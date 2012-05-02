@@ -2,8 +2,11 @@
 #include "MainWindow.h"
 #include "Git.h"
 
+extern "C" {
+
 	// libgit2:
 #include "git2.h"
+}
 
 #define WRAP_REPO(x) (Repository*)(x)
 #define UNWRAP_REPO(x) unwrapRepo(x)
@@ -42,4 +45,16 @@ namespace Git
 
 		git_repository_free( repo );
 	}
+
+
+	void initLibGit()
+	{
+		git_threads_init();
+	}
+
+	void deinitLibGit()
+	{
+		git_threads_shutdown();
+	}
+
 }

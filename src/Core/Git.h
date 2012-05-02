@@ -9,6 +9,9 @@ namespace Git
 
 	struct Repository;
 
+	void initLibGit();
+	void deinitLibGit();
+
 	Repository* createRepository( const QString& path, bool bare );
 
 }

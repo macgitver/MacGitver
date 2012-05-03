@@ -8,6 +8,7 @@
 
 namespace Git
 {
+
 	template< class T >
 	GitPtr< T >::GitPtr()
 		: d(0)
@@ -75,14 +76,30 @@ namespace Git
 	GitPtr< T >::operator const T*() const
 	{ return d; }
 
+	// we have our own ref count and go out of scope when it's 0
 	#define OWN_REF() \
 		void ref(){ mRef.ref(); } \
 		void deref(){ if( !mRef.deref() ) delete this; } \
 		QAtomicInt mRef;
 
+	// we use another one's ref count. he'll kill us if he's about to bite the dust
 	#define PROXY_REF(proxyType, proxy) \
 		void ref(){ proxy->ref(); } \
 		void deref(){ proxy->deref(); }
+
+	#define OWN_AND_PROXY_REF(proxyType, proxy) \
+		void ref(){ mRef.ref(); proxy->ref(); } \
+		void deref(){ proxyType* p = proxy; if( !mRef.deref() ) delete this; p->deref(); } \
+		QAtomicInt mRef;
+
+	class RepositoryPrivate;
+	class IndexPrivate;
+	class ObjectPrivate;
+
+	class Signature;
+
+	Signature git2Signature( const git_signature* gitsig );
+	git_signature* signature2git( const Signature& sig );
 
 	class RepositoryPrivate
 	{
@@ -110,6 +127,19 @@ namespace Git
 	public:
 		RepositoryPrivate*	mRepo;
 		git_index*			mIndex;
+	};
+
+	class ObjectPrivate
+	{
+	public:
+		OWN_REF();
+	public:
+		ObjectPrivate( RepositoryPrivate* repo, git_object* o );
+		~ObjectPrivate();
+
+	public:
+		RepositoryPrivate*	mRepo;
+		git_object*			mObj;
 	};
 
 }

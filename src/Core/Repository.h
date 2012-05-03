@@ -7,6 +7,8 @@
 namespace Git
 {
 
+	class RepositoryPrivate;
+
 	class Repository
 	{
 	private:

@@ -7,6 +7,8 @@
 namespace Git
 {
 
+	class IndexPrivate;
+
 	class Index
 	{
 	public:

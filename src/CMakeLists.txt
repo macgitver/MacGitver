@@ -18,6 +18,13 @@ SET( SRC_FILES
     Core/Git.cpp
 	Core/Repository.cpp
 	Core/Index.cpp
+	Core/ObjectId.cpp
+	Core/Object.cpp
+	Core/ObjectTree.cpp
+	Core/ObjectBlob.cpp
+	Core/ObjectTag.cpp
+	Core/ObjectCommit.cpp
+	Core/Signature.cpp
 
     MainWindow.cpp
 
@@ -35,6 +42,13 @@ SET( HDR_FILES
     Core/Git_p.h
 	Core/Repository.h
 	Core/Index.h
+	Core/ObjectId.h
+	Core/Object.h
+	Core/ObjectTree.h
+	Core/ObjectBlob.h
+	Core/ObjectTag.h
+	Core/ObjectCommit.h
+	Core/Signature.h
 
     Repo/CreateRepositoryDlg.h
 

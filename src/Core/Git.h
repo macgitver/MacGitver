@@ -13,9 +13,6 @@ namespace Git
 	class Repository;
 	class Index;
 
-	class RepositoryPrivate;
-	class IndexPrivate;
-
 	template< class T >
 	class GitPtr
 	{
@@ -42,6 +39,17 @@ namespace Git
 	private:
 		T* d;
 	};
+
+	enum ObjectType
+	{
+		otTree,
+		otCommit,
+		otBlob,
+		otTag,
+
+		otAny = -1
+	};
+
 }
 
 #endif

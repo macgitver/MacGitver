@@ -9,7 +9,7 @@
 MainWindow* MainWindow::sSelf = NULL;
 
 MainWindow::MainWindow()
-	: mRepo( NULL )
+	: mRepo()
 {
 	sSelf = this;
 	setupUi();
@@ -33,8 +33,8 @@ void MainWindow::onRepositoryOpen()
 		return;
 	}
 
-	Git::Repository* repo = Git::Repository::open( fn );
-	if( repo )
+	Git::Repository repo = Git::Repository::open( fn );
+	if( repo.isValid() )
 	{
 		switchToRepo( repo );
 	}
@@ -65,18 +65,17 @@ void MainWindow::addError( const QString& err )
 
 void MainWindow::closeRepository()
 {
-	if( !mRepo )
+	if( !mRepo.isValid() )
 	{
 		return;
 	}
 
-	emit repositoryChanged( NULL );
+	emit repositoryChanged( Git::Repository() );
 
-	delete mRepo;
-	mRepo = NULL;
+	mRepo = Git::Repository();
 }
 
-void MainWindow::switchToRepo( Git::Repository *repo )
+void MainWindow::switchToRepo( const Git::Repository& repo )
 {
 	closeRepository();
 

@@ -49,9 +49,9 @@ void CreateRepositoryDlg::accept()
 {
 	QString fn = QDir::toNativeSeparators( txtPath->text() );
 	bool makeBare = chkMakeBare->isChecked() && chkMakeBare->isEnabled();
-	Git::Repository* repo = Git::Repository::create( fn, makeBare );
+	Git::Repository repo = Git::Repository::create( fn, makeBare );
 
-	if( !repo )
+	if( !repo.isValid() )
 	{
 		QMessageBox::critical( this,
 							   trUtf8( "Error" ),

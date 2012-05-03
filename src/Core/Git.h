@@ -4,8 +4,6 @@
 
 #include <QString>
 
-#include <QSharedData>
-
 namespace Git
 {
 
@@ -16,52 +14,33 @@ namespace Git
 	class Index;
 
 	class RepositoryPrivate;
+	class IndexPrivate;
 
-	class Repository
+	template< class T >
+	class GitPtr
 	{
-	private:
-		Repository( RepositoryPrivate* d );
 	public:
-		Repository();
-		Repository( const Repository& other );
+		GitPtr();
+		GitPtr( const GitPtr< T >& o );
+		GitPtr( T* o );
+		~GitPtr();
 
-	public:
-		~Repository();
+		GitPtr< T >& operator=( const GitPtr< T >& o );
+		bool operator==( const GitPtr< T >& o ) const;
+		bool operator==( T* o ) const;
 
-	public:
-		static Repository create( const QString& path, bool bare );
-		static Repository open( const QString& path );
+		T* operator->();
+		const T* operator->() const;
 
-		bool isBare() const;
+		T* operator*();
+		const T* operator*() const;
 
-		Index index();
-
-	private:
-		QExplicitlySharedDataPointer< RepositoryPrivate > d;
-	};
-
-	class IndexEntry
-	{
+		operator bool() const;
+		operator T*();
+		operator const T*() const;
 
 	private:
-		git_index*			mIndex;
-	};
-
-	class Index
-	{
-		friend class Repository;
-	private:
-		Index( git_index* index );
-
-	public:
-		~Index();
-
-	public:
-		int count() const;
-		IndexEntry* at( int index );
-
-	private:
-		QExplicitlySharedDataPointer< IndexPrivate > d;
+		T* d;
 	};
 }
 

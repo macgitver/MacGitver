@@ -16,6 +16,8 @@ SET( SRC_FILES
     main.cpp
 
     Core/Git.cpp
+	Core/Repository.cpp
+	Core/Index.cpp
 
     MainWindow.cpp
 
@@ -31,6 +33,8 @@ SET( HDR_FILES
 
     Core/Git.h
     Core/Git_p.h
+	Core/Repository.h
+	Core/Index.h
 
     Repo/CreateRepositoryDlg.h
 

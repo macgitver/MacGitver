@@ -6,6 +6,8 @@
 
 #include "Repo/CreateRepositoryDlg.h"
 
+#include "MainWindow.h"
+
 CreateRepositoryDlg::CreateRepositoryDlg()
 {
 	setupUi( this );
@@ -45,6 +47,9 @@ void CreateRepositoryDlg::checkValid()
 void CreateRepositoryDlg::accept()
 {
 	QString fn = QDir::toNativeSeparators( txtPath->text() );
-	Git::createRepository( fn, chkMakeBare->isChecked() && chkMakeBare->isEnabled() );
+	bool makeBare = chkMakeBare->isChecked() && chkMakeBare->isEnabled();
+	Git::Repository* repo = Git::createRepository( fn, makeBare );
 	QDialog::accept();
+
+	MainWindow::self().switchToRepo( repo );
 }

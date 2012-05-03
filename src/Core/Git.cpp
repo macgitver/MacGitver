@@ -28,9 +28,23 @@ namespace Git
 
 	Repository* createRepository( const QString& path, bool bare )
 	{
-		git_repository* repo = 0;
+		git_repository* repo = NULL;
 
 		int rc = git_repository_init( &repo, path.toLatin1().constData(), bare );
+		if( rc < GIT_SUCCESS )
+		{
+			setError( rc );
+		}
+
+		return WRAP_REPO( repo );
+	}
+
+	Repository* tryOpenRepository( const QString& path )
+	{
+		git_repository* repo = NULL;
+
+		int rc = git_repository_open( &repo, path.toLatin1().constData() );
+
 		if( rc < GIT_SUCCESS )
 		{
 			setError( rc );

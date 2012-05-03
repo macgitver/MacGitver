@@ -1,4 +1,5 @@
 
+#include <QFileDialog>
 #include <QApplication>
 #include <QMenuBar>
 
@@ -8,9 +9,15 @@
 MainWindow* MainWindow::sSelf = NULL;
 
 MainWindow::MainWindow()
+	: mRepo( NULL )
 {
 	sSelf = this;
 	setupUi();
+}
+
+MainWindow::~MainWindow()
+{
+	closeRepository();
 }
 
 void MainWindow::onRepositoryCreate()
@@ -18,11 +25,30 @@ void MainWindow::onRepositoryCreate()
 	CreateRepositoryDlg().exec();
 }
 
+void MainWindow::onRepositoryOpen()
+{
+	QString fn = QFileDialog::getExistingDirectory( this, trUtf8( "Open repository" ) );
+	if( fn.isEmpty() )
+	{
+		return;
+	}
+
+	Git::Repository* repo = Git::tryOpenRepository( fn );
+	if( repo )
+	{
+		switchToRepo( repo );
+	}
+}
+
 void MainWindow::setupUi()
 {
 	mmuRepository			= menuBar()->addMenu( trUtf8( "&Repository" ) );
+	macRepositoryCreate		= mmuRepository->addAction( trUtf8( "&Open..." ),
+														this, SLOT(onRepositoryOpen()) );
+							  mmuRepository->addSeparator();
 	macRepositoryCreate		= mmuRepository->addAction( trUtf8( "Create &new..." ),
 														this, SLOT(onRepositoryCreate()) );
+							  mmuRepository->addSeparator();
 	macRepositoryQuit		= mmuRepository->addAction( trUtf8( "&Quit" ),
 														qApp, SLOT(quit()) );
 
@@ -32,4 +58,25 @@ void MainWindow::setupUi()
 void MainWindow::addError( const QString& err )
 {
 	qDebug( "Error occured:\n%s", qPrintable( err ) );
+}
+
+void MainWindow::closeRepository()
+{
+	if( !mRepo )
+	{
+		return;
+	}
+
+	emit repositoryChanged( NULL );
+
+	Git::closeRepository( mRepo );
+	mRepo = NULL;
+}
+
+void MainWindow::switchToRepo( Git::Repository *repo )
+{
+	closeRepository();
+
+	mRepo = repo;
+	emit repositoryChanged( mRepo );
 }

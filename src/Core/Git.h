@@ -13,6 +13,8 @@ namespace Git
 	void deinitLibGit();
 
 	Repository* createRepository( const QString& path, bool bare );
+	Repository* tryOpenRepository( const QString& path );
+	void closeRepository( Repository* repo );
 
 }
 

@@ -17,11 +17,17 @@ namespace Git
 
 	Repository::Repository( git_repository* repo )
 		: mRepo( repo )
+		, mIndex( NULL )
 	{
 	}
 
 	Repository::~Repository()
 	{
+		if( mIndex )
+		{
+			delete mIndex;
+			mIndex = NULL;
+		}
 		git_repository_free( mRepo );
 	}
 
@@ -54,6 +60,63 @@ namespace Git
 		return new Repository( repo );
 	}
 
+	bool Repository::isBare() const
+	{
+		Q_ASSERT( mRepo );
+		return git_repository_is_bare( mRepo );
+	}
+
+	Index Repository::index()
+	{
+		if( isBare() )
+		{
+			return NULL;
+		}
+
+		if( !mIndex )
+		{
+			git_index* index = NULL;
+
+			int rc = git_repository_index( &index, mRepo );
+
+			if( rc < GIT_SUCCESS )
+			{
+				setError( rc );
+				return NULL;
+			}
+
+			mIndex = new Index( index );
+		}
+
+		return mIndex;
+	}
+
+	// INDEX
+
+	Index::Index( git_index* index )
+		: mIndex( index )
+	{
+	}
+
+	Index::~Index()
+	{
+		if( mIndex )
+		{
+			git_index_free( mIndex );
+		}
+	}
+
+	int Index::count() const
+	{
+		return git_index_entrycount( mIndex );
+	}
+
+	IndexEntry* Index::at( unsigned int at )
+	{
+		return new IndexEntry( git_index_get( mIndex, at ) );
+	}
+
+	// tools
 
 	void initLibGit()
 	{

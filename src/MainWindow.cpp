@@ -52,6 +52,9 @@ void MainWindow::setupUi()
 	macRepositoryQuit		= mmuRepository->addAction( trUtf8( "&Quit" ),
 														qApp, SLOT(quit()) );
 
+	mmuWorkingTree			= menuBar()->addMenu( trUtf8( "&Working Tree" ) );
+	//mmuWorkingTree->addAction()
+
 	setWindowTitle( trUtf8( "MacGitver" ) );
 }
 

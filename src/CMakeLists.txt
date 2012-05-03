@@ -20,6 +20,9 @@ SET( SRC_FILES
     MainWindow.cpp
 
     Repo/CreateRepositoryDlg.cpp
+
+    Index/IndexWidget.cpp
+    Index/IndexTree.cpp
 )
 
 SET( HDR_FILES
@@ -27,8 +30,12 @@ SET( HDR_FILES
     MainWindow.h
 
     Core/Git.h
+    Core/Git_p.h
 
     Repo/CreateRepositoryDlg.h
+
+    Index/IndexWidget.h
+    Index/IndexTree.h
 )
 
 SET( UI_FILES

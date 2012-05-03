@@ -37,6 +37,9 @@ private:
 	QAction*			macRepositoryCreate;
 	QAction*			macRepositoryClone;
 	QAction*			macRepositoryQuit;
+	QMenu*				mmuWorkingTree;
+
+
 	Git::Repository*	mRepo;
 
 	static MainWindow* sSelf;

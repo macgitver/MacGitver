@@ -2,22 +2,11 @@
 #include "MainWindow.h"
 #include "Git.h"
 
-extern "C" {
-
 	// libgit2:
 #include "git2.h"
-}
-
-#define WRAP_REPO(x) (Repository*)(x)
-#define UNWRAP_REPO(x) unwrapRepo(x)
 
 namespace Git
 {
-	static inline git_repository* unwrapRepo( Repository* x )
-	{
-		// this is just to make the macro type-safe
-		return (git_repository*) x;
-	}
 
 	static inline void setError( int rc )
 	{
@@ -26,7 +15,17 @@ namespace Git
 		MainWindow::self().addError( errText );
 	}
 
-	Repository* createRepository( const QString& path, bool bare )
+	Repository::Repository( git_repository* repo )
+		: mRepo( repo )
+	{
+	}
+
+	Repository::~Repository()
+	{
+		git_repository_free( mRepo );
+	}
+
+	Repository* Repository::create( const QString& path, bool bare )
 	{
 		git_repository* repo = NULL;
 
@@ -34,12 +33,13 @@ namespace Git
 		if( rc < GIT_SUCCESS )
 		{
 			setError( rc );
+			return NULL;
 		}
 
-		return WRAP_REPO( repo );
+		return new Repository( repo );
 	}
 
-	Repository* tryOpenRepository( const QString& path )
+	Repository* Repository::open( const QString& path )
 	{
 		git_repository* repo = NULL;
 
@@ -48,16 +48,10 @@ namespace Git
 		if( rc < GIT_SUCCESS )
 		{
 			setError( rc );
+			return NULL;
 		}
 
-		return WRAP_REPO( repo );
-	}
-
-	void closeRepository( Repository* _repo )
-	{
-		git_repository* repo = UNWRAP_REPO( _repo );
-
-		git_repository_free( repo );
+		return new Repository( repo );
 	}
 
 

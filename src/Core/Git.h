@@ -4,18 +4,31 @@
 
 #include <QString>
 
+typedef struct git_repository git_repository;
+
 namespace Git
 {
-
-	struct Repository;
 
 	void initLibGit();
 	void deinitLibGit();
 
-	Repository* createRepository( const QString& path, bool bare );
-	Repository* tryOpenRepository( const QString& path );
-	void closeRepository( Repository* repo );
+	class Repository
+	{
+	private:
+		Repository( git_repository* repo );
 
+	public:
+		~Repository();
+
+	public:
+		static Repository* create( const QString& path, bool bare );
+		static Repository* open( const QString& path );
+
+		bool isBare() const;
+
+	private:
+		git_repository*		mRepo;
+	};
 }
 
 #endif

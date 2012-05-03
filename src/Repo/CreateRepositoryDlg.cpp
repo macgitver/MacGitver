@@ -1,4 +1,5 @@
 
+#include <QMessageBox>
 #include <QDir>
 #include <QFileDialog>
 
@@ -48,8 +49,16 @@ void CreateRepositoryDlg::accept()
 {
 	QString fn = QDir::toNativeSeparators( txtPath->text() );
 	bool makeBare = chkMakeBare->isChecked() && chkMakeBare->isEnabled();
-	Git::Repository* repo = Git::createRepository( fn, makeBare );
-	QDialog::accept();
+	Git::Repository* repo = Git::Repository::create( fn, makeBare );
 
+	if( !repo )
+	{
+		QMessageBox::critical( this,
+							   trUtf8( "Error" ),
+							   trUtf8( "Failed to create the repository." ) );
+		return;
+	}
+
+	QDialog::accept();
 	MainWindow::self().switchToRepo( repo );
 }

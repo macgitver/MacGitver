@@ -33,7 +33,7 @@ void MainWindow::onRepositoryOpen()
 		return;
 	}
 
-	Git::Repository* repo = Git::tryOpenRepository( fn );
+	Git::Repository* repo = Git::Repository::open( fn );
 	if( repo )
 	{
 		switchToRepo( repo );
@@ -69,7 +69,7 @@ void MainWindow::closeRepository()
 
 	emit repositoryChanged( NULL );
 
-	Git::closeRepository( mRepo );
+	delete mRepo;
 	mRepo = NULL;
 }
 

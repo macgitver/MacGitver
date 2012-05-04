@@ -1,5 +1,5 @@
 
-#include "Git_P.h"
+#include "Core/Git_p.h"
 
 #include "Core/Index.h"
 #include "Core/Repository.h"

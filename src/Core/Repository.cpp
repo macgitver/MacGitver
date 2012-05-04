@@ -19,12 +19,12 @@ namespace Git
 
 		git_repository_free( mRepo );
 	}
-	
+
 	void RepositoryPrivate::setError( int rc )
 	{
 		Q_UNUSED( rc );
 		QString errText = QString::fromUtf8( git_lasterror() );
-		qDebug( qPrintable( errText ) );
+		qDebug( "%s", qPrintable( errText ) );
 	//	MainWindow::self().addError( errText );
 	}
 
@@ -118,7 +118,7 @@ namespace Git
 
 		return Index( d->mIndex );
 	}
-	
+
 	QStringList Repository::allReferences()
 	{
 		Q_ASSERT( d );

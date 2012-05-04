@@ -13,9 +13,8 @@ namespace Git
 
 	class Repository
 	{
-	private:
-		Repository( RepositoryPrivate* _d );
 	public:
+		explicit Repository( RepositoryPrivate* _d );
 		Repository();
 		Repository( const Repository& other );
 		Repository& operator=( const Repository& other );

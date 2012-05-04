@@ -1,6 +1,7 @@
 
 #include "Core/Git_p.h"
 #include "Core/Index.h"
+#include "Core/Repository.h"
 
 namespace Git
 {
@@ -9,10 +10,20 @@ namespace Git
 		: mRepo( repo )
 		, mIndex( index )
 	{
+		Q_ASSERT( mRepo );
+		mRepo->ref();
 	}
 
 	IndexPrivate::~IndexPrivate()
 	{
+		Q_ASSERT( mRepo );
+		if( mRepo->mIndex == this )
+		{
+			mRepo->mIndex = NULL;
+		}
+
+		mRepo->deref();
+
 		if( mIndex )
 		{
 			git_index_free( mIndex );
@@ -52,6 +63,11 @@ namespace Git
 	bool Index::isValid() const
 	{
 		return d;
+	}
+
+	Repository Index::repository() const
+	{
+		return Repository( d ? d->mRepo : NULL );
 	}
 
 }

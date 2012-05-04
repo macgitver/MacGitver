@@ -8,11 +8,15 @@ namespace Git
 
 	RepositoryPrivate::RepositoryPrivate( git_repository* repo )
 		: mRepo( repo )
+		, mIndex( NULL )
 	{
 	}
 
 	RepositoryPrivate::~RepositoryPrivate()
 	{
+		Q_ASSERT( mRepo );
+		Q_ASSERT( !mIndex );
+
 		git_repository_free( mRepo );
 	}
 	
@@ -64,7 +68,7 @@ namespace Git
 			return Repository();
 		}
 
-		return new RepositoryPrivate( repo );
+		return Repository( new RepositoryPrivate( repo ) );
 	}
 
 	Repository Repository::open( const QString& path )
@@ -79,7 +83,7 @@ namespace Git
 			return Repository();
 		}
 
-		return new RepositoryPrivate( repo );
+		return Repository( new RepositoryPrivate( repo ) );
 	}
 
 	bool Repository::isBare() const

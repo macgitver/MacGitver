@@ -26,6 +26,8 @@ namespace Git
 		bool isValid() const;
 		int count() const;
 
+		Repository repository() const;
+
 	private:
 		GitPtr< IndexPrivate > d;
 	};

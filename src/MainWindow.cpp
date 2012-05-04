@@ -8,6 +8,7 @@
 #include "Repo/CreateRepositoryDlg.h"
 
 #include "References/ReferenceView.h"
+#include "Index/IndexWidget.h"
 
 MainWindow* MainWindow::sSelf = NULL;
 
@@ -68,11 +69,15 @@ void MainWindow::setupUi()
 
 	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
 		rv, SLOT(repositoryChanged(Git::Repository)) );
-}
 
-void MainWindow::addError( const QString& err )
-{
-	qDebug( "Error occured:\n%s", qPrintable( err ) );
+	IndexWidget* iw = new IndexWidget;
+
+	QDockWidget* dwIndex = new QDockWidget( trUtf8( "Working Tree" ) );
+	dwIndex->setWidget( iw );
+	addDockWidget( Qt::RightDockWidgetArea, dwIndex );
+
+	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
+		iw, SLOT(repositoryChanged(Git::Repository)) );
 }
 
 void MainWindow::closeRepository()

@@ -87,11 +87,6 @@ namespace Git
 		void ref(){ proxy->ref(); } \
 		void deref(){ proxy->deref(); }
 
-	#define OWN_AND_PROXY_REF(proxyType, proxy) \
-		void ref(){ mRef.ref(); proxy->ref(); } \
-		void deref(){ proxyType* p = proxy; if( !mRef.deref() ) delete this; p->deref(); } \
-		QAtomicInt mRef;
-
 	class RepositoryPrivate;
 	class IndexPrivate;
 	class ObjectPrivate;
@@ -119,7 +114,7 @@ namespace Git
 	class IndexPrivate
 	{
 	public:
-		PROXY_REF(RepositoryPrivate, mRepo );
+		OWN_REF();
 	public:
 		IndexPrivate( RepositoryPrivate* repo, git_index* index );
 		~IndexPrivate();

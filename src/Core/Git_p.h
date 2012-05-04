@@ -18,12 +18,12 @@ namespace Git
 	GitPtr< T >::GitPtr( const GitPtr< T >& o )
 		: d( o.d )
 	{ if( d ) d->ref(); }
-	
+
 	template< class T >
 	GitPtr< T >::GitPtr( T* o )
 		: d( o )
 	{ if( d ) d->ref(); }
-	
+
 	template< class T >
 	GitPtr< T >::~GitPtr()
 	{ if( d ) d->deref(); }
@@ -47,7 +47,7 @@ namespace Git
 	template< class T >
 	bool GitPtr< T >::operator==( T* o ) const
 	{ return d == o.d; }
-	
+
 	template< class T >
 	T* GitPtr< T >::operator->()
 	{ return d; }
@@ -55,7 +55,7 @@ namespace Git
 	template< class T >
 	const T* GitPtr< T >::operator->() const
 	{ return d; }
-	
+
 	template< class T >
 	T* GitPtr< T >::operator*()
 	{ return d; }
@@ -67,7 +67,7 @@ namespace Git
 	template< class T >
 	GitPtr< T >::operator bool() const
 	{ return d; }
-	
+
 	template< class T >
 	GitPtr< T >::operator T*()
 	{ return d; }
@@ -105,6 +105,8 @@ namespace Git
 		~RepositoryPrivate();
 
 		void setError( int rc );
+
+		friend int status_callback( const char* name, unsigned int status, void* );
 
 	public:
 		git_repository*		mRepo;

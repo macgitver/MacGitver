@@ -3,8 +3,8 @@
 
 #include "Core/Index.h"
 
-#include "Index/IndexWidget.h"
-#include "Index/IndexTree.h"
+#include "Views/WorkingTree/IndexWidget.h"
+#include "Views/WorkingTree/IndexTree.h"
 
 IndexWidget::IndexWidget()
 {

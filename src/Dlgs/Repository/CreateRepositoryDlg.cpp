@@ -5,9 +5,9 @@
 
 #include "Core/Git.h"
 
-#include "Repo/CreateRepositoryDlg.h"
+#include "Dlgs/Repository/CreateRepositoryDlg.h"
 
-#include "MainWindow.h"
+#include "Main/MainWindow.h"
 
 CreateRepositoryDlg::CreateRepositoryDlg()
 {

@@ -4,11 +4,11 @@
 #include <QMenuBar>
 #include <QDockWidget>
 
-#include "MainWindow.h"
-#include "Repo/CreateRepositoryDlg.h"
+#include "Main/MainWindow.h"
+#include "Dlgs/Repository/CreateRepositoryDlg.h"
 
-#include "References/ReferenceView.h"
-#include "Index/IndexWidget.h"
+#include "Views/Refs/ReferenceView.h"
+#include "Views/WorkingTree/IndexWidget.h"
 
 MainWindow* MainWindow::sSelf = NULL;
 

@@ -2,7 +2,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
-#include "References/ReferenceView.h"
+#include "Views/Refs/ReferenceView.h"
 
 ReferenceView::ReferenceView()
 {

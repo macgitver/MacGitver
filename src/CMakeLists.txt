@@ -13,55 +13,55 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
-    main.cpp
-
     Core/Git.cpp
-	Core/Repository.cpp
-	Core/Index.cpp
-	Core/ObjectId.cpp
-	Core/Object.cpp
-	Core/ObjectTree.cpp
-	Core/ObjectBlob.cpp
-	Core/ObjectTag.cpp
-	Core/ObjectCommit.cpp
-	Core/Signature.cpp
+    Core/Repository.cpp
+    Core/Index.cpp
+    Core/ObjectId.cpp
+    Core/Object.cpp
+    Core/ObjectTree.cpp
+    Core/ObjectBlob.cpp
+    Core/ObjectTag.cpp
+    Core/ObjectCommit.cpp
+    Core/Signature.cpp
 
-    MainWindow.cpp
+    Main/main.cpp
+    Main/MainWindow.cpp
 
-    Repo/CreateRepositoryDlg.cpp
+    Dlgs/Repository/CreateRepositoryDlg.cpp
 
-    Index/IndexWidget.cpp
-    Index/IndexTree.cpp
+    Views/Refs/ReferenceView.cpp
 
-	References/ReferenceView.cpp
+    Views/WorkingTree/IndexWidget.cpp
+    Views/WorkingTree/IndexTree.cpp
+
 )
 
 SET( HDR_FILES
 
-    MainWindow.h
-
     Core/Git.h
     Core/Git_p.h
-	Core/Repository.h
-	Core/Index.h
-	Core/ObjectId.h
-	Core/Object.h
-	Core/ObjectTree.h
-	Core/ObjectBlob.h
-	Core/ObjectTag.h
-	Core/ObjectCommit.h
-	Core/Signature.h
+    Core/Repository.h
+    Core/Index.h
+    Core/ObjectId.h
+    Core/Object.h
+    Core/ObjectTree.h
+    Core/ObjectBlob.h
+    Core/ObjectTag.h
+    Core/ObjectCommit.h
+    Core/Signature.h
 
-    Repo/CreateRepositoryDlg.h
+    Main/MainWindow.h
 
-    Index/IndexWidget.h
-    Index/IndexTree.h
+    Dlgs/Repository/CreateRepositoryDlg.h
 
-	References/ReferenceView.h
+    Views/Refs/ReferenceView.h
+
+    Views/WorkingTree/IndexWidget.h
+    Views/WorkingTree/IndexTree.h
 )
 
 SET( UI_FILES
-    Repo/CreateRepositoryDlg.ui
+    Dlgs/Repository/CreateRepositoryDlg.ui
 )
 
 QT4_MOC( MOC_FILES ${HDR_FILES} )

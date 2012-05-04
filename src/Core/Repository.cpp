@@ -137,4 +137,18 @@ namespace Git
 		return sl;
 	}
 
+
+	int status_callback( const char* name, unsigned int status, void* )
+	{
+		qDebug( "%s - %s",
+				qPrintable( QString::number( status, 2 ) ),
+				qPrintable( name ) );
+		return GIT_SUCCESS;
+	}
+
+	void Repository::test()
+	{
+		git_status_foreach( d->mRepo, &status_callback, 0 );
+	}
+
 }

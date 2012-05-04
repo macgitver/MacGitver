@@ -33,6 +33,8 @@ namespace Git
 
 		Index index();
 
+		void test();
+
 	private:
 		GitPtr< RepositoryPrivate > d;
 	};

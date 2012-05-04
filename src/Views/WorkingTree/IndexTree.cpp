@@ -1,5 +1,5 @@
 
-#include "Index/IndexTree.h"
+#include "Views/WorkingTree/IndexTree.h"
 
 IndexTree::IndexTree()
 {

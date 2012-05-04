@@ -35,7 +35,7 @@ namespace Git
 		if( x != d )
 		{
 			if( d ) d->ref();
-			if( x ) d->deref();
+			if( x ) x->deref();
 		}
 		return *this;
 	}

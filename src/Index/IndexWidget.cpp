@@ -8,7 +8,7 @@ IndexWidget::IndexWidget()
 
 }
 
-void IndexWidget::repositoryChanged( Git::Repository* repo )
+void IndexWidget::repositoryChanged( Git::Repository repo )
 {
-
+	mRepo = repo;
 }

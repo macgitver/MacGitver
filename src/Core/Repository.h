@@ -2,6 +2,8 @@
 #ifndef GIT_REPOSITORY_H
 #define GIT_REPOSITORY_H
 
+#include <QStringList>
+
 #include "Core/Git.h"
 
 namespace Git
@@ -26,8 +28,9 @@ namespace Git
 		static Repository open( const QString& path );
 
 		bool isValid() const;
-
 		bool isBare() const;
+
+		QStringList allReferences();
 
 		Index index();
 

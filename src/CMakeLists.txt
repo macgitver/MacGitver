@@ -32,6 +32,8 @@ SET( SRC_FILES
 
     Index/IndexWidget.cpp
     Index/IndexTree.cpp
+
+	References/ReferenceView.cpp
 )
 
 SET( HDR_FILES
@@ -54,6 +56,8 @@ SET( HDR_FILES
 
     Index/IndexWidget.h
     Index/IndexTree.h
+
+	References/ReferenceView.h
 )
 
 SET( UI_FILES

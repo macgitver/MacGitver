@@ -114,5 +114,23 @@ namespace Git
 
 		return Index( d->mIndex );
 	}
+	
+	QStringList Repository::allReferences()
+	{
+		Q_ASSERT( d );
+
+		git_strarray arr;
+		int rc = git_reference_listall( &arr, d->mRepo, GIT_REF_LISTALL );
+		if( rc < GIT_SUCCESS )
+		{
+			return QStringList();
+		}
+
+		QStringList sl;
+		for( unsigned int i = 0; i < arr.count; i++ )
+			sl << QString::fromLatin1( arr.strings[ i ] );
+
+		return sl;
+	}
 
 }

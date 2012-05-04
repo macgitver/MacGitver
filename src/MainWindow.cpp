@@ -2,9 +2,12 @@
 #include <QFileDialog>
 #include <QApplication>
 #include <QMenuBar>
+#include <QDockWidget>
 
 #include "MainWindow.h"
 #include "Repo/CreateRepositoryDlg.h"
+
+#include "References/ReferenceView.h"
 
 MainWindow* MainWindow::sSelf = NULL;
 
@@ -56,6 +59,15 @@ void MainWindow::setupUi()
 	//mmuWorkingTree->addAction()
 
 	setWindowTitle( trUtf8( "MacGitver" ) );
+
+	ReferenceView* rv = new ReferenceView;
+
+	QDockWidget* dw = new QDockWidget( trUtf8( "Refs" ) );
+	dw->setWidget( rv );
+	addDockWidget( Qt::RightDockWidgetArea, dw );
+
+	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
+		rv, SLOT(repositoryChanged(Git::Repository)) );
 }
 
 void MainWindow::addError( const QString& err )

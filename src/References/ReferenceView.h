@@ -1,27 +1,25 @@
 
-#ifndef INDEX_WIDGET_H
-#define INDEX_WIDGET_H
+#ifndef MGV_REFERENCE_VIEW_H
+#define MGV_REFERENCE_VIEW_H
 
 #include <QWidget>
 
-#include "Core/Git.h"
 #include "Core/Repository.h"
 
-class IndexTree;
+class QListWidget;
 
-class IndexWidget : public QWidget
+class ReferenceView : public QWidget
 {
 	Q_OBJECT
 public:
-	IndexWidget();
+	ReferenceView();
 
 private slots:
 	void repositoryChanged( Git::Repository repo );
 
 private:
-	IndexTree*			mTree;
 	Git::Repository		mRepo;
+	QListWidget*		mListWidget;
 };
 
 #endif
-

@@ -9,8 +9,10 @@
 
 #include "Heaven/HTopLevelWidget.h"
 
+#include "Views/Branches/BranchesView.h"
+#include "Views/Tags/TagsView.h"
 #include "Views/History/HistoryView.h"
-#include "Views/Refs/ReferenceView.h"
+#include "Views/Refs/RefsView.h"
 #include "Views/WorkingTree/IndexWidget.h"
 
 MainWindow* MainWindow::sSelf = NULL;
@@ -89,11 +91,20 @@ void MainWindow::setupUi()
 	mTop = new HeavenTopLevelWidget();
 	setCentralWidget( mTop );
 
-	ReferenceView* rv = new ReferenceView;
+	RefsView* rv = new RefsView;
 	mTop->addView( rv );
-
 	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
 		rv, SLOT(repositoryChanged(Git::Repository)) );
+
+	BranchesView* branches = new BranchesView;
+	mTop->addView( branches );
+	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
+		branches, SLOT(repositoryChanged(Git::Repository)) );
+
+	TagsView* tags = new TagsView;
+	mTop->addView( tags );
+	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
+		tags, SLOT(repositoryChanged(Git::Repository)) );
 
 	HistoryView* hv = new HistoryView;
 	mTop->addView( hv, Heaven::Central );

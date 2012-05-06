@@ -2,9 +2,9 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
-#include "Views/Refs/ReferenceView.h"
+#include "Views/Refs/RefsView.h"
 
-ReferenceView::ReferenceView()
+RefsView::RefsView()
 {
 	mListWidget = new QListWidget();
 	mListWidget->setFrameStyle( QFrame::NoFrame );
@@ -19,15 +19,18 @@ ReferenceView::ReferenceView()
 	setViewName( trUtf8( "Refs" ) );
 }
 
-void ReferenceView::repositoryChanged( Git::Repository repo )
+void RefsView::repositoryChanged( Git::Repository repo )
 {
 	mRepo = repo;
-
 	mListWidget->clear();
-	QStringList sl = mRepo.allReferences();
 
-	for( int i = 0; i < sl.count(); i++ )
+	if( mRepo.isValid() )
 	{
-		new QListWidgetItem( sl[ i ].mid( 5 ), mListWidget );
+		QStringList sl = mRepo.allReferences();
+
+		for( int i = 0; i < sl.count(); i++ )
+		{
+			new QListWidgetItem( sl[ i ].mid( 5 ), mListWidget );
+		}
 	}
 }

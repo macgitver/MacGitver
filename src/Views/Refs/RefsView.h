@@ -8,11 +8,11 @@
 
 class QListWidget;
 
-class ReferenceView : public HeavenView
+class RefsView : public HeavenView
 {
 	Q_OBJECT
 public:
-	ReferenceView();
+	RefsView();
 
 private slots:
 	void repositoryChanged( Git::Repository repo );

@@ -34,10 +34,14 @@ SET( SRC_FILES
 
     Dlgs/Repository/CreateRepositoryDlg.cpp
 
+    Views/Branches/BranchesView.cpp
+
     Views/History/HistoryView.cpp
     Views/History/HistoryList.cpp
 
-    Views/Refs/ReferenceView.cpp
+    Views/Refs/RefsView.cpp
+
+    Views/Tags/TagsView.cpp
 
     Views/WorkingTree/IndexWidget.cpp
     Views/WorkingTree/IndexTree.cpp
@@ -67,10 +71,14 @@ SET( HDR_FILES
 
     Dlgs/Repository/CreateRepositoryDlg.h
 
+    Views/Branches/BranchesView.h
+
     Views/History/HistoryView.h
     Views/History/HistoryList.h
 
-    Views/Refs/ReferenceView.h
+    Views/Refs/RefsView.h
+
+    Views/Tags/TagsView.h
 
     Views/WorkingTree/IndexWidget.h
     Views/WorkingTree/IndexTree.h

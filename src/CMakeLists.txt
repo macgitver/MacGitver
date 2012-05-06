@@ -34,6 +34,9 @@ SET( SRC_FILES
 
     Dlgs/Repository/CreateRepositoryDlg.cpp
 
+    Views/History/HistoryView.cpp
+    Views/History/HistoryList.cpp
+
     Views/Refs/ReferenceView.cpp
 
     Views/WorkingTree/IndexWidget.cpp
@@ -63,6 +66,9 @@ SET( HDR_FILES
     Main/MainWindow.h
 
     Dlgs/Repository/CreateRepositoryDlg.h
+
+    Views/History/HistoryView.h
+    Views/History/HistoryList.h
 
     Views/Refs/ReferenceView.h
 

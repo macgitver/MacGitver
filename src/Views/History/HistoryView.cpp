@@ -25,3 +25,6 @@ void HistoryView::repositoryChanged( Git::Repository repo )
 	mRepo = repo;
 }
 
+void HistoryView::buildHistory()
+{
+}

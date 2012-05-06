@@ -22,6 +22,9 @@ private slots:
 	void repositoryChanged( Git::Repository repo );
 
 private:
+	void buildHistory();
+
+private:
 	HistoryModel*		mModel;
 	HistoryList*		mList;
 	Git::Repository		mRepo;

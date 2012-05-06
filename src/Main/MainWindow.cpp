@@ -9,6 +9,7 @@
 
 #include "Heaven/HTopLevelWidget.h"
 
+#include "Views/History/HistoryView.h"
 #include "Views/Refs/ReferenceView.h"
 #include "Views/WorkingTree/IndexWidget.h"
 
@@ -93,6 +94,11 @@ void MainWindow::setupUi()
 
 	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
 		rv, SLOT(repositoryChanged(Git::Repository)) );
+
+	HistoryView* hv = new HistoryView;
+	mTop->addView( hv, Heaven::Central );
+	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
+		hv, SLOT(repositoryChanged(Git::Repository)) );
 
 	IndexWidget* iw = new IndexWidget;
 	mTop->addView( iw, Heaven::Central );

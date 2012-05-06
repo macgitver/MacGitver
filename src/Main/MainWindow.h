@@ -7,6 +7,8 @@
 #include "Core/Git.h"
 #include "Core/Repository.h"
 
+class HeavenTopLevelWidget;
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -40,6 +42,7 @@ private:
 	QAction*			macRepositoryQuit;
 	QMenu*				mmuWorkingTree;
 
+	HeavenTopLevelWidget*	mTop;
 
 	Git::Repository		mRepo;
 

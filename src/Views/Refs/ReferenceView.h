@@ -2,13 +2,13 @@
 #ifndef MGV_REFERENCE_VIEW_H
 #define MGV_REFERENCE_VIEW_H
 
-#include <QWidget>
+#include "Heaven/HView.h"
 
 #include "Core/Repository.h"
 
 class QListWidget;
 
-class ReferenceView : public QWidget
+class ReferenceView : public HeavenView
 {
 	Q_OBJECT
 public:

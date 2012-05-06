@@ -7,6 +7,8 @@
 #include "Main/MainWindow.h"
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 
+#include "Heaven/HTopLevelWidget.h"
+
 #include "Views/Refs/ReferenceView.h"
 #include "Views/WorkingTree/IndexWidget.h"
 
@@ -61,6 +63,8 @@ void MainWindow::setupUi()
 
 	setWindowTitle( trUtf8( "MacGitver" ) );
 
+	/*
+
 	ReferenceView* rv = new ReferenceView;
 
 	QDockWidget* dw = new QDockWidget( trUtf8( "Refs" ) );
@@ -76,6 +80,22 @@ void MainWindow::setupUi()
 	dwIndex->setWidget( iw );
 	addDockWidget( Qt::RightDockWidgetArea, dwIndex );
 
+	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
+		iw, SLOT(repositoryChanged(Git::Repository)) );
+
+	*/
+
+	mTop = new HeavenTopLevelWidget();
+	setCentralWidget( mTop );
+
+	ReferenceView* rv = new ReferenceView;
+	mTop->addView( rv );
+
+	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
+		rv, SLOT(repositoryChanged(Git::Repository)) );
+
+	IndexWidget* iw = new IndexWidget;
+	mTop->addView( iw, Heaven::Central );
 	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
 		iw, SLOT(repositoryChanged(Git::Repository)) );
 }

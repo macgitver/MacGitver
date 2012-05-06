@@ -7,9 +7,11 @@
 #include "Core/Git.h"
 #include "Core/Repository.h"
 
+#include "Heaven/HView.h"
+
 class IndexTree;
 
-class IndexWidget : public QWidget
+class IndexWidget : public HeavenView
 {
 	Q_OBJECT
 public:

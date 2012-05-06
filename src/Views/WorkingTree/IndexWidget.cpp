@@ -16,6 +16,8 @@ IndexWidget::IndexWidget()
 	l->addWidget( mTree );
 
 	setLayout( l );
+
+	setViewName( trUtf8( "Working tree" ) );
 }
 
 void IndexWidget::repositoryChanged( Git::Repository repo )

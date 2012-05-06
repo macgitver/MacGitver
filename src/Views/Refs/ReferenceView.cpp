@@ -7,6 +7,7 @@
 ReferenceView::ReferenceView()
 {
 	mListWidget = new QListWidget();
+	mListWidget->setFrameStyle( QFrame::NoFrame );
 
 	QVBoxLayout* l = new QVBoxLayout;
 	l->setSpacing( 0 );
@@ -14,6 +15,8 @@ ReferenceView::ReferenceView()
 	l->addWidget( mListWidget );
 
 	setLayout( l );
+
+	setViewName( trUtf8( "Refs" ) );
 }
 
 void ReferenceView::repositoryChanged( Git::Repository repo )

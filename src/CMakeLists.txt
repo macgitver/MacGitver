@@ -24,6 +24,11 @@ SET( SRC_FILES
     Core/ObjectCommit.cpp
     Core/Signature.cpp
 
+    Heaven/HContainer.cpp
+    Heaven/HView.cpp
+    Heaven/HTopLevelWidget.cpp
+    Heaven/HDecorator.cpp
+
     Main/main.cpp
     Main/MainWindow.cpp
 
@@ -49,6 +54,11 @@ SET( HDR_FILES
     Core/ObjectTag.h
     Core/ObjectCommit.h
     Core/Signature.h
+
+    Heaven/HContainer.h
+    Heaven/HView.h
+    Heaven/HTopLevelWidget.h
+    Heaven/HDecorator.h
 
     Main/MainWindow.h
 

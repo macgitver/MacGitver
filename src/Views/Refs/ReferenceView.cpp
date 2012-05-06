@@ -28,6 +28,6 @@ void ReferenceView::repositoryChanged( Git::Repository repo )
 
 	for( int i = 0; i < sl.count(); i++ )
 	{
-		new QListWidgetItem( sl[i ], mListWidget );
+		new QListWidgetItem( sl[ i ].mid( 5 ), mListWidget );
 	}
 }

@@ -151,4 +151,36 @@ namespace Git
 		git_status_foreach( d->mRepo, &status_callback, 0 );
 	}
 
+	static int statusHashCB( const char* fn, unsigned int status, void* rawSH )
+	{
+		StatusHash* sh = (StatusHash*) rawSH;
+		sh->insert( QString::fromUtf8( fn ), status );
+		return GIT_SUCCESS;
+	}
+
+	StatusHash Repository::statusHash()
+	{
+		StatusHash sh;
+
+		if( d )
+		{
+		//	git_status_foreach( d->mRepo, &statusHashCB, (void*) &sh );
+			git_status_options opt;
+			memset( &opt, 0, sizeof( opt ) );
+			opt.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED
+					  | GIT_STATUS_OPT_INCLUDE_IGNORED
+					  | GIT_STATUS_OPT_INCLUDE_UNMODIFIED
+					  | GIT_STATUS_OPT_EXCLUDE_SUBMODULES
+					  | GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
+			git_status_foreach_ext( d->mRepo, &opt, &statusHashCB, (void*) &sh );
+		}
+
+		return sh;
+	}
+
+	QString Repository::basePath() const
+	{
+		return QString::fromUtf8(( git_repository_workdir( d->mRepo ) ) );
+	}
+
 }

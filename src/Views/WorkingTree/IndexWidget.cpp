@@ -24,6 +24,5 @@ void IndexWidget::repositoryChanged( Git::Repository repo )
 {
 	mRepo = repo;
 
-	Git::Index i = mRepo.index();
-	mTree->setIndex( i );
+	mTree->setRepository( repo );
 }

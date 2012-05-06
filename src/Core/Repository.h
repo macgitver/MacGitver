@@ -3,6 +3,7 @@
 #define GIT_REPOSITORY_H
 
 #include <QStringList>
+#include <QHash>
 
 #include "Core/Git.h"
 
@@ -10,6 +11,8 @@ namespace Git
 {
 
 	class RepositoryPrivate;
+
+	typedef QHash< QString, int > StatusHash;
 
 	class Repository
 	{
@@ -29,9 +32,13 @@ namespace Git
 		bool isValid() const;
 		bool isBare() const;
 
+		QString basePath() const;
+
 		QStringList allReferences();
 
 		Index index();
+
+		StatusHash statusHash();
 
 		void test();
 

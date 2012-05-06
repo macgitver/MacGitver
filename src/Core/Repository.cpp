@@ -3,6 +3,8 @@
 #include "Core/Index.h"
 #include "Core/Repository.h"
 
+#include "git2/branch.h"
+
 namespace Git
 {
 
@@ -119,6 +121,17 @@ namespace Git
 		return Index( d->mIndex );
 	}
 
+	QStringList slFromStrArray( git_strarray* arry )
+	{
+
+		QStringList sl;
+		for( unsigned int i = 0; i < arry->count; i++ )
+			sl << QString::fromLatin1( arry->strings[ i ] );
+
+		git_strarray_free( arry );
+		return sl;
+	}
+
 	QStringList Repository::allReferences()
 	{
 		Q_ASSERT( d );
@@ -130,11 +143,42 @@ namespace Git
 			return QStringList();
 		}
 
-		QStringList sl;
-		for( unsigned int i = 0; i < arr.count; i++ )
-			sl << QString::fromLatin1( arr.strings[ i ] );
+		return slFromStrArray( &arr );
+	}
 
-		return sl;
+	QStringList Repository::allBranches()
+	{
+		return branches( true, true );
+	}
+
+	QStringList Repository::branches( bool local, bool remote )
+	{
+		Q_ASSERT( d );
+
+		git_strarray arr;
+		int rc = git_branch_list( &arr, d->mRepo,
+								  ( local ? GIT_BRANCH_LOCAL : 0 ) |
+								  ( remote ? GIT_BRANCH_REMOTE : 0 ) );
+		if( rc < GIT_SUCCESS )
+		{
+			return QStringList();
+		}
+
+		return slFromStrArray( &arr );
+	}
+
+	QStringList Repository::allTags()
+	{
+		Q_ASSERT( d );
+
+		git_strarray arr;
+		int rc = git_tag_list( &arr, d->mRepo );
+		if( rc < GIT_SUCCESS )
+		{
+			return QStringList();
+		}
+
+		return slFromStrArray( &arr );
 	}
 
 

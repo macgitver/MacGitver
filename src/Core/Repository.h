@@ -35,6 +35,9 @@ namespace Git
 		QString basePath() const;
 
 		QStringList allReferences();
+		QStringList allBranches();
+		QStringList branches( bool local = true, bool remote = false );
+		QStringList allTags();
 
 		Index index();
 

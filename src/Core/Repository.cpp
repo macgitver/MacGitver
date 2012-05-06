@@ -23,8 +23,8 @@ namespace Git
 	void RepositoryPrivate::setError( int rc )
 	{
 		Q_UNUSED( rc );
-		QString errText = QString::fromUtf8( git_lasterror() );
-		qDebug( "%s", qPrintable( errText ) );
+	//	QString errText = QString::fromUtf8( git_lasterror() );
+	//	qDebug( "%s", qPrintable( errText ) );
 	//	MainWindow::self().addError( errText );
 	}
 

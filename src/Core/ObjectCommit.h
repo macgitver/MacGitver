@@ -1,6 +1,6 @@
 
 #ifndef GIT_OBJECT_COMMIT_H
-#define GIT_OBJECT_COMMI_H
+#define GIT_OBJECT_COMMIT_H
 
 #include "Core/Git.h"
 #include "Core/ObjectId.h"
@@ -18,9 +18,14 @@ namespace Git
 		ObjectCommit();
 		ObjectCommit( ObjectPrivate* _d );
 		ObjectCommit( const ObjectCommit& o );
-	
+
 	public:
 		ObjectTree tree();
+		ObjectId treeId();
+
+		QList< ObjectId > parentCommitIds();
+		QList< ObjectCommit > parentCommits();
+		unsigned int numParentCommits();
 
 		Signature author();
 		Signature committer();

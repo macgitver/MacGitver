@@ -98,8 +98,14 @@ SET( UI_FILES
     Dlgs/Repository/CreateRepositoryDlg.ui
 )
 
+SET( RCC_FILES
+
+    Main/MacGitver.rcc
+)
+
 QT4_MOC( MOC_FILES ${HDR_FILES} )
 QT4_UIC( UIC_FILES ${UI_FILES} )
+QT4_ADD_RESOURCES( QRC_FILES ${RCC_FILES} )
 
 ADD_EXECUTABLE(
     MacGitver WIN32
@@ -108,6 +114,7 @@ ADD_EXECUTABLE(
     ${HDR_FILES}
     ${MOC_FILES}
     ${UIC_FILES}
+    ${QRC_FILES}
 )
 
 TARGET_LINK_LIBRARIES(

@@ -1,4 +1,5 @@
 
+#include <QPlastiqueStyle>
 #include <QApplication>
 
 #include "Core/Git.h"
@@ -13,6 +14,7 @@ int main( int c, char** v )
 	QApplication::setApplicationName( "MacGitver" );
 
 	QApplication a( c, v );
+	a.setStyle( new QPlastiqueStyle );
 
 	MainWindow* mw = new MainWindow;
 	mw->show();

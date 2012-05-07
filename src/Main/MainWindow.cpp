@@ -52,6 +52,10 @@ void MainWindow::onRepositoryOpen()
 
 void MainWindow::setupUi()
 {
+	QFile styleFile( ":/MacGitver.qss" );
+	styleFile.open( QFile::ReadOnly );
+	setStyleSheet( styleFile.readAll() );
+
 	mmuRepository			= menuBar()->addMenu( trUtf8( "&Repository" ) );
 	macRepositoryCreate		= mmuRepository->addAction( trUtf8( "&Open..." ),
 														this, SLOT(onRepositoryOpen()) );

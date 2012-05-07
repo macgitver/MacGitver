@@ -36,6 +36,11 @@ SET( SRC_FILES
 
     Views/Branches/BranchesView.cpp
 
+    Views/Diff/Diff.cpp
+    Views/Diff/DiffDisplay.cpp
+    Views/Diff/DiffTreeFileList.cpp
+    Views/Diff/DiffView.cpp
+
     Views/History/HistoryView.cpp
     Views/History/HistoryList.cpp
 
@@ -72,6 +77,11 @@ SET( HDR_FILES
     Dlgs/Repository/CreateRepositoryDlg.h
 
     Views/Branches/BranchesView.h
+
+    Views/Diff/Diff.h
+    Views/Diff/DiffDisplay.h
+    Views/Diff/DiffTreeFileList.h
+    Views/Diff/DiffView.h
 
     Views/History/HistoryView.h
     Views/History/HistoryList.h

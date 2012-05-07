@@ -13,6 +13,7 @@ namespace Git
 	ObjectTree::ObjectTree( ObjectPrivate* _d )
 		: Object( _d )
 	{
+		Q_ASSERT( type() == otTree );
 	}
 
 	ObjectTree::ObjectTree( const ObjectTree& o )

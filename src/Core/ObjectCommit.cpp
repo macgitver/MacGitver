@@ -14,6 +14,7 @@ namespace Git
 	ObjectCommit::ObjectCommit( ObjectPrivate* _d )
 		: Object( _d )
 	{
+		Q_ASSERT( type() == otCommit );
 	}
 
 	ObjectCommit::ObjectCommit( const ObjectCommit& o )

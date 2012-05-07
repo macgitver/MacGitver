@@ -2,6 +2,10 @@
 #include "Core/Git_p.h"
 #include "Core/ObjectId.h"
 #include "Core/Object.h"
+#include "Core/ObjectTree.h"
+#include "Core/ObjectTag.h"
+#include "Core/ObjectCommit.h"
+#include "Core/ObjectBlob.h"
 
 namespace Git
 {
@@ -35,7 +39,7 @@ namespace Git
 	Object::~Object()
 	{
 	}
-		
+
 	Object& Object::operator=( const Object& other )
 	{
 		d = other.d;
@@ -71,6 +75,67 @@ namespace Git
 		Q_ASSERT( d );
 		const git_oid* oid = git_object_id( d->mObj );
 		return ObjectId::fromRaw( oid->id );
+	}
+
+
+	ObjectTree Object::asTree()
+	{
+		ObjectTree o;
+		if( isTree() )
+		{
+			o = ObjectTree( d );
+		}
+		return o;
+	}
+
+	ObjectCommit Object::asCommit()
+	{
+		ObjectCommit o;
+		if( isCommit() )
+		{
+			o = ObjectCommit( d );
+		}
+		return o;
+	}
+
+	ObjectBlob Object::asBlob()
+	{
+		ObjectBlob o;
+		if( isBlob() )
+		{
+			o = ObjectBlob( d );
+		}
+		return o;
+	}
+
+	ObjectTag Object::asTag()
+	{
+		ObjectTag o;
+		if( isTag() )
+		{
+			o = ObjectTag( d );
+		}
+		return o;
+	}
+
+	bool Object::isTree() const
+	{
+		return type() == otTree;
+	}
+
+	bool Object::isTag() const
+	{
+		return type() == otTag;
+	}
+
+	bool Object::isCommit() const
+	{
+		return type() == otCommit;
+	}
+
+	bool Object::isBlob() const
+	{
+		return type() == otBlob;
 	}
 
 }

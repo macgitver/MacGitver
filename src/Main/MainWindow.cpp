@@ -9,6 +9,7 @@
 
 #include "Heaven/HTopLevelWidget.h"
 
+#include "Views/Diff/DiffView.h"
 #include "Views/Branches/BranchesView.h"
 #include "Views/Tags/TagsView.h"
 #include "Views/History/HistoryView.h"
@@ -115,6 +116,8 @@ void MainWindow::setupUi()
 	mTop->addView( iw, Heaven::Central );
 	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
 		iw, SLOT(repositoryChanged(Git::Repository)) );
+
+	mTop->addView( new DiffView, Heaven::Central );
 }
 
 void MainWindow::closeRepository()

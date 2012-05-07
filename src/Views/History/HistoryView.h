@@ -4,6 +4,8 @@
 
 #include <QWidget>
 
+class QToolBar;
+
 #include "Core/Git.h"
 #include "Core/Repository.h"
 
@@ -27,6 +29,7 @@ private:
 private:
 	HistoryModel*		mModel;
 	HistoryList*		mList;
+	QToolBar*			mToolBar;
 	Git::Repository		mRepo;
 };
 

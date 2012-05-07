@@ -9,6 +9,7 @@
 IndexWidget::IndexWidget()
 {
 	mTree = new IndexTree;
+	mTree->setFrameShape( QFrame::NoFrame );
 
 	QVBoxLayout* l = new QVBoxLayout;
 	l->setMargin( 0 );

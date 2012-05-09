@@ -23,6 +23,8 @@ SET( SRC_FILES
     Core/ObjectTag.cpp
     Core/ObjectCommit.cpp
     Core/Signature.cpp
+    Core/Reference.cpp
+    Core/RevisionWalker.cpp
 
     Heaven/HContainer.cpp
     Heaven/HView.cpp
@@ -43,6 +45,9 @@ SET( SRC_FILES
 
     Views/History/HistoryView.cpp
     Views/History/HistoryList.cpp
+    Views/History/HistoryEntry.cpp
+    Views/History/HistoryBuilder.cpp
+    Views/History/HistoryModel.cpp
 
     Views/Refs/RefsView.cpp
 
@@ -66,6 +71,8 @@ SET( HDR_FILES
     Core/ObjectTag.h
     Core/ObjectCommit.h
     Core/Signature.h
+    Core/Reference.h
+    Core/RevisionWalker.h
 
     Heaven/HContainer.h
     Heaven/HView.h
@@ -85,6 +92,9 @@ SET( HDR_FILES
 
     Views/History/HistoryView.h
     Views/History/HistoryList.h
+    Views/History/HistoryEntry.h
+    Views/History/HistoryBuilder.h
+    Views/History/HistoryModel.h
 
     Views/Refs/RefsView.h
 

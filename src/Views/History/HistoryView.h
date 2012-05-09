@@ -3,6 +3,7 @@
 #define MGV_HISTORY_VIEW_H
 
 #include <QWidget>
+#include <QItemDelegate>
 
 class QToolBar;
 
@@ -11,8 +12,15 @@ class QToolBar;
 
 #include "Heaven/HView.h"
 
+class HistoryBuilder;
 class HistoryModel;
 class HistoryList;
+
+class HistoryViewDelegate : public QItemDelegate
+{
+public:
+	virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+};
 
 class HistoryView : public HeavenView
 {
@@ -29,6 +37,7 @@ private:
 private:
 	HistoryModel*		mModel;
 	HistoryList*		mList;
+	HistoryBuilder*		mBuilder;
 	QToolBar*			mToolBar;
 	Git::Repository		mRepo;
 };

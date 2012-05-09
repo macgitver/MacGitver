@@ -1,8 +1,12 @@
 
+#include <QStatusBar>
 #include <QFileDialog>
 #include <QApplication>
 #include <QMenuBar>
 #include <QDockWidget>
+
+#include "Core/ObjectId.h"
+#include "Core/Reference.h"
 
 #include "Main/MainWindow.h"
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
@@ -70,6 +74,8 @@ void MainWindow::setupUi()
 	//mmuWorkingTree->addAction()
 
 	setWindowTitle( trUtf8( "MacGitver" ) );
+
+	statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
 
 	/*
 
@@ -142,4 +148,20 @@ void MainWindow::switchToRepo( const Git::Repository& repo )
 
 	mRepo = repo;
 	emit repositoryChanged( mRepo );
+
+	if( mRepo.isValid() )
+	{
+		Git::Reference HEAD = mRepo.HEAD();
+		QString curBranch;
+		if( HEAD.name() != "HEAD" )
+		{
+			curBranch = trUtf8( "on branch <b>%1</b>" ).arg( HEAD.name().mid( 11 ).constData() );
+		}
+		else
+		{
+			curBranch = trUtf8( "HEAD detached: <b>%1</b>" ).arg( HEAD.objectId().toString() );
+		}
+
+		mLblCurrentBranch->setText( curBranch );
+	}
 }

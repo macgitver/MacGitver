@@ -4,6 +4,8 @@
 
 #include <QMainWindow>
 
+class QLabel;
+
 #include "Core/Git.h"
 #include "Core/Repository.h"
 
@@ -34,19 +36,20 @@ private:
 	void closeRepository();
 
 private:
-	QMenu*				mmuRepository;
-	QAction*			macRepositoryOpen;
-	QAction*			macRepositoryClose;
-	QAction*			macRepositoryCreate;
-	QAction*			macRepositoryClone;
-	QAction*			macRepositoryQuit;
-	QMenu*				mmuWorkingTree;
+	QMenu*					mmuRepository;
+	QAction*				macRepositoryOpen;
+	QAction*				macRepositoryClose;
+	QAction*				macRepositoryCreate;
+	QAction*				macRepositoryClone;
+	QAction*				macRepositoryQuit;
+	QMenu*					mmuWorkingTree;
 
+	QLabel*					mLblCurrentBranch;
 	HeavenTopLevelWidget*	mTop;
 
-	Git::Repository		mRepo;
+	Git::Repository			mRepo;
 
-	static MainWindow* sSelf;
+	static MainWindow*		sSelf;
 public:
 	static MainWindow& self(){ return *sSelf; }
 };

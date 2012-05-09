@@ -10,11 +10,19 @@ HistoryModel::HistoryModel( QObject* parent )
 
 int HistoryModel::rowCount( const QModelIndex& parent ) const
 {
+	if( parent.isValid() )
+	{
+		return 0;
+	}
 	return mEntries ? mEntries->count() : 0;
 }
 
 int HistoryModel::columnCount( const QModelIndex& parent ) const
 {
+	if( parent.isValid() )
+	{
+		return 0;
+	}
 	return 7;
 }
 

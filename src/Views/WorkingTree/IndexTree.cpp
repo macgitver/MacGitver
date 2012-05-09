@@ -29,8 +29,14 @@ WorkingTreeDirNode::WorkingTreeDirNode( const QString& path, QTreeWidgetItem* it
 
 WorkingTreeDirNode::~WorkingTreeDirNode()
 {
+#if 0
+	// Don't delete any items. They're freed from IndexTree::clear()
 	if( mDeleteItem )
-		delete item();
+	{
+		QTreeWidgetItem* it = item();
+		delete it;
+	}
+#endif
 }
 
 IndexTree::IndexTree()
@@ -42,15 +48,24 @@ void IndexTree::setRepository( const Git::Repository& repo )
 {
 	clear();
 	mRepo = repo;
-	mIndex = mRepo.index();
+	if( mRepo.isValid() )
+	{
+		mIndex = mRepo.index();
+	}
+	else
+	{
+		mIndex = Git::Index();
+	}
 
 	update();
 }
 
 void IndexTree::clear()
 {
-	qDeleteAll( mFileToNodes );
-	qDeleteAll( mPathToNodes );
+	QTreeWidget::clear();
+
+	qDeleteAll( mFileToNodes ); mFileToNodes.clear();
+	qDeleteAll( mPathToNodes ); mPathToNodes.clear();
 
 	mPathToNodes.insert( QString(), new WorkingTreeDirNode( QString(), invisibleRootItem(), false ) );
 }

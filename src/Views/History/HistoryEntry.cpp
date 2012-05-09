@@ -68,6 +68,7 @@ HistoryEntry::HistoryEntry( const Git::ObjectCommit& commit, unsigned char slot 
 	mCommiter = commit.committer();
 	mAuthor = commit.author();
 	mSha1 = commit.id();
+	mCommitMessage = commit.shortMessage();
 }
 
 QString HistoryEntry::message() const

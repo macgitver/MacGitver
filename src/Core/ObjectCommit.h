@@ -48,6 +48,9 @@ namespace Git
 
 		Signature author() const;
 		Signature committer() const;
+
+		QString message() const;
+		QString shortMessage() const;
 	};
 
 	inline uint qHash( const ObjectCommit& c )

@@ -175,4 +175,30 @@ namespace Git
 		return git2Signature( sig );
 	}
 
+	QString ObjectCommit::message() const
+	{
+		Q_ASSERT( d );
+
+		git_commit* commit = (git_commit*) d->mObj;
+		const char* msg = git_commit_message( commit );
+		int len = strlen( msg );
+		if( len && msg[ len - 1 ] == '\n' )
+			len--;
+		return QString::fromUtf8( msg, len );
+	}
+
+	QString ObjectCommit::shortMessage() const
+	{
+		Q_ASSERT( d );
+
+		git_commit* commit = (git_commit*) d->mObj;
+		const char* msg = git_commit_message( commit );
+
+		int len = 0;
+		while( msg[ len ] && msg[ len ] != '\n' )
+			len++;
+
+		return QString::fromUtf8( msg, len );
+	}
+
 }

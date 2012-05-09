@@ -2,6 +2,13 @@
 #include "Core/Git_p.h"
 #include "Core/Index.h"
 #include "Core/Repository.h"
+#include "Core/Reference.h"
+#include "Core/Object.h"
+#include "Core/ObjectTag.h"
+#include "Core/ObjectTree.h"
+#include "Core/ObjectBlob.h"
+#include "Core/ObjectCommit.h"
+#include "Core/RevisionWalker.h"
 
 #include "git2/branch.h"
 
@@ -225,6 +232,84 @@ namespace Git
 	QString Repository::basePath() const
 	{
 		return QString::fromUtf8(( git_repository_workdir( d->mRepo ) ) );
+	}
+
+	Reference Repository::HEAD()
+	{
+		Q_ASSERT( d );
+		Reference ref;
+
+		if( d )
+		{
+			git_reference* refHead = NULL;
+			git_repository_head( &refHead, d->mRepo );
+
+			ref = new ReferencePrivate( d, refHead );
+		}
+
+		return ref;
+	}
+
+	Object Repository::lookup( const ObjectId& id, ObjectType ot )
+	{
+		Q_ASSERT( d );
+
+		git_object* obj = NULL;
+
+		git_otype gitObjType;
+		switch( ot )
+		{
+		case otAny:		gitObjType = GIT_OBJ_ANY;		break;
+		case otCommit:	gitObjType = GIT_OBJ_COMMIT;	break;
+		case otTree:	gitObjType = GIT_OBJ_TREE;		break;
+		case otTag:		gitObjType = GIT_OBJ_TAG;		break;
+		case otBlob:	gitObjType = GIT_OBJ_BLOB;		break;
+		default:		Q_ASSERT( false ); return Object();
+		}
+
+		int rc = git_object_lookup( &obj, d->mRepo, (git_oid*) id.raw(), gitObjType );
+		if( rc != GIT_SUCCESS )
+		{
+			return Object();
+		}
+
+		return new ObjectPrivate( d, obj );
+	}
+
+	ObjectCommit Repository::lookupCommit( const ObjectId& id )
+	{
+		return lookup( id, otCommit ).asCommit();
+	}
+
+	ObjectTree Repository::lookupTree( const ObjectId& id )
+	{
+		return lookup( id, otTree ).asTree();
+	}
+
+	ObjectBlob Repository::lookupBlob( const ObjectId& id )
+	{
+		return lookup( id, otBlob ).asBlob();
+	}
+
+	ObjectTag Repository::lookupTag( const ObjectId& id )
+	{
+		return lookup( id, otTag ).asTag();
+	}
+
+	RevisionWalker Repository::newWalker()
+	{
+		Q_ASSERT( d );
+		if( d )
+		{
+			git_revwalk* walker = NULL;
+			int rc = git_revwalk_new( &walker, d->mRepo );
+			if( rc == GIT_SUCCESS )
+			{
+				return new RevisionWalkerPrivate( d, walker );
+			}
+		}
+
+		return RevisionWalker();
 	}
 
 }

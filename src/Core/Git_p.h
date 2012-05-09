@@ -78,9 +78,9 @@ namespace Git
 
 	// we have our own ref count and go out of scope when it's 0
 	#define OWN_REF() \
-		void ref(){ mRef.ref(); } \
-		void deref(){ if( !mRef.deref() ) delete this; } \
-		QAtomicInt mRef;
+		void ref(){ mRefCounter.ref(); } \
+		void deref(){ if( !mRefCounter.deref() ) delete this; } \
+		QAtomicInt mRefCounter;
 
 	// we use another one's ref count. he'll kill us if he's about to bite the dust
 	#define PROXY_REF(proxyType, proxy) \
@@ -116,7 +116,8 @@ namespace Git
 	class IndexPrivate
 	{
 	public:
-		OWN_REF();
+		OWN_REF()
+
 	public:
 		IndexPrivate( RepositoryPrivate* repo, git_index* index );
 		~IndexPrivate();
@@ -129,7 +130,8 @@ namespace Git
 	class ObjectPrivate
 	{
 	public:
-		OWN_REF();
+		OWN_REF()
+
 	public:
 		ObjectPrivate( RepositoryPrivate* repo, git_object* o );
 		~ObjectPrivate();
@@ -137,6 +139,34 @@ namespace Git
 	public:
 		RepositoryPrivate*	mRepo;
 		git_object*			mObj;
+	};
+
+	class ReferencePrivate
+	{
+	public:
+		OWN_REF()
+
+	public:
+		ReferencePrivate( RepositoryPrivate* repo, git_reference* ref );
+		~ReferencePrivate();
+
+	public:
+		RepositoryPrivate*	mRepo;
+		git_reference*		mRef;
+	};
+
+	class RevisionWalkerPrivate
+	{
+	public:
+		OWN_REF()
+
+	public:
+		RevisionWalkerPrivate( RepositoryPrivate* repo, git_revwalk* walker );
+		~RevisionWalkerPrivate();
+
+	public:
+		RepositoryPrivate*	mRepo;
+		git_revwalk*		mWalker;
 	};
 
 }

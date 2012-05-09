@@ -46,7 +46,7 @@ namespace Git
 		return ObjectId::fromRaw( git_commit_tree_oid( commit )->id );
 	}
 
-	QList< ObjectId > ObjectCommit::parentCommitIds()
+	QList< ObjectId > ObjectCommit::parentCommitIds() const
 	{
 		QList< ObjectId > ids;
 
@@ -64,7 +64,26 @@ namespace Git
 		return ids;
 	}
 
-	QList< ObjectCommit > ObjectCommit::parentCommits()
+	ObjectCommit ObjectCommit::parentCommit( unsigned int index ) const
+	{
+		ObjectCommit parent;
+
+		if( d && numParentCommits() > index )
+		{
+			git_commit* commit = (git_commit*) d->mObj;
+			git_commit* gitparent = NULL;
+
+			int rc = git_commit_parent( &gitparent, commit, index );
+			if( rc == GIT_SUCCESS )
+			{
+				parent = new ObjectPrivate( d->mRepo, (git_object*) gitparent );
+			}
+		}
+
+		return parent;
+	}
+
+	QList< ObjectCommit > ObjectCommit::parentCommits() const
 	{
 		QList< ObjectCommit > objs;
 
@@ -77,7 +96,7 @@ namespace Git
 				git_commit* parent = NULL;
 
 				int rc = git_commit_parent( &parent, commit, i );
-				if( rc == -1 )
+				if( rc != GIT_SUCCESS )
 				{
 					return QList< ObjectCommit >();
 				}
@@ -89,7 +108,7 @@ namespace Git
 		return objs;
 	}
 
-	unsigned int ObjectCommit::numParentCommits()
+	unsigned int ObjectCommit::numParentCommits() const
 	{
 		if( d )
 		{
@@ -101,7 +120,46 @@ namespace Git
 		return 0;
 	}
 
-	Signature ObjectCommit::author()
+	bool ObjectCommit::isParentOf( const Git::ObjectCommit& child ) const
+	{
+		if( d )
+		{
+			QList< Git::ObjectCommit > parents = child.parentCommits();
+
+			for( int i = 0; i < parents.count(); i++ )
+			{
+				if( isEqual( parents[ i ] ) )
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool ObjectCommit::isChildOf( const Git::ObjectCommit& parent ) const
+	{
+		if( d )
+		{
+			QList< Git::ObjectCommit > children = parentCommits();
+
+			for( int i = 0; i < children.count(); i++ )
+			{
+				if( parent.isEqual( children[ i ] ) )
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	bool ObjectCommit::isEqual( const Git::ObjectCommit& commit ) const
+	{
+		return id() == commit.id();
+	}
+
+	Signature ObjectCommit::author() const
 	{
 		Q_ASSERT( d );
 		git_commit* commit = (git_commit*) d->mObj;
@@ -109,7 +167,7 @@ namespace Git
 		return git2Signature( sig );
 	}
 
-	Signature ObjectCommit::committer()
+	Signature ObjectCommit::committer() const
 	{
 		Q_ASSERT( d );
 		git_commit* commit = (git_commit*) d->mObj;

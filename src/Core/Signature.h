@@ -2,6 +2,8 @@
 #ifndef GIT_SIGNATURE_H
 #define GIT_SIGNATURE_H
 
+#include <QDebug>
+
 #include <QString>
 #include <QDateTime>
 
@@ -49,6 +51,21 @@ namespace Git
 			return mWhen;
 		}
 
+		QString fullName() const
+		{
+			return QString( "%1<%2>" )
+					.arg( mName )
+					.arg( mEMail );
+		}
+
+		QString toNaturalString() const
+		{
+			return QString( "%1 <%2> %3" )
+					.arg( mName )
+					.arg( mEMail )
+					.arg( mWhen.toString( Qt::ISODate ) );
+		}
+
 	private:
 		QString		mName;
 		QString		mEMail;
@@ -56,5 +73,11 @@ namespace Git
 	};
 
 }
+
+inline QDebug operator<<( QDebug debug, const Git::Signature& sig )
+{
+	return debug << "Sig(" << sig.toNaturalString() << ")";
+}
+
 
 #endif

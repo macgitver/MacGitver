@@ -10,6 +10,15 @@
 namespace Git
 {
 
+	class Reference;
+	class Object;
+	class ObjectCommit;
+	class ObjectTag;
+	class ObjectBlob;
+	class ObjectTree;
+	class ObjectId;
+	class RevisionWalker;
+
 	class RepositoryPrivate;
 
 	typedef QHash< QString, int > StatusHash;
@@ -42,6 +51,16 @@ namespace Git
 		Index index();
 
 		StatusHash statusHash();
+
+		Reference HEAD();
+
+		Object lookup( const ObjectId& id, ObjectType ot = otAny );
+		ObjectCommit lookupCommit( const ObjectId& id );
+		ObjectTree lookupTree( const ObjectId& id );
+		ObjectBlob lookupBlob( const ObjectId& id );
+		ObjectTag lookupTag( const ObjectId& id );
+
+		RevisionWalker newWalker();
 
 		void test();
 

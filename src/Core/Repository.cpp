@@ -312,4 +312,23 @@ namespace Git
 		return RevisionWalker();
 	}
 
+	bool Repository::shouldIgnore( const QString& filePath ) const
+	{
+		return shouldIgnore( filePath.toLocal8Bit() );
+	}
+
+	bool Repository::shouldIgnore( const QByteArray& filePath ) const
+	{
+		int ignore = 0;
+		if( d )
+		{
+			int rc = git_status_should_ignore( d->mRepo, filePath.data(), &ignore );
+			if( rc != GIT_SUCCESS )
+			{
+				return false;
+			}
+		}
+		return ignore;
+	}
+
 }

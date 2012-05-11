@@ -60,6 +60,9 @@ namespace Git
 		ObjectBlob lookupBlob( const ObjectId& id );
 		ObjectTag lookupTag( const ObjectId& id );
 
+		bool shouldIgnore( const QString& filePath ) const;
+		bool shouldIgnore( const QByteArray& filePath ) const;
+
 		RevisionWalker newWalker();
 
 		void test();

@@ -1,4 +1,5 @@
 
+#include <QDateTime>
 #include <QFileIconProvider>
 #include <QFileInfo>
 
@@ -42,6 +43,7 @@ WorkingTreeDirNode::~WorkingTreeDirNode()
 IndexTree::IndexTree()
 {
 	setSortingEnabled( true );
+	setColumnCount( 3 );
 }
 
 void IndexTree::setRepository( const Git::Repository& repo )
@@ -112,6 +114,9 @@ void IndexTree::update()
 					me->setData( 0, Qt::DecorationRole, ip.icon( QFileIconProvider::Folder ) );
 					me->setData( 0, Qt::UserRole, "D" + part );
 
+					QFileInfo fi( mRepo.basePath() + "/" + it.value() );
+					me->setData( 2, Qt::DisplayRole, fi.lastModified() );
+
 					dirNode = new WorkingTreeDirNode( curPath, me );
 					mPathToNodes.insert( curPath, dirNode );
 				}
@@ -128,20 +133,28 @@ void IndexTree::update()
 			QFileInfo fi( mRepo.basePath() + "/" + it.key() );
 			item->setData( 0, Qt::DecorationRole, ip.icon( fi ) );
 			item->setData( 0, Qt::UserRole, "F" + file );
+			item->setData( 2, Qt::DisplayRole, fi.lastModified() );
+			item->setData( 1, Qt::DisplayRole, fi.size() );
 
 			mFileToNodes.insert( it.key(), fNode );
 		}
 
-		unsigned int st = it.value();
-		if( st == 0 )
-			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::black );
-		else if( st & GIT_STATUS_WT_MODIFIED )
-			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::blue );
-		else if( st & GIT_STATUS_WT_NEW )
-			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::green );
-		else if( st & GIT_STATUS_WT_DELETED )
-			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::red );
-
+		if( mRepo.shouldIgnore( it.key() ) )
+		{
+			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::darkGray );
+		}
+		else
+		{
+			unsigned int st = it.value();
+			if( st == 0 )
+				fNode->item()->setData( 0, Qt::ForegroundRole, Qt::black );
+			else if( st & GIT_STATUS_WT_MODIFIED )
+				fNode->item()->setData( 0, Qt::ForegroundRole, Qt::blue );
+			else if( st & GIT_STATUS_WT_NEW )
+				fNode->item()->setData( 0, Qt::ForegroundRole, Qt::green );
+			else if( st & GIT_STATUS_WT_DELETED )
+				fNode->item()->setData( 0, Qt::ForegroundRole, Qt::red );
+		}
 		++it;
 	}
 }

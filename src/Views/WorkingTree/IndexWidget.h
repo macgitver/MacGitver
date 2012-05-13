@@ -34,6 +34,7 @@ private:
 	QToolBar*			mToolBar;
 	Git::Repository		mRepo;
 
+	bool				mChangingFilters;
 
 	QAction*			mactShowAll;
 	QAction*			mactShowUnchanged;

@@ -10,6 +10,8 @@
 
 IndexWidget::IndexWidget()
 {
+	mChangingFilters = false;
+
 	mTree = new IndexTree;
 	mTree->setFrameShape( QFrame::NoFrame );
 
@@ -60,25 +62,115 @@ void IndexWidget::repositoryChanged( Git::Repository repo )
 
 void IndexWidget::onShowAll( bool enabled )
 {
+	if( !mChangingFilters )
+	{
+		mChangingFilters = true;
+
+		mTree->setFilter( enabled ? IndexTree::All : IndexTree::None );
+
+		mactShowIgnored->setChecked( enabled );
+		mactShowMissing->setChecked( enabled);
+		mactShowModified->setChecked( enabled );
+		mactShowUnchanged->setChecked( enabled );
+		mactShowUntacked->setChecked( enabled );
+
+		mChangingFilters = false;
+	}
 }
 
 void IndexWidget::onShowModified( bool enabled )
 {
+	if( !mChangingFilters )
+	{
+		mChangingFilters = true;
+
+		IndexTree::TreeFilters f = mTree->filters();
+		if( enabled )
+			f |= IndexTree::Changed;
+		else
+			f &= ~IndexTree::Changed;
+		mTree->setFilter( f );
+
+		mactShowAll->setChecked( f == IndexTree::All );
+
+		mChangingFilters = false;
+	}
 }
 
 void IndexWidget::onShowMissing( bool enabled )
 {
+	if( !mChangingFilters )
+	{
+		mChangingFilters = true;
+
+		IndexTree::TreeFilters f = mTree->filters();
+		if( enabled )
+			f |= IndexTree::Missing;
+		else
+			f &= ~IndexTree::Missing;
+		mTree->setFilter( f );
+
+		mactShowAll->setChecked( f == IndexTree::All );
+
+		mChangingFilters = false;
+	}
+
 }
 
 void IndexWidget::onShowIgnored( bool enabled )
 {
+	if( !mChangingFilters )
+	{
+		mChangingFilters = true;
+
+		IndexTree::TreeFilters f = mTree->filters();
+		if( enabled )
+			f |= IndexTree::Ignored;
+		else
+			f &= ~IndexTree::Ignored;
+		mTree->setFilter( f );
+
+		mactShowAll->setChecked( f == IndexTree::All );
+
+		mChangingFilters = false;
+	}
 }
 
 void IndexWidget::onShowUntracked( bool enabled )
 {
+	if( !mChangingFilters )
+	{
+		mChangingFilters = true;
+
+		IndexTree::TreeFilters f = mTree->filters();
+		if( enabled )
+			f |= IndexTree::Untracked;
+		else
+			f &= ~IndexTree::Untracked;
+		mTree->setFilter( f );
+
+		mactShowAll->setChecked( f == IndexTree::All );
+
+		mChangingFilters = false;
+	}
 }
 
 void IndexWidget::onShowUnchanged( bool enabled )
 {
+	if( !mChangingFilters )
+	{
+		mChangingFilters = true;
+
+		IndexTree::TreeFilters f = mTree->filters();
+		if( enabled )
+			f |= IndexTree::Unchanged;
+		else
+			f &= ~IndexTree::Unchanged;
+		mTree->setFilter( f );
+
+		mactShowAll->setChecked( f == IndexTree::All );
+
+		mChangingFilters = false;
+	}
 }
 

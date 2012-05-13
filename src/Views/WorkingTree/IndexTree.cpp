@@ -82,6 +82,12 @@ IndexTree::IndexTree()
 	setColumnCount( 4 );
 	setSortingEnabled( true );
 	sortByColumn( 0, Qt::AscendingOrder );
+
+	QTreeWidgetItem* head = headerItem();
+	head->setData( 0, Qt::DisplayRole, trUtf8( "File" ) );
+	head->setData( 1, Qt::DisplayRole, trUtf8( "Size" ) );
+	head->setData( 2, Qt::DisplayRole, trUtf8( "M-Time" ) );
+	head->setData( 3, Qt::DisplayRole, trUtf8( "Owner" ) );
 }
 
 void IndexTree::setRepository( const Git::Repository& repo )

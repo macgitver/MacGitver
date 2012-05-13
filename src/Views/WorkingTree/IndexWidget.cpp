@@ -23,21 +23,27 @@ IndexWidget::IndexWidget()
 
 	mactShowAll = mToolBar->addAction( trUtf8( "All" ), this, SLOT(onShowAll(bool)) );
 	mactShowAll->setCheckable( true );
+	mactShowAll->setChecked( true );
 
 	mactShowUnchanged = mToolBar->addAction( trUtf8( "Unchanged" ), this, SLOT(onShowUnchanged(bool)) );
 	mactShowUnchanged->setCheckable( true );
+	mactShowUnchanged->setChecked( true );
 
 	mactShowModified = mToolBar->addAction( trUtf8( "Modified" ), this, SLOT(onShowModified(bool)) );
 	mactShowModified->setCheckable( true );
+	mactShowModified->setChecked( true );
 
 	mactShowMissing = mToolBar->addAction( trUtf8( "Missing" ), this, SLOT(onShowMissing(bool)) );
 	mactShowMissing->setCheckable( true );
+	mactShowMissing->setChecked( true );
 
 	mactShowIgnored = mToolBar->addAction( trUtf8( "Ignored" ), this, SLOT(onShowIgnored(bool)) );
 	mactShowIgnored->setCheckable( true );
+	mactShowIgnored->setChecked( true );
 
 	mactShowUntacked = mToolBar->addAction( trUtf8( "Untracked" ), this, SLOT(onShowUntracked(bool)) );
 	mactShowUntacked->setCheckable( true );
+	mactShowUntacked->setChecked( true );
 
 	mToolBar->addSeparator();
 

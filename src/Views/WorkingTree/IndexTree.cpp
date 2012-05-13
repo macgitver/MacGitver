@@ -30,7 +30,16 @@ WorkingTreeFileNode::WorkingTreeFileNode( const QString& path, QTreeWidgetItem* 
 
 bool WorkingTreeFileNode::refilter( IndexTree* tree )
 {
-	return true;
+	if( mState & tree->filters() )
+	{
+		item()->setHidden( false );
+		return true;
+	}
+	else
+	{
+		item()->setHidden( true );
+		return false;
+	}
 }
 
 

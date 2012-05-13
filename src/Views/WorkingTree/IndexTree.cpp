@@ -127,23 +127,17 @@ void IndexTree::update()
 	{
 		TreeFilters curState;
 
-		if( mRepo.shouldIgnore( it.key() ) )
-		{
+		unsigned int st = it.value();
+		if( st == 0 )
+			curState |= Unchanged;
+		else if( st & GIT_STATUS_IGNORED )
 			curState |= Ignored;
-		}
-		else
-		{
-			unsigned int st = it.value();
-			if( st == 0 )
-				curState |= Unchanged;
-			else if( st & GIT_STATUS_WT_MODIFIED )
-				curState |= Changed;
-			else if( st & GIT_STATUS_WT_NEW )
-				curState |= Untracked;
-			else if( st & GIT_STATUS_WT_DELETED )
-				curState |= Missing;
-		}
-
+		else if( st & GIT_STATUS_WT_MODIFIED )
+			curState |= Changed;
+		else if( st & GIT_STATUS_WT_NEW )
+			curState |= Untracked;
+		else if( st & GIT_STATUS_WT_DELETED )
+			curState |= Missing;
 
 		QString dir, file;
 		int i = it.key().lastIndexOf( L'/' );

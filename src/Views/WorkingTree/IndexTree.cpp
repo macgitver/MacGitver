@@ -79,7 +79,7 @@ IndexTree::IndexTree()
 {
 	mFilters = All;
 
-	setColumnCount( 3 );
+	setColumnCount( 4 );
 	setSortingEnabled( true );
 	sortByColumn( 0, Qt::AscendingOrder );
 }
@@ -174,7 +174,7 @@ void IndexTree::update()
 					me->setData( 0, Qt::UserRole, "D" + part );
 
 					QFileInfo fi( mRepo.basePath() + "/" + it.value() );
-					me->setData( 2, Qt::DisplayRole, fi.lastModified() );
+					me->setData( 3, Qt::DisplayRole, fi.owner() );
 
 					dirNode = new WorkingTreeDirNode( curPath, me, dirNode );
 					mPathToNodes.insert( curPath, dirNode );
@@ -192,8 +192,9 @@ void IndexTree::update()
 			QFileInfo fi( mRepo.basePath() + "/" + it.key() );
 			item->setData( 0, Qt::DecorationRole, ip.icon( fi ) );
 			item->setData( 0, Qt::UserRole, "F" + file );
-			item->setData( 2, Qt::DisplayRole, fi.lastModified() );
 			item->setData( 1, Qt::DisplayRole, fi.size() );
+			item->setData( 2, Qt::DisplayRole, fi.lastModified() );
+			item->setData( 3, Qt::DisplayRole, fi.owner() );
 
 			mFileToNodes.insert( it.key(), fNode );
 		}

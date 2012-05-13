@@ -43,6 +43,7 @@ public:
 		Unchanged		= 1 << 3,
 		Ignored			= 1 << 4,
 
+		None			= 0,
 		All				= Unchanged | Untracked | Missing | Ignored | Changed
 	};
 

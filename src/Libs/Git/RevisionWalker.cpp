@@ -1,8 +1,8 @@
 
-#include "Core/RevisionWalker.h"
-#include "Core/ObjectId.h"
-#include "Core/Reference.h"
-#include "Core/Git_p.h"
+#include "Libs/Git/RevisionWalker.h"
+#include "Libs/Git/ObjectId.h"
+#include "Libs/Git/Reference.h"
+#include "Libs/Git/Git_p.h"
 
 namespace Git
 {

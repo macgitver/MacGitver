@@ -1,8 +1,8 @@
 
 #include <QPainter>
 
-#include "Heaven/HDecorator.h"
-#include "Heaven/HView.h"
+#include "Libs/Heaven/HDecorator.h"
+#include "Libs/Heaven/HView.h"
 
 HeavenDecorator::HeavenDecorator( HeavenView* view )
 	: mView( view )

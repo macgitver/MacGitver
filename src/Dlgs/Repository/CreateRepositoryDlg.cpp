@@ -3,7 +3,7 @@
 #include <QDir>
 #include <QFileDialog>
 
-#include "Core/Git.h"
+#include "Libs/Git/Git.h"
 
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 

@@ -2,9 +2,9 @@
 #ifndef HISTORY_ENTRY_H
 #define HISTORY_ENTRY_H
 
-#include "Core/Signature.h"
-#include "Core/ObjectId.h"
-#include "Core/ObjectCommit.h"
+#include "Libs/Git/Signature.h"
+#include "Libs/Git/ObjectId.h"
+#include "Libs/Git/ObjectCommit.h"
 
 struct HistoryGraphDrawInfo
 {

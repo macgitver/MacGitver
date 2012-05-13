@@ -1,7 +1,7 @@
 
-#include "Core/Git_p.h"
-#include "Core/ObjectId.h"
-#include "Core/Reference.h"
+#include "Libs/Git/Git_p.h"
+#include "Libs/Git/ObjectId.h"
+#include "Libs/Git/Reference.h"
 
 namespace Git
 {

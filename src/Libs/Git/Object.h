@@ -2,8 +2,8 @@
 #ifndef GIT_OBJECT_H
 #define GIT_OBJECT_H
 
-#include "Core/Git.h"
-#include "Core/ObjectId.h"
+#include "Libs/Git/Git.h"
+#include "Libs/Git/ObjectId.h"
 
 namespace Git
 {

@@ -1,7 +1,7 @@
 
-#include "Core/Git_p.h"
+#include "Libs/Git/Git_p.h"
 
-#include "Core/ObjectTag.h"
+#include "Libs/Git/ObjectTag.h"
 
 namespace Git
 {

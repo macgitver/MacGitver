@@ -3,7 +3,7 @@
 #include <QToolBar>
 #include <QVBoxLayout>
 
-#include "Core/Index.h"
+#include "Libs/Git/Index.h"
 
 #include "Views/WorkingTree/IndexWidget.h"
 #include "Views/WorkingTree/IndexTree.h"

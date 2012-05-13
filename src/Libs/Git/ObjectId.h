@@ -6,7 +6,7 @@
 #include <QByteArray>
 #include <QDebug>
 
-#include "Core/Git.h"
+#include "Libs/Git/Git.h"
 
 namespace Git
 {

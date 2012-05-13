@@ -5,10 +5,10 @@
 #include <QDebug>
 #include <QList>
 
-#include "Core/Git.h"
-#include "Core/ObjectId.h"
-#include "Core/Object.h"
-#include "Core/Signature.h"
+#include "Libs/Git/Git.h"
+#include "Libs/Git/ObjectId.h"
+#include "Libs/Git/Object.h"
+#include "Libs/Git/Signature.h"
 
 namespace Git
 {

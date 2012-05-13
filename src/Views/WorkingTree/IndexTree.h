@@ -4,8 +4,8 @@
 
 #include <QTreeWidget>
 
-#include "Core/Index.h"
-#include "Core/Repository.h"
+#include "Libs/Git/Index.h"
+#include "Libs/Git/Repository.h"
 
 class IndexTree;
 

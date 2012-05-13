@@ -1,7 +1,7 @@
 
-#include "Core/Git_p.h"
+#include "Libs/Git/Git_p.h"
 
-#include "Core/ObjectBlob.h"
+#include "Libs/Git/ObjectBlob.h"
 
 namespace Git
 {

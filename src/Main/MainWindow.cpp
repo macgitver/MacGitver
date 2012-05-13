@@ -5,13 +5,13 @@
 #include <QMenuBar>
 #include <QDockWidget>
 
-#include "Core/ObjectId.h"
-#include "Core/Reference.h"
+#include "Libs/Git/ObjectId.h"
+#include "Libs/Git/Reference.h"
 
 #include "Main/MainWindow.h"
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 
-#include "Heaven/HTopLevelWidget.h"
+#include "Libs/Heaven/HTopLevelWidget.h"
 
 #include "Views/Diff/DiffView.h"
 #include "Views/Branches/BranchesView.h"

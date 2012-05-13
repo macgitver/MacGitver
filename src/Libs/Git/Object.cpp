@@ -1,11 +1,11 @@
 
-#include "Core/Git_p.h"
-#include "Core/ObjectId.h"
-#include "Core/Object.h"
-#include "Core/ObjectTree.h"
-#include "Core/ObjectTag.h"
-#include "Core/ObjectCommit.h"
-#include "Core/ObjectBlob.h"
+#include "Libs/Git/Git_p.h"
+#include "Libs/Git/ObjectId.h"
+#include "Libs/Git/Object.h"
+#include "Libs/Git/ObjectTree.h"
+#include "Libs/Git/ObjectTag.h"
+#include "Libs/Git/ObjectCommit.h"
+#include "Libs/Git/ObjectBlob.h"
 
 namespace Git
 {

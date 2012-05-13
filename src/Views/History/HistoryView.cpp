@@ -5,8 +5,8 @@
 #include <QAction>
 #include <QToolBar>
 
-#include "Core/Reference.h"
-#include "Core/ObjectCommit.h"
+#include "Libs/Git/Reference.h"
+#include "Libs/Git/ObjectCommit.h"
 
 #include "Views/History/HistoryView.h"
 #include "Views/History/HistoryEntry.h"

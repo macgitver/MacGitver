@@ -2,7 +2,7 @@
 #ifndef GIT_REFERENCE_H
 #define GIT_REFERENCE_H
 
-#include "Core/Git.h"
+#include "Libs/Git/Git.h"
 
 namespace Git
 {

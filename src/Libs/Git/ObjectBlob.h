@@ -2,9 +2,9 @@
 #ifndef GIT_OBJECT_BLOB_H
 #define GIT_OBJECT_BLOB_H
 
-#include "Core/Git.h"
-#include "Core/ObjectId.h"
-#include "Core/Object.h"
+#include "Libs/Git/Git.h"
+#include "Libs/Git/ObjectId.h"
+#include "Libs/Git/Object.h"
 
 namespace Git
 {

@@ -1,6 +1,6 @@
 
-#include "Core/ObjectId.h"
-#include "Core/Reference.h"
+#include "Libs/Git/ObjectId.h"
+#include "Libs/Git/Reference.h"
 
 #include "Views/History/HistoryBuilder.h"
 #include "Views/History/HistoryEntry.h"

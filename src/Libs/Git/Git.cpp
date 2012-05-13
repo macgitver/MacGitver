@@ -1,8 +1,8 @@
 
-#include "Core/Git_p.h"
+#include "Libs/Git/Git_p.h"
 
-#include "Core/Index.h"
-#include "Core/Repository.h"
+#include "Libs/Git/Index.h"
+#include "Libs/Git/Repository.h"
 
 namespace Git
 {

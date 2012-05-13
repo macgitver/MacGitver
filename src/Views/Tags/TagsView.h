@@ -2,9 +2,9 @@
 #ifndef MGV_TAGS_VIEW_H
 #define MGV_TAGS_VIEW_H
 
-#include "Heaven/HView.h"
+#include "Libs/Heaven/HView.h"
 
-#include "Core/Repository.h"
+#include "Libs/Git/Repository.h"
 
 class QListWidget;
 

@@ -2,7 +2,7 @@
 #include <QPlastiqueStyle>
 #include <QApplication>
 
-#include "Core/Git.h"
+#include "Libs/Git/Git.h"
 
 #include "MainWindow.h"
 

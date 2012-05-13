@@ -2,7 +2,7 @@
 #ifndef GIT_REVISION_WALKER_H
 #define GIT_REVISION_WALKER_H
 
-#include "Core/Git.h"
+#include "Libs/Git/Git.h"
 
 namespace Git
 {

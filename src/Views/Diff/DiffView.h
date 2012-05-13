@@ -2,7 +2,7 @@
 #ifndef DIFF_VIEW_H
 #define DIFF_VIEW_H
 
-#include "Heaven/HView.h"
+#include "Libs/Heaven/HView.h"
 
 class Differences;
 class DiffDisplayWidget;

@@ -4,7 +4,7 @@
 
 #include "git2.h"
 
-#include "Core/Git.h"
+#include "Libs/Git/Git.h"
 
 namespace Git
 {

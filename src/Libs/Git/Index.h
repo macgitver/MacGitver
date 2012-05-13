@@ -2,7 +2,7 @@
 #ifndef GIT_INDEX_H
 #define GIT_INDEX_H
 
-#include "Core/Git.h"
+#include "Libs/Git/Git.h"
 
 namespace Git
 {

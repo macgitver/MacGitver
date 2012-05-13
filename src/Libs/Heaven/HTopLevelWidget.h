@@ -4,8 +4,8 @@
 
 #include <QWidget>
 
-#include "Heaven/HContainer.h"
-#include "Heaven/HView.h"
+#include "Libs/Heaven/HContainer.h"
+#include "Libs/Heaven/HView.h"
 
 struct Heaven
 {

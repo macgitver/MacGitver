@@ -3,7 +3,7 @@
 #include <QPalette>
 #include <QVBoxLayout>
 
-#include "Heaven/HTopLevelWidget.h"
+#include "Libs/Heaven/HTopLevelWidget.h"
 
 HeavenTopLevelWidget::HeavenTopLevelWidget()
 {

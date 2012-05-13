@@ -13,23 +13,23 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
-    Core/Git.cpp
-    Core/Repository.cpp
-    Core/Index.cpp
-    Core/ObjectId.cpp
-    Core/Object.cpp
-    Core/ObjectTree.cpp
-    Core/ObjectBlob.cpp
-    Core/ObjectTag.cpp
-    Core/ObjectCommit.cpp
-    Core/Signature.cpp
-    Core/Reference.cpp
-    Core/RevisionWalker.cpp
+    Libs/Git/Git.cpp
+    Libs/Git/Repository.cpp
+    Libs/Git/Index.cpp
+    Libs/Git/ObjectId.cpp
+    Libs/Git/Object.cpp
+    Libs/Git/ObjectTree.cpp
+    Libs/Git/ObjectBlob.cpp
+    Libs/Git/ObjectTag.cpp
+    Libs/Git/ObjectCommit.cpp
+    Libs/Git/Signature.cpp
+    Libs/Git/Reference.cpp
+    Libs/Git/RevisionWalker.cpp
 
-    Heaven/HContainer.cpp
-    Heaven/HView.cpp
-    Heaven/HTopLevelWidget.cpp
-    Heaven/HDecorator.cpp
+    Libs/Heaven/HContainer.cpp
+    Libs/Heaven/HView.cpp
+    Libs/Heaven/HTopLevelWidget.cpp
+    Libs/Heaven/HDecorator.cpp
 
     Main/main.cpp
     Main/MainWindow.cpp
@@ -60,24 +60,24 @@ SET( SRC_FILES
 
 SET( HDR_FILES
 
-    Core/Git.h
-    Core/Git_p.h
-    Core/Repository.h
-    Core/Index.h
-    Core/ObjectId.h
-    Core/Object.h
-    Core/ObjectTree.h
-    Core/ObjectBlob.h
-    Core/ObjectTag.h
-    Core/ObjectCommit.h
-    Core/Signature.h
-    Core/Reference.h
-    Core/RevisionWalker.h
+    Libs/Git/Git.h
+    Libs/Git/Git_p.h
+    Libs/Git/Repository.h
+    Libs/Git/Index.h
+    Libs/Git/ObjectId.h
+    Libs/Git/Object.h
+    Libs/Git/ObjectTree.h
+    Libs/Git/ObjectBlob.h
+    Libs/Git/ObjectTag.h
+    Libs/Git/ObjectCommit.h
+    Libs/Git/Signature.h
+    Libs/Git/Reference.h
+    Libs/Git/RevisionWalker.h
 
-    Heaven/HContainer.h
-    Heaven/HView.h
-    Heaven/HTopLevelWidget.h
-    Heaven/HDecorator.h
+    Libs/Heaven/HContainer.h
+    Libs/Heaven/HView.h
+    Libs/Heaven/HTopLevelWidget.h
+    Libs/Heaven/HDecorator.h
 
     Main/MainWindow.h
 

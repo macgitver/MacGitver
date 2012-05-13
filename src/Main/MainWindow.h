@@ -6,8 +6,8 @@
 
 class QLabel;
 
-#include "Core/Git.h"
-#include "Core/Repository.h"
+#include "Libs/Git/Git.h"
+#include "Libs/Git/Repository.h"
 
 class HeavenTopLevelWidget;
 

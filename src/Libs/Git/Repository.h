@@ -5,7 +5,7 @@
 #include <QStringList>
 #include <QHash>
 
-#include "Core/Git.h"
+#include "Libs/Git/Git.h"
 
 namespace Git
 {

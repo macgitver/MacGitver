@@ -1,8 +1,8 @@
 
-#include "Core/Git_p.h"
+#include "Libs/Git/Git_p.h"
 
-#include "Core/ObjectCommit.h"
-#include "Core/ObjectTree.h"
+#include "Libs/Git/ObjectCommit.h"
+#include "Libs/Git/ObjectTree.h"
 
 namespace Git
 {

@@ -2,9 +2,9 @@
 #ifndef MGV_REFERENCE_VIEW_H
 #define MGV_REFERENCE_VIEW_H
 
-#include "Heaven/HView.h"
+#include "Libs/Heaven/HView.h"
 
-#include "Core/Repository.h"
+#include "Libs/Git/Repository.h"
 
 class QListWidget;
 

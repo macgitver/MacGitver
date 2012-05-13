@@ -1,6 +1,6 @@
 
-#include "Core/Git_p.h"
-#include "Core/Signature.h"
+#include "Libs/Git/Git_p.h"
+#include "Libs/Git/Signature.h"
 
 namespace Git
 {

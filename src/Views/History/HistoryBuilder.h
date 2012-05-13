@@ -4,9 +4,9 @@
 
 #include <QMap>
 
-#include "Core/ObjectCommit.h"
-#include "Core/Repository.h"
-#include "Core/RevisionWalker.h"
+#include "Libs/Git/ObjectCommit.h"
+#include "Libs/Git/Repository.h"
+#include "Libs/Git/RevisionWalker.h"
 
 class HistoryEntries;
 

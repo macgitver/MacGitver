@@ -15,35 +15,73 @@ WorkingTreeNode::WorkingTreeNode( const QString& path, QTreeWidgetItem* item )
 {
 }
 
-WorkingTreeFileNode::WorkingTreeFileNode( const QString& path, QTreeWidgetItem* item )
-	: WorkingTreeNode( path, item )
+WorkingTreeNode::~WorkingTreeNode()
 {
+}
+
+WorkingTreeFileNode::WorkingTreeFileNode( const QString& path, QTreeWidgetItem* item,
+										  WorkingTreeDirNode* parent, IndexTree::TreeFilters state )
+	: WorkingTreeNode( path, item )
+	, mParent( parent )
+	, mState( state )
+{
+	mParent->mChildren.append( this );
+}
+
+bool WorkingTreeFileNode::refilter( IndexTree* tree )
+{
+	return true;
 }
 
 
 WorkingTreeDirNode::WorkingTreeDirNode( const QString& path, QTreeWidgetItem* item,
-										bool deleteItem )
+										WorkingTreeDirNode* parent )
 	: WorkingTreeNode( path, item )
+	, mParent( parent )
 {
-	mDeleteItem = deleteItem;
+	if( mParent )
+	{
+		mParent->mChildren.append( this );
+	}
 }
 
 WorkingTreeDirNode::~WorkingTreeDirNode()
 {
-#if 0
-	// Don't delete any items. They're freed from IndexTree::clear()
-	if( mDeleteItem )
+}
+
+bool WorkingTreeDirNode::refilter( IndexTree* tree )
+{
+	bool anyChildVisible = false;
+
+	for( int i = 0; i < mChildren.count(); i++ )
 	{
-		QTreeWidgetItem* it = item();
-		delete it;
+		anyChildVisible |= mChildren.at( i )->refilter( tree );
 	}
-#endif
+
+	if( !mParent )
+	{
+		return true;
+	}
+
+	if( anyChildVisible )
+	{
+		item()->setHidden( false );
+		return true;
+	}
+	else
+	{
+		item()->setHidden( true );
+		return false;
+	}
 }
 
 IndexTree::IndexTree()
 {
-	setSortingEnabled( true );
+	mFilters = All;
+
 	setColumnCount( 3 );
+	setSortingEnabled( true );
+	sortByColumn( 0, Qt::AscendingOrder );
 }
 
 void IndexTree::setRepository( const Git::Repository& repo )
@@ -69,7 +107,8 @@ void IndexTree::clear()
 	qDeleteAll( mFileToNodes ); mFileToNodes.clear();
 	qDeleteAll( mPathToNodes ); mPathToNodes.clear();
 
-	mPathToNodes.insert( QString(), new WorkingTreeDirNode( QString(), invisibleRootItem(), false ) );
+	mPathToNodes.insert( QString(), new WorkingTreeDirNode( QString(),
+															invisibleRootItem(), NULL ) );
 }
 
 void IndexTree::update()
@@ -80,6 +119,26 @@ void IndexTree::update()
 	Git::StatusHash::ConstIterator it = sh.constBegin();
 	while( it != sh.constEnd() )
 	{
+		TreeFilters curState;
+
+		if( mRepo.shouldIgnore( it.key() ) )
+		{
+			curState |= Ignored;
+		}
+		else
+		{
+			unsigned int st = it.value();
+			if( st == 0 )
+				curState |= Unchanged;
+			else if( st & GIT_STATUS_WT_MODIFIED )
+				curState |= Changed;
+			else if( st & GIT_STATUS_WT_NEW )
+				curState |= Untracked;
+			else if( st & GIT_STATUS_WT_DELETED )
+				curState |= Missing;
+		}
+
+
 		QString dir, file;
 		int i = it.key().lastIndexOf( L'/' );
 		if( i == -1 )
@@ -117,7 +176,7 @@ void IndexTree::update()
 					QFileInfo fi( mRepo.basePath() + "/" + it.value() );
 					me->setData( 2, Qt::DisplayRole, fi.lastModified() );
 
-					dirNode = new WorkingTreeDirNode( curPath, me );
+					dirNode = new WorkingTreeDirNode( curPath, me, dirNode );
 					mPathToNodes.insert( curPath, dirNode );
 				}
 			}
@@ -128,7 +187,7 @@ void IndexTree::update()
 		if( !fNode )
 		{
 			QTreeWidgetItem* item = new QTreeWidgetItem( dirNode->item(), QStringList( file ) );
-			fNode = new WorkingTreeFileNode( it.key(), item );
+			fNode = new WorkingTreeFileNode( it.key(), item, dirNode, curState );
 
 			QFileInfo fi( mRepo.basePath() + "/" + it.key() );
 			item->setData( 0, Qt::DecorationRole, ip.icon( fi ) );
@@ -139,22 +198,46 @@ void IndexTree::update()
 			mFileToNodes.insert( it.key(), fNode );
 		}
 
-		if( mRepo.shouldIgnore( it.key() ) )
-		{
-			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::darkGray );
-		}
-		else
-		{
-			unsigned int st = it.value();
-			if( st == 0 )
-				fNode->item()->setData( 0, Qt::ForegroundRole, Qt::black );
-			else if( st & GIT_STATUS_WT_MODIFIED )
-				fNode->item()->setData( 0, Qt::ForegroundRole, Qt::blue );
-			else if( st & GIT_STATUS_WT_NEW )
-				fNode->item()->setData( 0, Qt::ForegroundRole, Qt::green );
-			else if( st & GIT_STATUS_WT_DELETED )
-				fNode->item()->setData( 0, Qt::ForegroundRole, Qt::red );
-		}
+		if( curState & Unchanged )
+			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::black );
+
+		else if( curState & Changed )
+			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::blue );
+
+		else if( curState & Untracked )
+			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::green );
+
+		else if( curState & Missing )
+			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::red );
+
+		else if( curState & Ignored )
+			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::gray );
+
 		++it;
 	}
+
+	refilter();
+}
+
+void IndexTree::refilter()
+{
+	WorkingTreeDirNode* node = mPathToNodes.value( QString(), NULL );
+	if( node )
+	{
+		node->refilter( this );
+	}
+}
+
+void IndexTree::setFilter( TreeFilters filters )
+{
+	if( filters != mFilters )
+	{
+		mFilters = filters;
+		refilter();
+	}
+}
+
+IndexTree::TreeFilters IndexTree::filters() const
+{
+	return mFilters;
 }

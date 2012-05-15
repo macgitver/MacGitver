@@ -31,8 +31,14 @@ SET( SRC_FILES
     Libs/Heaven/HTopLevelWidget.cpp
     Libs/Heaven/HDecorator.cpp
 
+    Libs/Core/MacGitver.cpp
+    Libs/Core/Module.cpp
+    Libs/Core/Modules.cpp
+    Libs/Core/ConfigPage.cpp
+    Libs/Core/ConfigWidget.cpp
+    Libs/Core/MainWindow.cpp
+
     Main/main.cpp
-    Main/MainWindow.cpp
 
     Dlgs/Repository/CreateRepositoryDlg.cpp
 
@@ -79,7 +85,12 @@ SET( HDR_FILES
     Libs/Heaven/HTopLevelWidget.h
     Libs/Heaven/HDecorator.h
 
-    Main/MainWindow.h
+    Libs/Core/MacGitver.h
+    Libs/Core/Module.h
+    Libs/Core/Modules.h
+    Libs/Core/ConfigPage.h
+    Libs/Core/ConfigWidget.h
+    Libs/Core/MainWindow.h
 
     Dlgs/Repository/CreateRepositoryDlg.h
 

@@ -8,7 +8,8 @@
 #include "Libs/Git/ObjectId.h"
 #include "Libs/Git/Reference.h"
 
-#include "Main/MainWindow.h"
+#include "Libs/Core/MainWindow.h"
+
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 
 #include "Libs/Heaven/HTopLevelWidget.h"

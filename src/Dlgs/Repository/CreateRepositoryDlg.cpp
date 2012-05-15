@@ -7,7 +7,7 @@
 
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 
-#include "Main/MainWindow.h"
+#include "Libs/Core/MainWindow.h"
 
 CreateRepositoryDlg::CreateRepositoryDlg()
 {

@@ -8,6 +8,7 @@
 #include "Libs/Git/ObjectId.h"
 #include "Libs/Git/Reference.h"
 
+#include "Libs/Core/MacGitver.h"
 #include "Libs/Core/MainWindow.h"
 
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
@@ -21,18 +22,17 @@
 #include "Views/Refs/RefsView.h"
 #include "Views/WorkingTree/IndexWidget.h"
 
-MainWindow* MainWindow::sSelf = NULL;
-
 MainWindow::MainWindow()
 	: mRepo()
 {
-	sSelf = this;
 	setupUi();
+
+	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+			 SLOT(repositoryChanged(Git::Repository)) );
 }
 
 MainWindow::~MainWindow()
 {
-	closeRepository();
 }
 
 void MainWindow::onRepositoryCreate()
@@ -51,7 +51,7 @@ void MainWindow::onRepositoryOpen()
 	Git::Repository repo = Git::Repository::open( fn );
 	if( repo.isValid() )
 	{
-		switchToRepo( repo );
+		MacGitver::self().openedRepository( repo );
 	}
 }
 
@@ -131,24 +131,9 @@ void MainWindow::setupUi()
 	mTop->addView( new DiffView, Heaven::Central );
 }
 
-void MainWindow::closeRepository()
+void MainWindow::repositoryChanged( const Git::Repository& repo )
 {
-	if( !mRepo.isValid() )
-	{
-		return;
-	}
-
-	emit repositoryChanged( Git::Repository() );
-
-	mRepo = Git::Repository();
-}
-
-void MainWindow::switchToRepo( const Git::Repository& repo )
-{
-	closeRepository();
-
 	mRepo = repo;
-	emit repositoryChanged( mRepo );
 
 	if( mRepo.isValid() )
 	{

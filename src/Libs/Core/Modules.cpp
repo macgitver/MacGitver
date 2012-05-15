@@ -1,7 +1,8 @@
 
 #include "Libs/Core/Modules.h"
 
-Modules::Modules()
+Modules::Modules( QObject* parent )
+	: QObject( parent )
 {
 }
 

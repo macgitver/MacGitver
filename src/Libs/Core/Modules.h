@@ -10,7 +10,7 @@ class Modules : public QObject
 {
 	Q_OBJECT
 public:
-	Modules();
+	Modules( QObject* parent );
 	~Modules();
 
 public:

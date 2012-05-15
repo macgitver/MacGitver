@@ -47,6 +47,7 @@ void HistoryBuilder::start()
 	while( mWalker.next( current ) )
 	{
 		lastEntry = curEntry;
+		Q_UNUSED( lastEntry );
 		lastSlot = slot;
 		prevCommit = curCommit;
 		curCommit = mRepo.lookupCommit( current );

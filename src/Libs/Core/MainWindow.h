@@ -25,15 +25,11 @@ private slots:
 private:
 	void setupUi();
 
-signals:
+public slots:
 	void repositoryChanged( const Git::Repository& repo );
 
 public:
 	void addError( const QString& err );
-	void switchToRepo( const Git::Repository& repo );
-
-private:
-	void closeRepository();
 
 private:
 	QMenu*					mmuRepository;
@@ -48,10 +44,6 @@ private:
 	HeavenTopLevelWidget*	mTop;
 
 	Git::Repository			mRepo;
-
-	static MainWindow*		sSelf;
-public:
-	static MainWindow& self(){ return *sSelf; }
 };
 
 #endif

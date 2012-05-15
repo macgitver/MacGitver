@@ -150,4 +150,8 @@ void MainWindow::repositoryChanged( const Git::Repository& repo )
 
 		mLblCurrentBranch->setText( curBranch );
 	}
+	else
+	{
+		mLblCurrentBranch->setText( QString() );
+	}
 }

@@ -20,4 +20,10 @@ public:
 	virtual ConfigPage* configPage( ConfigWidget* widget );
 };
 
+#define IMPLEMENT_INTERNAL_MODULE(Name) \
+	Module* createIntModule_##Name() \
+	{ \
+		return new Module##Name(); \
+	}
+
 #endif

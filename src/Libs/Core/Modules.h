@@ -21,6 +21,9 @@ public:
 	void repositoryChanged( Git::Repository newRepository );
 
 private:
+	void setupInternals();
+
+private:
 	QSet< Module* >			mModules;
 };
 

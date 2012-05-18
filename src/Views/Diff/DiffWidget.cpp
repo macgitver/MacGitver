@@ -3,30 +3,30 @@
 #include <QScrollBar>
 #include <QFontMetrics>
 
-#include "Views/Diff/Diff.h"
-#include "Views/Diff/DiffDisplay.h"
+#include "Libs/Diff/Diff.h"
+#include "Views/Diff/DiffWidget.h"
 
-DiffDisplayWidget::DiffDisplayWidget()
+DiffWidget::DiffWidget()
 {
 	mDiff = NULL;
 	mFont = QFont( "Monospace", 10 );
-
 }
 
-DiffDisplayWidget::~DiffDisplayWidget()
+DiffWidget::~DiffWidget()
 {
 
 }
 
-void DiffDisplayWidget::setDifference( Difference* diff )
+void DiffWidget::setDifference( PatchFile* diff )
 {
 	mDiff = diff;
 
 	calculateHeights();
 }
 
-void DiffDisplayWidget::calculateHeights()
+void DiffWidget::calculateHeights()
 {
+#if 0
 	QFontMetrics fm( mFont );
 	int xHeight = fm.xHeight();
 
@@ -51,15 +51,20 @@ void DiffDisplayWidget::calculateHeights()
 	{
 		vb->setRange( 0, 0 );
 	}
+#endif
 }
 
-void DiffDisplayWidget::paintEvent( QPaintEvent* ev )
+void DiffWidget::paintEvent( QPaintEvent* ev )
 {
-	QPainter p( viewport() );
+	Q_UNUSED( ev );
+	QPainter p( this );
+
+	QRect r = contentsRect();
+	p.fillRect( r, palette().color( QPalette::Base ) );
 }
 
-void DiffDisplayWidget::resizeEvent( QResizeEvent* ev )
+void DiffWidget::resizeEvent( QResizeEvent* ev )
 {
 	calculateHeights();
-	QAbstractScrollArea::resizeEvent( ev );
+	QWidget::resizeEvent( ev );
 }

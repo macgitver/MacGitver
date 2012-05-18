@@ -2,21 +2,20 @@
 #ifndef DIFF_DISPLAY_H
 #define DIFF_DISPLAY_H
 
-
 #include <QFont>
-#include <QAbstractScrollArea>
+#include <QWidget>
 
-class Difference;
+class PatchFile;
 
-class DiffDisplayWidget : public QAbstractScrollArea
+class DiffWidget : public QWidget
 {
 	Q_OBJECT
 public:
-	DiffDisplayWidget();
-	~DiffDisplayWidget();
+	DiffWidget();
+	~DiffWidget();
 
 public:
-	void setDifference( Difference* diff );
+	void setDifference( PatchFile* diff );
 
 protected:
 	void paintEvent( QPaintEvent* ev );
@@ -26,7 +25,7 @@ private:
 	void calculateHeights();
 
 private:
-	Difference*			mDiff;
+	PatchFile*			mDiff;
 	QFont				mFont;
 	int					mTotalHeight;
 };

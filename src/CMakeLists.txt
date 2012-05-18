@@ -13,6 +13,11 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
+    Libs/Diff/Diff.cpp
+    Libs/Diff/DiffHunk.cpp
+    Libs/Diff/Patch.cpp
+    Libs/Diff/PatchFile.cpp
+
     Libs/Git/Git.cpp
     Libs/Git/Repository.cpp
     Libs/Git/Index.cpp
@@ -44,10 +49,12 @@ SET( SRC_FILES
 
     Views/Branches/BranchesView.cpp
 
-    Views/Diff/Diff.cpp
-    Views/Diff/DiffDisplay.cpp
+    Views/Diff/DiffFrame.cpp
+    Views/Diff/DiffRawHighlighter.cpp
+    Views/Diff/DiffSplitter.cpp
     Views/Diff/DiffTreeFileList.cpp
     Views/Diff/DiffView.cpp
+    Views/Diff/DiffWidget.cpp
 
     Views/History/HistoryView.cpp
     Views/History/HistoryList.cpp
@@ -65,6 +72,11 @@ SET( SRC_FILES
 )
 
 SET( HDR_FILES
+
+    Libs/Diff/Diff.h
+    Libs/Diff/DiffHunk.h
+    Libs/Diff/Patch.h
+    Libs/Diff/PatchFile.h
 
     Libs/Git/Git.h
     Libs/Git/Git_p.h
@@ -96,10 +108,12 @@ SET( HDR_FILES
 
     Views/Branches/BranchesView.h
 
-    Views/Diff/Diff.h
-    Views/Diff/DiffDisplay.h
+    Views/Diff/DiffFrame.h
+    Views/Diff/DiffRawHighlighter.h
+    Views/Diff/DiffSplitter.h
     Views/Diff/DiffTreeFileList.h
     Views/Diff/DiffView.h
+    Views/Diff/DiffWidget.h
 
     Views/History/HistoryView.h
     Views/History/HistoryList.h

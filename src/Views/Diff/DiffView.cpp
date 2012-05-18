@@ -11,11 +11,13 @@
 #include "Views/Diff/DiffView.h"
 #include "Views/Diff/DiffSplitter.h"
 #include "Views/Diff/DiffFrame.h"
+#include "Views/Diff/DiffRawHighlighter.h"
 
 DiffView::DiffView()
 	: mPatch( NULL )
 	, mTree( NULL )
 {
+	setFont( QFont( "Monospace", 8 ) );
 //	setViewName( trUtf8( "Differences" ) );
 
 	QHBoxLayout* l = new QHBoxLayout;
@@ -33,7 +35,7 @@ DiffView::DiffView()
 	mRawDiffView = new QTextBrowser;
 	mDiffStack->addWidget( mDiffFrame );
 	mDiffStack->addWidget( mRawDiffView );
-	mDiffStack->setCurrentIndex( 0 );
+	mDiffStack->setCurrentIndex( 1 );
 
 	s1->addWidget( mDiffStack );
 
@@ -44,6 +46,10 @@ DiffView::DiffView()
 	s2->addWidget( mDetails );
 
 	l->addWidget( s1 );
+
+	new DiffRawHighlighter( mRawDiffView );
+
+	setPatch( Patch::readPatch( "/work/test.diff" ) );
 }
 
 DiffView::~DiffView()
@@ -56,6 +62,8 @@ void DiffView::setPatch( Patch* patch )
 	clearTree();
 
 	mDiffFrame->setPatch( patch );
+
+	mRawDiffView->setText( patch ? patch->toString() : QString() );
 
 	delete mPatch;
 	mPatch = patch;

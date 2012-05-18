@@ -168,11 +168,12 @@ Patch* Patch::readPatch( QIODevice* dev )
 
 					while( line[ 0 ] == ' ' && ( leftLength || rightLength ) )
 					{
-						differ->sideLines( 0 )->addLine( line );
+						QByteArray realLine = line.mid( 1 );
+						differ->sideLines( 0 )->addLine( realLine );
 						leftLength--;
 						leftStart++;
 
-						differ->sideLines( 1 )->addLine( line );
+						differ->sideLines( 1 )->addLine( realLine );
 						rightLength--;
 						rightStart++;
 
@@ -188,7 +189,8 @@ Patch* Patch::readPatch( QIODevice* dev )
 
 					while( line[ 0 ] == '-' && ( leftLength || rightLength ) )
 					{
-						differ->sideLines( 0 )->addLine( line );
+						QByteArray realLine = line.mid( 1 );
+						differ->sideLines( 0 )->addLine( realLine );
 						leftLength--;
 						leftStart++;
 
@@ -197,7 +199,8 @@ Patch* Patch::readPatch( QIODevice* dev )
 
 					while( line[ 0 ] == '+' && ( leftLength || rightLength ) )
 					{
-						differ->sideLines( 1 )->addLine( line );
+						QByteArray realLine = line.mid( 1 );
+						differ->sideLines( 1 )->addLine( realLine );
 						rightLength--;
 						rightStart++;
 

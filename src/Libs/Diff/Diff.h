@@ -6,6 +6,8 @@
 #include <QString>
 #include <QStringList>
 
+class QTextStream;
+
 class DiffLines
 {
 public:
@@ -20,6 +22,8 @@ public:
 	int lastLine() const;
 
 	void setFirstLine( int i );
+
+	void exportRaw( QTextStream& stream, char prefix );
 
 private:
 	int					mFirstLine;
@@ -46,6 +50,11 @@ public:
 	Type type() const;
 
 	DiffLines* sideLines( int side );
+
+	int numLines( int side ) const;
+	int firstLine( int side ) const;
+
+	void exportRaw( QTextStream& stream );
 
 private:
 	Type				mType;

@@ -37,5 +37,14 @@ int PatchFile::numHunks() const
 
 void PatchFile::exportRaw( QTextStream& stream )
 {
+	Q_ASSERT( mPathNames.count() == 2 );
 
+	stream << "diff " << mPathNames.join( " " ) << "\n";
+	stream << "--- " << mPathNames[ 0 ] << "\n";
+	stream << "+++ " << mPathNames[ 1 ] << "\n";
+
+	for( int i = 0; i < mHunks.count(); i++ )
+	{
+		mHunks[ i ]->exportRaw( stream );
+	}
 }

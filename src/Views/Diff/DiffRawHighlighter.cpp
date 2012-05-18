@@ -13,15 +13,15 @@ void DiffRawHighlighter::highlightBlock( const QString& text )
 
 	if( text.startsWith( "diff" ) || text.startsWith( "---" || text.startsWith( "+++" ) ) )
 	{
-		c = Qt::green;
+		c = Qt::darkGreen;
 	}
 	else if( text.startsWith( '-' ) )
 	{
-		c = Qt::red;
+		c = Qt::darkRed;
 	}
 	else if( text.startsWith( '+' ) )
 	{
-		c = Qt::cyan;
+		c = Qt::darkCyan;
 	}
 	else if( text.startsWith( ' ' ) )
 	{

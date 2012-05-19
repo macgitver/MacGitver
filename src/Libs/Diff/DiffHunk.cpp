@@ -58,3 +58,13 @@ void DifferenceHunk::exportRaw( QTextStream& stream )
 		mDifferences[ i ]->exportRaw( stream );
 	}
 }
+
+void DifferenceHunk::setHunkName( const QString& name )
+{
+	mHunkName = name;
+}
+
+QString DifferenceHunk::hunkName() const
+{
+	return mHunkName;
+}

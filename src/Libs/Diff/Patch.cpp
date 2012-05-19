@@ -93,20 +93,35 @@ Patch* Patch::readPatch( QIODevice* dev )
 		for( int i = 1; i < diffParts.count(); i++ )
 		{
 			if( diffParts[ i ].startsWith( "--" ) )
+			{
 				continue;
+			}
+
 			pathNames.append( QString( diffParts[ i ] ) );
 		}
 		Q_ASSERT( pathNames.length() == 2 );
 
 		PatchFile* diff = new PatchFile( pathNames );
 		patch->addPath( diff );
-
-		do
+		for( int i = 1; i < diffParts.count(); i++ )
 		{
+			if( !diffParts[ i ].startsWith( "--" ) )
+			{
+				continue;
+			}
+
+			diff->addOption( diffParts[ i ] );
+		}
+
+		line = nextLine( dev );
+
+		while( !line.startsWith( "---" ) &&
+			   !line.startsWith( "diff " ) &&
+			   !dev->atEnd() )
+		{
+			diff->addOptionLine( line );
 			line = nextLine( dev );
-		} while( !line.startsWith( "---" ) &&
-				 !line.startsWith( "diff " ) &&
-				 !dev->atEnd() );
+		}
 
 		if( dev->atEnd() )
 		{
@@ -154,6 +169,14 @@ Patch* Patch::readPatch( QIODevice* dev )
 
 			DifferenceHunk* hunk = new DifferenceHunk();
 			diff->addHunk( hunk );
+
+			if( hunkParts.count() > 4 )
+			{
+				QString name = hunkParts[ 4 ];
+				for( int i = 5; i < hunkParts.count(); i++ )
+					name += " " + hunkParts[ i ];
+				hunk->setHunkName( name );
+			}
 
 			line = nextLine( dev );
 

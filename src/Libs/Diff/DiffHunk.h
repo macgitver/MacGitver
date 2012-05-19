@@ -23,6 +23,9 @@ public:
 
 	void exportRaw( QTextStream& stream );
 
+	void setHunkName( const QString& name );
+	QString hunkName() const;
+
 private:
 	QString					mHunkName;
 	QList< Difference* >	mDifferences;

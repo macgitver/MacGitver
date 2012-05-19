@@ -35,13 +35,31 @@ int PatchFile::numHunks() const
 	return mHunks.count();
 }
 
+void PatchFile::addOptionLine( const QString& line )
+{
+	mOptionLines.append( line );
+}
+
+void PatchFile::addOption( const QString& option )
+{
+	mOptions.append( option );
+}
+
 void PatchFile::exportRaw( QTextStream& stream )
 {
 	Q_ASSERT( mPathNames.count() == 2 );
 
-	stream << "diff " << mPathNames.join( " " ) << "\n";
-	stream << "--- " << mPathNames[ 0 ] << "\n";
-	stream << "+++ " << mPathNames[ 1 ] << "\n";
+	stream << "diff " << mOptions.join( " " );
+	if( mOptions.count() > 0 )
+		stream << ' ';
+	stream << mPathNames.join( " " ) << '\n';
+
+	stream << mOptionLines.join( "\n" );
+	if( mOptionLines.count() > 0 )
+		stream << '\n';
+
+	stream << "--- " << mPathNames[ 0 ] << '\n';
+	stream << "+++ " << mPathNames[ 1 ] << '\n';
 
 	for( int i = 0; i < mHunks.count(); i++ )
 	{

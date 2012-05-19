@@ -22,8 +22,13 @@ public:
 
 	void exportRaw( QTextStream& stream );
 
+	void addOptionLine( const QString& line );
+	void addOption( const QString& option );
+
 private:
 	QStringList					mPathNames;
+	QStringList					mOptions;
+	QStringList					mOptionLines;
 	QList< DifferenceHunk* >	mHunks;
 };
 

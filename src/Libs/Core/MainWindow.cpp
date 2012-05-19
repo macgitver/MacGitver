@@ -78,28 +78,6 @@ void MainWindow::setupUi()
 
 	statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
 
-	/*
-
-	ReferenceView* rv = new ReferenceView;
-
-	QDockWidget* dw = new QDockWidget( trUtf8( "Refs" ) );
-	dw->setWidget( rv );
-	addDockWidget( Qt::RightDockWidgetArea, dw );
-
-	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
-		rv, SLOT(repositoryChanged(Git::Repository)) );
-
-	IndexWidget* iw = new IndexWidget;
-
-	QDockWidget* dwIndex = new QDockWidget( trUtf8( "Working Tree" ) );
-	dwIndex->setWidget( iw );
-	addDockWidget( Qt::RightDockWidgetArea, dwIndex );
-
-	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
-		iw, SLOT(repositoryChanged(Git::Repository)) );
-
-	*/
-
 	mTop = new HeavenTopLevelWidget();
 	setCentralWidget( mTop );
 

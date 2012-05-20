@@ -14,27 +14,26 @@
  *
  */
 
-#ifndef GIT_OBJECT_TREE_H
-#define GIT_OBJECT_TREE_H
+#include "Git_p.h"
 
-#include "Libs/Git/Git.h"
-#include "Libs/Git/ObjectId.h"
-#include "Libs/Git/Object.h"
+#include "ObjectTag.h"
 
 namespace Git
 {
 
-	class ObjectTree : public Object
+	ObjectTag::ObjectTag()
 	{
-	public:
-		ObjectTree();
-		ObjectTree( ObjectPrivate* _d );
-		ObjectTree( const ObjectTree& o );
+	}
 
-	public:
-		ObjectTree subPath( const QByteArray& pathName ) const;
-	};
+	ObjectTag::ObjectTag( ObjectPrivate* _d )
+		: Object( _d )
+	{
+		Q_ASSERT( type() == otTag );
+	}
+
+	ObjectTag::ObjectTag( const ObjectTag& o )
+		: Object( o )
+	{
+	}
 
 }
-
-#endif

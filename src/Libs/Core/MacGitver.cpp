@@ -16,7 +16,7 @@
 
 #include <QPlastiqueStyle>
 
-#include "Libs/Git/Git.h"
+#include "GitWrap/Git.h"
 
 #include "Libs/Core/MacGitver.h"
 #include "Libs/Core/Modules.h"

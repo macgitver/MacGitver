@@ -14,9 +14,9 @@
  *
  */
 
-#include "Libs/Git/Git_p.h"
-#include "Libs/Git/Index.h"
-#include "Libs/Git/Repository.h"
+#include "Git_p.h"
+#include "Index.h"
+#include "Repository.h"
 
 namespace Git
 {

@@ -18,9 +18,8 @@
 #define GIT_REPOSITORY_H
 
 #include <QStringList>
-#include <QHash>
 
-#include "Libs/Git/Git.h"
+#include "Git.h"
 
 namespace Git
 {
@@ -35,8 +34,6 @@ namespace Git
 	class RevisionWalker;
 
 	class RepositoryPrivate;
-
-	typedef QHash< QString, int > StatusHash;
 
 	class Repository
 	{

@@ -14,16 +14,16 @@
  *
  */
 
-#include "Libs/Git/Git_p.h"
-#include "Libs/Git/Index.h"
-#include "Libs/Git/Repository.h"
-#include "Libs/Git/Reference.h"
-#include "Libs/Git/Object.h"
-#include "Libs/Git/ObjectTag.h"
-#include "Libs/Git/ObjectTree.h"
-#include "Libs/Git/ObjectBlob.h"
-#include "Libs/Git/ObjectCommit.h"
-#include "Libs/Git/RevisionWalker.h"
+#include "Git_p.h"
+#include "Index.h"
+#include "Repository.h"
+#include "Reference.h"
+#include "Object.h"
+#include "ObjectTag.h"
+#include "ObjectTree.h"
+#include "ObjectBlob.h"
+#include "ObjectCommit.h"
+#include "RevisionWalker.h"
 
 #include "git2/branch.h"
 
@@ -220,7 +220,7 @@ namespace Git
 	static int statusHashCB( const char* fn, unsigned int status, void* rawSH )
 	{
 		StatusHash* sh = (StatusHash*) rawSH;
-		sh->insert( QString::fromUtf8( fn ), status );
+		sh->insert( QString::fromUtf8( fn ), FileStatus( status ) );
 		return GIT_OK;
 	}
 

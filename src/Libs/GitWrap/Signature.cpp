@@ -14,8 +14,8 @@
  *
  */
 
-#include "Libs/Git/Git_p.h"
-#include "Libs/Git/Signature.h"
+#include "Git_p.h"
+#include "Signature.h"
 
 namespace Git
 {

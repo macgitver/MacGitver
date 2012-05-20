@@ -18,7 +18,7 @@
 #include <QDir>
 #include <QFileDialog>
 
-#include "Libs/Git/Git.h"
+#include "GitWrap/Git.h"
 
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 

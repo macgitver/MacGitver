@@ -14,44 +14,49 @@
  *
  */
 
-#ifndef GIT_REVISION_WALKER_H
-#define GIT_REVISION_WALKER_H
+#ifndef GIT_OBJECT_ID_H
+#define GIT_OBJECT_ID_H
 
-#include "Libs/Git/Git.h"
+#include <QString>
+#include <QByteArray>
+#include <QDebug>
+
+#include "Git.h"
 
 namespace Git
 {
 
-	class RevisionWalkerPrivate;
-
-	class ObjectId;
-	class Reference;
-
-	class RevisionWalker
+	class ObjectId
 	{
 	public:
-		RevisionWalker();
-		RevisionWalker( RevisionWalkerPrivate* _d );
-		~RevisionWalker();
-		RevisionWalker& operator=( const RevisionWalker& other );
+		ObjectId();
+		ObjectId( const QByteArray& raw );
 
 	public:
-		bool isValid() const;
+		static ObjectId fromRaw( const unsigned char* raw, int n = 20 );
 
-		void reset();
-		void push( const ObjectId& id );
-		void push( const Reference& ref );
-		void pushRef( const QByteArray& name );
-		void pushHead();
+		QString toString() const;
+		QByteArray toAscii() const;
 
-		bool next( ObjectId& oidNext );
+		const unsigned char* raw() const
+		{
+			return (const unsigned char*) d.constData();
+		}
 
-		void setSorting( bool topological, bool timed );
+		bool operator==( const ObjectId& other ) const;
+		bool operator!=( const ObjectId& other ) const;
 
 	private:
-		GitPtr< RevisionWalkerPrivate > d;
+		QByteArray	d;
 	};
 
+	uint qHash( const ObjectId& sha1 );
+
+}
+
+inline QDebug operator<<( QDebug debug, const Git::ObjectId& id )
+{
+	return debug << "SHA1(" << id.toString() << ")";
 }
 
 #endif

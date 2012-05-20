@@ -1,6 +1,7 @@
 
 PROJECT( MAC_GITVER )
 
+ADD_SUBDIRECTORY( Libs )
 
 SET( QT_USE_QTMAIN				1 )
 INCLUDE( ${QT_USE_FILE} )
@@ -8,7 +9,8 @@ INCLUDE( ${QT_USE_FILE} )
 INCLUDE_DIRECTORIES(
     ${MAC_GITVER_SOURCE_DIR}
     ${MAC_GITVER_BINARY_DIR}
-    ${libgit2_SOURCE_DIR}/include
+
+    ${MGV_LIBS_SOURCE_DIR}
 )
 
 SET( SRC_FILES
@@ -17,19 +19,6 @@ SET( SRC_FILES
     Libs/Diff/DiffHunk.cpp
     Libs/Diff/Patch.cpp
     Libs/Diff/PatchFile.cpp
-
-    Libs/Git/Git.cpp
-    Libs/Git/Repository.cpp
-    Libs/Git/Index.cpp
-    Libs/Git/ObjectId.cpp
-    Libs/Git/Object.cpp
-    Libs/Git/ObjectTree.cpp
-    Libs/Git/ObjectBlob.cpp
-    Libs/Git/ObjectTag.cpp
-    Libs/Git/ObjectCommit.cpp
-    Libs/Git/Signature.cpp
-    Libs/Git/Reference.cpp
-    Libs/Git/RevisionWalker.cpp
 
     Libs/Heaven/HContainer.cpp
     Libs/Heaven/HView.cpp
@@ -78,20 +67,6 @@ SET( HDR_FILES
     Libs/Diff/DiffHunk.h
     Libs/Diff/Patch.h
     Libs/Diff/PatchFile.h
-
-    Libs/Git/Git.h
-    Libs/Git/Git_p.h
-    Libs/Git/Repository.h
-    Libs/Git/Index.h
-    Libs/Git/ObjectId.h
-    Libs/Git/Object.h
-    Libs/Git/ObjectTree.h
-    Libs/Git/ObjectBlob.h
-    Libs/Git/ObjectTag.h
-    Libs/Git/ObjectCommit.h
-    Libs/Git/Signature.h
-    Libs/Git/Reference.h
-    Libs/Git/RevisionWalker.h
 
     Libs/Heaven/HContainer.h
     Libs/Heaven/HView.h
@@ -160,6 +135,6 @@ ADD_EXECUTABLE(
 TARGET_LINK_LIBRARIES(
     MacGitver
 
-    git2
     ${QT_LIBRARIES}
+    GitWrap
 )

@@ -19,9 +19,9 @@
 
 #include <QMap>
 
-#include "Libs/Git/ObjectCommit.h"
-#include "Libs/Git/Repository.h"
-#include "Libs/Git/RevisionWalker.h"
+#include "GitWrap/ObjectCommit.h"
+#include "GitWrap/Repository.h"
+#include "GitWrap/RevisionWalker.h"
 
 class HistoryEntries;
 

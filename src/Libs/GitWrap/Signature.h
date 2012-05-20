@@ -68,7 +68,7 @@ namespace Git
 
 		QString fullName() const
 		{
-			return QString( "%1<%2>" )
+			return QString( "%1 <%2>" )
 					.arg( mName )
 					.arg( mEMail );
 		}

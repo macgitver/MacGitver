@@ -14,26 +14,43 @@
  *
  */
 
-#include "Libs/Git/Git_p.h"
+#ifndef GIT_REFERENCE_H
+#define GIT_REFERENCE_H
 
-#include "Libs/Git/ObjectBlob.h"
+#include "Git.h"
 
 namespace Git
 {
 
-	ObjectBlob::ObjectBlob()
-	{
-	}
+	class ReferencePrivate;
 
-	ObjectBlob::ObjectBlob( ObjectPrivate* _d )
-		: Object( _d )
-	{
-		Q_ASSERT( type() == otBlob );
-	}
+	class ObjectId;
 
-	ObjectBlob::ObjectBlob( const ObjectBlob& o )
-		: Object( o )
+	class Reference
 	{
-	}
+	public:
+		enum Type
+		{
+			Direct, Symbolic
+		};
+
+	public:
+		Reference();
+		Reference( ReferencePrivate* p );
+
+	public:
+		bool isValid() const;
+		void destroy();
+		QByteArray name() const;
+
+		Type type() const;
+		ObjectId objectId() const;
+		QByteArray target() const;
+
+	private:
+		ReferencePrivate* d;
+	};
 
 }
+
+#endif

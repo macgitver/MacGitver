@@ -21,8 +21,8 @@
 
 class QToolBar;
 
-#include "Libs/Git/Git.h"
-#include "Libs/Git/Repository.h"
+#include "GitWrap/Git.h"
+#include "GitWrap/Repository.h"
 
 #include "Libs/Heaven/HView.h"
 

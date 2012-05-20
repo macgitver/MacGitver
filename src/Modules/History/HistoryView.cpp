@@ -20,8 +20,8 @@
 #include <QAction>
 #include <QToolBar>
 
-#include "Libs/Git/Reference.h"
-#include "Libs/Git/ObjectCommit.h"
+#include "GitWrap/Reference.h"
+#include "GitWrap/ObjectCommit.h"
 
 #include "Modules/History/HistoryView.h"
 #include "Modules/History/HistoryEntry.h"

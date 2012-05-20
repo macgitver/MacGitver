@@ -19,7 +19,7 @@
 
 #include "git2.h"
 
-#include "Libs/Git/Git.h"
+#include "Git.h"
 
 namespace Git
 {

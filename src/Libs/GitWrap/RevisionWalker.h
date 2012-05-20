@@ -14,50 +14,42 @@
  *
  */
 
-#ifndef GIT_OBJECT_H
-#define GIT_OBJECT_H
+#ifndef GIT_REVISION_WALKER_H
+#define GIT_REVISION_WALKER_H
 
-#include "Libs/Git/Git.h"
-#include "Libs/Git/ObjectId.h"
+#include "Git.h"
 
 namespace Git
 {
 
-	class ObjectPrivate;
+	class RevisionWalkerPrivate;
 
-	class ObjectTree;
-	class ObjectBlob;
-	class ObjectCommit;
-	class ObjectTag;
+	class ObjectId;
+	class Reference;
 
-	class Object
+	class RevisionWalker
 	{
 	public:
-		Object( ObjectPrivate* _d );
-		Object( const Object& other );
-		Object();
-		~Object();
+		RevisionWalker();
+		RevisionWalker( RevisionWalkerPrivate* _d );
+		~RevisionWalker();
+		RevisionWalker& operator=( const RevisionWalker& other );
 
 	public:
-		Object& operator=( const Object& other );
-		bool operator==( const Object& other ) const;
 		bool isValid() const;
 
-		ObjectType type() const;
-		ObjectId id() const;
+		void reset();
+		void push( const ObjectId& id );
+		void push( const Reference& ref );
+		void pushRef( const QByteArray& name );
+		void pushHead();
 
-		ObjectTree asTree();
-		ObjectCommit asCommit();
-		ObjectBlob asBlob();
-		ObjectTag asTag();
+		bool next( ObjectId& oidNext );
 
-		bool isTree() const;
-		bool isTag() const;
-		bool isCommit() const;
-		bool isBlob() const;
+		void setSorting( bool topological, bool timed );
 
-	protected:
-		GitPtr< ObjectPrivate > d;
+	private:
+		GitPtr< RevisionWalkerPrivate > d;
 	};
 
 }

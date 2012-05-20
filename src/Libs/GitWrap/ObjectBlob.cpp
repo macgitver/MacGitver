@@ -14,24 +14,26 @@
  *
  */
 
-#ifndef GIT_OBJECT_TAG_H
-#define GIT_OBJECT_TAG_H
+#include "Git_p.h"
 
-#include "Libs/Git/Git.h"
-#include "Libs/Git/ObjectId.h"
-#include "Libs/Git/Object.h"
+#include "ObjectBlob.h"
 
 namespace Git
 {
 
-	class ObjectTag : public Object
+	ObjectBlob::ObjectBlob()
 	{
-	public:
-		ObjectTag();
-		ObjectTag( ObjectPrivate* _d );
-		ObjectTag( const ObjectTag& o );
-	};
+	}
+
+	ObjectBlob::ObjectBlob( ObjectPrivate* _d )
+		: Object( _d )
+	{
+		Q_ASSERT( type() == otBlob );
+	}
+
+	ObjectBlob::ObjectBlob( const ObjectBlob& o )
+		: Object( o )
+	{
+	}
 
 }
-
-#endif

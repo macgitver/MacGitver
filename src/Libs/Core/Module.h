@@ -19,13 +19,12 @@
 
 #include <QObject>
 
-#include "Libs/Git/Repository.h"
+#include "GitWrap/Repository.h"
 
 #include "Libs/Core/ConfigPage.h"
 
-class Module : public QObject
+class /* MGV_CORE_API */ ModuleInterface
 {
-	Q_OBJECT
 public:
 	enum Type
 	{
@@ -37,16 +36,36 @@ public:
 	typedef QFlags< Type > Types;
 
 public:
+	virtual ~ModuleInterface();
+
+public:
+	virtual void repositoryChanged( Git::Repository newRepository ) = 0;
+
+	virtual void setupConfigPages( ConfigDlg* dlg ) = 0;
+	virtual Types providesModuleTypes() const = 0;
+
+	virtual void initialize() = 0;
+	virtual void deinitialize() = 0;
+};
+
+Q_DECLARE_INTERFACE( ModuleInterface,
+					 "org.babbelbox.sacu.macgitver.ModuleInterface/0.1" )
+
+class /* MGV_CORE_API */ Module : public QObject, public ModuleInterface
+{
+	Q_INTERFACES( ModuleInterface )
+	Q_OBJECT
+public:
 	Module();
 
 public:
-	virtual void repositoryChanged( Git::Repository newRepository );
+	void repositoryChanged( Git::Repository newRepository );
 
-	virtual void setupConfigPages( ConfigDlg* dlg );
-	virtual Types providesModuleTypes() const = 0;
+	void setupConfigPages( ConfigDlg* dlg );
+	Types providesModuleTypes() const = 0;
 
-	virtual void initialize();
-	virtual void deinitialize();
+	void initialize();
+	void deinitialize();
 };
 
 #define IMPLEMENT_INTERNAL_MODULE(Name) \

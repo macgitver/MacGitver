@@ -1,0 +1,4 @@
+
+PROJECT( MGV_LIBS )
+
+ADD_SUBDIRECTORY( GitWrap )

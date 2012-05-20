@@ -18,8 +18,6 @@
 #include <QFileIconProvider>
 #include <QFileInfo>
 
-#include "git2/status.h"
-
 #include <QDebug>
 
 #include "Views/WorkingTree/IndexTree.h"
@@ -152,15 +150,19 @@ void IndexTree::update()
 		TreeFilters curState;
 
 		unsigned int st = it.value();
-		if( st == 0 )
+		if( st == Git::StatusCurrent )
 			curState |= Unchanged;
-		else if( st & GIT_STATUS_IGNORED )
+
+		else if( st & Git::StatusIgnored )
 			curState |= Ignored;
-		else if( st & GIT_STATUS_WT_MODIFIED )
+
+		else if( st & Git::StatusWorkingTreeModified )
 			curState |= Changed;
-		else if( st & GIT_STATUS_WT_NEW )
+
+		else if( st & Git::StatusWorkingTreeNew )
 			curState |= Untracked;
-		else if( st & GIT_STATUS_WT_DELETED )
+
+		else if( st & Git::StatusWorkingTreeDeleted )
 			curState |= Missing;
 
 		QString dir, file;

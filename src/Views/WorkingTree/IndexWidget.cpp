@@ -18,7 +18,7 @@
 #include <QToolBar>
 #include <QVBoxLayout>
 
-#include "Libs/Git/Index.h"
+#include "GitWrap/Index.h"
 
 #include "Views/WorkingTree/IndexWidget.h"
 #include "Views/WorkingTree/IndexTree.h"

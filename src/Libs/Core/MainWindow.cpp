@@ -20,8 +20,8 @@
 #include <QMenuBar>
 #include <QDockWidget>
 
-#include "Libs/Git/ObjectId.h"
-#include "Libs/Git/Reference.h"
+#include "GitWrap/ObjectId.h"
+#include "GitWrap/Reference.h"
 
 #include "Libs/Core/MacGitver.h"
 #include "Libs/Core/MainWindow.h"

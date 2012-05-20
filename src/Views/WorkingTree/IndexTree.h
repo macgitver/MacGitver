@@ -19,8 +19,8 @@
 
 #include <QTreeWidget>
 
-#include "Libs/Git/Index.h"
-#include "Libs/Git/Repository.h"
+#include "GitWrap/Index.h"
+#include "GitWrap/Repository.h"
 
 class IndexTree;
 

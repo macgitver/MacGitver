@@ -16,6 +16,10 @@
 
 #include "Libs/Core/Module.h"
 
+ModuleInterface::~ModuleInterface()
+{
+}
+
 Module::Module()
 {
 }

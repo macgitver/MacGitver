@@ -14,55 +14,22 @@
  *
  */
 
-#ifndef CORE_GIT_H
-#define CORE_GIT_H
+#ifndef GIT_OBJECT_BLOB_H
+#define GIT_OBJECT_BLOB_H
 
-#include <QString>
+#include "Git.h"
+#include "ObjectId.h"
+#include "Object.h"
 
 namespace Git
 {
 
-	void initLibGit();
-	void deinitLibGit();
-
-	class Repository;
-	class Index;
-
-	template< class T >
-	class GitPtr
+	class ObjectBlob : public Object
 	{
 	public:
-		GitPtr();
-		GitPtr( const GitPtr< T >& o );
-		GitPtr( T* o );
-		~GitPtr();
-
-		GitPtr< T >& operator=( const GitPtr< T >& o );
-		bool operator==( const GitPtr< T >& o ) const;
-		bool operator==( T* o ) const;
-
-		T* operator->();
-		const T* operator->() const;
-
-		T* operator*();
-		const T* operator*() const;
-
-		operator bool() const;
-		operator T*();
-		operator const T*() const;
-
-	private:
-		T* d;
-	};
-
-	enum ObjectType
-	{
-		otTree,
-		otCommit,
-		otBlob,
-		otTag,
-
-		otAny = -1
+		ObjectBlob();
+		ObjectBlob( ObjectPrivate* _d );
+		ObjectBlob( const ObjectBlob& o );
 	};
 
 }

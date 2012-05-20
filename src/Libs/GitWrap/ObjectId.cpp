@@ -16,7 +16,7 @@
 
 #include "git2.h"
 
-#include "Libs/Git/ObjectId.h"
+#include "ObjectId.h"
 
 namespace Git
 {

@@ -19,7 +19,7 @@
 
 #include <QApplication>
 
-#include "Libs/Git/Repository.h"
+#include "GitWrap/Repository.h"
 
 class Module;
 class Modules;

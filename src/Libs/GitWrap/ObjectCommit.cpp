@@ -14,10 +14,10 @@
  *
  */
 
-#include "Libs/Git/Git_p.h"
+#include "Git_p.h"
 
-#include "Libs/Git/ObjectCommit.h"
-#include "Libs/Git/ObjectTree.h"
+#include "ObjectCommit.h"
+#include "ObjectTree.h"
 
 namespace Git
 {

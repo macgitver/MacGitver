@@ -14,9 +14,9 @@
  *
  */
 
-#include "Libs/Git/Git_p.h"
-#include "Libs/Git/ObjectId.h"
-#include "Libs/Git/Reference.h"
+#include "Git_p.h"
+#include "ObjectId.h"
+#include "Reference.h"
 
 namespace Git
 {

@@ -14,10 +14,10 @@
  *
  */
 
-#include "Libs/Git/RevisionWalker.h"
-#include "Libs/Git/ObjectId.h"
-#include "Libs/Git/Reference.h"
-#include "Libs/Git/Git_p.h"
+#include "RevisionWalker.h"
+#include "ObjectId.h"
+#include "Reference.h"
+#include "Git_p.h"
 
 namespace Git
 {

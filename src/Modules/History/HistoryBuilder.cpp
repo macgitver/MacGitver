@@ -14,8 +14,8 @@
  *
  */
 
-#include "Libs/Git/ObjectId.h"
-#include "Libs/Git/Reference.h"
+#include "GitWrap/ObjectId.h"
+#include "GitWrap/Reference.h"
 
 #include "Modules/History/HistoryBuilder.h"
 #include "Modules/History/HistoryEntry.h"

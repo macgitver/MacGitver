@@ -14,43 +14,26 @@
  *
  */
 
-#ifndef GIT_REFERENCE_H
-#define GIT_REFERENCE_H
+#include "Git_p.h"
 
-#include "Libs/Git/Git.h"
+#include "Index.h"
+#include "Repository.h"
 
 namespace Git
 {
 
-	class ReferencePrivate;
+	// INDEX
 
-	class ObjectId;
+	// tools
 
-	class Reference
+	void initLibGit()
 	{
-	public:
-		enum Type
-		{
-			Direct, Symbolic
-		};
+		git_threads_init();
+	}
 
-	public:
-		Reference();
-		Reference( ReferencePrivate* p );
-
-	public:
-		bool isValid() const;
-		void destroy();
-		QByteArray name() const;
-
-		Type type() const;
-		ObjectId objectId() const;
-		QByteArray target() const;
-
-	private:
-		ReferencePrivate* d;
-	};
+	void deinitLibGit()
+	{
+		git_threads_shutdown();
+	}
 
 }
-
-#endif

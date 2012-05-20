@@ -14,26 +14,42 @@
  *
  */
 
-#include "Libs/Git/Git_p.h"
+#include "Git_p.h"
 
-#include "Libs/Git/Index.h"
-#include "Libs/Git/Repository.h"
+#include "ObjectTree.h"
 
 namespace Git
 {
 
-	// INDEX
-
-	// tools
-
-	void initLibGit()
+	ObjectTree::ObjectTree()
 	{
-		git_threads_init();
 	}
 
-	void deinitLibGit()
+	ObjectTree::ObjectTree( ObjectPrivate* _d )
+		: Object( _d )
 	{
-		git_threads_shutdown();
+		Q_ASSERT( type() == otTree );
+	}
+
+	ObjectTree::ObjectTree( const ObjectTree& o )
+		: Object( o )
+	{
+	}
+
+	ObjectTree ObjectTree::subPath( const QByteArray& pathName ) const
+	{
+		Q_ASSERT( d );
+		git_tree* d2 = (git_tree*) d->mObj;
+
+		git_tree* subTree = 0;
+
+		int rc = git_tree_get_subtree( &subTree, d2, pathName.constData() );
+		if( rc < GIT_OK )
+		{
+			return ObjectTree();
+		}
+
+		return new ObjectPrivate( d->mRepo, (git_object*) subTree );
 	}
 
 }

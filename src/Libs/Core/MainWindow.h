@@ -9,7 +9,7 @@ class QLabel;
 #include "Libs/Git/Git.h"
 #include "Libs/Git/Repository.h"
 
-class HeavenTopLevelWidget;
+#include "Libs/Heaven/HTopLevelWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -29,6 +29,7 @@ public slots:
 	void repositoryChanged( const Git::Repository& repo );
 
 public:
+	void integrateView( HeavenView* view, Heaven::Positions position );
 	void addError( const QString& err );
 
 private:
@@ -37,6 +38,7 @@ private:
 	QAction*				macRepositoryClose;
 	QAction*				macRepositoryCreate;
 	QAction*				macRepositoryClone;
+	QAction*				macRepositoryOptions;
 	QAction*				macRepositoryQuit;
 	QMenu*					mmuWorkingTree;
 

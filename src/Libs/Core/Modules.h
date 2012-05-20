@@ -18,6 +18,9 @@ public:
 	void delModule( Module* mod );
 
 public:
+	void initialize();
+
+public:
 	void repositoryChanged( Git::Repository newRepository );
 
 private:

@@ -24,7 +24,7 @@ static InternalModules sInternals[] =
 {
 //	INTERNAL_MODULE( Diff ),
 //	INTERNAL_MODULE( Branches ),
-//	INTERNAL_MODULE( History ),
+	INTERNAL_MODULE( History ),
 //	INTERNAL_MODULE( Refs ),
 //	INTERNAL_MODULE( Tags ),
 //	INTERNAL_MODULE( WorkingTree ),
@@ -42,6 +42,16 @@ Modules::~Modules()
 	{
 		module->repositoryChanged( Git::Repository() );
 		delete module;
+	}
+}
+
+void Modules::initialize()
+{
+	setupInternals();
+
+	foreach( Module* module, mModules )
+	{
+		module->initialize();
 	}
 }
 

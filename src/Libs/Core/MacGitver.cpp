@@ -9,6 +9,7 @@
 
 MacGitver::MacGitver( int argc, char** argv )
 	: QApplication( argc, argv )
+	, mMainWindow( NULL )
 {
 	Git::initLibGit();
 
@@ -21,8 +22,10 @@ MacGitver::MacGitver( int argc, char** argv )
 	Q_ASSERT( sSelf == NULL );
 	sSelf = this;
 
-	MainWindow* mw = new MainWindow;
-	mw->show();
+	mMainWindow = new MainWindow;
+	mMainWindow->show();
+
+	mModules->initialize();
 }
 
 MacGitver::~MacGitver()
@@ -64,6 +67,12 @@ void MacGitver::setRepository( const Git::Repository& repo )
 	mModules->repositoryChanged( repo );
 
 	emit repositoryChanged( mRepository );
+}
+
+MainWindow* MacGitver::mainWindow()
+{
+	Q_ASSERT( mMainWindow );
+	return mMainWindow;
 }
 
 MacGitver* MacGitver::sSelf = NULL;

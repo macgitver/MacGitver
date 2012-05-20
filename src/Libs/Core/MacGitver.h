@@ -8,6 +8,7 @@
 
 class Module;
 class Modules;
+class MainWindow;
 
 class MacGitver : public QApplication
 {
@@ -25,6 +26,8 @@ public:
 	Git::Repository repository() const;
 	Modules* modules();
 
+	MainWindow* mainWindow();
+
 signals:
 	void repositoryChanged( const Git::Repository& repo );
 
@@ -35,6 +38,7 @@ private:
 	static MacGitver*	sSelf;
 
 	Modules*			mModules;
+	MainWindow*			mMainWindow;
 	Git::Repository		mRepository;
 };
 

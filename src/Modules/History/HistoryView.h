@@ -28,7 +28,7 @@ class HistoryView : public HeavenView
 public:
 	HistoryView();
 
-private slots:
+public:
 	void repositoryChanged( Git::Repository repo );
 
 private:

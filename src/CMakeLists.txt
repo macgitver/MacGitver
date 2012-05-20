@@ -56,11 +56,12 @@ SET( SRC_FILES
     Views/Diff/DiffView.cpp
     Views/Diff/DiffWidget.cpp
 
-    Views/History/HistoryView.cpp
-    Views/History/HistoryList.cpp
-    Views/History/HistoryEntry.cpp
-    Views/History/HistoryBuilder.cpp
-    Views/History/HistoryModel.cpp
+    Modules/History/HistoryView.cpp
+    Modules/History/HistoryList.cpp
+    Modules/History/HistoryEntry.cpp
+    Modules/History/HistoryBuilder.cpp
+    Modules/History/HistoryModel.cpp
+    Modules/History/HistoryModule.cpp
 
     Views/Refs/RefsView.cpp
 
@@ -115,11 +116,12 @@ SET( HDR_FILES
     Views/Diff/DiffView.h
     Views/Diff/DiffWidget.h
 
-    Views/History/HistoryView.h
-    Views/History/HistoryList.h
-    Views/History/HistoryEntry.h
-    Views/History/HistoryBuilder.h
-    Views/History/HistoryModel.h
+    Modules/History/HistoryView.h
+    Modules/History/HistoryList.h
+    Modules/History/HistoryEntry.h
+    Modules/History/HistoryBuilder.h
+    Modules/History/HistoryModel.h
+    Modules/History/HistoryModule.h
 
     Views/Refs/RefsView.h
 

@@ -1,5 +1,5 @@
 
-#include "Views/History/HistoryList.h"
+#include "Modules/History/HistoryList.h"
 
 HistoryList::HistoryList()
 {

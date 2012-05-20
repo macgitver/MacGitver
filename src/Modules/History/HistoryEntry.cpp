@@ -1,5 +1,5 @@
 
-#include "Views/History/HistoryEntry.h"
+#include "Modules/History/HistoryEntry.h"
 
 HistoryGraphDrawInfos::HistoryGraphDrawInfos()
 {

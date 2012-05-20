@@ -8,11 +8,11 @@
 #include "Libs/Git/Reference.h"
 #include "Libs/Git/ObjectCommit.h"
 
-#include "Views/History/HistoryView.h"
-#include "Views/History/HistoryEntry.h"
-#include "Views/History/HistoryModel.h"
-#include "Views/History/HistoryBuilder.h"
-#include "Views/History/HistoryList.h"
+#include "Modules/History/HistoryView.h"
+#include "Modules/History/HistoryEntry.h"
+#include "Modules/History/HistoryModel.h"
+#include "Modules/History/HistoryBuilder.h"
+#include "Modules/History/HistoryList.h"
 
 #define SLOT_X 12
 #define SLOT_Y 12

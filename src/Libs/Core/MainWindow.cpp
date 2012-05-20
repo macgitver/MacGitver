@@ -18,7 +18,6 @@
 #include "Views/Diff/DiffView.h"
 #include "Views/Branches/BranchesView.h"
 #include "Views/Tags/TagsView.h"
-#include "Views/History/HistoryView.h"
 #include "Views/Refs/RefsView.h"
 #include "Views/WorkingTree/IndexWidget.h"
 
@@ -68,6 +67,9 @@ void MainWindow::setupUi()
 	macRepositoryCreate		= mmuRepository->addAction( trUtf8( "Create &new..." ),
 														this, SLOT(onRepositoryCreate()) );
 							  mmuRepository->addSeparator();
+	macRepositoryOptions	= mmuRepository->addAction( trUtf8( "&Preferences..." ),
+														this, SLOT(onPrefernces()) );
+							  mmuRepository->addSeparator();
 	macRepositoryQuit		= mmuRepository->addAction( trUtf8( "&Quit" ),
 														qApp, SLOT(quit()) );
 
@@ -95,11 +97,6 @@ void MainWindow::setupUi()
 	mTop->addView( tags );
 	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
 		tags, SLOT(repositoryChanged(Git::Repository)) );
-
-	HistoryView* hv = new HistoryView;
-	mTop->addView( hv, Heaven::Central );
-	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
-		hv, SLOT(repositoryChanged(Git::Repository)) );
 
 	IndexWidget* iw = new IndexWidget;
 	mTop->addView( iw, Heaven::Central );
@@ -132,4 +129,9 @@ void MainWindow::repositoryChanged( const Git::Repository& repo )
 	{
 		mLblCurrentBranch->setText( QString() );
 	}
+}
+
+void MainWindow::integrateView( HeavenView* view, Heaven::Positions position )
+{
+	mTop->addView( view, position );
 }

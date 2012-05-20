@@ -14,3 +14,10 @@ ConfigPage* Module::configPage( ConfigWidget* widget )
 	return NULL;
 }
 
+void Module::initialize()
+{
+}
+
+void Module::deinitialize()
+{
+}

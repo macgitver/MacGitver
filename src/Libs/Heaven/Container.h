@@ -21,12 +21,14 @@
 #include <QTableWidget>
 #include <QSplitter>
 
+#include "Heaven/HeavenApi.h"
+
 typedef QTabWidget HeavenTabWidget;
 typedef QSplitter HeavenSplitter;
 
 class HeavenView;
 
-class HeavenContainer : public QObject
+class HEAVEN_API HeavenContainer : public QObject
 {
 	Q_OBJECT
 public:

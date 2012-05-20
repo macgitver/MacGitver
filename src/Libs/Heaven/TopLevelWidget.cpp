@@ -18,7 +18,7 @@
 #include <QPalette>
 #include <QVBoxLayout>
 
-#include "Libs/Heaven/HTopLevelWidget.h"
+#include "Heaven/TopLevelWidget.h"
 
 HeavenTopLevelWidget::HeavenTopLevelWidget()
 {

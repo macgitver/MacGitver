@@ -17,7 +17,7 @@
 #ifndef MGV_TAGS_VIEW_H
 #define MGV_TAGS_VIEW_H
 
-#include "Libs/Heaven/HView.h"
+#include "Heaven/View.h"
 
 #include "GitWrap/Repository.h"
 

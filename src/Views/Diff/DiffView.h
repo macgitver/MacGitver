@@ -19,7 +19,7 @@
 
 #include <QWidget>
 
-#include "Libs/Heaven/HView.h"
+#include "Heaven/View.h"
 
 class QTreeWidget;
 class QStackedWidget;

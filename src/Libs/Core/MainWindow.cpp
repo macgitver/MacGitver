@@ -31,7 +31,7 @@
 
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 
-#include "Libs/Heaven/HTopLevelWidget.h"
+#include "Heaven/TopLevelWidget.h"
 
 #include "Views/Diff/DiffView.h"
 #include "Views/WorkingTree/IndexWidget.h"

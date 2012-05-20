@@ -14,35 +14,26 @@
  *
  */
 
-#ifndef HEAVEN_VIEW_H
-#define HEAVEN_VIEW_H
+#include <QPainter>
 
-#include <QWidget>
+#include "Heaven/Decorator.h"
+#include "Heaven/View.h"
 
-class HeavenView : public QWidget
+HeavenDecorator::HeavenDecorator( HeavenView* view )
+	: mView( view )
 {
-	Q_OBJECT
-public:
-	enum Type
-	{
-		Multiviewable,
-		Singleviewable
-	};
+	setMinimumHeight( 20 );
+}
 
+void HeavenDecorator::paintEvent( QPaintEvent* ev )
+{
+	QPainter p( this );
 
-public:
-	HeavenView();
-
-public:
-	QString viewName() const;
-	void setViewName( const QString& name );
-
-signals:
-	void nameChanged( const QString& viewName );
-
-private:
-	QString				mViewName;
-	QAction*			mAction;
-};
-
-#endif
+	QRect r = contentsRect().adjusted( 0, 0, -1, -1 );
+	p.fillRect( r, Qt::white );
+	p.setPen( Qt::black );
+	p.drawRect( r );
+	r.adjust( 2, 2, -2, -2 );
+	p.setFont( font() );
+	p.drawText( r, mView->viewName() );
+}

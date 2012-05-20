@@ -20,11 +20,6 @@ SET( SRC_FILES
     Libs/Diff/Patch.cpp
     Libs/Diff/PatchFile.cpp
 
-    Libs/Heaven/HContainer.cpp
-    Libs/Heaven/HView.cpp
-    Libs/Heaven/HTopLevelWidget.cpp
-    Libs/Heaven/HDecorator.cpp
-
     Libs/Core/MacGitver.cpp
     Libs/Core/Module.cpp
     Libs/Core/Modules.cpp
@@ -67,11 +62,6 @@ SET( HDR_FILES
     Libs/Diff/DiffHunk.h
     Libs/Diff/Patch.h
     Libs/Diff/PatchFile.h
-
-    Libs/Heaven/HContainer.h
-    Libs/Heaven/HView.h
-    Libs/Heaven/HTopLevelWidget.h
-    Libs/Heaven/HDecorator.h
 
     Libs/Core/MacGitver.h
     Libs/Core/Module.h
@@ -137,4 +127,5 @@ TARGET_LINK_LIBRARIES(
 
     ${QT_LIBRARIES}
     GitWrap
+    Heaven
 )

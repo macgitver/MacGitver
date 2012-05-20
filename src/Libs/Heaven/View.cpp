@@ -14,7 +14,7 @@
  *
  */
 
-#include "Libs/Heaven/HView.h"
+#include "Heaven/View.h"
 
 HeavenView::HeavenView()
 {

@@ -24,7 +24,7 @@ class QLabel;
 #include "GitWrap/Git.h"
 #include "GitWrap/Repository.h"
 
-#include "Libs/Heaven/HTopLevelWidget.h"
+#include "Heaven/TopLevelWidget.h"
 
 class MainWindow : public QMainWindow
 {

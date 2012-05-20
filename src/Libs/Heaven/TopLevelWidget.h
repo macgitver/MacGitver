@@ -4,8 +4,10 @@
 
 #include <QWidget>
 
-#include "Libs/Heaven/HContainer.h"
-#include "Libs/Heaven/HView.h"
+#include "Heaven/HeavenApi.h"
+
+#include "Heaven/Container.h"
+#include "Heaven/View.h"
 
 struct Heaven
 {
@@ -21,7 +23,7 @@ struct Heaven
 
 };
 
-class HeavenTopLevelWidget : public QWidget
+class HEAVEN_API HeavenTopLevelWidget : public QWidget
 {
 	Q_OBJECT
 public:

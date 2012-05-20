@@ -30,7 +30,7 @@ namespace Git
 	class ObjectCommit;
 	class ObjectTag;
 
-	class Object
+	class GITWRAP_API Object
 	{
 	public:
 		Object( ObjectPrivate* _d );

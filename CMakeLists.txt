@@ -21,6 +21,11 @@ IF( UNIX )
         SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" CACHE STRING "C++ Build Flags" FORCE )
     ENDIF( NOT "${CMAKE_CXX_FLAGS}" MATCHES ".*-Wall.*" )
 
+    # We can NOW be sure that it is defined
+    IF( NOT "${CMAKE_CXX_FLAGS}" MATCHES ".*-fvisibility=.*" )
+        SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden" CACHE STRING "C++ Build Flags" FORCE )
+    ENDIF( NOT "${CMAKE_CXX_FLAGS}" MATCHES ".*-fvisibility=.*" )
+
 ENDIF( UNIX )
 
 ADD_SUBDIRECTORY( libgit2  )

@@ -26,7 +26,7 @@ namespace Git
 
 	class ObjectId;
 
-	class Reference
+	class GITWRAP_API Reference
 	{
 	public:
 		enum Type

@@ -24,7 +24,7 @@
 namespace Git
 {
 
-	class ObjectTree : public Object
+	class GITWRAP_API ObjectTree : public Object
 	{
 	public:
 		ObjectTree();

@@ -35,7 +35,7 @@ namespace Git
 
 	class RepositoryPrivate;
 
-	class Repository
+	class GITWRAP_API Repository
 	{
 	public:
 		explicit Repository( RepositoryPrivate* _d );

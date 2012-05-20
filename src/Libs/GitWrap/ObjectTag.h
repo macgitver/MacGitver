@@ -24,7 +24,7 @@
 namespace Git
 {
 
-	class ObjectTag : public Object
+	class GITWRAP_API ObjectTag : public Object
 	{
 	public:
 		ObjectTag();

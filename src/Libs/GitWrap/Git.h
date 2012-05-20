@@ -20,11 +20,17 @@
 #include <QString>
 #include <QHash>
 
+#ifdef GitWrap_EXPORTS
+#	define GITWRAP_API Q_DECL_EXPORT
+#else
+#	define GITWRAP_API Q_DECL_IMPORT
+#endif
+
 namespace Git
 {
 
-	void initLibGit();
-	void deinitLibGit();
+	GITWRAP_API void initLibGit();
+	GITWRAP_API void deinitLibGit();
 
 	class Repository;
 	class Index;

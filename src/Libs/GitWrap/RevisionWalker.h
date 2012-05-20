@@ -27,7 +27,7 @@ namespace Git
 	class ObjectId;
 	class Reference;
 
-	class RevisionWalker
+	class GITWRAP_API RevisionWalker
 	{
 	public:
 		RevisionWalker();

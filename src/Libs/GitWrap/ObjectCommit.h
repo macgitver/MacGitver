@@ -30,7 +30,7 @@ namespace Git
 
 	class ObjectTree;
 
-	class ObjectCommit : public Object
+	class GITWRAP_API ObjectCommit : public Object
 	{
 	public:
 		ObjectCommit();

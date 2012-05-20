@@ -22,10 +22,12 @@
 #include <QString>
 #include <QDateTime>
 
+#include "Git.h"
+
 namespace Git
 {
 
-	class Signature
+	class GITWRAP_API Signature
 	{
 	public:
 		Signature( const QString& name, const QString& email, const QDateTime& when )

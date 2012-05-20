@@ -26,7 +26,7 @@
 namespace Git
 {
 
-	class ObjectId
+	class GITWRAP_API ObjectId
 	{
 	public:
 		ObjectId();
@@ -50,7 +50,7 @@ namespace Git
 		QByteArray	d;
 	};
 
-	uint qHash( const ObjectId& sha1 );
+	GITWRAP_API uint qHash( const ObjectId& sha1 );
 
 }
 

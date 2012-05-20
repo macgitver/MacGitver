@@ -24,7 +24,7 @@ namespace Git
 
 	class IndexPrivate;
 
-	class Index
+	class GITWRAP_API Index
 	{
 	public:
 		explicit Index( IndexPrivate* _d );

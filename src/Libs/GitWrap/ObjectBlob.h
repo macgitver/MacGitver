@@ -24,7 +24,7 @@
 namespace Git
 {
 
-	class ObjectBlob : public Object
+	class GITWRAP_API ObjectBlob : public Object
 	{
 	public:
 		ObjectBlob();

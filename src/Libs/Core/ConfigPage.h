@@ -18,10 +18,12 @@
 #define MGV_CONFIG_PAGE_H
 
 #include <QWidget>
+#include <QHash>
 
 class ConfigPageGroup
 {
 public:
+	ConfigPageGroup();
 	ConfigPageGroup( ConfigPageGroup* parent, const QString& name, const QByteArray& id );
 
 public:
@@ -29,35 +31,42 @@ public:
 	QString name() const;
 	ConfigPageGroup* parent();
 
+public:
+	void addPageGroup( ConfigPageGroup* child );
+	ConfigPageGroup* getPageGroup( const QByteArray& id );
+
 private:
 	ConfigPageGroup*	mParent;
 	QString				mName;
 	QByteArray			mId;
+	QHash< QByteArray, ConfigPageGroup* > mChildren;
 };
 
-class ConfigWidget;
+class ConfigDlg;
 
 class ConfigPage : public QWidget
 {
 	Q_OBJECT
 public:
-	ConfigPage( ConfigWidget* widget );
+	ConfigPage( ConfigDlg* dlg );
 
 protected:
-	ConfigPageGroup* getOrMakeGroup( const QString& name, const QByteArray& id );
+	ConfigPageGroup* getOrMakeGroup( const QString& name,
+									 const QByteArray& id,
+									 ConfigPageGroup* parent = 0 );
 	void setModified();
 
 public:
 	virtual void apply() = 0;
 	virtual void init() = 0;
 
-	virtual ConfigPageGroup* group() const = 0;
+	virtual ConfigPageGroup* group() = 0;
 	virtual QString name() const = 0;
 
-	ConfigWidget* configWidget();
+	ConfigDlg* configDialog();
 
 private:
-	ConfigWidget* mWidget;
+	ConfigDlg* mDialog;
 };
 
 #endif

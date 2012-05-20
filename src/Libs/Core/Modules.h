@@ -21,6 +21,8 @@
 
 #include "Libs/Core/Module.h"
 
+class ConfigDlg;
+
 class Modules : public QObject
 {
 	Q_OBJECT
@@ -34,6 +36,7 @@ public:
 
 public:
 	void initialize();
+	void setupConfigPages( ConfigDlg* dlg );
 
 public:
 	void repositoryChanged( Git::Repository newRepository );

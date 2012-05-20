@@ -101,3 +101,11 @@ void Modules::delModule( Module *mod )
 {
 	mModules.remove( mod );
 }
+
+void Modules::setupConfigPages( ConfigDlg* dlg )
+{
+	foreach( Module* m, mModules )
+	{
+		ConfigPage* p = m->configPage( dlg );
+	}
+}

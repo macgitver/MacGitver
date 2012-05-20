@@ -14,6 +14,7 @@
  *
  */
 
+#include "Libs/Core/ConfigPage.h"
 #include "Libs/Core/ConfigDlg.h"
 
 #include "ui_ConfigDlg.h"
@@ -22,9 +23,22 @@ ConfigDlg::ConfigDlg()
 	: ui( new Ui::ConfigDlg )
 {
 	ui->setupUi( this );
+
+	mRootGroup = new ConfigPageGroup( NULL, QString(), QByteArray() );
 }
 
 ConfigDlg::~ConfigDlg()
 {
 	delete ui;
+	delete mRootGroup;
+}
+
+ConfigPageGroup* ConfigDlg::rootConfigGroup()
+{
+	return mRootGroup;
+}
+
+void ConfigDlg::addPage( ConfigPage* page )
+{
+	ui->widgets->addWidget( page );
 }

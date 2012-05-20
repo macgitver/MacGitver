@@ -13,3 +13,80 @@
  * not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include "Libs/Core/ConfigPage.h"
+#include "Libs/Core/ConfigDlg.h"
+
+ConfigPageGroup::ConfigPageGroup()
+	: mParent( NULL )
+{
+}
+
+ConfigPageGroup::ConfigPageGroup( ConfigPageGroup* parent,
+								  const QString& name,
+								  const QByteArray &id )
+	: mParent( parent )
+	, mName( name )
+	, mId( id )
+{
+
+}
+
+ConfigPageGroup* ConfigPageGroup::getPageGroup( const QByteArray& id )
+{
+	return mChildren.value( id, NULL );
+}
+
+void ConfigPageGroup::addPageGroup( ConfigPageGroup* child )
+{
+	mChildren.insert( child->id(), child );
+}
+
+QByteArray ConfigPageGroup::id() const
+{
+	return mId;
+}
+
+QString ConfigPageGroup::name() const
+{
+	return mName;
+}
+
+ConfigPageGroup* ConfigPageGroup::parent()
+{
+	return mParent;
+}
+
+ConfigPage::ConfigPage( ConfigDlg* dlg )
+	: QWidget( NULL )
+{
+	dlg->addPage( this );
+}
+
+ConfigPageGroup* ConfigPage::getOrMakeGroup( const QString& name,
+											 const QByteArray& id,
+											 ConfigPageGroup* parent )
+{
+	if( !parent )
+	{
+		if( mDialog )
+		{
+			parent = mDialog->rootConfigGroup();
+		}
+	}
+
+	if( !parent )
+	{
+		return NULL;
+	}
+
+	ConfigPageGroup* me = parent->getPageGroup( id );
+
+	if( !me )
+	{
+		me = new ConfigPageGroup( parent, name, id );
+		parent->addPageGroup( me );
+	}
+
+	return me;
+}

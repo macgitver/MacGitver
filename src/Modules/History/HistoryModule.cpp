@@ -33,7 +33,7 @@ void HistoryModule::repositoryChanged( Git::Repository newRepository )
 	}
 }
 
-ConfigPage* HistoryModule::configPage( ConfigWidget* widget )
+ConfigPage* HistoryModule::configPage( ConfigDlg* dialog )
 {
 	return NULL;
 }

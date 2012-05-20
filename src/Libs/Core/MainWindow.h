@@ -36,6 +36,7 @@ public:
 private slots:
 	void onRepositoryCreate();
 	void onRepositoryOpen();
+	void onPreferences();
 
 private:
 	void setupUi();

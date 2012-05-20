@@ -24,7 +24,7 @@ void Module::repositoryChanged( Git::Repository newRepository )
 {
 }
 
-ConfigPage* Module::configPage( ConfigWidget* widget )
+ConfigPage* Module::configPage( ConfigDlg* dlg )
 {
 	return NULL;
 }

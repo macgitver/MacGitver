@@ -42,7 +42,7 @@ public:
 public:
 	virtual void repositoryChanged( Git::Repository newRepository );
 
-	virtual ConfigPage* configPage( ConfigWidget* widget );
+	virtual ConfigPage* configPage( ConfigDlg* dlg );
 	virtual Types providesModuleTypes() const = 0;
 
 	virtual void initialize();

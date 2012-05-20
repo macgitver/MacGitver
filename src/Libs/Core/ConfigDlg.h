@@ -42,9 +42,14 @@ public:
 	~ConfigDlg();
 
 public:
+	void addPage( ConfigPage* page );
+
+public:
+	ConfigPageGroup* rootConfigGroup();
 
 private:
-	Ui::ConfigDlg*								ui;
+	Ui::ConfigDlg*			ui;
+	ConfigPageGroup*		mRootGroup;
 	QHash< ConfigPageGroup*, QTreeWidgetItem* >	mGroupItems;
 	QHash< QTreeWidgetItem*, ConfigPage* >		mItemPages;
 };

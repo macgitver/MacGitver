@@ -25,6 +25,9 @@
 
 #include "Libs/Core/MacGitver.h"
 #include "Libs/Core/MainWindow.h"
+#include "Libs/Core/Modules.h"
+#include "Libs/Core/ConfigDlg.h"
+#include "Libs/Core/GeneralConfigPage.h"
 
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 
@@ -83,7 +86,7 @@ void MainWindow::setupUi()
 														this, SLOT(onRepositoryCreate()) );
 							  mmuRepository->addSeparator();
 	macRepositoryOptions	= mmuRepository->addAction( trUtf8( "&Preferences..." ),
-														this, SLOT(onPrefernces()) );
+														this, SLOT(onPreferences()) );
 							  mmuRepository->addSeparator();
 	macRepositoryQuit		= mmuRepository->addAction( trUtf8( "&Quit" ),
 														qApp, SLOT(quit()) );
@@ -149,4 +152,12 @@ void MainWindow::repositoryChanged( const Git::Repository& repo )
 void MainWindow::integrateView( HeavenView* view, Heaven::Positions position )
 {
 	mTop->addView( view, position );
+}
+
+void MainWindow::onPreferences()
+{
+	ConfigDlg d;
+	new GeneralConfigPage( &d );
+	MacGitver::self().modules()->setupConfigPages( &d );
+	d.exec();
 }

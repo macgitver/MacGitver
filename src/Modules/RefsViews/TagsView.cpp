@@ -14,33 +14,39 @@
  *
  */
 
-#ifndef MGV_BRANCHES_VIEW_H
-#define MGV_BRANCHES_VIEW_H
+#include <QListWidget>
+#include <QVBoxLayout>
 
-#include "Libs/Heaven/HView.h"
+#include "Modules/RefsViews/TagsView.h"
 
-#include "Libs/Git/Repository.h"
-
-class QListWidget;
-class QToolBar;
-class QToolButton;
-
-class BranchesView : public HeavenView
+TagsView::TagsView()
 {
-	Q_OBJECT
-public:
-	BranchesView();
+	mListWidget = new QListWidget();
+	mListWidget->setFrameStyle( QFrame::NoFrame );
 
-private slots:
-	void repositoryChanged( Git::Repository repo );
-	void rereadBranches();
+	QVBoxLayout* l = new QVBoxLayout;
+	l->setSpacing( 0 );
+	l->setMargin( 0 );
+	l->addWidget( mListWidget );
 
-private:
-	Git::Repository		mRepo;
-	QListWidget*		mListWidget;
-	QToolBar*			mToolBar;
-	QToolButton*		mBtnLocals;
-	QToolButton*		mBtnRemotes;
-};
+	setLayout( l );
 
-#endif
+	setViewName( trUtf8( "Tags" ) );
+}
+
+void TagsView::repositoryChanged( Git::Repository repo )
+{
+	mRepo = repo;
+
+	mListWidget->clear();
+
+	if( mRepo.isValid() )
+	{
+		QStringList sl = mRepo.allTags();
+
+		for( int i = 0; i < sl.count(); i++ )
+		{
+			new QListWidgetItem( sl[ i ], mListWidget );
+		}
+	}
+}

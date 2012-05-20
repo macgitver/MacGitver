@@ -29,19 +29,15 @@ struct InternalModules
 };
 
 DECLARE_INTERNAL_MODULE( Diff )
-DECLARE_INTERNAL_MODULE( Branches )
+DECLARE_INTERNAL_MODULE( RefsViews )
 DECLARE_INTERNAL_MODULE( History )
-DECLARE_INTERNAL_MODULE( Refs )
-DECLARE_INTERNAL_MODULE( Tags )
 DECLARE_INTERNAL_MODULE( WorkingTree )
 
 static InternalModules sInternals[] =
 {
 //	INTERNAL_MODULE( Diff ),
-//	INTERNAL_MODULE( Branches ),
 	INTERNAL_MODULE( History ),
-//	INTERNAL_MODULE( Refs ),
-//	INTERNAL_MODULE( Tags ),
+	INTERNAL_MODULE( RefsViews ),
 //	INTERNAL_MODULE( WorkingTree ),
 	{ NULL, NULL }
 };

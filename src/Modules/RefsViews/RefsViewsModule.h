@@ -14,27 +14,34 @@
  *
  */
 
-#ifndef MGV_TAGS_VIEW_H
-#define MGV_TAGS_VIEW_H
+#ifndef MGV_MODULE_REFSVIEWS_H
+#define MGV_MODULE_REFSVIEWS_H
 
-#include "Libs/Heaven/HView.h"
+#include "Libs/Core/Module.h"
 
-#include "Libs/Git/Repository.h"
+class RefsView;
+class BranchesView;
+class TagsView;
 
-class QListWidget;
-
-class TagsView : public HeavenView
+class RefsViewsModule : public Module
 {
 	Q_OBJECT
 public:
-	TagsView();
+	RefsViewsModule();
 
-private slots:
-	void repositoryChanged( Git::Repository repo );
+public:
+	void repositoryChanged( Git::Repository newRepository );
+
+	void setupConfigPages( ConfigDlg* dlg );
+	Types providesModuleTypes() const;
+
+	void initialize();
+	void deinitialize();
 
 private:
-	Git::Repository		mRepo;
-	QListWidget*		mListWidget;
+	BranchesView*	mBranchesView;
+	TagsView*		mTagsView;
+	RefsView*		mRefsView;
 };
 
 #endif

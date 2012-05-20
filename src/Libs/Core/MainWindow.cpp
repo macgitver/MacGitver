@@ -34,9 +34,6 @@
 #include "Libs/Heaven/HTopLevelWidget.h"
 
 #include "Views/Diff/DiffView.h"
-#include "Views/Branches/BranchesView.h"
-#include "Views/Tags/TagsView.h"
-#include "Views/Refs/RefsView.h"
 #include "Views/WorkingTree/IndexWidget.h"
 
 MainWindow::MainWindow()
@@ -100,21 +97,6 @@ void MainWindow::setupUi()
 
 	mTop = new HeavenTopLevelWidget();
 	setCentralWidget( mTop );
-
-	RefsView* rv = new RefsView;
-	mTop->addView( rv );
-	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
-		rv, SLOT(repositoryChanged(Git::Repository)) );
-
-	BranchesView* branches = new BranchesView;
-	mTop->addView( branches );
-	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
-		branches, SLOT(repositoryChanged(Git::Repository)) );
-
-	TagsView* tags = new TagsView;
-	mTop->addView( tags );
-	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
-		tags, SLOT(repositoryChanged(Git::Repository)) );
 
 	IndexWidget* iw = new IndexWidget;
 	mTop->addView( iw, Heaven::Central );

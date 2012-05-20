@@ -14,8 +14,8 @@
  *
  */
 
-#ifndef MGV_REFERENCE_VIEW_H
-#define MGV_REFERENCE_VIEW_H
+#ifndef MGV_TAGS_VIEW_H
+#define MGV_TAGS_VIEW_H
 
 #include "Libs/Heaven/HView.h"
 
@@ -23,13 +23,13 @@
 
 class QListWidget;
 
-class RefsView : public HeavenView
+class TagsView : public HeavenView
 {
 	Q_OBJECT
 public:
-	RefsView();
+	TagsView();
 
-private slots:
+public:
 	void repositoryChanged( Git::Repository repo );
 
 private:

@@ -14,38 +14,35 @@
  *
  */
 
-#include <QListWidget>
-#include <QVBoxLayout>
+#ifndef MGV_BRANCHES_VIEW_H
+#define MGV_BRANCHES_VIEW_H
 
-#include "Views/Refs/RefsView.h"
+#include "Libs/Heaven/HView.h"
 
-RefsView::RefsView()
+#include "Libs/Git/Repository.h"
+
+class QListWidget;
+class QToolBar;
+class QToolButton;
+
+class BranchesView : public HeavenView
 {
-	mListWidget = new QListWidget();
-	mListWidget->setFrameStyle( QFrame::NoFrame );
+	Q_OBJECT
+public:
+	BranchesView();
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
-	l->addWidget( mListWidget );
+public:
+	void repositoryChanged( Git::Repository repo );
 
-	setLayout( l );
+private slots:
+	void rereadBranches();
 
-	setViewName( trUtf8( "Refs" ) );
-}
+private:
+	Git::Repository		mRepo;
+	QListWidget*		mListWidget;
+	QToolBar*			mToolBar;
+	QToolButton*		mBtnLocals;
+	QToolButton*		mBtnRemotes;
+};
 
-void RefsView::repositoryChanged( Git::Repository repo )
-{
-	mRepo = repo;
-	mListWidget->clear();
-
-	if( mRepo.isValid() )
-	{
-		QStringList sl = mRepo.allReferences();
-
-		for( int i = 0; i < sl.count(); i++ )
-		{
-			new QListWidgetItem( sl[ i ].mid( 5 ), mListWidget );
-		}
-	}
-}
+#endif

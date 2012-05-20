@@ -14,39 +14,27 @@
  *
  */
 
-#include <QListWidget>
-#include <QVBoxLayout>
+#ifndef MGV_REFERENCE_VIEW_H
+#define MGV_REFERENCE_VIEW_H
 
-#include "Views/Tags/TagsView.h"
+#include "Libs/Heaven/HView.h"
 
-TagsView::TagsView()
+#include "Libs/Git/Repository.h"
+
+class QListWidget;
+
+class RefsView : public HeavenView
 {
-	mListWidget = new QListWidget();
-	mListWidget->setFrameStyle( QFrame::NoFrame );
+	Q_OBJECT
+public:
+	RefsView();
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
-	l->addWidget( mListWidget );
+public:
+	void repositoryChanged( Git::Repository repo );
 
-	setLayout( l );
+private:
+	Git::Repository		mRepo;
+	QListWidget*		mListWidget;
+};
 
-	setViewName( trUtf8( "Tags" ) );
-}
-
-void TagsView::repositoryChanged( Git::Repository repo )
-{
-	mRepo = repo;
-
-	mListWidget->clear();
-
-	if( mRepo.isValid() )
-	{
-		QStringList sl = mRepo.allTags();
-
-		for( int i = 0; i < sl.count(); i++ )
-		{
-			new QListWidgetItem( sl[ i ], mListWidget );
-		}
-	}
-}
+#endif

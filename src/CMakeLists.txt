@@ -48,8 +48,6 @@ SET( SRC_FILES
 
     Dlgs/Repository/CreateRepositoryDlg.cpp
 
-    Views/Branches/BranchesView.cpp
-
     Views/Diff/DiffFrame.cpp
     Views/Diff/DiffRawHighlighter.cpp
     Views/Diff/DiffSplitter.cpp
@@ -64,9 +62,10 @@ SET( SRC_FILES
     Modules/History/HistoryModel.cpp
     Modules/History/HistoryModule.cpp
 
-    Views/Refs/RefsView.cpp
-
-    Views/Tags/TagsView.cpp
+    Modules/RefsViews/RefsViewsModule.cpp
+    Modules/RefsViews/RefsView.cpp
+    Modules/RefsViews/BranchesView.cpp
+    Modules/RefsViews/TagsView.cpp
 
     Views/WorkingTree/IndexWidget.cpp
     Views/WorkingTree/IndexTree.cpp
@@ -109,8 +108,6 @@ SET( HDR_FILES
 
     Dlgs/Repository/CreateRepositoryDlg.h
 
-    Views/Branches/BranchesView.h
-
     Views/Diff/DiffFrame.h
     Views/Diff/DiffRawHighlighter.h
     Views/Diff/DiffSplitter.h
@@ -125,9 +122,10 @@ SET( HDR_FILES
     Modules/History/HistoryModel.h
     Modules/History/HistoryModule.h
 
-    Views/Refs/RefsView.h
-
-    Views/Tags/TagsView.h
+    Modules/RefsViews/RefsViewsModule.h
+    Modules/RefsViews/RefsView.h
+    Modules/RefsViews/BranchesView.h
+    Modules/RefsViews/TagsView.h
 
     Views/WorkingTree/IndexWidget.h
     Views/WorkingTree/IndexTree.h

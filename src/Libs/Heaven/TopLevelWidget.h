@@ -9,20 +9,6 @@
 #include "Heaven/Container.h"
 #include "Heaven/View.h"
 
-struct Heaven
-{
-
-	enum Positions
-	{
-		Left,
-		Right,
-		Top,
-		Bottom,
-		Central
-	};
-
-};
-
 class HEAVEN_API HeavenTopLevelWidget : public QWidget
 {
 	Q_OBJECT

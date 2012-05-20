@@ -19,7 +19,7 @@
 
 #include <QWidget>
 
-#include "Heaven/HeavenApi.h"
+#include "Heaven/Heaven.h"
 
 class HEAVEN_API HeavenView : public QWidget
 {

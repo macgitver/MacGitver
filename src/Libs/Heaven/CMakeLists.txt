@@ -21,6 +21,7 @@ SET( SRC_FILES
 SET( PUB_HDR_FILES
 
     HeavenApi.h
+    Heaven.h
     Container.h
     View.h
     TopLevelWidget.h

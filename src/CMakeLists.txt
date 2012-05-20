@@ -15,11 +15,6 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
-    Libs/Diff/Diff.cpp
-    Libs/Diff/DiffHunk.cpp
-    Libs/Diff/Patch.cpp
-    Libs/Diff/PatchFile.cpp
-
     Libs/Core/MacGitver.cpp
     Libs/Core/Module.cpp
     Libs/Core/Modules.cpp
@@ -57,11 +52,6 @@ SET( SRC_FILES
 )
 
 SET( HDR_FILES
-
-    Libs/Diff/Diff.h
-    Libs/Diff/DiffHunk.h
-    Libs/Diff/Patch.h
-    Libs/Diff/PatchFile.h
 
     Libs/Core/MacGitver.h
     Libs/Core/Module.h
@@ -128,4 +118,5 @@ TARGET_LINK_LIBRARIES(
     ${QT_LIBRARIES}
     GitWrap
     Heaven
+    DiffModel
 )

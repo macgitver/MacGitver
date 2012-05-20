@@ -23,7 +23,9 @@
 
 class QTextStream;
 
-class DiffLines
+#include "Diff/Model/DiffModelApi.h"
+
+class DIFF_MODEL_API DiffLines
 {
 public:
 	DiffLines();
@@ -45,7 +47,7 @@ private:
 	QStringList			mLines;
 };
 
-class Difference
+class DIFF_MODEL_API Difference
 {
 public:
 	enum Type

@@ -17,8 +17,8 @@
 #include <QGridLayout>
 #include <QScrollBar>
 
-#include "Libs/Diff/Diff.h"
-#include "Libs/Diff/Patch.h"
+#include "Diff/Model/Diff.h"
+#include "Diff/Model/Patch.h"
 
 #include "Views/Diff/DiffFrame.h"
 #include "Views/Diff/DiffWidget.h"

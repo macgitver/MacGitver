@@ -18,8 +18,8 @@
 #include <QStackedWidget>
 #include <QTextBrowser>
 
-#include "Libs/Diff/Diff.h"
-#include "Libs/Diff/Patch.h"
+#include "Diff/Model/Diff.h"
+#include "Diff/Model/Patch.h"
 
 #include "Views/Diff/DiffWidget.h"
 #include "Views/Diff/DiffTreeFileList.h"

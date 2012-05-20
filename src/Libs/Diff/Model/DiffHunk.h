@@ -21,9 +21,11 @@
 
 class QTextStream;
 
+#include "Diff/Model/DiffModelApi.h"
+
 class Difference;
 
-class DifferenceHunk
+class DIFF_MODEL_API DifferenceHunk
 {
 public:
 	DifferenceHunk();

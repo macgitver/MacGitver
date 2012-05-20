@@ -19,10 +19,10 @@
 #include <QStringList>
 #include <QString>
 
-#include "Libs/Diff/Patch.h"
-#include "Libs/Diff/PatchFile.h"
-#include "Libs/Diff/Diff.h"
-#include "Libs/Diff/DiffHunk.h"
+#include "Diff/Model/Patch.h"
+#include "Diff/Model/PatchFile.h"
+#include "Diff/Model/Diff.h"
+#include "Diff/Model/DiffHunk.h"
 
 Patch::Patch()
 	: mNumSides( 0 )

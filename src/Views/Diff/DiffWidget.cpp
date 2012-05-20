@@ -18,7 +18,7 @@
 #include <QScrollBar>
 #include <QFontMetrics>
 
-#include "Libs/Diff/Diff.h"
+#include "Diff/Model/Diff.h"
 #include "Views/Diff/DiffWidget.h"
 
 DiffWidget::DiffWidget()

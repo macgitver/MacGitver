@@ -16,7 +16,7 @@
 
 #include <QTextStream>
 
-#include "Libs/Diff/Diff.h"
+#include "Diff/Model/Diff.h"
 
 static inline QString untabbify( const QString& input )
 {

@@ -14,37 +14,43 @@
  *
  */
 
-#ifndef MGV_DIFF_PATCH_FILE_H
-#define MGV_DIFF_PATCH_FILE_H
+#ifndef MGV_DIFF_PATCH_H
+#define MGV_DIFF_PATCH_H
 
-#include <QStringList>
-
+#include <QList>
+class QString;
+class QIODevice;
 class QTextStream;
 
-class DifferenceHunk;
+#include "Diff/Model/DiffModelApi.h"
 
-class PatchFile
+class PatchFile;
+
+class DIFF_MODEL_API Patch
 {
 public:
-	PatchFile( const QStringList& pathNames );
-	~PatchFile();
+	Patch();
+	~Patch();
 
 public:
-	QStringList pathNames() const;
-	QList< DifferenceHunk* > allHunks() const;
-	void addHunk( DifferenceHunk* hunk );
-	int numHunks() const;
+	void addPath( PatchFile* diff );
+	QList< PatchFile* > allPaths() const;
+	int numPaths() const;
+	PatchFile* pathAt( int index );
+
+	void setNumSides( int sides );
+	int numSides() const;
+
+	static Patch* readPatch( const QString& fileName );
+	static Patch* readPatch( QIODevice* device );
 
 	void exportRaw( QTextStream& stream );
 
-	void addOptionLine( const QString& line );
-	void addOption( const QString& option );
+	QString toString();
 
 private:
-	QStringList					mPathNames;
-	QStringList					mOptions;
-	QStringList					mOptionLines;
-	QList< DifferenceHunk* >	mHunks;
+	int					mNumSides;
+	QList< PatchFile* >	mPaths;
 };
 
 #endif

@@ -16,8 +16,8 @@
 
 #include <QTextStream>
 
-#include "Libs/Diff/Diff.h"
-#include "Libs/Diff/DiffHunk.h"
+#include "Diff/Model/Diff.h"
+#include "Diff/Model/DiffHunk.h"
 
 DifferenceHunk::DifferenceHunk()
 {

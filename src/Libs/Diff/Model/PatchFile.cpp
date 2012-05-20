@@ -16,9 +16,9 @@
 
 #include <QTextStream>
 
-#include "Libs/Diff/Diff.h"
-#include "Libs/Diff/DiffHunk.h"
-#include "Libs/Diff/PatchFile.h"
+#include "Diff/Model/Diff.h"
+#include "Diff/Model/DiffHunk.h"
+#include "Diff/Model/PatchFile.h"
 
 PatchFile::PatchFile( const QStringList& pathNames )
 	: mPathNames( pathNames )

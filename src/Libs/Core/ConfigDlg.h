@@ -17,7 +17,7 @@
 #ifndef MGV_CONFIG_WIDGET_H
 #define MGV_CONFIG_WIDGET_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QHash>
 #include <QByteArray>
 
@@ -29,17 +29,22 @@ class QStackedWidget;
 class ConfigPageGroup;
 class ConfigPage;
 
-class ConfigWidget : public QWidget
+namespace Ui
+{
+	class ConfigDlg;
+}
+
+class ConfigDlg : public QDialog
 {
 	Q_OBJECT
 public:
-	ConfigWidget();
+	ConfigDlg();
+	~ConfigDlg();
 
 public:
 
 private:
-	QStackedWidget*							mConfigContainer;
-	QTreeWidget*							mPagesTree;
+	Ui::ConfigDlg*								ui;
 	QHash< ConfigPageGroup*, QTreeWidgetItem* >	mGroupItems;
 	QHash< QTreeWidgetItem*, ConfigPage* >		mItemPages;
 };

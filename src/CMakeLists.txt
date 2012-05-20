@@ -40,7 +40,7 @@ SET( SRC_FILES
     Libs/Core/Module.cpp
     Libs/Core/Modules.cpp
     Libs/Core/ConfigPage.cpp
-    Libs/Core/ConfigWidget.cpp
+    Libs/Core/ConfigDlg.cpp
     Libs/Core/MainWindow.cpp
 
     Main/main.cpp
@@ -102,7 +102,7 @@ SET( HDR_FILES
     Libs/Core/Module.h
     Libs/Core/Modules.h
     Libs/Core/ConfigPage.h
-    Libs/Core/ConfigWidget.h
+    Libs/Core/ConfigDlg.h
     Libs/Core/MainWindow.h
 
     Dlgs/Repository/CreateRepositoryDlg.h
@@ -132,6 +132,8 @@ SET( HDR_FILES
 )
 
 SET( UI_FILES
+
+    Libs/Core/ConfigDlg.ui
     Dlgs/Repository/CreateRepositoryDlg.ui
 )
 

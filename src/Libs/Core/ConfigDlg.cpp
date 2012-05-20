@@ -13,3 +13,18 @@
  * not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include "Libs/Core/ConfigDlg.h"
+
+#include "ui_ConfigDlg.h"
+
+ConfigDlg::ConfigDlg()
+	: ui( new Ui::ConfigDlg )
+{
+	ui->setupUi( this );
+}
+
+ConfigDlg::~ConfigDlg()
+{
+	delete ui;
+}

@@ -106,6 +106,6 @@ void Modules::setupConfigPages( ConfigDlg* dlg )
 {
 	foreach( Module* m, mModules )
 	{
-		ConfigPage* p = m->configPage( dlg );
+		m->setupConfigPages( dlg );
 	}
 }

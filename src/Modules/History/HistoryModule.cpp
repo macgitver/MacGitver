@@ -33,9 +33,8 @@ void HistoryModule::repositoryChanged( Git::Repository newRepository )
 	}
 }
 
-ConfigPage* HistoryModule::configPage( ConfigDlg* dialog )
+void HistoryModule::setupConfigPages( ConfigDlg* dialog )
 {
-	return NULL;
 }
 
 Module::Types HistoryModule::providesModuleTypes() const

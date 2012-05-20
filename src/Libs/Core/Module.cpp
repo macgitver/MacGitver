@@ -24,9 +24,8 @@ void Module::repositoryChanged( Git::Repository newRepository )
 {
 }
 
-ConfigPage* Module::configPage( ConfigDlg* dlg )
+void Module::setupConfigPages( ConfigDlg* dlg )
 {
-	return NULL;
 }
 
 void Module::initialize()

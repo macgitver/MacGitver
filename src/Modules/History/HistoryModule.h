@@ -30,7 +30,7 @@ public:
 public:
 	void repositoryChanged( Git::Repository newRepository );
 
-	ConfigPage* configPage( ConfigDlg* dlg );
+	void setupConfigPages( ConfigDlg* dlg );
 	Types providesModuleTypes() const;
 
 	void initialize();

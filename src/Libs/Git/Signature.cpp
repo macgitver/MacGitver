@@ -41,7 +41,7 @@ namespace Git
 									sig.when().toTime_t(),
 									sig.when().utcOffset() / 60 );
 
-		if( rc < GIT_SUCCESS )
+		if( rc < GIT_OK )
 		{
 			return NULL;
 		}

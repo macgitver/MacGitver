@@ -45,7 +45,7 @@ namespace Git
 		git_tree* tree = 0;
 
 		int rc = git_commit_tree( &tree, commit );
-		if( rc < GIT_SUCCESS )
+		if( rc < GIT_OK )
 		{
 			return ObjectTree();
 		}
@@ -89,7 +89,7 @@ namespace Git
 			git_commit* gitparent = NULL;
 
 			int rc = git_commit_parent( &gitparent, commit, index );
-			if( rc == GIT_SUCCESS )
+			if( rc == GIT_OK )
 			{
 				parent = new ObjectPrivate( d->mRepo, (git_object*) gitparent );
 			}
@@ -111,7 +111,7 @@ namespace Git
 				git_commit* parent = NULL;
 
 				int rc = git_commit_parent( &parent, commit, i );
-				if( rc != GIT_SUCCESS )
+				if( rc != GIT_OK )
 				{
 					return QList< ObjectCommit >();
 				}

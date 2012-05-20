@@ -90,7 +90,7 @@ namespace Git
 		if( d )
 		{
 			int rc = git_revwalk_push_ref( d->mWalker, name.constData() );
-			Q_ASSERT( rc == GIT_SUCCESS );
+			Q_ASSERT( rc == GIT_OK );
 		}
 	}
 
@@ -111,7 +111,7 @@ namespace Git
 		{
 			git_oid oid;
 			int rc = git_revwalk_next( &oid, d->mWalker );
-			if( rc == GIT_SUCCESS )
+			if( rc == GIT_OK )
 			{
 				oidNext = ObjectId::fromRaw( oid.id );
 				return true;

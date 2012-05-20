@@ -86,7 +86,7 @@ namespace Git
 		git_repository* repo = NULL;
 
 		int rc = git_repository_init( &repo, path.toLatin1().constData(), bare );
-		if( rc < GIT_SUCCESS )
+		if( rc < GIT_OK )
 		{
 		//	d->setError( rc );
 			return Repository();
@@ -101,7 +101,7 @@ namespace Git
 
 		int rc = git_repository_open( &repo, path.toLatin1().constData() );
 
-		if( rc < GIT_SUCCESS )
+		if( rc < GIT_OK )
 		{
 		//	d->setError( rc );
 			return Repository();
@@ -131,7 +131,7 @@ namespace Git
 
 			int rc = git_repository_index( &index, d->mRepo );
 
-			if( rc < GIT_SUCCESS )
+			if( rc < GIT_OK )
 			{
 				d->setError( rc );
 				return Index();
@@ -159,8 +159,8 @@ namespace Git
 		Q_ASSERT( d );
 
 		git_strarray arr;
-		int rc = git_reference_listall( &arr, d->mRepo, GIT_REF_LISTALL );
-		if( rc < GIT_SUCCESS )
+		int rc = git_reference_list( &arr, d->mRepo, GIT_REF_LISTALL );
+		if( rc < GIT_OK )
 		{
 			return QStringList();
 		}
@@ -181,7 +181,7 @@ namespace Git
 		int rc = git_branch_list( &arr, d->mRepo,
 								  ( local ? GIT_BRANCH_LOCAL : 0 ) |
 								  ( remote ? GIT_BRANCH_REMOTE : 0 ) );
-		if( rc < GIT_SUCCESS )
+		if( rc < GIT_OK )
 		{
 			return QStringList();
 		}
@@ -195,7 +195,7 @@ namespace Git
 
 		git_strarray arr;
 		int rc = git_tag_list( &arr, d->mRepo );
-		if( rc < GIT_SUCCESS )
+		if( rc < GIT_OK )
 		{
 			return QStringList();
 		}
@@ -209,7 +209,7 @@ namespace Git
 		qDebug( "%s - %s",
 				qPrintable( QString::number( status, 2 ) ),
 				qPrintable( name ) );
-		return GIT_SUCCESS;
+		return GIT_OK;
 	}
 
 	void Repository::test()
@@ -221,7 +221,7 @@ namespace Git
 	{
 		StatusHash* sh = (StatusHash*) rawSH;
 		sh->insert( QString::fromUtf8( fn ), status );
-		return GIT_SUCCESS;
+		return GIT_OK;
 	}
 
 	StatusHash Repository::statusHash()
@@ -236,7 +236,6 @@ namespace Git
 			opt.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED
 					  | GIT_STATUS_OPT_INCLUDE_IGNORED
 					  | GIT_STATUS_OPT_INCLUDE_UNMODIFIED
-					  | GIT_STATUS_OPT_EXCLUDE_SUBMODULES
 					  | GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
 			git_status_foreach_ext( d->mRepo, &opt, &statusHashCB, (void*) &sh );
 		}
@@ -283,7 +282,7 @@ namespace Git
 		}
 
 		int rc = git_object_lookup( &obj, d->mRepo, (git_oid*) id.raw(), gitObjType );
-		if( rc != GIT_SUCCESS )
+		if( rc != GIT_OK )
 		{
 			return Object();
 		}
@@ -318,7 +317,7 @@ namespace Git
 		{
 			git_revwalk* walker = NULL;
 			int rc = git_revwalk_new( &walker, d->mRepo );
-			if( rc == GIT_SUCCESS )
+			if( rc == GIT_OK )
 			{
 				return new RevisionWalkerPrivate( d, walker );
 			}
@@ -337,8 +336,8 @@ namespace Git
 		int ignore = 0;
 		if( d )
 		{
-			int rc = git_status_should_ignore( d->mRepo, filePath.data(), &ignore );
-			if( rc != GIT_SUCCESS )
+			int rc = git_status_should_ignore( &ignore, d->mRepo, filePath.data() );
+			if( rc != GIT_OK )
 			{
 				return false;
 			}

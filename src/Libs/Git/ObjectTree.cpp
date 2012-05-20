@@ -44,7 +44,7 @@ namespace Git
 		git_tree* subTree = 0;
 
 		int rc = git_tree_get_subtree( &subTree, d2, pathName.constData() );
-		if( rc < GIT_SUCCESS )
+		if( rc < GIT_OK )
 		{
 			return ObjectTree();
 		}

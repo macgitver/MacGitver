@@ -59,7 +59,7 @@ namespace Git
 		if( isValid() )
 		{
 			int rc = git_reference_delete( d->mRef );
-			if( rc == GIT_SUCCESS )
+			if( rc == GIT_OK )
 			{
 				d->mRef = NULL;
 			}

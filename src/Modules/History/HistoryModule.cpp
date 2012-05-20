@@ -14,8 +14,10 @@
  *
  */
 
-#include "Libs/Core/MacGitver.h"
-#include "Libs/Core/MainWindow.h"
+#define QT_STATICPLUGIN
+#include <QtPlugin>
+
+#include "Interfaces/IMainWindow.h"
 
 #include "Modules/History/HistoryModule.h"
 #include "Modules/History/HistoryView.h"
@@ -33,7 +35,7 @@ void HistoryModule::repositoryChanged( Git::Repository newRepository )
 	}
 }
 
-void HistoryModule::setupConfigPages( ConfigDlg* dialog )
+void HistoryModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
@@ -45,7 +47,7 @@ Module::Types HistoryModule::providesModuleTypes() const
 void HistoryModule::initialize()
 {
 	mView = new HistoryView();
-	MacGitver::self().mainWindow()->integrateView( mView, Heaven::Central );
+	mainWindow()->integrateView( mView, Heaven::Central );
 }
 
 void HistoryModule::deinitialize()
@@ -54,5 +56,5 @@ void HistoryModule::deinitialize()
 	mView = NULL;
 }
 
-
-IMPLEMENT_INTERNAL_MODULE( History )
+Q_EXPORT_STATIC_PLUGIN2( History, HistoryModule )
+Q_IMPORT_PLUGIN( History )

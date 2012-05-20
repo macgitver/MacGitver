@@ -15,15 +15,10 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
-    Libs/Core/MacGitver.cpp
-    Libs/Core/Module.cpp
-    Libs/Core/Modules.cpp
-    Libs/Core/ConfigPage.cpp
-    Libs/Core/ConfigDlg.cpp
-    Libs/Core/MainWindow.cpp
-    Libs/Core/GeneralConfigPage.cpp
-
     Main/main.cpp
+    Main/MacGitverMain.cpp
+    Main/MainWindow.cpp
+    Main/ConfigDialog.cpp
 
     Dlgs/Repository/CreateRepositoryDlg.cpp
 
@@ -53,14 +48,6 @@ SET( SRC_FILES
 
 SET( HDR_FILES
 
-    Libs/Core/MacGitver.h
-    Libs/Core/Module.h
-    Libs/Core/Modules.h
-    Libs/Core/ConfigPage.h
-    Libs/Core/ConfigDlg.h
-    Libs/Core/MainWindow.h
-    Libs/Core/GeneralConfigPage.h
-
     Dlgs/Repository/CreateRepositoryDlg.h
 
     Views/Diff/DiffFrame.h
@@ -84,12 +71,15 @@ SET( HDR_FILES
 
     Views/WorkingTree/IndexWidget.h
     Views/WorkingTree/IndexTree.h
+
+    Main/MacGitverMain.h
+    Main/MainWindow.h
+    Main/ConfigDialog.h
+
 )
 
 SET( UI_FILES
-
-    Libs/Core/ConfigDlg.ui
-    Libs/Core/GeneralConfigPage.ui
+    Main/ConfigDialog.ui
     Dlgs/Repository/CreateRepositoryDlg.ui
 )
 
@@ -119,4 +109,6 @@ TARGET_LINK_LIBRARIES(
     GitWrap
     Heaven
     DiffModel
+    Interfaces
+    MacGitverCore
 )

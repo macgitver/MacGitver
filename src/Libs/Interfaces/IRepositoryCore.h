@@ -13,35 +13,3 @@
  * not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef MGV_MODULE_REFSVIEWS_H
-#define MGV_MODULE_REFSVIEWS_H
-
-#include "MacGitver/Module.h"
-
-class RefsView;
-class BranchesView;
-class TagsView;
-
-class RefsViewsModule : public Module
-{
-	Q_OBJECT
-public:
-	RefsViewsModule();
-
-public:
-	void repositoryChanged( Git::Repository newRepository );
-
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
-
-	void initialize();
-	void deinitialize();
-
-private:
-	BranchesView*	mBranchesView;
-	TagsView*		mTagsView;
-	RefsView*		mRefsView;
-};
-
-#endif

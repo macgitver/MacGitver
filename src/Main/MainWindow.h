@@ -25,8 +25,9 @@ class QLabel;
 #include "GitWrap/Repository.h"
 
 #include "Heaven/TopLevelWidget.h"
+#include "Interfaces/IMainWindow.h"
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public IMainWindow
 {
 	Q_OBJECT
 public:

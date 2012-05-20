@@ -14,8 +14,10 @@
  *
  */
 
-#include "Libs/Core/MacGitver.h"
-#include "Libs/Core/MainWindow.h"
+#define QT_STATICPLUGIN
+#include <QtPlugin>
+
+#include "Interfaces/IMainWindow.h"
 
 #include "Modules/RefsViews/RefsViewsModule.h"
 #include "Modules/RefsViews/TagsView.h"
@@ -45,7 +47,7 @@ void RefsViewsModule::repositoryChanged( Git::Repository newRepository )
 	}
 }
 
-void RefsViewsModule::setupConfigPages( ConfigDlg* dialog )
+void RefsViewsModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
@@ -57,13 +59,13 @@ Module::Types RefsViewsModule::providesModuleTypes() const
 void RefsViewsModule::initialize()
 {
 	mBranchesView = new BranchesView();
-	MacGitver::self().mainWindow()->integrateView( mBranchesView, Heaven::Left );
+	mainWindow()->integrateView( mBranchesView, Heaven::Left );
 
 	mTagsView = new TagsView();
-	MacGitver::self().mainWindow()->integrateView( mTagsView, Heaven::Left );
+	mainWindow()->integrateView( mTagsView, Heaven::Left );
 
 	mRefsView = new RefsView();
-	MacGitver::self().mainWindow()->integrateView( mRefsView, Heaven::Left );
+	mainWindow()->integrateView( mRefsView, Heaven::Left );
 }
 
 void RefsViewsModule::deinitialize()
@@ -76,5 +78,5 @@ void RefsViewsModule::deinitialize()
 	mRefsView = NULL;
 }
 
-
-IMPLEMENT_INTERNAL_MODULE( RefsViews )
+Q_EXPORT_STATIC_PLUGIN2( RefsViews, RefsViewsModule )
+Q_IMPORT_PLUGIN( RefsViews )

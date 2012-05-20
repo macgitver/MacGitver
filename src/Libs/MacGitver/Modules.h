@@ -14,48 +14,36 @@
  *
  */
 
-#ifndef MGV_MACGITVER_H
-#define MGV_MACGITVER_H
+#ifndef MGV_MODULES_H
+#define MGV_MODULES_H
 
-#include <QApplication>
+#include <QSet>
 
-#include "GitWrap/Repository.h"
+#include "MacGitver/Module.h"
 
-class Module;
-class Modules;
-class MainWindow;
-
-class MacGitver : public QApplication
+class Modules : public QObject
 {
 	Q_OBJECT
 public:
-	MacGitver( int argc, char **argv );
-	~MacGitver();
+	Modules( QObject* parent );
+	~Modules();
 
 public:
-	static MacGitver& self();
+	void addModule( Module* mod );
+	void delModule( Module* mod );
 
 public:
-	void closeRepository();
-	void openedRepository( const Git::Repository &repo );
-	Git::Repository repository() const;
-	Modules* modules();
+	void initialize();
+	void setupConfigPages( IConfigDialog* dlg );
 
-	MainWindow* mainWindow();
-
-signals:
-	void repositoryChanged( const Git::Repository& repo );
+public:
+	void repositoryChanged( Git::Repository newRepository );
 
 private:
-	void setRepository( const Git::Repository &repo );
+	void setupInternals();
 
 private:
-	static MacGitver*	sSelf;
-
-	Modules*			mModules;
-	MainWindow*			mMainWindow;
-	Git::Repository		mRepository;
+	QSet< Module* >			mModules;
 };
 
 #endif
-

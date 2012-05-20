@@ -14,10 +14,10 @@
  *
  */
 
-#include "Libs/Core/MacGitver.h"
+#include "Main/MacGitverMain.h"
 
 int main( int c, char** v )
 {
-	MacGitver mgv( c, v );
+	MacGitverMain mgv( c, v );
 	return mgv.exec();
 }

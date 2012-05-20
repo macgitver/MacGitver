@@ -18,9 +18,9 @@
 
 #include "GitWrap/Git.h"
 
-#include "Libs/Core/MacGitver.h"
-#include "Libs/Core/Modules.h"
-#include "Libs/Core/MainWindow.h"
+#include "MacGitver/MacGitver.h"
+#include "MacGitver/Modules.h"
+#include "Interfaces/IMainWindow.h"
 
 MacGitver::MacGitver( int argc, char** argv )
 	: QApplication( argc, argv )
@@ -36,16 +36,11 @@ MacGitver::MacGitver( int argc, char** argv )
 
 	Q_ASSERT( sSelf == NULL );
 	sSelf = this;
-
-	mMainWindow = new MainWindow;
-	mMainWindow->show();
-
-	mModules->initialize();
 }
 
 MacGitver::~MacGitver()
 {
-	closeRepository();
+	setRepository( Git::Repository() );
 
 	delete mModules;
 
@@ -62,19 +57,6 @@ Git::Repository MacGitver::repository() const
 	return mRepository;
 }
 
-void MacGitver::closeRepository()
-{
-	if( mRepository.isValid() )
-	{
-		setRepository( Git::Repository() );
-	}
-}
-
-void MacGitver::openedRepository( const Git::Repository& repo )
-{
-	setRepository( repo );
-}
-
 void MacGitver::setRepository( const Git::Repository& repo )
 {
 	mRepository = repo;
@@ -84,10 +66,18 @@ void MacGitver::setRepository( const Git::Repository& repo )
 	emit repositoryChanged( mRepository );
 }
 
-MainWindow* MacGitver::mainWindow()
+IMainWindow* MacGitver::mainWindow()
 {
 	Q_ASSERT( mMainWindow );
 	return mMainWindow;
+}
+
+void MacGitver::setMainWindow( IMainWindow* mainWindow )
+{
+	Q_ASSERT( !mMainWindow );
+	mMainWindow = mainWindow;
+
+	mModules->initialize();
 }
 
 MacGitver* MacGitver::sSelf = NULL;

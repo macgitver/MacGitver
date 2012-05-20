@@ -14,33 +14,9 @@
  *
  */
 
-#include "Libs/Core/Modules.h"
+#include <QPluginLoader>
 
-#define DECLARE_INTERNAL_MODULE(Name) \
-	extern Module* createIntModule_##Name();
-
-#define INTERNAL_MODULE(Name) \
-	{ #Name, &createIntModule_##Name }
-
-struct InternalModules
-{
-	const char* szName;
-	Module* (*creator)();
-};
-
-DECLARE_INTERNAL_MODULE( Diff )
-DECLARE_INTERNAL_MODULE( RefsViews )
-DECLARE_INTERNAL_MODULE( History )
-DECLARE_INTERNAL_MODULE( WorkingTree )
-
-static InternalModules sInternals[] =
-{
-//	INTERNAL_MODULE( Diff ),
-	INTERNAL_MODULE( History ),
-	INTERNAL_MODULE( RefsViews ),
-//	INTERNAL_MODULE( WorkingTree ),
-	{ NULL, NULL }
-};
+#include "MacGitver/Modules.h"
 
 Modules::Modules( QObject* parent )
 	: QObject( parent )
@@ -68,6 +44,18 @@ void Modules::initialize()
 
 void Modules::setupInternals()
 {
+	QObjectList ol = QPluginLoader::staticInstances();
+
+	foreach( QObject* o, ol )
+	{
+		Module* mod = qobject_cast< Module* >( o );
+		if( mod )
+		{
+			addModule( mod );
+		}
+	}
+
+#if 0
 	int i = 0;
 	while( sInternals[ i ].szName )
 	{
@@ -78,6 +66,7 @@ void Modules::setupInternals()
 
 		i++;
 	}
+#endif
 }
 
 void Modules::repositoryChanged( Git::Repository newRepository )
@@ -98,7 +87,7 @@ void Modules::delModule( Module *mod )
 	mModules.remove( mod );
 }
 
-void Modules::setupConfigPages( ConfigDlg* dlg )
+void Modules::setupConfigPages( IConfigDialog* dlg )
 {
 	foreach( Module* m, mModules )
 	{

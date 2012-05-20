@@ -14,34 +14,25 @@
  *
  */
 
-#ifndef MGV_MODULE_REFSVIEWS_H
-#define MGV_MODULE_REFSVIEWS_H
+#ifndef MGV_I_CONFIG_PAGE_H
+#define MGV_I_CONFIG_PAGE_H
 
-#include "MacGitver/Module.h"
+#include "Interfaces/InterfaceApi.h"
 
-class RefsView;
-class BranchesView;
-class TagsView;
+class QWidget;
 
-class RefsViewsModule : public Module
+class INTERFACES_API IConfigPage
 {
-	Q_OBJECT
 public:
-	RefsViewsModule();
+	IConfigPage();
+	virtual ~IConfigPage();
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
+	virtual QString pageName() const = 0;
+	virtual QByteArray groupId() const = 0;
+	virtual QString groupName() const = 0;
 
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
-
-	void initialize();
-	void deinitialize();
-
-private:
-	BranchesView*	mBranchesView;
-	TagsView*		mTagsView;
-	RefsView*		mRefsView;
+	virtual QWidget* widget() = 0;
 };
 
 #endif

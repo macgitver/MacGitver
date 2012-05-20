@@ -14,28 +14,12 @@
  *
  */
 
-#include "Libs/Core/Module.h"
+#include "Interfaces/IConfigPage.h"
 
-ModuleInterface::~ModuleInterface()
+IConfigPage::IConfigPage()
 {
 }
 
-Module::Module()
-{
-}
-
-void Module::repositoryChanged( Git::Repository newRepository )
-{
-}
-
-void Module::setupConfigPages( ConfigDlg* dlg )
-{
-}
-
-void Module::initialize()
-{
-}
-
-void Module::deinitialize()
+IConfigPage::~IConfigPage()
 {
 }

@@ -14,38 +14,28 @@
  *
  */
 
-#ifndef MGV_MODULES_H
-#define MGV_MODULES_H
+#ifndef MGV_CONFIG_WIDGET_H
+#define MGV_CONFIG_WIDGET_H
 
-#include <QSet>
+#include <QDialog>
+#include <QHash>
+#include <QByteArray>
 
-#include "Libs/Core/Module.h"
+class QTreeWidgetItem;
 
-class ConfigDlg;
+#include "Interfaces/IConfigDialog.h"
 
-class Modules : public QObject
+#include "ui_ConfigDialog.h"
+
+class ConfigDialog : public QDialog, public IConfigDialog, private Ui::ConfigDialog
 {
 	Q_OBJECT
 public:
-	Modules( QObject* parent );
-	~Modules();
+	ConfigDialog();
+	~ConfigDialog();
 
 public:
-	void addModule( Module* mod );
-	void delModule( Module* mod );
-
-public:
-	void initialize();
-	void setupConfigPages( ConfigDlg* dlg );
-
-public:
-	void repositoryChanged( Git::Repository newRepository );
-
-private:
-	void setupInternals();
-
-private:
-	QSet< Module* >			mModules;
+	void addPage( IConfigPage* page );
 };
 
 #endif

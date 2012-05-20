@@ -14,34 +14,14 @@
  *
  */
 
-#ifndef MGV_MODULE_REFSVIEWS_H
-#define MGV_MODULE_REFSVIEWS_H
-
+#include "MacGitver/MacGitver.h"
 #include "MacGitver/Module.h"
 
-class RefsView;
-class BranchesView;
-class TagsView;
-
-class RefsViewsModule : public Module
+Module::Module()
 {
-	Q_OBJECT
-public:
-	RefsViewsModule();
+}
 
-public:
-	void repositoryChanged( Git::Repository newRepository );
-
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
-
-	void initialize();
-	void deinitialize();
-
-private:
-	BranchesView*	mBranchesView;
-	TagsView*		mTagsView;
-	RefsView*		mRefsView;
-};
-
-#endif
+IMainWindow* Module::mainWindow()
+{
+	return MacGitver::self().mainWindow();
+}

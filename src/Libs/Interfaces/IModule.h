@@ -14,21 +14,25 @@
  *
  */
 
-#ifndef MGV_MODULE_H
-#define MGV_MODULE_H
+#ifndef MGV_I_MODULE_H
+#define MGV_I_MODULE_H
 
-#include <QObject>
+#include <QFlags>
 
 #include "GitWrap/Repository.h"
 
-#include "Libs/Core/ConfigPage.h"
+#include "Interfaces/InterfaceApi.h"
 
-class /* MGV_CORE_API */ ModuleInterface
+class IConfigDialog;
+
+class INTERFACES_API IModule
 {
 public:
 	enum Type
 	{
-		View			= 1 << 0,
+		ConfigDialog	= 1 << 0,
+
+		View			= 1 << 16,
 
 
 		None			= 0	// Silly :)
@@ -36,42 +40,20 @@ public:
 	typedef QFlags< Type > Types;
 
 public:
-	virtual ~ModuleInterface();
+	IModule();
+	virtual ~IModule();
 
 public:
 	virtual void repositoryChanged( Git::Repository newRepository ) = 0;
 
-	virtual void setupConfigPages( ConfigDlg* dlg ) = 0;
+	virtual void setupConfigPages( IConfigDialog* dialog ) = 0;
 	virtual Types providesModuleTypes() const = 0;
 
 	virtual void initialize() = 0;
 	virtual void deinitialize() = 0;
 };
 
-Q_DECLARE_INTERFACE( ModuleInterface,
-					 "org.babbelbox.sacu.macgitver.ModuleInterface/0.1" )
-
-class /* MGV_CORE_API */ Module : public QObject, public ModuleInterface
-{
-	Q_INTERFACES( ModuleInterface )
-	Q_OBJECT
-public:
-	Module();
-
-public:
-	void repositoryChanged( Git::Repository newRepository );
-
-	void setupConfigPages( ConfigDlg* dlg );
-	Types providesModuleTypes() const = 0;
-
-	void initialize();
-	void deinitialize();
-};
-
-#define IMPLEMENT_INTERNAL_MODULE(Name) \
-	Module* createIntModule_##Name() \
-	{ \
-		return new Name##Module(); \
-	}
+Q_DECLARE_INTERFACE( IModule,
+					 "org.babbelbox.sacu.macgitver.IModule/0.1" )
 
 #endif

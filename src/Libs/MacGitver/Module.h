@@ -14,31 +14,27 @@
  *
  */
 
-#include "Libs/Core/ConfigPage.h"
-#include "Libs/Core/ConfigDlg.h"
+#ifndef MGV_MODULE_H
+#define MGV_MODULE_H
 
-#include "ui_ConfigDlg.h"
+#include <QObject>
 
-ConfigDlg::ConfigDlg()
-	: ui( new Ui::ConfigDlg )
+#include "GitWrap/Repository.h"
+
+#include "Interfaces/IModule.h"
+#include "Interfaces/IMainWindow.h"
+
+#include "MacGitver/MacGitverApi.h"
+
+class MGV_CORE_API Module : public QObject, public IModule
 {
-	ui->setupUi( this );
+	Q_INTERFACES( IModule )
+	Q_OBJECT
+public:
+	Module();
 
-	mRootGroup = new ConfigPageGroup( NULL, QString(), QByteArray() );
-}
+public:
+	IMainWindow* mainWindow();
+};
 
-ConfigDlg::~ConfigDlg()
-{
-	delete ui;
-	delete mRootGroup;
-}
-
-ConfigPageGroup* ConfigDlg::rootConfigGroup()
-{
-	return mRootGroup;
-}
-
-void ConfigDlg::addPage( ConfigPage* page )
-{
-	ui->widgets->addWidget( page );
-}
+#endif

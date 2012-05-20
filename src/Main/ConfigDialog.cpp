@@ -14,44 +14,20 @@
  *
  */
 
-#ifndef MGV_CONFIG_WIDGET_H
-#define MGV_CONFIG_WIDGET_H
+#include "Interfaces/IConfigPage.h"
 
-#include <QDialog>
-#include <QHash>
-#include <QByteArray>
+#include "Main/ConfigDialog.h"
 
-class QSplitter;
-class QTreeWidget;
-class QTreeWidgetItem;
-class QStackedWidget;
-
-class ConfigPageGroup;
-class ConfigPage;
-
-namespace Ui
+ConfigDialog::ConfigDialog()
 {
-	class ConfigDlg;
+	setupUi( this );
 }
 
-class ConfigDlg : public QDialog
+ConfigDialog::~ConfigDialog()
 {
-	Q_OBJECT
-public:
-	ConfigDlg();
-	~ConfigDlg();
+}
 
-public:
-	void addPage( ConfigPage* page );
-
-public:
-	ConfigPageGroup* rootConfigGroup();
-
-private:
-	Ui::ConfigDlg*			ui;
-	ConfigPageGroup*		mRootGroup;
-	QHash< ConfigPageGroup*, QTreeWidgetItem* >	mGroupItems;
-	QHash< QTreeWidgetItem*, ConfigPage* >		mItemPages;
-};
-
-#endif
+void ConfigDialog::addPage( IConfigPage* page )
+{
+	widgets->addWidget( page->widget() );
+}

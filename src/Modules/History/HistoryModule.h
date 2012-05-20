@@ -17,7 +17,7 @@
 #ifndef MGV_MODULE_HISTORY_H
 #define MGV_MODULE_HISTORY_H
 
-#include "Libs/Core/Module.h"
+#include "MacGitver/Module.h"
 
 class HistoryView;
 
@@ -30,7 +30,7 @@ public:
 public:
 	void repositoryChanged( Git::Repository newRepository );
 
-	void setupConfigPages( ConfigDlg* dlg );
+	void setupConfigPages( IConfigDialog* dlg );
 	Types providesModuleTypes() const;
 
 	void initialize();

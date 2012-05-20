@@ -23,11 +23,10 @@
 #include "GitWrap/ObjectId.h"
 #include "GitWrap/Reference.h"
 
-#include "Libs/Core/MacGitver.h"
-#include "Libs/Core/MainWindow.h"
-#include "Libs/Core/Modules.h"
-#include "Libs/Core/ConfigDlg.h"
-#include "Libs/Core/GeneralConfigPage.h"
+#include "MacGitver/MacGitver.h"
+
+#include "Main/MainWindow.h"
+#include "Main/ConfigDialog.h"
 
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 
@@ -65,7 +64,7 @@ void MainWindow::onRepositoryOpen()
 	Git::Repository repo = Git::Repository::open( fn );
 	if( repo.isValid() )
 	{
-		MacGitver::self().openedRepository( repo );
+		MacGitver::self().setRepository( repo );
 	}
 }
 
@@ -138,8 +137,8 @@ void MainWindow::integrateView( HeavenView* view, Heaven::Positions position )
 
 void MainWindow::onPreferences()
 {
-	ConfigDlg d;
-	new GeneralConfigPage( &d );
-	MacGitver::self().modules()->setupConfigPages( &d );
+	ConfigDialog d;
+//	new GeneralConfigPage( &d );
+//	MacGitver::self().modules()->setupConfigPages( &d );
 	d.exec();
 }

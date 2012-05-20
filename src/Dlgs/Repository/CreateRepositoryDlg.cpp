@@ -22,7 +22,7 @@
 
 #include "Dlgs/Repository/CreateRepositoryDlg.h"
 
-#include "Libs/Core/MacGitver.h"
+#include "MacGitver/MacGitver.h"
 
 CreateRepositoryDlg::CreateRepositoryDlg()
 {
@@ -75,5 +75,5 @@ void CreateRepositoryDlg::accept()
 	}
 
 	QDialog::accept();
-	MacGitver::self().openedRepository( repo );
+	MacGitver::self().setRepository( repo );
 }

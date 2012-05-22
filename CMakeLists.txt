@@ -9,6 +9,7 @@ SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
 SET( LIBRARY_OUTPUT_PATH    ${CMAKE_BINARY_DIR}/bin )
 
 INCLUDE( cmake/QtMacros.cmake )			# Our own set of Qt4 Macros
+INCLUDE( cmake/hic.cmake )              # The HI-Compiler
 #INCLUDE( cmake/Xslt.cmake )				# Generic Xslt support
 
 IF( UNIX )
@@ -29,4 +30,5 @@ IF( UNIX )
 ENDIF( UNIX )
 
 ADD_SUBDIRECTORY( libgit2  )
+ADD_SUBDIRECTORY( tools )
 ADD_SUBDIRECTORY( src )

@@ -17,7 +17,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
-#include "Modules/RefsViews/RefsView.h"
+#include "RefsView.h"
 
 RefsView::RefsView()
 {

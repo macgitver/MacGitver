@@ -14,7 +14,7 @@
  *
  */
 
-#include "Modules/History/HistoryList.h"
+#include "HistoryList.h"
 
 HistoryList::HistoryList()
 {

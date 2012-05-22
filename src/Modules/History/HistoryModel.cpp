@@ -14,8 +14,8 @@
  *
  */
 
-#include "Modules/History/HistoryModel.h"
-#include "Modules/History/HistoryEntry.h"
+#include "HistoryModel.h"
+#include "HistoryEntry.h"
 
 HistoryModel::HistoryModel( QObject* parent )
 	: QAbstractTableModel( parent )

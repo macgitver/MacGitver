@@ -19,7 +19,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-#include "Modules/RefsViews/BranchesView.h"
+#include "BranchesView.h"
 
 BranchesView::BranchesView()
 {

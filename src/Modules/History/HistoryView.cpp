@@ -23,11 +23,11 @@
 #include "GitWrap/Reference.h"
 #include "GitWrap/ObjectCommit.h"
 
-#include "Modules/History/HistoryView.h"
-#include "Modules/History/HistoryEntry.h"
-#include "Modules/History/HistoryModel.h"
-#include "Modules/History/HistoryBuilder.h"
-#include "Modules/History/HistoryList.h"
+#include "HistoryView.h"
+#include "HistoryEntry.h"
+#include "HistoryModel.h"
+#include "HistoryBuilder.h"
+#include "HistoryList.h"
 
 #define SLOT_X 12
 #define SLOT_Y 12

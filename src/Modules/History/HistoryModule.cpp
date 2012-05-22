@@ -14,13 +14,12 @@
  *
  */
 
-#define QT_STATICPLUGIN
 #include <QtPlugin>
 
 #include "Interfaces/IMainWindow.h"
 
-#include "Modules/History/HistoryModule.h"
-#include "Modules/History/HistoryView.h"
+#include "HistoryModule.h"
+#include "HistoryView.h"
 
 HistoryModule::HistoryModule()
 	: mView( NULL )
@@ -56,5 +55,4 @@ void HistoryModule::deinitialize()
 	mView = NULL;
 }
 
-Q_EXPORT_STATIC_PLUGIN2( History, HistoryModule )
-Q_IMPORT_PLUGIN( History )
+Q_EXPORT_PLUGIN2( History, HistoryModule )

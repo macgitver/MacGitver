@@ -17,7 +17,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
-#include "Modules/RefsViews/TagsView.h"
+#include "TagsView.h"
 
 TagsView::TagsView()
 {

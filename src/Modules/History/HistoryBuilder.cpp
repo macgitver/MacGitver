@@ -17,8 +17,8 @@
 #include "GitWrap/ObjectId.h"
 #include "GitWrap/Reference.h"
 
-#include "Modules/History/HistoryBuilder.h"
-#include "Modules/History/HistoryEntry.h"
+#include "HistoryBuilder.h"
+#include "HistoryEntry.h"
 
 HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryEntries* entries )
 	: mRepo( repo )

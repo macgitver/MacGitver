@@ -19,10 +19,10 @@
 
 #include "Interfaces/IMainWindow.h"
 
-#include "Modules/RefsViews/RefsViewsModule.h"
-#include "Modules/RefsViews/TagsView.h"
-#include "Modules/RefsViews/BranchesView.h"
-#include "Modules/RefsViews/RefsView.h"
+#include "RefsViewsModule.h"
+#include "TagsView.h"
+#include "BranchesView.h"
+#include "RefsView.h"
 
 RefsViewsModule::RefsViewsModule()
 	: mBranchesView( NULL )

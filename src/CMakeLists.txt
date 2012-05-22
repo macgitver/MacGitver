@@ -2,6 +2,7 @@
 PROJECT( MAC_GITVER )
 
 ADD_SUBDIRECTORY( Libs )
+ADD_SUBDIRECTORY( Modules )
 
 SET( QT_USE_QTMAIN				1 )
 INCLUDE( ${QT_USE_FILE} )
@@ -29,18 +30,6 @@ SET( SRC_FILES
     Views/Diff/DiffView.cpp
     Views/Diff/DiffWidget.cpp
 
-    Modules/History/HistoryView.cpp
-    Modules/History/HistoryList.cpp
-    Modules/History/HistoryEntry.cpp
-    Modules/History/HistoryBuilder.cpp
-    Modules/History/HistoryModel.cpp
-    Modules/History/HistoryModule.cpp
-
-    Modules/RefsViews/RefsViewsModule.cpp
-    Modules/RefsViews/RefsView.cpp
-    Modules/RefsViews/BranchesView.cpp
-    Modules/RefsViews/TagsView.cpp
-
     Views/WorkingTree/IndexWidget.cpp
     Views/WorkingTree/IndexTree.cpp
 
@@ -56,18 +45,6 @@ SET( HDR_FILES
     Views/Diff/DiffTreeFileList.h
     Views/Diff/DiffView.h
     Views/Diff/DiffWidget.h
-
-    Modules/History/HistoryView.h
-    Modules/History/HistoryList.h
-    Modules/History/HistoryEntry.h
-    Modules/History/HistoryBuilder.h
-    Modules/History/HistoryModel.h
-    Modules/History/HistoryModule.h
-
-    Modules/RefsViews/RefsViewsModule.h
-    Modules/RefsViews/RefsView.h
-    Modules/RefsViews/BranchesView.h
-    Modules/RefsViews/TagsView.h
 
     Views/WorkingTree/IndexWidget.h
     Views/WorkingTree/IndexTree.h

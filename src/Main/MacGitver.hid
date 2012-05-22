@@ -1,0 +1,22 @@
+
+Ui MacGitverActions
+{
+    Menubar MainMenuBar
+    {
+
+        Menu RepositoryMenu
+        {
+
+            Text "&Repository";
+
+            Action RepositoryQuit
+            {
+                Text "&Quit";
+            };
+
+        };
+
+        MergePlace WorkingTreeMP;
+
+    };
+};

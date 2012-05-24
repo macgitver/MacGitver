@@ -27,9 +27,6 @@ SET( SRC_FILES
     Views/Diff/DiffTreeFileList.cpp
     Views/Diff/DiffView.cpp
     Views/Diff/DiffWidget.cpp
-
-    Views/WorkingTree/IndexWidget.cpp
-    Views/WorkingTree/IndexTree.cpp
 )
 
 SET( HDR_FILES
@@ -40,9 +37,6 @@ SET( HDR_FILES
     Views/Diff/DiffTreeFileList.h
     Views/Diff/DiffView.h
     Views/Diff/DiffWidget.h
-
-    Views/WorkingTree/IndexWidget.h
-    Views/WorkingTree/IndexTree.h
 
     Main/MacGitverMain.h
     Main/MainWindow.h

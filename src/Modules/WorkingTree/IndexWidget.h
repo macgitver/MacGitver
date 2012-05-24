@@ -34,9 +34,10 @@ class IndexWidget : public HeavenView
 public:
 	IndexWidget();
 
-private slots:
+public:
 	void repositoryChanged( Git::Repository repo );
 
+private slots:
 	void onShowAll( bool enabled );
 	void onShowModified( bool enabled );
 	void onShowMissing( bool enabled );

@@ -31,7 +31,6 @@
 #include "Heaven/TopLevelWidget.h"
 
 #include "Views/Diff/DiffView.h"
-#include "Views/WorkingTree/IndexWidget.h"
 
 MainWindow::MainWindow()
 	: mRepo()
@@ -81,11 +80,6 @@ void MainWindow::setupUi()
 
 	mTop = new HeavenTopLevelWidget();
 	setCentralWidget( mTop );
-
-	IndexWidget* iw = new IndexWidget;
-	mTop->addView( iw, Heaven::Central );
-	connect( this, SIGNAL(repositoryChanged(Git::Repository)),
-		iw, SLOT(repositoryChanged(Git::Repository)) );
 
 	mTop->addView( new DiffView, Heaven::Central );
 }

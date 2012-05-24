@@ -21,6 +21,7 @@
 #include "Heaven/ActionPrivate.h"
 #include "Heaven/ActionContainerPrivate.h"
 #include "Heaven/MergePlacePrivate.h"
+#include "Heaven/Separator.h"
 
 namespace Heaven
 {
@@ -172,6 +173,11 @@ namespace Heaven
 	void MenuBar::add( MergePlace* uio )
 	{
 		d->add( uio->uiObject() );
+	}
+
+	void MenuBar::addSeparator()
+	{
+		d->add( new Separator );
 	}
 
 }

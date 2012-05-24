@@ -20,6 +20,7 @@
 
 namespace Heaven
 {
+
 	ActionPrivate::ActionPrivate( Action* owner )
 		: UiObject( owner )
 		, mEnabled( true )

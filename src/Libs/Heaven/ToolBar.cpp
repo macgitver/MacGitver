@@ -22,6 +22,7 @@
 #include "Heaven/ActionPrivate.h"
 #include "Heaven/ActionContainerPrivate.h"
 #include "Heaven/MergePlacePrivate.h"
+#include "Heaven/Separator.h"
 
 namespace Heaven
 {
@@ -177,7 +178,7 @@ namespace Heaven
 
 	void ToolBar::addSeparator()
 	{
-		// TODO: Add a Separator-Object
+		d->add( new Separator );
 	}
 
 }

@@ -14,42 +14,23 @@
  *
  */
 
-#ifndef MGV_HEAVEN_ACTION_CONTAINER_H
-#define MGV_HEAVEN_ACTION_CONTAINER_H
+#ifndef MGV_HEAVEN_SEPARATOR_H
+#define MGV_HEAVEN_SEPARATOR_H
 
-#include <QString>
-#include <QObject>
-
-#include "Heaven/HeavenApi.h"
+#include "Heaven/UiObject.h"
 
 namespace Heaven
 {
 
-	class Action;
-	class Menu;
-	class MergePlace;
-	class UiObject;
-	class ActionContainerPrivate;
-
-	class HEAVEN_API ActionContainer : public QObject
+	class Separator : public UiObject
 	{
 		Q_OBJECT
 	public:
-		ActionContainer( QObject* parent );
-		~ActionContainer();
+		Separator();
+		~Separator();
 
 	public:
-		void add( Menu* );
-		void add( Action* );
-		void add( MergePlace* );
-		void add( ActionContainer* );
-		void addSeparator();
-
-	public:
-		UiObject* uiObject();
-
-	private:
-		ActionContainerPrivate* d;
+		UiObjectTypes type() const;
 	};
 
 }

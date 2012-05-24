@@ -48,6 +48,7 @@ namespace Heaven
 		void add( Action* );
 		void add( MergePlace* );
 		void add( ActionContainer* );
+		void addSeparator();
 
 	private:
 		MenuBarPrivate* d;

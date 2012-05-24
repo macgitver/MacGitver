@@ -640,7 +640,7 @@ bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
 			 "*\n"
 			 "**********************************************************************************/\n"
 			 "\n"
-			 "class QWidget;\n"
+			 "class QObject;\n"
 			 "\n"
 			 "#include \"Heaven/Action.h\"\n"
 			 "#include \"Heaven/Menu.h\"\n"
@@ -658,7 +658,7 @@ bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
 				 "class " << uiObject->name() << "\n"
 				 "{\n"
 				 "public:\n"
-				 "\tvoid setupActions( QWidget* parent );\n"
+				 "\tvoid setupActions( QObject* parent );\n"
 				 "\n"
 				 "private:\n"
 				 "\tstatic QString trUtf8( const char* sourceText );\n"
@@ -716,7 +716,7 @@ bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& bas
 			 "**********************************************************************************/\n"
 			 "\n"
 			 "#include <QApplication>\n"
-			 "#include <QWidget>\n"
+			 "#include <QObject>\n"
 			 "\n"
 			 "#include \"" << baseName << "\"\n\n";
 
@@ -741,7 +741,7 @@ bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& bas
 				 "}\n"
 				 "\n";
 
-		tsOut << "void " << uiObject->name() << "::" << "setupActions( QWidget* parent )\n"
+		tsOut << "void " << uiObject->name() << "::" << "setupActions( QObject* parent )\n"
 				 "{\n"
 				 "\t//Setup the actions\n\n";
 

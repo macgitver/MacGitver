@@ -20,7 +20,7 @@
 
 #include <QDebug>
 
-#include "Views/WorkingTree/IndexTree.h"
+#include "IndexTree.h"
 
 WorkingTreeNode::WorkingTreeNode( const QString& path, QTreeWidgetItem* item )
 	: mPath( path )

@@ -20,8 +20,8 @@
 
 #include "GitWrap/Index.h"
 
-#include "Views/WorkingTree/IndexWidget.h"
-#include "Views/WorkingTree/IndexTree.h"
+#include "IndexWidget.h"
+#include "IndexTree.h"
 
 IndexWidget::IndexWidget()
 {

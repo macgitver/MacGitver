@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<language name="HID" section="Sources"
+	version="1" kateversion="2.4"
+	indenter="cstyle"
+	mimetype=""
+	extensions="*.hid"
+	priority="9">
+
+	<highlighting>
+		<lists>
+			<list name="objects">
+				<item> Ui </item>
+				<item> Action </item>
+				<item> Container </item>
+				<item> ToolBar </item>
+				<item> MenuBar </item>
+				<item> Menu </item>
+				<item> MergePlace </item>
+				<item> Separator </item>
+			</list>
+			<list name="bool">
+				<item> true </item>
+				<item> false </item>
+			</list>
+			<list name="property">
+				<item> Text </item>
+				<item> Checkable </item>
+				<item> Checked </item>
+				<item> Enabled </item>
+				<item> _ConnectTo </item>
+				<item> _ConnectCtx </item>
+			</list>
+		</lists>
+
+		<contexts>
+			<context attribute="Normal Text" lineEndContext="#stay" name="Normal Text">
+				<DetectSpaces/>
+				<keyword attribute="Keyword" context="#stay" String="objects" />
+				<keyword attribute="Keyword" context="#stay" String="bool" />
+				<keyword attribute="Property" context="#stay" String="property" />
+
+				<DetectChar attribute="String" context="String" char="&quot;"/>
+				<DetectChar attribute="Symbol" context="#stay" char="{" beginRegion="Brace1" />
+				<DetectChar attribute="Symbol" context="#stay" char="}" endRegion="Brace1" />
+
+				<Detect2Chars attribute="Comment" context="Commentar1" char="/" char1="/"/>
+				<Detect2Chars attribute="Comment" context="Commentar2" char="/" char1="*" beginRegion="Comment"/>
+
+				<DetectIdentifier />
+			</context>
+
+			<context attribute="Comment" lineEndContext="#pop" name="Commentar1">
+				<LineContinue attribute="Comment" context="#stay"/>
+				<DetectSpaces />
+				<DetectIdentifier />
+			</context>
+
+			<context attribute="Comment" lineEndContext="#stay" name="Commentar2">
+				<DetectSpaces />
+				<Detect2Chars attribute="Comment" context="#pop" char="*" char1="/" endRegion="Comment"/>
+				<DetectIdentifier />
+			</context>
+
+			<context attribute="String" lineEndContext="#pop" name="String">
+				<DetectSpaces />
+				<LineContinue attribute="String" context="#stay"/>
+				<DetectChar attribute="String" context="#pop" char="&quot;"/>
+				<DetectIdentifier />
+			</context>
+
+		</contexts>
+
+		<itemDatas>
+			<itemData name="Normal Text"  defStyleNum="dsNormal" spellChecking="false"/>
+			<itemData name="Keyword"      defStyleNum="dsKeyword" spellChecking="false"/>
+			<itemData name="Property"     defStyleNum="dsDataType" spellChecking="false"/>
+			<itemData name="Comment"      defStyleNum="dsComment"/>
+			<itemData name="String"       defStyleNum="dsString"/>
+			<itemData name="Symbol"       defStyleNum="dsNormal" spellChecking="false"/>
+		</itemDatas>
+
+	</highlighting>
+
+	<general>
+		<comments>
+			<comment name="singleLine" start="//" />
+			<comment name="multiLine" start="/*" end="*/" region="Comment"/>
+		</comments>
+		<keywords casesensitive="1" />
+	</general>
+</language>

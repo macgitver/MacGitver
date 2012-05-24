@@ -588,7 +588,7 @@ void HeavenInterfaceCompiler::spitSetProperties( QTextStream& tsOut, HICObject* 
 			break;
 
 		case HICP_Boolean:
-			tsOut << ( p.value().toBool() ? "true" : "false" ) << " );";
+			tsOut << ( p.value().toBool() ? "true" : "false" );
 			break;
 
 		default:

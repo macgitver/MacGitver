@@ -28,6 +28,7 @@ namespace Heaven
 	MenuPrivate::MenuPrivate( Menu* owner )
 		: UiContainer( owner )
 		, mEnabled( true )
+		, mRebuildQueued( false )
 	{
 	}
 
@@ -45,6 +46,8 @@ namespace Heaven
 		QAction* action = menu->menuAction();
 		action->setToolTip( mToolTip );
 		action->setStatusTip( mStatusTip );
+
+		setContainerDirty();
 
 		mQMenus.insert( menu );
 		return menu;

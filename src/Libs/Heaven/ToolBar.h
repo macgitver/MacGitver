@@ -20,6 +20,8 @@
 #include <QString>
 #include <QObject>
 
+class QToolBar;
+
 #include "Heaven/HeavenApi.h"
 
 namespace Heaven
@@ -40,10 +42,14 @@ namespace Heaven
 		~ToolBar();
 
 	public:
+		QToolBar* toolBarFor( QWidget* forParent );
+
+	public:
 		void add( Menu* );
 		void add( Action* );
 		void add( MergePlace* );
 		void add( ActionContainer* );
+		void addSeparator();
 
 	public:
 		UiObject* uiObject();

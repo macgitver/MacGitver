@@ -17,16 +17,16 @@ public:
 	~HeavenTopLevelWidget();
 
 public:
-	void addContainer( HeavenContainer* c );
+	void addContainer( HeavenViewContainer* c );
 	void addView( HeavenView* c, Heaven::Positions pos = Heaven::Left );
 
 protected:
 	void paintEvent( QPaintEvent* ev );
 
 private:
-	HeavenContainer*		mRoot1;
-	HeavenContainer*		mRoot2;
-	HeavenContainer*		mDocks[ 5 ];
+	HeavenViewContainer*		mRoot1;
+	HeavenViewContainer*		mRoot2;
+	HeavenViewContainer*		mDocks[ 5 ];
 };
 
 #endif

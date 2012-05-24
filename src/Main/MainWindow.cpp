@@ -74,6 +74,10 @@ void MainWindow::setupUi()
 	styleFile.open( QFile::ReadOnly );
 	setStyleSheet( styleFile.readAll() );
 
+	setupActions( this );
+
+#if 0
+
 	mmuRepository			= menuBar()->addMenu( trUtf8( "&Repository" ) );
 	macRepositoryCreate		= mmuRepository->addAction( trUtf8( "&Open..." ),
 														this, SLOT(onRepositoryOpen()) );
@@ -89,6 +93,9 @@ void MainWindow::setupUi()
 
 	mmuWorkingTree			= menuBar()->addMenu( trUtf8( "&Working Tree" ) );
 	//mmuWorkingTree->addAction()
+
+#endif
+	setMenuBar( mbMainMenuBar->menuBarFor( this ) );
 
 	setWindowTitle( trUtf8( "MacGitver" ) );
 

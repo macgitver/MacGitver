@@ -14,20 +14,44 @@
  *
  */
 
-#include "Main/MacGitverMain.h"
-#include "Main/MainWindow.h"
+#ifndef MGV_HEAVEN_TOOLBAR_H
+#define MGV_HEAVEN_TOOLBAR_H
 
-MacGitverMain::MacGitverMain( int argc, char** argv )
-	: MacGitver( argc, argv )
+#include <QString>
+#include <QObject>
+
+#include "Heaven/HeavenApi.h"
+
+namespace Heaven
 {
+
+	class Action;
+	class ActionContainer;
+	class MergePlace;
+	class Menu;
+	class UiObject;
+	class ToolBarPrivate;
+
+	class HEAVEN_API ToolBar : public QObject
+	{
+		Q_OBJECT
+	public:
+		ToolBar( QObject* parent );
+		~ToolBar();
+
+	public:
+		void add( Menu* );
+		void add( Action* );
+		void add( MergePlace* );
+		void add( ActionContainer* );
+
+	public:
+		UiObject* uiObject();
+
+	private:
+		ToolBarPrivate* d;
+	};
+
 }
 
-int MacGitverMain::exec()
-{
-	MainWindow* mw = new MainWindow;
-	setMainWindow( mw );
-
-	QMetaObject::invokeMethod( mw, "show", Qt::QueuedConnection );
-
-	return MacGitver::exec();
-}
+#endif

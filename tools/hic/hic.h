@@ -14,8 +14,8 @@ enum ObjectTypes
 	HACO_Ui,
 	HACO_Action,
 	HACO_Menu,
-	HACO_Menubar,
-	HACO_Toolbar,
+	HACO_MenuBar,
+	HACO_ToolBar,
 	HACO_Separator,
 	HACO_Container,
 	HACO_MergePlace
@@ -28,8 +28,8 @@ enum HIDTokenId
 	Token_Ui,
 	Token_Action,
 	Token_Menu,
-	Token_Menubar,
-	Token_Toolbar,
+	Token_MenuBar,
+	Token_ToolBar,
 	Token_Separator,
 	Token_Container,
 	Token_MergePlace,
@@ -51,6 +51,7 @@ enum HIDTokenId
 
 enum HICPropertyTypes
 {
+	HICP_Any = -1,
 	HICP_NULL,
 	HICP_String,
 	HICP_TRString,
@@ -118,9 +119,20 @@ public:
 		return mName;
 	}
 
-	bool hasProperty( const QString& name ) const
+	bool hasProperty( const QString& name, HICPropertyTypes type = HICP_Any ) const
 	{
-		return mProperties.contains( name );
+		if( type == HICP_Any )
+		{
+			return mProperties.contains( name );
+		}
+
+		if( mProperties.contains( name ) )
+		{
+			const HICProperty& p = mProperties[ name ];
+			return p.type() == type;
+		}
+
+		return false;
 	}
 
 	HICProperty getProperty( const QString& name ) const
@@ -186,8 +198,10 @@ private:
 	void error( const char* pszText, int line );
 	void error( const char* pszText );
 
-	bool spit( QTextStream& tsOut );
-	void spitSetProperties( QTextStream& tsOut, HICObject* obj, const char* prefix );
+	bool spitHeader( QTextStream& tsOut );
+	bool spitSource( QTextStream& tsOut, const QString& basename );
+	void spitSetProperties(QTextStream& tsOut, HICObject* obj,
+						   const char* whitespace, const char* prefix );
 	HICObjects allObjects( ObjectTypes byType ) const;
 
 private:

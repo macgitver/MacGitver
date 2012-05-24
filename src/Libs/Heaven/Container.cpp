@@ -22,7 +22,7 @@
 #include "Heaven/Container.h"
 #include "Heaven/View.h"
 
-HeavenContainer::HeavenContainer( Type t , Type s, HeavenContainer* parent )
+HeavenViewContainer::HeavenViewContainer( Type t , Type s, HeavenViewContainer* parent )
 	: QObject( parent )
 	, mType( Type( t | s ) )
 	, mContainerWidget( NULL )
@@ -52,7 +52,7 @@ HeavenContainer::HeavenContainer( Type t , Type s, HeavenContainer* parent )
 	}
 }
 
-HeavenContainer::~HeavenContainer()
+HeavenViewContainer::~HeavenViewContainer()
 {
 }
 
@@ -65,12 +65,12 @@ void HeavenContainer::replaceWith( HeavenContainer* newContainer )
 }
 #endif
 
-HeavenContainer::Type HeavenContainer::type() const
+HeavenViewContainer::Type HeavenViewContainer::type() const
 {
 	return mType;
 }
 
-QList< HeavenView* > HeavenContainer::views() const
+QList< HeavenView* > HeavenViewContainer::views() const
 {
 	QList< HeavenView* > r;
 
@@ -81,7 +81,7 @@ QList< HeavenView* > HeavenContainer::views() const
 	return r;
 }
 
-int HeavenContainer::numViews() const
+int HeavenViewContainer::numViews() const
 {
 	int n = 0;
 
@@ -92,9 +92,9 @@ int HeavenContainer::numViews() const
 	return n;
 }
 
-QList< HeavenContainer* > HeavenContainer::containers() const
+QList< HeavenViewContainer* > HeavenViewContainer::containers() const
 {
-	QList< HeavenContainer* > r;
+	QList< HeavenViewContainer* > r;
 
 	for( int j = 0; j < mContent.count(); j++ )
 		if( !mContent[ j ].isView )
@@ -103,7 +103,7 @@ QList< HeavenContainer* > HeavenContainer::containers() const
 	return r;
 }
 
-int HeavenContainer::numContainers() const
+int HeavenViewContainer::numContainers() const
 {
 	int n = 0;
 
@@ -114,7 +114,7 @@ int HeavenContainer::numContainers() const
 	return n;
 }
 
-int HeavenContainer::addView( HeavenView* view )
+int HeavenViewContainer::addView( HeavenView* view )
 {
 	Content ct;
 	ct.isView = true;
@@ -145,14 +145,14 @@ int HeavenContainer::addView( HeavenView* view )
 	}
 }
 
-int HeavenContainer::addContainer( HeavenContainer* container )
+int HeavenViewContainer::addContainer( HeavenViewContainer* container )
 {
 	int pos = mContent.count();
 	insertContainer( pos, container );
 	return pos;
 }
 
-void HeavenContainer::insertContainer( int pos, HeavenContainer* container )
+void HeavenViewContainer::insertContainer( int pos, HeavenViewContainer* container )
 {
 	Content ct;
 	ct.isView = false;
@@ -175,12 +175,12 @@ void HeavenContainer::insertContainer( int pos, HeavenContainer* container )
 	}
 }
 
-HeavenView* HeavenContainer::takeView( int index )
+HeavenView* HeavenViewContainer::takeView( int index )
 {
 	return 0;
 }
 
-QWidget* HeavenContainer::containerWidget()
+QWidget* HeavenViewContainer::containerWidget()
 {
 	return mContainerWidget;
 }

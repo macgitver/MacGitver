@@ -14,20 +14,25 @@
  *
  */
 
-#include "Main/MacGitverMain.h"
-#include "Main/MainWindow.h"
+#ifndef MGV_HEAVEN_TOOL_PRIVATE_H
+#define MGV_HEAVEN_TOOL_PRIVATE_H
 
-MacGitverMain::MacGitverMain( int argc, char** argv )
-	: MacGitver( argc, argv )
+#include "Heaven/ToolBar.h"
+#include "Heaven/UiContainer.h"
+
+namespace Heaven
 {
+
+	class ToolBarPrivate : public UiContainer
+	{
+	public:
+		ToolBarPrivate( ToolBar* owner );
+		~ToolBarPrivate();
+
+	public:
+		UiObjectTypes type() const;
+	};
+
 }
 
-int MacGitverMain::exec()
-{
-	MainWindow* mw = new MainWindow;
-	setMainWindow( mw );
-
-	QMetaObject::invokeMethod( mw, "show", Qt::QueuedConnection );
-
-	return MacGitver::exec();
-}
+#endif

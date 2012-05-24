@@ -1,5 +1,6 @@
 
 #include <QDateTime>
+#include <QFileInfo>
 #include <QFile>
 
 #include "hic.h"
@@ -46,8 +47,8 @@ QHash< QString, HIDTokenId > HeavenInterfaceCompiler::sTokens;
  *
  * ClassName			:= Keyword_Action
  *						:= Keyword_Menu
- *						:= Keyword_Menubar
- *						:= Keyword_Toolbar
+ *						:= Keyword_MenuBar
+ *						:= Keyword_ToolBar
  *						:= Keyword_MergePoint
  *						:= Keyword_Container
  *
@@ -59,8 +60,8 @@ QHash< QString, HIDTokenId > HeavenInterfaceCompiler::sTokens;
  * Keyword_Ui			:= "Ui"
  * Keyword_Action		:= "Action"
  * Keyword_Menu			:= "Menu"
- * Keyword_Menubar		:= "Menubar"
- * Keyword_Toolbar		:= "Toolbar"
+ * Keyword_MenuBar		:= "MenuBar"
+ * Keyword_ToolBar		:= "ToolBar"
  * Keyword_Separator	:= "Sep"
  *						:= "Separator"
  * Keyword_MergePlace	:= "MergePlace"
@@ -77,7 +78,25 @@ static inline QString latin1Encode( const QString& src )
 
 static inline QString utf8Encode( const QString& src )
 {
-	return src;
+	QByteArray a = src.toUtf8();
+	QString result;
+	result.reserve( a.count() );
+
+	for( int i = 0; i < a.count(); i++ )
+	{
+		unsigned char c = a[ i ];
+		if( c < 128 )
+		{
+			result += c;
+		}
+		else
+		{
+			result += '\\';
+			result += QString::number( c, 8 ).rightJustified( 3, L'0' );
+		}
+	}
+
+	return result;
 }
 
 HICObjects HICObjects::byType( ObjectTypes type ) const
@@ -107,8 +126,8 @@ HeavenInterfaceCompiler::HeavenInterfaceCompiler( int argc , char** argv )
 		T(Ui);
 		T(Action);
 		T(Menu);
-		T(Menubar);
-		T(Toolbar);
+		T(MenuBar);
+		T(ToolBar);
 		T(Separator);
 		T(Container);
 		T(MergePlace);
@@ -132,9 +151,9 @@ bool HeavenInterfaceCompiler::parseNewObject()
 	case Token_Action:		t = HACO_Action; break;
 	case Token_Container:	t = HACO_Container; break;
 	case Token_Menu:		t = HACO_Menu; break;
-	case Token_Menubar:		t = HACO_Menubar; break;
+	case Token_MenuBar:		t = HACO_MenuBar; break;
 	case Token_MergePlace:	t = HACO_MergePlace; break;
-	case Token_Toolbar:		t = HACO_Toolbar; break;
+	case Token_ToolBar:		t = HACO_ToolBar; break;
 	default:
 		error( "Expected new object" );
 		return false;
@@ -248,9 +267,9 @@ bool HeavenInterfaceCompiler::parseObjectContent()
 		case Token_Action:
 		case Token_Container:
 		case Token_Menu:
-		case Token_Menubar:
+		case Token_MenuBar:
 		case Token_MergePlace:
-		case Token_Toolbar:
+		case Token_ToolBar:
 			if( !parseNewObject() )
 			{
 				return false;
@@ -293,9 +312,9 @@ bool HeavenInterfaceCompiler::parseProperty()
 		case Token_Action:
 		case Token_Container:
 		case Token_Menu:
-		case Token_Menubar:
+		case Token_MenuBar:
 		case Token_MergePlace:
-		case Token_Toolbar:
+		case Token_ToolBar:
 			if( !parseNewObject() )
 			{
 				return false;
@@ -542,13 +561,19 @@ HICObjects HeavenInterfaceCompiler::allObjects( ObjectTypes byType ) const
 	return result;
 }
 
-void HeavenInterfaceCompiler::spitSetProperties( QTextStream& tsOut, HICObject* obj, const char* prefix )
+void HeavenInterfaceCompiler::spitSetProperties( QTextStream& tsOut, HICObject* obj,
+												 const char* whitespace,
+												 const char* prefix )
 {
 	foreach( QString pname, obj->propertyNames() )
 	{
+		if( pname.startsWith( L'_' ) )
+		{
+			continue;
+		}
 		HICProperty p = obj->getProperty( pname );
 
-		tsOut << prefix << obj->name() << "->set" << pname << "( ";
+		tsOut << whitespace << prefix << obj->name() << "->set" << pname << "( ";
 
 		switch( p.type() )
 		{
@@ -560,6 +585,10 @@ void HeavenInterfaceCompiler::spitSetProperties( QTextStream& tsOut, HICObject* 
 			tsOut << "trUtf8( \"" << utf8Encode( p.value().toString() ) << "\" )";
 			break;
 
+		case HICP_Boolean:
+			tsOut << ( p.value().toBool() ? "true" : "false" ) << " );";
+			break;
+
 		default:
 			tsOut << "WTF?";
 		}
@@ -567,9 +596,39 @@ void HeavenInterfaceCompiler::spitSetProperties( QTextStream& tsOut, HICObject* 
 		tsOut << " );\n";
 	}
 
+	switch( obj->type() )
+	{
+	case HACO_Action:
+		if( obj->hasProperty( "_ConnectTo", HICP_String ) )
+		{
+			HICProperty p = obj->getProperty( "_ConnectTo" );
+
+			QString slot = p.value().toString();
+			const char* signal = "triggered()";
+			if( slot.contains( "(bool)" ) )
+			{
+				signal = "toggled(bool)";
+			}
+
+			QByteArray receiver = "parent";
+			if( obj->hasProperty( "_ConnectContext", HICP_String ) )
+			{
+				HICProperty p2 = obj->getProperty( "_ConnectContext" );
+				receiver = p2.value().toString().toLocal8Bit();
+			}
+
+			tsOut << whitespace << "QObject::connect( " << prefix << obj->name() << ", SIGNAL(" << signal
+				  << "), " << receiver << ", SLOT(" << slot << ") );\n";
+		}
+		break;
+
+	default:
+		break;
+	}
+
 }
 
-bool HeavenInterfaceCompiler::spit( QTextStream& tsOut )
+bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
 {
 	tsOut << "/**********************************************************************************\n"
 			 "*\n"
@@ -581,8 +640,14 @@ bool HeavenInterfaceCompiler::spit( QTextStream& tsOut )
 			 "*\n"
 			 "**********************************************************************************/\n"
 			 "\n"
+			 "class QWidget;\n"
+			 "\n"
 			 "#include \"Heaven/Action.h\"\n"
-			 "#include \"Heaven/ActionManager.h\"\n"
+			 "#include \"Heaven/Menu.h\"\n"
+			 "#include \"Heaven/MenuBar.h\"\n"
+			 "#include \"Heaven/ToolBar.h\"\n"
+			 "#include \"Heaven/MergePlace.h\"\n"
+			 "#include \"Heaven/ActionContainer.h\"\n"
 			 "\n";
 
 	foreach( HICObject* uiObject, allObjects( HACO_Ui ) )
@@ -590,12 +655,15 @@ bool HeavenInterfaceCompiler::spit( QTextStream& tsOut )
 		tsOut << "#ifndef HIC_" << uiObject->name() << "\n"
 				 "#define HIC_" << uiObject->name() << "\n\n"
 
-				 "class " << uiObject->name() << " : public Heaven::ActionManager\n"
+				 "class " << uiObject->name() << "\n"
 				 "{\n"
 				 "public:\n"
-				 "\t" << uiObject->name() << "( QWidget* parent );\n";
-
-		tsOut << "\npublic:\n";
+				 "\tvoid setupActions( QWidget* parent );\n"
+				 "\n"
+				 "private:\n"
+				 "\tstatic QString trUtf8( const char* sourceText );\n"
+				 "\n"
+				 "public:\n";
 
 		foreach( HICObject* object, uiObject->content( HACO_Action ) )
 		{
@@ -612,14 +680,14 @@ bool HeavenInterfaceCompiler::spit( QTextStream& tsOut )
 			tsOut << "\tHeaven::Menu*            menu" << object->name() << ";\n";
 		}
 
-		foreach( HICObject* object, uiObject->content( HACO_Menubar ) )
+		foreach( HICObject* object, uiObject->content( HACO_MenuBar ) )
 		{
-			tsOut << "\tHeaven::Menubar*         mb" << object->name() << ";\n";
+			tsOut << "\tHeaven::MenuBar*         mb" << object->name() << ";\n";
 		}
 
-		foreach( HICObject* object, uiObject->content( HACO_Toolbar ) )
+		foreach( HICObject* object, uiObject->content( HACO_ToolBar ) )
 		{
-			tsOut << "\tHeaven::Toolbar*         tb" << object->name() << ";\n";
+			tsOut << "\tHeaven::ToolBar*         tb" << object->name() << ";\n";
 		}
 
 		foreach( HICObject* object, uiObject->content( HACO_Container ) )
@@ -629,51 +697,94 @@ bool HeavenInterfaceCompiler::spit( QTextStream& tsOut )
 
 		tsOut << "};\n\n";
 
-		tsOut << "inline " << uiObject->name() << "::" << uiObject->name() << "( QWidget* parent )\n"
-				 "\t: ActionManager( parent )\n"
+		tsOut << "#endif\n\n";
+	}
+
+	return true;
+}
+
+bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& baseName )
+{
+	tsOut << "/**********************************************************************************\n"
+			 "*\n"
+			 "* This file is generated by HIC, the Heaven Interface Compiler\n"
+			 "*\n"
+			 "* Any modifications will be lost on the next gererator run. You've been warned.\n"
+			 "*\n"
+			 "* " << QDateTime::currentDateTime().toString( Qt::ISODate ) << "\n"
+			 "*\n"
+			 "**********************************************************************************/\n"
+			 "\n"
+			 "#include <QApplication>\n"
+			 "#include <QWidget>\n"
+			 "\n"
+			 "#include \"" << baseName << "\"\n\n";
+
+	foreach( HICObject* uiObject, allObjects( HACO_Ui ) )
+	{
+		QString ctx;
+
+		if( uiObject->hasProperty( "TrContext", HICP_String ) )
+		{
+			ctx = uiObject->getProperty( "TrContext" ).value().toString();
+		}
+
+		if( ctx.isEmpty() )
+		{
+			ctx = uiObject->name();
+		}
+
+		tsOut << "QString "<< uiObject->name() << "::" << "trUtf8( const char* sourceText )\n"
+				 "{\n"
+				 "\treturn QApplication::translate( \"" << latin1Encode( ctx ) << "\", sourceText, "
+					"NULL, QCoreApplication::UnicodeUTF8 );\n"
+				 "}\n"
+				 "\n";
+
+		tsOut << "void " << uiObject->name() << "::" << "setupActions( QWidget* parent )\n"
 				 "{\n"
 				 "\t//Setup the actions\n\n";
 
 		foreach( HICObject* actionObject, uiObject->content( HACO_Action ) )
 		{
-			tsOut << "\tact" << actionObject->name() << " = new Heaven::Action( this );\n";
-			spitSetProperties( tsOut, actionObject, "\tact" );
+			tsOut << "\tact" << actionObject->name() << " = new Heaven::Action( parent );\n";
+			spitSetProperties( tsOut, actionObject, "\t", "act" );
 			tsOut << "\n";
 		}
 
 		tsOut << "\t//Setup Mergeplaces\n\n";
 		foreach( HICObject* mpObject, uiObject->content( HACO_MergePlace ) )
 		{
-			tsOut << "\tmp" << mpObject->name() << " = new Heaven::MergePlace( this );\n"
+			tsOut << "\tmp" << mpObject->name() << " = new Heaven::MergePlace( parent );\n"
 					 "\tmp" << mpObject->name() << "->setName( QByteArray( \"" <<
 					 latin1Encode( mpObject->name() ) << "\" ) );\n";
-			spitSetProperties( tsOut, mpObject, "\tmp" );
+			spitSetProperties( tsOut, mpObject, "\t", "mp" );
 			tsOut << "\n";
 		}
 
 		tsOut << "\t//Setup containers\n\n";
 		foreach( HICObject* menuObject, uiObject->content( HACO_Menu ) )
 		{
-			tsOut << "\tmenu" << menuObject->name() << " = new Heaven::Menu( this );\n";
-			spitSetProperties( tsOut, menuObject, "\tmenu" );
+			tsOut << "\tmenu" << menuObject->name() << " = new Heaven::Menu( parent );\n";
+			spitSetProperties( tsOut, menuObject, "\t", "menu" );
 			tsOut << "\n";
 		}
-		foreach( HICObject* menuObject, uiObject->content( HACO_Menubar ) )
+		foreach( HICObject* menuObject, uiObject->content( HACO_MenuBar ) )
 		{
-			tsOut << "\tmb" << menuObject->name() << " = new Heaven::Menubar( this );\n";
-			spitSetProperties( tsOut, menuObject, "\tmb" );
+			tsOut << "\tmb" << menuObject->name() << " = new Heaven::MenuBar( parent );\n";
+			spitSetProperties( tsOut, menuObject, "\t", "mb" );
 			tsOut << "\n";
 		}
-		foreach( HICObject* menuObject, uiObject->content( HACO_Toolbar ) )
+		foreach( HICObject* menuObject, uiObject->content( HACO_ToolBar ) )
 		{
-			tsOut << "\ttb" << menuObject->name() << " = new Heaven::Toolbar( this );\n";
-			spitSetProperties( tsOut, menuObject, "\ttb" );
+			tsOut << "\ttb" << menuObject->name() << " = new Heaven::ToolBar( parent );\n";
+			spitSetProperties( tsOut, menuObject, "\t", "tb" );
 			tsOut << "\n";
 		}
 		foreach( HICObject* menuObject, uiObject->content( HACO_Container ) )
 		{
-			tsOut << "\tac" << menuObject->name() << " = new Heaven::ActionContainer( this );\n";
-			spitSetProperties( tsOut, menuObject, "\tac" );
+			tsOut << "\tac" << menuObject->name() << " = new Heaven::ActionContainer( parent );\n";
+			spitSetProperties( tsOut, menuObject, "\t", "ac" );
 			tsOut << "\n";
 		}
 
@@ -694,11 +805,11 @@ bool HeavenInterfaceCompiler::spit( QTextStream& tsOut )
 				prefix = "\tmenu";
 				break;
 
-			case HACO_Menubar:
+			case HACO_MenuBar:
 				prefix = "\tmb";
 				break;
 
-			case HACO_Toolbar:
+			case HACO_ToolBar:
 				prefix = "\ttb";
 				break;
 
@@ -740,8 +851,6 @@ bool HeavenInterfaceCompiler::spit( QTextStream& tsOut )
 		}
 
 		tsOut << "}\n\n";
-
-		tsOut << "#endif\n\n";
 	}
 
 	return true;
@@ -751,9 +860,10 @@ int HeavenInterfaceCompiler::run()
 {
 	QStringList sl = arguments();
 
-	if( sl.count() != 3 )
+	if( sl.count() != 4 )
 	{
-		fprintf( stderr, "Usage: %s <input> <output>\n", qPrintable( sl[ 0 ] ) );
+		fprintf( stderr, "Usage: %s <input> <output-header> <output-source\n",
+				 qPrintable( sl[ 0 ] ) );
 		return -1;
 	}
 
@@ -764,6 +874,7 @@ int HeavenInterfaceCompiler::run()
 		return -1;
 	}
 	QTextStream tsInput( &fInput );
+	tsInput.setCodec( "UTF-8" );
 	if( !tokenize( tsInput.readAll() ) )
 	{
 		fprintf( stderr, "Could not tokenize input from %s\n", qPrintable( sl[ 1 ] ) );
@@ -776,15 +887,25 @@ int HeavenInterfaceCompiler::run()
 		return -1;
 	}
 
-	QFile fOutput( sl[ 2 ] );
-	if( !fOutput.open( QFile::WriteOnly ) )
+	QFile fOutput1( sl[ 2 ] );
+	if( !fOutput1.open( QFile::WriteOnly ) )
 	{
 		fprintf( stderr, "Could not open %s for output\n", qPrintable( sl[ 2 ] ) );
 		return -1;
 	}
 
-	QTextStream tsOutput( &fOutput );
-	spit( tsOutput );
+	QTextStream tsOutput1( &fOutput1 );
+	spitHeader( tsOutput1 );
+
+	QFile fOutput2( sl[ 3 ] );
+	if( !fOutput2.open( QFile::WriteOnly ) )
+	{
+		fprintf( stderr, "Could not open %s for output\n", qPrintable( sl[ 3 ] ) );
+		return -1;
+	}
+
+	QTextStream tsOutput2( &fOutput2 );
+	spitSource( tsOutput2, QFileInfo( fOutput1 ).fileName() );
 
 	return 0;
 }

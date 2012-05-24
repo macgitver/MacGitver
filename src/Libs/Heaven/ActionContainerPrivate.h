@@ -14,20 +14,26 @@
  *
  */
 
-#include "Main/MacGitverMain.h"
-#include "Main/MainWindow.h"
+#ifndef MGV_HEAVEN_ACTION_CONTAINER_PRIVATE_H
+#define MGV_HEAVEN_ACTION_CONTAINER_PRIVATE_H
 
-MacGitverMain::MacGitverMain( int argc, char** argv )
-	: MacGitver( argc, argv )
+#include "Heaven/ActionContainer.h"
+#include "Heaven/UiContainer.h"
+
+namespace Heaven
 {
+
+	class ActionContainerPrivate : public UiContainer
+	{
+		Q_OBJECT
+	public:
+		ActionContainerPrivate( ActionContainer* owner );
+		~ActionContainerPrivate();
+
+	public:
+		UiObjectTypes type() const;
+	};
+
 }
 
-int MacGitverMain::exec()
-{
-	MainWindow* mw = new MainWindow;
-	setMainWindow( mw );
-
-	QMetaObject::invokeMethod( mw, "show", Qt::QueuedConnection );
-
-	return MacGitver::exec();
-}
+#endif

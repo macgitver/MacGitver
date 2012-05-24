@@ -67,7 +67,7 @@ SET( RCC_FILES
 
 SET( HID_FILES
 
-    Main/MacGitver.hid
+    Main/MainWindowActions.hid
 
 )
 

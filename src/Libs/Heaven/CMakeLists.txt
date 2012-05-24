@@ -16,6 +16,16 @@ SET( SRC_FILES
     TopLevelWidget.cpp
     Decorator.cpp
 
+    Menu.cpp
+    Action.cpp
+    MenuBar.cpp
+    ToolBar.cpp
+    ActionContainer.cpp
+    MergePlace.cpp
+    UiManager.cpp
+    MergesManager.cpp
+    UiObject.cpp
+    UiContainer.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -25,11 +35,28 @@ SET( PUB_HDR_FILES
     Container.h
     View.h
     TopLevelWidget.h
+
+    Menu.h
+    Action.h
+    MenuBar.h
+    ToolBar.h
+    ActionContainer.h
+    MergePlace.h
 )
 
 SET( PRI_HDR_FILES
 
     Decorator.h
+    MergesManager.h
+    ActionPrivate.h
+    MenuPrivate.h
+    MenuBarPrivate.h
+    ToolBarPrivate.h
+    ActionContainerPrivate.h
+    MergePlacePrivate.h
+    UiContainer.h
+    UiObject.h
+    UiManager.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

@@ -14,20 +14,39 @@
  *
  */
 
-#include "Main/MacGitverMain.h"
-#include "Main/MainWindow.h"
+#include "Heaven/ActionContainerPrivate.h"
 
-MacGitverMain::MacGitverMain( int argc, char** argv )
-	: MacGitver( argc, argv )
+namespace Heaven
 {
-}
 
-int MacGitverMain::exec()
-{
-	MainWindow* mw = new MainWindow;
-	setMainWindow( mw );
+	ActionContainerPrivate::ActionContainerPrivate( ActionContainer* owner )
+		: UiContainer( owner )
+	{
+	}
 
-	QMetaObject::invokeMethod( mw, "show", Qt::QueuedConnection );
+	ActionContainerPrivate::~ActionContainerPrivate()
+	{
+	}
 
-	return MacGitver::exec();
+	UiObjectTypes ActionContainerPrivate::type() const
+	{
+		return ContainerType;
+	}
+
+	ActionContainer::ActionContainer( QObject* parent )
+		: QObject( parent )
+	{
+		d = new ActionContainerPrivate( this );
+	}
+
+	ActionContainer::~ActionContainer()
+	{
+		delete d;
+	}
+
+	UiObject* ActionContainer::uiObject()
+	{
+		return d;
+	}
+
 }

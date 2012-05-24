@@ -28,7 +28,7 @@ typedef QSplitter HeavenSplitter;
 
 class HeavenView;
 
-class HEAVEN_API HeavenContainer : public QObject
+class HEAVEN_API HeavenViewContainer : public QObject
 {
 	Q_OBJECT
 public:
@@ -55,13 +55,13 @@ public:
 		union
 		{
 			HeavenView*			view;
-			HeavenContainer*	container;
+			HeavenViewContainer*	container;
 		};
 	};
 
 public:
-	HeavenContainer( Type t, Type s, HeavenContainer* parent = NULL );
-	~HeavenContainer();
+	HeavenViewContainer( Type t, Type s, HeavenViewContainer* parent = NULL );
+	~HeavenViewContainer();
 
 
 public:
@@ -73,10 +73,10 @@ public:
 	HeavenView* takeView( int index );
 	QWidget* containerWidget();
 
-	QList< HeavenContainer* > containers() const;
+	QList< HeavenViewContainer* > containers() const;
 	int numContainers() const;
-	int addContainer( HeavenContainer* container );
-	void insertContainer( int pos, HeavenContainer* container );
+	int addContainer( HeavenViewContainer* container );
+	void insertContainer( int pos, HeavenViewContainer* container );
 
 private:
 	Type				mType;

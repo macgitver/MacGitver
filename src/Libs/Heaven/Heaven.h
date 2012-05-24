@@ -4,7 +4,7 @@
 
 #include "Heaven/HeavenApi.h"
 
-struct Heaven
+namespace Heaven
 {
 
 	enum Positions
@@ -14,6 +14,18 @@ struct Heaven
 		Top,
 		Bottom,
 		Central
+	};
+
+	enum UiObjectTypes
+	{
+		ActionType,
+		ContainerType,
+		MergePlaceType,
+		MenuType,
+		MenuBarType,
+		ToolBarType,
+
+		SeparatorType
 	};
 
 };

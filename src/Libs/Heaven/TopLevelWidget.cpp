@@ -22,15 +22,15 @@
 
 HeavenTopLevelWidget::HeavenTopLevelWidget()
 {
-	mRoot1 = new HeavenContainer( HeavenContainer::Splitter, HeavenContainer::SubSplitVert );
-	mRoot2 = new HeavenContainer( HeavenContainer::Splitter, HeavenContainer::SubSplitHorz );
+	mRoot1 = new HeavenViewContainer( HeavenViewContainer::Splitter, HeavenViewContainer::SubSplitVert );
+	mRoot2 = new HeavenViewContainer( HeavenViewContainer::Splitter, HeavenViewContainer::SubSplitHorz );
 	mRoot1->addContainer( mRoot2 );
 
-	mDocks[ 0 ] = new HeavenContainer( HeavenContainer::Tab, HeavenContainer::SubTabLeft );
-	mDocks[ 1 ] = new HeavenContainer( HeavenContainer::Tab, HeavenContainer::SubTabRight );
-	mDocks[ 2 ] = new HeavenContainer( HeavenContainer::Tab, HeavenContainer::SubTabTop );
-	mDocks[ 3 ] = new HeavenContainer( HeavenContainer::Tab, HeavenContainer::SubTabBottom );
-	mDocks[ 4 ] = new HeavenContainer( HeavenContainer::Tab, HeavenContainer::SubTabTop );
+	mDocks[ 0 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabLeft );
+	mDocks[ 1 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabRight );
+	mDocks[ 2 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabTop );
+	mDocks[ 3 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabBottom );
+	mDocks[ 4 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabTop );
 
 	mRoot2->addContainer( mDocks[ 4 ] );
 

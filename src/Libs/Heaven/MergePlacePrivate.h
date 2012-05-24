@@ -14,20 +14,30 @@
  *
  */
 
-#include "Main/MacGitverMain.h"
-#include "Main/MainWindow.h"
+#ifndef MGV_HEAVEN_MERGEPLACE_PRIVATE_H
+#define MGV_HEAVEN_MERGEPLACE_PRIVATE_H
 
-MacGitverMain::MacGitverMain( int argc, char** argv )
-	: MacGitver( argc, argv )
+#include <QByteArray>
+
+#include "Heaven/MergePlace.h"
+#include "Heaven/UiObject.h"
+
+namespace Heaven
 {
+
+	class MergePlacePrivate : public UiObject
+	{
+		Q_OBJECT
+	public:
+		MergePlacePrivate( MergePlace* owner );
+		~MergePlacePrivate();
+
+	public:
+		UiObjectTypes type() const;
+
+	public:
+		QByteArray			mName;
+	};
 }
 
-int MacGitverMain::exec()
-{
-	MainWindow* mw = new MainWindow;
-	setMainWindow( mw );
-
-	QMetaObject::invokeMethod( mw, "show", Qt::QueuedConnection );
-
-	return MacGitver::exec();
-}
+#endif

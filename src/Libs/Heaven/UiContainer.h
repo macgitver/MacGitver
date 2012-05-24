@@ -14,20 +14,41 @@
  *
  */
 
-#include "Main/MacGitverMain.h"
-#include "Main/MainWindow.h"
+#ifndef MGV_HEAVEN_UICONTAINER_H
+#define MGV_HEAVEN_UICONTAINER_H
 
-MacGitverMain::MacGitverMain( int argc, char** argv )
-	: MacGitver( argc, argv )
+#include <QList>
+
+#include "Heaven/UiObject.h"
+
+namespace Heaven
 {
+
+	class UiContainer : public UiObject
+	{
+		Q_OBJECT
+	protected:
+		UiContainer( QObject* owner );
+		~UiContainer();
+
+	public:
+		void add( UiObject* uio );
+		void remove( UiObject* uio );
+
+	public:
+		bool isContainerDirty() const;
+		virtual void setContainerDirty( bool value = true );
+
+	protected:
+		int numObjects() const;
+		UiObject* objectAt( int index );
+		QList< UiObject* > allObjects() const;
+
+	private:
+		bool					mDirty;
+		QList< UiObject* >		mContent;
+	};
+
 }
 
-int MacGitverMain::exec()
-{
-	MainWindow* mw = new MainWindow;
-	setMainWindow( mw );
-
-	QMetaObject::invokeMethod( mw, "show", Qt::QueuedConnection );
-
-	return MacGitver::exec();
-}
+#endif

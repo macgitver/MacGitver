@@ -133,6 +133,8 @@ HeavenInterfaceCompiler::HeavenInterfaceCompiler( int argc , char** argv )
 		T(MergePlace);
 		T2(Sep,Separator);
 		T(Content);
+		T(true);
+		T(false);
 		#undef T1
 		#undef T2
 	}

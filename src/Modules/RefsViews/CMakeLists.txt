@@ -33,20 +33,10 @@ SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
 QT4_MOC( MOC_FILES ${HDR_FILES} )
 
-ADD_LIBRARY(
-    ModRefsViews SHARED
+ADD_MGV_MODULE(
+    RefsViews
 
     ${SRC_FILES}
     ${HDR_FILES}
     ${MOC_FILES}
-)
-
-TARGET_LINK_LIBRARIES(
-    ModRefsViews
-
-    ${QT_LIBRARIES}
-	GitWrap
-	Interfaces
-	MacGitverCore
-	Heaven
 )

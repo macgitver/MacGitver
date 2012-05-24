@@ -38,22 +38,12 @@ QT4_MOC( MOC_FILES ${HDR_FILES} )
 QT4_UIC( UIC_FILES ${UI_FILES} )
 HIC( HIC_FILES ${HID_FILES} )
 
-ADD_LIBRARY(
-    ModRepository SHARED
+ADD_MGV_MODULE(
+    Repository
 
     ${SRC_FILES}
     ${HDR_FILES}
     ${MOC_FILES}
     ${UIC_FILES}
     ${HIC_FILES}
-)
-
-TARGET_LINK_LIBRARIES(
-    ModRepository
-
-    ${QT_LIBRARIES}
-	GitWrap
-	Interfaces
-	MacGitverCore
-	Heaven
 )

@@ -14,7 +14,6 @@
  *
  */
 
-#define QT_STATICPLUGIN
 #include <QtPlugin>
 
 #include "Interfaces/IMainWindow.h"
@@ -78,5 +77,4 @@ void RefsViewsModule::deinitialize()
 	mRefsView = NULL;
 }
 
-Q_EXPORT_STATIC_PLUGIN2( RefsViews, RefsViewsModule )
-Q_IMPORT_PLUGIN( RefsViews )
+Q_EXPORT_PLUGIN2( RefsViews, RefsViewsModule )

@@ -24,6 +24,9 @@ class MacGitverMain : public MacGitver
 public:
 	MacGitverMain( int argc, char** argv );
 
+private:
+	void loadModules();
+
 public:
 	int exec();
 };

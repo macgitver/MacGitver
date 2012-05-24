@@ -21,7 +21,7 @@
 
 #include "MacGitver/Module.h"
 
-class Modules : public QObject
+class MGV_CORE_API Modules : public QObject
 {
 	Q_OBJECT
 public:

@@ -49,4 +49,8 @@ TARGET_LINK_LIBRARIES(
     ModHistory
 
     ${QT_LIBRARIES}
+	GitWrap
+	Interfaces
+	MacGitverCore
+	Heaven
 )

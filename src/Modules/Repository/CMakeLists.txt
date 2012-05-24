@@ -52,4 +52,8 @@ TARGET_LINK_LIBRARIES(
     ModRepository
 
     ${QT_LIBRARIES}
+	GitWrap
+	Interfaces
+	MacGitverCore
+	Heaven
 )

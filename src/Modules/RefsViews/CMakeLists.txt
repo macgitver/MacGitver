@@ -45,4 +45,8 @@ TARGET_LINK_LIBRARIES(
     ModRefsViews
 
     ${QT_LIBRARIES}
+	GitWrap
+	Interfaces
+	MacGitverCore
+	Heaven
 )

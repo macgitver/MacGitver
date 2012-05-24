@@ -19,11 +19,7 @@ SET( SRC_FILES
     HistoryModule.cpp
 )
 
-SET( PUB_HDR_FILES
-
-)
-
-SET( PRI_HDR_FILES
+SET( HDR_FILES
 
     HistoryView.h
     HistoryList.h
@@ -32,8 +28,6 @@ SET( PRI_HDR_FILES
     HistoryModel.h
     HistoryModule.h
 )
-
-SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
 QT4_MOC( MOC_FILES ${HDR_FILES} )
 

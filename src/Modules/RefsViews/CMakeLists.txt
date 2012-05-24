@@ -17,19 +17,13 @@ SET( SRC_FILES
     TagsView.cpp
 )
 
-SET( PUB_HDR_FILES
-
-)
-
-SET( PRI_HDR_FILES
+SET( HDR_FILES
 
     RefsViewsModule.h
     RefsView.h
     BranchesView.h
     TagsView.h
 )
-
-SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
 QT4_MOC( MOC_FILES ${HDR_FILES} )
 

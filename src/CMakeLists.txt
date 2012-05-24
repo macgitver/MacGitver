@@ -21,8 +21,6 @@ SET( SRC_FILES
     Main/MainWindow.cpp
     Main/ConfigDialog.cpp
 
-    Dlgs/Repository/CreateRepositoryDlg.cpp
-
     Views/Diff/DiffFrame.cpp
     Views/Diff/DiffRawHighlighter.cpp
     Views/Diff/DiffSplitter.cpp
@@ -32,12 +30,9 @@ SET( SRC_FILES
 
     Views/WorkingTree/IndexWidget.cpp
     Views/WorkingTree/IndexTree.cpp
-
 )
 
 SET( HDR_FILES
-
-    Dlgs/Repository/CreateRepositoryDlg.h
 
     Views/Diff/DiffFrame.h
     Views/Diff/DiffRawHighlighter.h
@@ -52,12 +47,10 @@ SET( HDR_FILES
     Main/MacGitverMain.h
     Main/MainWindow.h
     Main/ConfigDialog.h
-
 )
 
 SET( UI_FILES
     Main/ConfigDialog.ui
-    Dlgs/Repository/CreateRepositoryDlg.ui
 )
 
 SET( RCC_FILES

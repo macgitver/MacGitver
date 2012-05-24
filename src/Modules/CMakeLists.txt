@@ -1,8 +1,6 @@
 
 MACRO(ADD_MGV_MODULE _Name )
 
-    MESSAGE( "Adding ${_Name}" )
-
     ADD_LIBRARY( Mod${_Name} MODULE ${ARGN} )
 
     SET_TARGET_PROPERTIES(

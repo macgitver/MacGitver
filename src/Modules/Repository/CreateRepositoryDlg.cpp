@@ -20,7 +20,7 @@
 
 #include "GitWrap/Git.h"
 
-#include "Dlgs/Repository/CreateRepositoryDlg.h"
+#include "CreateRepositoryDlg.h"
 
 #include "MacGitver/MacGitver.h"
 

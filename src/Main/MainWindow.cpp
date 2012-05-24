@@ -15,7 +15,7 @@
  */
 
 #include <QStatusBar>
-#include <QFileDialog>
+#include <QFile>
 #include <QApplication>
 #include <QMenuBar>
 #include <QDockWidget>
@@ -27,8 +27,6 @@
 
 #include "Main/MainWindow.h"
 #include "Main/ConfigDialog.h"
-
-#include "Dlgs/Repository/CreateRepositoryDlg.h"
 
 #include "Heaven/TopLevelWidget.h"
 
@@ -46,26 +44,6 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-}
-
-void MainWindow::onRepositoryCreate()
-{
-	CreateRepositoryDlg().exec();
-}
-
-void MainWindow::onRepositoryOpen()
-{
-	QString fn = QFileDialog::getExistingDirectory( this, trUtf8( "Open repository" ) );
-	if( fn.isEmpty() )
-	{
-		return;
-	}
-
-	Git::Repository repo = Git::Repository::open( fn );
-	if( repo.isValid() )
-	{
-		MacGitver::self().setRepository( repo );
-	}
 }
 
 void MainWindow::setupUi()
@@ -140,6 +118,11 @@ void MainWindow::repositoryChanged( const Git::Repository& repo )
 void MainWindow::integrateView( HeavenView* view, Heaven::Positions position )
 {
 	mTop->addView( view, position );
+}
+
+QWidget* MainWindow::widget()
+{
+	return this;
 }
 
 void MainWindow::onPreferences()

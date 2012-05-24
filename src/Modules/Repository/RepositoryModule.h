@@ -35,6 +35,10 @@ public:
 
 	void initialize();
 	void deinitialize();
+
+private slots:
+	void onRepositoryCreate();
+	void onRepositoryOpen();
 };
 
 #endif

@@ -23,6 +23,7 @@ class IMainWindow
 {
 public:
 	virtual void integrateView( HeavenView* view, Heaven::Positions position ) = 0;
+	virtual QWidget* widget() = 0;
 };
 
 #endif

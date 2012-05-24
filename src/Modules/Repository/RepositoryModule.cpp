@@ -15,8 +15,12 @@
  */
 
 #include <QtPlugin>
+#include <QFileDialog>
+
+#include "MacGitver/MacGitver.h"
 
 #include "RepositoryModule.h"
+#include "CreateRepositoryDlg.h"
 
 RepositoryModule::RepositoryModule()
 {
@@ -42,6 +46,28 @@ void RepositoryModule::initialize()
 
 void RepositoryModule::deinitialize()
 {
+}
+
+void RepositoryModule::onRepositoryCreate()
+{
+	CreateRepositoryDlg().exec();
+}
+
+void RepositoryModule::onRepositoryOpen()
+{
+	QWidget* main = MacGitver::self().mainWindow()->widget();
+
+	QString fn = QFileDialog::getExistingDirectory( main, trUtf8( "Open repository" ) );
+	if( fn.isEmpty() )
+	{
+		return;
+	}
+
+	Git::Repository repo = Git::Repository::open( fn );
+	if( repo.isValid() )
+	{
+		MacGitver::self().setRepository( repo );
+	}
 }
 
 Q_EXPORT_PLUGIN2( Repository, RepositoryModule )

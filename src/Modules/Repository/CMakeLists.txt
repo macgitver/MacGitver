@@ -12,27 +12,26 @@ INCLUDE_DIRECTORIES(
 SET( SRC_FILES
 
     RepositoryModule.cpp
+
+    CreateRepositoryDlg.cpp
 )
 
-SET( PUB_HDR_FILES
-
-)
-
-SET( PRI_HDR_FILES
+SET( HDR_FILES
 
     RepositoryModule.h
+
+    CreateRepositoryDlg.h
 )
 
-SET( UIC_FILES
+SET( UI_FILES
 
+    CreateRepositoryDlg.ui
 )
 
 SET( HID_FILES
 
     RepositoryModule.hid
 )
-
-SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
 QT4_MOC( MOC_FILES ${HDR_FILES} )
 QT4_UIC( UIC_FILES ${UI_FILES} )

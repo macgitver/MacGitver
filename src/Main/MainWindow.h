@@ -37,8 +37,6 @@ public:
 	~MainWindow();
 
 private slots:
-	void onRepositoryCreate();
-	void onRepositoryOpen();
 	void onPreferences();
 
 private:
@@ -49,6 +47,7 @@ public slots:
 
 public:
 	void integrateView( HeavenView* view, Heaven::Positions position );
+	QWidget* widget();
 	void addError( const QString& err );
 
 private:

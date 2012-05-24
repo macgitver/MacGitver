@@ -1,22 +1,21 @@
 
-Ui RepositoryActions
-{
+Ui RepositoryActions {
 
-    Container RepositoryAC
-    {
+	Container RepositoryAC {
 
-        Action RepositoryOpen
-        {
-            Text        "&Open...";
-            _ConnectTo  onRepositoryOpen();
-        };
+		Action RepositoryOpen {
+			Text		"&Open...";
+			_ConnectTo	onRepositoryOpen();
+		};
 
-        Action RepositoryClose
-        {
-            Text        "Close";
-            _ConnectTo  onRepositoryClose();
-        };
+		Action RepositoryClose {
+			Text		"Close";
+			_ConnectTo	onRepositoryClose();
+		};
 
-    };
+		Action RepositoryCreate {
+		};
+
+	};
 
 };

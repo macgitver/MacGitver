@@ -24,6 +24,10 @@
 
 namespace Heaven
 {
+
+	class Action;
+	class Menu;
+	class MergePlace;
 	class UiObject;
 	class ActionContainerPrivate;
 
@@ -33,6 +37,12 @@ namespace Heaven
 	public:
 		ActionContainer( QObject* parent );
 		~ActionContainer();
+
+	public:
+		void add( Menu* );
+		void add( Action* );
+		void add( MergePlace* );
+		void add( ActionContainer* );
 
 	public:
 		UiObject* uiObject();

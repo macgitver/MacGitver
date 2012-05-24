@@ -15,6 +15,9 @@
  */
 
 #include "Heaven/ActionContainerPrivate.h"
+#include "Heaven/MenuPrivate.h"
+#include "Heaven/ActionPrivate.h"
+#include "Heaven/MergePlacePrivate.h"
 
 namespace Heaven
 {
@@ -47,6 +50,26 @@ namespace Heaven
 	UiObject* ActionContainer::uiObject()
 	{
 		return d;
+	}
+
+	void ActionContainer::add( Action* uio )
+	{
+		d->add( uio->uiObject() );
+	}
+
+	void ActionContainer::add( ActionContainer* uio )
+	{
+		d->add( uio->uiObject() );
+	}
+
+	void ActionContainer::add( Menu* uio )
+	{
+		d->add( uio->uiObject() );
+	}
+
+	void ActionContainer::add( MergePlace* uio )
+	{
+		d->add( uio->uiObject() );
 	}
 
 }

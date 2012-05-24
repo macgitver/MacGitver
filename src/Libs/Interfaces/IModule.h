@@ -31,6 +31,7 @@ public:
 	enum Type
 	{
 		ConfigDialog	= 1 << 0,
+		Repository		= 1 << 1,
 
 		View			= 1 << 16,
 

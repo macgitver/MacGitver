@@ -1,0 +1,55 @@
+
+PROJECT( MGV_MOD_REPOSITORY )
+
+INCLUDE( ${QT_USE_FILE} )
+
+INCLUDE_DIRECTORIES(
+    ${MGV_LIBS_SOURCE_DIR}
+    ${MGV_MOD_REPOSITORY_SOURCE_DIR}
+    ${MGV_MOD_REPOSITORY_BINARY_DIR}
+)
+
+SET( SRC_FILES
+
+    RepositoryModule.cpp
+)
+
+SET( PUB_HDR_FILES
+
+)
+
+SET( PRI_HDR_FILES
+
+    RepositoryModule.h
+)
+
+SET( UIC_FILES
+
+)
+
+SET( HID_FILES
+
+    RepositoryModule.hid
+)
+
+SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
+
+QT4_MOC( MOC_FILES ${HDR_FILES} )
+QT4_UIC( UIC_FILES ${UI_FILES} )
+HIC( HIC_FILES ${HID_FILES} )
+
+ADD_LIBRARY(
+    ModRepository SHARED
+
+    ${SRC_FILES}
+    ${HDR_FILES}
+    ${MOC_FILES}
+    ${UIC_FILES}
+    ${HIC_FILES}
+)
+
+TARGET_LINK_LIBRARIES(
+    ModRepository
+
+    ${QT_LIBRARIES}
+)

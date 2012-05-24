@@ -1,0 +1,22 @@
+
+Ui RepositoryActions
+{
+
+    Container RepositoryAC
+    {
+
+        Action RepositoryOpen
+        {
+            Text        "&Open...";
+            _ConnectTo  onRepositoryOpen();
+        };
+
+        Action RepositoryClose
+        {
+            Text        "Close";
+            _ConnectTo  onRepositoryClose();
+        };
+
+    };
+
+};

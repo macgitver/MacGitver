@@ -23,7 +23,13 @@ SET( HDR_FILES
     WorkingTreeModule.h
 )
 
+SET( HID_FILES
+
+    WorkingTreeActions.hid
+)
+
 QT4_MOC( MOC_FILES ${HDR_FILES} )
+HIC( HIC_FILES ${HID_FILES} )
 
 ADD_MGV_MODULE(
     WorkingTree
@@ -31,5 +37,6 @@ ADD_MGV_MODULE(
     ${SRC_FILES}
     ${HDR_FILES}
     ${MOC_FILES}
+    ${HIC_FILES}
 )
 

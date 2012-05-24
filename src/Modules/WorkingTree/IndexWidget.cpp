@@ -34,39 +34,9 @@ IndexWidget::IndexWidget()
 	l->setSpacing( 2 );
 	l->setMargin( 2 );
 
-	mToolBar = new QToolBar;
+	setupActions( this );
 
-	mactShowAll = mToolBar->addAction( trUtf8( "All" ), this, SLOT(onShowAll(bool)) );
-	mactShowAll->setCheckable( true );
-	mactShowAll->setChecked( true );
-
-	mactShowUnchanged = mToolBar->addAction( trUtf8( "Unchanged" ), this, SLOT(onShowUnchanged(bool)) );
-	mactShowUnchanged->setCheckable( true );
-	mactShowUnchanged->setChecked( true );
-
-	mactShowModified = mToolBar->addAction( trUtf8( "Modified" ), this, SLOT(onShowModified(bool)) );
-	mactShowModified->setCheckable( true );
-	mactShowModified->setChecked( true );
-
-	mactShowMissing = mToolBar->addAction( trUtf8( "Missing" ), this, SLOT(onShowMissing(bool)) );
-	mactShowMissing->setCheckable( true );
-	mactShowMissing->setChecked( true );
-
-	mactShowIgnored = mToolBar->addAction( trUtf8( "Ignored" ), this, SLOT(onShowIgnored(bool)) );
-	mactShowIgnored->setCheckable( true );
-	mactShowIgnored->setChecked( true );
-
-	mactShowUntacked = mToolBar->addAction( trUtf8( "Untracked" ), this, SLOT(onShowUntracked(bool)) );
-	mactShowUntacked->setCheckable( true );
-	mactShowUntacked->setChecked( true );
-
-	mToolBar->addSeparator();
-
-	mToolBar->addAction( "Stage" );
-	mToolBar->addAction( "Commit" );
-	mToolBar->addAction( "Reset" );
-
-	l->addWidget( mToolBar );
+	l->addWidget( tbWorkingTree->toolBarFor( this ) );
 
 	l->addWidget( mTree );
 	setLayout( l );
@@ -77,7 +47,6 @@ IndexWidget::IndexWidget()
 void IndexWidget::repositoryChanged( Git::Repository repo )
 {
 	mRepo = repo;
-
 	mTree->setRepository( repo );
 }
 
@@ -89,11 +58,11 @@ void IndexWidget::onShowAll( bool enabled )
 
 		mTree->setFilter( enabled ? IndexTree::All : IndexTree::None );
 
-		mactShowIgnored->setChecked( enabled );
-		mactShowMissing->setChecked( enabled);
-		mactShowModified->setChecked( enabled );
-		mactShowUnchanged->setChecked( enabled );
-		mactShowUntacked->setChecked( enabled );
+		actShowIgnored->setChecked( enabled );
+		actShowMissing->setChecked( enabled);
+		actShowModified->setChecked( enabled );
+		actShowUnchanged->setChecked( enabled );
+		actShowUntracked->setChecked( enabled );
 
 		mChangingFilters = false;
 	}
@@ -112,7 +81,7 @@ void IndexWidget::onShowModified( bool enabled )
 			f &= ~IndexTree::Changed;
 		mTree->setFilter( f );
 
-		mactShowAll->setChecked( f == IndexTree::All );
+		actShowAll->setChecked( f == IndexTree::All );
 
 		mChangingFilters = false;
 	}
@@ -131,7 +100,7 @@ void IndexWidget::onShowMissing( bool enabled )
 			f &= ~IndexTree::Missing;
 		mTree->setFilter( f );
 
-		mactShowAll->setChecked( f == IndexTree::All );
+		actShowAll->setChecked( f == IndexTree::All );
 
 		mChangingFilters = false;
 	}
@@ -151,7 +120,7 @@ void IndexWidget::onShowIgnored( bool enabled )
 			f &= ~IndexTree::Ignored;
 		mTree->setFilter( f );
 
-		mactShowAll->setChecked( f == IndexTree::All );
+		actShowAll->setChecked( f == IndexTree::All );
 
 		mChangingFilters = false;
 	}
@@ -170,7 +139,7 @@ void IndexWidget::onShowUntracked( bool enabled )
 			f &= ~IndexTree::Untracked;
 		mTree->setFilter( f );
 
-		mactShowAll->setChecked( f == IndexTree::All );
+		actShowAll->setChecked( f == IndexTree::All );
 
 		mChangingFilters = false;
 	}
@@ -189,7 +158,7 @@ void IndexWidget::onShowUnchanged( bool enabled )
 			f &= ~IndexTree::Unchanged;
 		mTree->setFilter( f );
 
-		mactShowAll->setChecked( f == IndexTree::All );
+		actShowAll->setChecked( f == IndexTree::All );
 
 		mChangingFilters = false;
 	}

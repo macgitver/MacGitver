@@ -28,7 +28,9 @@ class QToolBar;
 
 class IndexTree;
 
-class IndexWidget : public HeavenView
+#include "hic_WorkingTreeActions.h"
+
+class IndexWidget : public HeavenView, private WorkingTreeActions
 {
 	Q_OBJECT
 public:
@@ -47,17 +49,9 @@ private slots:
 
 private:
 	IndexTree*			mTree;
-	QToolBar*			mToolBar;
 	Git::Repository		mRepo;
 
 	bool				mChangingFilters;
-
-	QAction*			mactShowAll;
-	QAction*			mactShowUnchanged;
-	QAction*			mactShowModified;
-	QAction*			mactShowMissing;
-	QAction*			mactShowIgnored;
-	QAction*			mactShowUntacked;
 };
 
 #endif

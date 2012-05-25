@@ -33,7 +33,7 @@ namespace Git
 	class ObjectTree;
 	class ObjectId;
 	class RevisionWalker;
-
+	class Remote;
 	class RepositoryPrivate;
 
 	class GITWRAP_API Repository
@@ -77,6 +77,11 @@ namespace Git
 		bool shouldIgnore( const QByteArray& filePath ) const;
 
 		RevisionWalker newWalker();
+
+		QList< QByteArray > allRemotes() const;
+		Remote remote( const QByteArray& remoteName ) const;
+		Remote createRemote( const QByteArray& remoteName, const QByteArray& url,
+							 const QByteArray& fetchSpec );
 
 		QList< Error > recentErrors();
 

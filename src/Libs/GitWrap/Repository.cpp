@@ -18,6 +18,8 @@
 #include "Error.h"
 #include "Index.h"
 #include "IndexPrivate.h"
+#include "Remote.h"
+#include "RemotePrivate.h"
 #include "Repository.h"
 #include "RepositoryPrivate.h"
 #include "Reference.h"
@@ -171,13 +173,28 @@ namespace Git
 
 	QStringList slFromStrArray( git_strarray* arry )
 	{
-
 		QStringList sl;
+
 		for( unsigned int i = 0; i < arry->count; i++ )
+		{
 			sl << QString::fromLatin1( arry->strings[ i ] );
+		}
 
 		git_strarray_free( arry );
 		return sl;
+	}
+
+	QList< QByteArray > byteArrayListFromStrArray( git_strarray* arry )
+	{
+		QList< QByteArray > list;
+
+		for( unsigned int i = 0; i < arry->count; i++ )
+		{
+			list << QByteArray( arry->strings[ i ] );
+		}
+
+		git_strarray_free( arry );
+		return list;
 	}
 
 	QStringList Repository::allReferences()
@@ -379,6 +396,50 @@ namespace Git
 			}
 		}
 		return ignore;
+	}
+
+	QList< QByteArray > Repository::allRemotes() const
+	{
+		Q_ASSERT( d );
+
+		git_strarray arr;
+		int rc = git_remote_list( &arr, d->mRepo );
+		if( !d->handleErrors( rc ) )
+		{
+			return QList< QByteArray >();
+		}
+
+		return byteArrayListFromStrArray( &arr );
+	}
+
+	Remote Repository::remote( const QByteArray& remoteName ) const
+	{
+		Q_ASSERT( d );
+
+		git_remote* remote = NULL;
+		int rc = git_remote_load( &remote, d->mRepo, remoteName.constData() );
+		if( !d->handleErrors( rc ) )
+		{
+			return Remote();
+		}
+
+		return new RemotePrivate( const_cast< RepositoryPrivate* >( *d ), remote );
+	}
+
+	Remote Repository::createRemote( const QByteArray& remoteName, const QByteArray& url,
+									 const QByteArray& fetchSpec )
+	{
+		Q_ASSERT( d );
+
+		git_remote* remote = NULL;
+		int rc = git_remote_new( &remote, d->mRepo, remoteName.constData(),
+								 url.constData(), fetchSpec.constData() );
+		if( !d->handleErrors( rc ) )
+		{
+			return Remote();
+		}
+
+		return new RemotePrivate( const_cast< RepositoryPrivate* >( *d ), remote );
 	}
 
 	QList< Error > Repository::recentErrors()

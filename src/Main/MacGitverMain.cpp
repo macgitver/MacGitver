@@ -37,7 +37,7 @@ void MacGitverMain::loadModules()
 	modFiles << "Mod*.mgv";
 	foreach( QString modName, binDir.entryList( modFiles ) )
 	{
-		QPluginLoader* loader = new QPluginLoader( modName, this );
+		QPluginLoader* loader = new QPluginLoader( binDir.filePath( modName ), this );
 		QObject* o = loader->instance();
 		Module* mod = qobject_cast< Module* >( o );
 		if( mod )

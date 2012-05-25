@@ -233,6 +233,12 @@ namespace Heaven
 		}
 	}
 
+	void Action::setStatusToolTip( const QString& text )
+	{
+		setStatusTip( text );
+		setToolTip( text );
+	}
+
 	void Action::setEnabled( bool v )
 	{
 		d->setEnabled( v );

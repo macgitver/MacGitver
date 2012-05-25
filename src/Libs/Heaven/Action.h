@@ -48,6 +48,7 @@ namespace Heaven
 		void setText( const QString& text );
 		void setToolTip( const QString& text );
 		void setStatusTip( const QString& text );
+		void setStatusToolTip( const QString& text );
 		void setEnabled( bool v );
 		void setDisabled( bool v );
 		void setCheckable( bool v );

@@ -28,8 +28,11 @@
 				<item> Checkable </item>
 				<item> Checked </item>
 				<item> Enabled </item>
+				<item> StatusTip </item>
+				<item> ToolTip </item>
+				<item> StatusToolTip </item>
 				<item> _ConnectTo </item>
-				<item> _ConnectCtx </item>
+				<item> _ConnectContext </item>
 			</list>
 		</lists>
 

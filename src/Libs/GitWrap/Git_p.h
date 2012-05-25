@@ -97,19 +97,16 @@ namespace Git
 		void deref(){ if( !mRefCounter.deref() ) delete this; } \
 		QAtomicInt mRefCounter;
 
-	// we use another one's ref count. he'll kill us if he's about to bite the dust
-	#define PROXY_REF(proxyType, proxy) \
-		void ref(){ proxy->ref(); } \
-		void deref(){ proxy->deref(); }
-
 	class RepositoryPrivate;
 	class IndexPrivate;
 	class ObjectPrivate;
 
 	class Signature;
+	class RefSpec;
 
 	Signature git2Signature( const git_signature* gitsig );
 	git_signature* signature2git( const Signature& sig );
+	RefSpec mkRefSpec( const git_refspec* refspec );
 
 	class RepositoryPrivate
 	{
@@ -182,6 +179,20 @@ namespace Git
 	public:
 		RepositoryPrivate*	mRepo;
 		git_revwalk*		mWalker;
+	};
+
+	class RemotePrivate
+	{
+	public:
+		OWN_REF();
+
+	public:
+		RemotePrivate( RepositoryPrivate* repo, git_remote* remote );
+		~RemotePrivate();
+
+	public:
+		RepositoryPrivate*	mRepo;
+		git_remote*			mRemote;
 	};
 
 }

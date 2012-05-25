@@ -39,6 +39,15 @@ namespace Heaven
 		~ActionContainer();
 
 	public:
+		void mergeInto( const QByteArray& mergePlace );
+
+	public slots:
+		void setMergePriority( int priority );
+
+	public:
+		int mergePriority() const;
+
+	public:
 		void add( Menu* );
 		void add( Action* );
 		void add( MergePlace* );

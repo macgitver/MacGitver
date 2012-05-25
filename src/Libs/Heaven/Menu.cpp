@@ -21,6 +21,9 @@
 #include "Heaven/ActionPrivate.h"
 #include "Heaven/ActionContainerPrivate.h"
 #include "Heaven/MergePlacePrivate.h"
+#include "Heaven/Separator.h"
+
+#include "Heaven/MergesManager.h"
 
 namespace Heaven
 {
@@ -121,6 +124,7 @@ namespace Heaven
 		ActionPrivate* actionPriv;
 		ActionContainerPrivate* containerPriv;
 		MergePlacePrivate* mergePlacePriv;
+
 		mRebuildQueued = false;
 
 		foreach( QMenu* myMenu, mQMenus )
@@ -164,6 +168,7 @@ namespace Heaven
 				case MergePlaceType:
 					mergePlacePriv = qobject_cast< MergePlacePrivate* >( uio );
 					Q_ASSERT( mergePlacePriv );
+					MergesManager::self()->emerge( mergePlacePriv->mName, myMenu );
 					break;
 
 				default:
@@ -276,6 +281,11 @@ namespace Heaven
 	void Menu::add( MergePlace* uio )
 	{
 		d->add( uio->uiObject() );
+	}
+
+	void Menu::addSeparator()
+	{
+		d->add( new Separator( this ) );
 	}
 
 }

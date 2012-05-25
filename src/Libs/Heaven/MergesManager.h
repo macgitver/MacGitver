@@ -20,11 +20,16 @@
 #include <QObject>
 #include <QHash>
 
+class QMenu;
+class QMenuBar;
+class QToolBar;
+
 namespace Heaven
 {
 
-	class IContainer;
+	class UiContainer;
 	class MergePlace;
+	class MergePlacePrivate;
 
 	class MergesManager : public QObject
 	{
@@ -36,24 +41,40 @@ namespace Heaven
 		static MergesManager* self();
 
 	public:
-		void setContainerDirty( IContainer* container );
+		void setContainerDirty( UiContainer* container );
 
 		void createMergePlace( MergePlace* place );
 		void removeMergePlace( MergePlace* place );
 
-		void mergeContainer( IContainer* container, int priority, const QByteArray& mergePlace );
-		void mergeContainer( IContainer* container, int priority, MergePlace* place );
+		bool mergeContainer( UiContainer* container, const QByteArray& mergePlace );
+		void mergeContainer( UiContainer* container, MergePlace* place );
 
-		void unmergeContainer( IContainer* container, const QByteArray& mergePlace );
-		void unmergeContainer( IContainer* container, MergePlace* place );
-		void unmergeContainer( IContainer* container );
+		void unmergeContainer( UiContainer* container, const QByteArray& mergePlace );
+		void unmergeContainer( UiContainer* container, MergePlace* place );
+		void unmergeContainer( UiContainer* container );
+
+		bool emerge( const QByteArray& mergeName, QMenu* menu );
+		bool emerge( const QByteArray& mergeName, QMenuBar* menuBar );
+		bool emerge( const QByteArray& mergeName, QToolBar* toolBar );
 
 	private:
 		static MergesManager* sSelf;
 
 		struct ContainerMerge
 		{
-			IContainer*		mContainer;
+			ContainerMerge()
+				: mContainer( NULL )
+				, mPriority( 0 )
+			{
+			}
+
+			ContainerMerge( UiContainer* container, int prio )
+				: mContainer( container )
+				, mPriority( prio )
+			{
+			}
+
+			UiContainer*	mContainer;
 			int				mPriority;
 		};
 

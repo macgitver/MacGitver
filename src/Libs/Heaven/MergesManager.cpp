@@ -17,9 +17,10 @@
 #include "Heaven/MergesManager.h"
 #include "Heaven/MergePlace.h"
 
+#include "Heaven/UiContainer.h"
+
 namespace Heaven
 {
-
 
 	MergesManager::MergesManager()
 	{
@@ -41,7 +42,7 @@ namespace Heaven
 		return sSelf;
 	}
 
-	void MergesManager::setContainerDirty( IContainer* container )
+	void MergesManager::setContainerDirty( UiContainer* container )
 	{
 	}
 
@@ -49,11 +50,17 @@ namespace Heaven
 	{
 		Q_ASSERT( place );
 
-		MergePlaces* mps = new MergePlaces;
-		mps->mName = place->name();
-		mps->mPlace = place;
+		MergePlaces* mps = mKnownPlaces.value( place->name(), NULL );
 
-		mKnownPlaces.insert( place->name(), mps );
+		if( !mps )
+		{
+			mps = new MergePlaces;
+			mps->mName = place->name();
+
+			mKnownPlaces.insert( place->name(), mps );
+		}
+
+		mps->mPlace = place;
 	}
 
 	void MergesManager::removeMergePlace( MergePlace* place )
@@ -65,24 +72,98 @@ namespace Heaven
 		}
 	}
 
-	void mergeContainer( IContainer* container, int priority, const QByteArray& mergePlace )
+	bool MergesManager::mergeContainer( UiContainer* container, const QByteArray& mergePlace )
+	{
+		MergePlaces* place = mKnownPlaces.value( mergePlace, NULL );
+		if( !place )
+		{
+			place = new MergePlaces;
+			place->mName = mergePlace;
+			place->mPlace = NULL;
+
+			mKnownPlaces.insert( mergePlace, place );
+		}
+
+		int i = 0, prio = container->priority();
+		while( i < place->mContainers.count() && prio > place->mContainers[ i ].mPriority )
+			i++;
+
+		/*
+		if( prio > place->mContainers[ i ].mPriority )
+			i++;
+		*/
+
+		Q_ASSERT( i <= place->mContainers.count() );
+
+		place->mContainers.insert( i, ContainerMerge( container, prio ) );
+
+		return true;
+	}
+
+	void MergesManager::mergeContainer( UiContainer* container, MergePlace* place )
 	{
 	}
 
-	void mergeContainer( IContainer* container, int priority, MergePlace* place )
+	void MergesManager::unmergeContainer( UiContainer* container, const QByteArray& mergePlace )
 	{
 	}
 
-	void unmergeContainer( IContainer* container, const QByteArray& mergePlace )
+	void MergesManager::unmergeContainer( UiContainer* container, MergePlace* place )
 	{
 	}
 
-	void unmergeContainer( IContainer* container, MergePlace* place )
+	void MergesManager::unmergeContainer( UiContainer* container )
 	{
 	}
 
-	void unmergeContainer( IContainer* container )
+	bool MergesManager::emerge( const QByteArray& mergeName, QMenu* menu )
 	{
+		MergePlaces* place = mKnownPlaces.value( mergeName, NULL );
+		if( !place )
+		{
+			return false;
+		}
+
+		for( int i = 0; i < place->mContainers.count(); i++ )
+		{
+			UiContainer* container = place->mContainers.at( i ).mContainer;
+			container->mergeInto( menu );
+		}
+
+		return true;
 	}
 
+	bool MergesManager::emerge( const QByteArray& mergeName, QMenuBar* menuBar )
+	{
+		MergePlaces* place = mKnownPlaces.value( mergeName, NULL );
+		if( !place )
+		{
+			return false;
+		}
+
+		for( int i = 0; i < place->mContainers.count(); i++ )
+		{
+			UiContainer* container = place->mContainers.at( i ).mContainer;
+			container->mergeInto( menuBar );
+		}
+
+		return true;
+	}
+
+	bool MergesManager::emerge( const QByteArray& mergeName, QToolBar* toolBar )
+	{
+		MergePlaces* place = mKnownPlaces.value( mergeName, NULL );
+		if( !place )
+		{
+			return false;
+		}
+
+		for( int i = 0; i < place->mContainers.count(); i++ )
+		{
+			UiContainer* container = place->mContainers.at( i ).mContainer;
+			container->mergeInto( toolBar );
+		}
+
+		return true;
+	}
 }

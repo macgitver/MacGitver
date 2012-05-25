@@ -22,6 +22,7 @@
 #include "Heaven/ActionContainerPrivate.h"
 #include "Heaven/MergePlacePrivate.h"
 #include "Heaven/Separator.h"
+#include "Heaven/MergesManager.h"
 
 namespace Heaven
 {
@@ -130,6 +131,7 @@ namespace Heaven
 				case MergePlaceType:
 					mergePlacePriv = qobject_cast< MergePlacePrivate* >( uio );
 					Q_ASSERT( mergePlacePriv );
+					MergesManager::self()->emerge( mergePlacePriv->mName, myBar );
 					break;
 
 				default:

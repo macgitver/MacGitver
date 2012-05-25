@@ -14,8 +14,18 @@
  *
  */
 
+#include <QMenu>
+#include <QMenuBar>
+#include <QToolBar>
+
 #include "Heaven/UiContainer.h"
 #include "Heaven/UiManager.h"
+#include "Heaven/ActionContainerPrivate.h"
+#include "Heaven/MenuPrivate.h"
+#include "Heaven/ActionPrivate.h"
+#include "Heaven/MergePlacePrivate.h"
+#include "Heaven/Separator.h"
+#include "Heaven/MergesManager.h"
 
 namespace Heaven
 {
@@ -72,6 +82,98 @@ namespace Heaven
 	void UiContainer::setContainerDirty( bool value )
 	{
 		mDirty = value;
+	}
+
+	int UiContainer::priority() const
+	{
+		return -1;
+	}
+
+	bool UiContainer::mergeInto( QMenu* menu )
+	{
+		MenuPrivate* menuPriv;
+		ActionPrivate* actionPriv;
+		ActionContainerPrivate* containerPriv;
+		MergePlacePrivate* mergePlacePriv;
+
+		foreach( UiObject* uio, allObjects() )
+		{
+			QAction* action;
+
+			switch( uio->type() )
+			{
+			case MenuType:
+				menuPriv = qobject_cast< MenuPrivate* >( uio );
+				Q_ASSERT( menuPriv );
+				action = menuPriv->getOrCreateQMenu( menu )->menuAction();
+				menu->addAction( action );
+				break;
+
+			case ActionType:
+				actionPriv = qobject_cast< ActionPrivate* >( uio );
+				Q_ASSERT( actionPriv );
+				action = actionPriv->getOrCreateQAction( menu );
+				menu->addAction( action );
+				break;
+
+			case SeparatorType:
+				menu->addSeparator();
+				break;
+
+			default:
+				Q_ASSERT( false );
+				break;
+			}
+
+		}
+		return true;
+	}
+
+
+	bool UiContainer::mergeInto( QMenuBar* menuBar )
+	{
+		MenuPrivate* menuPriv;
+		ActionPrivate* actionPriv;
+		ActionContainerPrivate* containerPriv;
+		MergePlacePrivate* mergePlacePriv;
+
+		foreach( UiObject* uio, allObjects() )
+		{
+			QAction* action;
+
+			switch( uio->type() )
+			{
+			case MenuType:
+				menuPriv = qobject_cast< MenuPrivate* >( uio );
+				Q_ASSERT( menuPriv );
+				action = menuPriv->getOrCreateQMenu( menuBar )->menuAction();
+				menuBar->addAction( action );
+				break;
+
+			case ActionType:
+				actionPriv = qobject_cast< ActionPrivate* >( uio );
+				Q_ASSERT( actionPriv );
+				action = actionPriv->getOrCreateQAction( menuBar );
+				menuBar->addAction( action );
+				break;
+
+			case SeparatorType:
+				menuBar->addSeparator();
+				break;
+
+			default:
+				Q_ASSERT( false );
+				break;
+			}
+
+		}
+		return true;
+	}
+
+	bool UiContainer::mergeInto( QToolBar* toolBar )
+	{
+		Q_UNUSED( toolBar );
+		return false;
 	}
 
 }

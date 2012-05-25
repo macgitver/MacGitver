@@ -19,6 +19,10 @@
 
 #include <QList>
 
+class QMenu;
+class QToolBar;
+class QMenuBar;
+
 #include "Heaven/UiObject.h"
 
 namespace Heaven
@@ -38,6 +42,11 @@ namespace Heaven
 	public:
 		bool isContainerDirty() const;
 		virtual void setContainerDirty( bool value = true );
+		virtual int priority() const;
+
+		virtual bool mergeInto( QMenu* menu );
+		virtual bool mergeInto( QMenuBar* menuBar );
+		virtual bool mergeInto( QToolBar* toolBar );
 
 	protected:
 		int numObjects() const;

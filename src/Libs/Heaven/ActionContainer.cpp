@@ -14,17 +14,22 @@
  *
  */
 
+#include <QMenu>
+
 #include "Heaven/ActionContainerPrivate.h"
 #include "Heaven/MenuPrivate.h"
 #include "Heaven/ActionPrivate.h"
 #include "Heaven/MergePlacePrivate.h"
 #include "Heaven/Separator.h"
 
+#include "Heaven/MergesManager.h"
+
 namespace Heaven
 {
 
 	ActionContainerPrivate::ActionContainerPrivate( ActionContainer* owner )
 		: UiContainer( owner )
+		, mPriority( 50 )
 	{
 	}
 
@@ -35,6 +40,11 @@ namespace Heaven
 	UiObjectTypes ActionContainerPrivate::type() const
 	{
 		return ContainerType;
+	}
+
+	int ActionContainerPrivate::priority() const
+	{
+		return mPriority;
 	}
 
 	ActionContainer::ActionContainer( QObject* parent )
@@ -51,6 +61,21 @@ namespace Heaven
 	UiObject* ActionContainer::uiObject()
 	{
 		return d;
+	}
+
+	void ActionContainer::setMergePriority( int priority )
+	{
+		d->mPriority = priority;
+	}
+
+	int ActionContainer::mergePriority() const
+	{
+		return d->mPriority;
+	}
+
+	void ActionContainer::mergeInto( const QByteArray& mergePlace )
+	{
+		MergesManager::self()->mergeContainer( d, mergePlace );
 	}
 
 	void ActionContainer::add( Action* uio )

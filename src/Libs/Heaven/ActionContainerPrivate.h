@@ -32,6 +32,10 @@ namespace Heaven
 
 	public:
 		UiObjectTypes type() const;
+		int priority() const;
+
+	public:
+		int				mPriority;
 	};
 
 }

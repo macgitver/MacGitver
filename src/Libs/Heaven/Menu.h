@@ -56,6 +56,7 @@ namespace Heaven
 		void add( Action* );
 		void add( MergePlace* );
 		void add( ActionContainer* );
+		void addSeparator();
 
 	public:
 		UiObject* uiObject();

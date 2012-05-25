@@ -17,13 +17,17 @@
 #ifndef MGV_I_MODULE_H
 #define MGV_I_MODULE_H
 
+#include <QtPlugin>
 #include <QFlags>
-
-#include "GitWrap/Repository.h"
 
 #include "Interfaces/InterfaceApi.h"
 
 class IConfigDialog;
+
+namespace Git
+{
+	class Repository;
+}
 
 class INTERFACES_API IModule
 {

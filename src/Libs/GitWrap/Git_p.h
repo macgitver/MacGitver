@@ -91,12 +91,6 @@ namespace Git
 	GitPtr< T >::operator const T*() const
 	{ return d; }
 
-	// we have our own ref count and go out of scope when it's 0
-	#define OWN_REF() \
-		void ref(){ mRefCounter.ref(); } \
-		void deref(){ if( !mRefCounter.deref() ) delete this; } \
-		QAtomicInt mRefCounter;
-
 	class RepositoryPrivate;
 	class IndexPrivate;
 	class ObjectPrivate;
@@ -107,93 +101,6 @@ namespace Git
 	Signature git2Signature( const git_signature* gitsig );
 	git_signature* signature2git( const Signature& sig );
 	RefSpec mkRefSpec( const git_refspec* refspec );
-
-	class RepositoryPrivate
-	{
-	public:
-		OWN_REF();
-	public:
-		RepositoryPrivate( git_repository* repo );
-		~RepositoryPrivate();
-
-		void setError( int rc );
-
-		friend int status_callback( const char* name, unsigned int status, void* );
-
-	public:
-		git_repository*		mRepo;
-		IndexPrivate*		mIndex;
-	};
-
-	class IndexPrivate
-	{
-	public:
-		OWN_REF()
-
-	public:
-		IndexPrivate( RepositoryPrivate* repo, git_index* index );
-		~IndexPrivate();
-
-	public:
-		RepositoryPrivate*	mRepo;
-		git_index*			mIndex;
-	};
-
-	class ObjectPrivate
-	{
-	public:
-		OWN_REF()
-
-	public:
-		ObjectPrivate( RepositoryPrivate* repo, git_object* o );
-		~ObjectPrivate();
-
-	public:
-		RepositoryPrivate*	mRepo;
-		git_object*			mObj;
-	};
-
-	class ReferencePrivate
-	{
-	public:
-		OWN_REF()
-
-	public:
-		ReferencePrivate( RepositoryPrivate* repo, git_reference* ref );
-		~ReferencePrivate();
-
-	public:
-		RepositoryPrivate*	mRepo;
-		git_reference*		mRef;
-	};
-
-	class RevisionWalkerPrivate
-	{
-	public:
-		OWN_REF()
-
-	public:
-		RevisionWalkerPrivate( RepositoryPrivate* repo, git_revwalk* walker );
-		~RevisionWalkerPrivate();
-
-	public:
-		RepositoryPrivate*	mRepo;
-		git_revwalk*		mWalker;
-	};
-
-	class RemotePrivate
-	{
-	public:
-		OWN_REF();
-
-	public:
-		RemotePrivate( RepositoryPrivate* repo, git_remote* remote );
-		~RemotePrivate();
-
-	public:
-		RepositoryPrivate*	mRepo;
-		git_remote*			mRemote;
-	};
 
 }
 

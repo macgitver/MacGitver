@@ -15,73 +15,52 @@
  */
 
 #include "Git_p.h"
-#include "Index.h"
-#include "Repository.h"
 #include "RepositoryPrivate.h"
-#include "IndexPrivate.h"
+#include "RepoObject.h"
 
 namespace Git
 {
 
-	IndexPrivate::IndexPrivate( RepositoryPrivate* repo, git_index* index )
-		: RepoObject( repo )
-		, mIndex( index )
-	{
-		Q_ASSERT( index );
-	}
-
-	IndexPrivate::~IndexPrivate()
+	RepoObject::RepoObject( RepositoryPrivate* repo )
+		: mRepo( repo )
 	{
 		Q_ASSERT( mRepo );
-		if( mRepo->mIndex == this )
+		if( mRepo )
 		{
-			mRepo->mIndex = NULL;
-		}
-
-		if( mIndex )
-		{
-			git_index_free( mIndex );
+			mRepo->ref();
 		}
 	}
 
-	Index::Index()
+	RepoObject::~RepoObject()
 	{
+		if( mRepo )
+		{
+			mRepo->deref();
+			mRepo = NULL;
+		}
 	}
 
-	Index::Index( IndexPrivate* _d )
-		: d( _d )
+	void RepoObject::ref()
 	{
+		mRefCounter.ref();
 	}
 
-	Index::Index( const Index& o )
-		: d( o.d )
+	void RepoObject::deref()
 	{
+		if( !mRefCounter.deref() )
+		{
+			delete this;
+		}
 	}
 
-	Index::~Index()
+	RepositoryPrivate* RepoObject::repo() const
 	{
+		return mRepo;
 	}
 
-	Index& Index::operator=( const Index& other )
+	bool RepoObject::handleErrors( int rc ) const
 	{
-		d = other.d;
-		return *this;
-	}
-
-	int Index::count() const
-	{
-		Q_ASSERT( d );
-		return git_index_entrycount( d->mIndex );
-	}
-
-	bool Index::isValid() const
-	{
-		return d;
-	}
-
-	Repository Index::repository() const
-	{
-		return Repository( d ? d->repo() : NULL );
+		return mRepo->handleErrors( rc );
 	}
 
 }

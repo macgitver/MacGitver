@@ -21,20 +21,21 @@
 #include "ObjectTag.h"
 #include "ObjectCommit.h"
 #include "ObjectBlob.h"
+#include "ObjectPrivate.h"
+#include "Repository.h"
 
 namespace Git
 {
 	ObjectPrivate::ObjectPrivate( RepositoryPrivate* repo, git_object* o )
-		: mRepo( repo )
+		: RepoObject( repo )
 		, mObj( o )
 	{
-		mRepo->ref();
+		Q_ASSERT( o );
 	}
 
 	ObjectPrivate::~ObjectPrivate()
 	{
 		git_object_free( mObj );
-		mRepo->deref();
 	}
 
 	Object::Object( ObjectPrivate* _d )
@@ -151,6 +152,11 @@ namespace Git
 	bool Object::isBlob() const
 	{
 		return type() == otBlob;
+	}
+
+	Repository Object::repository() const
+	{
+		return Repository( d ? d->repo() : NULL );
 	}
 
 }

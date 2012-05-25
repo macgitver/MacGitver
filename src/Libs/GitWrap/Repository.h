@@ -25,6 +25,7 @@ namespace Git
 {
 
 	class Reference;
+	class Error;
 	class Object;
 	class ObjectCommit;
 	class ObjectTag;
@@ -76,6 +77,8 @@ namespace Git
 		bool shouldIgnore( const QByteArray& filePath ) const;
 
 		RevisionWalker newWalker();
+
+		QList< Error > recentErrors();
 
 		void test();
 

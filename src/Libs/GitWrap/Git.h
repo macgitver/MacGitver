@@ -87,7 +87,9 @@ namespace Git
 		StatusIgnored				= (1 << 6)
 	};
 
-	typedef QHash< QString, FileStatus > StatusHash;
+	typedef QFlags< FileStatus > FileStati;
+
+	typedef QHash< QString, FileStati > StatusHash;
 
 }
 

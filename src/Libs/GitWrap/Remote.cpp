@@ -15,30 +15,23 @@
  */
 
 #include "Remote.h"
-#include "ObjectId.h"
+#include "RemotePrivate.h"
 #include "Reference.h"
 #include "RefSpec.h"
-#include "Git_p.h"
 
 namespace Git
 {
 
 	RemotePrivate::RemotePrivate( RepositoryPrivate* repo, git_remote* remote )
-		: mRepo( repo )
+		: RepoObject( repo )
 		, mRemote( remote )
 	{
-		Q_ASSERT( mRepo );
-		mRepo->ref();
+		Q_ASSERT( remote );
 	}
 
 	RemotePrivate::~RemotePrivate()
 	{
 		git_remote_free( mRemote );
-
-		if( mRepo )
-		{
-			mRepo->deref();
-		}
 	}
 
 	Remote::Remote()
@@ -65,13 +58,15 @@ namespace Git
 		return d;
 	}
 
-	void Remote::save()
+	bool Remote::save()
 	{
 		Q_ASSERT( d );
 		if( d )
 		{
 			int rc = git_remote_save( d->mRemote );
+			return d->handleErrors( rc );
 		}
+		return false;
 	}
 
 	QByteArray Remote::name() const
@@ -94,22 +89,28 @@ namespace Git
 		return a;
 	}
 
-	void Remote::setFetchSpec( const QByteArray& spec )
+	bool Remote::setFetchSpec( const QByteArray& spec )
 	{
 		Q_ASSERT( d );
 		if( d )
 		{
 			int rc = git_remote_set_fetchspec( d->mRemote, spec.constData() );
+			return d->handleErrors( rc );
 		}
+
+		return false;
 	}
 
-	void Remote::setPushSpec( const QByteArray& spec )
+	bool Remote::setPushSpec( const QByteArray& spec )
 	{
 		Q_ASSERT( d );
 		if( d )
 		{
 			int rc = git_remote_set_pushspec( d->mRemote, spec.constData() );
+			return d->handleErrors( rc );
 		}
+
+		return false;
 	}
 
 	RefSpec Remote::fetchSpec() const

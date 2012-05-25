@@ -39,13 +39,13 @@ namespace Git
 	public:
 		bool isValid() const;
 
-		void save();
+		bool save();
 
 		QByteArray name() const;
 		QByteArray url() const;
 
-		void setFetchSpec( const QByteArray& spec );
-		void setPushSpec( const QByteArray& spec );
+		bool setFetchSpec( const QByteArray& spec );
+		bool setPushSpec( const QByteArray& spec );
 
 		RefSpec fetchSpec() const;
 		RefSpec pushSpec() const;

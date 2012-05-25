@@ -14,45 +14,28 @@
  *
  */
 
-#ifndef GIT_REFERENCE_H
-#define GIT_REFERENCE_H
-
-#include "Git.h"
+#include "Error.h"
 
 namespace Git
 {
 
-	class ReferencePrivate;
-
-	class ObjectId;
-
-	class GITWRAP_API Reference
+	Error::Error( const QString& errorText )
+		: mErrorText( errorText )
 	{
-	public:
-		enum Type
-		{
-			Direct, Symbolic
-		};
+	}
 
-	public:
-		Reference();
-		Reference( ReferencePrivate* p );
+	Error::Error( const Error& other )
+		: mErrorText( other.mErrorText )
+	{
+	}
 
-	public:
-		bool isValid() const;
-		bool destroy();
-		QByteArray name() const;
+	Error::~Error()
+	{
+	}
 
-		Type type() const;
-		ObjectId objectId() const;
-		QByteArray target() const;
-
-		Repository repository() const;
-
-	private:
-		ReferencePrivate* d;
-	};
+	QString Error::text() const
+	{
+		return mErrorText;
+	}
 
 }
-
-#endif

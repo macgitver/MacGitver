@@ -14,44 +14,43 @@
  *
  */
 
-#ifndef GIT_REFERENCE_H
-#define GIT_REFERENCE_H
+#ifndef GIT_REPOSITORY_PRIVATE_H
+#define GIT_REPOSITORY_PRIVATE_H
 
-#include "Git.h"
+#include <QMutex>
+
+#include "Git_p.h"
 
 namespace Git
 {
 
-	class ReferencePrivate;
+	class Error;
 
-	class ObjectId;
-
-	class GITWRAP_API Reference
+	class RepositoryPrivate
 	{
 	public:
-		enum Type
-		{
-			Direct, Symbolic
-		};
+		RepositoryPrivate( git_repository* repo );
+		~RepositoryPrivate();
 
 	public:
-		Reference();
-		Reference( ReferencePrivate* p );
+		void ref();
+		void deref();
 
 	public:
-		bool isValid() const;
-		bool destroy();
-		QByteArray name() const;
+		bool handleErrors( int rc ) const;
 
-		Type type() const;
-		ObjectId objectId() const;
-		QByteArray target() const;
-
-		Repository repository() const;
+	public:
+		git_repository*			mRepo;
+		IndexPrivate*			mIndex;
+		mutable QList< Error >	mErrors;
+		mutable QMutex			mErrorListMtx;
 
 	private:
-		ReferencePrivate* d;
+		QAtomicInt				mRefCounter;
+
+		friend int status_callback( const char* name, unsigned int status, void* );
 	};
+
 
 }
 

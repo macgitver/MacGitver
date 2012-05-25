@@ -15,18 +15,19 @@
  */
 
 #include "Git_p.h"
+#include "ReferencePrivate.h"
 #include "ObjectId.h"
+#include "Repository.h"
 #include "Reference.h"
 
 namespace Git
 {
 
 	ReferencePrivate::ReferencePrivate( RepositoryPrivate* repo, git_reference* ref )
-		: mRepo( repo )
+		: RepoObject( repo )
 		, mRef( ref )
 	{
-		Q_ASSERT( mRepo );
-		mRepo->ref();
+		Q_ASSERT( ref );
 	}
 
 	ReferencePrivate::~ReferencePrivate()
@@ -35,8 +36,6 @@ namespace Git
 		{
 			git_reference_free( mRef );
 		}
-
-		mRepo->deref();
 	}
 
 	Reference::Reference()
@@ -54,16 +53,20 @@ namespace Git
 								// internally refCounted;
 	}
 
-	void Reference::destroy()
+	bool Reference::destroy()
 	{
 		if( isValid() )
 		{
 			int rc = git_reference_delete( d->mRef );
-			if( rc == GIT_OK )
+			if( d->handleErrors( rc ) )
 			{
-				d->mRef = NULL;
+				return false;
 			}
+
+			d->mRef = NULL;
 		}
+
+		return false;
 	}
 
 	QByteArray Reference::name() const
@@ -92,6 +95,11 @@ namespace Git
 	{
 		Q_ASSERT( isValid() && type() == Symbolic );
 		return QByteArray( git_reference_target( d->mRef ) );
+	}
+
+	Repository Reference::repository() const
+	{
+		return Repository( d ? d->repo() : NULL );
 	}
 
 }

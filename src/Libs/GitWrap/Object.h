@@ -30,6 +30,8 @@ namespace Git
 	class ObjectCommit;
 	class ObjectTag;
 
+	class Repository;
+
 	class GITWRAP_API Object
 	{
 	public:
@@ -55,6 +57,8 @@ namespace Git
 		bool isTag() const;
 		bool isCommit() const;
 		bool isBlob() const;
+
+		Repository repository() const;
 
 	protected:
 		GitPtr< ObjectPrivate > d;

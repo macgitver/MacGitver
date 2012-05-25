@@ -16,6 +16,7 @@
 
 #include "Git_p.h"
 
+#include "ObjectPrivate.h"
 #include "ObjectTree.h"
 
 namespace Git
@@ -44,12 +45,12 @@ namespace Git
 		git_tree* subTree = 0;
 
 		int rc = git_tree_get_subtree( &subTree, d2, pathName.constData() );
-		if( rc < GIT_OK )
+		if( d->handleErrors( rc ) )
 		{
 			return ObjectTree();
 		}
 
-		return new ObjectPrivate( d->mRepo, (git_object*) subTree );
+		return new ObjectPrivate( d->repo(), (git_object*) subTree );
 	}
 
 }

@@ -15,6 +15,7 @@
  */
 
 #include "RevisionWalker.h"
+#include "RevisionWalkerPrivate.h"
 #include "ObjectId.h"
 #include "Reference.h"
 #include "Git_p.h"
@@ -23,20 +24,14 @@ namespace Git
 {
 
 	RevisionWalkerPrivate::RevisionWalkerPrivate( RepositoryPrivate* repo, git_revwalk* walker )
-		: mRepo( repo )
+		: RepoObject( repo )
 		, mWalker( walker )
 	{
-		Q_ASSERT( mRepo );
-		mRepo->ref();
+		Q_ASSERT( walker );
 	}
 
 	RevisionWalkerPrivate::~RevisionWalkerPrivate()
 	{
-		if( mRepo )
-		{
-			mRepo->deref();
-		}
-
 		git_revwalk_free( mWalker );
 	}
 

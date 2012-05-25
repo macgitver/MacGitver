@@ -14,45 +14,35 @@
  *
  */
 
-#ifndef GIT_REFERENCE_H
-#define GIT_REFERENCE_H
+#ifndef GIT_REPO_OBJECT_H
+#define GIT_REPO_OBJECT_H
 
-#include "Git.h"
+#include <QAtomicInt>
 
 namespace Git
 {
+	class RepositoryPrivate;
 
-	class ReferencePrivate;
-
-	class ObjectId;
-
-	class GITWRAP_API Reference
+	class RepoObject
 	{
 	public:
-		enum Type
-		{
-			Direct, Symbolic
-		};
+		RepoObject( RepositoryPrivate* repo );
+		virtual ~RepoObject();
 
 	public:
-		Reference();
-		Reference( ReferencePrivate* p );
+		void ref();
+		void deref();
 
-	public:
-		bool isValid() const;
-		bool destroy();
-		QByteArray name() const;
+		RepositoryPrivate* repo() const;
+		bool handleErrors( int rc ) const;
 
-		Type type() const;
-		ObjectId objectId() const;
-		QByteArray target() const;
-
-		Repository repository() const;
-
+	protected:
+		RepositoryPrivate*	mRepo;
 	private:
-		ReferencePrivate* d;
+		QAtomicInt			mRefCounter;
 	};
 
 }
 
 #endif
+

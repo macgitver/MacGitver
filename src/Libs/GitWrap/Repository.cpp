@@ -15,15 +15,21 @@
  */
 
 #include "Git_p.h"
+#include "Error.h"
 #include "Index.h"
+#include "IndexPrivate.h"
 #include "Repository.h"
+#include "RepositoryPrivate.h"
 #include "Reference.h"
+#include "ReferencePrivate.h"
 #include "Object.h"
+#include "ObjectPrivate.h"
 #include "ObjectTag.h"
 #include "ObjectTree.h"
 #include "ObjectBlob.h"
 #include "ObjectCommit.h"
 #include "RevisionWalker.h"
+#include "RevisionWalkerPrivate.h"
 
 #include "git2/branch.h"
 
@@ -44,12 +50,36 @@ namespace Git
 		git_repository_free( mRepo );
 	}
 
-	void RepositoryPrivate::setError( int rc )
+	void RepositoryPrivate::ref()
 	{
-		Q_UNUSED( rc );
-	//	QString errText = QString::fromUtf8( git_lasterror() );
-	//	qDebug( "%s", qPrintable( errText ) );
-	//	MainWindow::self().addError( errText );
+		mRefCounter.ref();
+	}
+
+	void RepositoryPrivate::deref()
+	{
+		if( !mRefCounter.deref() )
+		{
+			delete this;
+		}
+	}
+
+	bool RepositoryPrivate::handleErrors( int rc ) const
+	{
+		if( rc < 0 )
+		{
+			const git_error* giterror = giterr_last();
+			Error err( QString::fromLocal8Bit( giterror->message ) );
+			giterr_clear();
+
+			mErrorListMtx.lock();
+			mErrors.append( err );
+			mErrorListMtx.unlock();
+
+			qDebug( "git2-Error: %s", qPrintable( err.text() ) );
+
+			return false;
+		}
+		return true;
 	}
 
 	Repository::Repository( RepositoryPrivate* _d )
@@ -88,7 +118,6 @@ namespace Git
 		int rc = git_repository_init( &repo, path.toLatin1().constData(), bare );
 		if( rc < GIT_OK )
 		{
-		//	d->setError( rc );
 			return Repository();
 		}
 
@@ -100,10 +129,8 @@ namespace Git
 		git_repository* repo = NULL;
 
 		int rc = git_repository_open( &repo, path.toLatin1().constData() );
-
 		if( rc < GIT_OK )
 		{
-		//	d->setError( rc );
 			return Repository();
 		}
 
@@ -131,9 +158,8 @@ namespace Git
 
 			int rc = git_repository_index( &index, d->mRepo );
 
-			if( rc < GIT_OK )
+			if( !d->handleErrors( rc ) )
 			{
-				d->setError( rc );
 				return Index();
 			}
 
@@ -160,7 +186,7 @@ namespace Git
 
 		git_strarray arr;
 		int rc = git_reference_list( &arr, d->mRepo, GIT_REF_LISTALL );
-		if( rc < GIT_OK )
+		if( !d->handleErrors( rc ) )
 		{
 			return QStringList();
 		}
@@ -181,7 +207,7 @@ namespace Git
 		int rc = git_branch_list( &arr, d->mRepo,
 								  ( local ? GIT_BRANCH_LOCAL : 0 ) |
 								  ( remote ? GIT_BRANCH_REMOTE : 0 ) );
-		if( rc < GIT_OK )
+		if( !d->handleErrors( rc ) )
 		{
 			return QStringList();
 		}
@@ -195,7 +221,7 @@ namespace Git
 
 		git_strarray arr;
 		int rc = git_tag_list( &arr, d->mRepo );
-		if( rc < GIT_OK )
+		if( !d->handleErrors( rc ) )
 		{
 			return QStringList();
 		}
@@ -220,7 +246,7 @@ namespace Git
 	static int statusHashCB( const char* fn, unsigned int status, void* rawSH )
 	{
 		StatusHash* sh = (StatusHash*) rawSH;
-		sh->insert( QString::fromUtf8( fn ), FileStatus( status ) );
+		sh->insert( QString::fromUtf8( fn ), FileStati( status ) );
 		return GIT_OK;
 	}
 
@@ -230,14 +256,17 @@ namespace Git
 
 		if( d )
 		{
-		//	git_status_foreach( d->mRepo, &statusHashCB, (void*) &sh );
 			git_status_options opt;
 			memset( &opt, 0, sizeof( opt ) );
 			opt.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED
 					  | GIT_STATUS_OPT_INCLUDE_IGNORED
 					  | GIT_STATUS_OPT_INCLUDE_UNMODIFIED
 					  | GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
-			git_status_foreach_ext( d->mRepo, &opt, &statusHashCB, (void*) &sh );
+			int rc = git_status_foreach_ext( d->mRepo, &opt, &statusHashCB, (void*) &sh );
+			if( !d->handleErrors( rc ) )
+			{
+				return StatusHash();
+			}
 		}
 
 		return sh;
@@ -245,7 +274,7 @@ namespace Git
 
 	QString Repository::basePath() const
 	{
-		return QString::fromUtf8(( git_repository_workdir( d->mRepo ) ) );
+		return QString::fromUtf8( git_repository_workdir( d->mRepo ) );
 	}
 
 	Reference Repository::HEAD()
@@ -256,7 +285,11 @@ namespace Git
 		if( d )
 		{
 			git_reference* refHead = NULL;
-			git_repository_head( &refHead, d->mRepo );
+			int rc = git_repository_head( &refHead, d->mRepo );
+			if( !d->handleErrors( rc ) )
+			{
+				return Reference();
+			}
 
 			ref = new ReferencePrivate( d, refHead );
 		}
@@ -269,8 +302,8 @@ namespace Git
 		Q_ASSERT( d );
 
 		git_object* obj = NULL;
-
 		git_otype gitObjType;
+
 		switch( ot )
 		{
 		case otAny:		gitObjType = GIT_OBJ_ANY;		break;
@@ -282,7 +315,7 @@ namespace Git
 		}
 
 		int rc = git_object_lookup( &obj, d->mRepo, (git_oid*) id.raw(), gitObjType );
-		if( rc != GIT_OK )
+		if( !d->handleErrors( rc ) )
 		{
 			return Object();
 		}
@@ -316,11 +349,14 @@ namespace Git
 		if( d )
 		{
 			git_revwalk* walker = NULL;
+
 			int rc = git_revwalk_new( &walker, d->mRepo );
-			if( rc == GIT_OK )
+			if( !d->handleErrors( rc ) )
 			{
-				return new RevisionWalkerPrivate( d, walker );
+				return RevisionWalker();
 			}
+
+			return new RevisionWalkerPrivate( d, walker );
 		}
 
 		return RevisionWalker();
@@ -337,7 +373,7 @@ namespace Git
 		if( d )
 		{
 			int rc = git_status_should_ignore( &ignore, d->mRepo, filePath.data() );
-			if( rc != GIT_OK )
+			if( !d->handleErrors( rc ) )
 			{
 				return false;
 			}
@@ -345,4 +381,15 @@ namespace Git
 		return ignore;
 	}
 
+	QList< Error > Repository::recentErrors()
+	{
+		QList< Error > detached;
+
+		d->mErrorListMtx.lock();
+		detached = d->mErrors;
+		d->mErrors.clear();
+		d->mErrorListMtx.unlock();
+
+		return detached;
+	}
 }

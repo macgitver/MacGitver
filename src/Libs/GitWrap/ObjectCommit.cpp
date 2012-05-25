@@ -16,6 +16,7 @@
 
 #include "Git_p.h"
 
+#include "ObjectPrivate.h"
 #include "ObjectCommit.h"
 #include "ObjectTree.h"
 
@@ -45,12 +46,12 @@ namespace Git
 		git_tree* tree = 0;
 
 		int rc = git_commit_tree( &tree, commit );
-		if( rc < GIT_OK )
+		if( !d->handleErrors( rc ) )
 		{
 			return ObjectTree();
 		}
 
-		return new ObjectPrivate( d->mRepo, (git_object*) tree );
+		return new ObjectPrivate( d->repo(), (git_object*) tree );
 	}
 
 	ObjectId ObjectCommit::treeId()
@@ -89,9 +90,9 @@ namespace Git
 			git_commit* gitparent = NULL;
 
 			int rc = git_commit_parent( &gitparent, commit, index );
-			if( rc == GIT_OK )
+			if( d->handleErrors( rc ) )
 			{
-				parent = new ObjectPrivate( d->mRepo, (git_object*) gitparent );
+				parent = new ObjectPrivate( d->repo(), (git_object*) gitparent );
 			}
 		}
 
@@ -111,12 +112,12 @@ namespace Git
 				git_commit* parent = NULL;
 
 				int rc = git_commit_parent( &parent, commit, i );
-				if( rc != GIT_OK )
+				if( !d->handleErrors( rc ) )
 				{
 					return QList< ObjectCommit >();
 				}
 
-				objs.append( new ObjectPrivate( d->mRepo, (git_object*) parent ) );
+				objs.append( new ObjectPrivate( d->repo(), (git_object*) parent ) );
 			}
 		}
 
@@ -197,8 +198,10 @@ namespace Git
 		git_commit* commit = (git_commit*) d->mObj;
 		const char* msg = git_commit_message( commit );
 		int len = strlen( msg );
+
 		if( len && msg[ len - 1 ] == '\n' )
 			len--;
+
 		return QString::fromUtf8( msg, len );
 	}
 

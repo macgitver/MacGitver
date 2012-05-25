@@ -12,44 +12,53 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
+	Error.cpp
 	Git.cpp
-	Repository.cpp
 	Index.cpp
-	ObjectId.cpp
 	Object.cpp
-	ObjectTree.cpp
 	ObjectBlob.cpp
-	ObjectTag.cpp
 	ObjectCommit.cpp
-	Signature.cpp
-	Reference.cpp
+	ObjectId.cpp
+	ObjectTag.cpp
+	ObjectTree.cpp
 	RefSpec.cpp
+	Reference.cpp
 	Remote.cpp
+	RepoObject.cpp
+	Repository.cpp
 	RevisionWalker.cpp
+	Signature.cpp
 )
 
 SET( PUB_HDR_FILES
 
+	Error.h
 	Git.h
-	Repository.h
 	Index.h
-	ObjectId.h
 	Object.h
-	ObjectTree.h
 	ObjectBlob.h
-	ObjectTag.h
 	ObjectCommit.h
-	Signature.h
-	Reference.h
+	ObjectId.h
+	ObjectTag.h
+	ObjectTree.h
 	RefSpec.h
+	Reference.h
 	Remote.h
+	Repository.h
 	RevisionWalker.h
+	Signature.h
 )
 
 SET( PRI_HDR_FILES
 
 	Git_p.h
-
+	IndexPrivate.h
+	ObjectPrivate.h
+	ReferencePrivate.h
+	RemotePrivate.h
+	RepoObject.h
+	RepositoryPrivate.h
+	RevisionWalkerPrivate.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
@@ -70,5 +79,6 @@ TARGET_LINK_LIBRARIES(
 TARGET_LINK_LIBRARIES(
 	GitWrap
 
-	LINK_PRIVATE    git2
+	LINK_PRIVATE	git2
+					DiffModel
 )

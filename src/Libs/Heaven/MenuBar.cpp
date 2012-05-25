@@ -177,7 +177,7 @@ namespace Heaven
 
 	void MenuBar::addSeparator()
 	{
-		d->add( new Separator );
+		d->add( new Separator( this ) );
 	}
 
 }

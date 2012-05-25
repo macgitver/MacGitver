@@ -26,7 +26,7 @@ namespace Heaven
 	{
 		Q_OBJECT
 	public:
-		Separator();
+		Separator( QObject* parent );
 		~Separator();
 
 	public:

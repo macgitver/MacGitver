@@ -22,7 +22,8 @@ Ui MainWindowActions {
 
 		Menu RepositoryMenu {
 
-			Text "&Repository";
+			Text			"&Repository";
+			StatusToolTip	"Repository related functions.";
 
 			MergePlace RepositoryMenuMP;
 
@@ -30,6 +31,7 @@ Ui MainWindowActions {
 
 			Action RepositoryQuit {
 				Text			"&Quit";
+				StatusToolTip	"Terminate MacGitver.";
 
 				_ConnectContext	qApp;
 				_ConnectTo		quit();
@@ -41,10 +43,12 @@ Ui MainWindowActions {
 		MergePlace WorkingTreeMP;
 
 		Menu HelpMenu {
-			Text	"&Help";
+			Text			"&Help";
+			StatusToolTip	"Help";
 
 			Action HelpAbout {
 				Text			"&About...";
+				StatusToolTip	"Show information about this release of MacGitver.";
 				_ConnectTo		onHelpAbout();
 			};
 		};

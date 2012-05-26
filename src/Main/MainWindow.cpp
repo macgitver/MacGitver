@@ -90,15 +90,23 @@ void MainWindow::repositoryChanged( const Git::Repository& repo )
 
 	if( mRepo.isValid() )
 	{
-		Git::Reference HEAD = mRepo.HEAD();
 		QString curBranch;
-		if( HEAD.name() != "HEAD" )
+		Git::Reference HEAD = mRepo.HEAD();
+
+		if( HEAD.isValid() )
 		{
-			curBranch = trUtf8( "on branch <b>%1</b>" ).arg( HEAD.name().mid( 11 ).constData() );
+			if( HEAD.name() != "HEAD" )
+			{
+				curBranch = trUtf8( "on branch <b>%1</b>" ).arg( HEAD.name().mid( 11 ).constData() );
+			}
+			else
+			{
+				curBranch = trUtf8( "HEAD detached: <b>%1</b>" ).arg( HEAD.objectId().toString() );
+			}
 		}
 		else
 		{
-			curBranch = trUtf8( "HEAD detached: <b>%1</b>" ).arg( HEAD.objectId().toString() );
+			curBranch = trUtf8( "<b style=\"color: red;\">Repository has no HEAD?!?</b>" );
 		}
 
 		mLblCurrentBranch->setText( curBranch );

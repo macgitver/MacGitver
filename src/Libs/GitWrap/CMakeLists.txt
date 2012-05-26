@@ -1,7 +1,7 @@
 
 PROJECT( MGV_GITWRAP )
 
-SET( QT_DONT_USE_GUI        1 )
+SET( QT_DONT_USE_QTGUI		1 )
 INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES(
@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES(
 SET( SRC_FILES
 
 	Error.cpp
+	Config.cpp
 	Git.cpp
 	Index.cpp
 	Object.cpp
@@ -33,6 +34,7 @@ SET( SRC_FILES
 SET( PUB_HDR_FILES
 
 	Error.h
+	Config.h
 	Git.h
 	Index.h
 	Object.h
@@ -52,6 +54,7 @@ SET( PUB_HDR_FILES
 SET( PRI_HDR_FILES
 
 	Git_p.h
+	ConfigPrivate.h
 	IndexPrivate.h
 	ObjectPrivate.h
 	ReferencePrivate.h

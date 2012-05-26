@@ -55,6 +55,7 @@ namespace Git
 		bool isBare() const;
 
 		QString basePath() const;
+		QString gitPath() const;
 
 		QStringList allReferences();
 		QStringList allBranches();

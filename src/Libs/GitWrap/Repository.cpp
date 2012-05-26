@@ -291,7 +291,16 @@ namespace Git
 
 	QString Repository::basePath() const
 	{
+		if( !d )
+			return QString();
 		return QString::fromUtf8( git_repository_workdir( d->mRepo ) );
+	}
+
+	QString Repository::gitPath() const
+	{
+		if( !d )
+			return QString();
+		return QString::fromUtf8( git_repository_path( d->mRepo ) );
 	}
 
 	Reference Repository::HEAD()

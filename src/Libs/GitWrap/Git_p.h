@@ -61,7 +61,7 @@ namespace Git
 
 	template< class T >
 	bool GitPtr< T >::operator==( T* o ) const
-	{ return d == o.d; }
+	{ return d == d; }
 
 	template< class T >
 	T* GitPtr< T >::operator->()

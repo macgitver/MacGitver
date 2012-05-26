@@ -37,6 +37,9 @@ namespace Git
 	public:
 		Reference();
 		Reference( ReferencePrivate* p );
+		Reference( const Reference& other );
+		~Reference();
+		Reference& operator=( const Reference& other );
 
 	public:
 		bool isValid() const;
@@ -50,7 +53,7 @@ namespace Git
 		Repository repository() const;
 
 	private:
-		ReferencePrivate* d;
+		GitPtr< ReferencePrivate > d;
 	};
 
 }

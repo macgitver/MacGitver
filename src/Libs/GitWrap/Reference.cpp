@@ -47,6 +47,22 @@ namespace Git
 	{
 	}
 
+	Reference::Reference( const Reference& other )
+		: d( other.d )
+	{
+	}
+
+	Reference::~Reference()
+	{
+	}
+
+
+	Reference& Reference::operator=( const Reference& other )
+	{
+		d = other.d;
+		return * this;
+	}
+
 	bool Reference::isValid() const
 	{
 		return d && d->mRef;	// libGit2 allows a Reference to become invalid though it's still

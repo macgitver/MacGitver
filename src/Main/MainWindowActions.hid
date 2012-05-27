@@ -42,6 +42,23 @@ Ui MainWindowActions {
 		MergePlace RemotesMP;
 		MergePlace WorkingTreeMP;
 
+		Menu ToolsMenu {
+			Text			"&Tools";
+			StatusToolTip	"Various configuration and tooling.";
+
+			MergePlace ToolsMenuMP;
+
+			Separator;
+
+			Action ToolsPreferences {
+				Text			"&Preferences...";
+				StatusToolTip	"Edit MacGitver global preferences.";
+
+				_ConnectTo		onToolsPreferences();
+			};
+
+		};
+
 		Menu HelpMenu {
 			Text			"&Help";
 			StatusToolTip	"Help";

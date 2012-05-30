@@ -93,8 +93,8 @@ namespace Heaven
 	{
 		MenuPrivate* menuPriv;
 		ActionPrivate* actionPriv;
-		ActionContainerPrivate* containerPriv;
-		MergePlacePrivate* mergePlacePriv;
+//		ActionContainerPrivate* containerPriv;
+//		MergePlacePrivate* mergePlacePriv;
 
 		foreach( UiObject* uio, allObjects() )
 		{
@@ -134,8 +134,8 @@ namespace Heaven
 	{
 		MenuPrivate* menuPriv;
 		ActionPrivate* actionPriv;
-		ActionContainerPrivate* containerPriv;
-		MergePlacePrivate* mergePlacePriv;
+//		ActionContainerPrivate* containerPriv;
+//		MergePlacePrivate* mergePlacePriv;
 
 		foreach( UiObject* uio, allObjects() )
 		{

@@ -14,6 +14,8 @@ SET( SRC_FILES
 
 	Error.cpp
 	Config.cpp
+	ChangeListConsumer.cpp
+	DiffList.cpp
 	Git.cpp
 	Index.cpp
 	Object.cpp
@@ -22,6 +24,7 @@ SET( SRC_FILES
 	ObjectId.cpp
 	ObjectTag.cpp
 	ObjectTree.cpp
+	PatchConsumer.cpp
 	RefSpec.cpp
 	Reference.cpp
 	Remote.cpp
@@ -35,7 +38,9 @@ SET( PUB_HDR_FILES
 
 	Error.h
 	Config.h
+	ChangeListConsumer.h
 	Git.h
+	DiffList.h
 	Index.h
 	Object.h
 	ObjectBlob.h
@@ -55,6 +60,7 @@ SET( PRI_HDR_FILES
 
 	Git_p.h
 	ConfigPrivate.h
+	DiffListPrivate.h
 	IndexPrivate.h
 	ObjectPrivate.h
 	ReferencePrivate.h
@@ -83,5 +89,4 @@ TARGET_LINK_LIBRARIES(
 	GitWrap
 
 	LINK_PRIVATE	git2
-					DiffModel
 )

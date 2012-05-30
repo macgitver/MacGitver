@@ -14,33 +14,29 @@
  *
  */
 
-#ifndef GIT_OBJECT_TREE_H
-#define GIT_OBJECT_TREE_H
-
-#include "Git.h"
-#include "ObjectId.h"
-#include "Object.h"
+#include "ChangeListConsumer.h"
 
 namespace Git
 {
 
-	class DiffList;
-
-	class GITWRAP_API ObjectTree : public Object
+	ChangeListConsumer::ChangeListConsumer()
 	{
-	public:
-		ObjectTree();
-		ObjectTree( ObjectPrivate* _d );
-		ObjectTree( const ObjectTree& o );
+	}
 
-	public:
-		ObjectTree subPath( const QByteArray& pathName ) const;
+	ChangeListConsumer::~ChangeListConsumer()
+	{
+	}
 
-		DiffList diffToTree( ObjectTree newTree );
-		DiffList diffToIndex();
-		DiffList diffToWorkingDir();
-	};
+	bool ChangeListConsumer::raw( const QString& oldPath, const QString& newPath, Type type,
+								  unsigned int similarity, bool isBinary )
+	{
+		Q_UNUSED( oldPath );
+		Q_UNUSED( newPath );
+		Q_UNUSED( type );
+		Q_UNUSED( similarity );
+		Q_UNUSED( isBinary );
+
+		return false;
+	}
 
 }
-
-#endif

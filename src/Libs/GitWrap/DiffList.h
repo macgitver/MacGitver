@@ -14,31 +14,43 @@
  *
  */
 
-#ifndef GIT_OBJECT_TREE_H
-#define GIT_OBJECT_TREE_H
+#ifndef GIT_DIFFLIST_H
+#define GIT_DIFFLIST_H
 
 #include "Git.h"
-#include "ObjectId.h"
-#include "Object.h"
 
 namespace Git
 {
 
-	class DiffList;
+	class ChangeListConsumer;
+	class PatchConsumer;
 
-	class GITWRAP_API ObjectTree : public Object
+	class DiffListPrivate;
+
+	class GITWRAP_API DiffList
 	{
 	public:
-		ObjectTree();
-		ObjectTree( ObjectPrivate* _d );
-		ObjectTree( const ObjectTree& o );
+		explicit DiffList( DiffListPrivate* _d );
 
 	public:
-		ObjectTree subPath( const QByteArray& pathName ) const;
+		DiffList( const DiffList& other );
+		DiffList();
+		~DiffList();
 
-		DiffList diffToTree( ObjectTree newTree );
-		DiffList diffToIndex();
-		DiffList diffToWorkingDir();
+	public:
+		DiffList& operator=( const DiffList& other );
+
+	public:
+		bool isValid() const;
+		Repository repository() const;
+
+		bool mergeOnto( DiffList other ) const;
+
+		bool consumePatch( PatchConsumer* consumer ) const;
+		bool consumeChangeList( ChangeListConsumer* consumer ) const;
+
+	private:
+		GitPtr< DiffListPrivate > d;
 	};
 
 }

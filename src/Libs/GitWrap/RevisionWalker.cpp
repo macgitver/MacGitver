@@ -70,7 +70,8 @@ namespace Git
 		Q_ASSERT( d );
 		if( d )
 		{
-			git_revwalk_push( d->mWalker, (const git_oid*) id.raw() );
+			int rc = git_revwalk_push( d->mWalker, (const git_oid*) id.raw() );
+			d->handleErrors( rc );
 		}
 	}
 
@@ -85,7 +86,7 @@ namespace Git
 		if( d )
 		{
 			int rc = git_revwalk_push_ref( d->mWalker, name.constData() );
-			Q_ASSERT( rc == GIT_OK );
+			d->handleErrors( rc );
 		}
 	}
 
@@ -94,7 +95,8 @@ namespace Git
 		Q_ASSERT( d );
 		if( d )
 		{
-			git_revwalk_push_head( d->mWalker );
+			int rc = git_revwalk_push_head( d->mWalker );
+			d->handleErrors( rc );
 		}
 	}
 
@@ -106,15 +108,19 @@ namespace Git
 		{
 			git_oid oid;
 			int rc = git_revwalk_next( &oid, d->mWalker );
-			if( rc == GIT_OK )
+			if( rc == GIT_REVWALKOVER )
 			{
-				oidNext = ObjectId::fromRaw( oid.id );
-				return true;
+				return false;
 			}
-		}
 
-		const git_error* err = giterr_last();
-		qDebug( "GIT-Error:\n%s\n\n", err->message );
+			if( !d->handleErrors( rc ) )
+			{
+				return false;
+			}
+
+			oidNext = ObjectId::fromRaw( oid.id );
+			return true;
+		}
 
 		return false;
 	}

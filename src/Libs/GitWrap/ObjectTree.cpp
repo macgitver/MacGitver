@@ -16,8 +16,11 @@
 
 #include "Git_p.h"
 
+#include "DiffList.h"
+#include "DiffListPrivate.h"
 #include "ObjectPrivate.h"
 #include "ObjectTree.h"
+#include "RepositoryPrivate.h"
 
 namespace Git
 {
@@ -51,6 +54,64 @@ namespace Git
 		}
 
 		return new ObjectPrivate( d->repo(), (git_object*) subTree );
+	}
+
+	DiffList ObjectTree::diffToTree( ObjectTree newTree )
+	{
+		if( !d )
+		{
+			return DiffList();
+		}
+
+		git_tree* gitTree = (git_tree*) d->mObj;
+		git_tree* gitNewTree = (git_tree*) newTree.d->mObj;
+
+		git_diff_list* diffList = NULL;
+		int rc = git_diff_tree_to_tree( d->repo()->mRepo, NULL, gitTree, gitNewTree, &diffList );
+		if( !d->handleErrors( rc ) )
+		{
+			return DiffList();
+		}
+
+		return DiffList( new DiffListPrivate( d->repo(), diffList ) );
+	}
+
+	DiffList ObjectTree::diffToIndex()
+	{
+		if( !d )
+		{
+			return DiffList();
+		}
+
+		git_tree* gitTree = (git_tree*) d->mObj;
+
+		git_diff_list* diffList = NULL;
+		int rc = git_diff_index_to_tree( d->repo()->mRepo, NULL, gitTree, &diffList );
+		if( !d->handleErrors( rc ) )
+		{
+			return DiffList();
+		}
+
+		return DiffList( new DiffListPrivate( d->repo(), diffList ) );
+	}
+
+	DiffList ObjectTree::diffToWorkingDir()
+	{
+		if( !d )
+		{
+			return DiffList();
+		}
+
+		git_tree* gitTree = (git_tree*) d->mObj;
+
+		git_diff_list* diffList = NULL;
+		int rc = git_diff_workdir_to_tree( d->repo()->mRepo, NULL, gitTree, &diffList );
+		if( !d->handleErrors( rc ) )
+		{
+			return DiffList();
+		}
+
+		return DiffList( new DiffListPrivate( d->repo(), diffList ) );
 	}
 
 }

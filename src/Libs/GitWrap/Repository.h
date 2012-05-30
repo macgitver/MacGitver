@@ -26,6 +26,7 @@ namespace Git
 
 	class Reference;
 	class Error;
+	class DiffList;
 	class Object;
 	class ObjectCommit;
 	class ObjectTag;
@@ -83,6 +84,12 @@ namespace Git
 		Remote remote( const QByteArray& remoteName ) const;
 		Remote createRemote( const QByteArray& remoteName, const QByteArray& url,
 							 const QByteArray& fetchSpec );
+
+		DiffList diffCommitToCommit( ObjectCommit oldCommit, ObjectCommit newCommit );
+		DiffList diffTreeToTree( ObjectTree oldTree, ObjectTree newTree );
+		DiffList diffIndexToTree( ObjectTree oldTree );
+		DiffList diffTreeToWorkingDir( ObjectTree oldTree );
+		DiffList diffIndexToWorkingDir();
 
 		QList< Error > recentErrors();
 

@@ -14,31 +14,37 @@
  *
  */
 
-#ifndef GIT_OBJECT_TREE_H
-#define GIT_OBJECT_TREE_H
+#ifndef GIT_CHANGELIST_CONSUMER_H
+#define GIT_CHANGELIST_CONSUMER_H
 
 #include "Git.h"
-#include "ObjectId.h"
-#include "Object.h"
 
 namespace Git
 {
 
-	class DiffList;
-
-	class GITWRAP_API ObjectTree : public Object
+	class GITWRAP_API ChangeListConsumer
 	{
 	public:
-		ObjectTree();
-		ObjectTree( ObjectPrivate* _d );
-		ObjectTree( const ObjectTree& o );
+		enum Type
+		{
+			FileUnmodified,
+			FileAdded,
+			FileDeleted,
+			FileModified,
+			FileRenamed,
+			FileCopied,
+			FileIgnored,
+			FileUntracked
+		};
 
 	public:
-		ObjectTree subPath( const QByteArray& pathName ) const;
+		ChangeListConsumer();
+		virtual ~ChangeListConsumer();
 
-		DiffList diffToTree( ObjectTree newTree );
-		DiffList diffToIndex();
-		DiffList diffToWorkingDir();
+	public:
+		virtual bool raw( const QString& oldPath, const QString& newPath, Type type,
+						  unsigned int similarity, bool isBinary );
+
 	};
 
 }

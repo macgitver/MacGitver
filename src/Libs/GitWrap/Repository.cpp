@@ -24,6 +24,8 @@
 #include "RepositoryPrivate.h"
 #include "Reference.h"
 #include "ReferencePrivate.h"
+#include "DiffList.h"
+#include "DiffListPrivate.h"
 #include "Object.h"
 #include "ObjectPrivate.h"
 #include "ObjectTag.h"
@@ -450,6 +452,44 @@ namespace Git
 
 		return new RemotePrivate( const_cast< RepositoryPrivate* >( *d ), remote );
 	}
+
+	DiffList Repository::diffCommitToCommit( ObjectCommit oldCommit, ObjectCommit newCommit )
+	{
+		return diffTreeToTree( oldCommit.tree(), newCommit.tree() );
+	}
+
+	DiffList Repository::diffTreeToTree( ObjectTree oldTree, ObjectTree newTree )
+	{
+		return oldTree.diffToTree( newTree );
+	}
+
+	DiffList Repository::diffIndexToTree( ObjectTree oldTree )
+	{
+		return oldTree.diffToIndex();
+	}
+
+	DiffList Repository::diffTreeToWorkingDir( ObjectTree oldTree )
+	{
+		return oldTree.diffToWorkingDir();
+	}
+
+	DiffList Repository::diffIndexToWorkingDir()
+	{
+		if( !d )
+		{
+			return DiffList();
+		}
+
+		git_diff_list* diffList = NULL;
+		int rc = git_diff_workdir_to_index( d->mRepo, NULL, &diffList );
+		if( !d->handleErrors( rc ) )
+		{
+			return DiffList();
+		}
+
+		return DiffList( new DiffListPrivate( d, diffList ) );
+	}
+
 
 	QList< Error > Repository::recentErrors()
 	{

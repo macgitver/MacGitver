@@ -42,8 +42,15 @@ private slots:
 private:
 	void setupUi();
 
+public:
+	void setHeadLabel();
+
 public slots:
 	void repositoryChanged( const Git::Repository& repo );
+
+private slots:
+	void onHelpAbout();
+	void onToolsPreferences();
 
 public:
 	void integrateView( HeavenView* view, Heaven::Positions position );
@@ -51,15 +58,6 @@ public:
 	void addError( const QString& err );
 
 private:
-	QMenu*					mmuRepository;
-	QAction*				macRepositoryOpen;
-	QAction*				macRepositoryClose;
-	QAction*				macRepositoryCreate;
-	QAction*				macRepositoryClone;
-	QAction*				macRepositoryOptions;
-	QAction*				macRepositoryQuit;
-	QMenu*					mmuWorkingTree;
-
 	QLabel*					mLblCurrentBranch;
 	HeavenTopLevelWidget*	mTop;
 

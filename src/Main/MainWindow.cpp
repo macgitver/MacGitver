@@ -32,6 +32,8 @@
 
 #include "Views/Diff/DiffView.h"
 
+#include "ui_AboutDlg.h"
+
 MainWindow::MainWindow()
 	: mRepo()
 {
@@ -53,25 +55,6 @@ void MainWindow::setupUi()
 
 	setupActions( this );
 
-#if 0
-
-	mmuRepository			= menuBar()->addMenu( trUtf8( "&Repository" ) );
-	macRepositoryCreate		= mmuRepository->addAction( trUtf8( "&Open..." ),
-														this, SLOT(onRepositoryOpen()) );
-							  mmuRepository->addSeparator();
-	macRepositoryCreate		= mmuRepository->addAction( trUtf8( "Create &new..." ),
-														this, SLOT(onRepositoryCreate()) );
-							  mmuRepository->addSeparator();
-	macRepositoryOptions	= mmuRepository->addAction( trUtf8( "&Preferences..." ),
-														this, SLOT(onPreferences()) );
-							  mmuRepository->addSeparator();
-	macRepositoryQuit		= mmuRepository->addAction( trUtf8( "&Quit" ),
-														qApp, SLOT(quit()) );
-
-	mmuWorkingTree			= menuBar()->addMenu( trUtf8( "&Working Tree" ) );
-	//mmuWorkingTree->addAction()
-
-#endif
 	setMenuBar( mbMainMenuBar->menuBarFor( this ) );
 
 	setWindowTitle( trUtf8( "MacGitver" ) );
@@ -87,7 +70,11 @@ void MainWindow::setupUi()
 void MainWindow::repositoryChanged( const Git::Repository& repo )
 {
 	mRepo = repo;
+	setHeadLabel();
+}
 
+void MainWindow::setHeadLabel()
+{
 	if( mRepo.isValid() )
 	{
 		QString curBranch;
@@ -101,12 +88,12 @@ void MainWindow::repositoryChanged( const Git::Repository& repo )
 			}
 			else
 			{
-				curBranch = trUtf8( "HEAD detached: <b>%1</b>" ).arg( HEAD.objectId().toString() );
+				curBranch = trUtf8( "on detached HEAD at <b>%1</b>" ).arg( HEAD.objectId().toString() );
 			}
 		}
 		else
 		{
-			curBranch = trUtf8( "<b style=\"color: red;\">Repository has no HEAD?!?</b>" );
+			curBranch = trUtf8( "<b style=\"color: red;\">Repository has no HEAD (yet)?</b>" );
 		}
 
 		mLblCurrentBranch->setText( curBranch );
@@ -133,4 +120,16 @@ void MainWindow::onPreferences()
 //	new GeneralConfigPage( &d );
 //	MacGitver::self().modules()->setupConfigPages( &d );
 	d.exec();
+}
+
+void MainWindow::onHelpAbout()
+{
+	QDialog d;
+	Ui::AboutDlg u;
+	u.setupUi( &d );
+	d.exec();
+}
+
+void MainWindow::onToolsPreferences()
+{
 }

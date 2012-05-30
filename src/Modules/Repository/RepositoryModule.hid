@@ -25,6 +25,7 @@ Ui RepositoryActions {
 
 		Action RepositoryClose {
 			Text		"C&lose";
+			Enabled		false;
 			_ConnectTo	onRepositoryClose();
 		};
 

@@ -39,6 +39,10 @@ public:
 private slots:
 	void onRepositoryCreate();
 	void onRepositoryOpen();
+	void onRepositoryClose();
+
+private:
+	Git::Repository mRepo;
 };
 
 #endif

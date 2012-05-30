@@ -28,6 +28,11 @@ RepositoryModule::RepositoryModule()
 
 void RepositoryModule::repositoryChanged( Git::Repository newRepository )
 {
+	mRepo = newRepository;
+
+	bool isValid = mRepo.isValid();
+
+	actRepositoryClose->setEnabled( isValid );
 }
 
 void RepositoryModule::setupConfigPages( IConfigDialog* dialog )
@@ -47,6 +52,14 @@ void RepositoryModule::initialize()
 
 void RepositoryModule::deinitialize()
 {
+}
+
+void RepositoryModule::onRepositoryClose()
+{
+	if( mRepo.isValid() )
+	{
+		MacGitver::self().setRepository( Git::Repository() );
+	}
 }
 
 void RepositoryModule::onRepositoryCreate()

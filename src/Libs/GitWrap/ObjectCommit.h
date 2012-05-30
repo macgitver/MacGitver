@@ -66,6 +66,8 @@ namespace Git
 
 		QString message() const;
 		QString shortMessage() const;
+
+		ObjectId createBranch( const QString& name, bool force );
 	};
 
 	inline uint qHash( const ObjectCommit& c )

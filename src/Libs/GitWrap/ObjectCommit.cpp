@@ -19,6 +19,9 @@
 #include "ObjectPrivate.h"
 #include "ObjectCommit.h"
 #include "ObjectTree.h"
+#include "RepositoryPrivate.h"
+
+#include "git2/branch.h"
 
 namespace Git
 {
@@ -217,6 +220,24 @@ namespace Git
 			len++;
 
 		return QString::fromUtf8( msg, len );
+	}
+
+	ObjectId ObjectCommit::createBranch( const QString& name, bool force )
+	{
+		if( !d )
+		{
+			return ObjectId();
+		}
+
+		git_oid id;
+		int rc = git_branch_create( &id, d->repo()->mRepo, name.toUtf8().constData(),
+									d->mObj, force );
+		if( !d->handleErrors( rc ) )
+		{
+			return ObjectId();
+		}
+
+		return ObjectId::fromRaw( id.id );
 	}
 
 }

@@ -179,7 +179,7 @@ namespace Git
 
 		for( unsigned int i = 0; i < arry->count; i++ )
 		{
-			sl << QString::fromLatin1( arry->strings[ i ] );
+			sl << QString::fromUtf8( arry->strings[ i ] );
 		}
 
 		git_strarray_free( arry );
@@ -232,6 +232,34 @@ namespace Git
 		}
 
 		return slFromStrArray( &arr );
+	}
+
+	bool Repository::deleteBranch( const QString& name, bool local )
+	{
+		if( !d )
+		{
+			return false;
+		}
+
+		int rc = git_branch_delete( d->mRepo, name.toUtf8().constData(),
+									local ? GIT_BRANCH_LOCAL : GIT_BRANCH_REMOTE );
+
+		return d->handleErrors( rc );
+	}
+
+	bool Repository::renameBranch( const QString& oldName, const QString& newName, bool force )
+	{
+		if( !d )
+		{
+			return false;
+		}
+
+		int rc = git_branch_move( d->mRepo,
+								  oldName.toUtf8().constData(),
+								  newName.toUtf8().constData(),
+								  force );
+
+		return d->handleErrors( rc );
 	}
 
 	QStringList Repository::allTags()
@@ -502,4 +530,5 @@ namespace Git
 
 		return detached;
 	}
+
 }

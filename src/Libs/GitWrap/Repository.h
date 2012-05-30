@@ -63,6 +63,9 @@ namespace Git
 		QStringList branches( bool local = true, bool remote = false );
 		QStringList allTags();
 
+		bool deleteBranch( const QString& name, bool local );
+		bool renameBranch( const QString& oldName, const QString& newName, bool force = false );
+
 		Index index();
 
 		StatusHash statusHash();

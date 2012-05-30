@@ -30,4 +30,19 @@ ConfigDialog::~ConfigDialog()
 void ConfigDialog::addPage( IConfigPage* page )
 {
 	widgets->addWidget( page->widget() );
+
+	QTreeWidgetItem* groupItem = mGroupsById.value( page->groupId(), NULL );
+	if( !groupItem )
+	{
+		groupItem = new QTreeWidgetItem( widgetTree, QStringList( page->groupName() ) );
+		mGroupsById.insert( page->groupId(), groupItem );
+		groupItem->setExpanded( true );
+		groupItem->setFlags( Qt::ItemIsEnabled );
+	}
+
+	Q_ASSERT( groupItem );
+	QTreeWidgetItem* pageItem = new QTreeWidgetItem( groupItem, QStringList( page->pageName() ) );
+	QByteArray fullPageId = page->groupId() + "/" + page->pageId();
+	mPagesById.insert( fullPageId, page );
+	mPageIdsByTree.insert( pageItem, fullPageId );
 }

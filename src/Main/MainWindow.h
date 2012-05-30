@@ -36,9 +36,6 @@ public:
 	MainWindow();
 	~MainWindow();
 
-private slots:
-	void onPreferences();
-
 private:
 	void setupUi();
 

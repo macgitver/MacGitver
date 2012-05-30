@@ -28,6 +28,7 @@ public:
 	virtual ~IConfigPage();
 
 public:
+	virtual QByteArray pageId() const = 0;
 	virtual QString pageName() const = 0;
 	virtual QByteArray groupId() const = 0;
 	virtual QString groupName() const = 0;

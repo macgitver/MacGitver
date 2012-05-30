@@ -36,6 +36,11 @@ public:
 
 public:
 	void addPage( IConfigPage* page );
+
+private:
+	QHash< QByteArray, QTreeWidgetItem* >	mGroupsById;
+	QHash< QByteArray, IConfigPage* >		mPagesById;
+	QHash< QTreeWidgetItem*, QByteArray >	mPageIdsByTree;
 };
 
 #endif

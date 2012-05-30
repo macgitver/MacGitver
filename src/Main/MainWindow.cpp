@@ -24,9 +24,11 @@
 #include "GitWrap/Reference.h"
 
 #include "MacGitver/MacGitver.h"
+#include "MacGitver/Modules.h"
 
 #include "Main/MainWindow.h"
 #include "Main/ConfigDialog.h"
+#include "Main/GeneralConfigPage.h"
 
 #include "Heaven/TopLevelWidget.h"
 
@@ -114,14 +116,6 @@ QWidget* MainWindow::widget()
 	return this;
 }
 
-void MainWindow::onPreferences()
-{
-	ConfigDialog d;
-//	new GeneralConfigPage( &d );
-//	MacGitver::self().modules()->setupConfigPages( &d );
-	d.exec();
-}
-
 void MainWindow::onHelpAbout()
 {
 	QDialog d;
@@ -132,4 +126,8 @@ void MainWindow::onHelpAbout()
 
 void MainWindow::onToolsPreferences()
 {
+	ConfigDialog d;
+	d.addPage( new GeneralConfigPage( &d ) );
+	MacGitver::self().modules()->setupConfigPages( &d );
+	d.exec();
 }

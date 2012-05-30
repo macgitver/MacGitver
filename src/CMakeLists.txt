@@ -8,53 +8,57 @@ SET( QT_USE_QTMAIN				1 )
 INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES(
-    ${MAC_GITVER_SOURCE_DIR}
-    ${MAC_GITVER_BINARY_DIR}
+	${MAC_GITVER_SOURCE_DIR}
+	${MAC_GITVER_BINARY_DIR}
 
-    ${MGV_LIBS_SOURCE_DIR}
+	${MGV_LIBS_SOURCE_DIR}
 )
 
 SET( SRC_FILES
 
-    Main/main.cpp
-    Main/MacGitverMain.cpp
-    Main/MainWindow.cpp
-    Main/ConfigDialog.cpp
+	Main/main.cpp
+	Main/MacGitverMain.cpp
+	Main/MainWindow.cpp
+	Main/ConfigDialog.cpp
+	Main/GeneralConfigPage.cpp
 
-    Views/Diff/DiffFrame.cpp
-    Views/Diff/DiffRawHighlighter.cpp
-    Views/Diff/DiffSplitter.cpp
-    Views/Diff/DiffTreeFileList.cpp
-    Views/Diff/DiffView.cpp
-    Views/Diff/DiffWidget.cpp
+	Views/Diff/DiffFrame.cpp
+	Views/Diff/DiffRawHighlighter.cpp
+	Views/Diff/DiffSplitter.cpp
+	Views/Diff/DiffTreeFileList.cpp
+	Views/Diff/DiffView.cpp
+	Views/Diff/DiffWidget.cpp
 )
 
 SET( HDR_FILES
 
-    Views/Diff/DiffFrame.h
-    Views/Diff/DiffRawHighlighter.h
-    Views/Diff/DiffSplitter.h
-    Views/Diff/DiffTreeFileList.h
-    Views/Diff/DiffView.h
-    Views/Diff/DiffWidget.h
+	Views/Diff/DiffFrame.h
+	Views/Diff/DiffRawHighlighter.h
+	Views/Diff/DiffSplitter.h
+	Views/Diff/DiffTreeFileList.h
+	Views/Diff/DiffView.h
+	Views/Diff/DiffWidget.h
 
-    Main/MacGitverMain.h
-    Main/MainWindow.h
-    Main/ConfigDialog.h
+	Main/MacGitverMain.h
+	Main/MainWindow.h
+	Main/ConfigDialog.h
+	Main/GeneralConfigPage.h
 )
 
 SET( UI_FILES
-    Main/ConfigDialog.ui
+	Main/ConfigDialog.ui
+	Main/GeneralConfigPage.ui
+	Main/AboutDlg.ui
 )
 
 SET( RCC_FILES
 
-    Main/MacGitver.rcc
+	Main/MacGitver.rcc
 )
 
 SET( HID_FILES
 
-    Main/MainWindowActions.hid
+	Main/MainWindowActions.hid
 
 )
 
@@ -65,24 +69,24 @@ QT4_ADD_RESOURCES( QRC_FILES ${RCC_FILES} )
 HIC( HIC_FILES ${HID_FILES} )
 
 ADD_EXECUTABLE(
-    MacGitver WIN32
+	MacGitver WIN32
 
-    ${SRC_FILES}
-    ${HDR_FILES}
-    ${MOC_FILES}
-    ${UIC_FILES}
-    ${QRC_FILES}
+	${SRC_FILES}
+	${HDR_FILES}
+	${MOC_FILES}
+	${UIC_FILES}
+	${QRC_FILES}
  #   ${HID_FILES}
-    ${HIC_FILES}
+	${HIC_FILES}
 )
 
 TARGET_LINK_LIBRARIES(
-    MacGitver
+	MacGitver
 
-    ${QT_LIBRARIES}
-    GitWrap
-    Heaven
-    DiffModel
-    Interfaces
-    MacGitverCore
+	${QT_LIBRARIES}
+	GitWrap
+	Heaven
+	DiffModel
+	Interfaces
+	MacGitverCore
 )

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>GeneralConfigPage</class>
- <widget class="ConfigPage" name="GeneralConfigPage">
+ <widget class="QWidget" name="GeneralConfigPage">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,19 +23,28 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Interface level</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QComboBox" name="comboBox"/>
+          </item>
+          <item>
+           <widget class="QTextBrowser" name="textBrowser"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>ConfigPage</class>
-   <extends>QWidget</extends>
-   <header>Libs/Core/ConfigPage.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

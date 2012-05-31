@@ -126,8 +126,8 @@ namespace Heaven
 		a->setStatusTip( mStatusTip );
 		a->setToolTip( mToolTip );
 		a->setEnabled( mEnabled );
-		a->setChecked( mChecked );
 		a->setCheckable( mCheckable );
+		a->setChecked( mChecked );
 
 		connect( a, SIGNAL(destroyed()), this, SLOT(qactionDestroyed()) );
 		connect( a, SIGNAL(triggered()), this, SLOT(qactionTriggered()) );

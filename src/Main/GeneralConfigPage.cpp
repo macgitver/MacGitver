@@ -24,6 +24,7 @@ GeneralConfigPage::GeneralConfigPage( IConfigDialog* dlg )
 	, ui( new Ui::GeneralConfigPage )
 {
 	ui->setupUi( this );
+	ui->fontSourceCode->setFontFilters( QFontComboBox::MonospacedFonts );
 }
 
 GeneralConfigPage::~GeneralConfigPage()

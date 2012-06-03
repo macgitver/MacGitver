@@ -88,5 +88,6 @@ TARGET_LINK_LIBRARIES(
 	Heaven
 	DiffModel
 	Interfaces
+	Widgets
 	MacGitverCore
 )

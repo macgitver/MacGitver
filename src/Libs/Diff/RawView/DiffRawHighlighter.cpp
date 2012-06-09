@@ -14,7 +14,7 @@
  *
  */
 
-#include "Views/Diff/DiffRawHighlighter.h"
+#include "Diff/RawView/DiffRawHighlighter.h"
 
 
 DiffRawHighlighter::DiffRawHighlighter( QTextEdit* editor )
@@ -51,5 +51,21 @@ void DiffRawHighlighter::highlightBlock( const QString& text )
 		return;
 	}
 
-	setFormat( 0, text.length(), c );
+	int i = text.length();
+	while( i && text[ --i ].isSpace() )
+		/* */ ;
+
+	i++;
+	if( i != text.length() )
+	{
+		setFormat( 0, i, c );
+		QTextCharFormat tcf;
+		tcf.setBackground( Qt::red );
+		tcf.setForeground( Qt::white );
+		setFormat( i, text.length() - i, tcf );
+	}
+	else
+	{
+		setFormat( 0, text.length(), c );
+	}
 }

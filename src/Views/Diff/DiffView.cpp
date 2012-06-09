@@ -26,7 +26,7 @@
 #include "Views/Diff/DiffView.h"
 #include "Views/Diff/DiffSplitter.h"
 #include "Views/Diff/DiffFrame.h"
-#include "Views/Diff/DiffRawHighlighter.h"
+#include "Diff/RawView/DiffRawView.h"
 
 DiffView::DiffView()
 	: mPatch( NULL )
@@ -47,7 +47,7 @@ DiffView::DiffView()
 	s1->addWidget( s2 );
 
 	mDiffStack = new QStackedWidget;
-	mRawDiffView = new QTextBrowser;
+	mRawDiffView = new DiffRawView;
 	mDiffStack->addWidget( mDiffFrame );
 	mDiffStack->addWidget( mRawDiffView );
 	mDiffStack->setCurrentIndex( 1 );
@@ -61,8 +61,6 @@ DiffView::DiffView()
 	s2->addWidget( mDetails );
 
 	l->addWidget( s1 );
-
-	new DiffRawHighlighter( mRawDiffView );
 
 	setPatch( Patch::readPatch( "/work/test.diff" ) );
 }

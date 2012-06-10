@@ -13,3 +13,29 @@
  * not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef MGV_REPOSITORY_CORE_IFACE_H
+#define MGV_REPOSITORY_CORE_IFACE_H
+
+#include "Interfaces/InterfaceApi.h"
+
+class QString;
+
+namespace Git
+{
+	class ObjectId;
+}
+
+class INTERFACES_API IRepository
+{
+public:
+	IRepository();
+	virtual ~IRepository();
+
+public:
+	virtual bool createBranch( const Git::ObjectId& baseOID,
+							   const QString& branchName,
+							   bool force ) = 0;
+};
+
+#endif

@@ -13,3 +13,13 @@
  * not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include "IRepositoryCore.h"
+
+IRepository::IRepository()
+{
+}
+
+IRepository::~IRepository()
+{
+}

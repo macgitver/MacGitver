@@ -16,7 +16,7 @@
 
 Ui RepositoryActions {
 
-	Container RepositoryAC {
+	Container RepositoryMenuAC {
 
 		Action RepositoryOpen {
 			Text		"&Open...";
@@ -40,6 +40,14 @@ Ui RepositoryActions {
 			Text		"C&reate...";
 			_ConnectTo	onRepositoryCreate();
 		};
+
+	};
+
+	Container RepositoryToolBarAC {
+
+		Action		RepositoryOpen;
+		Action		RepositoryClone;
+		Action		RepositoryClose;
 
 	};
 

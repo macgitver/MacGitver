@@ -72,9 +72,8 @@ Ui MainWindowActions {
 	};
 
 	ToolBar MainBar {
-	};
-
-	Container ac {
+		MergePlace		RepositoryToolBarMP;
+		Separator;
 	};
 
 };

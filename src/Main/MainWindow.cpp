@@ -67,6 +67,8 @@ void MainWindow::setupUi()
 	setCentralWidget( mTop );
 
 	mTop->addView( new DiffView, Heaven::Central );
+
+	addToolBar( tbMainBar->toolBarFor( this ) );
 }
 
 void MainWindow::repositoryChanged( const Git::Repository& repo )

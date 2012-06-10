@@ -47,7 +47,8 @@ Module::Types RepositoryModule::providesModuleTypes() const
 void RepositoryModule::initialize()
 {
 	setupActions( this );
-	acRepositoryAC->mergeInto( "RepositoryMenuMP" );
+	acRepositoryMenuAC->mergeInto( "RepositoryMenuMP" );
+	acRepositoryToolBarAC->mergeInto( "RepositoryToolBarMP" );
 }
 
 void RepositoryModule::deinitialize()

@@ -21,7 +21,9 @@
 
 #include "GitWrap/Repository.h"
 
-class QListWidget;
+class QListView;
+
+class RefsListModel;
 
 class RefsView : public HeavenView
 {
@@ -34,7 +36,8 @@ public:
 
 private:
 	Git::Repository		mRepo;
-	QListWidget*		mListWidget;
+	QListView*			mListView;
+	RefsListModel*		mModel;
 };
 
 #endif

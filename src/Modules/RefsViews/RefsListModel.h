@@ -14,40 +14,38 @@
  *
  */
 
-#include <QListView>
-#include <QVBoxLayout>
+#ifndef MGV_REFS_LIST_MODEL_H
+#define MGV_REFS_LIST_MODEL_H
 
-#include "RefsListModel.h"
-#include "RefsView.h"
+#include <QAbstractListModel>
 
-RefsView::RefsView()
+class RefsListModel : public QAbstractListModel
 {
-	mListView = new QListView();
-	mListView->setFrameStyle( QFrame::NoFrame );
+	Q_OBJECT
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
-	l->addWidget( mListView );
-
-	setLayout( l );
-
-	setViewName( trUtf8( "Refs" ) );
-
-	mModel = new RefsListModel( this );
-	mListView->setModel( mModel );
-}
-
-void RefsView::repositoryChanged( Git::Repository repo )
-{
-	mRepo = repo;
-
-	if( mRepo.isValid() )
+	struct RefInfo
 	{
-		mModel->syncTo( mRepo.allReferences() );
-	}
-	else
-	{
-		mModel->clear();
-	}
-}
+		QString				mRefName;
+	};
+
+public:
+	RefsListModel( QObject* parent = 0 );
+	~RefsListModel();
+
+public:
+	int rowCount( const QModelIndex& parent ) const;
+	QVariant data( const QModelIndex& index, int role ) const;
+
+public:
+	void clear();
+	void updateRef( const QString& refName );
+	void addRef( const QString& refName );
+	void removeRef( const QString& refName );
+	void syncTo( const QStringList& refs );
+
+private:
+	QList< RefInfo* >			mOrderedData;
+	QHash< QString, RefInfo* >	mData;
+};
+
+#endif

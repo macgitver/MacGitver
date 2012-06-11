@@ -18,6 +18,7 @@
 				<item> Menu </item>
 				<item> MergePlace </item>
 				<item> Separator </item>
+				<item> WidgetAction </item>
 			</list>
 			<list name="bool">
 				<item> true </item>

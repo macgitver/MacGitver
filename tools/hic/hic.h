@@ -18,7 +18,8 @@ enum ObjectTypes
 	HACO_ToolBar,
 	HACO_Separator,
 	HACO_Container,
-	HACO_MergePlace
+	HACO_MergePlace,
+	HACO_WidgetAction
 };
 
 enum HIDTokenId
@@ -34,6 +35,7 @@ enum HIDTokenId
 	Token_Container,
 	Token_MergePlace,
 	Token_Content,
+	Token_WidgetAction,
 
 	Token_string,
 	Token_translateString,

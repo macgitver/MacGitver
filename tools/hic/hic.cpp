@@ -131,6 +131,7 @@ HeavenInterfaceCompiler::HeavenInterfaceCompiler( int argc , char** argv )
 		T(Separator);
 		T(Container);
 		T(MergePlace);
+		T(WidgetAction);
 		T2(Sep,Separator);
 		T(Content);
 		T(true);
@@ -149,13 +150,14 @@ bool HeavenInterfaceCompiler::parseNewObject()
 	ObjectTypes t;
 	switch( tokens[ tokenPos ].id )
 	{
-	case Token_Ui:			t = HACO_Ui; break;
-	case Token_Action:		t = HACO_Action; break;
-	case Token_Container:	t = HACO_Container; break;
-	case Token_Menu:		t = HACO_Menu; break;
-	case Token_MenuBar:		t = HACO_MenuBar; break;
-	case Token_MergePlace:	t = HACO_MergePlace; break;
-	case Token_ToolBar:		t = HACO_ToolBar; break;
+	case Token_Ui:				t = HACO_Ui;			break;
+	case Token_Action:			t = HACO_Action;		break;
+	case Token_Container:		t = HACO_Container;		break;
+	case Token_Menu:			t = HACO_Menu;			break;
+	case Token_MenuBar:			t = HACO_MenuBar;		break;
+	case Token_MergePlace:		t = HACO_MergePlace;	break;
+	case Token_ToolBar:			t = HACO_ToolBar;		break;
+	case Token_WidgetAction:	t = HACO_WidgetAction;	break;
 	default:
 		error( "Expected new object" );
 		return false;
@@ -272,6 +274,7 @@ bool HeavenInterfaceCompiler::parseObjectContent()
 		case Token_MenuBar:
 		case Token_MergePlace:
 		case Token_ToolBar:
+		case Token_WidgetAction:
 			if( !parseNewObject() )
 			{
 				return false;
@@ -645,6 +648,7 @@ bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
 			 "class QObject;\n"
 			 "\n"
 			 "#include \"Heaven/Action.h\"\n"
+			 "#include \"Heaven/WidgetAction.h\"\n"
 			 "#include \"Heaven/Menu.h\"\n"
 			 "#include \"Heaven/MenuBar.h\"\n"
 			 "#include \"Heaven/ToolBar.h\"\n"
@@ -670,6 +674,11 @@ bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
 		foreach( HICObject* object, uiObject->content( HACO_Action ) )
 		{
 			tsOut << "\tHeaven::Action*          act" << object->name() << ";\n";
+		}
+
+		foreach( HICObject* object, uiObject->content( HACO_WidgetAction ) )
+		{
+			tsOut << "\tHeaven::WidgetAction*    wac" << object->name() << ";\n";
 		}
 
 		foreach( HICObject* object, uiObject->content( HACO_MergePlace ) )
@@ -754,6 +763,13 @@ bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& bas
 			tsOut << "\n";
 		}
 
+		foreach( HICObject* actionObject, uiObject->content( HACO_WidgetAction ) )
+		{
+			tsOut << "\twac" << actionObject->name() << " = new Heaven::WidgetAction( parent );\n";
+			spitSetProperties( tsOut, actionObject, "\t", "wac" );
+			tsOut << "\n";
+		}
+
 		tsOut << "\t//Setup Mergeplaces\n\n";
 		foreach( HICObject* mpObject, uiObject->content( HACO_MergePlace ) )
 		{
@@ -801,6 +817,7 @@ bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& bas
 			case HACO_MergePlace:
 			case HACO_Ui:
 			case HACO_Separator:
+			case HACO_WidgetAction:
 				continue;
 
 			case HACO_Menu:
@@ -830,6 +847,10 @@ bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& bas
 
 				case HACO_Action:
 					tsOut << prefix << object->name() << "->add( act" << child->name() << " );\n";
+					break;
+
+				case HACO_WidgetAction:
+					tsOut << prefix << object->name() << "->add( wac" << child->name() << " );\n";
 					break;
 
 				case HACO_Container:

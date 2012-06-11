@@ -27,6 +27,7 @@ SET( SRC_FILES
 	UiObject.cpp
 	UiContainer.cpp
 	Separator.cpp
+	WidgetAction.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -43,6 +44,7 @@ SET( PUB_HDR_FILES
 	ToolBar.h
 	ActionContainer.h
 	MergePlace.h
+	WidgetAction.h
 )
 
 SET( PRI_HDR_FILES
@@ -59,6 +61,7 @@ SET( PRI_HDR_FILES
 	UiContainer.h
 	UiObject.h
 	UiManager.h
+	WidgetActionPrivate.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

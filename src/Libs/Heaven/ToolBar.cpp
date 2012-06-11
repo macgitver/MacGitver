@@ -24,6 +24,8 @@
 #include "Heaven/MergePlacePrivate.h"
 #include "Heaven/Separator.h"
 
+#include "Heaven/MergesManager.h"
+
 namespace Heaven
 {
 
@@ -131,10 +133,19 @@ namespace Heaven
 				case MergePlaceType:
 					mergePlacePriv = qobject_cast< MergePlacePrivate* >( uio );
 					Q_ASSERT( mergePlacePriv );
+					MergesManager::self()->emerge( mergePlacePriv->mName, myBar );
 					break;
 
-				default:
+				case MenuBarType:
+				case ToolBarType:
+					// Cannot merge Bars into Toolbars
 					Q_ASSERT( false );
+					break;
+
+				//case WidgetActionType:
+				//	// not implemented
+				//	Q_ASSERT( false );
+				//	break;
 				}
 			}
 		}

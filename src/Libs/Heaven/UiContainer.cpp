@@ -120,7 +120,9 @@ namespace Heaven
 				menu->addSeparator();
 				break;
 
-			default:
+			case MenuBarType:
+			case ToolBarType:
+				// cannot merge Bars into menus
 				Q_ASSERT( false );
 				break;
 			}
@@ -161,7 +163,9 @@ namespace Heaven
 				menuBar->addSeparator();
 				break;
 
-			default:
+			case MenuBarType:
+			case ToolBarType:
+				// cannot merge Bars into menus
 				Q_ASSERT( false );
 				break;
 			}
@@ -172,8 +176,44 @@ namespace Heaven
 
 	bool UiContainer::mergeInto( QToolBar* toolBar )
 	{
-		Q_UNUSED( toolBar );
-		return false;
+		MenuPrivate* menuPriv;
+		ActionPrivate* actionPriv;
+//		ActionContainerPrivate* containerPriv;
+//		MergePlacePrivate* mergePlacePriv;
+
+		foreach( UiObject* uio, allObjects() )
+		{
+			QAction* action;
+
+			switch( uio->type() )
+			{
+			case MenuType:
+				menuPriv = qobject_cast< MenuPrivate* >( uio );
+				Q_ASSERT( menuPriv );
+				action = menuPriv->getOrCreateQMenu( toolBar )->menuAction();
+				toolBar->addAction( action );
+				break;
+
+			case ActionType:
+				actionPriv = qobject_cast< ActionPrivate* >( uio );
+				Q_ASSERT( actionPriv );
+				action = actionPriv->getOrCreateQAction( toolBar );
+				toolBar->addAction( action );
+				break;
+
+			case SeparatorType:
+				toolBar->addSeparator();
+				break;
+
+			case MenuBarType:
+			case ToolBarType:
+				// cannot merge bars into bars
+				Q_ASSERT( false );
+				break;
+			}
+
+		}
+		return true;
 	}
 
 }

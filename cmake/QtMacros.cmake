@@ -96,3 +96,40 @@ MACRO (QT4_UIC outfiles )
 	ENDFOREACH( it )
 
 ENDMACRO( QT4_UIC )
+
+
+MACRO(QT4_RCC infiles outfiles )
+  QT4_EXTRACT_OPTIONS(rcc_files rcc_options ${ARGN})
+
+  FOREACH (it ${rcc_files})
+	GET_FILENAME_COMPONENT(outfilename ${it} NAME_WE)
+	GET_FILENAME_COMPONENT(infile ${it} ABSOLUTE)
+	GET_FILENAME_COMPONENT(rc_path ${infile} PATH)
+	SET(outfile ${CMAKE_CURRENT_BINARY_DIR}/qrc_${outfilename}.cxx)
+	#  parse file for dependencies
+	#  all files are absolute paths or relative to the location of the qrc file
+	FILE(READ "${infile}" _RC_FILE_CONTENTS)
+	STRING(REGEX MATCHALL "<file[^<]+" _RC_FILES "${_RC_FILE_CONTENTS}")
+	SET(_RC_DEPENDS)
+	FOREACH(_RC_FILE ${_RC_FILES})
+	  STRING(REGEX REPLACE "^<file[^>]*>" "" _RC_FILE "${_RC_FILE}")
+	  IF(NOT IS_ABSOLUTE "${_RC_FILE}")
+		SET(_RC_FILE "${rc_path}/${_RC_FILE}")
+	  ENDIF(NOT IS_ABSOLUTE "${_RC_FILE}")
+	  LIST( APPEND ${infiles} ${_RC_FILE} )
+	  SET(_RC_DEPENDS ${_RC_DEPENDS} "${_RC_FILE}")
+	ENDFOREACH(_RC_FILE)
+	# Since this cmake macro is doing the dependency scanning for these files,
+	# let's make a configured file and add it as a dependency so cmake is run
+	# again when dependencies need to be recomputed.
+	QT4_MAKE_OUTPUT_FILE("${infile}" "" "qrc.depends" out_depends)
+	CONFIGURE_FILE("${infile}" "${out_depends}" COPY_ONLY)
+	ADD_CUSTOM_COMMAND(OUTPUT ${outfile}
+	  COMMAND ${QT_RCC_EXECUTABLE}
+	  ARGS ${rcc_options} -name ${outfilename} -o ${outfile} ${infile}
+	  MAIN_DEPENDENCY ${infile}
+	  DEPENDS ${_RC_DEPENDS} "${out_depends}" VERBATIM)
+	SET(${outfiles} ${${outfiles}} ${outfile})
+  ENDFOREACH (it)
+
+ENDMACRO(QT4_RCC)

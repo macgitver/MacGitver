@@ -21,10 +21,12 @@
 
 class QWidget;
 
+class IConfigDialog;
+
 class INTERFACES_API IConfigPage
 {
 public:
-	IConfigPage();
+	IConfigPage( IConfigDialog* dlg );
 	virtual ~IConfigPage();
 
 public:
@@ -34,6 +36,12 @@ public:
 	virtual QString groupName() const = 0;
 
 	virtual QWidget* widget() = 0;
+
+protected:
+	void setModified( bool value = true );
+
+private:
+	IConfigDialog*			mDialog;
 };
 
 #endif

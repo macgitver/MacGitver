@@ -28,6 +28,7 @@ public:
 	virtual ~IConfigDialog();
 
 public:
+	virtual void setModified( IConfigPage* page, bool value ) = 0;
 	virtual void addPage( IConfigPage* page ) = 0;
 };
 

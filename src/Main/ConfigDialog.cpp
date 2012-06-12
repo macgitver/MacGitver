@@ -14,6 +14,8 @@
  *
  */
 
+#include <QPushButton>
+
 #include "Interfaces/IConfigPage.h"
 
 #include "ConfigDialog.h"
@@ -45,4 +47,19 @@ void ConfigDialog::addPage( IConfigPage* page )
 	QByteArray fullPageId = page->groupId() + "/" + page->pageId();
 	mPagesById.insert( fullPageId, page );
 	mPageIdsByTree.insert( pageItem, fullPageId );
+}
+
+void ConfigDialog::setModified( IConfigPage* page, bool value )
+{
+	Q_ASSERT( page );
+	buttonBox->button( QDialogButtonBox::Apply )->setEnabled( value );
+	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( value );
+}
+
+void ConfigDialog::exec()
+{
+	buttonBox->button( QDialogButtonBox::Apply )->setEnabled( false );
+	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( false );
+
+	QDialog::exec();
 }

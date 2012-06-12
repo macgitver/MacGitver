@@ -35,6 +35,10 @@ public:
 	~ConfigDialog();
 
 public:
+	void exec();
+
+public:
+	void setModified( IConfigPage* page, bool value );
 	void addPage( IConfigPage* page );
 
 private:

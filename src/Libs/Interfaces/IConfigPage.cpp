@@ -15,11 +15,20 @@
  */
 
 #include "Interfaces/IConfigPage.h"
+#include "Interfaces/IConfigDialog.h"
 
-IConfigPage::IConfigPage()
+IConfigPage::IConfigPage( IConfigDialog* dlg )
+	: mDialog( dlg )
 {
+	Q_ASSERT( dlg );
 }
 
 IConfigPage::~IConfigPage()
 {
 }
+
+void IConfigPage::setModified( bool value )
+{
+	mDialog->setModified( this, value );
+}
+

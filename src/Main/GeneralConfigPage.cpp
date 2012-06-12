@@ -14,17 +14,30 @@
  *
  */
 
+#include "MacGitver/MacGitver.h"
+#include "MacGitver/UserLevelDefinition.h"
+
 #include "GeneralConfigPage.h"
 
 #include "ui_GeneralConfigPage.h"
 
 GeneralConfigPage::GeneralConfigPage( IConfigDialog* dlg )
 	: QWidget()
-	, IConfigPage()
+	, IConfigPage( dlg )
 	, ui( new Ui::GeneralConfigPage )
 {
 	ui->setupUi( this );
 	ui->fontSourceCode->setFontFilters( QFontComboBox::MonospacedFonts );
+
+	foreach( UserLevelDefinition* lvl, MacGitver::self().levels() )
+	{
+		ui->cboUserLevel->addItem( lvl->name(), lvl->precedence() );
+	}
+
+	connect( ui->cboUserLevel, SIGNAL(currentIndexChanged(int)),
+			 this, SLOT(onUserLevelChanged(int)) );
+
+	onUserLevelChanged( 0 );
 }
 
 GeneralConfigPage::~GeneralConfigPage()
@@ -38,6 +51,27 @@ void GeneralConfigPage::init()
 
 void GeneralConfigPage::apply()
 {
+}
+
+void GeneralConfigPage::onUserLevelChanged( int index )
+{
+	if( index == -1 )
+	{
+		return;
+	}
+
+	setModified();
+
+	int data = ui->cboUserLevel->itemData( index ).toInt();
+
+	foreach( UserLevelDefinition* lvl, MacGitver::self().levels() )
+	{
+		if( lvl->precedence() == data )
+		{
+			ui->txtUserLevelDescription->setHtml( lvl->description() );
+			return;
+		}
+	}
 }
 
 QByteArray GeneralConfigPage::pageId() const

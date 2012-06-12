@@ -20,6 +20,8 @@
 
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"
+#include "MacGitver/UserLevelDefinition.h"
+
 #include "Interfaces/IMainWindow.h"
 
 MacGitver::MacGitver( int argc, char** argv )
@@ -43,6 +45,9 @@ MacGitver::~MacGitver()
 	setRepository( Git::Repository() );
 
 	delete mModules;
+
+	qDeleteAll( mLevels );
+	mLevels.clear();
 
 	sSelf = NULL;
 }
@@ -78,6 +83,25 @@ void MacGitver::setMainWindow( IMainWindow* mainWindow )
 	mMainWindow = mainWindow;
 
 	mModules->initialize();
+}
+
+void MacGitver::addUserLevel( UserLevelDefinition* level )
+{
+	int i = 0;
+	while( i < mLevels.count() )
+	{
+		if( mLevels[ i ]->precedence() < level->precedence() )
+			i++;
+		else
+			break;
+	}
+
+	mLevels.insert( i, level );
+}
+
+QList< UserLevelDefinition* > MacGitver::levels() const
+{
+	return mLevels;
 }
 
 MacGitver* MacGitver::sSelf = NULL;

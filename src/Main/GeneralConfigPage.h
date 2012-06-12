@@ -46,6 +46,9 @@ public:
 
 	QWidget* widget();
 
+private slots:
+	void onUserLevelChanged( int index );
+
 private:
 	Ui::GeneralConfigPage*		ui;
 };

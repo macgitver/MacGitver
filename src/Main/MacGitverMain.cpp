@@ -22,6 +22,7 @@
 #include <QDomDocument>
 
 #include "MacGitver/Modules.h"
+#include "MacGitver/UserLevelDefinition.h"
 
 #include "MacGitverMain.h"
 #include "MainWindow.h"
@@ -70,18 +71,18 @@ void MacGitverMain::loadLevels()
 	while( e2.isElement() )
 	{
 		Q_ASSERT( e2.tagName() == "level" );
-		LevelInfo li;
-		li.mAppLevel = e2.attribute( "applevel" ).toInt();
-		li.mName = e2.attribute( "name" );
-		li.mPrecedence = e2.attribute( "precedence" ).toInt();
+		UserLevelDefinition* li = new UserLevelDefinition(
+									  e2.attribute( "name" ),
+									  e2.attribute( "applevel" ).toInt(),
+									  e2.attribute( "precedence" ).toInt() );
 
 		QString foo;
 		QTextStream ts( &foo );
 		e2.firstChildElement( "desc" ).save( ts, 0 );
 
-		li.mDescription = foo.replace( "<desc", "<html" ).simplified();
+		li->setDescription( foo.replace( "<desc", "<html" ).simplified() );
 
-		mLevels.append( li );
+		addUserLevel( li );
 
 		e2 = e2.nextSiblingElement();
 	}

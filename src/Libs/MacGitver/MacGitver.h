@@ -25,6 +25,7 @@
 
 class Module;
 class Modules;
+class UserLevelDefinition;
 class IMainWindow;
 
 class MGV_CORE_API MacGitver : public QApplication
@@ -45,6 +46,7 @@ public:
 	IMainWindow* mainWindow();
 
 	void integrateView( HeavenView* view, Heaven::Positions place );
+	QList< UserLevelDefinition* > levels() const;
 
 signals:
 	void repositoryChanged( const Git::Repository& repo );
@@ -52,12 +54,15 @@ signals:
 protected:
 	void setMainWindow( IMainWindow* mainWindow );
 
+	void addUserLevel( UserLevelDefinition* level );
+
 private:
 	static MacGitver*	sSelf;
 
 	Modules*			mModules;
 	IMainWindow*		mMainWindow;
 	Git::Repository		mRepository;
+	QList< UserLevelDefinition* >	mLevels;
 };
 
 #endif

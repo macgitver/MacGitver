@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabInterfaceLevel">
       <attribute name="title">
@@ -28,16 +28,10 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QComboBox" name="comboBox">
-         <item>
-          <property name="text">
-           <string>Novice</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="QComboBox" name="cboUserLevel"/>
        </item>
        <item>
-        <widget class="QTextBrowser" name="textBrowser"/>
+        <widget class="QTextBrowser" name="txtUserLevelDescription"/>
        </item>
       </layout>
      </widget>

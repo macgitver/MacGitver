@@ -15,6 +15,7 @@
  */
 
 #include <QDateTime>
+#include <QHeaderView>
 #include <QFileIconProvider>
 #include <QFileInfo>
 
@@ -110,6 +111,8 @@ IndexTree::IndexTree()
 	head->setData( 1, Qt::DisplayRole, trUtf8( "Size" ) );
 	head->setData( 2, Qt::DisplayRole, trUtf8( "M-Time" ) );
 	head->setData( 3, Qt::DisplayRole, trUtf8( "Owner" ) );
+
+	header()->setResizeMode( 0, QHeaderView::ResizeToContents );
 }
 
 void IndexTree::setRepository( const Git::Repository& repo )

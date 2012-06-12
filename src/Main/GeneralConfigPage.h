@@ -19,8 +19,8 @@
 
 #include <QWidget>
 
-#include "Libs/Interfaces/IConfigPage.h"
-#include "Libs/Interfaces/IConfigDialog.h"
+#include "Interfaces/IConfigPage.h"
+#include "Interfaces/IConfigDialog.h"
 
 namespace Ui
 {

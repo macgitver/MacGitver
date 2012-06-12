@@ -20,8 +20,8 @@
 
 #include "MacGitver/Modules.h"
 
-#include "Main/MacGitverMain.h"
-#include "Main/MainWindow.h"
+#include "MacGitverMain.h"
+#include "MainWindow.h"
 
 MacGitverMain::MacGitverMain( int argc, char** argv )
 	: MacGitver( argc, argv )

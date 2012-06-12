@@ -26,9 +26,9 @@
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"
 
-#include "Main/MainWindow.h"
-#include "Main/ConfigDialog.h"
-#include "Main/GeneralConfigPage.h"
+#include "MainWindow.h"
+#include "ConfigDialog.h"
+#include "GeneralConfigPage.h"
 
 #include "Heaven/TopLevelWidget.h"
 

@@ -14,7 +14,7 @@
  *
  */
 
-#include "Main/MacGitverMain.h"
+#include "MacGitverMain.h"
 
 int main( int c, char** v )
 {

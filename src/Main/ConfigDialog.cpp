@@ -16,7 +16,7 @@
 
 #include "Interfaces/IConfigPage.h"
 
-#include "Main/ConfigDialog.h"
+#include "ConfigDialog.h"
 
 ConfigDialog::ConfigDialog()
 {

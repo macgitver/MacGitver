@@ -14,7 +14,7 @@
  *
  */
 
-#include "Main/GeneralConfigPage.h"
+#include "GeneralConfigPage.h"
 
 #include "ui_GeneralConfigPage.h"
 

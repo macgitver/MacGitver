@@ -21,11 +21,14 @@
 
 #include "hic_RepositoryModule.h"
 
+class RepositoryCore;
+
 class RepositoryModule : public Module, public RepositoryActions
 {
 	Q_OBJECT
 public:
 	RepositoryModule();
+	~RepositoryModule();
 
 public:
 	void repositoryChanged( Git::Repository newRepository );
@@ -43,6 +46,7 @@ private slots:
 
 private:
 	Git::Repository mRepo;
+	RepositoryCore*	mCore;
 };
 
 #endif

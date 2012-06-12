@@ -20,15 +20,25 @@
 #include "MacGitver/MacGitver.h"
 
 #include "RepositoryModule.h"
+#include "RepositoryCore.h"
 #include "CreateRepositoryDlg.h"
 
 RepositoryModule::RepositoryModule()
 {
+	mCore = new RepositoryCore;
+}
+
+RepositoryModule::~RepositoryModule()
+{
+	delete mCore;
 }
 
 void RepositoryModule::repositoryChanged( Git::Repository newRepository )
 {
 	mRepo = newRepository;
+
+	Q_ASSERT( mCore );
+	mCore->setRepository( newRepository );
 
 	bool isValid = mRepo.isValid();
 

@@ -32,7 +32,7 @@
 
 #include "Heaven/TopLevelWidget.h"
 
-#include "Views/Diff/DiffView.h"
+#include "Diff/View/DiffView.h"
 
 #include "ui_AboutDlg.h"
 

@@ -19,7 +19,7 @@
 #include <QFontMetrics>
 
 #include "Diff/Model/Diff.h"
-#include "Views/Diff/DiffWidget.h"
+#include "DiffWidget.h"
 
 DiffWidget::DiffWidget()
 {

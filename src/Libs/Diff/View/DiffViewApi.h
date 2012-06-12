@@ -14,46 +14,15 @@
  *
  */
 
-#ifndef DIFF_VIEW_H
-#define DIFF_VIEW_H
+#ifndef MGV_DIFF_VIEW_API_H
+#define MGV_DIFF_VIEW_API_H
 
-#include <QWidget>
+#include <qglobal.h>
 
-#include "Heaven/View.h"
-
-class QTreeWidget;
-class QStackedWidget;
-class QTextBrowser;
-class QScrollBar;
-
-class Patch;
-class DiffWidget;
-class DiffTreeFileList;
-class DiffFrame;
-
-class DiffView : public HeavenView
-{
-	Q_OBJECT
-public:
-	DiffView();
-	~DiffView();
-
-public:
-	void setPatch( Patch* patch );
-
-private:
-	void clearTree();
-	void fillTree();
-
-private:
-	Patch*				mPatch;
-	DiffTreeFileList*	mTree;
-	QTreeWidget*		mDetails;
-	QStackedWidget*		mDiffStack;
-	QTextBrowser*		mRawDiffView;
-	DiffFrame*			mDiffFrame;
-	QScrollBar*			mScrollV;
-	QScrollBar*			mScrollH;
-};
+#ifdef DiffView_EXPORTS
+#	define DIFF_VIEW_API Q_DECL_EXPORT
+#else
+#	define DIFF_VIEW_API Q_DECL_IMPORT
+#endif
 
 #endif

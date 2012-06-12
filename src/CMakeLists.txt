@@ -21,21 +21,9 @@ SET( SRC_FILES
 	Main/MainWindow.cpp
 	Main/ConfigDialog.cpp
 	Main/GeneralConfigPage.cpp
-
-	Views/Diff/DiffFrame.cpp
-	Views/Diff/DiffSplitter.cpp
-	Views/Diff/DiffTreeFileList.cpp
-	Views/Diff/DiffView.cpp
-	Views/Diff/DiffWidget.cpp
 )
 
 SET( HDR_FILES
-
-	Views/Diff/DiffFrame.h
-	Views/Diff/DiffSplitter.h
-	Views/Diff/DiffTreeFileList.h
-	Views/Diff/DiffView.h
-	Views/Diff/DiffWidget.h
 
 	Main/MacGitverMain.h
 	Main/MainWindow.h
@@ -86,6 +74,7 @@ TARGET_LINK_LIBRARIES(
 	Heaven
 	DiffModel
 	DiffRawView
+	DiffView
 	Interfaces
 	Widgets
 	MacGitverCore

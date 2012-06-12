@@ -20,9 +20,9 @@
 #include "Diff/Model/Diff.h"
 #include "Diff/Model/Patch.h"
 
-#include "Views/Diff/DiffFrame.h"
-#include "Views/Diff/DiffWidget.h"
-#include "Views/Diff/DiffSplitter.h"
+#include "DiffFrame.h"
+#include "DiffWidget.h"
+#include "DiffSplitter.h"
 
 DiffFrame::DiffFrame()
 	: QFrame()

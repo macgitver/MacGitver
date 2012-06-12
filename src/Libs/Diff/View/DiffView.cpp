@@ -21,11 +21,11 @@
 #include "Diff/Model/Diff.h"
 #include "Diff/Model/Patch.h"
 
-#include "Views/Diff/DiffWidget.h"
-#include "Views/Diff/DiffTreeFileList.h"
-#include "Views/Diff/DiffView.h"
-#include "Views/Diff/DiffSplitter.h"
-#include "Views/Diff/DiffFrame.h"
+#include "DiffWidget.h"
+#include "DiffTreeFileList.h"
+#include "DiffView.h"
+#include "DiffSplitter.h"
+#include "DiffFrame.h"
 #include "Diff/RawView/DiffRawView.h"
 
 DiffView::DiffView()

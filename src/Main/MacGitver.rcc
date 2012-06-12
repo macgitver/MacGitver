@@ -1,5 +1,6 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
-     <file>MacGitver.qss</file>
+	 <file>MacGitver.qss</file>
+	 <file>Xml/levels.xml</file>
  </qresource>
  </RCC>

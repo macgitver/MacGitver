@@ -14,9 +14,12 @@
  *
  */
 
+#include <QDebug>
 #include <QFileInfo>
 #include <QDir>
 #include <QPluginLoader>
+#include <QTextStream>
+#include <QDomDocument>
 
 #include "MacGitver/Modules.h"
 
@@ -30,8 +33,7 @@ MacGitverMain::MacGitverMain( int argc, char** argv )
 
 void MacGitverMain::loadModules()
 {
-	QFileInfo fi( arguments().at( 0 ) );
-	QDir binDir = fi.absoluteDir();
+	QDir binDir( applicationDirPath() );
 
 	QStringList modFiles;
 	modFiles << "Mod*.mgv";
@@ -51,14 +53,54 @@ void MacGitverMain::loadModules()
 	}
 }
 
-int MacGitverMain::exec()
+void MacGitverMain::loadLevels()
 {
+	QFile f( ":/Xml/levels.xml" );
+	if( !f.open( QFile::ReadOnly ) )
+	{
+		qFatal( "Cannot load levels.xml" );
+		return;
+	}
+
+	QDomDocument doc;
+	doc.setContent( &f );
+
+	QDomElement e1 = doc.documentElement();
+	QDomElement e2 = e1.firstChildElement();
+	while( e2.isElement() )
+	{
+		Q_ASSERT( e2.tagName() == "level" );
+		LevelInfo li;
+		li.mAppLevel = e2.attribute( "applevel" ).toInt();
+		li.mName = e2.attribute( "name" );
+		li.mPrecedence = e2.attribute( "precedence" ).toInt();
+
+		QString foo;
+		QTextStream ts( &foo );
+		e2.firstChildElement( "desc" ).save( ts, 0 );
+
+		li.mDescription = foo.replace( "<desc", "<html" ).simplified();
+
+		mLevels.append( li );
+
+		e2 = e2.nextSiblingElement();
+	}
+}
+
+void MacGitverMain::boot()
+{
+	qDebug() << arguments();
+	loadLevels();
 	loadModules();
 
 	MainWindow* mw = new MainWindow;
 	setMainWindow( mw );
 
-	QMetaObject::invokeMethod( mw, "show", Qt::QueuedConnection );
+	mw->show();
+}
 
+int MacGitverMain::exec()
+{
+	QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
 	return MacGitver::exec();
 }

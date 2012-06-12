@@ -2,5 +2,6 @@
  <qresource>
 	 <file>MacGitver.qss</file>
 	 <file>Xml/levels.xml</file>
+	 <file>Xml/Novice.hstate</file>
  </qresource>
  </RCC>

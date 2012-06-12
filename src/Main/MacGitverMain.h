@@ -19,16 +19,33 @@
 
 #include "MacGitver/MacGitver.h"
 
+struct LevelInfo
+{
+	QString						mName;
+	int							mAppLevel;
+	int							mPrecedence;
+	QString						mDescription;
+	QHash< QString, QString >	mHeavenPresets;
+};
+
 class MacGitverMain : public MacGitver
 {
+	Q_OBJECT
 public:
 	MacGitverMain( int argc, char** argv );
 
 private:
 	void loadModules();
+	void loadLevels();
 
 public:
 	int exec();
+
+private slots:
+	void boot();
+
+private:
+	QVector< LevelInfo >		mLevels;
 };
 
 #endif

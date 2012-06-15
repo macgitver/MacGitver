@@ -44,7 +44,7 @@ WorkingTreeFileNode::WorkingTreeFileNode( const QString& path, QTreeWidgetItem* 
 
 bool WorkingTreeFileNode::refilter( IndexTree* tree )
 {
-	if( mState & tree->filters() )
+	if( mState == 0 || ( mState & tree->filters() ) )
 	{
 		item()->setHidden( false );
 		return true;
@@ -167,6 +167,17 @@ void IndexTree::update()
 
 		else if( st & Git::StatusWorkingTreeDeleted )
 			curState |= Missing;
+#if 0
+
+		else if( st & Git::StatusIndexModified )
+			curState |= Changed;
+
+		else if( st & Git::StatusIndexNew )
+			curState |= Untracked;
+
+		else if( st & Git::StatusIndexDeleted )
+			curState |= Missing;
+#endif
 
 		QString dir, file;
 		int i = it.key().lastIndexOf( L'/' );
@@ -242,6 +253,9 @@ void IndexTree::update()
 
 		else if( curState & Ignored )
 			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::gray );
+
+		else
+			fNode->item()->setData( 0, Qt::ForegroundRole, QColor( 0xFFCCFF ) );
 
 		++it;
 	}

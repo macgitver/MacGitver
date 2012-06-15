@@ -1,0 +1,39 @@
+
+PROJECT( MGV_MOD_WELCOME )
+
+INCLUDE( ${QT_USE_FILE} )
+
+INCLUDE_DIRECTORIES(
+	${MGV_LIBS_SOURCE_DIR}
+	${MGV_MOD_WELCOME_SOURCE_DIR}
+	${MGV_MOD_WELCOME_BINARY_DIR}
+)
+
+SET( SRC_FILES
+
+	WelcomeView.cpp
+	WelcomeModule.cpp
+)
+
+SET( HDR_FILES
+
+	WelcomeView.h
+	WelcomeModule.h
+)
+
+SET( HID_FILES
+
+)
+
+QT4_MOC( MOC_FILES ${HDR_FILES} )
+HIC( HIC_FILES ${HID_FILES} )
+
+ADD_MGV_MODULE(
+	Welcome
+
+	${SRC_FILES}
+	${HDR_FILES}
+	${MOC_FILES}
+	${HIC_FILES}
+)
+

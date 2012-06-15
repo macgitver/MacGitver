@@ -292,6 +292,9 @@ namespace Git
 
 	static int statusHashCB( const char* fn, unsigned int status, void* rawSH )
 	{
+		#if 0
+		qDebug( "%s - %s", qPrintable( QString::number( status, 2 ) ), fn );
+		#endif
 		StatusHash* sh = (StatusHash*) rawSH;
 		sh->insert( QString::fromUtf8( fn ), FileStati( status ) );
 		return GIT_OK;

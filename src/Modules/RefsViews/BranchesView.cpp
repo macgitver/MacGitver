@@ -71,7 +71,7 @@ void BranchesView::rereadBranches()
 
 		for( int i = 0; i < sl.count(); i++ )
 		{
-			new QListWidgetItem( sl[ i ].mid( 5 ), mListWidget );
+			new QListWidgetItem( sl[ i ], mListWidget );
 		}
 
 	}

@@ -16,6 +16,7 @@
 
 #include "Git_p.h"
 #include "ChangeListConsumer.h"
+#include "PatchConsumer.h"
 #include "DiffList.h"
 #include "Repository.h"
 #include "RepositoryPrivate.h"
@@ -86,13 +87,103 @@ namespace Git
 		return d->handleErrors( rc );
 	}
 
+	static int patchFileCallBack( void* cb_data, git_diff_delta* delta, float )
+	{
+		PatchConsumer* pc = (PatchConsumer*) cb_data;
+
+		if( pc->startFile( QString::fromUtf8( delta->old_file.path ),
+						   QString::fromUtf8( delta->new_file.path ),
+						   PatchConsumer::Type( delta->status ),
+						   delta->similarity,
+						   delta->binary ) )
+		{
+			return GIT_ERROR;
+		}
+
+		return GIT_OK;
+	}
+
+	static int patchHunkCallBack( void* cb_data, git_diff_delta* delta, git_diff_range* range,
+								  const char* header, size_t header_len )
+	{
+		PatchConsumer* pc = (PatchConsumer*) cb_data;
+
+		if( pc->startHunk( range->new_start, range->new_lines,
+						   range->old_start, range->old_lines,
+						   header ? QString::fromUtf8( header, header_len ) : QString() ) )
+		{
+			return GIT_ERROR;
+		}
+
+		return GIT_OK;
+	}
+
+	static int patchDataCallBack( void* cb_data, git_diff_delta* delta, git_diff_range* range,
+								  char line_origin, const char *content, size_t content_len )
+	{
+		PatchConsumer* pc = (PatchConsumer*) cb_data;
+
+		QString ct;
+		if( content && content_len )
+		{
+			if( content[ content_len - 1 ] == '\n' )
+				--content_len;
+
+			ct = QString::fromUtf8( content, content_len );
+		}
+
+		switch( line_origin )
+		{
+		case GIT_DIFF_LINE_CONTEXT:
+			if( pc->appendContext( ct ) )
+			{
+				return GIT_ERROR;
+			}
+			break;
+
+		case GIT_DIFF_LINE_ADDITION:
+			if( pc->appendAddition( ct ) )
+			{
+				return GIT_ERROR;
+			}
+			break;
+
+		case GIT_DIFF_LINE_DELETION:
+			if( pc->appendDeletion( ct ) )
+			{
+				return GIT_ERROR;
+			}
+			break;
+
+		default:
+			qDebug( "Foo: t=%i", int(line_origin) );
+
+		}
+
+		return GIT_OK;
+	}
+
 	bool DiffList::consumePatch( PatchConsumer* consumer ) const
 	{
+		if( !d || !d->mDiffList )
+		{
+			return false;
+		}
+
 		if( !consumer )
 		{
 			return false;
 		}
-		return false;
+
+		int rc = git_diff_foreach( d->mDiffList, consumer, patchFileCallBack, patchHunkCallBack,
+								   patchDataCallBack );
+
+		if( !d->handleErrors( rc ) )
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	static int changeListCallBack( void* cb_data, git_diff_delta* delta, float )
@@ -105,7 +196,7 @@ namespace Git
 						   delta->similarity,
 						   delta->binary ) )
 		{
-			return -1;
+			return GIT_ERROR;
 		}
 
 		return GIT_OK;
@@ -113,6 +204,11 @@ namespace Git
 
 	bool DiffList::consumeChangeList( ChangeListConsumer* consumer ) const
 	{
+		if( !d || !d->mDiffList )
+		{
+			return false;
+		}
+
 		if( !consumer )
 		{
 			return false;

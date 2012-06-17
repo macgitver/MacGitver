@@ -70,6 +70,7 @@ TARGET_LINK_LIBRARIES(
 
 	${QT_LIBRARIES}
 	GitWrap
+	Config
 	Heaven
 	DiffModel
 	DiffRawView

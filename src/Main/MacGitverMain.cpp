@@ -22,7 +22,8 @@
 #include <QDomDocument>
 
 #include "MacGitver/Modules.h"
-#include "MacGitver/UserLevelDefinition.h"
+#include "Config/Config.h"
+#include "Config/UserLevelDefinition.h"
 
 #include "MacGitverMain.h"
 #include "MainWindow.h"
@@ -56,36 +57,7 @@ void MacGitverMain::loadModules()
 
 void MacGitverMain::loadLevels()
 {
-	QFile f( ":/Xml/levels.xml" );
-	if( !f.open( QFile::ReadOnly ) )
-	{
-		qFatal( "Cannot load levels.xml" );
-		return;
-	}
-
-	QDomDocument doc;
-	doc.setContent( &f );
-
-	QDomElement e1 = doc.documentElement();
-	QDomElement e2 = e1.firstChildElement();
-	while( e2.isElement() )
-	{
-		Q_ASSERT( e2.tagName() == "level" );
-		UserLevelDefinition* li = new UserLevelDefinition(
-									  e2.attribute( "name" ),
-									  e2.attribute( "applevel" ).toInt(),
-									  e2.attribute( "precedence" ).toInt() );
-
-		QString foo;
-		QTextStream ts( &foo );
-		e2.firstChildElement( "desc" ).save( ts, 0 );
-
-		li->setDescription( foo.replace( "<desc", "<html" ).simplified() );
-
-		addUserLevel( li );
-
-		e2 = e2.nextSiblingElement();
-	}
+	Config::self().loadLevels( ":/Xml/levels.xml" );
 }
 
 void MacGitverMain::boot()

@@ -17,6 +17,7 @@ SET( SRC_FILES
 	DiffHunk.cpp
 	Patch.cpp
 	PatchFile.cpp
+	GitPatchConsumer.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -26,6 +27,7 @@ SET( PUB_HDR_FILES
 	DiffHunk.h
 	Patch.h
 	PatchFile.h
+	GitPatchConsumer.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
@@ -44,4 +46,5 @@ TARGET_LINK_LIBRARIES(
 	DiffModel
 
 	${QT_LIBRARIES}
+	GitWrap
 )

@@ -67,10 +67,9 @@ DiffView::DiffView()
 
 DiffView::~DiffView()
 {
-	delete mPatch;
 }
 
-void DiffView::setPatch( Patch* patch )
+void DiffView::setPatch( Patch::Ptr patch )
 {
 	clearTree();
 
@@ -78,7 +77,6 @@ void DiffView::setPatch( Patch* patch )
 
 	mRawDiffView->setText( patch ? patch->toString() : QString() );
 
-	delete mPatch;
 	mPatch = patch;
 }
 

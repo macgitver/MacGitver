@@ -27,7 +27,6 @@ PatchFile::PatchFile( const QStringList& pathNames )
 
 PatchFile::~PatchFile()
 {
-	qDeleteAll( mHunks );
 }
 
 QStringList PatchFile::pathNames() const
@@ -35,12 +34,12 @@ QStringList PatchFile::pathNames() const
 	return mPathNames;
 }
 
-QList< DifferenceHunk* > PatchFile::allHunks() const
+DifferenceHunk::List PatchFile::allHunks() const
 {
 	return mHunks;
 }
 
-void PatchFile::addHunk( DifferenceHunk* hunk )
+void PatchFile::addHunk( DifferenceHunk::Ptr hunk )
 {
 	mHunks.append( hunk );
 }

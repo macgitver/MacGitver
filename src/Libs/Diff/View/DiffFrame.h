@@ -21,7 +21,7 @@
 
 class QScrollBar;
 
-class Patch;
+#include "Diff/Model/Patch.h"
 
 class DiffSplitter;
 class DiffWidget;
@@ -33,7 +33,7 @@ public:
 	DiffFrame();
 
 public:
-	void setPatch( Patch* patch );
+	void setPatch( Patch::Ptr patch );
 
 private:
 	DiffSplitter*			mSplitter;
@@ -42,7 +42,7 @@ private:
 	QList< DiffWidget* >	mWidgets;
 
 
-	Patch*					mPatch;
+	Patch::Ptr				mPatch;
 };
 
 #endif

@@ -31,7 +31,6 @@ Patch::Patch()
 
 Patch::~Patch()
 {
-	qDeleteAll( mPaths );
 }
 
 void Patch::setNumSides( int sides )
@@ -45,12 +44,12 @@ int Patch::numSides() const
 }
 
 
-void Patch::addPath( PatchFile* diff )
+void Patch::addPath( PatchFile::Ptr diff )
 {
 	mPaths.append( diff );
 }
 
-QList< PatchFile* > Patch::allPaths() const
+PatchFile::List Patch::allPaths() const
 {
 	return mPaths;
 }
@@ -60,17 +59,17 @@ int Patch::numPaths() const
 	return mPaths.count();
 }
 
-PatchFile* Patch::pathAt( int index )
+PatchFile::Ptr Patch::pathAt( int index )
 {
 	return mPaths[ index ];
 }
 
-Patch* Patch::readPatch( const QString& fileName )
+Patch::Ptr Patch::readPatch( const QString& fileName )
 {
 	QFile f( fileName );
 	if( !f.open( QFile::ReadOnly ) )
 	{
-		return NULL;
+		return Patch::Ptr();
 	}
 
 	return readPatch( &f );
@@ -89,9 +88,9 @@ static inline QByteArray nextLine( QIODevice* dev )
 	}
 }
 
-Patch* Patch::readPatch( QIODevice* dev )
+Patch::Ptr Patch::readPatch( QIODevice* dev )
 {
-	Patch* patch = new Patch;
+	Patch::Ptr patch( new Patch );
 	patch->setNumSides( 2 );
 
 	QByteArray line = nextLine( dev );
@@ -99,8 +98,7 @@ Patch* Patch::readPatch( QIODevice* dev )
 	{
 		if( !line.startsWith( "diff " ) )
 		{
-			delete patch;
-			return NULL;
+			return Patch::Ptr();
 		}
 
 		QList< QByteArray > diffParts = line.split( ' ' );
@@ -116,7 +114,7 @@ Patch* Patch::readPatch( QIODevice* dev )
 		}
 		Q_ASSERT( pathNames.length() == 2 );
 
-		PatchFile* diff = new PatchFile( pathNames );
+		PatchFile::Ptr diff( new PatchFile( pathNames ) );
 		patch->addPath( diff );
 		for( int i = 1; i < diffParts.count(); i++ )
 		{
@@ -140,8 +138,7 @@ Patch* Patch::readPatch( QIODevice* dev )
 
 		if( dev->atEnd() )
 		{
-			delete patch;
-			return NULL;
+			return Patch::Ptr();
 		}
 
 		if( line.startsWith( "diff " ) )
@@ -152,8 +149,7 @@ Patch* Patch::readPatch( QIODevice* dev )
 		line = nextLine( dev );
 		if( !line.startsWith( "+++" ) )
 		{
-			delete patch;
-			return NULL;
+			return Patch::Ptr();
 		}
 
 		line = nextLine( dev );
@@ -166,8 +162,7 @@ Patch* Patch::readPatch( QIODevice* dev )
 
 			if( !line.startsWith( "@@" ) )
 			{
-				delete patch;
-				return NULL;
+				return Patch::Ptr();
 			}
 
 			QList< QByteArray > hunkParts = line.split( ' ' );
@@ -182,7 +177,7 @@ Patch* Patch::readPatch( QIODevice* dev )
 			int rightStart = lineParts[ 0 ].toInt();
 			int rightLength = lineParts[ 1 ].toInt();
 
-			DifferenceHunk* hunk = new DifferenceHunk();
+			DifferenceHunk::Ptr hunk( new DifferenceHunk() );
 			diff->addHunk( hunk );
 
 			if( hunkParts.count() > 4 )
@@ -199,7 +194,7 @@ Patch* Patch::readPatch( QIODevice* dev )
 			{
 				if( line[ 0 ] == ' ' )
 				{
-					Difference* differ = new Difference( 2, Difference::Context );
+					Difference::Ptr differ( new Difference( 2, Difference::Context ) );
 					hunk->addDifference( differ );
 					differ->sideLines( 0 )->setFirstLine( leftStart );
 					differ->sideLines( 1 )->setFirstLine( rightStart );
@@ -220,7 +215,7 @@ Patch* Patch::readPatch( QIODevice* dev )
 				}
 				else
 				{
-					Difference* differ = new Difference( 2, Difference::Change );
+					Difference::Ptr differ( new Difference( 2, Difference::Change ) );
 					hunk->addDifference( differ );
 					differ->sideLines( 0 )->setFirstLine( leftStart );
 					differ->sideLines( 1 )->setFirstLine( rightStart );

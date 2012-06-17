@@ -25,15 +25,14 @@ DifferenceHunk::DifferenceHunk()
 
 DifferenceHunk::~DifferenceHunk()
 {
-	qDeleteAll( mDifferences );
 }
 
-void DifferenceHunk::addDifference( Difference* difference )
+void DifferenceHunk::addDifference( Difference::Ptr difference )
 {
 	mDifferences.append( difference );
 }
 
-QList< Difference* > DifferenceHunk::differences() const
+Difference::List DifferenceHunk::differences() const
 {
 	return mDifferences;
 }

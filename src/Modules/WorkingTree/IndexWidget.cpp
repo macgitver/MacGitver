@@ -67,11 +67,7 @@ void IndexWidget::repositoryChanged( Git::Repository repo )
 		GitPatchConsumer p;
 		dl.consumePatch( &p );
 
-		Patch* patch = p.patch();
-		QString s = patch->toString();
-		delete patch;
-
-		mRawDiff->setText( s );
+		mRawDiff->setText( p.patch()->toString() );
 	}
 }
 

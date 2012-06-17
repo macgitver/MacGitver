@@ -20,6 +20,7 @@
 #include <QList>
 #include <QString>
 #include <QStringList>
+#include <QSharedData>
 
 class QTextStream;
 
@@ -47,8 +48,12 @@ private:
 	QStringList			mLines;
 };
 
-class DIFF_MODEL_API Difference
+class DIFF_MODEL_API Difference : public QSharedData
 {
+public:
+	typedef QExplicitlySharedDataPointer< Difference > Ptr;
+	typedef QList< Ptr > List;
+
 public:
 	enum Type
 	{

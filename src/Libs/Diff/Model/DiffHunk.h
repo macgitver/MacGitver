@@ -18,22 +18,25 @@
 #define MGV_DIFF_HUNK_H
 
 #include <QList>
+#include <QSharedData>
 
 class QTextStream;
 
-#include "Diff/Model/DiffModelApi.h"
+#include "Diff/Model/Diff.h"
 
-class Difference;
-
-class DIFF_MODEL_API DifferenceHunk
+class DIFF_MODEL_API DifferenceHunk : public QSharedData
 {
+public:
+	typedef QExplicitlySharedDataPointer< DifferenceHunk > Ptr;
+	typedef QList< Ptr > List;
+
 public:
 	DifferenceHunk();
 	~DifferenceHunk();
 
 public:
-	void addDifference( Difference* difference );
-	QList< Difference* > differences() const;
+	void addDifference( Difference::Ptr difference );
+	Difference::List differences() const;
 
 	int numLines( int side ) const;
 	int firstLine( int side ) const;
@@ -44,8 +47,8 @@ public:
 	QString hunkName() const;
 
 private:
-	QString					mHunkName;
-	QList< Difference* >	mDifferences;
+	QString				mHunkName;
+	Difference::List	mDifferences;
 };
 
 #endif

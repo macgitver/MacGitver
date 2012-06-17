@@ -28,7 +28,8 @@ class QStackedWidget;
 class QTextBrowser;
 class QScrollBar;
 
-class Patch;
+#include "Diff/Model/Patch.h"
+
 class DiffWidget;
 class DiffTreeFileList;
 class DiffFrame;
@@ -41,14 +42,14 @@ public:
 	~DiffView();
 
 public:
-	void setPatch( Patch* patch );
+	void setPatch( Patch::Ptr patch );
 
 private:
 	void clearTree();
 	void fillTree();
 
 private:
-	Patch*				mPatch;
+	Patch::Ptr			mPatch;
 	DiffTreeFileList*	mTree;
 	QTreeWidget*		mDetails;
 	QStackedWidget*		mDiffStack;

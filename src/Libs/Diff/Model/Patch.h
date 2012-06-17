@@ -18,39 +18,43 @@
 #define MGV_DIFF_PATCH_H
 
 #include <QList>
+#include <QSharedData>
+
 class QString;
 class QIODevice;
 class QTextStream;
 
 #include "Diff/Model/DiffModelApi.h"
+#include "Diff/Model/PatchFile.h"
 
-class PatchFile;
-
-class DIFF_MODEL_API Patch
+class DIFF_MODEL_API Patch : public QSharedData
 {
+public:
+	typedef QExplicitlySharedDataPointer< Patch > Ptr;
+
 public:
 	Patch();
 	~Patch();
 
 public:
-	void addPath( PatchFile* diff );
-	QList< PatchFile* > allPaths() const;
+	void addPath( PatchFile::Ptr diff );
+	PatchFile::List allPaths() const;
 	int numPaths() const;
-	PatchFile* pathAt( int index );
+	PatchFile::Ptr pathAt( int index );
 
 	void setNumSides( int sides );
 	int numSides() const;
 
-	static Patch* readPatch( const QString& fileName );
-	static Patch* readPatch( QIODevice* device );
+	static Patch::Ptr readPatch( const QString& fileName );
+	static Patch::Ptr readPatch( QIODevice* device );
 
 	void exportRaw( QTextStream& stream );
 
 	QString toString();
 
 private:
-	int					mNumSides;
-	QList< PatchFile* >	mPaths;
+	int				mNumSides;
+	PatchFile::List	mPaths;
 };
 
 #endif

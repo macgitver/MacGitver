@@ -41,7 +41,7 @@ DiffFrame::DiffFrame()
 	setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 }
 
-void DiffFrame::setPatch( Patch* patch )
+void DiffFrame::setPatch( Patch::Ptr patch )
 {
 	foreach( DiffWidget* disp, mWidgets )
 	{

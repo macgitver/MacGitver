@@ -21,8 +21,8 @@
 
 #include "GitWrap/PatchConsumer.h"
 
-class Patch;
-class PatchFile;
+#include "Diff/Model/Patch.h"
+#include "Diff/Model/PatchFile.h"
 class DifferenceHunk;
 class Difference;
 
@@ -44,19 +44,18 @@ private:
 	virtual bool appendDeletion( const QString& content );
 
 public:
-	Patch* patch();
+	Patch::Ptr patch() const;
 
 private:
-	Patch*	mPatch;
-	PatchFile*		mCurFile;
-	DifferenceHunk*	mCurHunk;
-	Difference*		mCurDiff;
+	Patch::Ptr			mPatch;
+	PatchFile::Ptr		mCurFile;
+	DifferenceHunk::Ptr	mCurHunk;
+	Difference::Ptr		mCurDiff;
 
-	int				mRemainsOld, mCurOld;
-	int				mRemainsNew, mCurNew;
-	enum {
-		None, Context, Add, Del, Change
-	}				mCurType;
+	int					mRemainsOld, mCurOld;
+	int					mRemainsNew, mCurNew;
+	enum { None, Context, Add, Del, Change }
+						mCurType;
 };
 
 #endif

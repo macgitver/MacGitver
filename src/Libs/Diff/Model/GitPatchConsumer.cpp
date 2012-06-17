@@ -24,8 +24,8 @@
 #define DBG 0
 
 GitPatchConsumer::GitPatchConsumer()
+	: mPatch( new Patch )
 {
-	mPatch = new Patch;
 }
 
 GitPatchConsumer::~GitPatchConsumer()
@@ -153,7 +153,7 @@ bool GitPatchConsumer::appendDeletion( const QString& content )
 	return false;
 }
 
-Patch* GitPatchConsumer::patch()
+Patch::Ptr GitPatchConsumer::patch() const
 {
 	return mPatch;
 }

@@ -19,7 +19,7 @@
 
 #include <QWidget>
 
-class QToolBar;
+class QSplitter;
 
 #include "GitWrap/Git.h"
 #include "GitWrap/Repository.h"
@@ -27,6 +27,7 @@ class QToolBar;
 #include "Heaven/View.h"
 
 class IndexTree;
+class DiffRawView;
 
 #include "hic_WorkingTreeActions.h"
 
@@ -48,7 +49,9 @@ private slots:
 	void onShowUnchanged( bool enabled );
 
 private:
+	QSplitter*			mSplitter;
 	IndexTree*			mTree;
+	DiffRawView*		mRawDiff;
 	Git::Repository		mRepo;
 
 	bool				mChangingFilters;

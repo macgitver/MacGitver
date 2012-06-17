@@ -16,9 +16,15 @@
 
 #include <QAction>
 #include <QToolBar>
+#include <QSplitter>
 #include <QVBoxLayout>
 
 #include "GitWrap/Index.h"
+#include "GitWrap/DiffList.h"
+
+#include "Diff/Model/GitPatchConsumer.h"
+#include "Diff/Model/Patch.h"
+#include "Diff/RawView/DiffRawView.h"
 
 #include "IndexWidget.h"
 #include "IndexTree.h"
@@ -38,7 +44,13 @@ IndexWidget::IndexWidget()
 
 	l->addWidget( tbWorkingTree->toolBarFor( this ) );
 
-	l->addWidget( mTree );
+	mRawDiff = new DiffRawView;
+
+	mSplitter = new QSplitter( Qt::Horizontal );
+	mSplitter->addWidget( mTree );
+	mSplitter->addWidget( mRawDiff );
+
+	l->addWidget( mSplitter );
 	setLayout( l );
 
 	setViewName( trUtf8( "Working tree" ) );
@@ -48,6 +60,19 @@ void IndexWidget::repositoryChanged( Git::Repository repo )
 {
 	mRepo = repo;
 	mTree->setRepository( repo );
+
+	if( mRepo.isValid() )
+	{
+		Git::DiffList dl = mRepo.diffIndexToWorkingDir();
+		GitPatchConsumer p;
+		dl.consumePatch( &p );
+
+		Patch* patch = p.patch();
+		QString s = patch->toString();
+		delete patch;
+
+		mRawDiff->setText( s );
+	}
 }
 
 void IndexWidget::onShowAll( bool enabled )

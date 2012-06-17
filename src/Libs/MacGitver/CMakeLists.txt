@@ -14,7 +14,6 @@ SET( SRC_FILES
 	MacGitver.cpp
 	Module.cpp
 	Modules.cpp
-	UserLevelDefinition.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -23,7 +22,6 @@ SET( PUB_HDR_FILES
 	MacGitver.h
 	Module.h
 	Modules.h
-	UserLevelDefinition.h
 )
 
 SET( PRI_HDR_FILES

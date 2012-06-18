@@ -20,6 +20,7 @@
 
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"
+#include "MacGitver/FSWatcher.h"
 
 #include "Interfaces/IMainWindow.h"
 
@@ -32,6 +33,8 @@ MacGitver::MacGitver( int argc, char** argv )
 	setOrganizationName( "SaCu" );
 	setApplicationName( "MacGitver" );
 	setStyle( new QPlastiqueStyle );
+
+	mWatcher = new FSWatcher( this );
 
 	mModules = new Modules( this );
 
@@ -52,6 +55,11 @@ Modules* MacGitver::modules()
 	return mModules;
 }
 
+FSWatcher* MacGitver::watcher()
+{
+	return mWatcher;
+}
+
 Git::Repository MacGitver::repository() const
 {
 	return mRepository;
@@ -61,6 +69,7 @@ void MacGitver::setRepository( const Git::Repository& repo )
 {
 	mRepository = repo;
 
+	mWatcher->setRepository( repo );
 	mModules->repositoryChanged( repo );
 
 	emit repositoryChanged( mRepository );

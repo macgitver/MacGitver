@@ -14,55 +14,48 @@
  *
  */
 
-#ifndef MGV_MACGITVER_H
-#define MGV_MACGITVER_H
+#ifndef MGV_FSWATCHER_H
+#define MGV_FSWATCHER_H
 
-#include <QApplication>
+#include <QObject>
 
 #include "GitWrap/Repository.h"
-#include "Heaven/View.h"
+
 #include "MacGitver/MacGitverApi.h"
 
-class Module;
-class Modules;
-class FSWatcher;
-class UserLevelDefinition;
-class IMainWindow;
+class QFileSystemWatcher;
 
+class FSWatcherPrivate;
 
-class MGV_CORE_API MacGitver : public QApplication
+class MGV_CORE_API FSWatcher : public QObject
 {
 	Q_OBJECT
-public:
-	MacGitver( int argc, char **argv );
-	~MacGitver();
+private:
+	friend class FSWatcherPrivate;
 
 public:
-	static MacGitver& self();
+	FSWatcher( QObject* parent );
+	~FSWatcher();
 
 public:
-	void setRepository( const Git::Repository &repo );
-	Git::Repository repository() const;
-	Modules* modules();
-
-	IMainWindow* mainWindow();
-
-	void integrateView( HeavenView* view, Heaven::Positions place );
+	void setRepository( Git::Repository repo );
 
 signals:
-	void repositoryChanged( const Git::Repository& repo );
+	void configChanged();
+	void refsChanged();
+	void refLogChanged();
+	void headChanged();
+	void workingTreeChanged();
+	void descriptionChanged();
+	void indexChanged();
+	void modeChanged();
 
-protected:
-	void setMainWindow( IMainWindow* mainWindow );
+private slots:
+	void directoryChanged( const QString& path );
+	void spitOutChanges();
 
 private:
-	static MacGitver*	sSelf;
-
-	Modules*			mModules;
-	IMainWindow*		mMainWindow;
-	FSWatcher*			mWatcher;
-	Git::Repository		mRepository;
+	FSWatcherPrivate* d;
 };
 
 #endif
-

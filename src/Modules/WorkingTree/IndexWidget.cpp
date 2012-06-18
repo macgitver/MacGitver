@@ -73,115 +73,73 @@ void IndexWidget::repositoryChanged( Git::Repository repo )
 
 void IndexWidget::onShowAll( bool enabled )
 {
-	if( !mChangingFilters )
-	{
-		mChangingFilters = true;
+	mTree->setFilter( enabled ? IndexTree::All : IndexTree::None );
 
-		mTree->setFilter( enabled ? IndexTree::All : IndexTree::None );
-
-		actShowIgnored->setChecked( enabled );
-		actShowMissing->setChecked( enabled);
-		actShowModified->setChecked( enabled );
-		actShowUnchanged->setChecked( enabled );
-		actShowUntracked->setChecked( enabled );
-
-		mChangingFilters = false;
-	}
+	actShowIgnored->setChecked( enabled );
+	actShowMissing->setChecked( enabled);
+	actShowModified->setChecked( enabled );
+	actShowUnchanged->setChecked( enabled );
+	actShowUntracked->setChecked( enabled );
 }
 
 void IndexWidget::onShowModified( bool enabled )
 {
-	if( !mChangingFilters )
-	{
-		mChangingFilters = true;
+	IndexTree::TreeFilters f = mTree->filters();
+	if( enabled )
+		f |= IndexTree::Changed;
+	else
+		f &= ~IndexTree::Changed;
+	mTree->setFilter( f );
 
-		IndexTree::TreeFilters f = mTree->filters();
-		if( enabled )
-			f |= IndexTree::Changed;
-		else
-			f &= ~IndexTree::Changed;
-		mTree->setFilter( f );
-
-		actShowAll->setChecked( f == IndexTree::All );
-
-		mChangingFilters = false;
-	}
+	actShowAll->setChecked( f == IndexTree::All );
 }
 
 void IndexWidget::onShowMissing( bool enabled )
 {
-	if( !mChangingFilters )
-	{
-		mChangingFilters = true;
+	IndexTree::TreeFilters f = mTree->filters();
+	if( enabled )
+		f |= IndexTree::Missing;
+	else
+		f &= ~IndexTree::Missing;
+	mTree->setFilter( f );
 
-		IndexTree::TreeFilters f = mTree->filters();
-		if( enabled )
-			f |= IndexTree::Missing;
-		else
-			f &= ~IndexTree::Missing;
-		mTree->setFilter( f );
-
-		actShowAll->setChecked( f == IndexTree::All );
-
-		mChangingFilters = false;
-	}
-
+	actShowAll->setChecked( f == IndexTree::All );
 }
 
 void IndexWidget::onShowIgnored( bool enabled )
 {
-	if( !mChangingFilters )
-	{
-		mChangingFilters = true;
 
-		IndexTree::TreeFilters f = mTree->filters();
-		if( enabled )
-			f |= IndexTree::Ignored;
-		else
-			f &= ~IndexTree::Ignored;
-		mTree->setFilter( f );
+	IndexTree::TreeFilters f = mTree->filters();
+	if( enabled )
+		f |= IndexTree::Ignored;
+	else
+		f &= ~IndexTree::Ignored;
+	mTree->setFilter( f );
 
-		actShowAll->setChecked( f == IndexTree::All );
-
-		mChangingFilters = false;
-	}
+	actShowAll->setChecked( f == IndexTree::All );
 }
 
 void IndexWidget::onShowUntracked( bool enabled )
 {
-	if( !mChangingFilters )
-	{
-		mChangingFilters = true;
+	IndexTree::TreeFilters f = mTree->filters();
+	if( enabled )
+		f |= IndexTree::Untracked;
+	else
+		f &= ~IndexTree::Untracked;
+	mTree->setFilter( f );
 
-		IndexTree::TreeFilters f = mTree->filters();
-		if( enabled )
-			f |= IndexTree::Untracked;
-		else
-			f &= ~IndexTree::Untracked;
-		mTree->setFilter( f );
-
-		actShowAll->setChecked( f == IndexTree::All );
-
-		mChangingFilters = false;
-	}
+	actShowAll->setChecked( f == IndexTree::All );
 }
 
 void IndexWidget::onShowUnchanged( bool enabled )
 {
-	if( !mChangingFilters )
-	{
-		mChangingFilters = true;
+	IndexTree::TreeFilters f = mTree->filters();
+	if( enabled )
+		f |= IndexTree::Unchanged;
+	else
+		f &= ~IndexTree::Unchanged;
+	mTree->setFilter( f );
 
-		IndexTree::TreeFilters f = mTree->filters();
-		if( enabled )
-			f |= IndexTree::Unchanged;
-		else
-			f &= ~IndexTree::Unchanged;
-		mTree->setFilter( f );
-
-		actShowAll->setChecked( f == IndexTree::All );
-
-		mChangingFilters = false;
-	}
+	actShowAll->setChecked( f == IndexTree::All );
 }
 

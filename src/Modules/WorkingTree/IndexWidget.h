@@ -26,8 +26,13 @@ class QSplitter;
 
 #include "Heaven/View.h"
 
-class IndexTree;
 class DiffRawView;
+
+class IndexTree;
+class WorkingTreeModel;
+class WorkingTreeItemView;
+
+#include "WorkingTreeFilters.h"
 
 #include "hic_WorkingTreeActions.h"
 
@@ -47,14 +52,18 @@ private slots:
 	void onShowIgnored( bool enabled );
 	void onShowUntracked( bool enabled );
 	void onShowUnchanged( bool enabled );
+	void workingTreeChanged();
 
 private:
-	QSplitter*			mSplitter;
-	IndexTree*			mTree;
-	DiffRawView*		mRawDiff;
-	Git::Repository		mRepo;
+	void setTreeFilter( WorkingTreeFilters filters );
 
-	bool				mChangingFilters;
+private:
+	QSplitter*				mSplitter;
+	IndexTree*				mTree;
+	WorkingTreeItemView*	mTreeView;
+	WorkingTreeModel*		mModel;
+	DiffRawView*			mRawDiff;
+	Git::Repository			mRepo;
 };
 
 #endif

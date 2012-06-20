@@ -14,6 +14,11 @@ SET( SRC_FILES
 	IndexTree.cpp
 	IndexWidget.cpp
 	WorkingTreeModule.cpp
+	WorkingTreeAbstractItem.cpp
+	WorkingTreeDirItem.cpp
+	WorkingTreeFileItem.cpp
+	WorkingTreeItemView.cpp
+	WorkingTreeModel.cpp
 )
 
 SET( HDR_FILES
@@ -21,6 +26,12 @@ SET( HDR_FILES
 	IndexTree.h
 	IndexWidget.h
 	WorkingTreeModule.h
+	WorkingTreeAbstractItem.h
+	WorkingTreeDirItem.h
+	WorkingTreeFileItem.h
+	WorkingTreeItemView.h
+	WorkingTreeModel.h
+	WorkingTreeFilters.h
 )
 
 SET( HID_FILES

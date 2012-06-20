@@ -29,12 +29,15 @@
 #include "IndexWidget.h"
 #include "IndexTree.h"
 
+#include "WorkingTreeItemView.h"
+
 IndexWidget::IndexWidget()
 {
-	mChangingFilters = false;
-
 	mTree = new IndexTree;
 	mTree->setFrameShape( QFrame::NoFrame );
+
+	mTreeView = new WorkingTreeItemView;
+	mTreeView->setFrameShape( QFrame::NoFrame );
 
 	QVBoxLayout* l = new QVBoxLayout;
 	l->setSpacing( 2 );
@@ -47,19 +50,27 @@ IndexWidget::IndexWidget()
 	mRawDiff = new DiffRawView;
 
 	mSplitter = new QSplitter( Qt::Horizontal );
-	mSplitter->addWidget( mTree );
+
+	QSplitter* temp = new QSplitter( Qt::Vertical );
+	temp->addWidget( mTree );
+	temp->addWidget( mTreeView );
+
+	mSplitter->addWidget( temp );
 	mSplitter->addWidget( mRawDiff );
 
 	l->addWidget( mSplitter );
 	setLayout( l );
 
 	setViewName( trUtf8( "Working tree" ) );
+
+	setTreeFilter( WTF_All );
 }
 
 void IndexWidget::repositoryChanged( Git::Repository repo )
 {
 	mRepo = repo;
 	mTree->setRepository( repo );
+	mTreeView->setRepository( repo );
 
 	if( mRepo.isValid() )
 	{
@@ -73,7 +84,7 @@ void IndexWidget::repositoryChanged( Git::Repository repo )
 
 void IndexWidget::onShowAll( bool enabled )
 {
-	mTree->setFilter( enabled ? IndexTree::All : IndexTree::None );
+	setTreeFilter( enabled ? WTF_All : WTF_None );
 
 	actShowIgnored->setChecked( enabled );
 	actShowMissing->setChecked( enabled);
@@ -84,62 +95,70 @@ void IndexWidget::onShowAll( bool enabled )
 
 void IndexWidget::onShowModified( bool enabled )
 {
-	IndexTree::TreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTree->filters();
 	if( enabled )
-		f |= IndexTree::Changed;
+		f |= WTF_Changed;
 	else
-		f &= ~IndexTree::Changed;
-	mTree->setFilter( f );
+		f &= ~WTF_Changed;
+	setTreeFilter( f );
 
-	actShowAll->setChecked( f == IndexTree::All );
+	actShowAll->setChecked( f == WTF_All );
 }
 
 void IndexWidget::onShowMissing( bool enabled )
 {
-	IndexTree::TreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTree->filters();
 	if( enabled )
-		f |= IndexTree::Missing;
+		f |= WTF_Missing;
 	else
-		f &= ~IndexTree::Missing;
-	mTree->setFilter( f );
+		f &= ~WTF_Missing;
+	setTreeFilter( f );
 
-	actShowAll->setChecked( f == IndexTree::All );
+	actShowAll->setChecked( f == WTF_All );
 }
 
 void IndexWidget::onShowIgnored( bool enabled )
 {
-
-	IndexTree::TreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTree->filters();
 	if( enabled )
-		f |= IndexTree::Ignored;
+		f |= WTF_Ignored;
 	else
-		f &= ~IndexTree::Ignored;
-	mTree->setFilter( f );
+		f &= ~WTF_Ignored;
+	setTreeFilter( f );
 
-	actShowAll->setChecked( f == IndexTree::All );
+	actShowAll->setChecked( f == WTF_All );
 }
 
 void IndexWidget::onShowUntracked( bool enabled )
 {
-	IndexTree::TreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTree->filters();
 	if( enabled )
-		f |= IndexTree::Untracked;
+		f |= WTF_Untracked;
 	else
-		f &= ~IndexTree::Untracked;
-	mTree->setFilter( f );
+		f &= ~WTF_Untracked;
+	setTreeFilter( f );
 
-	actShowAll->setChecked( f == IndexTree::All );
+	actShowAll->setChecked( f == WTF_All );
 }
 
 void IndexWidget::onShowUnchanged( bool enabled )
 {
-	IndexTree::TreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTree->filters();
 	if( enabled )
-		f |= IndexTree::Unchanged;
+		f |= WTF_Unchanged;
 	else
-		f &= ~IndexTree::Unchanged;
-	mTree->setFilter( f );
+		f &= ~WTF_Unchanged;
+	setTreeFilter( f );
 
-	actShowAll->setChecked( f == IndexTree::All );
+	actShowAll->setChecked( f == WTF_All );
 }
 
+void IndexWidget::setTreeFilter( WorkingTreeFilters filters )
+{
+	mTree->setFilter( filters );
+	mTreeView->setFilter( filters );
+}
+
+void IndexWidget::workingTreeChanged()
+{
+}

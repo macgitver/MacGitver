@@ -34,7 +34,7 @@ WorkingTreeNode::~WorkingTreeNode()
 }
 
 WorkingTreeFileNode::WorkingTreeFileNode( const QString& path, QTreeWidgetItem* item,
-										  WorkingTreeDirNode* parent, IndexTree::TreeFilters state )
+										  WorkingTreeDirNode* parent, WorkingTreeFilters state )
 	: WorkingTreeNode( path, item )
 	, mParent( parent )
 	, mState( state )
@@ -100,7 +100,7 @@ bool WorkingTreeDirNode::refilter( IndexTree* tree )
 
 IndexTree::IndexTree()
 {
-	mFilters = All;
+	mFilters = WTF_All;
 
 	setColumnCount( 4 );
 	setSortingEnabled( true );
@@ -150,23 +150,23 @@ void IndexTree::update()
 	Git::StatusHash::ConstIterator it = sh.constBegin();
 	while( it != sh.constEnd() )
 	{
-		TreeFilters curState;
+		WorkingTreeFilters curState;
 
 		unsigned int st = it.value();
 		if( st == Git::StatusCurrent )
-			curState |= Unchanged;
+			curState |= WTF_Unchanged;
 
 		else if( st & Git::StatusIgnored )
-			curState |= Ignored;
+			curState |= WTF_Ignored;
 
 		else if( st & Git::StatusWorkingTreeModified )
-			curState |= Changed;
+			curState |= WTF_Changed;
 
 		else if( st & Git::StatusWorkingTreeNew )
-			curState |= Untracked;
+			curState |= WTF_Untracked;
 
 		else if( st & Git::StatusWorkingTreeDeleted )
-			curState |= Missing;
+			curState |= WTF_Missing;
 #if 0
 
 		else if( st & Git::StatusIndexModified )
@@ -239,19 +239,19 @@ void IndexTree::update()
 			mFileToNodes.insert( it.key(), fNode );
 		}
 
-		if( curState & Unchanged )
+		if( curState & WTF_Unchanged )
 			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::black );
 
-		else if( curState & Changed )
+		else if( curState & WTF_Changed )
 			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::blue );
 
-		else if( curState & Untracked )
+		else if( curState & WTF_Untracked )
 			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::green );
 
-		else if( curState & Missing )
+		else if( curState & WTF_Missing )
 			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::red );
 
-		else if( curState & Ignored )
+		else if( curState & WTF_Ignored )
 			fNode->item()->setData( 0, Qt::ForegroundRole, Qt::gray );
 
 		else
@@ -272,7 +272,7 @@ void IndexTree::refilter()
 	}
 }
 
-void IndexTree::setFilter( TreeFilters filters )
+void IndexTree::setFilter( WorkingTreeFilters filters )
 {
 	if( filters != mFilters )
 	{
@@ -281,7 +281,7 @@ void IndexTree::setFilter( TreeFilters filters )
 	}
 }
 
-IndexTree::TreeFilters IndexTree::filters() const
+WorkingTreeFilters IndexTree::filters() const
 {
 	return mFilters;
 }

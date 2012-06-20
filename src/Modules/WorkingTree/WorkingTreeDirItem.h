@@ -1,0 +1,63 @@
+/*
+ * MacGitver
+ * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License (Version 2) as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#ifndef MGV_WORKING_TREE_DIR_ITEM_H
+#define MGV_WORKING_TREE_DIR_ITEM_H
+
+#include <QList>
+#include <QHash>
+#include <QIcon>
+
+#include "WorkingTreeAbstractItem.h"
+
+class WorkingTreeFileItem;
+
+class WorkingTreeDirItem : public WorkingTreeAbstractItem
+{
+public:
+	WorkingTreeDirItem( WorkingTreeAbstractItem* parent );
+	~WorkingTreeDirItem();
+
+public:
+	void setName( const QString& name );
+	void setIcon( const QIcon& icon );
+
+public:
+	QString name() const;
+	bool isDirectory() const;
+	int visibleChildren() const;
+	WorkingTreeAbstractItem* visibleChildAt( int index );
+	QVariant data( int column, int role ) const;
+	WorkingTreeAbstractItem* parent();
+	int visibleIndex() const;
+	WorkingTreeAbstractItem* childByName( const QString& name );
+	void removeChild( WorkingTreeAbstractItem* child );
+
+	bool refilter( WorkingTreeFilters filters );
+
+	void appendItem( WorkingTreeAbstractItem* item );
+
+private:
+	WorkingTreeAbstractItem*		mParent;
+	QString							mName;
+	QIcon							mIcon;
+	QList< WorkingTreeDirItem* >	mVisibleDirs;
+	QList< WorkingTreeFileItem* >	mVisibleFiles;
+
+	QMap< QString, WorkingTreeAbstractItem* >	mChildren;
+};
+
+#endif

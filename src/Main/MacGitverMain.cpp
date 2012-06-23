@@ -43,6 +43,9 @@ void MacGitverMain::loadModules()
 	{
 		QPluginLoader* loader = new QPluginLoader( binDir.filePath( modName ), this );
 		QObject* o = loader->instance();
+		if( !o )
+			qDebug( "%s: %s", qPrintable( modName ), qPrintable( loader->errorString() ) );
+
 		Module* mod = qobject_cast< Module* >( o );
 		if( mod )
 		{

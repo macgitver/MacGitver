@@ -54,5 +54,6 @@ ADD_MGV_MODULE(
 TARGET_LINK_LIBRARIES(
 	ModWorkingTree
 
+	DiffModel
 	DiffRawView
 )

@@ -218,20 +218,29 @@ namespace Git
 		return branches( true, true );
 	}
 
+	static int listBranches( const char* branchName, git_branch_t brachType, void* payload )
+	{
+		QStringList* sl = (QStringList*) payload;
+		sl->append( QString::fromUtf8( branchName ) );
+		return 0;
+	}
+
 	QStringList Repository::branches( bool local, bool remote )
 	{
 		Q_ASSERT( d );
 
-		git_strarray arr;
-		int rc = git_branch_list( &arr, d->mRepo,
-								  ( local ? GIT_BRANCH_LOCAL : 0 ) |
-								  ( remote ? GIT_BRANCH_REMOTE : 0 ) );
+		QStringList sl;
+		int rc = git_branch_foreach( d->mRepo,
+									 ( local ? GIT_BRANCH_LOCAL : 0 ) |
+									 ( remote ? GIT_BRANCH_REMOTE : 0 ),
+									 &listBranches,
+									 (void*) &sl );
 		if( !d->handleErrors( rc ) )
 		{
 			return QStringList();
 		}
 
-		return slFromStrArray( &arr );
+		return sl;
 	}
 
 	bool Repository::deleteBranch( const QString& name, bool local )

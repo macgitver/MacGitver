@@ -40,15 +40,17 @@ namespace Git
 
 		const unsigned char* raw() const
 		{
-			return (const unsigned char*) d.constData();
+			return data;
 		}
 
 		bool operator==( const ObjectId& other ) const;
 		bool operator!=( const ObjectId& other ) const;
 
 	private:
-		QByteArray	d;
+		unsigned char data[ 20 ];
 	};
+
+	typedef QVector< ObjectId > ObjectIdList;
 
 	GITWRAP_API uint qHash( const ObjectId& sha1 );
 

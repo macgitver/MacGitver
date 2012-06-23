@@ -23,16 +23,20 @@ namespace Git
 
 	ObjectId::ObjectId()
 	{
+		memset( data, 0, 20 );
 	}
 
-	ObjectId::ObjectId( const QByteArray& _d )
-		: d( _d )
+	ObjectId::ObjectId( const QByteArray& d )
 	{
+		Q_ASSERT( d.length() == 20 );
+		memcpy( data, d.constData(), 20 );
 	}
 
 	ObjectId ObjectId::fromRaw( const unsigned char* d, int len )
 	{
-		return ObjectId( QByteArray( (const char*) d, len ) );
+		ObjectId id;
+		memcpy( id.data, d, qMin( len, 20 ) );
+		return id;
 	}
 
 	QString ObjectId::toString() const
@@ -43,28 +47,18 @@ namespace Git
 	QByteArray ObjectId::toAscii() const
 	{
 		QByteArray id( 41, 0 );
-		git_oid_tostr( id.data(), 41, (const git_oid*) d.data() );
+		git_oid_tostr( id.data(), 41, (const git_oid*) data );
 		return id;
 	}
 
 	bool ObjectId::operator==( const ObjectId& other ) const
 	{
-		if( d.length() == 20 && other.d.length() == 20 )
-		{
-			return !memcmp( d.constData(), other.d.constData(), 20 );
-		}
-
-		return false;
+		return !memcmp( data, other.data, 20 );
 	}
 
 	bool ObjectId::operator!=( const ObjectId& other ) const
 	{
-		if( d.length() == 20 && other.d.length() == 20 )
-		{
-			return !!memcmp( d.constData(), other.d.constData(), 20 );
-		}
-
-		return false;
+		return !!memcmp( data, other.data, 20 );
 	}
 
 	static uint hash(const unsigned char *p, int n)

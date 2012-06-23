@@ -59,7 +59,7 @@ void RefsListModel::addRef( const QString& refName )
 
 	mData.insert( refName, ref );
 
-	int row = mOrderedData.count() - 1;
+	int row = mOrderedData.count();
 
 	beginInsertRows( QModelIndex(), row, row );
 	mOrderedData.insert( row, ref );

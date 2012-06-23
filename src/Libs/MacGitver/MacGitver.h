@@ -44,6 +44,7 @@ public:
 	void setRepository( const Git::Repository &repo );
 	Git::Repository repository() const;
 	Modules* modules();
+	FSWatcher* watcher();
 
 	IMainWindow* mainWindow();
 

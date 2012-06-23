@@ -23,7 +23,7 @@
 #include "GitWrap/Repository.h"
 #include "GitWrap/RevisionWalker.h"
 
-class HistoryEntries;
+#include "HistoryEntry.h"
 
 class HistoryBuilder
 {
@@ -39,9 +39,16 @@ public:
 	void start();
 
 private:
-	Git::Repository				mRepo;
-	Git::RevisionWalker			mWalker;
-	HistoryEntries*				mEntries;
+	int nextParent( const Git::ObjectId& sha1, int start = 0 );
+	int createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nextSha1InSlot, int start = 0 );
+
+private:
+	Git::Repository		mRepo;
+	Git::RevisionWalker	mWalker;
+	HistoryEntries*		mEntries;
+	GraphGlyphVector	mCurrentGlyphs;
+	int					mCurrentLine;
+	Git::ObjectIdList	mNextParent;
 };
 
 #endif

@@ -14,6 +14,8 @@
  *
  */
 
+#include <QElapsedTimer>
+
 #include "GitWrap/ObjectId.h"
 #include "GitWrap/Reference.h"
 
@@ -47,85 +49,268 @@ void HistoryBuilder::addAllRefs()
 	}
 }
 
+int HistoryBuilder::nextParent( const Git::ObjectId& sha1, int start )
+{
+	for( int i = start; i < mCurrentGlyphs.count(); i++ )
+	{
+		if( mNextParent.at( i ) == sha1 )
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+int HistoryBuilder::createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nextSha1InSlot,
+									 int start )
+{
+	if( start < mCurrentGlyphs.count() )
+	{
+		while( start < mCurrentGlyphs.count() )
+		{
+			if( mCurrentGlyphs[ start ] == ggCrossUnused || mCurrentGlyphs[ start ] == ggUnused )
+			{
+				mCurrentGlyphs[ start ] = glyph;
+				mNextParent[ start ] = nextSha1InSlot;
+				return start;
+			}
+			start++;
+		}
+	}
+
+	mCurrentGlyphs.append( glyph );
+	mNextParent.append( nextSha1InSlot );
+
+	return mCurrentGlyphs.count() - 1;
+}
+
 void HistoryBuilder::start()
 {
-	Git::ObjectId current;
-	Git::ObjectCommit prevCommit;
-	Git::ObjectCommit curCommit;
-	int lastSlot = -1;
-	int slot = -1;
-	HistoryEntry* lastEntry = 0;
-	HistoryEntry* curEntry = 0;
+	QElapsedTimer timer;
+	timer.start();
 
-	QList< Git::ObjectCommit > mLastSlotEntries;
+	mEntries->beforeClear();
 
-	while( mWalker.next( current ) )
+	Git::ObjectId		currentSHA1;
+	Git::ObjectCommit	curCommit;
+
+	mNextParent.clear();
+	mCurrentGlyphs.clear();
+	mCurrentLine = -1;
+
+	while( mWalker.next( currentSHA1 ) )
 	{
-		lastEntry = curEntry;
-		Q_UNUSED( lastEntry );
-		lastSlot = slot;
-		prevCommit = curCommit;
-		curCommit = mRepo.lookupCommit( current );
-
-		slot = -1;
-		for( int i = 0; i < mLastSlotEntries.count(); i++ )
+		if( mCurrentLine == -1 )
 		{
-			Git::ObjectCommit that = mLastSlotEntries[ i ];
-			if( that.numParentCommits() > 0 && curCommit == that.parentCommit( 0 )  )
+			createGlyphSlot( ggBranch, currentSHA1 );
+			mCurrentLine++;
+		}
+		curCommit = mRepo.lookupCommit( currentSHA1 );
+
+		HistoryEntry* entry = new HistoryEntry( curCommit );
+		mEntries->append( entry );
+
+		int numParents = curCommit.numParentCommits();
+		bool didFork = false;
+
+		int nextLine = nextParent( currentSHA1 );
+		if( nextLine != mCurrentLine )
+		{
+			GraphGlyphs& curGlyph = mCurrentGlyphs[ mCurrentLine ];
+
+			if( curGlyph == ggInitial )
+				curGlyph = ggUnused;
+			else
+				curGlyph = ggNotCurrent;
+
+			if( nextLine != -1 )
+				mCurrentGlyphs[ nextLine ] = ggCurrent;
+			else
+				nextLine = createGlyphSlot( ggBranch, currentSHA1, mCurrentLine );
+
+			mCurrentLine = nextLine;
+		}
+
+		if( nextLine != -1 && nextParent( currentSHA1, nextLine + 1 ) != -1 )
+		{
+			didFork = true;
+			int start, end, cur;
+			start = end = cur = nextParent( currentSHA1 );
+
+			while( cur != -1 )
 			{
-				slot = i;
-				break;
+				end = cur;
+				mCurrentGlyphs[ cur ] = ggTail;
+				cur = nextParent( currentSHA1, cur + 1 );
+			}
+
+			mCurrentGlyphs[ mCurrentLine ] = ggMergeFork;
+
+			GraphGlyphs& startGlyph = mCurrentGlyphs[ start ];
+			GraphGlyphs& endGlyph = mCurrentGlyphs[ end ];
+
+			if( startGlyph == ggMergeFork )
+				startGlyph = ggMergeForkLeft;
+
+			if( endGlyph == ggMergeFork )
+				endGlyph = ggMergeForkRight;
+
+			if( startGlyph == ggTail )
+				startGlyph = ggTailLeft;
+
+			if( endGlyph == ggTail )
+				endGlyph = ggTailRight;
+
+			for( int i = start + 1; i < end; i++ )
+			{
+				GraphGlyphs& gl = mCurrentGlyphs[ i ];
+
+				if( gl == ggNotCurrent )
+					gl = ggCross;
+				else if( gl == ggUnused )
+					gl = ggCrossUnused;
 			}
 		}
 
-		if( slot == -1 )
+		if( numParents > 1 )
 		{
-			int i = 0;
-			if( lastSlot >= 0 )
-				i = lastSlot;
+			GraphGlyphs& gl = mCurrentGlyphs[ mCurrentLine ];
 
-			for( ; i < mLastSlotEntries.count(); i++ )
+			bool wasFork	= gl == ggMergeFork;
+			bool wasForkR	= gl == ggMergeForkRight;
+			bool wasForkL	= gl == ggMergeForkLeft;
+			bool startedCross = false, endedCross = false;
+
+			gl = ggMergeFork;
+			int start = mCurrentLine, end = mCurrentLine;
+
+			for( int j = 1; j < numParents; j++ )
 			{
-				if( !mLastSlotEntries[ i ].isValid() )
+				Git::ObjectId parentSha1 = curCommit.parentCommitId( j );
+				int idx = nextParent( parentSha1 );
+				if( idx != -1 )
 				{
-					slot = i;
-					break;
+					if( idx > end )
+					{
+						end = idx;
+						endedCross = mCurrentGlyphs[ idx ] == ggCross;
+					}
+					if( idx < start )
+					{
+						start = idx;
+						startedCross = mCurrentGlyphs[ idx ] == ggCross;
+					}
+
+					mCurrentGlyphs[ idx ] = ggJoin;
+				}
+				else
+				{
+					int tmp = createGlyphSlot( ggHead, parentSha1, 0 );
+					if( tmp < mCurrentLine )
+						start = tmp;
+					else
+						end = tmp;
 				}
 			}
-		}
 
-		if( slot == -1 )
-		{
-			slot = mLastSlotEntries.count();
-			mLastSlotEntries.append( Git::ObjectCommit() );
-		}
+			GraphGlyphs& startGlyph = mCurrentGlyphs[ start ];
+			GraphGlyphs& endGlyph = mCurrentGlyphs[ end ];
 
-		curEntry = new HistoryEntry( curCommit, slot );
-		mEntries->append( curEntry );
+			if( startGlyph == ggMergeFork && !wasFork && !wasForkR )
+				startGlyph = ggMergeForkLeft;
 
-		for( int i = 0; i < mLastSlotEntries.count(); i++ )
-		{
-			if( i > slot && mLastSlotEntries[ i ].isValid() &&
-					curCommit.isParentOf( mLastSlotEntries[ i ] ) )
+			if( endGlyph == ggMergeFork && !wasFork && !wasForkL )
+				endGlyph = ggMergeForkRight;
+
+			if( startGlyph == ggJoin && !startedCross )
+				startGlyph = ggJoinLeft;
+
+			if( endGlyph == ggJoin && !endedCross )
+				endGlyph = ggJoinRight;
+
+			if( startGlyph == ggHead )
+				startGlyph = ggHeadLeft;
+
+			if( endGlyph == ggHead )
+				endGlyph = ggHeadRight;
+
+			for( int i = start + 1; i < end; i++ )
 			{
-				HistoryGraphDrawInfo di;
-				di.endsDownwards = false;
-				di.endsUpwards = true;
-				di.startsMiddle = true;
-				di.endColumn = i;
-				di.startColumn = slot;
-				curEntry->addDrawInfo( di );
-				mLastSlotEntries[ i ] = Git::ObjectCommit();
-			}
-			else if( i == slot || mLastSlotEntries[ i ].isValid() )
-			{
-				HistoryGraphDrawInfo di;
-				di.endsDownwards = di.endsUpwards = true;
-				di.endColumn = di.startColumn = i;
-				curEntry->addDrawInfo( di );
+				GraphGlyphs& gl = mCurrentGlyphs[ i ];
+
+				if( gl == ggNotCurrent )
+					gl = ggCross;
+				else if( gl == ggUnused )
+					gl = ggCrossUnused;
+				else if( gl == ggTailLeft || gl == ggTailRight )
+					gl = ggTail;
 			}
 		}
 
-		mLastSlotEntries[ slot ] = curCommit;
+		if( numParents == 0 )
+		{
+			GraphGlyphs& gl = mCurrentGlyphs[ mCurrentLine ];
+			if( gl != ggMergeFork && gl != ggMergeForkLeft && gl != ggMergeForkRight )
+			{
+				gl = ggInitial;
+			}
+		}
+
+		entry->setGlyphs( mCurrentGlyphs );
+
+		if( numParents == 0 )
+		{
+			mNextParent[ mCurrentLine ] = Git::ObjectId();
+		}
+		else
+		{
+			mNextParent[ mCurrentLine ] = curCommit.parentCommitId( 0 );
+		}
+
+		if( numParents > 1 )
+		{
+			for( int i = 0; i < mCurrentGlyphs.count(); i++ )
+			{
+				GraphGlyphs& gl = mCurrentGlyphs[ i ];
+				if( gl == ggCross || gl == ggHead || gl == ggHeadLeft || gl == ggHeadRight ||
+					gl == ggJoin || gl == ggJoinRight || gl == ggJoinLeft )
+					gl = ggNotCurrent;
+				else if( gl == ggCrossUnused )
+					gl = ggUnused;
+				else if( gl == ggMergeFork || gl == ggMergeForkRight || gl == ggMergeForkLeft )
+					gl = ggCurrent;
+			}
+		}
+
+		if( didFork )
+		{
+			for( int i = 0; i < mCurrentGlyphs.count(); i++ )
+			{
+				GraphGlyphs& gl = mCurrentGlyphs[ i ];
+				if( gl == ggCross )
+					gl = ggNotCurrent;
+				else if( gl == ggTail || gl == ggTailLeft || gl == ggTailRight || gl == ggCrossUnused )
+					gl = ggUnused;
+				else if( gl == ggMergeFork || gl == ggMergeForkRight || gl == ggMergeForkLeft )
+					gl = ggCurrent;
+			}
+
+			while( mCurrentGlyphs.last() == ggUnused )
+			{
+				mCurrentGlyphs.pop_back();
+				mNextParent.pop_back();
+			}
+		}
+
+		if( mCurrentGlyphs[ mCurrentLine ] == ggBranch )
+			mCurrentGlyphs[ mCurrentLine ] = ggCurrent;
 	}
+
+	mEntries->afterClear();
+
+	qint64 dur = timer.nsecsElapsed();
+	double avg = double(dur) / double(mEntries->count());
+	QString s = QString::number( avg, 'f' );
+	qDebug( "Glyphed %i commits in %lli ns = %s ns per Commit", mEntries->count(), dur, qPrintable( s ) );
 }

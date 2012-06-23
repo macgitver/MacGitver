@@ -21,66 +21,66 @@
 #include "GitWrap/ObjectId.h"
 #include "GitWrap/ObjectCommit.h"
 
-struct HistoryGraphDrawInfo
+enum GraphGlyphs
 {
-	bool			endsUpwards		: 1;
-	bool			endsDownwards	: 1;
-	bool			startsMiddle	: 1;
-	unsigned int	startColumn		: 10;
-	unsigned int	endColumn		: 10;
-	unsigned int	colorIndex		: 5;
+	ggUnused,
+
+	ggCurrent,
+	ggNotCurrent,
+
+	ggMergeFork,
+	ggMergeForkRight,
+	ggMergeForkLeft,
+
+	ggJoin,
+	ggJoinLeft,
+	ggJoinRight,
+
+	ggHead,
+	ggHeadLeft,
+	ggHeadRight,
+
+	ggTail,
+	ggTailLeft,
+	ggTailRight,
+
+	ggCross,
+	ggCrossUnused,
+
+	ggInitial,
+	ggBranch
 };
 
-class HistoryGraphDrawInfos
-{
-public:
-	HistoryGraphDrawInfos();
-	~HistoryGraphDrawInfos();
-
-public:
-	HistoryGraphDrawInfo at( unsigned char idx ) const;
-	unsigned char count() const;
-	void add( HistoryGraphDrawInfo di );
-
-private:
-	unsigned char		mNumEntries;
-	union
-	{
-		struct
-		{
-			HistoryGraphDrawInfo*	mData;
-			unsigned char			mAlloced;
-		};
-		HistoryGraphDrawInfo mOwnData[ 8 ];
-	};
-};
+typedef QVector< GraphGlyphs > GraphGlyphVector;
 
 class HistoryEntry
 {
 public:
-	HistoryEntry( const Git::ObjectCommit& commit, unsigned char slot );
+	HistoryEntry( const Git::ObjectCommit& commit );
 
 public:
 	QString message() const;
-	Git::Signature committer() const;
-	Git::Signature author() const;
-	Git::ObjectId id() const;
-	unsigned char slot() const;
+	const Git::Signature&	committer() const;
+	const Git::Signature&	author() const;
+	const Git::ObjectId&	id() const;
+	const GraphGlyphVector&	glyphs() const;
 
-	HistoryGraphDrawInfos& drawInfos(){ return mDrawInfos; }
-	void addDrawInfo( HistoryGraphDrawInfo& di ){ mDrawInfos.add( di ); }
+public:
+	void setGlyphs( const GraphGlyphVector& glyphs );
 
 private:
-	QString					mCommitMessage;
-	Git::ObjectId			mSha1;
-	Git::Signature			mCommiter;
-	Git::Signature			mAuthor;
-	unsigned char			mSlot;
-	HistoryGraphDrawInfos	mDrawInfos;
+	QString				mCommitMessage;
+	Git::ObjectId		mSha1;
+	Git::Signature		mCommiter;
+	Git::Signature		mAuthor;
+	GraphGlyphVector	mGlyphs;
 };
+
+class HistoryBuilder;
 
 class HistoryEntries : public QObject
 {
+	friend class HistoryBuilder;
 	Q_OBJECT
 public:
 	HistoryEntries();

@@ -48,4 +48,6 @@ TARGET_LINK_LIBRARIES(
 
 	${QT_LIBRARIES}
 	DiffModel
+	DiffRawView
+	Heaven
 )

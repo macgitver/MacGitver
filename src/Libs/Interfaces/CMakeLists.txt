@@ -41,3 +41,8 @@ ADD_LIBRARY(
 	${MOC_FILES}
 )
 
+TARGET_LINK_LIBRARIES(
+	Interfaces
+
+	${QT_LIBRARIES}
+)

@@ -65,9 +65,9 @@ namespace Git
 		return ObjectId::fromRaw( git_commit_tree_oid( commit )->id );
 	}
 
-	QList< ObjectId > ObjectCommit::parentCommitIds() const
+	ObjectIdList ObjectCommit::parentCommitIds() const
 	{
-		QList< ObjectId > ids;
+		ObjectIdList ids;
 
 		if( d )
 		{
@@ -100,6 +100,22 @@ namespace Git
 		}
 
 		return parent;
+	}
+
+	ObjectId ObjectCommit::parentCommitId( unsigned int index ) const
+	{
+		if( d && numParentCommits() > index )
+		{
+			git_commit* commit = (git_commit*) d->mObj;
+
+			const git_oid* oid = git_commit_parent_oid( commit, index );
+			if( oid )
+			{
+				return ObjectId::fromRaw( oid->id );
+			}
+		}
+
+		return ObjectId();
 	}
 
 	QList< ObjectCommit > ObjectCommit::parentCommits() const

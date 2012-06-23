@@ -52,9 +52,10 @@ namespace Git
 		ObjectTree tree();
 		ObjectId treeId();
 
-		QList< ObjectId > parentCommitIds() const;
+		ObjectIdList parentCommitIds() const;
 		QList< ObjectCommit > parentCommits() const;
 		ObjectCommit parentCommit( unsigned int index ) const;
+		ObjectId parentCommitId( unsigned int index ) const;
 		unsigned int numParentCommits() const;
 
 		bool isParentOf( const Git::ObjectCommit& child ) const;

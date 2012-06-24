@@ -25,9 +25,13 @@
 
 class WorkingTreeAbstractItem;
 class WorkingTreeDirItem;
+class WorkingTreeFileItem;
 
 class WorkingTreeModel : public QAbstractItemModel
 {
+	friend class WorkingTreeAbstractItem;
+	friend class WorkingTreeDirItem;
+	friend class WorkingTreeFileItem;
 	Q_OBJECT
 public:
 	WorkingTreeModel( Git::Repository repo, QObject* parent = 0 );
@@ -49,7 +53,7 @@ public:
 	int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
 public:
-	void update( bool sendEvents );
+	void update();
 
 private:
 	Git::Repository		mRepo;

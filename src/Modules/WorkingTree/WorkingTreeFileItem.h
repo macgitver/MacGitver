@@ -30,12 +30,12 @@ class WorkingTreeDirItem;
 class WorkingTreeFileItem : public WorkingTreeAbstractItem
 {
 public:
-	WorkingTreeFileItem( WorkingTreeAbstractItem* parent );
+	WorkingTreeFileItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent );
 	~WorkingTreeFileItem();
 
 public:
 	void setName( const QString& name );
-	void setState( WorkingTreeFilter state );
+	void setState( WorkingTreeFilter state, bool shouldBeVisible );
 	void setIcon( const QIcon& icon );
 	void setSize( qint64 size );
 	void setOwner( const QString& owner );
@@ -51,11 +51,9 @@ public:
 	int visibleIndex() const;
 	WorkingTreeAbstractItem* childByName( const QString& name );
 	void removeChild( WorkingTreeAbstractItem* child );
-
-	bool refilter( WorkingTreeFilters filters );
+	QModelIndex index() const;
 
 private:
-	WorkingTreeAbstractItem*	mParent;
 	QString						mName;
 	QIcon						mIcon;
 	QDateTime					mLastMod;

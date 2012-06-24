@@ -25,16 +25,20 @@ WorkingTreeItemView::WorkingTreeItemView()
 
 void WorkingTreeItemView::setRepository( const Git::Repository& repo )
 {
-	mRepo = repo;
-	if( mRepo.isValid() )
-	{
-		mModel->setRepository( mRepo );
-	}
-	else
+	if( mModel )
 	{
 		setModel( NULL );
 		delete mModel;
 		mModel = NULL;
+	}
+
+	mRepo = repo;
+
+	if( mRepo.isValid() )
+	{
+		mModel = new WorkingTreeModel( Git::Repository(), this );
+		mModel->setRepository( mRepo );
+		setModel( mModel );
 	}
 }
 

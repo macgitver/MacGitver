@@ -19,8 +19,8 @@
 
 #include "WorkingTreeFileItem.h"
 
-WorkingTreeFileItem::WorkingTreeFileItem( WorkingTreeAbstractItem* parent )
-	: mParent( parent )
+WorkingTreeFileItem::WorkingTreeFileItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent )
+	: WorkingTreeAbstractItem( model, parent )
 {
 }
 
@@ -88,12 +88,6 @@ WorkingTreeAbstractItem* WorkingTreeFileItem::childByName( const QString& name )
 	return NULL;
 }
 
-bool WorkingTreeFileItem::refilter( WorkingTreeFilters filters )
-{
-	qDebug( "%i-%i-%i", int(filters), int(mState), int(filters & mState) );
-	return ( filters & mState ) != 0;
-}
-
 bool WorkingTreeFileItem::isDirectory() const
 {
 	return false;
@@ -104,9 +98,21 @@ void WorkingTreeFileItem::setName( const QString& name )
 	mName = name;
 }
 
-void WorkingTreeFileItem::setState( WorkingTreeFilter state )
+void WorkingTreeFileItem::setState( WorkingTreeFilter state, bool shouldBeVisible )
 {
 	mState = state;
+
+	if( shouldBeVisible != isVisible() )
+	{
+		if( isVisible() )
+		{
+			makeInvisible();
+		}
+		else
+		{
+			makeVisible();
+		}
+	}
 }
 
 void WorkingTreeFileItem::setIcon( const QIcon& icon )

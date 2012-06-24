@@ -3,34 +3,70 @@
 
 #include "WorkingTreeDirItem.h"
 #include "WorkingTreeFileItem.h"
+#include "WorkingTreeModel.h"
 
-WorkingTreeDirItem::WorkingTreeDirItem( WorkingTreeAbstractItem* parent )
-	: mParent( parent )
+WorkingTreeDirItem::WorkingTreeDirItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent )
+	: WorkingTreeAbstractItem( model, parent )
 {
 }
 
 WorkingTreeDirItem::~WorkingTreeDirItem()
 {
+	qDeleteAll( mFiles );
+	qDeleteAll( mDirs );
+	mFiles.clear();
+	mDirs.clear();
+	mChildren.clear();
 }
 
 int WorkingTreeDirItem::visibleChildren() const
 {
-	int i = mVisibleDirs.count() + mVisibleFiles.count();
-//	qDebug( "visChildren=%i", i );
-	return i;
+	int visible = 0;
+
+	for( int i = 0; i < mDirs.count(); i++ )
+	{
+		if( mDirs[ i ]->isVisible() )
+			visible++;
+	}
+
+	for( int i = 0; i < mFiles.count(); i++ )
+	{
+		if( mFiles[ i ]->isVisible() )
+			visible++;
+	}
+
+	return visible;
 }
 
 WorkingTreeAbstractItem* WorkingTreeDirItem::visibleChildAt( int index )
 {
-	if( index < mVisibleDirs.count() )
+	for( int i = 0; i < mChildren.count(); i++ )
 	{
-		return mVisibleDirs.at( index );
+		WorkingTreeAbstractItem* c = childAt( i );
+
+		if( c->isVisible() )
+		{
+			if( !index )
+				return c;
+			else
+				--index;
+		}
 	}
 
-	index -= mVisibleDirs.count();
-	if( index < mVisibleFiles.count() )
+	return NULL;
+}
+
+WorkingTreeAbstractItem* WorkingTreeDirItem::childAt( int index )
+{
+	if( index < mDirs.count() )
 	{
-		return mVisibleFiles.at( index );
+		return mDirs.at( index );
+	}
+
+	index -= mDirs.count();
+	if( index < mFiles.count() )
+	{
+		return mFiles.at( index );
 	}
 
 	return NULL;
@@ -61,14 +97,21 @@ QVariant WorkingTreeDirItem::data( int column, int role ) const
 	return QVariant();
 }
 
-WorkingTreeAbstractItem* WorkingTreeDirItem::parent()
-{
-	return mParent;
-}
-
 int WorkingTreeDirItem::visibleIndex() const
 {
-	return 0;
+	if( !mParent )
+		return -1;
+
+	int numVis = mParent->visibleChildren();
+	for( int i = 0; i < numVis; i++ )
+	{
+		if( mParent->visibleChildAt( i ) == this )
+		{
+			return i;
+		}
+	}
+
+	return -1;
 }
 
 WorkingTreeAbstractItem* WorkingTreeDirItem::childByName( const QString& name )
@@ -78,34 +121,24 @@ WorkingTreeAbstractItem* WorkingTreeDirItem::childByName( const QString& name )
 
 void WorkingTreeDirItem::appendItem( WorkingTreeAbstractItem* item )
 {
-	mChildren.insert( item->name(), item );
-}
+	// No model to update at this place, new items are _always_ hidden by default
 
-bool WorkingTreeDirItem::refilter( WorkingTreeFilters filters )
-{
-	mVisibleDirs.clear();
-	mVisibleFiles.clear();
-
-	bool anyVisible = false;
-
-	foreach( WorkingTreeAbstractItem* item, mChildren )
+	if( item->isDirectory() )
 	{
-		bool visible = item->refilter( filters );
-		if( visible )
-		{
-			anyVisible = true;
-			if( item->isDirectory() )
-			{
-				mVisibleDirs.append( (WorkingTreeDirItem*) item );
-			}
-			else
-			{
-				mVisibleFiles.append( (WorkingTreeFileItem*) item );
-			}
-		}
+		int index = 0;
+		while( index < mDirs.count() && mDirs[ index ]->name() < item->name() )
+			index++;
+		mDirs.insert( index, (WorkingTreeDirItem*) item );
+	}
+	else
+	{
+		int index = 0;
+		while( index < mFiles.count() && mFiles[ index ]->name() < item->name() )
+			index++;
+		mFiles.insert( index, (WorkingTreeFileItem*) item );
 	}
 
-	return anyVisible;
+	mChildren.insert( item->name(), item );
 }
 
 void WorkingTreeDirItem::setIcon( const QIcon& icon )
@@ -130,23 +163,41 @@ bool WorkingTreeDirItem::isDirectory() const
 
 void WorkingTreeDirItem::removeChild( WorkingTreeAbstractItem* child )
 {
+	int i = child->visibleIndex();
+
+	if( i != -1 )
+	{
+		model()->beginRemoveRows( index(), i, i );
+	}
 	mChildren.remove( child->name() );
 
-	for( int i = 0; i < mVisibleDirs.count(); i++ )
+	if( child->isDirectory() )
 	{
-		if( mVisibleDirs[ i ] == child )
+		for( int i = 0; i < mDirs.count(); i++ )
 		{
-			mVisibleDirs.removeAt( i );
-			break;
+			if( mDirs[ i ] == child )
+			{
+				mDirs.remove( i );
+				break;
+			}
+		}
+	}
+	else
+	{
+		for( int i = 0; i < mFiles.count(); i++ )
+		{
+			if( mFiles[ i ] == child )
+			{
+				mFiles.remove( i );
+				break;
+			}
 		}
 	}
 
-	for( int i = 0; i < mVisibleFiles.count(); i++ )
+	delete child;
+
+	if( i != -1 )
 	{
-		if( mVisibleFiles[ i ] == child )
-		{
-			mVisibleFiles.removeAt( i );
-			break;
-		}
+		model()->endRemoveRows();
 	}
 }

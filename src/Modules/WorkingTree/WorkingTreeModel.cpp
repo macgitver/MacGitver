@@ -27,8 +27,8 @@ WorkingTreeModel::WorkingTreeModel( Git::Repository repo, QObject* parent )
 	, mRepo( repo )
 	, mRootItem( NULL )
 {
-	mRootItem = new WorkingTreeDirItem( NULL );
-	update( false );
+	mRootItem = new WorkingTreeDirItem( this, NULL );
+	update();
 }
 
 WorkingTreeModel::~WorkingTreeModel()
@@ -130,15 +130,11 @@ int WorkingTreeModel::columnCount( const QModelIndex& parent ) const
 
 void WorkingTreeModel::setRepository( Git::Repository repo )
 {
-	beginResetModel();
-
 	mRepo = repo;
-	update( false );
-
-	endResetModel();
+	update();
 }
 
-void WorkingTreeModel::update( bool sendEvents )
+void WorkingTreeModel::update()
 {
 	QFileIconProvider ip;
 	QIcon folderIcon = ip.icon( QFileIconProvider::Folder );
@@ -184,7 +180,7 @@ void WorkingTreeModel::update( bool sendEvents )
 			WorkingTreeDirItem* next = (WorkingTreeDirItem*) cur->childByName( dir );
 			if( !next )
 			{
-				next = new WorkingTreeDirItem( cur );
+				next = new WorkingTreeDirItem( this, cur );
 				next->setName( dir );
 				next->setIcon( folderIcon );
 				cur->appendItem( next );
@@ -199,13 +195,12 @@ void WorkingTreeModel::update( bool sendEvents )
 		if( fileBase && fileBase->isDirectory() )
 		{
 			cur->removeChild( fileBase );
-			delete fileBase;
 			fileBase = NULL;
 		}
 
 		if( !fileBase )
 		{
-			file = new WorkingTreeFileItem( cur );
+			file = new WorkingTreeFileItem( this, cur );
 			file->setName( slNames[ 0 ] );
 			cur->appendItem( file );
 			fileBase = file;
@@ -221,18 +216,18 @@ void WorkingTreeModel::update( bool sendEvents )
 		file->setLastModified( fi.lastModified() );
 		file->setOwner( fi.owner() );
 
-		file->setState( (WorkingTreeFilter) (int) curState );
+		WorkingTreeFilter state = WorkingTreeFilter( int( curState ) );
+		file->setState( state, mFilters & state );
 
 		++it;
 	}
 
-	mRootItem->refilter( mFilters );
+	// TODO: Remove all not visited items (including empty dirs)
 }
 
 void WorkingTreeModel::setFilters( WorkingTreeFilters filters )
 {
-	beginResetModel();
 	mFilters = filters;
-	mRootItem->refilter( mFilters );
-	endResetModel();
+	update();
+	// mRootItem->refilter( mFilters );
 }

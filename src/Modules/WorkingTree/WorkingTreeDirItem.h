@@ -28,7 +28,7 @@ class WorkingTreeFileItem;
 class WorkingTreeDirItem : public WorkingTreeAbstractItem
 {
 public:
-	WorkingTreeDirItem( WorkingTreeAbstractItem* parent );
+	WorkingTreeDirItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent );
 	~WorkingTreeDirItem();
 
 public:
@@ -41,23 +41,24 @@ public:
 	int visibleChildren() const;
 	WorkingTreeAbstractItem* visibleChildAt( int index );
 	QVariant data( int column, int role ) const;
-	WorkingTreeAbstractItem* parent();
 	int visibleIndex() const;
 	WorkingTreeAbstractItem* childByName( const QString& name );
 	void removeChild( WorkingTreeAbstractItem* child );
-
-	bool refilter( WorkingTreeFilters filters );
-
 	void appendItem( WorkingTreeAbstractItem* item );
 
+	friend class WorkingTreeAbstractItem;
 private:
-	WorkingTreeAbstractItem*		mParent;
+	int totalChildren() const{ return mChildren.count(); }
+	WorkingTreeAbstractItem* childAt( int index );
+
+private:
 	QString							mName;
 	QIcon							mIcon;
-	QList< WorkingTreeDirItem* >	mVisibleDirs;
-	QList< WorkingTreeFileItem* >	mVisibleFiles;
 
-	QMap< QString, WorkingTreeAbstractItem* >	mChildren;
+	QVector< WorkingTreeDirItem* >				mDirs;
+	QVector< WorkingTreeFileItem* >				mFiles;
+
+	QHash< QString, WorkingTreeAbstractItem* >	mChildren;
 };
 
 #endif

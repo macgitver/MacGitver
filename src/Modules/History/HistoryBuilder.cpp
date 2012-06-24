@@ -206,11 +206,7 @@ void HistoryBuilder::start()
 				}
 				else
 				{
-					int tmp = createGlyphSlot( ggHead, parentSha1, 0 );
-					if( tmp < mCurrentLine )
-						start = tmp;
-					else
-						end = tmp;
+					end = createGlyphSlot( ggHead, parentSha1, end + 1 );
 				}
 			}
 
@@ -305,6 +301,7 @@ void HistoryBuilder::start()
 
 		if( mCurrentGlyphs[ mCurrentLine ] == ggBranch )
 			mCurrentGlyphs[ mCurrentLine ] = ggCurrent;
+
 	}
 
 	mEntries->afterClear();

@@ -17,12 +17,14 @@
 #include <QAction>
 
 #include "Heaven/WidgetActionPrivate.h"
+#include "Heaven/WidgetActionWrapper.h"
 
 namespace Heaven
 {
 
 	WidgetActionPrivate::WidgetActionPrivate( WidgetAction* owner )
 		: UiObject( owner )
+		, mWrapper( NULL )
 	{
 	}
 
@@ -33,6 +35,16 @@ namespace Heaven
 	UiObjectTypes WidgetActionPrivate::type() const
 	{
 		return WidgetActionType;
+	}
+
+	WidgetActionWrapper* WidgetActionPrivate::wrapper()
+	{
+		if( !mWrapper )
+		{
+			mWrapper = new WidgetActionWrapper( this );
+		}
+
+		return mWrapper;
 	}
 
 	WidgetAction::WidgetAction( QObject* parent )

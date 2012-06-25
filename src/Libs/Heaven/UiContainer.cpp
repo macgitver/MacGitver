@@ -23,9 +23,11 @@
 #include "Heaven/ActionContainerPrivate.h"
 #include "Heaven/MenuPrivate.h"
 #include "Heaven/ActionPrivate.h"
+#include "Heaven/WidgetActionPrivate.h"
 #include "Heaven/MergePlacePrivate.h"
 #include "Heaven/Separator.h"
 #include "Heaven/MergesManager.h"
+#include "Heaven/WidgetActionWrapper.h"
 
 namespace Heaven
 {
@@ -93,6 +95,7 @@ namespace Heaven
 	{
 		MenuPrivate* menuPriv;
 		ActionPrivate* actionPriv;
+		WidgetActionPrivate* widgetActPriv;
 //		ActionContainerPrivate* containerPriv;
 //		MergePlacePrivate* mergePlacePriv;
 
@@ -120,13 +123,23 @@ namespace Heaven
 				menu->addSeparator();
 				break;
 
+			case WidgetActionType:
+				widgetActPriv = qobject_cast< WidgetActionPrivate* >( uio );
+				Q_ASSERT( widgetActPriv );
+				// We don't have to create several widget actions
+				menu->addAction( widgetActPriv->wrapper() );
+				break;
+
+			case ContainerType:
+				((UiContainer*)uio)->mergeInto( menu );
+				break;
+
 			case MenuBarType:
 			case ToolBarType:
 				// cannot merge Bars into menus
 				Q_ASSERT( false );
 				break;
 			}
-
 		}
 		return true;
 	}
@@ -136,6 +149,7 @@ namespace Heaven
 	{
 		MenuPrivate* menuPriv;
 		ActionPrivate* actionPriv;
+		WidgetActionPrivate* widgetActPriv;
 //		ActionContainerPrivate* containerPriv;
 //		MergePlacePrivate* mergePlacePriv;
 
@@ -163,6 +177,17 @@ namespace Heaven
 				menuBar->addSeparator();
 				break;
 
+			case WidgetActionType:
+				widgetActPriv = qobject_cast< WidgetActionPrivate* >( uio );
+				Q_ASSERT( widgetActPriv );
+				// We don't have to create several widget actions
+				menuBar->addAction( widgetActPriv->wrapper() );
+				break;
+
+			case ContainerType:
+				((UiContainer*)uio)->mergeInto( menuBar );
+				break;
+
 			case MenuBarType:
 			case ToolBarType:
 				// cannot merge Bars into menus
@@ -178,6 +203,7 @@ namespace Heaven
 	{
 		MenuPrivate* menuPriv;
 		ActionPrivate* actionPriv;
+		WidgetActionPrivate* widgetActPriv;
 //		ActionContainerPrivate* containerPriv;
 //		MergePlacePrivate* mergePlacePriv;
 
@@ -201,8 +227,19 @@ namespace Heaven
 				toolBar->addAction( action );
 				break;
 
+			case WidgetActionType:
+				widgetActPriv = qobject_cast< WidgetActionPrivate* >( uio );
+				Q_ASSERT( widgetActPriv );
+				// We don't have to create several widget actions
+				toolBar->addAction( widgetActPriv->wrapper() );
+				break;
+
 			case SeparatorType:
 				toolBar->addSeparator();
+				break;
+
+			case ContainerType:
+				((UiContainer*)uio)->mergeInto( toolBar );
 				break;
 
 			case MenuBarType:

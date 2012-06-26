@@ -14,30 +14,45 @@
  *
  */
 
-#ifndef MGV_HEAVEN_MERGEPLACE_PRIVATE_H
-#define MGV_HEAVEN_MERGEPLACE_PRIVATE_H
-
-#include <QByteArray>
-
-#include "Heaven/MergePlace.h"
-#include "Heaven/UiObject.h"
+#include "Mode.h"
+#include "ModePrivate.h"
+#include "MainWindow.h"
 
 namespace Heaven
 {
 
-	class MergePlacePrivate : public UiObject
+	Mode::Mode( MainWindow* owner )
+		: QObject( owner )
+		, d( new ModePrivate )
 	{
-		Q_OBJECT
-	public:
-		MergePlacePrivate( MergePlace* owner );
-		~MergePlacePrivate();
+		Q_ASSERT( owner );
+	}
 
-	public:
-		UiObjectTypes type() const;
+	Mode::~Mode()
+	{
+		delete d;
+	}
 
-	public:
-		QByteArray			mName;
-	};
+	QString Mode::name() const
+	{
+		return d->mName;
+	}
+
+	void Mode::setName( const QString& name )
+	{
+		if( name != d->mName )
+		{
+			d->mName = name;
+			emit nameChanged( name );
+		}
+	}
+
+	void Mode::activate()
+	{
+	}
+
+	void Mode::deactivate()
+	{
+	}
+
 }
-
-#endif

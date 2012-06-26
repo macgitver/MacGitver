@@ -14,35 +14,39 @@
  *
  */
 
-#ifndef MGV_BRANCHES_VIEW_H
-#define MGV_BRANCHES_VIEW_H
+#ifndef MGV_HEAVEN_TOOL_PRIVATE_H
+#define MGV_HEAVEN_TOOL_PRIVATE_H
 
-#include "Heaven/Views/View.h"
+#include "Heaven/Actions/ToolBar.h"
+#include "Heaven/Actions/UiContainer.h"
 
-#include "GitWrap/Repository.h"
-
-class QListWidget;
-class QToolBar;
-class QToolButton;
-
-class BranchesView : public HeavenView
+namespace Heaven
 {
-	Q_OBJECT
-public:
-	BranchesView();
 
-public:
-	void repositoryChanged( Git::Repository repo );
+	class ToolBarPrivate : public UiContainer
+	{
+		Q_OBJECT
+	public:
+		ToolBarPrivate( ToolBar* owner );
+		~ToolBarPrivate();
 
-private slots:
-	void rereadBranches();
+	public:
+		QToolBar* createQToolBar( QWidget* forParent );
+		QToolBar* getOrCreateQToolBar( QWidget* forParent );
 
-private:
-	Git::Repository		mRepo;
-	QListWidget*		mListWidget;
-	QToolBar*			mToolBar;
-	QToolButton*		mBtnLocals;
-	QToolButton*		mBtnRemotes;
-};
+	private slots:
+		void qtoolbarDestroyed();
+		void reemergeGuiElement();
+
+	public:
+		void setContainerDirty( bool value = true );
+		UiObjectTypes type() const;
+
+	public:
+		bool					mRebuildQueued;
+		QSet< QToolBar* >		mToolBars;
+	};
+
+}
 
 #endif

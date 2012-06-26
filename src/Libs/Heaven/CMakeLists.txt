@@ -11,59 +11,67 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
-	Container.cpp
-	View.cpp
-	TopLevelWidget.cpp
-	Decorator.cpp
+	Actions/Action.cpp
+	Actions/ActionContainer.cpp
+	Actions/Menu.cpp
+	Actions/MenuBar.cpp
+	Actions/MergePlace.cpp
+	Actions/MergesManager.cpp
+	Actions/Separator.cpp
+	Actions/ToolBar.cpp
+	Actions/UiContainer.cpp
+	Actions/UiManager.cpp
+	Actions/UiObject.cpp
+	Actions/WidgetAction.cpp
+	Actions/WidgetActionWrapper.cpp
 
-	Menu.cpp
-	Action.cpp
-	MenuBar.cpp
-	ToolBar.cpp
-	ActionContainer.cpp
-	MergePlace.cpp
-	UiManager.cpp
-	MergesManager.cpp
-	UiObject.cpp
-	UiContainer.cpp
-	Separator.cpp
-	WidgetAction.cpp
-	WidgetActionWrapper.cpp
+	Views/Container.cpp
+	Views/MainWindow.cpp
+	Views/Mode.cpp
+	Views/TopLevelWidget.cpp
+	Views/View.cpp
+	Views/Decorator.cpp
 )
 
 SET( PUB_HDR_FILES
 
-	HeavenApi.h
 	Heaven.h
-	Container.h
-	View.h
-	TopLevelWidget.h
+	HeavenApi.h
 
-	Menu.h
-	Action.h
-	MenuBar.h
-	ToolBar.h
-	ActionContainer.h
-	MergePlace.h
-	WidgetAction.h
+	Actions/Action.h
+	Actions/ActionContainer.h
+	Actions/Menu.h
+	Actions/MenuBar.h
+	Actions/MergePlace.h
+	Actions/ToolBar.h
+	Actions/WidgetAction.h
+
+	Views/Container.h
+	Views/MainWindow.h
+	Views/Mode.h
+	Views/TopLevelWidget.h
+	Views/View.h
 )
 
 SET( PRI_HDR_FILES
 
-	Decorator.h
-	MergesManager.h
-	ActionPrivate.h
-	MenuPrivate.h
-	MenuBarPrivate.h
-	ToolBarPrivate.h
-	ActionContainerPrivate.h
-	MergePlacePrivate.h
-	Separator.h
-	UiContainer.h
-	UiObject.h
-	UiManager.h
-	WidgetActionPrivate.h
-	WidgetActionWrapper.h
+	Actions/ActionContainerPrivate.h
+	Actions/ActionPrivate.h
+	Actions/MenuBarPrivate.h
+	Actions/MenuPrivate.h
+	Actions/MergePlacePrivate.h
+	Actions/MergesManager.h
+	Actions/Separator.h
+	Actions/ToolBarPrivate.h
+	Actions/UiContainer.h
+	Actions/UiManager.h
+	Actions/UiObject.h
+	Actions/WidgetActionPrivate.h
+	Actions/WidgetActionWrapper.h
+
+	Views/MainWindowPrivate.h
+	Views/ModePrivate.h
+	Views/Decorator.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

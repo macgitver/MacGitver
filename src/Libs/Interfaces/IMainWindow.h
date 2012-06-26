@@ -17,7 +17,7 @@
 #ifndef MGV_I_MAINWINDOW_H
 #define MGV_I_MAINWINDOW_H
 
-#include "Heaven/View.h"
+#include "Heaven/Views/View.h"
 
 class IMainWindow
 {

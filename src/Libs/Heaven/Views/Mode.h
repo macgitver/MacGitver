@@ -14,35 +14,39 @@
  *
  */
 
-#ifndef MGV_BRANCHES_VIEW_H
-#define MGV_BRANCHES_VIEW_H
+#ifndef MGV_HEAVEN_MODE_H
+#define MGV_HEAVEN_MODE_H
 
-#include "Heaven/Views/View.h"
+#include <QObject>
 
-#include "GitWrap/Repository.h"
-
-class QListWidget;
-class QToolBar;
-class QToolButton;
-
-class BranchesView : public HeavenView
+namespace Heaven
 {
-	Q_OBJECT
-public:
-	BranchesView();
 
-public:
-	void repositoryChanged( Git::Repository repo );
+	class MainWindow;
+	class ModePrivate;
 
-private slots:
-	void rereadBranches();
+	class Mode : public QObject
+	{
+		Q_OBJECT
+	public:
+		Mode( MainWindow* owner );
+		~Mode();
 
-private:
-	Git::Repository		mRepo;
-	QListWidget*		mListWidget;
-	QToolBar*			mToolBar;
-	QToolButton*		mBtnLocals;
-	QToolButton*		mBtnRemotes;
-};
+	public:
+		QString name() const;
+		void setName( const QString& name );
+
+	public:
+		void activate();
+		void deactivate();
+
+	signals:
+		void nameChanged( const QString& name );
+
+	private:
+		ModePrivate* d;
+	};
+
+}
 
 #endif

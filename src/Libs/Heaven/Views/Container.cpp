@@ -18,9 +18,9 @@
 #include <QTableWidget>
 #include <QSplitter>
 
-#include "Heaven/Decorator.h"
-#include "Heaven/Container.h"
-#include "Heaven/View.h"
+#include "Heaven/Views/Decorator.h"
+#include "Heaven/Views/Container.h"
+#include "Heaven/Views/View.h"
 
 HeavenViewContainer::HeavenViewContainer( Type t , Type s, HeavenViewContainer* parent )
 	: QObject( parent )

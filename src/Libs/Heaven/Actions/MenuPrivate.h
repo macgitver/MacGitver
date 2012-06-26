@@ -21,8 +21,8 @@
 
 class QMenu;
 
-#include "Heaven/Menu.h"
-#include "Heaven/UiContainer.h"
+#include "Heaven/Actions/Menu.h"
+#include "Heaven/Actions/UiContainer.h"
 
 namespace Heaven
 {

@@ -14,48 +14,35 @@
  *
  */
 
-#include <QWidget>
+#ifndef MGV_HEAVEN_MAINWINDOW_PRIVATE_H
+#define MGV_HEAVEN_MAINWINDOW_PRIVATE_H
 
-#include "Heaven/UiManager.h"
+class QStatusBar;
+class QMenuBar;
 
 namespace Heaven
 {
 
-	UiManager::UiManager()
-		: QObject()
+	class MainWindow;
+	class Mode;
+
+	class MainWindowPrivate
 	{
-	}
+	public:
+		MainWindowPrivate();
 
-	UiManager::~UiManager()
-	{
-	}
+	public:
+		void setup();
+		void switchToMode( Mode* mode );
 
-	UiManager* UiManager::sSelf = NULL;
-
-	UiManager* UiManager::self()
-	{
-		if( sSelf == NULL )
-		{
-			sSelf = new UiManager;
-		}
-
-		return sSelf;
-	}
-
-	void UiManager::addUiObject( UiObject* uio )
-	{
-		mUioUsage.insert( uio, QSet< UiObject* >() );
-	}
-
-	void UiManager::delUiObject( UiObject* uio )
-	{
-		QSet< UiObject* > usage = mUioUsage.value( uio );
-		mUioUsage.remove( uio );
-
-		foreach( UiObject* used, usage )
-		{
-			Q_UNUSED( used );
-		}
-	}
+	public:
+		MainWindow*			mOwner;
+		QStatusBar*			mStatusBar;
+		QMenuBar*			mMenuBar;
+		Mode*				mCurrentMode;
+		QVector< Mode* >	mModes;
+	};
 
 }
+
+#endif

@@ -16,7 +16,7 @@
 
 #include <QAction>
 
-#include "Heaven/ActionPrivate.h"
+#include "Heaven/Actions/ActionPrivate.h"
 
 namespace Heaven
 {

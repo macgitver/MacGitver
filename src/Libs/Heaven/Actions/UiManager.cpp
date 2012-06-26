@@ -14,19 +14,48 @@
  *
  */
 
-#include "Heaven/WidgetActionWrapper.h"
+#include <QWidget>
+
+#include "Heaven/Actions/UiManager.h"
 
 namespace Heaven
 {
 
-	WidgetActionWrapper::WidgetActionWrapper( QObject* parent )
-		: QWidgetAction( parent )
+	UiManager::UiManager()
+		: QObject()
 	{
-
 	}
 
-	WidgetActionWrapper::~WidgetActionWrapper()
+	UiManager::~UiManager()
 	{
+	}
+
+	UiManager* UiManager::sSelf = NULL;
+
+	UiManager* UiManager::self()
+	{
+		if( sSelf == NULL )
+		{
+			sSelf = new UiManager;
+		}
+
+		return sSelf;
+	}
+
+	void UiManager::addUiObject( UiObject* uio )
+	{
+		mUioUsage.insert( uio, QSet< UiObject* >() );
+	}
+
+	void UiManager::delUiObject( UiObject* uio )
+	{
+		QSet< UiObject* > usage = mUioUsage.value( uio );
+		mUioUsage.remove( uio );
+
+		foreach( UiObject* used, usage )
+		{
+			Q_UNUSED( used );
+		}
 	}
 
 }

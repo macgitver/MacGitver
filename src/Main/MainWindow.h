@@ -24,12 +24,14 @@ class QLabel;
 #include "GitWrap/Git.h"
 #include "GitWrap/Repository.h"
 
-#include "Heaven/TopLevelWidget.h"
+#include "Heaven/Views/TopLevelWidget.h"
+#include "Heaven/Views/MainWindow.h"
+
 #include "Interfaces/IMainWindow.h"
 
 #include "hic_MainWindowActions.h"
 
-class MainWindow : public QMainWindow, public IMainWindow, private MainWindowActions
+class MainWindow : public Heaven::MainWindow, public IMainWindow, private MainWindowActions
 {
 	Q_OBJECT
 public:

@@ -647,13 +647,13 @@ bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
 			 "\n"
 			 "class QObject;\n"
 			 "\n"
-			 "#include \"Heaven/Action.h\"\n"
-			 "#include \"Heaven/WidgetAction.h\"\n"
-			 "#include \"Heaven/Menu.h\"\n"
-			 "#include \"Heaven/MenuBar.h\"\n"
-			 "#include \"Heaven/ToolBar.h\"\n"
-			 "#include \"Heaven/MergePlace.h\"\n"
-			 "#include \"Heaven/ActionContainer.h\"\n"
+			 "#include \"Heaven/Actions/Action.h\"\n"
+			 "#include \"Heaven/Actions/WidgetAction.h\"\n"
+			 "#include \"Heaven/Actions/Menu.h\"\n"
+			 "#include \"Heaven/Actions/MenuBar.h\"\n"
+			 "#include \"Heaven/Actions/ToolBar.h\"\n"
+			 "#include \"Heaven/Actions/MergePlace.h\"\n"
+			 "#include \"Heaven/Actions/ActionContainer.h\"\n"
 			 "\n";
 
 	foreach( HICObject* uiObject, allObjects( HACO_Ui ) )

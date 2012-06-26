@@ -21,8 +21,8 @@
 
 class QAction;
 
-#include "Heaven/Action.h"
-#include "Heaven/UiObject.h"
+#include "Heaven/Actions/Action.h"
+#include "Heaven/Actions/UiObject.h"
 
 namespace Heaven
 {

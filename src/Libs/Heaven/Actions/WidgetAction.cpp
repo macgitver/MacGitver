@@ -14,56 +14,48 @@
  *
  */
 
-#include "Heaven/MergePlacePrivate.h"
-#include "Heaven/UiManager.h"
-#include "Heaven/MergesManager.h"
+#include <QAction>
+
+#include "Heaven/Actions/WidgetActionPrivate.h"
+#include "Heaven/Actions/WidgetActionWrapper.h"
 
 namespace Heaven
 {
 
-	MergePlacePrivate::MergePlacePrivate( MergePlace* owner )
+	WidgetActionPrivate::WidgetActionPrivate( WidgetAction* owner )
 		: UiObject( owner )
+		, mWrapper( NULL )
 	{
 	}
 
-	MergePlacePrivate::~MergePlacePrivate()
+	WidgetActionPrivate::~WidgetActionPrivate()
 	{
-		if( !mName.isEmpty() )
+	}
+
+	UiObjectTypes WidgetActionPrivate::type() const
+	{
+		return WidgetActionType;
+	}
+
+	WidgetActionWrapper* WidgetActionPrivate::wrapper()
+	{
+		if( !mWrapper )
 		{
-//			MergesManager::self()->removeMergePlace( this );
+			mWrapper = new WidgetActionWrapper( this );
 		}
+
+		return mWrapper;
 	}
 
-	UiObjectTypes MergePlacePrivate::type() const
-	{
-		return MergePlaceType;
-	}
-
-	MergePlace::MergePlace( QObject* parent )
+	WidgetAction::WidgetAction( QObject* parent )
 		: QObject( parent )
 	{
-		d = new MergePlacePrivate( this );
+		d = new WidgetActionPrivate( this );
 	}
 
-	MergePlace::~MergePlace()
+	WidgetAction::~WidgetAction()
 	{
 		delete d;
 	}
 
-	UiObject* MergePlace::uiObject()
-	{
-		return d;
-	}
-
-	void MergePlace::setName( const QByteArray& name )
-	{
-		d->mName = name;
-	}
-
-	QByteArray MergePlace::name() const
-	{
-		return d->mName;
-	}
-
 }
-

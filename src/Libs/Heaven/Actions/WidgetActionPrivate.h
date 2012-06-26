@@ -14,48 +14,36 @@
  *
  */
 
-#include <QAction>
+#ifndef MGV_HEAVEN_WIDGET_ACTION_PRIVATE_H
+#define MGV_HEAVEN_WIDGET_ACTION_PRIVATE_H
 
-#include "Heaven/WidgetActionPrivate.h"
-#include "Heaven/WidgetActionWrapper.h"
+#include <QSet>
+
+#include "Heaven/Actions/WidgetAction.h"
+#include "Heaven/Actions/UiObject.h"
 
 namespace Heaven
 {
 
-	WidgetActionPrivate::WidgetActionPrivate( WidgetAction* owner )
-		: UiObject( owner )
-		, mWrapper( NULL )
-	{
-	}
+	class WidgetActionWrapper;
 
-	WidgetActionPrivate::~WidgetActionPrivate()
+	class WidgetActionPrivate : public UiObject
 	{
-	}
+		Q_OBJECT
+	public:
+		WidgetActionPrivate( WidgetAction* owner );
+		~WidgetActionPrivate();
 
-	UiObjectTypes WidgetActionPrivate::type() const
-	{
-		return WidgetActionType;
-	}
+	public:
+		UiObjectTypes type() const;
 
-	WidgetActionWrapper* WidgetActionPrivate::wrapper()
-	{
-		if( !mWrapper )
-		{
-			mWrapper = new WidgetActionWrapper( this );
-		}
+	public:
+		WidgetActionWrapper* wrapper();
 
-		return mWrapper;
-	}
-
-	WidgetAction::WidgetAction( QObject* parent )
-		: QObject( parent )
-	{
-		d = new WidgetActionPrivate( this );
-	}
-
-	WidgetAction::~WidgetAction()
-	{
-		delete d;
-	}
+	private:
+		WidgetActionWrapper*		mWrapper;
+	};
 
 }
+
+#endif

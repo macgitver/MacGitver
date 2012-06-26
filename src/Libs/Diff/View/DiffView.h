@@ -19,14 +19,14 @@
 
 #include <QWidget>
 
-#include "Heaven/View.h"
-
-#include "Diff/View/DiffViewApi.h"
-
 class QTreeWidget;
 class QStackedWidget;
 class QTextBrowser;
 class QScrollBar;
+
+#include "Heaven/Views/View.h"
+
+#include "Diff/View/DiffViewApi.h"
 
 #include "Diff/Model/Patch.h"
 

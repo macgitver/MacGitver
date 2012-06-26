@@ -14,25 +14,19 @@
  *
  */
 
-#include <QAction>
-
-#include "Heaven/Separator.h"
+#include "Heaven/Actions/WidgetActionWrapper.h"
 
 namespace Heaven
 {
 
-	Separator::Separator( QObject* parent )
-		: UiObject( parent )
+	WidgetActionWrapper::WidgetActionWrapper( QObject* parent )
+		: QWidgetAction( parent )
 	{
+
 	}
 
-	Separator::~Separator()
+	WidgetActionWrapper::~WidgetActionWrapper()
 	{
-	}
-
-	UiObjectTypes Separator::type() const
-	{
-		return SeparatorType;
 	}
 
 }

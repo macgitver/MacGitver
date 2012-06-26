@@ -20,7 +20,7 @@
 #include <QApplication>
 
 #include "GitWrap/Repository.h"
-#include "Heaven/View.h"
+#include "Heaven/Views/View.h"
 #include "MacGitver/MacGitverApi.h"
 
 class Module;

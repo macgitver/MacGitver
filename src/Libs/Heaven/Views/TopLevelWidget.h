@@ -6,8 +6,8 @@
 
 #include "Heaven/HeavenApi.h"
 
-#include "Heaven/Container.h"
-#include "Heaven/View.h"
+#include "Heaven/Views/Container.h"
+#include "Heaven/Views/View.h"
 
 class HEAVEN_API HeavenTopLevelWidget : public QWidget
 {

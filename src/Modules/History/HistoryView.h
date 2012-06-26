@@ -25,7 +25,7 @@ class QToolBar;
 #include "GitWrap/Git.h"
 #include "GitWrap/Repository.h"
 
-#include "Heaven/View.h"
+#include "Heaven/Views/View.h"
 
 #include "HistoryEntry.h"
 

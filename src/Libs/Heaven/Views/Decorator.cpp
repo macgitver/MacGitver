@@ -14,25 +14,26 @@
  *
  */
 
-#ifndef MGV_HEAVEN_SEPARATOR_H
-#define MGV_HEAVEN_SEPARATOR_H
+#include <QPainter>
 
-#include "Heaven/UiObject.h"
+#include "Heaven/Views/Decorator.h"
+#include "Heaven/Views/View.h"
 
-namespace Heaven
+HeavenDecorator::HeavenDecorator( HeavenView* view )
+	: mView( view )
 {
-
-	class Separator : public UiObject
-	{
-		Q_OBJECT
-	public:
-		Separator( QObject* parent );
-		~Separator();
-
-	public:
-		UiObjectTypes type() const;
-	};
-
+	setMinimumHeight( 20 );
 }
 
-#endif
+void HeavenDecorator::paintEvent( QPaintEvent* ev )
+{
+	QPainter p( this );
+
+	QRect r = contentsRect().adjusted( 0, 0, -1, -1 );
+	p.fillRect( r, Qt::white );
+	p.setPen( Qt::black );
+	p.drawRect( r );
+	r.adjust( 2, 2, -2, -2 );
+	p.setFont( font() );
+	p.drawText( r, mView->viewName() );
+}

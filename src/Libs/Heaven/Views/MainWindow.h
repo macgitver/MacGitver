@@ -14,28 +14,46 @@
  *
  */
 
-#ifndef MGV_HEAVEN_ACTION_CONTAINER_PRIVATE_H
-#define MGV_HEAVEN_ACTION_CONTAINER_PRIVATE_H
+#ifndef MGV_HEAVEN_MAINWINDOW_H
+#define MGV_HEAVEN_MAINWINDOW_H
 
-#include "Heaven/ActionContainer.h"
-#include "Heaven/UiContainer.h"
+#include <QWidget>
+
+class QStatusBar;
+
+#include "Heaven/HeavenApi.h"
 
 namespace Heaven
 {
 
-	class ActionContainerPrivate : public UiContainer
+	class Mode;
+
+	class MainWindowPrivate;
+
+	class HEAVEN_API MainWindow : public QWidget
 	{
+		friend class MainWindowPrivate;
 		Q_OBJECT
 	public:
-		ActionContainerPrivate( ActionContainer* owner );
-		~ActionContainerPrivate();
+		MainWindow();
+		~MainWindow();
 
 	public:
-		UiObjectTypes type() const;
-		int priority() const;
+		void addMode( Mode* mode );
+		void removeMode( Mode* mode );
+		void setCurrentMode( Mode* mode );
+		Mode* currentMode();
 
-	public:
-		int				mPriority;
+		QStatusBar* statusBar();
+
+	signals:
+		void currentModeChanged( Heaven::Mode* newMode );
+
+	protected:
+		void resizeEvent( QResizeEvent* ev );
+
+	private:
+		MainWindowPrivate* d;
 	};
 
 }

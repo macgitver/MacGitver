@@ -14,26 +14,30 @@
  *
  */
 
-#include <QPainter>
+#ifndef MGV_HEAVEN_ACTION_CONTAINER_PRIVATE_H
+#define MGV_HEAVEN_ACTION_CONTAINER_PRIVATE_H
 
-#include "Heaven/Decorator.h"
-#include "Heaven/View.h"
+#include "Heaven/Actions/ActionContainer.h"
+#include "Heaven/Actions/UiContainer.h"
 
-HeavenDecorator::HeavenDecorator( HeavenView* view )
-	: mView( view )
+namespace Heaven
 {
-	setMinimumHeight( 20 );
+
+	class ActionContainerPrivate : public UiContainer
+	{
+		Q_OBJECT
+	public:
+		ActionContainerPrivate( ActionContainer* owner );
+		~ActionContainerPrivate();
+
+	public:
+		UiObjectTypes type() const;
+		int priority() const;
+
+	public:
+		int				mPriority;
+	};
+
 }
 
-void HeavenDecorator::paintEvent( QPaintEvent* ev )
-{
-	QPainter p( this );
-
-	QRect r = contentsRect().adjusted( 0, 0, -1, -1 );
-	p.fillRect( r, Qt::white );
-	p.setPen( Qt::black );
-	p.drawRect( r );
-	r.adjust( 2, 2, -2, -2 );
-	p.setFont( font() );
-	p.drawText( r, mView->viewName() );
-}
+#endif

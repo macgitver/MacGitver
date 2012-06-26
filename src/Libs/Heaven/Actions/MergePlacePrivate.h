@@ -14,40 +14,30 @@
  *
  */
 
-#include "Heaven/UiObject.h"
-#include "Heaven/UiContainer.h"
-#include "Heaven/UiManager.h"
+#ifndef MGV_HEAVEN_MERGEPLACE_PRIVATE_H
+#define MGV_HEAVEN_MERGEPLACE_PRIVATE_H
+
+#include <QByteArray>
+
+#include "Heaven/Actions/MergePlace.h"
+#include "Heaven/Actions/UiObject.h"
 
 namespace Heaven
 {
 
-	UiObject::UiObject( QObject* owner )
+	class MergePlacePrivate : public UiObject
 	{
-		UiManager::self()->addUiObject( this );
-	}
+		Q_OBJECT
+	public:
+		MergePlacePrivate( MergePlace* owner );
+		~MergePlacePrivate();
 
-	UiObject::~UiObject()
-	{
-		foreach( UiContainer* container, mContainers )
-		{
-			removeFromContainer( container );
-		}
+	public:
+		UiObjectTypes type() const;
 
-		UiManager::self()->delUiObject( this );
-	}
-
-	void UiObject::addedToContainer( UiContainer* container )
-	{
-		mContainers.insert( container );
-	}
-
-	void UiObject::removeFromContainer( UiContainer* container )
-	{
-		container->remove( this );
-	}
-
-	void UiObject::removedFromContainer( UiContainer* container )
-	{
-		mContainers.remove( container );
-	}
+	public:
+		QByteArray			mName;
+	};
 }
+
+#endif

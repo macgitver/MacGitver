@@ -14,39 +14,40 @@
  *
  */
 
-#ifndef MGV_HEAVEN_TOOL_PRIVATE_H
-#define MGV_HEAVEN_TOOL_PRIVATE_H
-
-#include "Heaven/ToolBar.h"
-#include "Heaven/UiContainer.h"
+#include "Heaven/Actions/UiObject.h"
+#include "Heaven/Actions/UiContainer.h"
+#include "Heaven/Actions/UiManager.h"
 
 namespace Heaven
 {
 
-	class ToolBarPrivate : public UiContainer
+	UiObject::UiObject( QObject* owner )
 	{
-		Q_OBJECT
-	public:
-		ToolBarPrivate( ToolBar* owner );
-		~ToolBarPrivate();
+		UiManager::self()->addUiObject( this );
+	}
 
-	public:
-		QToolBar* createQToolBar( QWidget* forParent );
-		QToolBar* getOrCreateQToolBar( QWidget* forParent );
+	UiObject::~UiObject()
+	{
+		foreach( UiContainer* container, mContainers )
+		{
+			removeFromContainer( container );
+		}
 
-	private slots:
-		void qtoolbarDestroyed();
-		void reemergeGuiElement();
+		UiManager::self()->delUiObject( this );
+	}
 
-	public:
-		void setContainerDirty( bool value = true );
-		UiObjectTypes type() const;
+	void UiObject::addedToContainer( UiContainer* container )
+	{
+		mContainers.insert( container );
+	}
 
-	public:
-		bool					mRebuildQueued;
-		QSet< QToolBar* >		mToolBars;
-	};
+	void UiObject::removeFromContainer( UiContainer* container )
+	{
+		container->remove( this );
+	}
 
+	void UiObject::removedFromContainer( UiContainer* container )
+	{
+		mContainers.remove( container );
+	}
 }
-
-#endif

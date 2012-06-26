@@ -14,23 +14,25 @@
  *
  */
 
-#include "Heaven/View.h"
+#include <QAction>
 
-HeavenView::HeavenView()
-{
-	mAction = NULL;
-}
+#include "Heaven/Actions/Separator.h"
 
-QString HeavenView::viewName() const
+namespace Heaven
 {
-	return mViewName;
-}
 
-void HeavenView::setViewName( const QString& name )
-{
-	if( name != mViewName )
+	Separator::Separator( QObject* parent )
+		: UiObject( parent )
 	{
-		mViewName = name;
-		emit nameChanged( mViewName );
 	}
+
+	Separator::~Separator()
+	{
+	}
+
+	UiObjectTypes Separator::type() const
+	{
+		return SeparatorType;
+	}
+
 }

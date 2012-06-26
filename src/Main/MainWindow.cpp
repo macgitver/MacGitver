@@ -14,6 +14,7 @@
  *
  */
 
+#include <QComboBox>
 #include <QStatusBar>
 #include <QFile>
 #include <QApplication>
@@ -30,14 +31,13 @@
 #include "ConfigDialog.h"
 #include "GeneralConfigPage.h"
 
-#include "Heaven/TopLevelWidget.h"
-
 #include "Diff/View/DiffView.h"
 
 #include "ui_AboutDlg.h"
 
 MainWindow::MainWindow()
-	: mRepo()
+	: Heaven::MainWindow()
+	, mRepo()
 {
 	setupUi();
 
@@ -56,19 +56,30 @@ void MainWindow::setupUi()
 	setStyleSheet( styleFile.readAll() );
 
 	setupActions( this );
-
+#if 0
 	setMenuBar( mbMainMenuBar->menuBarFor( this ) );
+
+	QComboBox* cb = new QComboBox;
+	cb->setStyleSheet( "QComboBox { border: 0px solid gray; padding: 1px 18px 1px 3px; background: lightgray; width: 100px; }"
+					   "QComboBox::drop-down { width: 0px; }"
+					 );
+	menuBar()->setCornerWidget( cb );
+	cb->addItem( "Foobar" );
+	cb->addItem( "Barfoo" );
+#endif
 
 	setWindowTitle( trUtf8( "MacGitver" ) );
 
 	statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
 
+#if 0
 	mTop = new HeavenTopLevelWidget();
 	setCentralWidget( mTop );
 
 	mTop->addView( new DiffView, Heaven::Central );
 
 	addToolBar( tbMainBar->toolBarFor( this ) );
+#endif
 }
 
 void MainWindow::repositoryChanged( const Git::Repository& repo )
@@ -110,7 +121,9 @@ void MainWindow::setHeadLabel()
 
 void MainWindow::integrateView( HeavenView* view, Heaven::Positions position )
 {
+#if 0
 	mTop->addView( view, position );
+#endif
 }
 
 QWidget* MainWindow::widget()

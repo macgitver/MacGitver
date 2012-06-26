@@ -18,16 +18,16 @@
 #include <QMenuBar>
 #include <QToolBar>
 
-#include "Heaven/UiContainer.h"
-#include "Heaven/UiManager.h"
-#include "Heaven/ActionContainerPrivate.h"
-#include "Heaven/MenuPrivate.h"
-#include "Heaven/ActionPrivate.h"
-#include "Heaven/WidgetActionPrivate.h"
-#include "Heaven/MergePlacePrivate.h"
-#include "Heaven/Separator.h"
-#include "Heaven/MergesManager.h"
-#include "Heaven/WidgetActionWrapper.h"
+#include "Heaven/Actions/UiContainer.h"
+#include "Heaven/Actions/UiManager.h"
+#include "Heaven/Actions/ActionContainerPrivate.h"
+#include "Heaven/Actions/MenuPrivate.h"
+#include "Heaven/Actions/ActionPrivate.h"
+#include "Heaven/Actions/WidgetActionPrivate.h"
+#include "Heaven/Actions/MergePlacePrivate.h"
+#include "Heaven/Actions/Separator.h"
+#include "Heaven/Actions/MergesManager.h"
+#include "Heaven/Actions/WidgetActionWrapper.h"
 
 namespace Heaven
 {

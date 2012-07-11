@@ -45,15 +45,26 @@ namespace Git
 		Q_ASSERT( d );
 		git_tree* d2 = (git_tree*) d->mObj;
 
-		git_tree* subTree = 0;
-
-		int rc = git_tree_get_subtree( &subTree, d2, pathName.constData() );
-		if( d->handleErrors( rc ) )
+		const git_tree_entry* entry = git_tree_entry_byname( d2, pathName.constData() );
+		if( !entry )
 		{
 			return ObjectTree();
 		}
 
-		return new ObjectPrivate( d->repo(), (git_object*) subTree );
+		git_object* subObject = 0;
+		int rc = git_tree_entry_to_object( &subObject, d->repo()->mRepo, entry );
+		if( d->handleErrors( rc ) || !subObject )
+		{
+			return ObjectTree();
+		}
+
+		if( git_object_type( subObject ) != GIT_OBJ_TREE )
+		{
+			git_object_free( subObject );
+			return ObjectTree();
+		}
+
+		return new ObjectPrivate( d->repo(), subObject );
 	}
 
 	DiffList ObjectTree::diffToTree( ObjectTree newTree )

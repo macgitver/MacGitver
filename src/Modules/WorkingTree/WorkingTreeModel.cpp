@@ -27,6 +27,7 @@ WorkingTreeModel::WorkingTreeModel( Git::Repository repo, QObject* parent )
 	, mRepo( repo )
 	, mRootItem( NULL )
 {
+	mFilters = WTF_All;
 	mRootItem = new WorkingTreeDirItem( this, NULL );
 	update();
 }

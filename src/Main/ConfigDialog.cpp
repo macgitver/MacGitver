@@ -56,10 +56,10 @@ void ConfigDialog::setModified( IConfigPage* page, bool value )
 	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( value );
 }
 
-void ConfigDialog::exec()
+int ConfigDialog::exec()
 {
 	buttonBox->button( QDialogButtonBox::Apply )->setEnabled( false );
 	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( false );
 
-	QDialog::exec();
+	return QDialog::exec();
 }

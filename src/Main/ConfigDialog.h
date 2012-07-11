@@ -35,7 +35,7 @@ public:
 	~ConfigDialog();
 
 public:
-	void exec();
+	int exec();
 
 public:
 	void setModified( IConfigPage* page, bool value );

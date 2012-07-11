@@ -62,6 +62,7 @@ private:
 	WorkingTreeModel*		mModel;
 	DiffRawView*			mRawDiff;
 	Git::Repository			mRepo;
+	bool					mFilterRecursion;
 };
 
 #endif

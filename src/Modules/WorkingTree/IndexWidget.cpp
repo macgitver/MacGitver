@@ -29,6 +29,7 @@
 #include "IndexWidget.h"
 
 #include "WorkingTreeItemView.h"
+#include "WorkingTreeModel.h"
 
 IndexWidget::IndexWidget()
 {
@@ -54,6 +55,7 @@ IndexWidget::IndexWidget()
 
 	setViewName( trUtf8( "Working tree" ) );
 
+	mFilterRecursion = false;
 	setTreeFilter( WTF_All );
 }
 
@@ -74,6 +76,11 @@ void IndexWidget::repositoryChanged( Git::Repository repo )
 
 void IndexWidget::onShowAll( bool enabled )
 {
+	if( mFilterRecursion )
+		return;
+
+	mFilterRecursion = true;
+
 	setTreeFilter( enabled ? WTF_All : WTF_None );
 
 	actShowIgnored->setChecked( enabled );
@@ -81,10 +88,17 @@ void IndexWidget::onShowAll( bool enabled )
 	actShowModified->setChecked( enabled );
 	actShowUnchanged->setChecked( enabled );
 	actShowUntracked->setChecked( enabled );
+
+	mFilterRecursion = false;
 }
 
 void IndexWidget::onShowModified( bool enabled )
 {
+	if( mFilterRecursion )
+		return;
+
+	mFilterRecursion = true;
+
 	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Changed;
@@ -93,10 +107,17 @@ void IndexWidget::onShowModified( bool enabled )
 	setTreeFilter( f );
 
 	actShowAll->setChecked( f == WTF_All );
+
+	mFilterRecursion = false;
 }
 
 void IndexWidget::onShowMissing( bool enabled )
 {
+	if( mFilterRecursion )
+		return;
+
+	mFilterRecursion = true;
+
 	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Missing;
@@ -105,10 +126,17 @@ void IndexWidget::onShowMissing( bool enabled )
 	setTreeFilter( f );
 
 	actShowAll->setChecked( f == WTF_All );
+
+	mFilterRecursion = false;
 }
 
 void IndexWidget::onShowIgnored( bool enabled )
 {
+	if( mFilterRecursion )
+		return;
+
+	mFilterRecursion = true;
+
 	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Ignored;
@@ -117,10 +145,17 @@ void IndexWidget::onShowIgnored( bool enabled )
 	setTreeFilter( f );
 
 	actShowAll->setChecked( f == WTF_All );
+
+	mFilterRecursion = false;
 }
 
 void IndexWidget::onShowUntracked( bool enabled )
 {
+	if( mFilterRecursion )
+		return;
+
+	mFilterRecursion = true;
+
 	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Untracked;
@@ -129,10 +164,17 @@ void IndexWidget::onShowUntracked( bool enabled )
 	setTreeFilter( f );
 
 	actShowAll->setChecked( f == WTF_All );
+
+	mFilterRecursion = false;
 }
 
 void IndexWidget::onShowUnchanged( bool enabled )
 {
+	if( mFilterRecursion )
+		return;
+
+	mFilterRecursion = true;
+
 	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Unchanged;
@@ -141,6 +183,8 @@ void IndexWidget::onShowUnchanged( bool enabled )
 	setTreeFilter( f );
 
 	actShowAll->setChecked( f == WTF_All );
+
+	mFilterRecursion = false;
 }
 
 void IndexWidget::setTreeFilter( WorkingTreeFilters filters )
@@ -150,4 +194,11 @@ void IndexWidget::setTreeFilter( WorkingTreeFilters filters )
 
 void IndexWidget::workingTreeChanged()
 {
+	WorkingTreeModel* model = static_cast< WorkingTreeModel* >( mTreeView->model() );
+	if( !model )
+	{
+		return;
+	}
+
+	model->update();
 }

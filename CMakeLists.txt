@@ -1,16 +1,15 @@
 
 PROJECT( MacGitver )
 
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
+CMAKE_MINIMUM_REQUIRED( VERSION 2.8.8 )
 
-FIND_PACKAGE( Qt4 4.8.0 REQUIRED )
+FIND_PACKAGE( Qt4 4.8.2 REQUIRED )
 
 SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
 SET( LIBRARY_OUTPUT_PATH    ${CMAKE_BINARY_DIR}/bin )
 
 INCLUDE( cmake/QtMacros.cmake )			# Our own set of Qt4 Macros
 INCLUDE( cmake/hic.cmake )              # The HI-Compiler
-#INCLUDE( cmake/Xslt.cmake )				# Generic Xslt support
 
 IF( UNIX )
 
@@ -29,6 +28,13 @@ IF( UNIX )
 
 ENDIF( UNIX )
 
-ADD_SUBDIRECTORY( libgit2  )
+# submodule containing libgit2
+OPTION (THREADSAFE "Build libgit2 as threadsafe" ON)
+OPTION (BUILD_CLAR "Build Tests using the Clar suite" OFF)
+ADD_SUBDIRECTORY( libgit2 )
+
+# Tools required to build MacGitver
 ADD_SUBDIRECTORY( tools )
+
+# MacGitver itself
 ADD_SUBDIRECTORY( src )

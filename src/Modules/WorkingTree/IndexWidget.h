@@ -28,7 +28,6 @@ class QSplitter;
 
 class DiffRawView;
 
-class IndexTree;
 class WorkingTreeModel;
 class WorkingTreeItemView;
 
@@ -59,7 +58,6 @@ private:
 
 private:
 	QSplitter*				mSplitter;
-	IndexTree*				mTree;
 	WorkingTreeItemView*	mTreeView;
 	WorkingTreeModel*		mModel;
 	DiffRawView*			mRawDiff;

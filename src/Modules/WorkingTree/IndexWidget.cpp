@@ -27,15 +27,11 @@
 #include "Diff/RawView/DiffRawView.h"
 
 #include "IndexWidget.h"
-#include "IndexTree.h"
 
 #include "WorkingTreeItemView.h"
 
 IndexWidget::IndexWidget()
 {
-	mTree = new IndexTree;
-	mTree->setFrameShape( QFrame::NoFrame );
-
 	mTreeView = new WorkingTreeItemView;
 	mTreeView->setFrameShape( QFrame::NoFrame );
 
@@ -50,12 +46,7 @@ IndexWidget::IndexWidget()
 	mRawDiff = new DiffRawView;
 
 	mSplitter = new QSplitter( Qt::Horizontal );
-
-	QSplitter* temp = new QSplitter( Qt::Vertical );
-	temp->addWidget( mTree );
-	temp->addWidget( mTreeView );
-
-	mSplitter->addWidget( temp );
+	mSplitter->addWidget( mTreeView );
 	mSplitter->addWidget( mRawDiff );
 
 	l->addWidget( mSplitter );
@@ -69,7 +60,6 @@ IndexWidget::IndexWidget()
 void IndexWidget::repositoryChanged( Git::Repository repo )
 {
 	mRepo = repo;
-	mTree->setRepository( repo );
 	mTreeView->setRepository( repo );
 
 	if( mRepo.isValid() )
@@ -95,7 +85,7 @@ void IndexWidget::onShowAll( bool enabled )
 
 void IndexWidget::onShowModified( bool enabled )
 {
-	WorkingTreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Changed;
 	else
@@ -107,7 +97,7 @@ void IndexWidget::onShowModified( bool enabled )
 
 void IndexWidget::onShowMissing( bool enabled )
 {
-	WorkingTreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Missing;
 	else
@@ -119,7 +109,7 @@ void IndexWidget::onShowMissing( bool enabled )
 
 void IndexWidget::onShowIgnored( bool enabled )
 {
-	WorkingTreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Ignored;
 	else
@@ -131,7 +121,7 @@ void IndexWidget::onShowIgnored( bool enabled )
 
 void IndexWidget::onShowUntracked( bool enabled )
 {
-	WorkingTreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Untracked;
 	else
@@ -143,7 +133,7 @@ void IndexWidget::onShowUntracked( bool enabled )
 
 void IndexWidget::onShowUnchanged( bool enabled )
 {
-	WorkingTreeFilters f = mTree->filters();
+	WorkingTreeFilters f = mTreeView->filters();
 	if( enabled )
 		f |= WTF_Unchanged;
 	else
@@ -155,7 +145,6 @@ void IndexWidget::onShowUnchanged( bool enabled )
 
 void IndexWidget::setTreeFilter( WorkingTreeFilters filters )
 {
-	mTree->setFilter( filters );
 	mTreeView->setFilter( filters );
 }
 

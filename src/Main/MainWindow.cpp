@@ -36,7 +36,7 @@
 #include "ui_AboutDlg.h"
 
 MainWindow::MainWindow()
-	: Heaven::MainWindow()
+	: QMainWindow()
 	, mRepo()
 {
 	setupUi();
@@ -56,9 +56,9 @@ void MainWindow::setupUi()
 	setStyleSheet( styleFile.readAll() );
 
 	setupActions( this );
-#if 0
 	setMenuBar( mbMainMenuBar->menuBarFor( this ) );
 
+#if 0
 	QComboBox* cb = new QComboBox;
 	cb->setStyleSheet( "QComboBox { border: 0px solid gray; padding: 1px 18px 1px 3px; background: lightgray; width: 100px; }"
 					   "QComboBox::drop-down { width: 0px; }"
@@ -72,7 +72,7 @@ void MainWindow::setupUi()
 
 	statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
 
-#if 0
+#if 1
 	mTop = new HeavenTopLevelWidget();
 	setCentralWidget( mTop );
 
@@ -121,7 +121,7 @@ void MainWindow::setHeadLabel()
 
 void MainWindow::integrateView( HeavenView* view, Heaven::Positions position )
 {
-#if 0
+#if 1
 	mTop->addView( view, position );
 #endif
 }

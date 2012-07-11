@@ -31,7 +31,7 @@ class QLabel;
 
 #include "hic_MainWindowActions.h"
 
-class MainWindow : public Heaven::MainWindow, public IMainWindow, private MainWindowActions
+class MainWindow : public QMainWindow, public IMainWindow, private MainWindowActions
 {
 	Q_OBJECT
 public:

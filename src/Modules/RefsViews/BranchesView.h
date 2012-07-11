@@ -34,6 +34,9 @@ public:
 public:
 	void repositoryChanged( Git::Repository repo );
 
+public:
+	virtual QSize sizeHint() const;
+
 private slots:
 	void rereadBranches();
 

@@ -76,3 +76,8 @@ void BranchesView::rereadBranches()
 
 	}
 }
+
+QSize BranchesView::sizeHint() const
+{
+	return QSize( 100, 100 );
+}

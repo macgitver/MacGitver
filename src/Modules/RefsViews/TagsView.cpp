@@ -50,3 +50,8 @@ void TagsView::repositoryChanged( Git::Repository repo )
 		}
 	}
 }
+
+QSize TagsView::sizeHint() const
+{
+	return QSize( 100, 100 );
+}

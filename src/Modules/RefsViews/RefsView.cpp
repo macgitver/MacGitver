@@ -51,3 +51,8 @@ void RefsView::repositoryChanged( Git::Repository repo )
 		mModel->clear();
 	}
 }
+
+QSize RefsView::sizeHint() const
+{
+	return QSize( 100, 100 );
+}

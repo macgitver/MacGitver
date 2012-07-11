@@ -32,6 +32,9 @@ public:
 public:
 	void repositoryChanged( Git::Repository repo );
 
+public:
+	virtual QSize sizeHint() const;
+
 private:
 	Git::Repository		mRepo;
 	QListWidget*		mListWidget;

@@ -70,6 +70,12 @@ void Config::loadLevels( const QString& fileName )
 
 		li->setDescription( foo.replace( "<desc", "<html" ).simplified() );
 
+		QDomElement e3 = e2.firstChildElement( "gui" );
+		if( e3.isElement() )
+		{
+			li->readGuiDef( e3.attribute( "file" ) );
+		}
+
 		addUserLevel( li );
 
 		e2 = e2.nextSiblingElement();

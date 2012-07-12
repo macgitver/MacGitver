@@ -18,9 +18,60 @@
 #define MGV_MGV_USERLEVELDEF_H
 
 #include <QString>
+#include <QStringList>
 #include <QHash>
 
 #include "Config/ConfigApi.h"
+
+class QDomElement;
+
+class CONFIG_API EnableDisable
+{
+public:
+	EnableDisable();
+	EnableDisable( const QString& regex, bool enable );
+
+public:
+	QString regex() const;
+	bool enable() const;
+
+private:
+	QString	mRegex;
+	bool	mEnable;
+};
+
+class CONFIG_API EnableDisableList
+{
+public:
+	EnableDisableList();
+
+public:
+	bool read( const QDomElement& parent );
+
+	QStringList appliedTo( const QStringList& list ) const;
+
+public:
+	int count() const;
+	const EnableDisable& at( int index ) const;
+
+private:
+	QList< EnableDisable > mList;
+};
+
+class UserLevelMode
+{
+public:
+	UserLevelMode( const QString& modeName );
+
+public:
+	QString name() const;
+	EnableDisableList& allowedViews();
+	const EnableDisableList& allowedViews() const;
+
+private:
+	QString				mModeName;
+	EnableDisableList	mAllowedViews;
+};
 
 class CONFIG_API UserLevelDefinition
 {
@@ -35,6 +86,7 @@ public:
 	QString name() const;
 	int precedence() const;
 	QString description() const;
+	void readGuiDef(const QString& fileName );
 	QString preset( const QString& type ) const;
 
 private:
@@ -42,6 +94,7 @@ private:
 	int							mAppLevel;
 	int							mPrecedence;
 	QString						mDescription;
+	QList< UserLevelMode >		mModes;
 	QHash< QString, QString >	mHeavenPresets;
 };
 

@@ -14,7 +14,126 @@
  *
  */
 
+#include <QSet>
+#include <QFile>
+#include <QRegExp>
+#include <QDebug>
+#include <QDomDocument>
+
 #include "UserLevelDefinition.h"
+
+
+EnableDisable::EnableDisable()
+{
+}
+
+EnableDisable::EnableDisable( const QString& regex, bool enable )
+	: mRegex( regex )
+	, mEnable( enable )
+{
+}
+
+QString EnableDisable::regex() const
+{
+	return mRegex;
+}
+
+bool EnableDisable::enable() const
+{
+	return mEnable;
+}
+
+EnableDisableList::EnableDisableList()
+{
+}
+
+bool EnableDisableList::read( const QDomElement& parent )
+{
+	QDomElement e = parent.firstChildElement();
+	while( e.isElement() )
+	{
+		if( e.tagName() == "Enable" )
+		{
+			mList.append( EnableDisable( e.attribute( "Name" ), true ) );
+		}
+		else if( e.tagName() == "Disable" )
+		{
+			mList.append( EnableDisable( e.attribute( "Name" ), false ) );
+		}
+		else
+		{
+			return false;
+		}
+
+		e = e.nextSiblingElement();
+	}
+
+	return true;
+}
+
+int EnableDisableList::count() const
+{
+	return mList.count();
+}
+
+const EnableDisable& EnableDisableList::at( int index ) const
+{
+	return mList.at( index );
+}
+
+QStringList EnableDisableList::appliedTo( const QStringList& list ) const
+{
+	QSet< QString > result;
+
+	for( int i = 0; i < mList.count(); i++ )
+	{
+		QRegExp re( mList.at( i ).regex() );
+		for( int j = 0; j < list.count(); j++ )
+		{
+			QString search = list.at( j );
+			if( re.indexIn( search ) != -1 )
+			{
+				if( mList.at( i ).enable() )
+				{
+					if( !result.contains( search ) )
+					{
+						result.insert( search );
+					}
+				}
+				else
+				{
+					if( result.contains( search ) )
+					{
+						result.remove( search );
+					}
+				}
+			}
+		}
+	}
+
+	return result.toList();
+}
+
+UserLevelMode::UserLevelMode( const QString& modeName )
+	: mModeName( modeName )
+{
+}
+
+QString UserLevelMode::name() const
+{
+	return mModeName;
+}
+
+EnableDisableList& UserLevelMode::allowedViews()
+{
+	return mAllowedViews;
+}
+
+const EnableDisableList& UserLevelMode::allowedViews() const
+{
+	return mAllowedViews;
+}
+
 
 UserLevelDefinition::UserLevelDefinition( const QString& name, int appLevel, int precedence )
 {
@@ -61,4 +180,29 @@ QString UserLevelDefinition::preset( const QString& type ) const
 	}
 
 	return QString();
+}
+
+void UserLevelDefinition::readGuiDef( const QString& fileName )
+{
+	QFile f( fileName );
+	if( !f.open( QFile::ReadOnly ) )
+	{
+		return;
+	}
+
+	QDomDocument doc;
+	doc.setContent( &f );
+
+	QDomElement elMode = doc.documentElement().firstChildElement( "Mode" );
+
+	while( elMode.isElement() )
+	{
+		UserLevelMode mode( elMode.attribute( "Name" ) );
+
+		mode.allowedViews().read( elMode );
+
+		mModes.append( mode );
+
+		elMode = elMode.nextSiblingElement( "Mode" );
+	}
 }

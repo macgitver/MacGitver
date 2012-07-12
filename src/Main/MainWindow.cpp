@@ -72,14 +72,12 @@ void MainWindow::setupUi()
 
 	statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
 
-#if 1
 	mTop = new HeavenTopLevelWidget();
 	setCentralWidget( mTop );
 
 	mTop->addView( new DiffView, Heaven::Central );
 
 	addToolBar( tbMainBar->toolBarFor( this ) );
-#endif
 }
 
 void MainWindow::repositoryChanged( const Git::Repository& repo )
@@ -121,9 +119,7 @@ void MainWindow::setHeadLabel()
 
 void MainWindow::integrateView( HeavenView* view, Heaven::Positions position )
 {
-#if 1
 	mTop->addView( view, position );
-#endif
 }
 
 QWidget* MainWindow::widget()

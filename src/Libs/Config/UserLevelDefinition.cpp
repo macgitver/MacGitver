@@ -114,6 +114,10 @@ QStringList EnableDisableList::appliedTo( const QStringList& list ) const
 	return result.toList();
 }
 
+UserLevelMode::UserLevelMode()
+{
+}
+
 UserLevelMode::UserLevelMode( const QString& modeName )
 	: mModeName( modeName )
 {
@@ -199,10 +203,37 @@ void UserLevelDefinition::readGuiDef( const QString& fileName )
 	{
 		UserLevelMode mode( elMode.attribute( "Name" ) );
 
-		mode.allowedViews().read( elMode );
+		QDomElement elViews = elMode.firstChildElement( "Views" );
+		if( elViews.isElement() )
+		{
+			mode.allowedViews().read( elViews );
+		}
 
 		mModes.append( mode );
 
 		elMode = elMode.nextSiblingElement( "Mode" );
 	}
+}
+
+int UserLevelDefinition::numModes() const
+{
+	return mModes.count();
+}
+
+UserLevelMode UserLevelDefinition::mode( int index ) const
+{
+	return mModes.at( index );
+}
+
+UserLevelMode UserLevelDefinition::mode( const QString& name ) const
+{
+	for( int i = 0; i < mModes.count(); i++ )
+	{
+		if( mModes[ i ].name() == name )
+		{
+			return mModes[ i ];
+		}
+	}
+
+	return UserLevelMode();
 }

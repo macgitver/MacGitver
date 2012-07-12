@@ -58,9 +58,10 @@ private:
 	QList< EnableDisable > mList;
 };
 
-class UserLevelMode
+class CONFIG_API UserLevelMode
 {
 public:
+	UserLevelMode();
 	UserLevelMode( const QString& modeName );
 
 public:
@@ -88,6 +89,10 @@ public:
 	QString description() const;
 	void readGuiDef(const QString& fileName );
 	QString preset( const QString& type ) const;
+
+	int numModes() const;
+	UserLevelMode mode( int index ) const;
+	UserLevelMode mode( const QString& name ) const;
 
 private:
 	QString						mName;

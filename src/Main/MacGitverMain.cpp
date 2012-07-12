@@ -60,7 +60,7 @@ void MacGitverMain::loadModules()
 
 void MacGitverMain::loadLevels()
 {
-	Config::self().loadLevels( ":/Xml/levels.xml" );
+	Config::self().loadLevels( ":/Xml/Levels.xml" );
 }
 
 void MacGitverMain::boot()

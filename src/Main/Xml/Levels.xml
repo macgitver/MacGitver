@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <levels>
 	<level name="Novice" precedence="1" applevel="0">
 		<desc>The <em>Novice</em>-Level will present you with the most basic operations. It will
 			not bother you with some gory details; nor will any advanced features be enabled.
 		</desc>
-		<useConfig for="*" link="Novice"/>
+		<gui file=":/Xml/Novice.Gui.xml"/>
 	</level>
 
 	<level name="Black Magican" precedence="20" applevel="100">
@@ -12,7 +13,6 @@
 			or customize the preexisting ones. It will enable options to view the very internals
 			of your git repository; including troubleshooting views and all the gory details.
 		</desc>
-		<useConfig for="*" link="BlackMagican"/>
 	</level>
 
 </levels>

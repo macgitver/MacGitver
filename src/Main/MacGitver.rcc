@@ -1,7 +1,7 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
 	 <file>MacGitver.qss</file>
-	 <file>Xml/levels.xml</file>
-	 <file>Xml/Novice.hstate</file>
+	 <file>Xml/Levels.xml</file>
+	 <file>Xml/Novice.Gui.xml</file>
  </qresource>
  </RCC>

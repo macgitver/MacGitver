@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Heaven>
+
+	<Mode Name="Welcome">
+
+		<Views>
+			<Disable Match="*"/>
+			<Enable  Match="Welcome"/>
+		</Views>
+
+		<DefaultLayout>
+			<View Name="Welcome"/>
+		</DefaultLayout>
+
+	</Mode>
+
+	<Mode Name="Novice">
+
+		<Views>
+			<Disable Match="*"/>
+			<Enable  Match="History"/>
+			<Enable  Match="WorkTree"/>
+			<Enable  Match="Branches"/>
+			<Enable  Match="Tags"/>
+			<Enable  Match="Log"/>
+		</Views>
+
+		<DefaultLayout>
+			<Split Orient="Vert">
+				<Split Orient="Horz" Stretch="3">
+					<Tab Orient="Vert" Caption="Left">
+						<View Name="Branches"/>
+						<View Name="Tags"/>
+					</Tab>
+					<Tab Orient="Horz" Caption="Top" Stretch="2">
+						<View Name="History"/>
+						<View Name="WorkTree"/>
+					</Tab>
+				</Split>
+				<Tab Orient="Horz" Caption="Bottom">
+					<View Name="Log"/>
+				</Tab>
+			</Split>
+		</DefaultLayout>
+
+	</Mode>
+
+</Heaven>

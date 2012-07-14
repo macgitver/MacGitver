@@ -96,3 +96,31 @@ MacGitver& MacGitver::self()
 	Q_ASSERT( sSelf );
 	return *sSelf;
 }
+
+void MacGitver::registerView( const QString& identifier, Heaven::ViewTypes type,
+							  ViewCreator* creator )
+{
+	Q_ASSERT( !mViews.contains( identifier ) );
+
+	ViewInfo vi;
+	vi.mIdentifier = identifier;
+	vi.mType = type;
+	vi.mCreator = creator;
+	mViews.insert( identifier, vi );
+}
+
+void MacGitver::unregisterView( const QString& identifier )
+{
+	mViews.remove( identifier );
+}
+
+Heaven::View* MacGitver::createView( const QString& identifier )
+{
+	if( mViews.contains( identifier ) )
+	{
+		ViewInfo vi = mViews.value( identifier );
+		return vi.mCreator();
+	}
+
+	return NULL;
+}

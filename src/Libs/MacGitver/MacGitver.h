@@ -29,10 +29,19 @@ class FSWatcher;
 class UserLevelDefinition;
 class IMainWindow;
 
+typedef Heaven::View* (ViewCreator)( );
 
 class MGV_CORE_API MacGitver : public QApplication
 {
 	Q_OBJECT
+private:
+	struct ViewInfo
+	{
+		QString				mIdentifier;
+		ViewCreator*		mCreator;
+		Heaven::ViewTypes	mType;
+	};
+
 public:
 	MacGitver( int argc, char **argv );
 	~MacGitver();
@@ -50,6 +59,10 @@ public:
 
 	void integrateView( Heaven::View* view, Heaven::Positions place );
 
+	void registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator );
+	void unregisterView( const QString& identifier );
+	Heaven::View* createView( const QString& identifier );
+
 signals:
 	void repositoryChanged( const Git::Repository& repo );
 
@@ -63,6 +76,7 @@ private:
 	IMainWindow*		mMainWindow;
 	FSWatcher*			mWatcher;
 	Git::Repository		mRepository;
+	QHash< QString, ViewInfo >	mViews;
 };
 
 #endif

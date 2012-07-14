@@ -25,6 +25,7 @@
 #include "Interfaces/IMainWindow.h"
 
 #include "MacGitver/MacGitverApi.h"
+#include "MacGitver/MacGitver.h"
 
 class MGV_CORE_API Module : public QObject, public IModule
 {
@@ -35,6 +36,13 @@ public:
 
 public:
 	IMainWindow* mainWindow();
+
+public:
+	void repositoryChanged( Git::Repository newRepository );
+
+protected:
+	void registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator );
+	void unregisterView( const QString& identifier );
 };
 
 #endif

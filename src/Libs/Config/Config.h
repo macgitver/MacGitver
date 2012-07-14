@@ -20,9 +20,7 @@
 #include <QList>
 #include <QString>
 
-#include "Config/ConfigApi.h"
-
-class UserLevelDefinition;
+#include "Config/UserLevelDefinition.h"
 
 class CONFIG_API Config
 {
@@ -31,16 +29,16 @@ public:
 
 public:
 	void loadLevels( const QString& fileName );
-	QList< UserLevelDefinition* > levels() const;
+	QList< UserLevelDefinition::Ptr > levels() const;
 
 private:
-	void addUserLevel( UserLevelDefinition* level );
+	void addUserLevel( UserLevelDefinition::Ptr level );
 
 private:
 	static Config* sSelf;
 	Config();
 	~Config();
-	QList< UserLevelDefinition* >	mLevels;
+	QList< UserLevelDefinition::Ptr >	mLevels;
 };
 
 #endif

@@ -31,7 +31,7 @@ GeneralConfigPage::GeneralConfigPage( IConfigDialog* dlg )
 	ui->setupUi( this );
 	ui->fontSourceCode->setFontFilters( QFontComboBox::MonospacedFonts );
 
-	foreach( UserLevelDefinition* lvl, Config::self().levels() )
+	foreach( UserLevelDefinition::Ptr lvl, Config::self().levels() )
 	{
 		ui->cboUserLevel->addItem( lvl->name(), lvl->precedence() );
 	}
@@ -66,7 +66,7 @@ void GeneralConfigPage::onUserLevelChanged( int index )
 
 	int data = ui->cboUserLevel->itemData( index ).toInt();
 
-	foreach( UserLevelDefinition* lvl, Config::self().levels() )
+	foreach( UserLevelDefinition::Ptr lvl, Config::self().levels() )
 	{
 		if( lvl->precedence() == data )
 		{

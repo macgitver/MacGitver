@@ -47,6 +47,14 @@ EnableDisableList::EnableDisableList()
 {
 }
 
+EnableDisableList::EnableDisableList( const QDomElement& parent )
+{
+	if( !read( parent ) )
+	{
+		mList.clear();
+	}
+}
+
 bool EnableDisableList::read( const QDomElement& parent )
 {
 	QDomElement e = parent.firstChildElement();
@@ -88,6 +96,7 @@ QStringList EnableDisableList::appliedTo( const QStringList& list ) const
 	for( int i = 0; i < mList.count(); i++ )
 	{
 		QRegExp re( mList.at( i ).regex() );
+
 		for( int j = 0; j < list.count(); j++ )
 		{
 			QString search = list.at( j );
@@ -114,12 +123,121 @@ QStringList EnableDisableList::appliedTo( const QStringList& list ) const
 	return result.toList();
 }
 
+UserLevelDefaultLayoutEntry::UserLevelDefaultLayoutEntry()
+{
+}
+
+UserLevelDefaultLayoutEntry::~UserLevelDefaultLayoutEntry()
+{
+}
+
+UserLevelDefaultLayoutEntry::Type UserLevelDefaultLayoutEntry::type() const
+{
+	return mType;
+}
+
+int UserLevelDefaultLayoutEntry::numChildren() const
+{
+	return mChildren.count();
+}
+
+UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayoutEntry::childAt( int index ) const
+{
+	return mChildren.at( index );
+}
+
+bool UserLevelDefaultLayoutEntry::parseOrient( const QString& s )
+{
+	return s == "Vert";
+}
+
+UserLevelDefaultLayoutEntry::TabPos UserLevelDefaultLayoutEntry::parseCaption( const QString& s )
+{
+	if( s == "Left" )
+		return Left;
+	if( s == "Right" )
+		return Right;
+	if( s == "Bottom" )
+		return Bottom;
+
+	return Top;
+}
+
+UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayoutEntry::read( const QDomElement& el )
+{
+	UserLevelDefaultLayoutEntry::Ptr entry( new UserLevelDefaultLayoutEntry );
+
+	if( el.tagName() == "Split" )
+	{
+		entry->mType = Split;
+		entry->mVertical = parseOrient( el.attribute( "Orient" ) );
+		entry->mStretch = el.attribute( "Stretch", "0" ).toInt();
+	}
+	else if( el.tagName() == "Tab" )
+	{
+		entry->mType = Tab;
+		entry->mTabPos = parseCaption( el.attribute( "Orient" ) );
+		entry->mStretch = el.attribute( "Stretch", "0" ).toInt();
+	}
+	else if( el.tagName() == "View" )
+	{
+		entry->mType = View;
+		entry->mName = el.attribute( "Name" );
+		entry->mStretch = el.attribute( "Stretch", "0" ).toInt();
+	}
+	else
+	{
+		return UserLevelDefaultLayoutEntry::Ptr();
+	}
+
+	for( QDomElement e = el.firstChildElement(); e.isElement(); e = e.nextSiblingElement() )
+	{
+		UserLevelDefaultLayoutEntry::Ptr child = read( e );
+		if( !child )
+		{
+			return UserLevelDefaultLayoutEntry::Ptr();
+		}
+		entry->mChildren.append( child );
+	}
+
+	return entry;
+}
+
+UserLevelDefaultLayout::UserLevelDefaultLayout()
+{
+}
+
+UserLevelDefaultLayout::~UserLevelDefaultLayout()
+{
+}
+
+UserLevelDefaultLayout::Ptr UserLevelDefaultLayout::read( const QDomElement& el )
+{
+	UserLevelDefaultLayout::Ptr deflay( new UserLevelDefaultLayout );
+
+	QDomElement elDef = el.firstChildElement();
+	if( !elDef.isElement() )
+	{
+		return UserLevelDefaultLayout::Ptr();
+	}
+
+	deflay->mRoot = UserLevelDefaultLayoutEntry::read( elDef );
+
+	return deflay;
+}
+
 UserLevelMode::UserLevelMode()
 {
 }
 
 UserLevelMode::UserLevelMode( const QString& modeName )
 	: mModeName( modeName )
+	, mIsLocking( false )
+	, mIsUserSelectable( true )
+{
+}
+
+UserLevelMode::~UserLevelMode()
 {
 }
 
@@ -138,12 +256,65 @@ const EnableDisableList& UserLevelMode::allowedViews() const
 	return mAllowedViews;
 }
 
-
-UserLevelDefinition::UserLevelDefinition( const QString& name, int appLevel, int precedence )
+bool UserLevelMode::isLockingMode() const
 {
-	mName = name;
-	mAppLevel = appLevel;
-	mPrecedence = precedence;
+	return mIsLocking;
+}
+
+bool UserLevelMode::isUserSelectable() const
+{
+	return mIsUserSelectable;
+}
+
+
+UserLevelMode::Ptr UserLevelMode::read( const QDomElement& el )
+{
+	UserLevelMode::Ptr mode( new UserLevelMode( el.attribute( "Name" ) ) );
+
+	for( QDomElement e = el.firstChildElement(); e.isElement(); e = e.nextSiblingElement() )
+	{
+		if( e.tagName() == "Views" )
+		{
+			mode->mAllowedViews = EnableDisableList( e );
+		}
+		else if( e.tagName() == "DefaultLayout" )
+		{
+			mode->mDefaultLayout = UserLevelDefaultLayout::read( e );
+		}
+	}
+
+	return mode;
+}
+
+UserLevelDefinition::UserLevelDefinition()
+{
+}
+
+UserLevelDefinition::~UserLevelDefinition()
+{
+}
+
+UserLevelDefinition::Ptr UserLevelDefinition::read( const QDomElement& el )
+{
+	UserLevelDefinition::Ptr def( new UserLevelDefinition );
+
+	def->mName = el.attribute( "name" );
+	def->mAppLevel = el.attribute( "applevel" ).toInt();
+	def->mPrecedence = el.attribute( "precedence" ).toInt();
+
+	QString foo;
+	QTextStream ts( &foo );
+	el.firstChildElement( "desc" ).save( ts, 0 );
+
+	def->mDescription = foo.replace( "<desc", "<html" ).simplified();
+
+	QDomElement e = el.firstChildElement( "gui" );
+	if( e.isElement() )
+	{
+		def->readGuiDef( e.attribute( "file" ) );
+	}
+
+	return def;
 }
 
 void UserLevelDefinition::setDescription( const QString& desc )
@@ -197,21 +368,21 @@ void UserLevelDefinition::readGuiDef( const QString& fileName )
 	QDomDocument doc;
 	doc.setContent( &f );
 
-	QDomElement elMode = doc.documentElement().firstChildElement( "Mode" );
+	QDomElement el = doc.documentElement().firstChildElement();
 
-	while( elMode.isElement() )
+	while( el.isElement() )
 	{
-		UserLevelMode mode( elMode.attribute( "Name" ) );
-
-		QDomElement elViews = elMode.firstChildElement( "Views" );
-		if( elViews.isElement() )
+		if( el.tagName() == "Mode" )
 		{
-			mode.allowedViews().read( elViews );
+			UserLevelMode::Ptr mode = UserLevelMode::read( el );
+			if( !mode )
+			{
+				return;
+			}
+			mModes.append( mode );
 		}
 
-		mModes.append( mode );
-
-		elMode = elMode.nextSiblingElement( "Mode" );
+		el = el.nextSiblingElement();
 	}
 }
 
@@ -220,20 +391,42 @@ int UserLevelDefinition::numModes() const
 	return mModes.count();
 }
 
-UserLevelMode UserLevelDefinition::mode( int index ) const
+UserLevelMode::Ptr UserLevelDefinition::mode( int index ) const
 {
 	return mModes.at( index );
 }
 
-UserLevelMode UserLevelDefinition::mode( const QString& name ) const
+UserLevelMode::Ptr UserLevelDefinition::mode( const QString& name ) const
 {
 	for( int i = 0; i < mModes.count(); i++ )
 	{
-		if( mModes[ i ].name() == name )
+		if( mModes[ i ]->name() == name )
 		{
 			return mModes[ i ];
 		}
 	}
 
-	return UserLevelMode();
+	return UserLevelMode::Ptr();
+}
+
+QList< UserLevelMode::Ptr > UserLevelDefinition::allModes() const
+{
+	return mModes;
+}
+
+QList< UserLevelMode::Ptr > UserLevelDefinition::userModes() const
+{
+	QList< UserLevelMode::Ptr > result;
+
+	for( int i = 0; i < mModes.count(); i++ )
+	{
+		UserLevelMode::Ptr m = mModes.at( i );
+
+		if( m->isUserSelectable() )
+		{
+			result += m;
+		}
+	}
+
+	return result;
 }

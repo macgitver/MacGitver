@@ -19,7 +19,6 @@
 #include <QTextStream>
 
 #include "Config/Config.h"
-#include "Config/UserLevelDefinition.h"
 
 Config::Config()
 {
@@ -27,8 +26,6 @@ Config::Config()
 
 Config::~Config()
 {
-	qDeleteAll( mLevels );
-	mLevels.clear();
 }
 
 Config* Config::sSelf = NULL;
@@ -59,30 +56,18 @@ void Config::loadLevels( const QString& fileName )
 	while( e2.isElement() )
 	{
 		Q_ASSERT( e2.tagName() == "level" );
-		UserLevelDefinition* li = new UserLevelDefinition(
-									  e2.attribute( "name" ),
-									  e2.attribute( "applevel" ).toInt(),
-									  e2.attribute( "precedence" ).toInt() );
-
-		QString foo;
-		QTextStream ts( &foo );
-		e2.firstChildElement( "desc" ).save( ts, 0 );
-
-		li->setDescription( foo.replace( "<desc", "<html" ).simplified() );
-
-		QDomElement e3 = e2.firstChildElement( "gui" );
-		if( e3.isElement() )
+		UserLevelDefinition::Ptr lvldef = UserLevelDefinition::read( e2 );
+		if( !lvldef )
 		{
-			li->readGuiDef( e3.attribute( "file" ) );
+			return /*false*/;
 		}
-
-		addUserLevel( li );
+		addUserLevel( lvldef );
 
 		e2 = e2.nextSiblingElement();
 	}
 }
 
-void Config::addUserLevel( UserLevelDefinition* level )
+void Config::addUserLevel( UserLevelDefinition::Ptr level )
 {
 	int i = 0;
 	while( i < mLevels.count() )
@@ -96,7 +81,7 @@ void Config::addUserLevel( UserLevelDefinition* level )
 	mLevels.insert( i, level );
 }
 
-QList< UserLevelDefinition* > Config::levels() const
+QList< UserLevelDefinition::Ptr > Config::levels() const
 {
 	return mLevels;
 }

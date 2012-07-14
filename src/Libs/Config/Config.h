@@ -19,6 +19,9 @@
 
 #include <QList>
 #include <QString>
+#include <QVariant>
+
+class QSettings;
 
 #include "Config/UserLevelDefinition.h"
 
@@ -28,8 +31,14 @@ public:
 	static Config& self();
 
 public:
+	void loadSettings();
+	void saveSettings();
+
 	void loadLevels( const QString& fileName );
 	QList< UserLevelDefinition::Ptr > levels() const;
+
+	QVariant get( const QString& path, const QVariant& defaultValue = QVariant() ) const;
+	void set( const QString& path, const QVariant& value );
 
 private:
 	void addUserLevel( UserLevelDefinition::Ptr level );
@@ -39,6 +48,7 @@ private:
 	Config();
 	~Config();
 	QList< UserLevelDefinition::Ptr >	mLevels;
+	QSettings*							mSettings;
 };
 
 #endif

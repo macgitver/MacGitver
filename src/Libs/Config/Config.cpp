@@ -17,15 +17,18 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QTextStream>
+#include <QSettings>
 
 #include "Config/Config.h"
 
 Config::Config()
+	: mSettings( NULL )
 {
 }
 
 Config::~Config()
 {
+	delete mSettings;
 }
 
 Config* Config::sSelf = NULL;
@@ -85,3 +88,38 @@ QList< UserLevelDefinition::Ptr > Config::levels() const
 {
 	return mLevels;
 }
+
+void Config::loadSettings()
+{
+	delete mSettings;
+	mSettings = new QSettings();
+}
+
+void Config::saveSettings()
+{
+	if( mSettings )
+	{
+		mSettings->sync();
+	}
+}
+
+QVariant Config::get( const QString& path, const QVariant& defaultValue ) const
+{
+	if( mSettings )
+	{
+		return mSettings->value( path, defaultValue );
+	}
+
+	return defaultValue;
+}
+
+void Config::set( const QString& path, const QVariant& value )
+{
+	if( !mSettings )
+	{
+		mSettings = new QSettings;
+	}
+
+	mSettings->setValue( path, value );
+}
+

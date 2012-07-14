@@ -52,7 +52,7 @@ private slots:
 	void onToolsPreferences();
 
 public:
-	void integrateView( HeavenView* view, Heaven::Positions position );
+	void integrateView( Heaven::View* view, Heaven::Positions position );
 	QWidget* widget();
 	void addError( const QString& err );
 

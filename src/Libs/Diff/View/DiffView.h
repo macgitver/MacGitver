@@ -34,7 +34,7 @@ class DiffWidget;
 class DiffTreeFileList;
 class DiffFrame;
 
-class DIFF_VIEW_API DiffView : public HeavenView
+class DIFF_VIEW_API DiffView : public Heaven::View
 {
 	Q_OBJECT
 public:

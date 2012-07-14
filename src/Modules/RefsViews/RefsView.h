@@ -25,7 +25,7 @@ class QListView;
 
 class RefsListModel;
 
-class RefsView : public HeavenView
+class RefsView : public Heaven::View
 {
 	Q_OBJECT
 public:

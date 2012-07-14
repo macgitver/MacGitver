@@ -18,7 +18,7 @@ public:
 
 public:
 	void addContainer( HeavenViewContainer* c );
-	void addView( HeavenView* c, Heaven::Positions pos = Heaven::Left );
+	void addView( Heaven::View* c, Heaven::Positions pos = Heaven::Left );
 
 protected:
 	void paintEvent( QPaintEvent* ev );

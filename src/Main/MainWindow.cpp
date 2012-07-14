@@ -117,7 +117,7 @@ void MainWindow::setHeadLabel()
 	}
 }
 
-void MainWindow::integrateView( HeavenView* view, Heaven::Positions position )
+void MainWindow::integrateView( Heaven::View* view, Heaven::Positions position )
 {
 	mTop->addView( view, position );
 }

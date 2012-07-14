@@ -26,7 +26,10 @@
 typedef QTabWidget HeavenTabWidget;
 typedef QSplitter HeavenSplitter;
 
-class HeavenView;
+namespace Heaven
+{
+	class View;
+}
 
 class HEAVEN_API HeavenViewContainer : public QObject
 {
@@ -54,7 +57,7 @@ public:
 		bool					isView;
 		union
 		{
-			HeavenView*			view;
+			Heaven::View*			view;
 			HeavenViewContainer*	container;
 		};
 	};
@@ -67,10 +70,10 @@ public:
 public:
 	Type type() const;
 
-	QList< HeavenView* > views() const;
+	QList< Heaven::View* > views() const;
 	int numViews() const;
-	int addView( HeavenView* view );
-	HeavenView* takeView( int index );
+	int addView( Heaven::View* view );
+	Heaven::View* takeView( int index );
 	QWidget* containerWidget();
 
 	QList< HeavenViewContainer* > containers() const;

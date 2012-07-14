@@ -21,30 +21,35 @@
 
 #include "Heaven/Heaven.h"
 
-class HEAVEN_API HeavenView : public QWidget
+namespace Heaven
 {
-	Q_OBJECT
-public:
-	enum Type
+
+	class HEAVEN_API View : public QWidget
 	{
-		Multiviewable,
-		Singleviewable
+		Q_OBJECT
+	public:
+		enum Type
+		{
+			Multiviewable,
+			Singleviewable
+		};
+
+
+	public:
+		View();
+
+	public:
+		QString viewName() const;
+		void setViewName( const QString& name );
+
+	signals:
+		void nameChanged( const QString& viewName );
+
+	private:
+		QString				mViewName;
+		QAction*			mAction;
 	};
 
-
-public:
-	HeavenView();
-
-public:
-	QString viewName() const;
-	void setViewName( const QString& name );
-
-signals:
-	void nameChanged( const QString& viewName );
-
-private:
-	QString				mViewName;
-	QAction*			mAction;
-};
+}
 
 #endif

@@ -48,7 +48,7 @@ public:
 
 	IMainWindow* mainWindow();
 
-	void integrateView( HeavenView* view, Heaven::Positions place );
+	void integrateView( Heaven::View* view, Heaven::Positions place );
 
 signals:
 	void repositoryChanged( const Git::Repository& repo );

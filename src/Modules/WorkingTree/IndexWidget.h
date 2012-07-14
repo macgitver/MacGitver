@@ -35,7 +35,7 @@ class WorkingTreeItemView;
 
 #include "hic_WorkingTreeActions.h"
 
-class IndexWidget : public HeavenView, private WorkingTreeActions
+class IndexWidget : public Heaven::View, private WorkingTreeActions
 {
 	Q_OBJECT
 public:

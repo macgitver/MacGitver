@@ -70,9 +70,9 @@ HeavenViewContainer::Type HeavenViewContainer::type() const
 	return mType;
 }
 
-QList< HeavenView* > HeavenViewContainer::views() const
+QList< Heaven::View* > HeavenViewContainer::views() const
 {
-	QList< HeavenView* > r;
+	QList< Heaven::View* > r;
 
 	for( int j = 0; j < mContent.count(); j++ )
 		if( mContent[ j ].isView )
@@ -114,7 +114,7 @@ int HeavenViewContainer::numContainers() const
 	return n;
 }
 
-int HeavenViewContainer::addView( HeavenView* view )
+int HeavenViewContainer::addView( Heaven::View* view )
 {
 	Content ct;
 	ct.isView = true;
@@ -132,7 +132,7 @@ int HeavenViewContainer::addView( HeavenView* view )
 			QVBoxLayout* l = new QVBoxLayout;
 			l->setSpacing( 0 );
 			l->setMargin( 0 );
-			l->addWidget( new HeavenDecorator( view ) );
+			l->addWidget( new Heaven::Decorator( view ) );
 			l->addWidget( view );
 			wrapper->setLayout( l );
 			mSpliterWidget->addWidget( wrapper );
@@ -175,7 +175,7 @@ void HeavenViewContainer::insertContainer( int pos, HeavenViewContainer* contain
 	}
 }
 
-HeavenView* HeavenViewContainer::takeView( int index )
+Heaven::View* HeavenViewContainer::takeView( int index )
 {
 	return 0;
 }

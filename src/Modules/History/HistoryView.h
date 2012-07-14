@@ -36,7 +36,7 @@ class HistoryList;
 class HistoryViewDelegate : public QItemDelegate
 {
 public:
-	virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+	void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private:
 	void paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2, const QColor& col,
@@ -45,7 +45,7 @@ private:
 										  const QModelIndex& i) const;
 };
 
-class HistoryView : public HeavenView
+class HistoryView : public Heaven::View
 {
 	Q_OBJECT
 public:

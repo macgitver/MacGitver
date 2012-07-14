@@ -16,21 +16,26 @@
 
 #include "Heaven/Views/View.h"
 
-HeavenView::HeavenView()
+namespace Heaven
 {
-	mAction = NULL;
-}
 
-QString HeavenView::viewName() const
-{
-	return mViewName;
-}
-
-void HeavenView::setViewName( const QString& name )
-{
-	if( name != mViewName )
+	View::View()
 	{
-		mViewName = name;
-		emit nameChanged( mViewName );
+		mAction = NULL;
 	}
+
+	QString View::viewName() const
+	{
+		return mViewName;
+	}
+
+	void View::setViewName( const QString& name )
+	{
+		if( name != mViewName )
+		{
+			mViewName = name;
+			emit nameChanged( mViewName );
+		}
+	}
+
 }

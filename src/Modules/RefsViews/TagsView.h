@@ -23,7 +23,7 @@
 
 class QListWidget;
 
-class TagsView : public HeavenView
+class TagsView : public Heaven::View
 {
 	Q_OBJECT
 public:

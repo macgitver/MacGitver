@@ -19,19 +19,24 @@
 
 #include <QWidget>
 
-class HeavenView;
-
-class HeavenDecorator : public QWidget
+namespace Heaven
 {
-	Q_OBJECT
-public:
-	HeavenDecorator( HeavenView* view );
 
-private:
-	void paintEvent( QPaintEvent* ev );
+	class View;
 
-private:
-	HeavenView*		mView;
-};
+	class Decorator : public QWidget
+	{
+		Q_OBJECT
+	public:
+		Decorator( View* view );
+
+	private:
+		void paintEvent( QPaintEvent* ev );
+
+	private:
+		View*		mView;
+	};
+
+}
 
 #endif

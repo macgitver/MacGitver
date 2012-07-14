@@ -47,7 +47,7 @@ HeavenTopLevelWidget::~HeavenTopLevelWidget()
 {
 }
 
-void HeavenTopLevelWidget::addView( HeavenView* view, Heaven::Positions pos )
+void HeavenTopLevelWidget::addView( Heaven::View* view, Heaven::Positions pos )
 {
 	switch( pos )
 	{

@@ -21,7 +21,7 @@
 
 class QTextBrowser;
 
-class WelcomeView : public HeavenView
+class WelcomeView : public Heaven::View
 {
 	Q_OBJECT
 public:

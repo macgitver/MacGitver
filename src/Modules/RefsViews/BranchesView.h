@@ -25,7 +25,7 @@ class QListWidget;
 class QToolBar;
 class QToolButton;
 
-class BranchesView : public HeavenView
+class BranchesView : public Heaven::View
 {
 	Q_OBJECT
 public:

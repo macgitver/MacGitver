@@ -263,6 +263,7 @@ void HistoryViewDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
 
 
 HistoryView::HistoryView()
+	: GlobalView( "History" )
 {
 	setViewName( trUtf8( "History" ) );
 

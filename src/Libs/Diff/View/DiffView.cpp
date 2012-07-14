@@ -29,7 +29,8 @@
 #include "Diff/RawView/DiffRawView.h"
 
 DiffView::DiffView()
-	: mPatch( NULL )
+	: View( "Diff" )
+	, mPatch( NULL )
 	, mTree( NULL )
 {
 	setFont( QFont( "Monospace", 8 ) );

@@ -25,7 +25,7 @@ class QToolBar;
 #include "GitWrap/Git.h"
 #include "GitWrap/Repository.h"
 
-#include "Heaven/Views/View.h"
+#include "Heaven/Views/GlobalView.h"
 
 #include "HistoryEntry.h"
 
@@ -45,7 +45,7 @@ private:
 										  const QModelIndex& i) const;
 };
 
-class HistoryView : public Heaven::View
+class HistoryView : public Heaven::GlobalView
 {
 	Q_OBJECT
 public:

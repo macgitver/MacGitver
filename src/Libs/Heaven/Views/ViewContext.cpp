@@ -14,45 +14,17 @@
  *
  */
 
-#include <QListWidget>
-#include <QVBoxLayout>
+#include "Heaven/Views/ViewContext.h"
 
-#include "TagsView.h"
-
-TagsView::TagsView()
-	: View( "Tags" )
+namespace Heaven
 {
-	mListWidget = new QListWidget();
-	mListWidget->setFrameStyle( QFrame::NoFrame );
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
-	l->addWidget( mListWidget );
-
-	setLayout( l );
-
-	setViewName( trUtf8( "Tags" ) );
-}
-
-void TagsView::repositoryChanged( Git::Repository repo )
-{
-	mRepo = repo;
-
-	mListWidget->clear();
-
-	if( mRepo.isValid() )
+	ViewContext::ViewContext()
 	{
-		QStringList sl = mRepo.allTags();
-
-		for( int i = 0; i < sl.count(); i++ )
-		{
-			new QListWidgetItem( sl[ i ], mListWidget );
-		}
 	}
-}
 
-QSize TagsView::sizeHint() const
-{
-	return QSize( 100, 100 );
+	ViewContext::~ViewContext()
+	{
+	}
+
 }

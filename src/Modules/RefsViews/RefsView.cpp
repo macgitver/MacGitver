@@ -21,6 +21,7 @@
 #include "RefsView.h"
 
 RefsView::RefsView()
+	: View( "Refs" )
 {
 	mListView = new QListView();
 	mListView->setFrameStyle( QFrame::NoFrame );

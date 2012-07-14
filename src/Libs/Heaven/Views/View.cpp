@@ -19,9 +19,11 @@
 namespace Heaven
 {
 
-	View::View()
+	View::View( const QString& identifier, ViewTypes type )
+		: mIdentifier( identifier )
+		, mType( type )
+		, mAction( NULL )
 	{
-		mAction = NULL;
 	}
 
 	QString View::viewName() const
@@ -36,6 +38,17 @@ namespace Heaven
 			mViewName = name;
 			emit nameChanged( mViewName );
 		}
+	}
+
+	QString View::identifier() const
+	{
+		return mIdentifier;
+	}
+
+
+	ViewTypes View::type() const
+	{
+		return mType;
 	}
 
 }

@@ -26,11 +26,13 @@ SET( SRC_FILES
 	Actions/WidgetActionWrapper.cpp
 
 	Views/Container.cpp
+	Views/Decorator.cpp
+	Views/GlobalView.cpp
 	Views/MainWindow.cpp
 	Views/Mode.cpp
 	Views/TopLevelWidget.cpp
 	Views/View.cpp
-	Views/Decorator.cpp
+	Views/ViewContext.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -47,10 +49,12 @@ SET( PUB_HDR_FILES
 	Actions/WidgetAction.h
 
 	Views/Container.h
+	Views/GlobalView.h
 	Views/MainWindow.h
 	Views/Mode.h
 	Views/TopLevelWidget.h
 	Views/View.h
+	Views/ViewContext.h
 )
 
 SET( PRI_HDR_FILES

@@ -21,6 +21,7 @@
 #include "WelcomeView.h"
 
 WelcomeView::WelcomeView()
+	: View( "Welcome" )
 {
 	setViewName( trUtf8( "Welcome" ) );
 

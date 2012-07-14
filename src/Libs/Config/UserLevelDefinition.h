@@ -168,6 +168,7 @@ public:
 
 public:
 	QString name() const;
+	QString id() const;
 	int precedence() const;
 	QString description() const;
 	void readGuiDef(const QString& fileName );
@@ -184,6 +185,7 @@ public:
 
 private:
 	QString						mName;
+	QString						mId;
 	int							mAppLevel;
 	int							mPrecedence;
 	QString						mDescription;

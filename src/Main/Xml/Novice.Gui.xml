@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Heaven>
 
-	<Mode Name="Welcome">
+	<Preset Name="Welcome" Mode="Welcome"/>
+	<Preset Name="Normal"  Mode="Novice"/>
+
+	<Mode Name="Welcome" Selectable="0" Locking="1">
 
 		<Views>
 			<Disable Match="*"/>
@@ -14,7 +17,7 @@
 
 	</Mode>
 
-	<Mode Name="Novice">
+	<Mode Name="Novice" Selectable="0" Locking="1">
 
 		<Views>
 			<Disable Match="*"/>

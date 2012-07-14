@@ -271,6 +271,22 @@ UserLevelMode::Ptr UserLevelMode::read( const QDomElement& el )
 {
 	UserLevelMode::Ptr mode( new UserLevelMode( el.attribute( "Name" ) ) );
 
+	if( el.hasAttribute( "Selectable" ) )
+	{
+		if( el.attribute( "Selectable" ) == "0" )
+		{
+			mode->mIsUserSelectable = false;
+		}
+	}
+
+	if( el.hasAttribute( "Locking" ) )
+	{
+		if( el.attribute( "Locking" ) == "1" )
+		{
+			mode->mIsLocking = true;
+		}
+	}
+
 	for( QDomElement e = el.firstChildElement(); e.isElement(); e = e.nextSiblingElement() )
 	{
 		if( e.tagName() == "Views" )
@@ -299,6 +315,7 @@ UserLevelDefinition::Ptr UserLevelDefinition::read( const QDomElement& el )
 	UserLevelDefinition::Ptr def( new UserLevelDefinition );
 
 	def->mName = el.attribute( "name" );
+	def->mId = el.attribute( "id" );
 	def->mAppLevel = el.attribute( "applevel" ).toInt();
 	def->mPrecedence = el.attribute( "precedence" ).toInt();
 
@@ -330,6 +347,11 @@ void UserLevelDefinition::addPreset( const QString& type, const QString& preset 
 QString UserLevelDefinition::name() const
 {
 	return mName;
+}
+
+QString UserLevelDefinition::id() const
+{
+	return mId;
 }
 
 int UserLevelDefinition::precedence() const
@@ -380,6 +402,12 @@ void UserLevelDefinition::readGuiDef( const QString& fileName )
 				return;
 			}
 			mModes.append( mode );
+		}
+		else if( el.tagName() == "Preset" )
+		{
+			QString preset = el.attribute( "Name" );
+			QString mode = el.attribute( "Mode" );
+			mHeavenPresets.insert( preset, mode );
 		}
 
 		el = el.nextSiblingElement();

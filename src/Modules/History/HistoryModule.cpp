@@ -43,16 +43,21 @@ Module::Types HistoryModule::providesModuleTypes() const
 	return View;
 }
 
+Heaven::View* HistoryModule::createHistoryView()
+{
+	return new HistoryView();
+}
+
 void HistoryModule::initialize()
 {
-	mView = new HistoryView();
-	mainWindow()->integrateView( mView, Heaven::Central );
+	registerView( "History",
+				  Heaven::GlobalViewType,
+				  &HistoryModule::createHistoryView );
 }
 
 void HistoryModule::deinitialize()
 {
-	delete mView;
-	mView = NULL;
+	unregisterView( "History" );
 }
 
 Q_EXPORT_PLUGIN2( History, HistoryModule )

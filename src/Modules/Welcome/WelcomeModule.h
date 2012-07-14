@@ -28,8 +28,6 @@ public:
 	WelcomeModule();
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
-
 	void setupConfigPages( IConfigDialog* dlg );
 	Types providesModuleTypes() const;
 
@@ -37,7 +35,7 @@ public:
 	void deinitialize();
 
 private:
-	WelcomeView*			mView;
+	static Heaven::View* createWelcomeView();
 };
 
 #endif

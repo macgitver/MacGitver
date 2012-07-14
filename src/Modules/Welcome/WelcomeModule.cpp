@@ -22,13 +22,7 @@
 #include "WelcomeView.h"
 
 WelcomeModule::WelcomeModule()
-	: mView( NULL )
 {
-}
-
-void WelcomeModule::repositoryChanged( Git::Repository newRepository )
-{
-	Q_UNUSED( newRepository );
 }
 
 void WelcomeModule::setupConfigPages( IConfigDialog* dialog )
@@ -41,16 +35,21 @@ Module::Types WelcomeModule::providesModuleTypes() const
 	return View;
 }
 
+Heaven::View* WelcomeModule::createWelcomeView()
+{
+	return new WelcomeView();
+}
+
 void WelcomeModule::initialize()
 {
-	mView = new WelcomeView();
-	mainWindow()->integrateView( mView, Heaven::Central );
+	registerView( "Welcome",
+				  Heaven::SingleViewType,
+				  &WelcomeModule::createWelcomeView );
 }
 
 void WelcomeModule::deinitialize()
 {
-	delete mView;
-	mView = NULL;
+	unregisterView( "Welcome" );
 }
 
 Q_EXPORT_PLUGIN2( Welcome, WelcomeModule )

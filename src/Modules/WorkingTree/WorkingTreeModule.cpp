@@ -22,16 +22,7 @@
 #include "IndexWidget.h"
 
 WorkingTreeModule::WorkingTreeModule()
-	: mView( NULL )
 {
-}
-
-void WorkingTreeModule::repositoryChanged( Git::Repository newRepository )
-{
-	if( mView )
-	{
-		mView->repositoryChanged( newRepository );
-	}
 }
 
 void WorkingTreeModule::setupConfigPages( IConfigDialog* dialog )
@@ -43,16 +34,21 @@ Module::Types WorkingTreeModule::providesModuleTypes() const
 	return View;
 }
 
+Heaven::View* WorkingTreeModule::createWorkTreeView()
+{
+	return new IndexWidget();
+}
+
 void WorkingTreeModule::initialize()
 {
-	mView = new IndexWidget();
-	mainWindow()->integrateView( mView, Heaven::Central );
+	registerView( "WorkTree",
+				  Heaven::SingleViewType,
+				  &WorkingTreeModule::createWorkTreeView );
 }
 
 void WorkingTreeModule::deinitialize()
 {
-	delete mView;
-	mView = NULL;
+	unregisterView( "WorkTree" );
 }
 
 Q_EXPORT_PLUGIN2( WorkingTree, WorkingTreeModule )

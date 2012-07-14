@@ -24,26 +24,7 @@
 #include "RefsView.h"
 
 RefsViewsModule::RefsViewsModule()
-	: mBranchesView( NULL )
-	, mTagsView( NULL )
-	, mRefsView( NULL )
 {
-}
-
-void RefsViewsModule::repositoryChanged( Git::Repository newRepository )
-{
-	if( mBranchesView )
-	{
-		mBranchesView->repositoryChanged( newRepository );
-	}
-	if( mTagsView )
-	{
-		mTagsView->repositoryChanged( newRepository );
-	}
-	if( mRefsView )
-	{
-		mRefsView->repositoryChanged( newRepository );
-	}
 }
 
 void RefsViewsModule::setupConfigPages( IConfigDialog* dialog )
@@ -55,26 +36,42 @@ Module::Types RefsViewsModule::providesModuleTypes() const
 	return View;
 }
 
+
+Heaven::View* RefsViewsModule::createBranchesView()
+{
+	return new BranchesView();
+}
+
+Heaven::View* RefsViewsModule::createTagsView()
+{
+	return new TagsView();
+}
+
+Heaven::View* RefsViewsModule::createRefsView()
+{
+	return new RefsView();
+}
+
 void RefsViewsModule::initialize()
 {
-	mBranchesView = new BranchesView();
-	mainWindow()->integrateView( mBranchesView, Heaven::Left );
+	registerView( "Branches",
+				  Heaven::GlobalViewType,
+				  &RefsViewsModule::createBranchesView );
 
-	mTagsView = new TagsView();
-	mainWindow()->integrateView( mTagsView, Heaven::Left );
+	registerView( "Refs",
+				  Heaven::GlobalViewType,
+				  &RefsViewsModule::createRefsView );
 
-	mRefsView = new RefsView();
-	mainWindow()->integrateView( mRefsView, Heaven::Left );
+	registerView( "Tags",
+				  Heaven::GlobalViewType,
+				  &RefsViewsModule::createTagsView );
 }
 
 void RefsViewsModule::deinitialize()
 {
-	delete mBranchesView;
-	delete mTagsView;
-	delete mRefsView;
-	mBranchesView = NULL;
-	mTagsView = NULL;
-	mRefsView = NULL;
+	unregisterView( "Branches" );
+	unregisterView( "Refs" );
+	unregisterView( "Tags" );
 }
 
 Q_EXPORT_PLUGIN2( RefsViews, RefsViewsModule )

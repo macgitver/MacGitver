@@ -19,10 +19,6 @@
 
 #include "MacGitver/Module.h"
 
-class RefsView;
-class BranchesView;
-class TagsView;
-
 class RefsViewsModule : public Module
 {
 	Q_OBJECT
@@ -30,8 +26,6 @@ public:
 	RefsViewsModule();
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
-
 	void setupConfigPages( IConfigDialog* dlg );
 	Types providesModuleTypes() const;
 
@@ -39,9 +33,9 @@ public:
 	void deinitialize();
 
 private:
-	BranchesView*	mBranchesView;
-	TagsView*		mTagsView;
-	RefsView*		mRefsView;
+	static Heaven::View* createBranchesView();
+	static Heaven::View* createTagsView();
+	static Heaven::View* createRefsView();
 };
 
 #endif

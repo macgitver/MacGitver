@@ -28,8 +28,6 @@ public:
 	WorkingTreeModule();
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
-
 	void setupConfigPages( IConfigDialog* dlg );
 	Types providesModuleTypes() const;
 
@@ -37,7 +35,7 @@ public:
 	void deinitialize();
 
 private:
-	IndexWidget*			mView;
+	static Heaven::View* createWorkTreeView();
 };
 
 #endif

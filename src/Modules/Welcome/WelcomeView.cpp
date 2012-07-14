@@ -16,6 +16,7 @@
 
 #include <QTextBrowser>
 #include <QVBoxLayout>
+#include <QFile>
 
 #include "WelcomeView.h"
 
@@ -25,8 +26,9 @@ WelcomeView::WelcomeView()
 
 	mBrowser = new QTextBrowser;
 
-	mBrowser->setHtml( "<html><h1>Welcome to MacGitver</h1>"
-					   "<p><em>The swiss army knife for GIT</em></p></html>");
+	QFile f( ":/ModWelcome/Welcome.html" );
+	f.open( QFile::ReadOnly );
+	mBrowser->setHtml( QString::fromUtf8( f.readAll() ) );
 
 	QVBoxLayout* l = new QVBoxLayout;
 	l->addWidget( mBrowser );

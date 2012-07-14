@@ -1,0 +1,5 @@
+ <!DOCTYPE RCC><RCC version="1.0">
+ <qresource prefix="ModWelcome">
+	 <file>Welcome.html</file>
+ </qresource>
+ </RCC>

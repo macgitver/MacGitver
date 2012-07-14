@@ -71,6 +71,7 @@ void MainWindow::setupUi()
 	setWindowTitle( trUtf8( "MacGitver" ) );
 
 	statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
+	setHeadLabel();
 
 	mTop = new Heaven::TopLevelWidget();
 	setCentralWidget( mTop );
@@ -113,7 +114,7 @@ void MainWindow::setHeadLabel()
 	}
 	else
 	{
-		mLblCurrentBranch->setText( QString() );
+		mLblCurrentBranch->setText( trUtf8( "No repository loaded" ) );
 	}
 }
 

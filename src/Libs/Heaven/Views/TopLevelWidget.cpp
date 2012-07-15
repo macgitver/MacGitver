@@ -20,89 +20,99 @@
 
 #include "Heaven/Views/TopLevelWidget.h"
 
-HeavenTopLevelWidget::HeavenTopLevelWidget()
+namespace Heaven
 {
-	mRoot1 = new HeavenViewContainer( HeavenViewContainer::Splitter, HeavenViewContainer::SubSplitVert );
-	mRoot2 = new HeavenViewContainer( HeavenViewContainer::Splitter, HeavenViewContainer::SubSplitHorz );
-	mRoot1->addContainer( mRoot2 );
 
-	mDocks[ 0 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabLeft );
-	mDocks[ 1 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabRight );
-	mDocks[ 2 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabTop );
-	mDocks[ 3 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabBottom );
-	mDocks[ 4 ] = new HeavenViewContainer( HeavenViewContainer::Tab, HeavenViewContainer::SubTabTop );
-
-	mRoot2->addContainer( mDocks[ 4 ] );
-
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setMargin( 2 );
-	l->setSpacing( 0 );
-	l->addWidget( mRoot1->containerWidget() );
-	setLayout( l );
-
-	setAutoFillBackground( false );
-}
-
-HeavenTopLevelWidget::~HeavenTopLevelWidget()
-{
-}
-
-void HeavenTopLevelWidget::addView( Heaven::View* view, Heaven::Positions pos )
-{
-	switch( pos )
+	TopLevelWidget::TopLevelWidget()
 	{
-	case Heaven::Left:
-		if( mRoot2->containers().first() != mDocks[ 0 ] )
-		{
-			mRoot2->insertContainer( 0, mDocks[ 0 ] );
-		}
+		mRoot1 = new ViewContainer( ViewContainer::Splitter, ViewContainer::SubSplitVert );
+		mRoot2 = new ViewContainer( ViewContainer::Splitter, ViewContainer::SubSplitHorz );
+		mRoot1->addContainer( mRoot2 );
 
-		mDocks[ 0 ]->addView( view );
+		mDocks[ 0 ] = new ViewContainer( ViewContainer::Tab, ViewContainer::SubTabLeft );
+		mDocks[ 1 ] = new ViewContainer( ViewContainer::Tab, ViewContainer::SubTabRight );
+		mDocks[ 2 ] = new ViewContainer( ViewContainer::Tab, ViewContainer::SubTabTop );
+		mDocks[ 3 ] = new ViewContainer( ViewContainer::Tab, ViewContainer::SubTabBottom );
+		mDocks[ 4 ] = new ViewContainer( ViewContainer::Tab, ViewContainer::SubTabTop );
 
-		break;
+		mRoot2->addContainer( mDocks[ 4 ] );
 
-	case Heaven::Right:
-		if( mRoot2->containers().last() != mDocks[ 1 ] )
-		{
-			mRoot2->insertContainer( mRoot2->numContainers(), mDocks[ 1 ] );
-		}
+		QVBoxLayout* l = new QVBoxLayout;
+		l->setMargin( 2 );
+		l->setSpacing( 0 );
+		l->addWidget( mRoot1->containerWidget() );
+		setLayout( l );
 
-		mDocks[ 1 ]->addView( view );
-
-		break;
-
-	case Heaven::Top:
-		if( mRoot1->containers().last() != mDocks[ 2 ] )
-		{
-			mRoot1->insertContainer( mRoot1->numContainers(), mDocks[ 2 ] );
-		}
-
-		mDocks[ 2 ]->addView( view );
-
-		break;
-
-	case Heaven::Bottom:
-		if( mRoot1->containers().last() != mDocks[ 3 ] )
-		{
-			mRoot1->insertContainer( mRoot1->numContainers(), mDocks[ 3 ] );
-		}
-
-		mDocks[ 3 ]->addView( view );
-
-		break;
-
-	case Heaven::Central:
-		mDocks[ 4 ]->addView( view );
-		break;
-
-	default:
-		break;
+		setAutoFillBackground( false );
 	}
-}
 
-void HeavenTopLevelWidget::paintEvent( QPaintEvent* ev )
-{
-	return;
-	QPainter p( this );
-	p.fillRect( contentsRect(), QColor( "navy" ) );
+	TopLevelWidget::~TopLevelWidget()
+	{
+		clear();
+	}
+
+	void TopLevelWidget::clear()
+	{
+	}
+
+	void TopLevelWidget::addView( View* view, Positions pos )
+	{
+		switch( pos )
+		{
+		case Heaven::Left:
+			if( mRoot2->containers().first() != mDocks[ 0 ] )
+			{
+				mRoot2->insertContainer( 0, mDocks[ 0 ] );
+			}
+
+			mDocks[ 0 ]->addView( view );
+
+			break;
+
+		case Heaven::Right:
+			if( mRoot2->containers().last() != mDocks[ 1 ] )
+			{
+				mRoot2->insertContainer( mRoot2->numContainers(), mDocks[ 1 ] );
+			}
+
+			mDocks[ 1 ]->addView( view );
+
+			break;
+
+		case Heaven::Top:
+			if( mRoot1->containers().last() != mDocks[ 2 ] )
+			{
+				mRoot1->insertContainer( mRoot1->numContainers(), mDocks[ 2 ] );
+			}
+
+			mDocks[ 2 ]->addView( view );
+
+			break;
+
+		case Heaven::Bottom:
+			if( mRoot1->containers().last() != mDocks[ 3 ] )
+			{
+				mRoot1->insertContainer( mRoot1->numContainers(), mDocks[ 3 ] );
+			}
+
+			mDocks[ 3 ]->addView( view );
+
+			break;
+
+		case Heaven::Central:
+			mDocks[ 4 ]->addView( view );
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	void TopLevelWidget::paintEvent( QPaintEvent* ev )
+	{
+		return;
+		QPainter p( this );
+		p.fillRect( contentsRect(), QColor( "navy" ) );
+	}
+
 }

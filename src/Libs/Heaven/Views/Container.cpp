@@ -22,165 +22,161 @@
 #include "Heaven/Views/Container.h"
 #include "Heaven/Views/View.h"
 
-HeavenViewContainer::HeavenViewContainer( Type t , Type s, HeavenViewContainer* parent )
-	: QObject( parent )
-	, mType( Type( t | s ) )
-	, mContainerWidget( NULL )
+namespace Heaven
 {
-	switch( t & BaseMask )
+
+	ViewContainer::ViewContainer( Type t, Type s, ViewContainer* parent )
+		: QObject( parent )
+		, mType( Type( t | s ) )
+		, mContainerWidget( NULL )
 	{
-	case Tab:
-		mTabWidget = new QTabWidget;
-		switch( s )
+		switch( t & BaseMask )
 		{
-		case SubTabLeft:	mTabWidget->setTabPosition( QTabWidget::West );		break;
-		case SubTabRight:	mTabWidget->setTabPosition( QTabWidget::East );		break;
-		case SubTabTop:		mTabWidget->setTabPosition( QTabWidget::North );	break;
-		case SubTabBottom:	mTabWidget->setTabPosition( QTabWidget::South );	break;
-		default: break;
+		case Tab:
+			mTabWidget = new QTabWidget;
+			switch( s )
+			{
+			case SubTabLeft:	mTabWidget->setTabPosition( QTabWidget::West );		break;
+			case SubTabRight:	mTabWidget->setTabPosition( QTabWidget::East );		break;
+			case SubTabTop:		mTabWidget->setTabPosition( QTabWidget::North );	break;
+			case SubTabBottom:	mTabWidget->setTabPosition( QTabWidget::South );	break;
+			default: break;
+			}
+
+			break;
+
+		case Splitter:
+			mSpliterWidget = new QSplitter;
+			break;
+
+		default:
+			Q_ASSERT( false );
+			break;
 		}
-
-		break;
-
-	case Splitter:
-		mSpliterWidget = new QSplitter;
-		break;
-
-	default:
-		Q_ASSERT( false );
-		break;
 	}
-}
 
-HeavenViewContainer::~HeavenViewContainer()
-{
-}
-
-#if 0
-void HeavenContainer::replaceWith( HeavenContainer* newContainer )
-{
-	HeavenContainer* p = qobject_cast< HeavenContainer* >( parent() );
-	int i = p->indexOf( this );
-
-}
-#endif
-
-HeavenViewContainer::Type HeavenViewContainer::type() const
-{
-	return mType;
-}
-
-QList< Heaven::View* > HeavenViewContainer::views() const
-{
-	QList< Heaven::View* > r;
-
-	for( int j = 0; j < mContent.count(); j++ )
-		if( mContent[ j ].isView )
-			r << mContent[ j ].view;
-
-	return r;
-}
-
-int HeavenViewContainer::numViews() const
-{
-	int n = 0;
-
-	for( int j = 0; j < mContent.count(); j++ )
-		if( mContent[ j ].isView )
-			n++;
-
-	return n;
-}
-
-QList< HeavenViewContainer* > HeavenViewContainer::containers() const
-{
-	QList< HeavenViewContainer* > r;
-
-	for( int j = 0; j < mContent.count(); j++ )
-		if( !mContent[ j ].isView )
-			r << mContent[ j ].container;
-
-	return r;
-}
-
-int HeavenViewContainer::numContainers() const
-{
-	int n = 0;
-
-	for( int j = 0; j < mContent.count(); j++ )
-		if( ! mContent[ j ].isView )
-			n++;
-
-	return n;
-}
-
-int HeavenViewContainer::addView( Heaven::View* view )
-{
-	Content ct;
-	ct.isView = true;
-	ct.view = view;
-	mContent.append( ct );
-
-	switch( mType & BaseMask )
+	ViewContainer::~ViewContainer()
 	{
-	case Tab:
-		return mTabWidget->addTab( view, view->viewName() );
+	}
 
-	case Splitter:
+	ViewContainer::Type ViewContainer::type() const
+	{
+		return mType;
+	}
+
+	QList< View* > ViewContainer::views() const
+	{
+		QList< View* > r;
+
+		for( int j = 0; j < mContent.count(); j++ )
+			if( mContent[ j ].isView )
+				r << mContent[ j ].view;
+
+		return r;
+	}
+
+	int ViewContainer::numViews() const
+	{
+		int n = 0;
+
+		for( int j = 0; j < mContent.count(); j++ )
+			if( mContent[ j ].isView )
+				n++;
+
+		return n;
+	}
+
+	QList< ViewContainer* > ViewContainer::containers() const
+	{
+		QList< ViewContainer* > r;
+
+		for( int j = 0; j < mContent.count(); j++ )
+			if( !mContent[ j ].isView )
+				r << mContent[ j ].container;
+
+		return r;
+	}
+
+	int ViewContainer::numContainers() const
+	{
+		int n = 0;
+
+		for( int j = 0; j < mContent.count(); j++ )
+			if( ! mContent[ j ].isView )
+				n++;
+
+		return n;
+	}
+
+	int ViewContainer::addView( View* view )
+	{
+		Content ct;
+		ct.isView = true;
+		ct.view = view;
+		mContent.append( ct );
+
+		switch( mType & BaseMask )
 		{
-			QWidget* wrapper = new QWidget;
-			QVBoxLayout* l = new QVBoxLayout;
-			l->setSpacing( 0 );
-			l->setMargin( 0 );
-			l->addWidget( new Heaven::Decorator( view ) );
-			l->addWidget( view );
-			wrapper->setLayout( l );
-			mSpliterWidget->addWidget( wrapper );
+		case Tab:
+			return mTabWidget->addTab( view, view->viewName() );
+
+		case Splitter:
+			{
+				QWidget* wrapper = new QWidget;
+				QVBoxLayout* l = new QVBoxLayout;
+				l->setSpacing( 0 );
+				l->setMargin( 0 );
+				l->addWidget( new Decorator( view ) );
+				l->addWidget( view );
+				wrapper->setLayout( l );
+				mSpliterWidget->addWidget( wrapper );
+			}
+			return mContent.count() - 1;
+
+		default:
+			Q_ASSERT( false );
+			return -1;
 		}
-		return mContent.count() - 1;
-
-	default:
-		Q_ASSERT( false );
-		return -1;
 	}
-}
 
-int HeavenViewContainer::addContainer( HeavenViewContainer* container )
-{
-	int pos = mContent.count();
-	insertContainer( pos, container );
-	return pos;
-}
-
-void HeavenViewContainer::insertContainer( int pos, HeavenViewContainer* container )
-{
-	Content ct;
-	ct.isView = false;
-	ct.container = container;
-	mContent.insert( pos, ct );
-
-	switch( mType & BaseMask )
+	int ViewContainer::addContainer( ViewContainer* container )
 	{
-	case Tab:
-		mTabWidget->insertTab( pos, container->containerWidget(), "Container" );
-		return;
-
-	case Splitter:
-		mSpliterWidget->insertWidget( pos, container->containerWidget() );
-		return;
-
-	default:
-		Q_ASSERT( false );
-		return;
+		int pos = mContent.count();
+		insertContainer( pos, container );
+		return pos;
 	}
-}
 
-Heaven::View* HeavenViewContainer::takeView( int index )
-{
-	return 0;
-}
+	void ViewContainer::insertContainer( int pos, ViewContainer* container )
+	{
+		Content ct;
+		ct.isView = false;
+		ct.container = container;
+		mContent.insert( pos, ct );
 
-QWidget* HeavenViewContainer::containerWidget()
-{
-	return mContainerWidget;
+		switch( mType & BaseMask )
+		{
+		case Tab:
+			mTabWidget->insertTab( pos, container->containerWidget(), "Container" );
+			return;
+
+		case Splitter:
+			mSpliterWidget->insertWidget( pos, container->containerWidget() );
+			return;
+
+		default:
+			Q_ASSERT( false );
+			return;
+		}
+	}
+
+	View* ViewContainer::takeView( int index )
+	{
+		return 0;
+	}
+
+	QWidget* ViewContainer::containerWidget()
+	{
+		return mContainerWidget;
+	}
+
 }

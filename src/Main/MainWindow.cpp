@@ -72,7 +72,7 @@ void MainWindow::setupUi()
 
 	statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
 
-	mTop = new HeavenTopLevelWidget();
+	mTop = new Heaven::TopLevelWidget();
 	setCentralWidget( mTop );
 
 	mTop->addView( new DiffView, Heaven::Central );

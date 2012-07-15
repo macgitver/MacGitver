@@ -23,74 +23,74 @@
 
 #include "Heaven/HeavenApi.h"
 
-typedef QTabWidget HeavenTabWidget;
-typedef QSplitter HeavenSplitter;
-
 namespace Heaven
 {
 	class View;
-}
 
-class HEAVEN_API HeavenViewContainer : public QObject
-{
-	Q_OBJECT
-public:
-	enum Type
+	typedef QTabWidget	HeavenTabWidget;
+	typedef QSplitter	HeavenSplitter;
+
+	class HEAVEN_API ViewContainer : public QObject
 	{
-		Tab			= 1 << 8,
-		Splitter	= 1 << 9,
-		BaseMask	= Tab|Splitter,
+		Q_OBJECT
+	public:
+		enum Type
+		{
+			Tab			= 1 << 8,
+			Splitter	= 1 << 9,
+			BaseMask	= Tab|Splitter,
 
-		SubTabTop		= 0,
-		SubTabBottom	= 1,
-		SubTabRight		= 2,
-		SubTabLeft		= 3,
+			SubTabTop		= 0,
+			SubTabBottom	= 1,
+			SubTabRight		= 2,
+			SubTabLeft		= 3,
 
-		SubSplitVert	= 0,
-		SubSplitHorz	= 1,
+			SubSplitVert	= 0,
+			SubSplitHorz	= 1,
 
-		SubMask			= 255
-	};
+			SubMask			= 255
+		};
 
-	struct Content
-	{
-		bool					isView;
+		struct Content
+		{
+			bool				isView;
+			union
+			{
+				View*			view;
+				ViewContainer*	container;
+			};
+		};
+
+	public:
+		ViewContainer( Type t, Type s, ViewContainer* parent = NULL );
+		~ViewContainer();
+
+	public:
+		Type type() const;
+
+		QList< View* > views() const;
+		int numViews() const;
+		int addView( View* view );
+		View* takeView( int index );
+		QWidget* containerWidget();
+
+		QList< ViewContainer* > containers() const;
+		int numContainers() const;
+		int addContainer( ViewContainer* container );
+		void insertContainer( int pos, ViewContainer* container );
+
+	private:
+		Type				mType;
+		QList< Content >	mContent;
+
 		union
 		{
-			Heaven::View*			view;
-			HeavenViewContainer*	container;
+			QWidget*			mContainerWidget;
+			HeavenSplitter*		mSpliterWidget;
+			HeavenTabWidget*	mTabWidget;
 		};
 	};
 
-public:
-	HeavenViewContainer( Type t, Type s, HeavenViewContainer* parent = NULL );
-	~HeavenViewContainer();
-
-
-public:
-	Type type() const;
-
-	QList< Heaven::View* > views() const;
-	int numViews() const;
-	int addView( Heaven::View* view );
-	Heaven::View* takeView( int index );
-	QWidget* containerWidget();
-
-	QList< HeavenViewContainer* > containers() const;
-	int numContainers() const;
-	int addContainer( HeavenViewContainer* container );
-	void insertContainer( int pos, HeavenViewContainer* container );
-
-private:
-	Type				mType;
-	QList< Content >	mContent;
-
-	union
-	{
-		QWidget*			mContainerWidget;
-		HeavenSplitter*		mSpliterWidget;
-		HeavenTabWidget*	mTabWidget;
-	};
-};
+}
 
 #endif

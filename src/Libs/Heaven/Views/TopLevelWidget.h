@@ -9,24 +9,32 @@
 #include "Heaven/Views/Container.h"
 #include "Heaven/Views/View.h"
 
-class HEAVEN_API HeavenTopLevelWidget : public QWidget
+namespace Heaven
 {
-	Q_OBJECT
-public:
-	HeavenTopLevelWidget();
-	~HeavenTopLevelWidget();
 
-public:
-	void addContainer( HeavenViewContainer* c );
-	void addView( Heaven::View* c, Heaven::Positions pos = Heaven::Left );
+	class HEAVEN_API TopLevelWidget : public QWidget
+	{
+		Q_OBJECT
+	public:
+		TopLevelWidget();
+		~TopLevelWidget();
 
-protected:
-	void paintEvent( QPaintEvent* ev );
+	public:
+		void clear();
 
-private:
-	HeavenViewContainer*		mRoot1;
-	HeavenViewContainer*		mRoot2;
-	HeavenViewContainer*		mDocks[ 5 ];
-};
+	public:
+		void addContainer( ViewContainer* c );
+		void addView( View* c, Positions pos = Left );
+
+	protected:
+		void paintEvent( QPaintEvent* ev );
+
+	private:
+		ViewContainer*		mRoot1;
+		ViewContainer*		mRoot2;
+		ViewContainer*		mDocks[ 5 ];
+	};
+
+}
 
 #endif

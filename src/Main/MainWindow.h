@@ -58,7 +58,7 @@ public:
 
 private:
 	QLabel*					mLblCurrentBranch;
-	HeavenTopLevelWidget*	mTop;
+	Heaven::TopLevelWidget*	mTop;
 
 	Git::Repository			mRepo;
 };

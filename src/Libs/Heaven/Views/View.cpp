@@ -51,4 +51,8 @@ namespace Heaven
 		return mType;
 	}
 
+	void View::aboutToRemove()
+	{
+	}
+
 }

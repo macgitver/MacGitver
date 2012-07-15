@@ -41,6 +41,9 @@ namespace Heaven
 	signals:
 		void nameChanged( const QString& viewName );
 
+	protected:
+		virtual void aboutToRemove();
+
 	private:
 		const QString		mIdentifier;
 		QString				mViewName;

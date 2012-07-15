@@ -17,7 +17,6 @@
 #ifndef MGV_HISTORY_VIEW_H
 #define MGV_HISTORY_VIEW_H
 
-#include <QWidget>
 #include <QItemDelegate>
 
 class QToolBar;

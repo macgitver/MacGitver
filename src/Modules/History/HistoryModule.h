@@ -28,8 +28,6 @@ public:
 	HistoryModule();
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
-
 	void setupConfigPages( IConfigDialog* dlg );
 	Types providesModuleTypes() const;
 

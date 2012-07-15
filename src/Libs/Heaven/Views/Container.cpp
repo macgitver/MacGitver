@@ -46,7 +46,7 @@ namespace Heaven
 			break;
 
 		case Splitter:
-			mSpliterWidget = new QSplitter;
+			mSpliterWidget = new QSplitter( s == SubSplitHorz ? Qt::Horizontal : Qt::Vertical );
 			break;
 
 		default:

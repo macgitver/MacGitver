@@ -23,6 +23,10 @@ namespace Heaven
 		void clear();
 
 	public:
+		ViewContainer* rootContainer();
+		void setRootContainer( ViewContainer* c );
+
+	public:
 		void addContainer( ViewContainer* c );
 		void addView( View* c, Positions pos = Left );
 
@@ -30,9 +34,7 @@ namespace Heaven
 		void paintEvent( QPaintEvent* ev );
 
 	private:
-		ViewContainer*		mRoot1;
-		ViewContainer*		mRoot2;
-		ViewContainer*		mDocks[ 5 ];
+		ViewContainer*		mRoot;
 	};
 
 }

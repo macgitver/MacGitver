@@ -91,6 +91,9 @@ public:
 	Type type() const;
 	int numChildren() const;
 	UserLevelDefaultLayoutEntry::Ptr childAt( int index ) const;
+	QVector< UserLevelDefaultLayoutEntry::Ptr > children() const;
+	bool isVertical() const;
+	QString name() const;
 
 public:
 	static UserLevelDefaultLayoutEntry::Ptr read( const QDomElement& el );
@@ -117,6 +120,9 @@ public:
 	~UserLevelDefaultLayout();
 
 public:
+	UserLevelDefaultLayoutEntry::Ptr root() const;
+
+public:
 	static UserLevelDefaultLayout::Ptr read( const QDomElement& el );
 
 private:
@@ -136,6 +142,8 @@ public:
 	QString name() const;
 	EnableDisableList& allowedViews();
 	const EnableDisableList& allowedViews() const;
+
+	UserLevelDefaultLayout::Ptr defaultLayout() const;
 
 	bool isLockingMode() const;
 	bool isUserSelectable() const;

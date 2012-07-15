@@ -146,6 +146,21 @@ UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayoutEntry::childAt( int index
 	return mChildren.at( index );
 }
 
+QVector< UserLevelDefaultLayoutEntry::Ptr > UserLevelDefaultLayoutEntry::children() const
+{
+	return mChildren;
+}
+
+bool UserLevelDefaultLayoutEntry::isVertical() const
+{
+	return mVertical;
+}
+
+QString UserLevelDefaultLayoutEntry::name() const
+{
+	return mName;
+}
+
 bool UserLevelDefaultLayoutEntry::parseOrient( const QString& s )
 {
 	return s == "Vert";
@@ -211,6 +226,11 @@ UserLevelDefaultLayout::~UserLevelDefaultLayout()
 {
 }
 
+UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayout::root() const
+{
+	return mRoot;
+}
+
 UserLevelDefaultLayout::Ptr UserLevelDefaultLayout::read( const QDomElement& el )
 {
 	UserLevelDefaultLayout::Ptr deflay( new UserLevelDefaultLayout );
@@ -244,6 +264,11 @@ UserLevelMode::~UserLevelMode()
 QString UserLevelMode::name() const
 {
 	return mModeName;
+}
+
+UserLevelDefaultLayout::Ptr UserLevelMode::defaultLayout() const
+{
+	return mDefaultLayout;
 }
 
 EnableDisableList& UserLevelMode::allowedViews()

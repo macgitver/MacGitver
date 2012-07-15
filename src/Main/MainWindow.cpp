@@ -14,12 +14,16 @@
  *
  */
 
+#include <QDebug>
 #include <QComboBox>
 #include <QStatusBar>
 #include <QFile>
 #include <QApplication>
 #include <QMenuBar>
 #include <QDockWidget>
+#include <QStringBuilder>
+
+#include "Config/Config.h"
 
 #include "GitWrap/ObjectId.h"
 #include "GitWrap/Reference.h"
@@ -28,6 +32,7 @@
 #include "MacGitver/Modules.h"
 
 #include "MainWindow.h"
+#include "SwitchModeComboBox.h"
 #include "ConfigDialog.h"
 #include "GeneralConfigPage.h"
 
@@ -43,6 +48,18 @@ MainWindow::MainWindow()
 
 	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
 			 SLOT(repositoryChanged(Git::Repository)) );
+
+	QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
+
+	foreach( UserLevelDefinition::Ptr uld, Config::self().levels() )
+	{
+		if( uld->id() == levelId )
+		{
+			activateLevel( uld );
+			break;
+		}
+	}
+
 }
 
 MainWindow::~MainWindow()
@@ -58,15 +75,8 @@ void MainWindow::setupUi()
 	setupActions( this );
 	setMenuBar( mbMainMenuBar->menuBarFor( this ) );
 
-#if 0
-	QComboBox* cb = new QComboBox;
-	cb->setStyleSheet( "QComboBox { border: 0px solid gray; padding: 1px 18px 1px 3px; background: lightgray; width: 100px; }"
-					   "QComboBox::drop-down { width: 0px; }"
-					 );
-	menuBar()->setCornerWidget( cb );
-	cb->addItem( "Foobar" );
-	cb->addItem( "Barfoo" );
-#endif
+	mModes = new SwitchModeComboBox();
+	menuBar()->setCornerWidget( mModes );
 
 	setWindowTitle( trUtf8( "MacGitver" ) );
 
@@ -76,14 +86,110 @@ void MainWindow::setupUi()
 	mTop = new Heaven::TopLevelWidget();
 	setCentralWidget( mTop );
 
-	mTop->addView( new DiffView, Heaven::Central );
-
 	addToolBar( tbMainBar->toolBarFor( this ) );
+}
+
+void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )
+{
+	QStringList modeNames;
+
+	foreach( UserLevelMode::Ptr mode, uld->userModes() )
+	{
+		modeNames.append( mode->name() );
+	}
+
+	mModes->setModes( modeNames, QString() );
+
+	mCurrentLevel = uld;
+
+	activateModeForRepo();
+}
+
+void MainWindow::activateModeForRepo()
+{
+	QString preset = mRepo.isValid() ? "Normal" : "Welcome";
+
+	QString configPath = mCurrentLevel->id() % "/" % preset;
+	QString modeName = Config::self().get( configPath, mCurrentLevel->preset( preset ) ).toString();
+
+	activateMode( modeName );
+}
+
+void MainWindow::createPartialLayout( Heaven::ViewContainer* parent,
+									  UserLevelDefaultLayoutEntry::Ptr entry )
+{
+	switch( entry->type() )
+	{
+	case UserLevelDefaultLayoutEntry::Tab:
+		{
+			Heaven::ViewContainer* child = new Heaven::ViewContainer(
+											   Heaven::ViewContainer::Tab,
+											   Heaven::ViewContainer::SubTabTop,
+											   parent );
+
+			parent->addContainer( child );
+
+			foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, entry->children() )
+			{
+				createPartialLayout( child, subEntry );
+			}
+		}
+		break;
+
+	case UserLevelDefaultLayoutEntry::Split:
+		{
+			Heaven::ViewContainer* child = new Heaven::ViewContainer(
+											   Heaven::ViewContainer::Splitter,
+											   entry->isVertical() ?
+												   Heaven::ViewContainer::SubSplitVert :
+												   Heaven::ViewContainer::SubSplitHorz,
+											   parent );
+
+			parent->addContainer( child );
+
+			foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, entry->children() )
+			{
+				createPartialLayout( child, subEntry );
+			}
+		}
+		break;
+
+	case UserLevelDefaultLayoutEntry::View:
+		{
+			Heaven::View* v = MacGitver::self().createView( entry->name() );
+
+			if( !v )
+			{
+				qDebug( "Could not create a view with id '%s'", qPrintable( entry->name() ) );
+				break;
+			}
+
+			parent->addView( v );
+		}
+		break;
+	}
+}
+
+void MainWindow::activateMode( const QString& modeName )
+{
+	qDebug( "Going to %s mode", qPrintable( modeName ) );
+
+	mTop->clear();
+
+	UserLevelMode::Ptr mode = mCurrentLevel->mode( modeName );
+
+	UserLevelDefaultLayout::Ptr layout = mode->defaultLayout();
+
+	createPartialLayout( mTop->rootContainer(), layout->root() );
+
+	mModes->setEnabled( mode->isLockingMode() );
+	mModes->setCurrentMode( modeName );
 }
 
 void MainWindow::repositoryChanged( const Git::Repository& repo )
 {
 	mRepo = repo;
+	activateModeForRepo();
 	setHeadLabel();
 }
 
@@ -98,11 +204,13 @@ void MainWindow::setHeadLabel()
 		{
 			if( HEAD.name() != "HEAD" )
 			{
-				curBranch = trUtf8( "on branch <b>%1</b>" ).arg( HEAD.name().mid( 11 ).constData() );
+				curBranch = trUtf8( "on branch <b>%1</b>" )
+							.arg( HEAD.name().mid( 11 ).constData() );
 			}
 			else
 			{
-				curBranch = trUtf8( "on detached HEAD at <b>%1</b>" ).arg( HEAD.objectId().toString() );
+				curBranch = trUtf8( "on detached HEAD at <b>%1</b>" )
+							.arg( HEAD.objectId().toString() );
 			}
 		}
 		else

@@ -24,12 +24,16 @@ class QLabel;
 #include "GitWrap/Git.h"
 #include "GitWrap/Repository.h"
 
+#include "Config/UserLevelDefinition.h"
+
 #include "Heaven/Views/TopLevelWidget.h"
 #include "Heaven/Views/MainWindow.h"
 
 #include "Interfaces/IMainWindow.h"
 
 #include "hic_MainWindowActions.h"
+
+class SwitchModeComboBox;
 
 class MainWindow : public QMainWindow, public IMainWindow, private MainWindowActions
 {
@@ -53,14 +57,22 @@ private slots:
 
 public:
 	void integrateView( Heaven::View* view, Heaven::Positions position );
+	void activateMode( const QString& modeName );
+	void activateLevel( UserLevelDefinition::Ptr uld );
 	QWidget* widget();
 	void addError( const QString& err );
 
 private:
-	QLabel*					mLblCurrentBranch;
-	Heaven::TopLevelWidget*	mTop;
+	void activateModeForRepo();
+	void createPartialLayout( Heaven::ViewContainer* parent,
+							  UserLevelDefaultLayoutEntry::Ptr entry );
 
-	Git::Repository			mRepo;
+private:
+	QLabel*						mLblCurrentBranch;
+	Heaven::TopLevelWidget*		mTop;
+	SwitchModeComboBox*			mModes;
+	UserLevelDefinition::Ptr	mCurrentLevel;
+	Git::Repository				mRepo;
 };
 
 #endif

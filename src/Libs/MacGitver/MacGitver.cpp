@@ -85,8 +85,6 @@ void MacGitver::setMainWindow( IMainWindow* mainWindow )
 {
 	Q_ASSERT( !mMainWindow );
 	mMainWindow = mainWindow;
-
-	mModules->initialize();
 }
 
 MacGitver* MacGitver::sSelf = NULL;

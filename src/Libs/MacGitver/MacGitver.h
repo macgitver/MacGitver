@@ -63,6 +63,8 @@ public:
 	void unregisterView( const QString& identifier );
 	Heaven::View* createView( const QString& identifier );
 
+
+
 signals:
 	void repositoryChanged( const Git::Repository& repo );
 

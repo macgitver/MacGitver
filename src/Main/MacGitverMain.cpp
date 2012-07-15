@@ -56,6 +56,8 @@ void MacGitverMain::loadModules()
 			delete loader;
 		}
 	}
+
+	modules()->initialize();
 }
 
 void MacGitverMain::loadLevels()
@@ -65,7 +67,6 @@ void MacGitverMain::loadLevels()
 
 void MacGitverMain::boot()
 {
-	qDebug() << arguments();
 	loadLevels();
 	loadModules();
 

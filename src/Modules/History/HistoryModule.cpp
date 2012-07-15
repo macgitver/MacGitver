@@ -22,16 +22,7 @@
 #include "HistoryView.h"
 
 HistoryModule::HistoryModule()
-	: mView( NULL )
 {
-}
-
-void HistoryModule::repositoryChanged( Git::Repository newRepository )
-{
-	if( mView )
-	{
-		mView->repositoryChanged( newRepository );
-	}
 }
 
 void HistoryModule::setupConfigPages( IConfigDialog* dialog )

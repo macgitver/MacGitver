@@ -38,9 +38,6 @@ public:
 
 private:
 	static Heaven::View* createHistoryView();
-
-private:
-	HistoryView*			mView;
 };
 
 #endif

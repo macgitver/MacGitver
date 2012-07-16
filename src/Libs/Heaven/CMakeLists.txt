@@ -33,6 +33,9 @@ SET( SRC_FILES
 	Views/TopLevelWidget.cpp
 	Views/View.cpp
 	Views/ViewContext.cpp
+
+	Widgets/ModeSwitchWidget.cpp
+	Widgets/ModeSwitchCombo.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -55,6 +58,8 @@ SET( PUB_HDR_FILES
 	Views/TopLevelWidget.h
 	Views/View.h
 	Views/ViewContext.h
+	
+	Widgets/ModeSwitchWidget.h
 )
 
 SET( PRI_HDR_FILES
@@ -76,6 +81,8 @@ SET( PRI_HDR_FILES
 	Views/MainWindowPrivate.h
 	Views/ModePrivate.h
 	Views/Decorator.h
+
+	Widgets/ModeSwitchCombo.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

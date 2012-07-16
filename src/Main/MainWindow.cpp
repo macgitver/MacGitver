@@ -32,7 +32,6 @@
 #include "MacGitver/Modules.h"
 
 #include "MainWindow.h"
-#include "SwitchModeComboBox.h"
 #include "ConfigDialog.h"
 #include "GeneralConfigPage.h"
 
@@ -75,7 +74,7 @@ void MainWindow::setupUi()
 	setupActions( this );
 	setMenuBar( mbMainMenuBar->menuBarFor( this ) );
 
-	mModes = new SwitchModeComboBox();
+	mModes = new Heaven::ModeSwitchWidget();
 	menuBar()->setCornerWidget( mModes );
 
 	setWindowTitle( trUtf8( "MacGitver" ) );
@@ -98,7 +97,7 @@ void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )
 		modeNames.append( mode->name() );
 	}
 
-	mModes->setModes( modeNames, QString() );
+//	mModes->setModes( modeNames, QString() );
 
 	mCurrentLevel = uld;
 
@@ -182,8 +181,8 @@ void MainWindow::activateMode( const QString& modeName )
 
 	createPartialLayout( mTop->rootContainer(), layout->root() );
 
-	mModes->setEnabled( mode->isLockingMode() );
-	mModes->setCurrentMode( modeName );
+//	mModes->setEnabled( mode->isLockingMode() );
+//	mModes->setCurrentMode( modeName );
 }
 
 void MainWindow::repositoryChanged( const Git::Repository& repo )

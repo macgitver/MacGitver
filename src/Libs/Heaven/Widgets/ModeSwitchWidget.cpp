@@ -14,25 +14,27 @@
  *
  */
 
-#ifndef MGV_MAIN_SWITCH_MODE_COMBO_BOX_H
-#define MGV_MAIN_SWITCH_MODE_COMBO_BOX_H
+#include <QLabel>
+#include <QStackedLayout>
 
-#include <QComboBox>
+#include "Heaven/Widgets/ModeSwitchWidget.h"
+#include "Heaven/Widgets/ModeSwitchCombo.h"
 
-class SwitchModeComboBox : public QComboBox
+namespace Heaven
 {
-	Q_OBJECT
-public:
-	SwitchModeComboBox();
 
-public:
-	void setCurrentMode( const QString& current );
-	void setModes( const QStringList& modes, const QString& current );
+	ModeSwitchWidget::ModeSwitchWidget()
+	{
+		mMode = new QLabel( QString() );
+		mSelect = new ModeSwitchCombo();
 
-	QString currentMode() const;
+		mStack = new QStackedLayout;
+		mStack->addWidget( mMode );
+		mStack->addWidget( mSelect );
+		setLayout( mStack );
 
-private slots:
-	void onCurrentChanged( const QString& name );
-};
+		mStack->setCurrentWidget( mMode );
+		setVisible( false );
+	}
 
-#endif
+}

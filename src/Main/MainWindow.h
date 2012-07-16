@@ -29,11 +29,11 @@ class QLabel;
 #include "Heaven/Views/TopLevelWidget.h"
 #include "Heaven/Views/MainWindow.h"
 
+#include "Heaven/Widgets/ModeSwitchWidget.h"
+
 #include "Interfaces/IMainWindow.h"
 
 #include "hic_MainWindowActions.h"
-
-class SwitchModeComboBox;
 
 class MainWindow : public Heaven::MainWindow, public IMainWindow, private MainWindowActions
 {
@@ -70,7 +70,7 @@ private:
 private:
 	QLabel*						mLblCurrentBranch;
 	Heaven::TopLevelWidget*		mTop;
-	SwitchModeComboBox*			mModes;
+	Heaven::ModeSwitchWidget*	mModes;
 	UserLevelDefinition::Ptr	mCurrentLevel;
 	Git::Repository				mRepo;
 };

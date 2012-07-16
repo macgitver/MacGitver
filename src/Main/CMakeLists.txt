@@ -20,7 +20,6 @@ SET( SRC_FILES
 	MainWindow.cpp
 	ConfigDialog.cpp
 	GeneralConfigPage.cpp
-	SwitchModeComboBox.cpp
 )
 
 SET( HDR_FILES
@@ -29,7 +28,6 @@ SET( HDR_FILES
 	MainWindow.h
 	ConfigDialog.h
 	GeneralConfigPage.h
-	SwitchModeComboBox.h
 )
 
 SET( UI_FILES

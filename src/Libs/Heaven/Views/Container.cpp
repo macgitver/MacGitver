@@ -68,9 +68,13 @@ namespace Heaven
 	{
 		QList< View* > r;
 
-		for( int j = 0; j < mContent.count(); j++ )
-			if( mContent[ j ].isView )
-				r << mContent[ j ].view;
+		for( int j = 0; j < mContents.count(); j++ )
+		{
+			if( !mContents[ j ]->isContainer() )
+			{
+				r.append( mContents[ j ]->asView() );
+			}
+		}
 
 		return r;
 	}
@@ -79,9 +83,13 @@ namespace Heaven
 	{
 		int n = 0;
 
-		for( int j = 0; j < mContent.count(); j++ )
-			if( mContent[ j ].isView )
+		for( int j = 0; j < mContents.count(); j++ )
+		{
+			if( !mContents[ j ]->isContainer() )
+			{
 				n++;
+			}
+		}
 
 		return n;
 	}
@@ -90,9 +98,13 @@ namespace Heaven
 	{
 		QList< ViewContainer* > r;
 
-		for( int j = 0; j < mContent.count(); j++ )
-			if( !mContent[ j ].isView )
-				r << mContent[ j ].container;
+		for( int j = 0; j < mContents.count(); j++ )
+		{
+			if( mContents[ j ]->isContainer() )
+			{
+				r.append( mContents[ j ]->asContainer() );
+			}
+		}
 
 		return r;
 	}
@@ -101,19 +113,20 @@ namespace Heaven
 	{
 		int n = 0;
 
-		for( int j = 0; j < mContent.count(); j++ )
-			if( ! mContent[ j ].isView )
+		for( int j = 0; j < mContents.count(); j++ )
+		{
+			if( mContents[ j ]->isContainer() )
+			{
 				n++;
+			}
+		}
 
 		return n;
 	}
 
 	int ViewContainer::addView( View* view )
 	{
-		Content ct;
-		ct.isView = true;
-		ct.view = view;
-		mContent.append( ct );
+		mContents.append( view );
 
 		switch( mType & BaseMask )
 		{
@@ -131,7 +144,7 @@ namespace Heaven
 				wrapper->setLayout( l );
 				mSpliterWidget->addWidget( wrapper );
 			}
-			return mContent.count() - 1;
+			return mContents.count() - 1;
 
 		default:
 			Q_ASSERT( false );
@@ -141,17 +154,14 @@ namespace Heaven
 
 	int ViewContainer::addContainer( ViewContainer* container )
 	{
-		int pos = mContent.count();
+		int pos = mContents.count();
 		insertContainer( pos, container );
 		return pos;
 	}
 
 	void ViewContainer::insertContainer( int pos, ViewContainer* container )
 	{
-		Content ct;
-		ct.isView = false;
-		ct.container = container;
-		mContent.insert( pos, ct );
+		mContents.insert( pos, container );
 
 		switch( mType & BaseMask )
 		{
@@ -177,6 +187,21 @@ namespace Heaven
 	QWidget* ViewContainer::containerWidget()
 	{
 		return mContainerWidget;
+	}
+
+	bool ViewContainer::isContainer() const
+	{
+		return true;
+	}
+
+	ViewContainer* ViewContainer::asContainer()
+	{
+		return this;
+	}
+
+	QList< ContainerContent* > ViewContainer::contents() const
+	{
+		return mContents;
 	}
 
 }

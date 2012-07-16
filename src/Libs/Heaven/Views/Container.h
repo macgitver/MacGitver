@@ -23,14 +23,15 @@
 
 #include "Heaven/HeavenApi.h"
 
+#include "Heaven/Views/View.h"
+
 namespace Heaven
 {
-	class View;
 
 	typedef QTabWidget	HeavenTabWidget;
 	typedef QSplitter	HeavenSplitter;
 
-	class HEAVEN_API ViewContainer : public QObject
+	class HEAVEN_API ViewContainer : public QObject, public ContainerContent
 	{
 		Q_OBJECT
 	public:
@@ -51,16 +52,6 @@ namespace Heaven
 			SubMask			= 255
 		};
 
-		struct Content
-		{
-			bool				isView;
-			union
-			{
-				View*			view;
-				ViewContainer*	container;
-			};
-		};
-
 	public:
 		ViewContainer( Type t, Type s, ViewContainer* parent = NULL );
 		~ViewContainer();
@@ -79,9 +70,15 @@ namespace Heaven
 		int addContainer( ViewContainer* container );
 		void insertContainer( int pos, ViewContainer* container );
 
+		QList< ContainerContent* > contents() const;
+
+	public:
+		bool isContainer() const;
+		ViewContainer* asContainer();
+
 	private:
-		Type				mType;
-		QList< Content >	mContent;
+		Type						mType;
+		QList< ContainerContent* >	mContents;
 
 		union
 		{

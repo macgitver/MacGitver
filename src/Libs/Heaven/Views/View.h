@@ -23,8 +23,18 @@
 
 namespace Heaven
 {
+	class ViewContainer;
+	class View;
 
-	class HEAVEN_API View : public QWidget
+	class HEAVEN_API ContainerContent
+	{
+	public:
+		virtual bool isContainer() const = 0;
+		virtual View* asView();
+		virtual ViewContainer* asContainer();
+	};
+
+	class HEAVEN_API View : public QWidget, public ContainerContent
 	{
 		Q_OBJECT
 	public:
@@ -43,6 +53,10 @@ namespace Heaven
 
 	protected:
 		virtual void aboutToRemove();
+
+	public:	// ContainerContent Interface
+		bool isContainer() const;
+		View* asView();
 
 	private:
 		const QString		mIdentifier;

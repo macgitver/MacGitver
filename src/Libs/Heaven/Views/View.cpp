@@ -18,12 +18,31 @@
 
 namespace Heaven
 {
+	View* ContainerContent::asView()
+	{
+		return NULL;
+	}
+
+	ViewContainer* ContainerContent::asContainer()
+	{
+		return NULL;
+	}
 
 	View::View( const QString& identifier, ViewTypes type )
 		: mIdentifier( identifier )
 		, mType( type )
 		, mAction( NULL )
 	{
+	}
+
+	bool View::isContainer() const
+	{
+		return false;
+	}
+
+	View* View::asView()
+	{
+		return this;
 	}
 
 	QString View::viewName() const

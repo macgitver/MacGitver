@@ -142,10 +142,10 @@ namespace Heaven
 					Q_ASSERT( false );
 					break;
 
-				//case WidgetActionType:
-				//	// not implemented
-				//	Q_ASSERT( false );
-				//	break;
+				case WidgetActionType:
+					qDebug( "WidgetAction not supported!" );
+					Q_ASSERT( false );
+					break;
 				}
 			}
 		}

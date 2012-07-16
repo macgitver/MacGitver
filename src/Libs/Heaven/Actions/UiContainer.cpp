@@ -134,6 +134,11 @@ namespace Heaven
 				((UiContainer*)uio)->mergeInto( menu );
 				break;
 
+			case MergePlaceType:
+				qDebug( "MergePlace into Menu is unsupported!" );
+				Q_ASSERT( false );
+				break;
+
 			case MenuBarType:
 			case ToolBarType:
 				// cannot merge Bars into menus
@@ -188,6 +193,11 @@ namespace Heaven
 				((UiContainer*)uio)->mergeInto( menuBar );
 				break;
 
+			case MergePlaceType:
+				qDebug( "MergePlace into MenuBar is unsupported!" );
+				Q_ASSERT( false );
+				break;
+
 			case MenuBarType:
 			case ToolBarType:
 				// cannot merge Bars into menus
@@ -240,6 +250,11 @@ namespace Heaven
 
 			case ContainerType:
 				((UiContainer*)uio)->mergeInto( toolBar );
+				break;
+
+			case MergePlaceType:
+				qDebug( "MergePlace into Toolbar is unsupported!" );
+				Q_ASSERT( false );
 				break;
 
 			case MenuBarType:

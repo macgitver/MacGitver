@@ -171,9 +171,10 @@ namespace Heaven
 					MergesManager::self()->emerge( mergePlacePriv->mName, myMenu );
 					break;
 
-				//case WidgetActionType:
-				//	// Not implemented
-				//	Q_ASSERT( false );
+				case WidgetActionType:
+					qDebug( "WidgetAction not supported!" );
+					Q_ASSERT( false );
+					break;
 
 				case ToolBarType:
 				case MenuBarType:

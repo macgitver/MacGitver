@@ -35,7 +35,7 @@ class QLabel;
 
 class SwitchModeComboBox;
 
-class MainWindow : public QMainWindow, public IMainWindow, private MainWindowActions
+class MainWindow : public Heaven::MainWindow, public IMainWindow, private MainWindowActions
 {
 	Q_OBJECT
 public:

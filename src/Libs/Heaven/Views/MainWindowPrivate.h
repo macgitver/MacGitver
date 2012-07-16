@@ -17,6 +17,8 @@
 #ifndef MGV_HEAVEN_MAINWINDOW_PRIVATE_H
 #define MGV_HEAVEN_MAINWINDOW_PRIVATE_H
 
+#include <QVector>
+
 class QStatusBar;
 class QMenuBar;
 
@@ -37,8 +39,6 @@ namespace Heaven
 
 	public:
 		MainWindow*			mOwner;
-		QStatusBar*			mStatusBar;
-		QMenuBar*			mMenuBar;
 		Mode*				mCurrentMode;
 		QVector< Mode* >	mModes;
 	};

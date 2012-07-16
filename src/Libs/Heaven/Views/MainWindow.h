@@ -17,9 +17,7 @@
 #ifndef MGV_HEAVEN_MAINWINDOW_H
 #define MGV_HEAVEN_MAINWINDOW_H
 
-#include <QWidget>
-
-class QStatusBar;
+#include <QMainWindow>
 
 #include "Heaven/HeavenApi.h"
 
@@ -30,7 +28,7 @@ namespace Heaven
 
 	class MainWindowPrivate;
 
-	class HEAVEN_API MainWindow : public QWidget
+	class HEAVEN_API MainWindow : public QMainWindow
 	{
 		friend class MainWindowPrivate;
 		Q_OBJECT
@@ -44,13 +42,8 @@ namespace Heaven
 		void setCurrentMode( Mode* mode );
 		Mode* currentMode();
 
-		QStatusBar* statusBar();
-
 	signals:
 		void currentModeChanged( Heaven::Mode* newMode );
-
-	protected:
-		void resizeEvent( QResizeEvent* ev );
 
 	private:
 		MainWindowPrivate* d;

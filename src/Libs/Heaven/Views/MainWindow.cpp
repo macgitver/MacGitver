@@ -28,14 +28,11 @@ namespace Heaven
 	MainWindowPrivate::MainWindowPrivate()
 	{
 		mOwner = NULL;
-		mStatusBar = NULL;
-		mMenuBar = NULL;
 		mCurrentMode = NULL;
 	}
 
 	void MainWindowPrivate::setup()
 	{
-		mStatusBar = new QStatusBar( mOwner );
 	}
 
 	void MainWindowPrivate::switchToMode( Mode* mode )
@@ -62,7 +59,8 @@ namespace Heaven
 
 
 	MainWindow::MainWindow()
-		: d( new MainWindowPrivate )
+		: QMainWindow()
+		, d( new MainWindowPrivate )
 	{
 		d->mOwner = this;
 		d->setup();
@@ -100,17 +98,6 @@ namespace Heaven
 	Mode* MainWindow::currentMode()
 	{
 		return d->mCurrentMode;
-	}
-
-	QStatusBar* MainWindow::statusBar()
-	{
-		return d->mStatusBar;
-	}
-
-	void MainWindow::resizeEvent( QResizeEvent* ev )
-	{
-		QSize s = ev->size();
-
 	}
 
 }

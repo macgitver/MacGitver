@@ -41,7 +41,7 @@
 #include "ui_AboutDlg.h"
 
 MainWindow::MainWindow()
-	: QMainWindow()
+	: Heaven::MainWindow()
 	, mRepo()
 {
 	setupUi();

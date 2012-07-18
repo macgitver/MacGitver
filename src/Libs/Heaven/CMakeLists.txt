@@ -34,6 +34,7 @@ SET( SRC_FILES
 	Views/ViewContainer.cpp
 	Views/ViewContainerContent.cpp
 	Views/ViewContext.cpp
+	Views/WindowState.cpp
 
 	Widgets/ModeSwitchWidget.cpp
 	Widgets/ModeSwitchCombo.cpp
@@ -60,6 +61,7 @@ SET( PUB_HDR_FILES
 	Views/ViewContainer.h
 	Views/ViewContainerContent.h
 	Views/ViewContext.h
+	Views/WindowState.h
 	
 	Widgets/ModeSwitchWidget.h
 )

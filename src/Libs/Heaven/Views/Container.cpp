@@ -126,7 +126,12 @@ namespace Heaven
 
 	int ViewContainer::addView( View* view )
 	{
+		if( view->container() )
+		{
+			view->container()->take( view );
+		}
 		mContents.append( view );
+		view->setContainer( this );
 
 		switch( mType & BaseMask )
 		{
@@ -179,9 +184,57 @@ namespace Heaven
 		}
 	}
 
-	View* ViewContainer::takeView( int index )
+	int ViewContainer::indexOf( ContainerContent* cc ) const
 	{
-		return 0;
+		return mContents.indexOf( cc );
+	}
+
+	ContainerContent* ViewContainer::take( ContainerContent* cc )
+	{
+		if( !cc )
+		{
+			return NULL;
+		}
+
+		Q_ASSERT( !cc->isContainer() );
+
+		int i = indexOf( cc );
+		Q_ASSERT( i != -1 );
+
+		ContainerContent* cc2 = take( i );
+		Q_ASSERT( cc2 == cc );
+
+		return cc;
+	}
+
+	ContainerContent* ViewContainer::take( int index )
+	{
+		ContainerContent* cc = mContents[ index ];
+		if( !cc )
+		{
+			return NULL;
+		}
+
+		QWidget* w = cc->widget();
+		w->hide();
+		w->setParent( NULL );
+
+		switch( mType & BaseMask )
+		{
+		case Tab:
+			mTabWidget->removeTab( index );
+			break;
+
+		case Splitter:
+			// Don't do anything more, it's just hide and reparent
+			break;
+
+		default:
+			Q_ASSERT( false );
+			return NULL;
+		}
+
+		return cc;
 	}
 
 	QWidget* ViewContainer::containerWidget()

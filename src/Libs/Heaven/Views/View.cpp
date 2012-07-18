@@ -15,9 +15,23 @@
  */
 
 #include "Heaven/Views/View.h"
+#include "Heaven/Views/Container.h"
 
 namespace Heaven
 {
+	ContainerContent::ContainerContent( ViewContainer* parentContainer )
+		: mParentContainer( NULL )
+	{
+	}
+
+	ContainerContent::~ContainerContent()
+	{
+		if( mParentContainer )
+		{
+			mParentContainer->take( this );
+		}
+	}
+
 	View* ContainerContent::asView()
 	{
 		return NULL;
@@ -28,10 +42,30 @@ namespace Heaven
 		return NULL;
 	}
 
+	QWidget* ContainerContent::widget()
+	{
+		return isContainer() ? asContainer()->containerWidget() : asView();
+	}
+
+	ViewContainer* ContainerContent::container() const
+	{
+		return mParentContainer;
+	}
+
+	void ContainerContent::setContainer( ViewContainer* container )
+	{
+		mParentContainer = container;
+	}
+
 	View::View( const QString& identifier, ViewTypes type )
-		: mIdentifier( identifier )
+		: ContainerContent( NULL )
+		, mIdentifier( identifier )
 		, mType( type )
 		, mAction( NULL )
+	{
+	}
+
+	View::~View()
 	{
 	}
 

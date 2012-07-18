@@ -29,9 +29,20 @@ namespace Heaven
 	class HEAVEN_API ContainerContent
 	{
 	public:
+		ContainerContent( ViewContainer* parent = NULL );
+		virtual ~ContainerContent();
+
+	public:
 		virtual bool isContainer() const = 0;
 		virtual View* asView();
 		virtual ViewContainer* asContainer();
+		QWidget* widget();
+
+		void setContainer( ViewContainer* parent );
+		ViewContainer* container() const;
+
+	private:
+		ViewContainer*	mParentContainer;
 	};
 
 	class HEAVEN_API View : public QWidget, public ContainerContent
@@ -39,6 +50,7 @@ namespace Heaven
 		Q_OBJECT
 	public:
 		View( const QString& identifier, ViewTypes type = SingleViewType );
+		~View();
 
 	public:
 		ViewTypes type() const;
@@ -60,6 +72,7 @@ namespace Heaven
 
 	private:
 		const QString		mIdentifier;
+		ViewContainer*		mContainer;
 		QString				mViewName;
 		ViewTypes			mType;
 		QAction*			mAction;

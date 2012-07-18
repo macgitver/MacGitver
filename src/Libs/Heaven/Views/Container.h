@@ -62,7 +62,6 @@ namespace Heaven
 		QList< View* > views() const;
 		int numViews() const;
 		int addView( View* view );
-		View* takeView( int index );
 		QWidget* containerWidget();
 
 		QList< ViewContainer* > containers() const;
@@ -70,6 +69,9 @@ namespace Heaven
 		int addContainer( ViewContainer* container );
 		void insertContainer( int pos, ViewContainer* container );
 
+		ContainerContent* take( ContainerContent* cc );
+		ContainerContent* take( int index );
+		int indexOf( ContainerContent* cc ) const;
 		QList< ContainerContent* > contents() const;
 
 	public:

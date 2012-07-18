@@ -14,61 +14,48 @@
  *
  */
 
-#include "Heaven/Views/View.h"
+#include "Heaven/Views/ViewContainerContent.h"
 #include "Heaven/Views/ViewContainer.h"
 
 namespace Heaven
 {
 
-	View::View( const QString& identifier, ViewTypes type )
-		: ViewContainerContent( NULL )
-		, mIdentifier( identifier )
-		, mType( type )
-		, mAction( NULL )
+	ViewContainerContent::ViewContainerContent( ViewContainer* parentContainer )
+		: mParentContainer( NULL )
 	{
 	}
 
-	View::~View()
+	ViewContainerContent::~ViewContainerContent()
 	{
-	}
-
-	bool View::isContainer() const
-	{
-		return false;
-	}
-
-	View* View::asView()
-	{
-		return this;
-	}
-
-	QString View::viewName() const
-	{
-		return mViewName;
-	}
-
-	void View::setViewName( const QString& name )
-	{
-		if( name != mViewName )
+		if( mParentContainer )
 		{
-			mViewName = name;
-			emit nameChanged( mViewName );
+			mParentContainer->take( this );
 		}
 	}
 
-	QString View::identifier() const
+	View* ViewContainerContent::asView()
 	{
-		return mIdentifier;
+		return NULL;
 	}
 
-
-	ViewTypes View::type() const
+	ViewContainer* ViewContainerContent::asContainer()
 	{
-		return mType;
+		return NULL;
 	}
 
-	void View::aboutToRemove()
+	QWidget* ViewContainerContent::widget()
 	{
+		return isContainer() ? asContainer()->containerWidget() : asView();
+	}
+
+	ViewContainer* ViewContainerContent::container() const
+	{
+		return mParentContainer;
+	}
+
+	void ViewContainerContent::setContainer( ViewContainer* container )
+	{
+		mParentContainer = container;
 	}
 
 }

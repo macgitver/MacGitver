@@ -6,7 +6,7 @@
 
 #include "Heaven/HeavenApi.h"
 
-#include "Heaven/Views/Container.h"
+#include "Heaven/Views/ViewContainer.h"
 #include "Heaven/Views/View.h"
 
 namespace Heaven

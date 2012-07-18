@@ -25,13 +25,14 @@ SET( SRC_FILES
 	Actions/WidgetAction.cpp
 	Actions/WidgetActionWrapper.cpp
 
-	Views/Container.cpp
 	Views/Decorator.cpp
 	Views/GlobalView.cpp
 	Views/MainWindow.cpp
 	Views/Mode.cpp
 	Views/TopLevelWidget.cpp
 	Views/View.cpp
+	Views/ViewContainer.cpp
+	Views/ViewContainerContent.cpp
 	Views/ViewContext.cpp
 
 	Widgets/ModeSwitchWidget.cpp
@@ -51,12 +52,13 @@ SET( PUB_HDR_FILES
 	Actions/ToolBar.h
 	Actions/WidgetAction.h
 
-	Views/Container.h
 	Views/GlobalView.h
 	Views/MainWindow.h
 	Views/Mode.h
 	Views/TopLevelWidget.h
 	Views/View.h
+	Views/ViewContainer.h
+	Views/ViewContainerContent.h
 	Views/ViewContext.h
 	
 	Widgets/ModeSwitchWidget.h

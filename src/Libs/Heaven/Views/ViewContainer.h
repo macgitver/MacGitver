@@ -31,7 +31,7 @@ namespace Heaven
 	typedef QTabWidget	HeavenTabWidget;
 	typedef QSplitter	HeavenSplitter;
 
-	class HEAVEN_API ViewContainer : public QObject, public ContainerContent
+	class HEAVEN_API ViewContainer : public QObject, public ViewContainerContent
 	{
 		Q_OBJECT
 	public:
@@ -69,10 +69,10 @@ namespace Heaven
 		int addContainer( ViewContainer* container );
 		void insertContainer( int pos, ViewContainer* container );
 
-		ContainerContent* take( ContainerContent* cc );
-		ContainerContent* take( int index );
-		int indexOf( ContainerContent* cc ) const;
-		QList< ContainerContent* > contents() const;
+		ViewContainerContent* take( ViewContainerContent* cc );
+		ViewContainerContent* take( int index );
+		int indexOf( ViewContainerContent* cc ) const;
+		QList< ViewContainerContent* > contents() const;
 
 	public:
 		bool isContainer() const;
@@ -80,7 +80,7 @@ namespace Heaven
 
 	private:
 		Type						mType;
-		QList< ContainerContent* >	mContents;
+		QList< ViewContainerContent* >	mContents;
 
 		union
 		{

@@ -19,7 +19,7 @@
 #include <QSplitter>
 
 #include "Heaven/Views/Decorator.h"
-#include "Heaven/Views/Container.h"
+#include "Heaven/Views/ViewContainer.h"
 #include "Heaven/Views/View.h"
 
 namespace Heaven
@@ -184,12 +184,12 @@ namespace Heaven
 		}
 	}
 
-	int ViewContainer::indexOf( ContainerContent* cc ) const
+	int ViewContainer::indexOf( ViewContainerContent* cc ) const
 	{
 		return mContents.indexOf( cc );
 	}
 
-	ContainerContent* ViewContainer::take( ContainerContent* cc )
+	ViewContainerContent* ViewContainer::take( ViewContainerContent* cc )
 	{
 		if( !cc )
 		{
@@ -201,15 +201,15 @@ namespace Heaven
 		int i = indexOf( cc );
 		Q_ASSERT( i != -1 );
 
-		ContainerContent* cc2 = take( i );
+		ViewContainerContent* cc2 = take( i );
 		Q_ASSERT( cc2 == cc );
 
 		return cc;
 	}
 
-	ContainerContent* ViewContainer::take( int index )
+	ViewContainerContent* ViewContainer::take( int index )
 	{
-		ContainerContent* cc = mContents[ index ];
+		ViewContainerContent* cc = mContents[ index ];
 		if( !cc )
 		{
 			return NULL;
@@ -252,7 +252,7 @@ namespace Heaven
 		return this;
 	}
 
-	QList< ContainerContent* > ViewContainer::contents() const
+	QList< ViewContainerContent* > ViewContainer::contents() const
 	{
 		return mContents;
 	}

@@ -14,50 +14,36 @@
  *
  */
 
-#ifndef HEAVEN_VIEW_H
-#define HEAVEN_VIEW_H
+#ifndef MGV_HEAVEN_VIEW_CONTAINER_CONTENT_H
+#define MGV_HEAVEN_VIEW_CONTAINER_CONTENT_H
 
-#include <QWidget>
+#include "Heaven/HeavenApi.h"
 
-#include "Heaven/Heaven.h"
-#include "Heaven/Views/ViewContainerContent.h"
+class QWidget;
 
 namespace Heaven
 {
+
 	class ViewContainer;
 	class View;
 
-	class HEAVEN_API View : public QWidget, public ViewContainerContent
+	class HEAVEN_API ViewContainerContent
 	{
-		Q_OBJECT
 	public:
-		View( const QString& identifier, ViewTypes type = SingleViewType );
-		~View();
-
-	public:
-		ViewTypes type() const;
+		ViewContainerContent( ViewContainer* parent = NULL );
+		virtual ~ViewContainerContent();
 
 	public:
-		QString identifier() const;
-		QString viewName() const;
-		void setViewName( const QString& name );
+		virtual bool isContainer() const = 0;
+		virtual View* asView();
+		virtual ViewContainer* asContainer();
+		QWidget* widget();
 
-	signals:
-		void nameChanged( const QString& viewName );
-
-	protected:
-		virtual void aboutToRemove();
-
-	public:	// ContainerContent Interface
-		bool isContainer() const;
-		View* asView();
+		void setContainer( ViewContainer* parent );
+		ViewContainer* container() const;
 
 	private:
-		const QString		mIdentifier;
-		ViewContainer*		mContainer;
-		QString				mViewName;
-		ViewTypes			mType;
-		QAction*			mAction;
+		ViewContainer*	mParentContainer;
 	};
 
 }

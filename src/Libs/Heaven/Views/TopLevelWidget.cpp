@@ -88,7 +88,7 @@ namespace Heaven
 			{
 				continue;
 			}
-			foreach( ContainerContent* cc, vc->contents() )
+			foreach( ViewContainerContent* cc, vc->contents() )
 			{
 				if( cc->isContainer() )
 				{

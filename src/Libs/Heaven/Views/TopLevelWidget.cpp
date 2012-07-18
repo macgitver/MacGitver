@@ -17,6 +17,7 @@
 #include <QPainter>
 #include <QPalette>
 #include <QVBoxLayout>
+#include <QQueue>
 
 #include "Heaven/Views/TopLevelWidget.h"
 
@@ -72,6 +73,35 @@ namespace Heaven
 		return;
 		QPainter p( this );
 		p.fillRect( contentsRect(), QColor( "navy" ) );
+	}
+
+	QSet< View* > TopLevelWidget::setOfViews() const
+	{
+		QSet< View* > views;
+		QQueue< ViewContainer* > visit;
+
+		visit.enqueue( mRoot );
+		while( !visit.isEmpty() )
+		{
+			ViewContainer* vc = visit.dequeue();
+			if( !vc )
+			{
+				continue;
+			}
+			foreach( ContainerContent* cc, vc->contents() )
+			{
+				if( cc->isContainer() )
+				{
+					visit.enqueue( cc->asContainer() );
+				}
+				else
+				{
+					views.insert( cc->asView() );
+				}
+			}
+		}
+
+		return views;
 	}
 
 }

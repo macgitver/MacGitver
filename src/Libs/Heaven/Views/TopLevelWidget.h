@@ -30,6 +30,8 @@ namespace Heaven
 		void addContainer( ViewContainer* c );
 		void addView( View* c, Positions pos = Left );
 
+		QSet< View* > setOfViews() const;
+
 	protected:
 		void paintEvent( QPaintEvent* ev );
 

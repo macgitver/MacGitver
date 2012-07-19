@@ -23,6 +23,8 @@
 #include "GitWrap/Reference.h"
 #include "GitWrap/ObjectCommit.h"
 
+#include "MacGitver/MacGitver.h"
+
 #include "HistoryView.h"
 #include "HistoryEntry.h"
 #include "HistoryModel.h"
@@ -289,6 +291,15 @@ HistoryView::HistoryView()
 	mList->setItemDelegate( new HistoryViewDelegate );
 
 	mBuilder = NULL;
+
+	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+			 this, SLOT(repositoryChanged(Git::Repository)) );
+
+	Git::Repository repo = MacGitver::self().repository();
+	if( repo.isValid() )
+	{
+		repositoryChanged( repo );
+	}
 }
 
 void HistoryView::repositoryChanged( Git::Repository repo )

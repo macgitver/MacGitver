@@ -26,6 +26,8 @@
 #include "Diff/Model/Patch.h"
 #include "Diff/RawView/DiffRawView.h"
 
+#include "MacGitver/MacGitver.h"
+
 #include "IndexWidget.h"
 
 #include "WorkingTreeItemView.h"
@@ -58,6 +60,15 @@ IndexWidget::IndexWidget()
 
 	mFilterRecursion = false;
 	setTreeFilter( WTF_All );
+
+	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+			 this, SLOT(repositoryChanged(Git::Repository)) );
+
+	Git::Repository repo = MacGitver::self().repository();
+	if( repo.isValid() )
+	{
+		repositoryChanged( repo );
+	}
 }
 
 void IndexWidget::repositoryChanged( Git::Repository repo )

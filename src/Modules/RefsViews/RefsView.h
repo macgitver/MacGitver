@@ -31,7 +31,7 @@ class RefsView : public Heaven::View
 public:
 	RefsView();
 
-public:
+public slots:
 	void repositoryChanged( Git::Repository repo );
 
 public:

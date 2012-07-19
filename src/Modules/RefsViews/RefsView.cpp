@@ -17,6 +17,8 @@
 #include <QListView>
 #include <QVBoxLayout>
 
+#include "MacGitver/MacGitver.h"
+
 #include "RefsListModel.h"
 #include "RefsView.h"
 
@@ -37,6 +39,15 @@ RefsView::RefsView()
 
 	mModel = new RefsListModel( this );
 	mListView->setModel( mModel );
+
+	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+			 this, SLOT(repositoryChanged(Git::Repository)) );
+
+	Git::Repository repo = MacGitver::self().repository();
+	if( repo.isValid() )
+	{
+		repositoryChanged( repo );
+	}
 }
 
 void RefsView::repositoryChanged( Git::Repository repo )

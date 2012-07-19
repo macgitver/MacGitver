@@ -50,7 +50,7 @@ class HistoryView : public Heaven::GlobalView
 public:
 	HistoryView();
 
-public:
+public slots:
 	void repositoryChanged( Git::Repository repo );
 
 private:

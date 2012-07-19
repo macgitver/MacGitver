@@ -29,7 +29,7 @@ class TagsView : public Heaven::View
 public:
 	TagsView();
 
-public:
+public slots:
 	void repositoryChanged( Git::Repository repo );
 
 public:

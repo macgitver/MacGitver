@@ -31,7 +31,7 @@ class BranchesView : public Heaven::View
 public:
 	BranchesView();
 
-public:
+public slots:
 	void repositoryChanged( Git::Repository repo );
 
 public:

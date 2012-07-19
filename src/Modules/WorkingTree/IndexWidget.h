@@ -41,7 +41,7 @@ class IndexWidget : public Heaven::View, private WorkingTreeActions
 public:
 	IndexWidget();
 
-public:
+public slots:
 	void repositoryChanged( Git::Repository repo );
 
 private slots:

@@ -17,6 +17,8 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
+#include "MacGitver/MacGitver.h"
+
 #include "TagsView.h"
 
 TagsView::TagsView()
@@ -33,6 +35,15 @@ TagsView::TagsView()
 	setLayout( l );
 
 	setViewName( trUtf8( "Tags" ) );
+
+	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+			 this, SLOT(repositoryChanged(Git::Repository)) );
+
+	Git::Repository repo = MacGitver::self().repository();
+	if( repo.isValid() )
+	{
+		repositoryChanged( repo );
+	}
 }
 
 void TagsView::repositoryChanged( Git::Repository repo )

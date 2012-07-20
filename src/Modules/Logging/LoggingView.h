@@ -14,7 +14,7 @@
  *
  */
 
-#ifndef MGV_LOGGIN_VIEW_H
+#ifndef MGV_LOGGING_VIEW_H
 #define MGV_LOGGING_VIEW_H
 
 #include "Heaven/Views/GlobalView.h"

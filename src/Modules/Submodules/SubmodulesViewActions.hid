@@ -14,24 +14,30 @@
  *
  */
 
-#ifndef MGV_SUBMODULES_VIEW_H
-#define MGV_SUBMODULES_VIEW_H
+Ui SubmodulesViewActions {
 
-#include "Heaven/Views/GlobalView.h"
+	ToolBar SMViewToolbar {
 
-#include "hic_SubmodulesViewActions.h"
+		Action		Add {
+			Text	"Add";
+		};
 
-class QTreeView;
+		Action		Edit {
+			Text	"Edit";
+		};
 
-class SubmodulesView : public Heaven::GlobalView, private SubmodulesViewActions
-{
-	Q_OBJECT
-public:
-	SubmodulesView();
+		Action		Init {
+			Text	"Init";
+		};
 
-private:
-	QTreeView*			mTree;
+		Action		Update {
+			Text	"Update";
+		};
+
+		Action		Remove {
+			Text	"Remove";
+		};
+
+	};
+
 };
-
-#endif
-

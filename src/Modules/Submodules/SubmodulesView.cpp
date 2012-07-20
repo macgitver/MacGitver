@@ -15,6 +15,7 @@
  */
 
 #include <QVBoxLayout>
+#include <QToolBar>
 #include <QTreeView>
 
 #include "SubmodulesView.h"
@@ -24,11 +25,17 @@ SubmodulesView::SubmodulesView()
 {
 	setViewName( trUtf8( "Submodules" ) );
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 2 );
-	l->setMargin( 2 );
-	setLayout( l );
+	setupActions( this );
 
-	l->addWidget( new QTreeView );
+	QVBoxLayout* l = new QVBoxLayout;
+	l->setSpacing( 0 );
+	l->setMargin( 0 );
+
+	l->addWidget( tbSMViewToolbar->toolBarFor( this ) );
+
+	mTree = new QTreeView;
+	l->addWidget( mTree );
+
+	setLayout( l );
 }
 

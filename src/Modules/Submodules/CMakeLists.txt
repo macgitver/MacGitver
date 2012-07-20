@@ -30,6 +30,7 @@ SET( UI_FILES
 
 SET( HID_FILES
 
+	SubmodulesViewActions.hid
 )
 
 QT4_MOC( MOC_FILES ${HDR_FILES} )

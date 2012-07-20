@@ -25,10 +25,6 @@ RemotesModule::RemotesModule()
 {
 }
 
-void RemotesModule::repositoryChanged( Git::Repository newRepository )
-{
-}
-
 void RemotesModule::setupConfigPages( IConfigDialog* dialog )
 {
 }

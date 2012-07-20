@@ -28,15 +28,11 @@ public:
 	RemotesModule();
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
-
 	void setupConfigPages( IConfigDialog* dlg );
 	Types providesModuleTypes() const;
 
 	void initialize();
 	void deinitialize();
-
-private slots:
 };
 
 #endif

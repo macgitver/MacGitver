@@ -60,6 +60,7 @@ namespace Git
 
 		QStringList allReferences();
 		QStringList allBranches();
+		QString currentBranch();
 		QStringList branches( bool local = true, bool remote = false );
 		QStringList allTags();
 

@@ -218,6 +218,22 @@ namespace Git
 		return branches( true, true );
 	}
 
+	QString Repository::currentBranch()
+	{
+		Git::Reference refHEAD = HEAD();
+
+		if( refHEAD.isValid() )
+		{
+			if( refHEAD.name() == "HEAD" )
+			{
+				return QString();
+			}
+			return QString::fromUtf8( refHEAD.name().mid( 11 ).constData() );
+		}
+
+		return QString();
+	}
+
 	static int listBranches( const char* branchName, git_branch_t brachType, void* payload )
 	{
 		QStringList* sl = (QStringList*) payload;

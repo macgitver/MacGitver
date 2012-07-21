@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>263</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -18,28 +18,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="3" column="1">
-       <widget class="QComboBox" name="cboIgnoreStrategy">
-        <item>
-         <property name="text">
-          <string notr="true">None</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">Dirty</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">Untracked</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">All</string>
-         </property>
-        </item>
-       </widget>
+	   <widget class="QComboBox" name="cboIgnoreStrategy"/>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_5">
@@ -62,23 +41,7 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QComboBox" name="cboUpdateStrategy">
-        <item>
-         <property name="text">
-          <string notr="true">Checkout</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">Rebase</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">Merge</string>
-         </property>
-        </item>
-       </widget>
+	   <widget class="QComboBox" name="cboUpdateStrategy"/>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_3">
@@ -101,7 +64,7 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QCheckBox" name="chlFetchRecursive">
+	   <widget class="QCheckBox" name="chkFetchRecursive">
         <property name="text">
          <string>Fetch recursive</string>
         </property>
@@ -115,7 +78,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="txtName"/>
+       <widget class="LineEdit" name="txtName">
+        <property name="mandatory" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="chkHasPath">
@@ -125,9 +92,12 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="txtPath">
+       <widget class="LineEdit" name="txtPath">
         <property name="enabled">
          <bool>false</bool>
+        </property>
+        <property name="mandatory" stdset="0">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -142,7 +112,11 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="txtUrl"/>
+       <widget class="LineEdit" name="txtUrl">
+        <property name="mandatory" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="7" column="0">
        <spacer name="verticalSpacer">
@@ -172,6 +146,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>Widgets/LineEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>txtName</tabstop>
   <tabstop>chkHasPath</tabstop>
@@ -179,7 +160,7 @@
   <tabstop>txtUrl</tabstop>
   <tabstop>cboIgnoreStrategy</tabstop>
   <tabstop>cboUpdateStrategy</tabstop>
-  <tabstop>chlFetchRecursive</tabstop>
+  <tabstop>chkFetchRecursive</tabstop>
   <tabstop>txtSHA1</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>

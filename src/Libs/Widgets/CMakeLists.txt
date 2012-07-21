@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
 SET( SRC_FILES
 
 	FontSelectWidget.cpp
+	LineEdit.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -19,6 +20,7 @@ SET( PUB_HDR_FILES
 	WidgetsApi.h
 
 	FontSelectWidget.h
+	LineEdit.h
 )
 
 SET( PRI_HDR_FILES

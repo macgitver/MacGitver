@@ -214,7 +214,7 @@ void MainWindow::setHeadLabel()
 		}
 		else
 		{
-			curBranch = trUtf8( "<b style=\"color: red;\">Repository has no HEAD (yet)?</b>" );
+			curBranch = trUtf8( "<b style=\"color: red;\">Branch yet to be born</b>" );
 		}
 
 		mLblCurrentBranch->setText( curBranch );

@@ -79,11 +79,19 @@ void BranchesView::rereadBranches()
 
 	if( mRepo.isValid() )
 	{
+		QString curBranch = mRepo.currentBranch();
+
 		QStringList sl = mRepo.branches( mBtnLocals->isChecked(), mBtnRemotes->isChecked() );
 
 		for( int i = 0; i < sl.count(); i++ )
 		{
-			new QListWidgetItem( sl[ i ], mListWidget );
+			QListWidgetItem* it = new QListWidgetItem( sl[ i ], mListWidget );
+			if( sl[ i ] == curBranch )
+			{
+				QFont f = it->font();
+				f.setBold( true );
+				it->setFont( f );
+			}
 		}
 
 	}

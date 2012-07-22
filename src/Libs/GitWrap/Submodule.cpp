@@ -26,10 +26,13 @@ namespace Git
 	{
 		git_submodule* result = NULL;
 
-		int rc = git_submodule_lookup( &result, repo->mRepo, smName.toUtf8().constData() );
-		if( rc < 0 )
+		if( repo && repo->mRepo )
 		{
-			return NULL;
+			int rc = git_submodule_lookup( &result, repo->mRepo, smName.toUtf8().constData() );
+			if( rc < 0 )
+			{
+				return NULL;
+			}
 		}
 
 		return result;

@@ -47,6 +47,19 @@ namespace Git
 		isValid();	// do a lookup, so we know we're valid at least once
 	}
 
+	Submodule::Submodule( const Submodule& other )
+	{
+		mRepo = other.mRepo;
+		mName = other.mName;
+	}
+
+	Submodule& Submodule::operator=( const Submodule& other )
+	{
+		mRepo = other.mRepo;
+		mName = other.mName;
+		return *this;
+	}
+
 	Submodule::~Submodule()
 	{
 	}

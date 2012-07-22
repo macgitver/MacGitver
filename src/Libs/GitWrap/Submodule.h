@@ -47,8 +47,11 @@ namespace Git
 
 	public:
 		Submodule( RepositoryPrivate* repo, const QString& name );
+		Submodule( const Submodule& other );
 		Submodule();
 		~Submodule();
+
+		Submodule& operator=( const Submodule& other );
 
 	public:
 		bool isValid();

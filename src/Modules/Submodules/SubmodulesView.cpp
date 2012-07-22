@@ -22,6 +22,7 @@
 #include "GitWrap/ObjectId.h"
 
 #include "MacGitver/MacGitver.h"
+#include "MacGitver/FSWatcher.h"
 
 #include "SubmodulesView.h"
 #include "SubmodulesCreateEditDlg.h"
@@ -39,6 +40,8 @@ SubmodulesView::SubmodulesView()
 
 	mTree = new QTreeView;
 	mTree->setRootIsDecorated( false );
+	mTree->setHeaderHidden( true );
+	mTree->setFrameShape( QFrame::NoFrame );
 	l->addWidget( mTree );
 
 	mModel = new QStandardItemModel( this );
@@ -56,6 +59,9 @@ SubmodulesView::SubmodulesView()
 	{
 		repositoryChanged( repo );
 	}
+
+	connect( MacGitver::self().watcher(), SIGNAL(repoGitFileChanged()),
+			 this, SLOT(readSubmodules()) );
 }
 
 void SubmodulesView::repositoryChanged( Git::Repository repo )
@@ -70,13 +76,21 @@ void SubmodulesView::readSubmodules()
 
 	if( mRepo.isValid() )
 	{
+		#ifdef LIBGIT_IMPROVED
 		submodules = mRepo.submodules();
+		#else
+		Git::Repository r = Git::Repository::open( mRepo.basePath() );
+		submodules = r.submodules();
+		#endif
 	}
 
 	QStringList toVisit = mNameToItem.keys();
 
 	foreach( Git::Submodule module, submodules )
 	{
+		if( !module.isValid() )
+			continue;
+
 		QString name = module.name();
 		QStandardItem* it = mNameToItem.value( name, NULL );
 
@@ -91,6 +105,7 @@ void SubmodulesView::readSubmodules()
 		else
 		{
 			it = new QStandardItem( name );
+			it->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
 			mModel->appendRow( it );
 		}
 

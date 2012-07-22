@@ -39,8 +39,6 @@ private slots:
 	void repositoryChanged( Git::Repository repo );
 
 	void addSubmodule();
-
-private:
 	void readSubmodules();
 
 private:

@@ -14,49 +14,39 @@
  *
  */
 
-#ifndef MGV_FSWATCHER_H
-#define MGV_FSWATCHER_H
+#ifndef MGV_SUBMODULES_VIEW_H
+#define MGV_SUBMODULES_VIEW_H
 
-#include <QObject>
+#include <QHash>
+
+#include "Heaven/Views/GlobalView.h"
 
 #include "GitWrap/Repository.h"
 
-#include "MacGitver/MacGitverApi.h"
+#include "hic_SubmodulesViewActions.h"
 
-class QFileSystemWatcher;
+class QStandardItem;
+class QStandardItemModel;
+class QTreeView;
 
-class FSWatcherPrivate;
-
-class MGV_CORE_API FSWatcher : public QObject
+class SubmodulesView : public Heaven::GlobalView, private SubmodulesViewActions
 {
 	Q_OBJECT
-private:
-	friend class FSWatcherPrivate;
-
 public:
-	FSWatcher( QObject* parent );
-	~FSWatcher();
-
-public:
-	void setRepository( Git::Repository repo );
-
-signals:
-	void configChanged();
-	void refsChanged();
-	void refLogChanged();
-	void headChanged();
-	void repoGitFileChanged();
-	void workingTreeChanged();
-	void descriptionChanged();
-	void indexChanged();
-	void modeChanged();
+	SubmodulesView();
 
 private slots:
-	void directoryChanged( const QString& path );
-	void spitOutChanges();
+	void repositoryChanged( Git::Repository repo );
+
+	void addSubmodule();
+	void readSubmodules();
 
 private:
-	FSWatcherPrivate* d;
+	Git::Repository						mRepo;
+	QTreeView*							mTree;
+	QStandardItemModel*					mModel;
+	QHash< QString, QStandardItem* >	mNameToItem;
 };
 
 #endif
+

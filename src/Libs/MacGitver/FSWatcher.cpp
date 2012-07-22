@@ -20,6 +20,8 @@
 #include <QFileInfo>
 #include <QTimer>
 
+#define DBG_FSWATCHER 0
+
 #include "FSWatcher.h"
 
 enum FileType
@@ -36,7 +38,8 @@ enum FileType
 	ModeFile			= 1 << 6,
 	IndexFile			= 1 << 7,
 	DescriptionFile		= 1 << 8,
-	RefLogFile			= 1 << 9
+	RefLogFile			= 1 << 9,
+	RepoGitFile			= 1 << 10	// a .gitanything file inside WT
 };
 
 typedef QFlags< FileType > FileTypes;
@@ -212,7 +215,9 @@ void FSWatcherPrivate::foundFile( FileInfo* path, const QString& name )
 		fi->type = UnknownFile;
 
 		QString gitLocalFile = fi->fullPath().mid( gitPath.length() + 1 );
+		#if DBG_FSWATCHER
 		qDebug( "Git-File: local=%s", qPrintable( gitLocalFile ) );
+		#endif
 
 		if( gitLocalFile.startsWith( "refs" ) || gitLocalFile == "packed-refs" )
 		{
@@ -241,27 +246,44 @@ void FSWatcherPrivate::foundFile( FileInfo* path, const QString& name )
 	}
 	else
 	{
-		fi->type = WorkingTreeFile;
+		if( fi->name == ".gitattributes" ||
+			fi->name == ".gitignore" ||
+			fi->name == ".gitmodules" )
+		{
+			fi->type = RepoGitFile;
+		}
+		else
+		{
+			fi->type = WorkingTreeFile;
+		}
 	}
 
 	path->children.insert( name, fi );
 
+	#if DBG_FSWATCHER
 	qDebug( "Found File in '%s', named '%s', type %i", qPrintable( path->fullPath() ),
 			qPrintable( name ), int( fi->type ) );
+	#endif
 }
 
 void FSWatcherPrivate::lostFile( FileInfo* path, const QString& name )
 {
 	Q_ASSERT( path );
 
+	#if DBG_FSWATCHER
 	qDebug( "Lost File in '%s', named '%s'", qPrintable( path->fullPath() ), qPrintable( name ) );
+	#else
+	qDebug( "Unsupported: Loosing files in FSWatcher" );
+	#endif
 }
 
 void FSWatcherPrivate::foundDirectory( FileInfo* path, const QString& name )
 {
 	Q_ASSERT( path );
 
+	#if DBG_FSWATCHER
 	qDebug( "Found Dir in '%s', named '%s'", qPrintable( path->fullPath() ), qPrintable( name ) );
+	#endif
 
 	FileInfo* fi = new FileInfo();
 	fi->type = DirectoryFile;
@@ -278,7 +300,9 @@ void FSWatcherPrivate::lostDirectory( FileInfo* path )
 {
 	Q_ASSERT( path );
 
+	#if DBG_FSWATCHER
 	qDebug( "Lost Dir '%s'", qPrintable( path->fullPath() ) );
+	#endif
 
 	enqueueFood( WorkingTreeFile );
 
@@ -305,8 +329,10 @@ void FSWatcherPrivate::modifiedFile( FileInfo* path )
 {
 	Q_ASSERT( path );
 
+	#if DBG_FSWATCHER
 	qDebug( "Found modification of %s type = %i",
 			qPrintable( path->fullPath() ), int( path->type ) );
+	#endif
 
 	enqueueFood( path->type );
 }
@@ -345,46 +371,53 @@ void FSWatcherPrivate::spoonFeed()
 		mSpitQueued = true;
 	}
 
+	#if DBG_FSWATCHER
 	qDebug( "Spoon feeding the application with %i", int( spitNow ) );
+	#endif
 
-	if( spitNow && WorkingTreeFile )
+	if( spitNow & WorkingTreeFile )
 	{
 		emit mOwner->workingTreeChanged();
 	}
 
-	if( spitNow && ConfigFile )
+	if( spitNow & ConfigFile )
 	{
 		emit mOwner->configChanged();
 	}
 
-	if( spitNow && RefsFile )
+	if( spitNow & RefsFile )
 	{
 		emit mOwner->refsChanged();
 	}
 
-	if( spitNow && HeadFile )
+	if( spitNow & HeadFile )
 	{
 		emit mOwner->headChanged();
 	}
 
-	if( spitNow && ModeFile )
+	if( spitNow & ModeFile )
 	{
 		emit mOwner->modeChanged();
 	}
 
-	if( spitNow && IndexFile )
+	if( spitNow & IndexFile )
 	{
 		emit mOwner->indexChanged();
 	}
 
-	if( spitNow && DescriptionFile )
+	if( spitNow & DescriptionFile )
 	{
 		emit mOwner->descriptionChanged();
 	}
 
-	if( spitNow && RefLogFile )
+	if( spitNow & RefLogFile )
 	{
 		emit mOwner->refLogChanged();
+	}
+
+	if( spitNow & RepoGitFile )
+	{
+		emit mOwner->repoGitFileChanged();
 	}
 }
 
@@ -438,7 +471,9 @@ void FSWatcher::setRepository( Git::Repository repo )
 
 void FSWatcher::directoryChanged( const QString& path )
 {
+	#if DBG_FSWATCHER
 	qDebug( "Notify for: '%s'", qPrintable( path ) );
+	#endif
 
 	QString repoPath = path.mid( d->mRepo.basePath().length() );
 	FileInfo* fi = d->mRoot;
@@ -456,7 +491,9 @@ void FSWatcher::directoryChanged( const QString& path )
 			fi = fi2;
 		}
 	}
+	#if DBG_FSWATCHER
 	qDebug( "Found as %s", qPrintable( fi->fullPath() ) );
+	#endif
 
 	if( QDir( path ).exists() )
 	{

@@ -34,8 +34,7 @@
 #include "ObjectCommit.h"
 #include "RevisionWalker.h"
 #include "RevisionWalkerPrivate.h"
-
-#include "git2/branch.h"
+#include "Submodule.h"
 
 namespace Git
 {
@@ -557,6 +556,41 @@ namespace Git
 		d->mErrorListMtx.unlock();
 
 		return detached;
+	}
+
+	struct cb_enum_submodules_t
+	{
+		QList< Submodule >* subs;
+		RepositoryPrivate* repo;
+	};
+
+	static int cb_enum_submodules( const char* name, void* payload )
+	{
+		cb_enum_submodules_t* d = static_cast< cb_enum_submodules_t* >( payload );
+		Q_ASSERT( d && d->subs && name );
+
+		d->subs->append( Submodule( d->repo, QString::fromUtf8( name ) ) );
+		return 0;
+	}
+
+	QList< Submodule > Repository::submodules()
+	{
+		QList< Submodule > result;
+
+		cb_enum_submodules_t data = { &result, d };
+
+		int rc = git_submodule_foreach( d->mRepo, &cb_enum_submodules, &data );
+		if( !d->handleErrors( rc ) )
+		{
+			return QList< Submodule >();
+		}
+
+		return result;
+	}
+
+	Submodule Repository::submodule( const QString& name )
+	{
+		return Submodule( d, name );
 	}
 
 }

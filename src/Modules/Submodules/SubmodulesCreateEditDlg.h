@@ -14,49 +14,30 @@
  *
  */
 
-#ifndef MGV_FSWATCHER_H
-#define MGV_FSWATCHER_H
+#ifndef MGV_SUBMODULES_CREATE_EDIT_DLG_H
+#define MGV_SUBMODULES_CREATE_EDIT_DLG_H
 
-#include <QObject>
+#include "GitWrap/Submodule.h"
 
-#include "GitWrap/Repository.h"
+#include "ui_SubmodulesCreateEditDlg.h"
 
-#include "MacGitver/MacGitverApi.h"
-
-class QFileSystemWatcher;
-
-class FSWatcherPrivate;
-
-class MGV_CORE_API FSWatcher : public QObject
+class SubmodulesCreateEditDlg : public QDialog, private Ui::SubmodulesCreateEditDlg
 {
 	Q_OBJECT
-private:
-	friend class FSWatcherPrivate;
-
 public:
-	FSWatcher( QObject* parent );
-	~FSWatcher();
-
-public:
-	void setRepository( Git::Repository repo );
-
-signals:
-	void configChanged();
-	void refsChanged();
-	void refLogChanged();
-	void headChanged();
-	void repoGitFileChanged();
-	void workingTreeChanged();
-	void descriptionChanged();
-	void indexChanged();
-	void modeChanged();
+	SubmodulesCreateEditDlg();
+	SubmodulesCreateEditDlg( Git::Submodule module );
 
 private slots:
-	void directoryChanged( const QString& path );
-	void spitOutChanges();
+	void onNameChange( const QString& name );
+	void onHasPathChange( bool newValue );
 
 private:
-	FSWatcherPrivate* d;
+	void setupComboboxes();
+	void init();
+
+private:
+	Git::Submodule			mSubmodule;
 };
 
 #endif

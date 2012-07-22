@@ -32,6 +32,7 @@ SET( SRC_FILES
 	Repository.cpp
 	RevisionWalker.cpp
 	Signature.cpp
+	Submodule.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -54,6 +55,7 @@ SET( PUB_HDR_FILES
 	Repository.h
 	RevisionWalker.h
 	Signature.h
+	Submodule.h
 )
 
 SET( PRI_HDR_FILES

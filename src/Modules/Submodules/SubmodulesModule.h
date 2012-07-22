@@ -14,49 +14,26 @@
  *
  */
 
-#ifndef MGV_FSWATCHER_H
-#define MGV_FSWATCHER_H
+#ifndef MGV_MODULE_SUBMODULES_H
+#define MGV_MODULE_SUBMODULES_H
 
-#include <QObject>
+#include "MacGitver/Module.h"
 
-#include "GitWrap/Repository.h"
-
-#include "MacGitver/MacGitverApi.h"
-
-class QFileSystemWatcher;
-
-class FSWatcherPrivate;
-
-class MGV_CORE_API FSWatcher : public QObject
+class SubmodulesModule : public Module
 {
 	Q_OBJECT
-private:
-	friend class FSWatcherPrivate;
+public:
+	SubmodulesModule();
 
 public:
-	FSWatcher( QObject* parent );
-	~FSWatcher();
+	void setupConfigPages( IConfigDialog* dlg );
+	Types providesModuleTypes() const;
 
-public:
-	void setRepository( Git::Repository repo );
-
-signals:
-	void configChanged();
-	void refsChanged();
-	void refLogChanged();
-	void headChanged();
-	void repoGitFileChanged();
-	void workingTreeChanged();
-	void descriptionChanged();
-	void indexChanged();
-	void modeChanged();
-
-private slots:
-	void directoryChanged( const QString& path );
-	void spitOutChanges();
+	void initialize();
+	void deinitialize();
 
 private:
-	FSWatcherPrivate* d;
+	static Heaven::View* createSubmodulesView();
 };
 
 #endif

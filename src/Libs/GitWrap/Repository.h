@@ -24,6 +24,7 @@
 namespace Git
 {
 
+	class Submodule;
 	class Reference;
 	class Error;
 	class DiffList;
@@ -96,6 +97,9 @@ namespace Git
 		DiffList diffIndexToWorkingDir();
 
 		QList< Error > recentErrors();
+
+		QList< Submodule > submodules();
+		Submodule submodule( const QString& name );
 
 		void test();
 

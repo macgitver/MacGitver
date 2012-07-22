@@ -375,47 +375,47 @@ void FSWatcherPrivate::spoonFeed()
 	qDebug( "Spoon feeding the application with %i", int( spitNow ) );
 	#endif
 
-	if( spitNow && WorkingTreeFile )
+	if( spitNow & WorkingTreeFile )
 	{
 		emit mOwner->workingTreeChanged();
 	}
 
-	if( spitNow && ConfigFile )
+	if( spitNow & ConfigFile )
 	{
 		emit mOwner->configChanged();
 	}
 
-	if( spitNow && RefsFile )
+	if( spitNow & RefsFile )
 	{
 		emit mOwner->refsChanged();
 	}
 
-	if( spitNow && HeadFile )
+	if( spitNow & HeadFile )
 	{
 		emit mOwner->headChanged();
 	}
 
-	if( spitNow && ModeFile )
+	if( spitNow & ModeFile )
 	{
 		emit mOwner->modeChanged();
 	}
 
-	if( spitNow && IndexFile )
+	if( spitNow & IndexFile )
 	{
 		emit mOwner->indexChanged();
 	}
 
-	if( spitNow && DescriptionFile )
+	if( spitNow & DescriptionFile )
 	{
 		emit mOwner->descriptionChanged();
 	}
 
-	if( spitNow && RefLogFile )
+	if( spitNow & RefLogFile )
 	{
 		emit mOwner->refLogChanged();
 	}
 
-	if( spitNow && RepoGitFile )
+	if( spitNow & RepoGitFile )
 	{
 		emit mOwner->repoGitFileChanged();
 	}

@@ -17,10 +17,16 @@
 #ifndef MGV_SUBMODULES_VIEW_H
 #define MGV_SUBMODULES_VIEW_H
 
+#include <QHash>
+
 #include "Heaven/Views/GlobalView.h"
+
+#include "GitWrap/Repository.h"
 
 #include "hic_SubmodulesViewActions.h"
 
+class QStandardItem;
+class QStandardItemModel;
 class QTreeView;
 
 class SubmodulesView : public Heaven::GlobalView, private SubmodulesViewActions
@@ -29,8 +35,19 @@ class SubmodulesView : public Heaven::GlobalView, private SubmodulesViewActions
 public:
 	SubmodulesView();
 
+private slots:
+	void repositoryChanged( Git::Repository repo );
+
+	void addSubmodule();
+
 private:
-	QTreeView*			mTree;
+	void readSubmodules();
+
+private:
+	Git::Repository						mRepo;
+	QTreeView*							mTree;
+	QStandardItemModel*					mModel;
+	QHash< QString, QStandardItem* >	mNameToItem;
 };
 
 #endif

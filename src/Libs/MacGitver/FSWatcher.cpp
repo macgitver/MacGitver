@@ -36,7 +36,8 @@ enum FileType
 	ModeFile			= 1 << 6,
 	IndexFile			= 1 << 7,
 	DescriptionFile		= 1 << 8,
-	RefLogFile			= 1 << 9
+	RefLogFile			= 1 << 9,
+	RepoGitFile			= 1 << 10	// a .gitanything file inside WT
 };
 
 typedef QFlags< FileType > FileTypes;
@@ -241,7 +242,16 @@ void FSWatcherPrivate::foundFile( FileInfo* path, const QString& name )
 	}
 	else
 	{
-		fi->type = WorkingTreeFile;
+		if( fi->name == ".gitattributes" ||
+			fi->name == ".gitignore" ||
+			fi->name == ".gitmodules" )
+		{
+			fi->type = RepoGitFile;
+		}
+		else
+		{
+			fi->type = WorkingTreeFile;
+		}
 	}
 
 	path->children.insert( name, fi );
@@ -385,6 +395,11 @@ void FSWatcherPrivate::spoonFeed()
 	if( spitNow && RefLogFile )
 	{
 		emit mOwner->refLogChanged();
+	}
+
+	if( spitNow && RepoGitFile )
+	{
+		emit mOwner->repoGitFileChanged();
 	}
 }
 

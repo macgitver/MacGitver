@@ -45,6 +45,7 @@ signals:
 	void refsChanged();
 	void refLogChanged();
 	void headChanged();
+	void repoGitFileChanged();
 	void workingTreeChanged();
 	void descriptionChanged();
 	void indexChanged();

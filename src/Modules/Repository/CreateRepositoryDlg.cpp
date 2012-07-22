@@ -49,15 +49,16 @@ void CreateRepositoryDlg::checkValid()
 	bool okay = !txtPath->text().isEmpty();
 
 	QDir wanted( txtPath->text() );
-	okay &= wanted.exists();
-
-	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
-
-	if( okay )
+	if( wanted.exists() )
 	{
 		QStringList sl = wanted.entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot );
-		chkMakeBare->setEnabled( sl.count() == 0 );
+		if( sl.count() > 0 )
+		{
+			okay = false;
+		}
 	}
+
+	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
 }
 
 void CreateRepositoryDlg::accept()

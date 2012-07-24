@@ -16,6 +16,7 @@ SET( SRC_FILES
 	RepositoryCore.cpp
 
 	CreateRepositoryDlg.cpp
+	CloneRepositoryDlg.cpp
 )
 
 SET( HDR_FILES
@@ -25,11 +26,13 @@ SET( HDR_FILES
 	RepositoryCore.h
 
 	CreateRepositoryDlg.h
+	CloneRepositoryDlg.h
 )
 
 SET( UI_FILES
 
 	CreateRepositoryDlg.ui
+	CloneRepositoryDlg.ui
 )
 
 SET( HID_FILES

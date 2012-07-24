@@ -14,40 +14,26 @@
  *
  */
 
-#ifndef MGV_MODULE_REPOSITORY_H
-#define MGV_MODULE_REPOSITORY_H
+#ifndef CLONE_REPOSITORY_DLG_H
+#define CLONE_REPOSITORY_DLG_H
 
-#include "MacGitver/Module.h"
+#include "ui_CloneRepositoryDlg.h"
 
-#include "hic_RepositoryModule.h"
-
-class RepositoryCore;
-
-class RepositoryModule : public Module, public RepositoryActions
+class CloneRepositoryDlg : public QDialog, Ui::CloneRepositoryDlg
 {
 	Q_OBJECT
 public:
-	RepositoryModule();
-	~RepositoryModule();
+	CloneRepositoryDlg();
 
-public:
-	void repositoryChanged( Git::Repository newRepository );
-
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
-
-	void initialize();
-	void deinitialize();
+protected:
+	void accept();
 
 private slots:
-	void onRepositoryCreate();
-	void onRepositoryClone();
-	void onRepositoryOpen();
-	void onRepositoryClose();
-
-private:
-	Git::Repository mRepo;
-	RepositoryCore*	mCore;
+	void onBrowse();
+	void onCheckout( bool value );
+	void onInitSubmodules( bool value );
+	void onCheckoutBranch( const QString& branch );
+	void checkValid();
 };
 
 #endif

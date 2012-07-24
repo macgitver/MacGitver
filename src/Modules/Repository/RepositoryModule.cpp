@@ -21,6 +21,7 @@
 
 #include "RepositoryModule.h"
 #include "RepositoryCore.h"
+#include "CloneRepositoryDlg.h"
 #include "CreateRepositoryDlg.h"
 
 RepositoryModule::RepositoryModule()
@@ -93,6 +94,11 @@ void RepositoryModule::onRepositoryOpen()
 	{
 		MacGitver::self().setRepository( repo );
 	}
+}
+
+void RepositoryModule::onRepositoryClone()
+{
+	CloneRepositoryDlg().exec();
 }
 
 Q_EXPORT_PLUGIN2( Repository, RepositoryModule )

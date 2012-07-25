@@ -33,6 +33,7 @@ namespace Heaven
 
 	public:
 		ViewContext* context();
+		virtual ViewContext* createContext();
 		virtual void setContext( ViewContext* context );
 
 	private:

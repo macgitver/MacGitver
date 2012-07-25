@@ -34,4 +34,9 @@ namespace Heaven
 		mContext = context;
 	}
 
+	ViewContext* GlobalView::createContext()
+	{
+		return NULL;
+	}
+
 }

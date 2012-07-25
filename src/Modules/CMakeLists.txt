@@ -13,7 +13,7 @@ MACRO(ADD_MGV_MODULE _Name )
 	TARGET_LINK_LIBRARIES(
 		Mod${_Name}
 
-		GitWrap Interfaces Heaven MacGitverCore
+		GitWrap Interfaces Heaven MacGitverCore Widgets
 	)
 
 ENDMACRO(ADD_MGV_MODULE)

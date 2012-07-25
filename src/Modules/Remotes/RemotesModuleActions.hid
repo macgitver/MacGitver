@@ -23,15 +23,16 @@ Ui RemotesModuleActions {
 			Text	"R&emotes";
 
 			Action RemotesCreate {
-				Text	"&Create...";
+				Text		"&Create...";
+				_ConnectTo	onRemoteCreate();
 			};
 
 			Action RemotesFetch {
-				Text	"&Fetch";
+				Text		"&Fetch";
 			};
 
 			Action RemotesPush {
-				Text	"P&ush...";
+				Text		"P&ush...";
 			};
 
 		};

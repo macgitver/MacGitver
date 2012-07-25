@@ -19,7 +19,9 @@
 
 #include "MacGitver/MacGitver.h"
 
+#include "RemoteCreateEditDlg.h"
 #include "RemotesModule.h"
+#include "RemotesView.h"
 
 RemotesModule::RemotesModule()
 {
@@ -34,14 +36,28 @@ Module::Types RemotesModule::providesModuleTypes() const
 	return View;
 }
 
+Heaven::View* RemotesModule::createRemotesView()
+{
+	return new RemotesView;
+}
+
 void RemotesModule::initialize()
 {
 	setupActions( this );
 	acRemotesAC->mergeInto( "RemotesMP" );
+
+	MacGitver::self().registerView( "Remotes", Heaven::GlobalViewType,
+									&RemotesModule::createRemotesView );
 }
 
 void RemotesModule::deinitialize()
 {
+	MacGitver::self().unregisterView( "Remotes" );
+}
+
+void RemotesModule::onRemoteCreate()
+{
+	RemoteCreateEditDlg().exec();
 }
 
 Q_EXPORT_PLUGIN2( Remotes, RemotesModule )

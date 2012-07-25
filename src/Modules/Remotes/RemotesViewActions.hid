@@ -14,31 +14,15 @@
  *
  */
 
-#ifndef MGV_MODULE_REMOTES_H
-#define MGV_MODULE_REMOTES_H
+Ui RemotesViewActions {
 
-#include "MacGitver/Module.h"
+	ToolBar RemotesTB {
 
-#include "hic_RemotesModuleActions.h"
+		Action			AddRemote {
+			Text		"Add";
+			_ConnectTo	onAddRemote();
+		};
 
-class RemotesModule : public Module, public RemotesModuleActions
-{
-	Q_OBJECT
-public:
-	RemotesModule();
+	};
 
-public:
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
-
-	void initialize();
-	void deinitialize();
-
-private:
-	static Heaven::View* createRemotesView();
-
-private slots:
-	void onRemoteCreate();
 };
-
-#endif

@@ -14,31 +14,30 @@
  *
  */
 
-#ifndef MGV_MODULE_REMOTES_H
-#define MGV_MODULE_REMOTES_H
+#ifndef MGV_REMOTES_VIEW_H
+#define MGV_REMOTES_VIEW_H
 
-#include "MacGitver/Module.h"
+#include "Heaven/Views/GlobalView.h"
 
-#include "hic_RemotesModuleActions.h"
+#include "hic_RemotesViewActions.h"
 
-class RemotesModule : public Module, public RemotesModuleActions
+class QTreeView;
+
+class RemotesViewContext;
+
+class RemotesView : public Heaven::GlobalView, private RemotesViewActions
 {
 	Q_OBJECT
 public:
-	RemotesModule();
+	RemotesView();
 
-public:
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
-
-	void initialize();
-	void deinitialize();
+protected:
+	Heaven::ViewContext* createContext();
+	void setContext( Heaven::ViewContext* context );
 
 private:
-	static Heaven::View* createRemotesView();
-
-private slots:
-	void onRemoteCreate();
+	RemotesViewContext*	mCtx;
+	QTreeView*			mTreeView;
 };
 
 #endif

@@ -14,31 +14,32 @@
  *
  */
 
-#ifndef MGV_MODULE_REMOTES_H
-#define MGV_MODULE_REMOTES_H
+#ifndef MGV_REMOTES_VIEW_CONTEXT_H
+#define MGV_REMOTES_VIEW_CONTEXT_H
 
-#include "MacGitver/Module.h"
+#include "GitWrap/Repository.h"
 
-#include "hic_RemotesModuleActions.h"
+#include "Heaven/Views/ViewContext.h"
 
-class RemotesModule : public Module, public RemotesModuleActions
+class QAbstractItemModel;
+class QStandardItem;
+class QStandardItemModel;
+
+class RemotesViewContext : public Heaven::ViewContext
 {
 	Q_OBJECT
 public:
-	RemotesModule();
-
-public:
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
-
-	void initialize();
-	void deinitialize();
-
-private:
-	static Heaven::View* createRemotesView();
+	RemotesViewContext();
 
 private slots:
-	void onRemoteCreate();
+	void repositoryChanged( Git::Repository repo );
+
+public:
+	QAbstractItemModel* model();
+
+private:
+	Git::Repository		mRepo;
+	QStandardItemModel*	mModel;
 };
 
 #endif

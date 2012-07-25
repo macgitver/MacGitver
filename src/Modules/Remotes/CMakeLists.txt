@@ -12,20 +12,28 @@ INCLUDE_DIRECTORIES(
 SET( SRC_FILES
 
 	RemotesModule.cpp
+	RemotesView.cpp
+	RemotesViewContext.cpp
+	RemoteCreateEditDlg.cpp
 )
 
 SET( HDR_FILES
 
 	RemotesModule.h
+	RemotesView.h
+	RemotesViewContext.h
+	RemoteCreateEditDlg.h
 )
 
 SET( UI_FILES
 
+	RemoteCreateEditDlg.ui
 )
 
 SET( HID_FILES
 
 	RemotesModuleActions.hid
+	RemotesViewActions.hid
 )
 
 QT4_MOC( MOC_FILES ${HDR_FILES} )

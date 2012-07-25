@@ -14,31 +14,34 @@
  *
  */
 
-#ifndef MGV_MODULE_REMOTES_H
-#define MGV_MODULE_REMOTES_H
+#ifndef MGV_REMOTE_CREATE_EDIT_DLG_H
+#define MGV_REMOTE_CREATE_EDIT_DLG_H
 
-#include "MacGitver/Module.h"
+#include "ui_RemoteCreateEditDlg.h"
 
-#include "hic_RemotesModuleActions.h"
+#include "GitWrap/Remote.h"
 
-class RemotesModule : public Module, public RemotesModuleActions
+class RemoteCreateEditDlg : public QDialog, private Ui::RemoteCreateEditDlg
 {
 	Q_OBJECT
 public:
-	RemotesModule();
-
-public:
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
-
-	void initialize();
-	void deinitialize();
+	RemoteCreateEditDlg();
+	RemoteCreateEditDlg( Git::Remote remote );
 
 private:
-	static Heaven::View* createRemotesView();
+	void init();
+
+private:
+	void accept();
 
 private slots:
-	void onRemoteCreate();
+	void onNameChanged( const QString& newName );
+	void onUrlChanged( const QString& newUrl );
+
+	void checkValid();
+
+private:
+	Git::Remote			mRemote;
 };
 
 #endif

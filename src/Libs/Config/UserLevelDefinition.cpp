@@ -156,6 +156,11 @@ bool UserLevelDefaultLayoutEntry::isVertical() const
 	return mVertical;
 }
 
+UserLevelDefaultLayoutEntry::TabPos UserLevelDefaultLayoutEntry::tabPos() const
+{
+	return mTabPos;
+}
+
 QString UserLevelDefaultLayoutEntry::name() const
 {
 	return mName;
@@ -191,7 +196,7 @@ UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayoutEntry::read( const QDomEl
 	else if( el.tagName() == "Tab" )
 	{
 		entry->mType = Tab;
-		entry->mTabPos = parseCaption( el.attribute( "Orient" ) );
+		entry->mTabPos = parseCaption( el.attribute( "Caption" ) );
 		entry->mStretch = el.attribute( "Stretch", "0" ).toInt();
 	}
 	else if( el.tagName() == "View" )

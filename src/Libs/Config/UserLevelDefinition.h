@@ -93,6 +93,7 @@ public:
 	UserLevelDefaultLayoutEntry::Ptr childAt( int index ) const;
 	QVector< UserLevelDefaultLayoutEntry::Ptr > children() const;
 	bool isVertical() const;
+	TabPos tabPos() const;
 	QString name() const;
 
 public:

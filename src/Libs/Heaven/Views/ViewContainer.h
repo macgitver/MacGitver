@@ -18,18 +18,21 @@
 #define HEAVEN_CONTAINER_H
 
 #include <QObject>
-#include <QTableWidget>
-#include <QSplitter>
+#include <QSet>
 
 #include "Heaven/HeavenApi.h"
+#include "Heaven/Views/ViewContainerContent.h"
 
-#include "Heaven/Views/View.h"
+class QTabWidget;
+class QSplitter;
 
 namespace Heaven
 {
 
 	typedef QTabWidget	HeavenTabWidget;
 	typedef QSplitter	HeavenSplitter;
+
+	class View;
 
 	class HEAVEN_API ViewContainer : public QObject, public ViewContainerContent
 	{

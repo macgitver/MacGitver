@@ -14,7 +14,7 @@
  *
  */
 
-#include "Heaven/Views/ViewContainerContent.h"
+#include "Heaven/Views/View.h"
 #include "Heaven/Views/ViewContainer.h"
 
 namespace Heaven

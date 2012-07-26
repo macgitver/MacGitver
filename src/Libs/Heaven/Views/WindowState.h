@@ -22,14 +22,12 @@
 #include <QSet>
 
 #include "Heaven/HeavenApi.h"
+#include "Heaven/Views/ViewContainer.h"
 
 namespace Heaven
 {
 
-	class View;
 	class ViewFactory;
-	class ViewContainer;
-	class ViewContainerContent;
 	class TopLevelWidget;
 
 	class HEAVEN_API WindowStateBase : public QSharedData
@@ -89,10 +87,13 @@ namespace Heaven
 	public:
 		virtual Type type() const;
 
+		void setVertical( bool value );
+
 	protected:
 		virtual void apply( ApplyContext& ctx );
 
 	private:
+		bool						mVertical;
 		QVector< int >				mWidths;
 	};
 
@@ -102,13 +103,19 @@ namespace Heaven
 		typedef QExplicitlySharedDataPointer< WindowStateTab > Ptr;
 
 	public:
+		WindowStateTab( WindowStateBase* parent );
 		WindowStateTab( ViewContainer* vc, WindowStateBase* parent );
 
 	public:
 		virtual Type type() const;
 
+		void setTabSubType( ViewContainer::Type type );
+
 	protected:
 		virtual void apply( ApplyContext& ctx );
+
+	private:
+		ViewContainer::Type		mTabSubType;
 	};
 
 	class HEAVEN_API WindowStateView : public WindowStateBase
@@ -117,7 +124,10 @@ namespace Heaven
 		typedef QExplicitlySharedDataPointer< WindowStateView > Ptr;
 
 	public:
+		WindowStateView( WindowStateBase* parent );
 		WindowStateView( View* view, WindowStateBase* parent );
+
+		void setViewId( const QString& id );
 
 	public:
 		virtual Type type() const;

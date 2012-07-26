@@ -112,6 +112,11 @@ namespace Heaven
 		return WSSplitter;
 	}
 
+	void WindowStateSplitter::setVertical( bool value )
+	{
+		mVertical = value;
+	}
+
 	void WindowStateSplitter::apply( ApplyContext& ctx )
 	{
 	}
@@ -119,7 +124,11 @@ namespace Heaven
 	WindowStateTab::WindowStateTab( ViewContainer* vc, WindowStateBase* parent )
 		: WindowStateBase( parent )
 	{
+	}
 
+	WindowStateTab::WindowStateTab( WindowStateBase* parent )
+		: WindowStateBase( parent )
+	{
 	}
 
 	WindowStateBase::Type WindowStateTab::type() const
@@ -127,7 +136,17 @@ namespace Heaven
 		return WSTab;
 	}
 
+	void WindowStateTab::setTabSubType( ViewContainer::Type type )
+	{
+		mTabSubType = type;
+	}
+
 	void WindowStateTab::apply( ApplyContext& ctx )
+	{
+	}
+
+	WindowStateView::WindowStateView( WindowStateBase* parent )
+		: WindowStateBase( parent )
 	{
 	}
 
@@ -140,6 +159,11 @@ namespace Heaven
 	WindowStateBase::Type WindowStateView::type() const
 	{
 		return WSView;
+	}
+
+	void WindowStateView::setViewId( const QString& id )
+	{
+		mViewId = id;
 	}
 
 	void WindowStateView::apply( ApplyContext& ctx )

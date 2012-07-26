@@ -25,7 +25,7 @@ namespace Heaven
 	class MainWindow;
 	class ModePrivate;
 
-	class Mode : public QObject
+	class HEAVEN_API Mode : public QObject
 	{
 		Q_OBJECT
 	public:

@@ -27,6 +27,14 @@
 
 class QDomElement;
 
+
+namespace Heaven
+{
+	class MainWindow;
+	class Mode;
+	class WindowStateBase;
+}
+
 class CONFIG_API EnableDisable
 {
 public:
@@ -96,6 +104,8 @@ public:
 	TabPos tabPos() const;
 	QString name() const;
 
+	void addToWindowState( Heaven::WindowStateBase* parent );
+
 public:
 	static UserLevelDefaultLayoutEntry::Ptr read( const QDomElement& el );
 
@@ -148,6 +158,8 @@ public:
 
 	bool isLockingMode() const;
 	bool isUserSelectable() const;
+
+	Heaven::Mode* createHeavenMode( Heaven::MainWindow* mainWindow );
 
 public:
 	static UserLevelMode::Ptr read( const QDomElement& el );

@@ -22,6 +22,8 @@
 
 #include "UserLevelDefinition.h"
 
+#include "Heaven/Views/Mode.h"
+#include "Heaven/Views/ViewContainer.h"
 
 EnableDisable::EnableDisable()
 {
@@ -183,6 +185,53 @@ UserLevelDefaultLayoutEntry::TabPos UserLevelDefaultLayoutEntry::parseCaption( c
 	return Top;
 }
 
+
+void UserLevelDefaultLayoutEntry::addToWindowState( Heaven::WindowStateBase* parent )
+{
+	switch( mType )
+	{
+	case Tab:
+		{
+			Heaven::ViewContainer::Type subType;
+			switch( mTabPos )
+			{
+			case Left:		subType = Heaven::ViewContainer::SubTabLeft;	break;
+			case Right:		subType = Heaven::ViewContainer::SubTabRight;	break;
+			case Top:		subType = Heaven::ViewContainer::SubTabTop;		break;
+			case Bottom:	subType = Heaven::ViewContainer::SubTabBottom;	break;
+			}
+
+			Heaven::WindowStateTab* tab = new Heaven::WindowStateTab( parent );
+			tab->setTabSubType( subType );
+
+			foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, mChildren )
+			{
+				subEntry->addToWindowState( tab );
+			}
+		}
+		break;
+
+	case Split:
+		{
+			Heaven::WindowStateSplitter* split = new Heaven::WindowStateSplitter( parent );
+			split->setVertical( mVertical );
+
+			foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, mChildren )
+			{
+				subEntry->addToWindowState( split );
+			}
+		}
+		break;
+
+	case View:
+		{
+			Heaven::WindowStateView* view = new Heaven::WindowStateView( parent );
+			view->setViewId( mName );
+		}
+		break;
+	}
+}
+
 UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayoutEntry::read( const QDomElement& el )
 {
 	UserLevelDefaultLayoutEntry::Ptr entry( new UserLevelDefaultLayoutEntry );
@@ -296,6 +345,12 @@ bool UserLevelMode::isUserSelectable() const
 	return mIsUserSelectable;
 }
 
+Heaven::Mode* UserLevelMode::createHeavenMode( Heaven::MainWindow* mainWindow )
+{
+	Heaven::WindowStateRoot* state = new Heaven::WindowStateRoot;
+	mDefaultLayout->root()->addToWindowState( state );
+	return new Heaven::Mode( mainWindow, mModeName, state );
+}
 
 UserLevelMode::Ptr UserLevelMode::read( const QDomElement& el )
 {

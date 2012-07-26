@@ -28,6 +28,15 @@ namespace Heaven
 		Q_ASSERT( owner );
 	}
 
+	Mode::Mode( MainWindow* owner, const QString& name, WindowStateRoot *state )
+		: QObject( owner )
+		, d( new ModePrivate )
+	{
+		Q_ASSERT( owner );
+		d->mName = name;
+		d->mRoot = state;
+	}
+
 	Mode::~Mode()
 	{
 		delete d;
@@ -53,6 +62,11 @@ namespace Heaven
 
 	void Mode::deactivate()
 	{
+	}
+
+	MainWindow* Mode::owner()
+	{
+		return qobject_cast< MainWindow* >( parent() );
 	}
 
 }

@@ -19,13 +19,16 @@
 
 #include <QString>
 
+#include "WindowState.h"
+
 namespace Heaven
 {
 
 	class ModePrivate
 	{
 	public:
-		QString				mName;
+		QString					mName;
+		WindowStateRoot::Ptr	mRoot;
 	};
 
 }

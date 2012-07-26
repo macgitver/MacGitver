@@ -19,6 +19,8 @@
 
 #include <QObject>
 
+#include "WindowState.h"
+
 namespace Heaven
 {
 
@@ -30,6 +32,7 @@ namespace Heaven
 		Q_OBJECT
 	public:
 		Mode( MainWindow* owner );
+		Mode( MainWindow* owner, const QString& name, WindowStateRoot* state );
 		~Mode();
 
 	public:
@@ -39,6 +42,7 @@ namespace Heaven
 	public:
 		void activate();
 		void deactivate();
+		MainWindow* owner();
 
 	signals:
 		void nameChanged( const QString& name );

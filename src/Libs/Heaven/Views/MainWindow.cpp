@@ -51,10 +51,10 @@ namespace Heaven
 		if( mode )
 		{
 			mode->activate();
-
 			mCurrentMode = mode;
-			emit mOwner->currentModeChanged( mode );
 		}
+
+		emit mOwner->currentModeChanged( mode );
 	}
 
 

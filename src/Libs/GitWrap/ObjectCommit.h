@@ -28,6 +28,7 @@
 namespace Git
 {
 
+	class Reference;
 	class ObjectTree;
 
 	class GITWRAP_API ObjectCommit : public Object
@@ -68,7 +69,7 @@ namespace Git
 		QString message() const;
 		QString shortMessage() const;
 
-		ObjectId createBranch( const QString& name, bool force );
+		Reference createBranch( const QString& name, bool force );
 	};
 
 	inline uint qHash( const ObjectCommit& c )

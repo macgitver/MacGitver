@@ -20,8 +20,8 @@
 #include "ObjectCommit.h"
 #include "ObjectTree.h"
 #include "RepositoryPrivate.h"
-
-#include "git2/branch.h"
+#include "Reference.h"
+#include "ReferencePrivate.h"
 
 namespace Git
 {
@@ -238,22 +238,22 @@ namespace Git
 		return QString::fromUtf8( msg, len );
 	}
 
-	ObjectId ObjectCommit::createBranch( const QString& name, bool force )
+	Reference ObjectCommit::createBranch( const QString& name, bool force )
 	{
 		if( !d )
 		{
-			return ObjectId();
+			return Reference();
 		}
 
-		git_oid id;
-		int rc = git_branch_create( &id, d->repo()->mRepo, name.toUtf8().constData(),
+		git_reference* ref = NULL;
+		int rc = git_branch_create( &ref, d->repo()->mRepo, name.toUtf8().constData(),
 									d->mObj, force );
 		if( !d->handleErrors( rc ) )
 		{
-			return ObjectId();
+			return Reference();
 		}
 
-		return ObjectId::fromRaw( id.id );
+		return Reference( new ReferencePrivate( d->repo(), ref ) );
 	}
 
 }

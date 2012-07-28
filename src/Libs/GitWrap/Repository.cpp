@@ -278,10 +278,20 @@ namespace Git
 			return false;
 		}
 
-		int rc = git_branch_move( d->mRepo,
-								  oldName.toUtf8().constData(),
-								  newName.toUtf8().constData(),
-								  force );
+		git_reference* ref = NULL;
+
+		int rc = git_branch_lookup( &ref, d->mRepo, oldName.toUtf8().constData(), GIT_BRANCH_LOCAL );
+		if( rc == GITERR_REFERENCE )
+		{
+			rc = git_branch_lookup( &ref, d->mRepo, oldName.toUtf8().constData(), GIT_BRANCH_REMOTE );
+		}
+		if( !d->handleErrors( rc ) )
+		{
+			return false;
+		}
+
+		rc = git_branch_move( ref, newName.toUtf8().constData(), force );
+		git_reference_free( ref );
 
 		return d->handleErrors( rc );
 	}

@@ -17,6 +17,7 @@
 #include "GitWrap/Object.h"
 #include "GitWrap/ObjectCommit.h"
 #include "GitWrap/ObjectTag.h"
+#include "GitWrap/Reference.h"
 
 #include "RepositoryCore.h"
 

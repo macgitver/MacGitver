@@ -29,9 +29,6 @@ class QSplitter;
 namespace Heaven
 {
 
-	typedef QTabWidget	HeavenTabWidget;
-	typedef QSplitter	HeavenSplitter;
-
 	class View;
 
 	class HEAVEN_API ViewContainer : public QObject, public ViewContainerContent
@@ -88,8 +85,8 @@ namespace Heaven
 		union
 		{
 			QWidget*			mContainerWidget;
-			HeavenSplitter*		mSpliterWidget;
-			HeavenTabWidget*	mTabWidget;
+			QSplitter*			mSpliterWidget;
+			QTabWidget*			mTabWidget;
 		};
 	};
 

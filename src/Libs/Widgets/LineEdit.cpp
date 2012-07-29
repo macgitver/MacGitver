@@ -61,7 +61,7 @@ void LineEdit::updatePalette()
 	{
 		p = QApplication::palette();
 		QColor c = p.color( QPalette::Active, QPalette::Highlight );
-		p.setColor( QPalette::Active, QPalette::Base, c.lighter( 180 ) );
+		p.setColor( QPalette::Active, QPalette::Base, c.lighter( 130 ) );
 	}
 
 	setPalette( p );

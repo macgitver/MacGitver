@@ -41,6 +41,8 @@ Heaven::View* LoggingModule::createLoggingView()
 
 void LoggingModule::initialize()
 {
+	MacGitver::self().setLog( this );
+
 	registerView( "Log",
 				  Heaven::GlobalViewType,
 				  &LoggingModule::createLoggingView );
@@ -48,7 +50,13 @@ void LoggingModule::initialize()
 
 void LoggingModule::deinitialize()
 {
+	MacGitver::self().setLog( NULL );
 	unregisterView( "Log" );
+}
+
+void LoggingModule::addMessage( LogType type, const QString& message )
+{
+	qDebug( "%i: %s", int(type), qPrintable( message ) );
 }
 
 Q_EXPORT_PLUGIN2( Logging, LoggingModule )

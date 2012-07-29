@@ -21,7 +21,7 @@
 
 class LoggingView;
 
-class LoggingModule : public Module
+class LoggingModule : public Module, private ILog
 {
 	Q_OBJECT
 public:
@@ -33,6 +33,9 @@ public:
 
 	void initialize();
 	void deinitialize();
+
+private:
+	void addMessage( LogType type, const QString& message );
 
 private:
 	static Heaven::View* createLoggingView();

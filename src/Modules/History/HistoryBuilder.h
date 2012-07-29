@@ -17,6 +17,7 @@
 #ifndef HISTORY_BUILDER_H
 #define HISTORY_BUILDER_H
 
+#include <QObject>
 #include <QMap>
 
 #include "GitWrap/ObjectCommit.h"
@@ -25,8 +26,9 @@
 
 #include "HistoryEntry.h"
 
-class HistoryBuilder
+class HistoryBuilder : public QObject
 {
+	Q_OBJECT
 public:
 	HistoryBuilder( Git::Repository repo, HistoryEntries* entries );
 	~HistoryBuilder();

@@ -16,6 +16,8 @@
 
 #include <QElapsedTimer>
 
+#include "MacGitver/MacGitver.h"
+
 #include "GitWrap/ObjectId.h"
 #include "GitWrap/Reference.h"
 
@@ -310,8 +312,8 @@ void HistoryBuilder::start()
 	double avg = double(dur) / double(mEntries->count());
 	QString s = QString::number( avg, 'f' );
 
-		MacGitver::self().log( ltInfo,
-							   trUtf8( "Glyphed %i commits in %lli ns = %s ns per Commit" )
+		MacGitver::self().log( ltInformation,
+							   trUtf8( "Glyphed %1 commits in %2 ns = %3 ns per Commit" )
 								.arg( mEntries->count() )
 								.arg( dur )
 								.arg( s ) );

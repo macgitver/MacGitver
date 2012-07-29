@@ -309,5 +309,10 @@ void HistoryBuilder::start()
 	qint64 dur = timer.nsecsElapsed();
 	double avg = double(dur) / double(mEntries->count());
 	QString s = QString::number( avg, 'f' );
-	qDebug( "Glyphed %i commits in %lli ns = %s ns per Commit", mEntries->count(), dur, qPrintable( s ) );
+
+		MacGitver::self().log( ltInfo,
+							   trUtf8( "Glyphed %i commits in %lli ns = %s ns per Commit" )
+								.arg( mEntries->count() )
+								.arg( dur )
+								.arg( s ) );
 }

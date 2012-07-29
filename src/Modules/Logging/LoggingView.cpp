@@ -25,10 +25,17 @@ LoggingView::LoggingView()
 	setViewName( trUtf8( "Log" ) );
 
 	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 2 );
-	l->setMargin( 2 );
+	l->setSpacing( 0 );
+	l->setMargin( 0 );
 	setLayout( l );
 
-	l->addWidget( new QTextBrowser );
+	mBrowser = new QTextBrowser;
+	mBrowser->setFrameShape( QFrame::NoFrame );
+
+	l->addWidget( mBrowser );
 }
 
+QSize LoggingView::sizeHint() const
+{
+	return QSize( 300, 110 );
+}

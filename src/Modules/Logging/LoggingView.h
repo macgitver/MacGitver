@@ -19,11 +19,19 @@
 
 #include "Heaven/Views/GlobalView.h"
 
+class QTextBrowser;
+
 class LoggingView : public Heaven::GlobalView
 {
 	Q_OBJECT
 public:
 	LoggingView();
+
+public:
+	QSize sizeHint() const;
+
+private:
+	QTextBrowser*		mBrowser;
 };
 
 #endif

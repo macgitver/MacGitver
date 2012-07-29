@@ -38,6 +38,7 @@ SET( SRC_FILES
 
 	Widgets/ModeSwitchWidget.cpp
 	Widgets/ModeSwitchCombo.cpp
+	Widgets/MiniSplitter.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -64,6 +65,7 @@ SET( PUB_HDR_FILES
 	Views/WindowState.h
 	
 	Widgets/ModeSwitchWidget.h
+	Widgets/MiniSplitter.h
 )
 
 SET( PRI_HDR_FILES

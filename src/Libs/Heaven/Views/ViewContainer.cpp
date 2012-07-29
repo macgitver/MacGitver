@@ -22,6 +22,8 @@
 #include "Heaven/Views/ViewContainer.h"
 #include "Heaven/Views/View.h"
 
+#include "Widgets/MiniSplitter.h"
+
 namespace Heaven
 {
 
@@ -46,7 +48,7 @@ namespace Heaven
 			break;
 
 		case Splitter:
-			mSpliterWidget = new QSplitter( s == SubSplitHorz ? Qt::Horizontal : Qt::Vertical );
+			mSpliterWidget = new MiniSplitter( s == SubSplitHorz ? Qt::Horizontal : Qt::Vertical );
 			break;
 
 		default:

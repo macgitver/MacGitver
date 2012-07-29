@@ -44,6 +44,7 @@ namespace Heaven
 
 	void TopLevelWidget::clear()
 	{
+		mRoot->clear();
 	}
 
 	void TopLevelWidget::addView( View* view, Positions pos )

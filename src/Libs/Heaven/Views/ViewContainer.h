@@ -59,6 +59,8 @@ namespace Heaven
 	public:
 		Type type() const;
 
+		void clear();
+
 		QList< View* > views() const;
 		int numViews() const;
 		int addView( View* view );
@@ -70,7 +72,7 @@ namespace Heaven
 		void insertContainer( int pos, ViewContainer* container );
 
 		ViewContainerContent* take( ViewContainerContent* cc );
-		ViewContainerContent* take( int index );
+		ViewContainerContent* takeAt( int index );
 		int indexOf( ViewContainerContent* cc ) const;
 		QList< ViewContainerContent* > contents() const;
 

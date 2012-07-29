@@ -66,6 +66,26 @@ namespace Heaven
 		return mType;
 	}
 
+	void ViewContainer::clear()
+	{
+		while( mContents.count() )
+		{
+			if( mContents[ 0 ]->isContainer() )
+			{
+				ViewContainer* child = mContents[ 0 ]->asContainer();
+				takeAt( 0 );
+				child->clear();
+				child->deleteLater();
+			}
+			else
+			{
+				View* child = mContents[ 0 ]->asView();
+				takeAt( 0 );
+				child->deleteLater();
+			}
+		}
+	}
+
 	QList< View* > ViewContainer::views() const
 	{
 		QList< View* > r;
@@ -203,32 +223,47 @@ namespace Heaven
 		int i = indexOf( cc );
 		Q_ASSERT( i != -1 );
 
-		ViewContainerContent* cc2 = take( i );
+		ViewContainerContent* cc2 = takeAt( i );
 		Q_ASSERT( cc2 == cc );
 
 		return cc;
 	}
 
-	ViewContainerContent* ViewContainer::take( int index )
+	ViewContainerContent* ViewContainer::takeAt( int index )
 	{
 		ViewContainerContent* cc = mContents[ index ];
+		mContents.removeAt( index );
+
 		if( !cc )
 		{
 			return NULL;
 		}
 
+		cc->setContainer( NULL );
 		QWidget* w = cc->widget();
-		w->hide();
-		w->setParent( NULL );
 
 		switch( mType & BaseMask )
 		{
 		case Tab:
+			w->hide();
+			w->setParent( NULL );
 			mTabWidget->removeTab( index );
 			break;
 
 		case Splitter:
-			// Don't do anything more, it's just hide and reparent
+			if( mSpliterWidget->indexOf( w ) == -1 )
+			{
+				w = w->parentWidget();
+				Q_ASSERT( mSpliterWidget->indexOf( w ) != -1 );
+				w->hide();
+				w->setParent( NULL );
+				w->deleteLater();
+			}
+			else
+			{
+				w->hide();
+				w->setParent( NULL );
+			}
 			break;
 
 		default:

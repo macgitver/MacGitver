@@ -26,6 +26,7 @@ WelcomeView::WelcomeView()
 	setViewName( trUtf8( "Welcome" ) );
 
 	mBrowser = new QTextBrowser;
+	mBrowser->setFrameShape( QFrame::NoFrame );
 
 	QFile f( ":/ModWelcome/Welcome.html" );
 	f.open( QFile::ReadOnly );
@@ -33,6 +34,8 @@ WelcomeView::WelcomeView()
 
 	QVBoxLayout* l = new QVBoxLayout;
 	l->addWidget( mBrowser );
+	l->setSpacing( 0 );
+	l->setMargin( 0 );
 	setLayout( l );
 }
 

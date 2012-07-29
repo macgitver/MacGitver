@@ -55,3 +55,5 @@ TARGET_LINK_LIBRARIES(
 
 	LINK_PUBLIC     Interfaces
 )
+
+INSTALL_MGV_LIB( MacGitverCore )

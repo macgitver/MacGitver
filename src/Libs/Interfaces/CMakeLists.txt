@@ -40,3 +40,5 @@ ADD_QT_LIBRARY(
 	${HDR_FILES}
 	${MOC_FILES}
 )
+
+INSTALL_MGV_LIB( Interfaces )

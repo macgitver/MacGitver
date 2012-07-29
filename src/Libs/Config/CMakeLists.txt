@@ -45,3 +45,5 @@ TARGET_LINK_LIBRARIES(
 
 	Heaven
 )
+
+INSTALL_MGV_LIB( Config )

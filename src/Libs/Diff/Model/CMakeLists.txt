@@ -47,3 +47,5 @@ TARGET_LINK_LIBRARIES(
 
 	GitWrap
 )
+
+INSTALL_MGV_LIB( DiffModel )

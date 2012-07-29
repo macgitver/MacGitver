@@ -78,3 +78,17 @@ TARGET_LINK_LIBRARIES(
 	Widgets
 	MacGitverCore
 )
+
+IF( UNIX )
+
+	INSTALL(
+		TARGETS		MacGitver
+		RUNTIME		DESTINATION bin
+		LIBRARY		DESTINATION bin
+	)
+
+	SET_TARGET_PROPERTIES(	MacGitver
+		PROPERTIES			INSTALL_RPATH "\$ORIGIN/macgitver/lib:\$ORIGIN/macgitver/modules:\$ORIGIN/"
+	)
+
+ENDIF()

@@ -38,3 +38,4 @@ ADD_QT_LIBRARY(
 	${MOC_FILES}
 )
 
+INSTALL_MGV_LIB( DiffRawView )

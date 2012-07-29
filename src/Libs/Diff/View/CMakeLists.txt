@@ -50,3 +50,5 @@ TARGET_LINK_LIBRARIES(
 	DiffRawView
 	Heaven
 )
+
+INSTALL_MGV_LIB( DiffView )

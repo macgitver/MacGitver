@@ -27,6 +27,7 @@
 MacGitver::MacGitver( int argc, char** argv )
 	: QApplication( argc, argv )
 	, mMainWindow( NULL )
+	, mLog( NULL )
 {
 	Git::initLibGit();
 
@@ -121,4 +122,22 @@ Heaven::View* MacGitver::createView( const QString& identifier )
 	}
 
 	return NULL;
+}
+
+ILog* MacGitver::log()
+{
+	return mLog;
+}
+
+void MacGitver::setLog( ILog* log )
+{
+	mLog = log;
+}
+
+void MacGitver::log( LogType type, const QString& logMessage )
+{
+	if( mLog )
+	{
+		mLog->addMessage( type, logMessage );
+	}
 }

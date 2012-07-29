@@ -19,6 +19,7 @@
 
 #include <QApplication>
 
+#include "Interfaces/ILog.h"
 #include "GitWrap/Repository.h"
 #include "Heaven/Views/View.h"
 #include "MacGitver/MacGitverApi.h"
@@ -27,6 +28,7 @@ class Module;
 class Modules;
 class FSWatcher;
 class UserLevelDefinition;
+
 class IMainWindow;
 
 typedef Heaven::View* (ViewCreator)( );
@@ -63,7 +65,9 @@ public:
 	void unregisterView( const QString& identifier );
 	Heaven::View* createView( const QString& identifier );
 
-
+	ILog* log();
+	void setLog( ILog* log );
+	void log( LogType type, const QString& logMessage );
 
 signals:
 	void repositoryChanged( const Git::Repository& repo );
@@ -76,6 +80,7 @@ private:
 
 	Modules*			mModules;
 	IMainWindow*		mMainWindow;
+	ILog*				mLog;
 	FSWatcher*			mWatcher;
 	Git::Repository		mRepository;
 	QHash< QString, ViewInfo >	mViews;

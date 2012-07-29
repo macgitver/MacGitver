@@ -16,6 +16,7 @@ SET( SRC_FILES
 	IMainWindow.cpp
 	IModule.cpp
 	IRepositoryCore.cpp
+	ILog.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -27,6 +28,7 @@ SET( PUB_HDR_FILES
 	IMainWindow.h
 	IModule.h
 	IRepositoryCore.h
+	ILog.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

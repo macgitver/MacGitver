@@ -269,9 +269,12 @@ HistoryView::HistoryView()
 {
 	setViewName( trUtf8( "History" ) );
 
+	setSizePolicy( QSizePolicy::MinimumExpanding,
+				   QSizePolicy::MinimumExpanding );
+
 	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 2 );
-	l->setMargin( 2 );
+	l->setSpacing( 0 );
+	l->setMargin( 0 );
 	setLayout( l );
 
 	mToolBar = new QToolBar;

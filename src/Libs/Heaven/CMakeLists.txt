@@ -39,6 +39,8 @@ SET( SRC_FILES
 	Widgets/ModeSwitchWidget.cpp
 	Widgets/ModeSwitchCombo.cpp
 	Widgets/MiniSplitter.cpp
+	Widgets/TabBar.cpp
+	Widgets/TabWidget.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -89,6 +91,8 @@ SET( PRI_HDR_FILES
 	Views/Decorator.h
 
 	Widgets/ModeSwitchCombo.h
+	Widgets/TabWidget.h
+	Widgets/TabBar.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

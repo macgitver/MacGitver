@@ -23,6 +23,7 @@
 #include "Heaven/Views/View.h"
 
 #include "Widgets/MiniSplitter.h"
+#include "Widgets/TabWidget.h"
 
 namespace Heaven
 {
@@ -35,13 +36,13 @@ namespace Heaven
 		switch( t & BaseMask )
 		{
 		case Tab:
-			mTabWidget = new QTabWidget;
+			mTabWidget = new TabWidget;
 			switch( s )
 			{
-			case SubTabLeft:	mTabWidget->setTabPosition( QTabWidget::West );		break;
-			case SubTabRight:	mTabWidget->setTabPosition( QTabWidget::East );		break;
-			case SubTabTop:		mTabWidget->setTabPosition( QTabWidget::North );	break;
-			case SubTabBottom:	mTabWidget->setTabPosition( QTabWidget::South );	break;
+			case SubTabLeft:	mTabWidget->setTabPos( TabBar::West );	break;
+			case SubTabRight:	mTabWidget->setTabPos( TabBar::East );	break;
+			case SubTabTop:		mTabWidget->setTabPos( TabBar::North );	break;
+			case SubTabBottom:	mTabWidget->setTabPos( TabBar::South );	break;
 			default: break;
 			}
 

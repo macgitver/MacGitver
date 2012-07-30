@@ -29,7 +29,7 @@ namespace Heaven
 		mRoot = new ViewContainer( ViewContainer::Splitter, ViewContainer::SubSplitHorz );
 
 		QVBoxLayout* l = new QVBoxLayout;
-		l->setMargin( 2 );
+		l->setMargin( 0 );
 		l->setSpacing( 0 );
 		l->addWidget( mRoot->containerWidget() );
 		setLayout( l );

@@ -23,12 +23,12 @@
 #include "Heaven/HeavenApi.h"
 #include "Heaven/Views/ViewContainerContent.h"
 
-class QTabWidget;
 class QSplitter;
 
 namespace Heaven
 {
 
+	class TabWidget;
 	class View;
 
 	class HEAVEN_API ViewContainer : public QObject, public ViewContainerContent
@@ -88,7 +88,7 @@ namespace Heaven
 		{
 			QWidget*			mContainerWidget;
 			QSplitter*			mSpliterWidget;
-			QTabWidget*			mTabWidget;
+			TabWidget*			mTabWidget;
 		};
 	};
 

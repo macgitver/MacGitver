@@ -32,14 +32,14 @@
 #include "HistoryList.h"
 
 void HistoryViewDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2,
-										  const QColor& col, const QColor& activeCol,
+										  int height, const QColor& col, const QColor& activeCol,
 										  const QBrush& back ) const
 {
 	const int padding = 2;
 	x1 += padding;
 	x2 += padding;
 
-	int h = 18 / 2;
+	int h = height / 2;
 	int m = (x1 + x2) / 2;
 		int r = (x2 - x1) * 1 / 3;
 	int d =  2 * r;
@@ -48,18 +48,18 @@ void HistoryViewDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1
 	#define P_0      x2, h      // >
 	#define P_90     m , 0      // ^
 	#define P_180    x1, h      // <
-	#define P_270    m , 2 * h  // v
-	#define DELTA_UR 2*(x1 - m), 2*h ,   0*16, 90*16  // -,
-	#define DELTA_DR 2*(x1 - m), 2*-h, 270*16, 90*16  // -'
-	#define DELTA_UL 2*(x2 - m), 2*h ,  90*16, 90*16  //  ,-
-	#define DELTA_DL 2*(x2 - m), 2*-h, 180*16, 90*16  //  '-
-	#define CENTER_UR x1, 2*h, 225
+	#define P_270    m , height  // v
+	#define DELTA_UR 2*(x1 - m), height ,   0*16, 90*16  // -,
+	#define DELTA_DR 2*(x1 - m), -height, 270*16, 90*16  // -'
+	#define DELTA_UL 2*(x2 - m), height ,  90*16, 90*16  //  ,-
+	#define DELTA_DL 2*(x2 - m), -height, 180*16, 90*16  //  '-
+	#define CENTER_UR x1, height, 225
 	#define CENTER_DR x1, 0  , 135
-	#define CENTER_UL x2, 2*h, 315
+	#define CENTER_UL x2, height, 315
 	#define CENTER_DL x2, 0  ,  45
 	#define R_CENTER m - r, h - r, d, d
 
-	static QPen lanePen(Qt::black, 2); // fast path here
+	QPen lanePen( Qt::black, 2 );
 
 	// arc
 	switch( glyph )
@@ -229,6 +229,7 @@ void HistoryViewDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
 		}
 
 	int x1 = 0, x2 = 0;
+	int height = opt.rect.height();
 	int maxWidth = opt.rect.width();
 	int lw = 3 * 18 / 4;
 	QColor activeColor = colors[activeLane % 4];
@@ -244,7 +245,7 @@ void HistoryViewDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
 			continue;
 
 		QColor color = i == activeLane ? activeColor : colors[i % 4];
-		paintGraphLane(p, ln, x1, x2, color, activeColor, back);
+		paintGraphLane(p, ln, x1, x2, height, color, activeColor, back);
 	}
 	p->restore();
 }
@@ -268,6 +269,8 @@ HistoryView::HistoryView()
 	: GlobalView( "History" )
 {
 	setViewName( trUtf8( "History" ) );
+
+	setFont( QFont( "Verdana", 8 ) );
 
 	setSizePolicy( QSizePolicy::MinimumExpanding,
 				   QSizePolicy::MinimumExpanding );

@@ -28,6 +28,7 @@ Config::Config()
 
 Config::~Config()
 {
+	// QSettings' DTor will sync()
 	delete mSettings;
 }
 
@@ -110,6 +111,13 @@ QVariant Config::get( const QString& path, const QVariant& defaultValue ) const
 		return mSettings->value( path, defaultValue );
 	}
 
+	const_cast< Config* >( this )->loadSettings();
+
+	if( mSettings )
+	{
+		return mSettings->value( path, defaultValue );
+	}
+
 	return defaultValue;
 }
 
@@ -119,6 +127,7 @@ void Config::set( const QString& path, const QVariant& value )
 	{
 		loadSettings();
 	}
+	Q_ASSERT( mSettings );
 
 	mSettings->setValue( path, value );
 }

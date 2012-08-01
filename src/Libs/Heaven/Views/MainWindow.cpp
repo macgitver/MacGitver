@@ -15,12 +15,15 @@
  */
 
 #include <QStatusBar>
-
+#include <QApplication>
+#include <QPlastiqueStyle>
 #include <QResizeEvent>
 
 #include "Mode.h"
 #include "MainWindow.h"
 #include "MainWindowPrivate.h"
+
+#include "Heaven/Style/Style.h"
 
 namespace Heaven
 {
@@ -62,8 +65,12 @@ namespace Heaven
 		: QMainWindow()
 		, d( new MainWindowPrivate )
 	{
+		qApp->setStyle( new Style( new QPlastiqueStyle ) );
+
 		d->mOwner = this;
 		d->setup();
+
+		setProperty( "heavenStyle", true );
 	}
 
 	MainWindow::~MainWindow()

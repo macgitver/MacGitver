@@ -25,6 +25,8 @@ SET( SRC_FILES
 	Actions/WidgetAction.cpp
 	Actions/WidgetActionWrapper.cpp
 
+	Style/Style.cpp
+
 	Views/Decorator.cpp
 	Views/GlobalView.cpp
 	Views/MainWindow.cpp
@@ -85,6 +87,8 @@ SET( PRI_HDR_FILES
 	Actions/UiObject.h
 	Actions/WidgetActionPrivate.h
 	Actions/WidgetActionWrapper.h
+
+	Style/Style.h
 
 	Views/MainWindowPrivate.h
 	Views/ModePrivate.h

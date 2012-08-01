@@ -14,8 +14,6 @@
  *
  */
 
-#include <QPlastiqueStyle>
-
 #include "GitWrap/Git.h"
 
 #include "MacGitver/MacGitver.h"
@@ -33,7 +31,6 @@ MacGitver::MacGitver( int argc, char** argv )
 
 	setOrganizationName( "SaCu" );
 	setApplicationName( "MacGitver" );
-	setStyle( new QPlastiqueStyle );
 
 	mWatcher = new FSWatcher( this );
 

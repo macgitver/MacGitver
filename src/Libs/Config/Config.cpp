@@ -117,7 +117,7 @@ void Config::set( const QString& path, const QVariant& value )
 {
 	if( !mSettings )
 	{
-		mSettings = new QSettings;
+		loadSettings();
 	}
 
 	mSettings->setValue( path, value );

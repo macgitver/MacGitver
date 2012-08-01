@@ -40,8 +40,8 @@ IndexWidget::IndexWidget()
 	mTreeView->setFrameShape( QFrame::NoFrame );
 
 	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 2 );
-	l->setMargin( 2 );
+	l->setSpacing( 0 );
+	l->setMargin( 0 );
 
 	setupActions( this );
 
@@ -49,7 +49,7 @@ IndexWidget::IndexWidget()
 
 	mRawDiff = new DiffRawView;
 
-	mSplitter = new QSplitter( Qt::Horizontal );
+	mSplitter = new Heaven::MiniSplitter( Qt::Horizontal );
 	mSplitter->addWidget( mTreeView );
 	mSplitter->addWidget( mRawDiff );
 

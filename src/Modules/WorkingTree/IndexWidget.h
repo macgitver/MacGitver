@@ -25,6 +25,7 @@ class QSplitter;
 #include "GitWrap/Repository.h"
 
 #include "Heaven/Views/View.h"
+#include "Heaven/Widgets/MiniSplitter.h"
 
 class DiffRawView;
 
@@ -57,7 +58,7 @@ private:
 	void setTreeFilter( WorkingTreeFilters filters );
 
 private:
-	QSplitter*				mSplitter;
+	Heaven::MiniSplitter*	mSplitter;
 	WorkingTreeItemView*	mTreeView;
 	WorkingTreeModel*		mModel;
 	DiffRawView*			mRawDiff;

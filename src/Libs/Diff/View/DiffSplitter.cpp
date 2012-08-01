@@ -15,24 +15,21 @@
  */
 
 #include <QPainter>
+#include <QVariant>
 
 #include "DiffSplitter.h"
 
-DiffSplitter::DiffSplitter( QWidget* parent )
-	: QSplitter( Qt::Horizontal, parent )
+class DiffSplitterHandle : public QSplitterHandle
 {
-	setHandleWidth( 50 );
-}
+public:
+	DiffSplitterHandle( DiffSplitter *parent );
 
-QSplitterHandle* DiffSplitter::createHandle()
-{
-	return new DiffSplitterHandle( orientation(), this );
-}
+protected:
+	void paintEvent( QPaintEvent* ev );
+};
 
-//--------------------------
-
-DiffSplitterHandle::DiffSplitterHandle( Qt::Orientation o, DiffSplitter *parent )
-	: QSplitterHandle( o, parent )
+DiffSplitterHandle::DiffSplitterHandle( DiffSplitter *parent )
+	: QSplitterHandle( Qt::Horizontal, parent )
 {
 }
 
@@ -44,3 +41,17 @@ void DiffSplitterHandle::paintEvent( QPaintEvent* ev )
 
 	p.fillRect( contentsRect(), palette().color( QPalette::Background ) );
 }
+
+
+DiffSplitter::DiffSplitter( QWidget* parent )
+	: QSplitter( Qt::Horizontal, parent )
+{
+	setHandleWidth( 50 );
+	setProperty( "heavenStyle", false );
+}
+
+QSplitterHandle* DiffSplitter::createHandle()
+{
+	return new DiffSplitterHandle( this );
+}
+

@@ -27,19 +27,6 @@ public:
 
 protected:
 	virtual QSplitterHandle* createHandle();
-
-private:
-};
-
-class DiffSplitterHandle : public QSplitterHandle
-{
-public:
-	DiffSplitterHandle( Qt::Orientation o, DiffSplitter *parent );
-
-protected:
-	void paintEvent( QPaintEvent* ev );
-
-private:
 };
 
 #endif

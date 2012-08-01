@@ -162,7 +162,6 @@ namespace Heaven
 		if( ms != mMinSize )
 		{
 			mMinSize = ms;
-			qDebug() << "MS=" << ms;
 			mWidget->updateGeometry();
 		}
 
@@ -171,7 +170,6 @@ namespace Heaven
 		if( sh != mSizeHint )
 		{
 			mSizeHint = sh;
-			qDebug() << "SH=" << sh;
 			mWidget->updateGeometry();
 		}
 	}
@@ -189,7 +187,7 @@ namespace Heaven
 
 		calculate();
 
-		QColor base( QColor( 64, 64, 64 ) );
+		QColor base( QColor( 0x40, 0x40, 0x40 ) );
 
 		QLinearGradient br( 0, 0, horz ? 0 : me.width(), horz ? me.height() : 0 );
 		br.setColorAt( 0, base );

@@ -70,6 +70,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUi()
 {
+	QIcon icon( ":/mgv_sak32.png" );
+	setWindowIcon( icon );
+
 	QFile styleFile( ":/MacGitver.qss" );
 	styleFile.open( QFile::ReadOnly );
 	setStyleSheet( styleFile.readAll() );

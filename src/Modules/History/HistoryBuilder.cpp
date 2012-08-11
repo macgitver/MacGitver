@@ -89,20 +89,35 @@ int HistoryBuilder::createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nex
 
 void HistoryBuilder::start()
 {
-	QElapsedTimer timer;
+	QVector< Git::ObjectId >	commits;
+	Git::ObjectId				currentSHA1;
+	Git::ObjectCommit			curCommit;
+	qint64						dur;
+	double						avg;
+	QElapsedTimer				timer;
+
 	timer.start();
+	commits = mWalker.all();
+
+	dur = timer.nsecsElapsed();
+	avg = double( dur ) / double( commits.count() );
+	MacGitver::self().log( ltInformation,
+						   trUtf8( "Walked %1 commits in %2 ns = %3 ns per Commit" )
+								.arg( commits.count() )
+								.arg( dur )
+								.arg( avg, 10, 'f', 2 ) );
+
+	timer.restart();
 
 	mEntries->beforeClear();
-
-	Git::ObjectId		currentSHA1;
-	Git::ObjectCommit	curCommit;
 
 	mNextParent.clear();
 	mCurrentGlyphs.clear();
 	mCurrentLine = -1;
 
-	while( mWalker.next( currentSHA1 ) )
+	for( int curCommitIdx = 0; curCommitIdx < commits.count(); curCommitIdx++ )
 	{
+		currentSHA1 = commits[ curCommitIdx ];
 		if( mCurrentLine == -1 )
 		{
 			createGlyphSlot( ggBranch, currentSHA1 );
@@ -308,13 +323,12 @@ void HistoryBuilder::start()
 
 	mEntries->afterClear();
 
-	qint64 dur = timer.nsecsElapsed();
-	double avg = double(dur) / double(mEntries->count());
-	QString s = QString::number( avg, 'f' );
+	dur = timer.nsecsElapsed();
+	avg = double(dur) / double(mEntries->count());
 
 	MacGitver::self().log( ltInformation,
 						   trUtf8( "Glyphed %1 commits in %2 ns = %3 ns per Commit" )
 								.arg( mEntries->count() )
 								.arg( dur )
-								.arg( s ) );
+								.arg( avg, 10, 'f', 2 ) );
 }

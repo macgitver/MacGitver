@@ -40,12 +40,12 @@ namespace Git
 	{
 	}
 
-	ObjectTree ObjectTree::subPath( const QByteArray& pathName ) const
+	ObjectTree ObjectTree::subPath( const QString& pathName ) const
 	{
 		Q_ASSERT( d );
 		git_tree* d2 = (git_tree*) d->mObj;
 
-		const git_tree_entry* entry = git_tree_entry_byname( d2, pathName.constData() );
+		const git_tree_entry* entry = git_tree_entry_byname( d2, pathName.toUtf8().constData() );
 		if( !entry )
 		{
 			return ObjectTree();

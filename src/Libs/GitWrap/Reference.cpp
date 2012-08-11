@@ -85,10 +85,10 @@ namespace Git
 		return false;
 	}
 
-	QByteArray Reference::name() const
+	QString Reference::name() const
 	{
 		Q_ASSERT( isValid() );
-		return QByteArray( git_reference_name( d->mRef ) );
+		return QString::fromUtf8( git_reference_name( d->mRef ) );
 	}
 
 
@@ -107,10 +107,10 @@ namespace Git
 		return ObjectId::fromRaw( git_reference_oid( d->mRef )->id );
 	}
 
-	QByteArray Reference::target() const
+	QString Reference::target() const
 	{
 		Q_ASSERT( isValid() && type() == Symbolic );
-		return QByteArray( git_reference_target( d->mRef ) );
+		return QString::fromUtf8( git_reference_target( d->mRef ) );
 	}
 
 	Repository Reference::repository() const

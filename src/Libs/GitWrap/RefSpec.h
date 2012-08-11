@@ -17,7 +17,7 @@
 #ifndef GIT_REFSPEC_H
 #define GIT_REFSPEC_H
 
-#include <QByteArray>
+#include <QString>
 
 #include "Git.h"
 
@@ -29,15 +29,15 @@ namespace Git
 	public:
 		RefSpec();
 		RefSpec( const RefSpec& other );
-		RefSpec( const QByteArray& source, const QByteArray& destination );
+		RefSpec( const QString& source, const QString& destination );
 
 	public:
-		QByteArray source() const;
-		QByteArray destination() const;
+		QString source() const;
+		QString destination() const;
 
 	private:
-		QByteArray mSrc;
-		QByteArray mDst;
+		QString mSrc;
+		QString mDst;
 	};
 
 }

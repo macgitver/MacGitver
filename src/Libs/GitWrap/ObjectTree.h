@@ -34,7 +34,7 @@ namespace Git
 		ObjectTree( const ObjectTree& o );
 
 	public:
-		ObjectTree subPath( const QByteArray& pathName ) const;
+		ObjectTree subPath( const QString& pathName ) const;
 
 		DiffList diffToTree( ObjectTree newTree );
 		DiffList diffToIndex();

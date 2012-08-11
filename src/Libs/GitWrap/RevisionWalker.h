@@ -41,7 +41,7 @@ namespace Git
 		void reset();
 		void push( const ObjectId& id );
 		void push( const Reference& ref );
-		void pushRef( const QByteArray& name );
+		void pushRef( const QString& name );
 		void pushHead();
 
 		bool next( ObjectId& oidNext );

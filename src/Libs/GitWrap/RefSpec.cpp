@@ -30,18 +30,18 @@ namespace Git
 	{
 	}
 
-	RefSpec::RefSpec( const QByteArray& source, const QByteArray& destination )
+	RefSpec::RefSpec( const QString& source, const QString& destination )
 		: mSrc( source )
 		, mDst( destination )
 	{
 	}
 
-	QByteArray RefSpec::source() const
+	QString RefSpec::source() const
 	{
 		return mSrc;
 	}
 
-	QByteArray RefSpec::destination() const
+	QString RefSpec::destination() const
 	{
 		return mDst;
 	}
@@ -53,8 +53,8 @@ namespace Git
 			return RefSpec();
 		}
 
-		QByteArray src = git_refspec_src( refspec );
-		QByteArray dst = git_refspec_dst( refspec );
+		QString src = QString::fromUtf8( git_refspec_src( refspec ) );
+		QString dst = QString::fromUtf8( git_refspec_dst( refspec ) );
 		return RefSpec( src, dst );
 	}
 

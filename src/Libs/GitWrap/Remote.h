@@ -41,17 +41,17 @@ namespace Git
 
 		bool save();
 
-		QByteArray name() const;
-		QByteArray url() const;
+		QString name() const;
+		QString url() const;
 
-		bool setFetchSpec( const QByteArray& spec );
-		bool setPushSpec( const QByteArray& spec );
+		bool setFetchSpec( const QString& spec );
+		bool setPushSpec( const QString& spec );
 
 		RefSpec fetchSpec() const;
 		RefSpec pushSpec() const;
 
-		static bool isValidUrl( const QByteArray& url );
-		static bool isSupportedUrl( const QByteArray& url );
+		static bool isValidUrl( const QString& url );
+		static bool isSupportedUrl( const QString& url );
 
 	private:
 		GitPtr< RemotePrivate > d;

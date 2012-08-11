@@ -44,11 +44,11 @@ namespace Git
 	public:
 		bool isValid() const;
 		bool destroy();
-		QByteArray name() const;
+		QString name() const;
 
 		Type type() const;
 		ObjectId objectId() const;
-		QByteArray target() const;
+		QString target() const;
 
 		Repository repository() const;
 

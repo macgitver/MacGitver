@@ -69,44 +69,42 @@ namespace Git
 		return false;
 	}
 
-	QByteArray Remote::name() const
+	QString Remote::name() const
 	{
-		QByteArray a;
 		if( d )
 		{
-			a = QByteArray( git_remote_name( d->mRemote ) );
+			return QString::fromUtf8( git_remote_name( d->mRemote ) );
 		}
-		return a;
+		return QString();
 	}
 
-	QByteArray Remote::url() const
+	QString Remote::url() const
 	{
-		QByteArray a;
 		if( d )
 		{
-			a = QByteArray( git_remote_url( d->mRemote ) );
+			return QString::fromUtf8( git_remote_url( d->mRemote ) );
 		}
-		return a;
+		return QString();
 	}
 
-	bool Remote::setFetchSpec( const QByteArray& spec )
+	bool Remote::setFetchSpec( const QString& spec )
 	{
 		Q_ASSERT( d );
 		if( d )
 		{
-			int rc = git_remote_set_fetchspec( d->mRemote, spec.constData() );
+			int rc = git_remote_set_fetchspec( d->mRemote, spec.toUtf8().constData() );
 			return d->handleErrors( rc );
 		}
 
 		return false;
 	}
 
-	bool Remote::setPushSpec( const QByteArray& spec )
+	bool Remote::setPushSpec( const QString& spec )
 	{
 		Q_ASSERT( d );
 		if( d )
 		{
-			int rc = git_remote_set_pushspec( d->mRemote, spec.constData() );
+			int rc = git_remote_set_pushspec( d->mRemote, spec.toUtf8().constData() );
 			return d->handleErrors( rc );
 		}
 
@@ -133,14 +131,14 @@ namespace Git
 		return RefSpec();
 	}
 
-	bool Remote::isValidUrl( const QByteArray& url )
+	bool Remote::isValidUrl( const QString& url )
 	{
-		return git_remote_valid_url( url.constData() );
+		return git_remote_valid_url( url.toUtf8().constData() );
 	}
 
-	bool Remote::isSupportedUrl( const QByteArray& url )
+	bool Remote::isSupportedUrl( const QString& url )
 	{
-		return git_remote_supported_url( url.constData() );
+		return git_remote_supported_url( url.toUtf8().constData() );
 	}
 
 }

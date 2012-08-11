@@ -85,14 +85,13 @@ namespace Git
 		ObjectTag lookupTag( const ObjectId& id );
 
 		bool shouldIgnore( const QString& filePath ) const;
-		bool shouldIgnore( const QByteArray& filePath ) const;
 
 		RevisionWalker newWalker();
 
-		QList< QByteArray > allRemotes() const;
-		Remote remote( const QByteArray& remoteName ) const;
-		Remote createRemote( const QByteArray& remoteName, const QByteArray& url,
-							 const QByteArray& fetchSpec );
+		QStringList allRemotes() const;
+		Remote remote( const QString& remoteName ) const;
+		Remote createRemote( const QString& remoteName, const QString& url,
+							 const QString& fetchSpec );
 
 		DiffList diffCommitToCommit( ObjectCommit oldCommit, ObjectCommit newCommit );
 		DiffList diffTreeToTree( ObjectTree oldTree, ObjectTree newTree );

@@ -80,12 +80,12 @@ namespace Git
 		pushRef( ref.name() );
 	}
 
-	void RevisionWalker::pushRef( const QByteArray& name )
+	void RevisionWalker::pushRef( const QString& name )
 	{
 		Q_ASSERT( d );
 		if( d )
 		{
-			int rc = git_revwalk_push_ref( d->mWalker, name.constData() );
+			int rc = git_revwalk_push_ref( d->mWalker, name.toUtf8().constData() );
 			d->handleErrors( rc );
 		}
 	}

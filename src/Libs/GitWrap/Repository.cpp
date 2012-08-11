@@ -185,19 +185,6 @@ namespace Git
 		return sl;
 	}
 
-	QList< QByteArray > byteArrayListFromStrArray( git_strarray* arry )
-	{
-		QList< QByteArray > list;
-
-		for( unsigned int i = 0; i < arry->count; i++ )
-		{
-			list << QByteArray( arry->strings[ i ] );
-		}
-
-		git_strarray_free( arry );
-		return list;
-	}
-
 	QStringList Repository::allReferences()
 	{
 		Q_ASSERT( d );
@@ -262,7 +249,7 @@ namespace Git
 			{
 				return QString();
 			}
-			return QString::fromUtf8( refHEAD.name().mid( 11 ).constData() );
+			return refHEAD.name().mid( 11 );
 		}
 
 		return QString();
@@ -492,15 +479,10 @@ namespace Git
 
 	bool Repository::shouldIgnore( const QString& filePath ) const
 	{
-		return shouldIgnore( filePath.toLocal8Bit() );
-	}
-
-	bool Repository::shouldIgnore( const QByteArray& filePath ) const
-	{
 		int ignore = 0;
 		if( d )
 		{
-			int rc = git_status_should_ignore( &ignore, d->mRepo, filePath.data() );
+			int rc = git_status_should_ignore( &ignore, d->mRepo, filePath.toUtf8().constData() );
 			if( !d->handleErrors( rc ) )
 			{
 				return false;
@@ -509,7 +491,7 @@ namespace Git
 		return ignore;
 	}
 
-	QList< QByteArray > Repository::allRemotes() const
+	QStringList Repository::allRemotes() const
 	{
 		Q_ASSERT( d );
 
@@ -517,18 +499,18 @@ namespace Git
 		int rc = git_remote_list( &arr, d->mRepo );
 		if( !d->handleErrors( rc ) )
 		{
-			return QList< QByteArray >();
+			return QStringList();
 		}
 
-		return byteArrayListFromStrArray( &arr );
+		return slFromStrArray( &arr );
 	}
 
-	Remote Repository::remote( const QByteArray& remoteName ) const
+	Remote Repository::remote( const QString& remoteName ) const
 	{
 		Q_ASSERT( d );
 
 		git_remote* remote = NULL;
-		int rc = git_remote_load( &remote, d->mRepo, remoteName.constData() );
+		int rc = git_remote_load( &remote, d->mRepo, remoteName.toUtf8().constData() );
 		if( !d->handleErrors( rc ) )
 		{
 			return Remote();
@@ -537,14 +519,14 @@ namespace Git
 		return new RemotePrivate( const_cast< RepositoryPrivate* >( *d ), remote );
 	}
 
-	Remote Repository::createRemote( const QByteArray& remoteName, const QByteArray& url,
-									 const QByteArray& fetchSpec )
+	Remote Repository::createRemote( const QString& remoteName, const QString& url,
+									 const QString& fetchSpec )
 	{
 		Q_ASSERT( d );
 
 		git_remote* remote = NULL;
-		int rc = git_remote_new( &remote, d->mRepo, remoteName.constData(),
-								 url.constData(), fetchSpec.constData() );
+		int rc = git_remote_new( &remote, d->mRepo, remoteName.toUtf8().constData(),
+								 url.toUtf8().constData(), fetchSpec.toUtf8().constData() );
 		if( !d->handleErrors( rc ) )
 		{
 			return Remote();

@@ -244,7 +244,7 @@ void MainWindow::setHeadLabel()
 			if( HEAD.name() != "HEAD" )
 			{
 				curBranch = trUtf8( "on branch <b>%1</b>" )
-							.arg( HEAD.name().mid( 11 ).constData() );
+							.arg( HEAD.name().mid( 11 ) );
 			}
 			else
 			{

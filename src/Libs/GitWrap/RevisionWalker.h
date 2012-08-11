@@ -45,6 +45,7 @@ namespace Git
 		void pushHead();
 
 		bool next( ObjectId& oidNext );
+		QVector< ObjectId > all();
 
 		void setSorting( bool topological, bool timed );
 

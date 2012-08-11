@@ -125,6 +125,19 @@ namespace Git
 		return false;
 	}
 
+	QVector< ObjectId > RevisionWalker::all()
+	{
+		QVector< ObjectId > ids ;
+		ObjectId id;
+
+		while( next( id ) )
+		{
+			ids.append( id );
+		}
+
+		return ids;
+	}
+
 	void RevisionWalker::setSorting( bool topological, bool timed )
 	{
 		Q_ASSERT( d );

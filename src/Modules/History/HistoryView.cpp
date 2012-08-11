@@ -194,19 +194,19 @@ void HistoryViewDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1
 }
 
 void HistoryViewDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
-									  const QModelIndex& i) const
+									  const QModelIndex& i ) const
 {
 	static const QColor colors[] = { Qt::red, //DARK_GREEN,
 											   Qt::blue, Qt::darkGray, //BROWN,
 											   Qt::magenta //, ORANGE
 											 };
-	if (opt.state & QStyle::State_Selected)
-		p->fillRect(opt.rect, opt.palette.highlight());
-	else if (i.row() & 1)
-		p->fillRect(opt.rect, opt.palette.alternateBase());
-	else
-		p->fillRect(opt.rect, opt.palette.base());
 
+	if( opt.state & QStyle::State_Selected )
+		p->fillRect( opt.rect, opt.palette.highlight() );
+	else if( i.row() & 1 )
+		p->fillRect( opt.rect, opt.palette.alternateBase() );
+	else
+		p->fillRect( opt.rect, opt.palette.base() );
 
 	HistoryModel* m = const_cast< HistoryModel* >( qobject_cast< const HistoryModel* >( i.model() ) );
 	HistoryEntry* e = m->entries()->at( i.row() );
@@ -250,10 +250,76 @@ void HistoryViewDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
 	p->restore();
 }
 
+void HistoryViewDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
+										const QModelIndex& i ) const
+{
+	if( opt.state & QStyle::State_Selected )
+		p->fillRect( opt.rect, opt.palette.highlight() );
+	else if( i.row() & 1 )
+		p->fillRect( opt.rect, opt.palette.alternateBase() );
+	else
+		p->fillRect( opt.rect, opt.palette.base() );
+
+	HistoryModel* m = const_cast< HistoryModel* >( qobject_cast< const HistoryModel* >( i.model() ) );
+	HistoryEntry* e = m->entries()->at( i.row() );
+
+	QRect r = opt.rect;
+	p->save();
+	p->setClipRect( opt.rect );
+
+	HistoryInlineRefs refs = e->refs();
+	if( refs.count() )
+	{
+		for( int refIdx = 0; refIdx < refs.count(); refIdx++ )
+		{
+			const HistoryInlineRef& ref = refs.at( refIdx );
+			int w;
+			if( ref.mIsCurrent )
+			{
+				QFont f = opt.font;
+				f.setBold( true );
+				w = QFontMetrics( f ).width( ref.mRefName ) + 6;
+				p->setFont( f );
+			}
+			else
+			{
+				w = opt.fontMetrics.width( ref.mRefName ) + 6;
+				p->setFont( opt.font );
+			}
+
+			QRect refRect( r.left(), r.top() + 1, w, r.height() - 3 );
+
+			QColor back = Qt::white;
+			if( ref.mIsTag )
+			{
+				back = Qt::yellow;
+			}
+			else if( ref.mIsBranch )
+			{
+				back = ref.mIsRemote ? Qt::green : Qt::darkGreen;
+			}
+
+			p->fillRect( refRect, back );
+			p->setPen( Qt::black );
+			p->drawRect( refRect );
+
+			refRect.adjust( 2, 0, -2, 0 );
+			p->drawText( refRect, Qt::AlignCenter, ref.mRefName );
+
+			r.setLeft( r.left() + w + 3 );
+		}
+		r.setLeft( r.left() + 3 );
+	}
+
+	p->drawText( r, Qt::AlignTop | Qt::AlignLeft, i.data().toString() );
+
+	p->restore();
+}
+
 void HistoryViewDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 								 const QModelIndex& index ) const
 {
-	if( index.column() != 0 )
+	if( index.column() > 1 )
 	{
 		QItemDelegate::paint( painter, option, index );
 		return;
@@ -261,7 +327,63 @@ void HistoryViewDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
 
 	drawBackground( painter, option, index );
 
-	paintGraph( painter, option, index );
+	if( index.column() == 0 )
+	{
+		paintGraph( painter, option, index );
+		return;
+	}
+
+	if( index.column() == 1 )
+	{
+		paintMessage( painter, option, index );
+	}
+}
+
+
+QSize HistoryViewDelegate::sizeHint( const QStyleOptionViewItem& option,
+									 const QModelIndex& index) const
+{
+	QSize s = QItemDelegate::sizeHint( option, index );
+
+	if( index.column() == 1 )
+	{
+		const HistoryModel* constmodel = qobject_cast< const HistoryModel* >( index.model() );
+		HistoryModel* m = const_cast< HistoryModel* >( constmodel );
+		HistoryEntry* e = m->entries()->at( index.row() );
+
+		HistoryInlineRefs refs = e->refs();
+		int totalWidth = 0;
+
+		if( refs.count() )
+		{
+			for( int refIdx = 0; refIdx < refs.count(); refIdx++ )
+			{
+				const HistoryInlineRef& ref = refs.at( refIdx );
+				int w;
+				if( ref.mIsCurrent )
+				{
+					QFont f = option.font;
+					f.setBold( true );
+					w = QFontMetrics( f ).width( ref.mRefName ) + 6;
+
+					s.rheight() += 2;
+				}
+				else
+				{
+					w = option.fontMetrics.width( ref.mRefName ) + 6;
+				}
+
+				totalWidth += w + 3;
+			}
+			totalWidth += 3;
+		}
+
+		QString txt = index.data().toString();
+		s.rwidth() = option.fontMetrics.width( txt ) + totalWidth;
+		s.rheight() += 2;
+	}
+
+	return s;
 }
 
 

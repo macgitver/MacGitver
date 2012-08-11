@@ -87,6 +87,79 @@ int HistoryBuilder::createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nex
 	return mCurrentGlyphs.count() - 1;
 }
 
+void HistoryBuilder::updateReferences()
+{
+	qint64				dur;
+	double				avg;
+	QElapsedTimer		timer;
+	Git::ResolvedRefs	refs;
+	QString				curBranch;
+	QHash< Git::ObjectId, HistoryInlineRefs > refsById;
+
+	timer.start();
+
+	refs = mRepo.allResolvedRefs();
+
+	curBranch = mRepo.currentBranch();
+
+	foreach( QString ref, refs.keys() )
+	{
+		HistoryInlineRef inlRef;
+
+		if( ref.startsWith( QLatin1String( "refs/heads/" ) ) )
+		{
+			inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
+			inlRef.mIsBranch = true;
+			inlRef.mIsRemote = false;
+			inlRef.mIsTag = false;
+			inlRef.mIsStash = false;
+			inlRef.mIsCurrent = inlRef.mRefName == curBranch;
+		}
+		else if( ref.startsWith( QLatin1String( "refs/tags/" ) ) )
+		{
+			inlRef.mRefName = ref.mid( strlen( "refs/tags/" ) );
+			inlRef.mIsBranch = false;
+			inlRef.mIsRemote = false;
+			inlRef.mIsTag = true;
+			inlRef.mIsCurrent = false;
+			inlRef.mIsStash = false;
+		}
+		else if( ref.startsWith( QLatin1String( "refs/remotes/" ) ) )
+		{
+			inlRef.mRefName = ref.mid( strlen( "refs/remotes/" ) );
+			inlRef.mIsBranch = true;
+			inlRef.mIsRemote = true;
+			inlRef.mIsTag = false;
+			inlRef.mIsCurrent = false;
+			inlRef.mIsStash = false;
+		}
+		else if( ref == "refs/stash" )
+		{
+			inlRef.mRefName = tr( "<recent stash>" );
+			inlRef.mIsBranch = false;
+			inlRef.mIsCurrent = true;
+			inlRef.mIsRemote = false;
+			inlRef.mIsTag = false;
+			inlRef.mIsStash = true;
+		}
+
+		if( !refsById.contains( refs[ ref ] ) )
+		{
+			refsById.insert( refs[ ref ], HistoryInlineRefs() );
+		}
+
+		refsById[ refs[ ref ] ].append( inlRef );
+	}
+
+	dur = timer.nsecsElapsed();
+	avg = double( dur ) / double( refs.count() );
+	MacGitver::self().log( ltInformation,
+						   trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
+								.arg( refs.count() )
+								.arg( dur )
+								.arg( avg, 10, 'f', 2 ) );
+}
+
 void HistoryBuilder::start()
 {
 	QVector< Git::ObjectId >	commits;
@@ -95,7 +168,6 @@ void HistoryBuilder::start()
 	qint64						dur;
 	double						avg;
 	QElapsedTimer				timer;
-	Git::ResolvedRefs			refs;
 
 	timer.start();
 	commits = mWalker.all();
@@ -105,18 +177,6 @@ void HistoryBuilder::start()
 	MacGitver::self().log( ltInformation,
 						   trUtf8( "Walked %1 commits in %2 ns = %3 ns per commit." )
 								.arg( commits.count() )
-								.arg( dur )
-								.arg( avg, 10, 'f', 2 ) );
-
-	timer.restart();
-
-	refs = mRepo.allResolvedRefs();
-
-	dur = timer.nsecsElapsed();
-	avg = double( dur ) / double( commits.count() );
-	MacGitver::self().log( ltInformation,
-						   trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
-								.arg( refs.count() )
 								.arg( dur )
 								.arg( avg, 10, 'f', 2 ) );
 

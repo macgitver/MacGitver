@@ -45,6 +45,9 @@ private:
 	int createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nextSha1InSlot, int start = 0 );
 
 private:
+	void updateReferences();
+
+private:
 	Git::Repository		mRepo;
 	Git::RevisionWalker	mWalker;
 	HistoryEntries*		mEntries;

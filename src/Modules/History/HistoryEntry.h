@@ -68,9 +68,11 @@ typedef QVector< HistoryInlineRef > HistoryInlineRefs;
 class HistoryEntry
 {
 public:
-	HistoryEntry( const Git::ObjectCommit& commit );
+	HistoryEntry( const Git::ObjectId& sha1 );
 
 public:
+	bool						isPopulated() const;
+
 	QString						message() const;
 	const Git::Signature&		committer() const;
 	const Git::Signature&		author() const;
@@ -79,14 +81,18 @@ public:
 	const HistoryInlineRefs&	refs() const;
 
 public:
+	void populate( const Git::ObjectCommit& commit );
 	void setGlyphs( const GraphGlyphVector& glyphs );
 	void setInlineRefs( const HistoryInlineRefs& refs );
 
 private:
-	QString				mCommitMessage;
 	Git::ObjectId		mSha1;
+	bool				mPopulated;
+
+	QString				mCommitMessage;
 	Git::Signature		mCommiter;
 	Git::Signature		mAuthor;
+
 	GraphGlyphVector	mGlyphs;
 	HistoryInlineRefs	mRefs;
 };

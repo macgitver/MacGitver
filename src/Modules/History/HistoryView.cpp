@@ -317,6 +317,7 @@ void HistoryView::repositoryChanged( Git::Repository repo )
 	}
 
 	mRepo = repo;
+	mModel->setRepository( repo );
 
 	if( mRepo.isValid() )
 	{

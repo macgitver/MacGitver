@@ -19,6 +19,8 @@
 
 #include <QAbstractTableModel>
 
+#include "GitWrap/Repository.h"
+
 class HistoryEntries;
 
 class HistoryModel : public QAbstractTableModel
@@ -34,6 +36,12 @@ public:
 	QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
 public:
+	void setRepository( Git::Repository repo );
+
+public slots:
+	void ensurePopulated( int row );
+
+public:
 	HistoryEntries* entries();
 
 private slots:
@@ -43,6 +51,7 @@ private slots:
 	void afterAppend();
 
 private:
+	Git::Repository	mRepo;
 	HistoryEntries* mEntries;
 };
 

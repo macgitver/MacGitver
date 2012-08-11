@@ -23,6 +23,11 @@ HistoryModel::HistoryModel( QObject* parent )
 {
 }
 
+void HistoryModel::setRepository( Git::Repository repo )
+{
+	mRepo = repo;
+}
+
 int HistoryModel::rowCount( const QModelIndex& parent ) const
 {
 	if( parent.isValid() )
@@ -44,10 +49,19 @@ int HistoryModel::columnCount( const QModelIndex& parent ) const
 QVariant HistoryModel::data( const QModelIndex& index, int role ) const
 {
 	if( !index.isValid() )
+	{
 		return QVariant();
+	}
 
 	HistoryEntry* e = mEntries->at( index.row() );
 	Q_ASSERT( e );
+
+	if( !e->isPopulated() )
+	{
+		QMetaObject::invokeMethod( (HistoryModel*)this, "ensurePopulated", Qt::QueuedConnection,
+								   Q_ARG( int, index.row() ) );
+		return QVariant();
+	}
 
 	switch( role )
 	{
@@ -130,4 +144,20 @@ void HistoryModel::beforeAppend()
 void HistoryModel::afterAppend()
 {
 	endInsertRows();
+}
+
+void HistoryModel::ensurePopulated( int row )
+{
+	Q_ASSERT( mEntries && row < mEntries->count() );
+
+	HistoryEntry* e = mEntries->at( row );
+	if( !e || e->isPopulated() )
+	{
+		return;
+	}
+
+	Git::ObjectCommit commit = mRepo.lookupCommit( e->id() );
+	e->populate( commit );
+
+	emit dataChanged( index( row, 0 ), index( row, 6 ) );
 }

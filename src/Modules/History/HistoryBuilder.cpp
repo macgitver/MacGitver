@@ -184,6 +184,11 @@ void HistoryBuilder::start()
 
 	mEntries->beforeClear();
 
+	for( int curCommitIdx = 0; curCommitIdx < commits.count(); curCommitIdx++ )
+	{
+		mEntries->append( new HistoryEntry( commits[ curCommitIdx ] ) );
+	}
+
 	mNextParent.clear();
 	mCurrentGlyphs.clear();
 	mCurrentLine = -1;
@@ -198,8 +203,7 @@ void HistoryBuilder::start()
 		}
 		curCommit = mRepo.lookupCommit( currentSHA1 );
 
-		HistoryEntry* entry = new HistoryEntry( curCommit );
-		mEntries->append( entry );
+		HistoryEntry* entry = mEntries->at( curCommitIdx );
 
 		int numParents = curCommit.numParentCommits();
 		bool didFork = false;

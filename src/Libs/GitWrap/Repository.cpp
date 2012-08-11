@@ -212,6 +212,41 @@ namespace Git
 		return slFromStrArray( &arr );
 	}
 
+	struct cb_enum_resolvedrefs_data
+	{
+		ResolvedRefs	refs;
+		git_repository*	repo;
+	};
+
+	static int cb_enum_resolvedrefs( const char* refName, void* payload )
+	{
+		cb_enum_resolvedrefs_data* d = (cb_enum_resolvedrefs_data*) payload;
+
+		git_oid oid;
+		if( git_reference_name_to_oid( &oid, d->repo, refName ) < 0 )
+		{
+			return -1;
+		}
+
+		QString name = QString::fromUtf8( refName );
+		ObjectId obj = ObjectId::fromRaw( oid.id );
+
+		d->refs.insert( name, obj );
+
+		return 0;
+	}
+
+	ResolvedRefs Repository::allResolvedRefs()
+	{
+		Q_ASSERT( d );
+
+		cb_enum_resolvedrefs_data data;
+		data.repo = d->mRepo;
+		git_reference_foreach( d->mRepo, GIT_REF_LISTALL, &cb_enum_resolvedrefs, &data );
+
+		return data.refs;
+	}
+
 	QStringList Repository::allBranches()
 	{
 		return branches( true, true );

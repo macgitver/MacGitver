@@ -38,6 +38,8 @@ namespace Git
 	class Remote;
 	class RepositoryPrivate;
 
+	typedef QHash< QString, ObjectId > ResolvedRefs;
+
 	class GITWRAP_API Repository
 	{
 	public:
@@ -64,6 +66,8 @@ namespace Git
 		QString currentBranch();
 		QStringList branches( bool local = true, bool remote = false );
 		QStringList allTags();
+
+		ResolvedRefs allResolvedRefs();
 
 		bool deleteBranch( const QString& name, bool local );
 		bool renameBranch( const QString& oldName, const QString& newName, bool force = false );

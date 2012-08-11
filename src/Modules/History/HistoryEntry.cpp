@@ -119,3 +119,8 @@ void HistoryEntries::clear()
 
 	emit afterClear();
 }
+
+void HistoryEntries::updateRow( int row )
+{
+	// need to have the model here
+}

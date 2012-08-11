@@ -112,6 +112,7 @@ public:
 	int count() const;
 	HistoryEntry* at( int index );
 	void append( HistoryEntry* entry );
+	void updateRow( int row );
 
 signals:
 	void beforeClear();

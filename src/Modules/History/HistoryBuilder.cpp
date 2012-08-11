@@ -151,6 +151,53 @@ void HistoryBuilder::updateReferences()
 		refsById[ refs[ ref ] ].append( inlRef );
 	}
 
+	for( int i = 0; i < mEntries->count(); i++ )
+	{
+		HistoryEntry* e = mEntries->at( i );
+
+		HistoryInlineRefs newRefs = refsById.value( e->id() );
+		HistoryInlineRefs oldRefs = e->refs();
+
+		if( !newRefs.count() )
+		{
+			if( !oldRefs.count() )
+			{
+				continue;
+			}
+			e->setInlineRefs( newRefs );
+			mEntries->updateRow( i );
+		}
+		else
+		{
+			if( oldRefs.count() != newRefs.count() )
+			{
+				e->setInlineRefs( newRefs );
+				mEntries->updateRow( i );
+				continue;
+			}
+
+			int diffs = newRefs.count();
+			for( int j = 0; j < newRefs.count(); j++ )
+			{
+				QString newRef = newRefs.at( j ).mRefName;
+				for( int k = 0; k < oldRefs.count(); k++ )
+				{
+					if( oldRefs.at( k ).mRefName == newRef )
+					{
+						diffs--;
+						break;
+					}
+				}
+			}
+
+			if( diffs )
+			{
+				e->setInlineRefs( newRefs );
+				mEntries->updateRow( i );
+			}
+		}
+	}
+
 	dur = timer.nsecsElapsed();
 	avg = double( dur ) / double( refs.count() );
 	MacGitver::self().log( ltInformation,
@@ -188,6 +235,8 @@ void HistoryBuilder::start()
 	{
 		mEntries->append( new HistoryEntry( commits[ curCommitIdx ] ) );
 	}
+
+	updateReferences();
 
 	mNextParent.clear();
 	mCurrentGlyphs.clear();

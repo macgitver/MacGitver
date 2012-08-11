@@ -53,20 +53,34 @@ enum GraphGlyphs
 
 typedef QVector< GraphGlyphs > GraphGlyphVector;
 
+struct HistoryInlineRef
+{
+	QString		mRefName;
+	bool		mIsBranch	: 1;
+	bool		mIsCurrent	: 1;
+	bool		mIsRemote	: 1;
+	bool		mIsTag		: 1;
+	bool		mIsStash	: 1;
+};
+
+typedef QVector< HistoryInlineRef > HistoryInlineRefs;
+
 class HistoryEntry
 {
 public:
 	HistoryEntry( const Git::ObjectCommit& commit );
 
 public:
-	QString message() const;
-	const Git::Signature&	committer() const;
-	const Git::Signature&	author() const;
-	const Git::ObjectId&	id() const;
-	const GraphGlyphVector&	glyphs() const;
+	QString						message() const;
+	const Git::Signature&		committer() const;
+	const Git::Signature&		author() const;
+	const Git::ObjectId&		id() const;
+	const GraphGlyphVector&		glyphs() const;
+	const HistoryInlineRefs&	refs() const;
 
 public:
 	void setGlyphs( const GraphGlyphVector& glyphs );
+	void setInlineRefs( const HistoryInlineRefs& refs );
 
 private:
 	QString				mCommitMessage;
@@ -74,6 +88,7 @@ private:
 	Git::Signature		mCommiter;
 	Git::Signature		mAuthor;
 	GraphGlyphVector	mGlyphs;
+	HistoryInlineRefs	mRefs;
 };
 
 class HistoryBuilder;

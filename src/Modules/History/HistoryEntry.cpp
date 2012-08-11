@@ -55,6 +55,16 @@ const GraphGlyphVector&	HistoryEntry::glyphs() const
 	return mGlyphs;
 }
 
+void HistoryEntry::setInlineRefs( const HistoryInlineRefs& refs )
+{
+	mRefs = refs;
+}
+
+const HistoryInlineRefs& HistoryEntry::refs() const
+{
+	return mRefs;
+}
+
 //-----------
 
 HistoryEntries::HistoryEntries()

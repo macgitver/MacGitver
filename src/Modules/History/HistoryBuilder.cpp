@@ -95,6 +95,7 @@ void HistoryBuilder::start()
 	qint64						dur;
 	double						avg;
 	QElapsedTimer				timer;
+	Git::ResolvedRefs			refs;
 
 	timer.start();
 	commits = mWalker.all();
@@ -102,8 +103,20 @@ void HistoryBuilder::start()
 	dur = timer.nsecsElapsed();
 	avg = double( dur ) / double( commits.count() );
 	MacGitver::self().log( ltInformation,
-						   trUtf8( "Walked %1 commits in %2 ns = %3 ns per Commit" )
+						   trUtf8( "Walked %1 commits in %2 ns = %3 ns per commit." )
 								.arg( commits.count() )
+								.arg( dur )
+								.arg( avg, 10, 'f', 2 ) );
+
+	timer.restart();
+
+	refs = mRepo.allResolvedRefs();
+
+	dur = timer.nsecsElapsed();
+	avg = double( dur ) / double( commits.count() );
+	MacGitver::self().log( ltInformation,
+						   trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
+								.arg( refs.count() )
 								.arg( dur )
 								.arg( avg, 10, 'f', 2 ) );
 

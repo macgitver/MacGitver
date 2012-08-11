@@ -63,6 +63,7 @@ public:
 	void addError( const QString& err );
 
 private:
+	void moveToCenter();
 	void activateModeForRepo();
 	void createPartialLayout( Heaven::ViewContainer* parent,
 							  UserLevelDefaultLayoutEntry::Ptr entry );

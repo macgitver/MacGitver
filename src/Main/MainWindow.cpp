@@ -22,6 +22,8 @@
 #include <QMenuBar>
 #include <QDockWidget>
 #include <QStringBuilder>
+#include <QDesktopWidget>
+#include <QApplication>
 
 #include "Config/Config.h"
 
@@ -92,6 +94,18 @@ void MainWindow::setupUi()
 	setCentralWidget( mTop );
 
 	addToolBar( tbMainBar->toolBarFor( this ) );
+
+	moveToCenter();
+}
+
+void MainWindow::moveToCenter()
+{
+	QRect desk = QApplication::desktop()->availableGeometry();
+
+	QRect center = QRect( desk.width() / 12, desk.height() / 12,
+						  desk.width() - desk.width() / 6,
+						  desk.height() - desk.height() / 6 );
+	setGeometry( center );
 }
 
 void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )

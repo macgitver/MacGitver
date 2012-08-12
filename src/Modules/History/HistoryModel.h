@@ -30,8 +30,30 @@ class HistoryModel : public QAbstractTableModel
 	friend class HistoryBuilder;
 	Q_OBJECT
 public:
+	enum Columns
+	{
+		colGraph,
+		colMessage,
+		colAuthor,
+		colAuthorDate,
+		colCommitter,
+		colCommitterDate,
+		colSHA1
+	};
+
+	enum Modes
+	{
+		modeFull,
+		modeSimple,
+		modeFancy
+	};
+
+public:
 	HistoryModel( QObject* parent = NULL );
 	~HistoryModel();
+
+public:
+	int columnMap( int index ) const;
 
 public:
 	HistoryEntry* indexToEntry( const QModelIndex& index ) const;
@@ -58,6 +80,7 @@ private slots:
 
 private:
 	Git::Repository			mRepo;
+	Modes					mMode;
 	QList< HistoryEntry* >	mEntries;
 };
 

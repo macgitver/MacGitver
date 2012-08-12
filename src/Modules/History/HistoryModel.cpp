@@ -20,6 +20,7 @@
 HistoryModel::HistoryModel( QObject* parent )
 	: QAbstractTableModel( parent )
 {
+	mMode = modeSimple;
 }
 
 HistoryModel::~HistoryModel()
@@ -30,6 +31,42 @@ HistoryModel::~HistoryModel()
 void HistoryModel::setRepository( Git::Repository repo )
 {
 	mRepo = repo;
+}
+
+int HistoryModel::columnMap( int index ) const
+{
+	switch( mMode )
+	{
+	case modeSimple:
+		switch( index )
+		{
+		case -1:	return 4;
+		case 0:		return colGraph;
+		case 1:		return colMessage;
+		case 2:		return colAuthor;
+		case 3:		return colAuthorDate;
+		default:	return -1;
+		}
+
+	case modeFull:
+		switch( index )
+		{
+		case -1:	return 7;
+		case 0:		return colGraph;
+		case 1:		return colMessage;
+		case 2:		return colAuthor;
+		case 3:		return colAuthorDate;
+		case 4:		return colCommitter;
+		case 5:		return colCommitterDate;
+		case 6:		return colSHA1;
+		default:	return -1;
+		}
+
+	case modeFancy:
+		return 1;
+	}
+
+	return -1;
 }
 
 int HistoryModel::rowCount( const QModelIndex& parent ) const
@@ -47,7 +84,7 @@ int HistoryModel::columnCount( const QModelIndex& parent ) const
 	{
 		return 0;
 	}
-	return 7;
+	return columnMap( -1 );
 }
 
 HistoryEntry* HistoryModel::at( int row, bool populate ) const
@@ -85,16 +122,16 @@ QVariant HistoryModel::data( const QModelIndex& index, int role ) const
 	switch( role )
 	{
 	case Qt::DisplayRole:
-		switch( index.column() )
+		switch( columnMap( index.column() ) )
 		{
-		case 0:		return QVariant();
-		case 1:		return e->message();
-		case 2:		return e->author().fullName();
-		case 3:		return e->author().when();
-		case 4:		return e->committer().fullName();
-		case 5:		return e->committer().when();
-		case 6:		return e->id().toString();
-		default:	return QVariant();
+		case colGraph:			return QVariant();
+		case colMessage:		return e->message();
+		case colAuthor:			return e->author().fullName();
+		case colAuthorDate:		return e->author().when();
+		case colCommitter:		return e->committer().fullName();
+		case colCommitterDate:	return e->committer().when();
+		case colSHA1:			return e->id().toString();
+		default:				return QVariant();
 		}
 
 	default:
@@ -112,14 +149,14 @@ QVariant HistoryModel::headerData( int section, Qt::Orientation orientation, int
 
 	switch( section )
 	{
-	case 0:		return trUtf8( "Graph" );
-	case 1:		return trUtf8( "Message" );
-	case 2:		return trUtf8( "Author" );
-	case 3:		return trUtf8( "Author date" );
-	case 4:		return trUtf8( "Comitter" );
-	case 5:		return trUtf8( "Committer date" );
-	case 6:		return trUtf8( "SHA1" );
-	default:	return QVariant();
+	case colGraph:			return trUtf8( "Graph" );
+	case colMessage:		return trUtf8( "Message" );
+	case colAuthor:			return trUtf8( "Author" );
+	case colAuthorDate:		return trUtf8( "Author date" );
+	case colCommitter:		return trUtf8( "Comitter" );
+	case colCommitterDate:	return trUtf8( "Committer date" );
+	case colSHA1:			return trUtf8( "SHA1" );
+	default:				return QVariant();
 	}
 }
 
@@ -161,7 +198,7 @@ void HistoryModel::ensurePopulated( int row )
 	Git::ObjectCommit commit = mRepo.lookupCommit( e->id() );
 	e->populate( commit );
 
-	emit dataChanged( index( row, 0 ), index( row, 6 ) );
+	emit dataChanged( index( row, 0 ), index( row, columnMap( -1 ) - 1 ) );
 }
 
 void HistoryModel::append( HistoryEntry* entry )

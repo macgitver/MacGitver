@@ -1,4 +1,5 @@
 
+#include <QDebug>
 #include <QDateTime>
 #include <QFileInfo>
 #include <QFile>
@@ -898,8 +899,10 @@ int HeavenInterfaceCompiler::run()
 
 	if( sl.count() != 4 )
 	{
+		qDebug() << arguments();
+
 		fprintf( stderr, "Usage: %s <input> <output-header> <output-source\n",
-				 qPrintable( sl[ 0 ] ) );
+				 sl.count() ? qPrintable( sl[ 0 ] ) : "" );
 		return -1;
 	}
 

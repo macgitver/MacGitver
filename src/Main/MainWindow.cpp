@@ -72,12 +72,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUi()
 {
-	QIcon icon( ":/mgv_sak32.png" );
+	QIcon icon( QLatin1String( ":/mgv_sak32.png" ) );
 	setWindowIcon( icon );
 
-	QFile styleFile( ":/MacGitver.qss" );
+	QFile styleFile( QLatin1String( ":/MacGitver.qss" ) );
 	styleFile.open( QFile::ReadOnly );
-	setStyleSheet( styleFile.readAll() );
+	setStyleSheet( QString::fromUtf8( styleFile.readAll().constData() ) );
 
 	setupActions( this );
 	setMenuBar( mbMainMenuBar->menuBarFor( this ) );
@@ -126,9 +126,9 @@ void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )
 
 void MainWindow::activateModeForRepo()
 {
-	QString preset = mRepo.isValid() ? "Normal" : "Welcome";
+	QString preset = QLatin1String( mRepo.isValid() ? "Normal" : "Welcome" );
 
-	QString configPath = mCurrentLevel->id() % "/" % preset;
+	QString configPath = mCurrentLevel->id() % QChar( L'/' ) % preset;
 	QString modeName = Config::self().get( configPath, mCurrentLevel->preset( preset ) ).toString();
 
 	activateMode( modeName );
@@ -241,7 +241,7 @@ void MainWindow::setHeadLabel()
 
 		if( HEAD.isValid() )
 		{
-			if( HEAD.name() != "HEAD" )
+			if( HEAD.name() != QLatin1String( "HEAD" ) )
 			{
 				curBranch = trUtf8( "on branch <b>%1</b>" )
 							.arg( HEAD.name().mid( 11 ) );

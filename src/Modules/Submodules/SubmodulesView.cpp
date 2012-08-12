@@ -72,7 +72,7 @@ void SubmodulesViewDelegate::paint( QPainter* painter, const QStyleOptionViewIte
 	painter->setFont( option.font );
 	painter->drawText( textRect,
 					   index.data( Qt::UserRole + 2 ).toString() %
-					   " - " %
+					   QLatin1String( " - " ) %
 					   index.data( Qt::UserRole + 1 ).toString() );
 
 	drawFocus( painter, option, option.rect );
@@ -87,7 +87,7 @@ QSize SubmodulesViewDelegate::sizeHint( const QStyleOptionViewItem& option,
 }
 
 SubmodulesView::SubmodulesView()
-	: GlobalView( "Submodules" )
+	: GlobalView( QLatin1String( "Submodules" ) )
 {
 	setupActions( this );
 

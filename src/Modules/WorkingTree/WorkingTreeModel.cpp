@@ -64,10 +64,10 @@ QVariant WorkingTreeModel::headerData( int section, Qt::Orientation orientation,
 
 	switch( section )
 	{
-	case 0:		return "Name";
-	case 1:		return "Size";
-	case 2:		return "M-Time";
-	case 3:		return "Owner";
+	case 0:		return trUtf8( "Name" );
+	case 1:		return trUtf8( "Size" );
+	case 2:		return trUtf8( "M-Time" );
+	case 3:		return trUtf8( "Owner" );
 	default:	return QVariant();
 	}
 }
@@ -210,7 +210,7 @@ void WorkingTreeModel::update()
 		Q_ASSERT( fileBase && !fileBase->isDirectory() );
 		file = (WorkingTreeFileItem*) fileBase;
 
-		QFileInfo fi( mRepo.basePath() + "/" + it.key() );
+		QFileInfo fi( mRepo.basePath() + L'/' + it.key() );
 
 		file->setIcon( ip.icon( fi ) );
 		file->setSize( fi.size() );

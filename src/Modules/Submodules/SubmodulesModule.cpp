@@ -42,13 +42,13 @@ Heaven::View* SubmodulesModule::createSubmodulesView()
 
 void SubmodulesModule::initialize()
 {
-	registerView( "Submodules", Heaven::GlobalViewType,
+	registerView( QLatin1String( "Submodules" ), Heaven::GlobalViewType,
 				  & SubmodulesModule::createSubmodulesView );
 }
 
 void SubmodulesModule::deinitialize()
 {
-	unregisterView( "Submodules" );
+	unregisterView( QLatin1String( "Submodules" ) );
 }
 
 Q_EXPORT_PLUGIN2( Submodules, SubmodulesModule )

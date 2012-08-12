@@ -24,11 +24,11 @@ static inline QString untabbify( const QString& input )
 	output.reserve( input.length() );
 	for( int i = 0; i < input.length(); i++ )
 	{
-		if( input[ i ] == '\t' )
+		if( input[ i ] == L'\t' )
 		{
 			do
 			{
-				output += ' ';
+				output += L' ';
 			} while( output.length() % 4 );
 		}
 		else

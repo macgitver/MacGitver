@@ -1,4 +1,5 @@
 
+#include <QDebug>
 #include <QDateTime>
 #include <QFileInfo>
 #include <QFile>
@@ -88,11 +89,11 @@ static inline QString utf8Encode( const QString& src )
 		unsigned char c = a[ i ];
 		if( c < 128 )
 		{
-			result += c;
+			result += QLatin1Char( c );
 		}
 		else
 		{
-			result += '\\';
+			result += L'\\';
 			result += QString::number( c, 8 ).rightJustified( 3, L'0' );
 		}
 	}
@@ -122,8 +123,8 @@ HeavenInterfaceCompiler::HeavenInterfaceCompiler( int argc , char** argv )
 
 	if( sTokens.count() == 0 )
 	{
-		#define T(t) sTokens[ #t ] = Token_##t
-		#define T2(t1,t2) sTokens[ #t1 ] = Token_##t2
+		#define T(t) sTokens[ QLatin1String( #t ) ] = Token_##t
+		#define T2(t1,t2) sTokens[ QLatin1String( #t1 ) ] = Token_##t2
 		T(Ui);
 		T(Action);
 		T(Menu);
@@ -605,21 +606,21 @@ void HeavenInterfaceCompiler::spitSetProperties( QTextStream& tsOut, HICObject* 
 	switch( obj->type() )
 	{
 	case HACO_Action:
-		if( obj->hasProperty( "_ConnectTo", HICP_String ) )
+		if( obj->hasProperty( QLatin1String( "_ConnectTo" ), HICP_String ) )
 		{
-			HICProperty p = obj->getProperty( "_ConnectTo" );
+			HICProperty p = obj->getProperty( QLatin1String( "_ConnectTo" ) );
 
 			QString slot = p.value().toString();
 			const char* signal = "triggered()";
-			if( slot.contains( "(bool)" ) )
+			if( slot.contains( QLatin1String( "(bool)" ) ) )
 			{
 				signal = "toggled(bool)";
 			}
 
 			QByteArray receiver = "parent";
-			if( obj->hasProperty( "_ConnectContext", HICP_String ) )
+			if( obj->hasProperty( QLatin1String( "_ConnectContext" ), HICP_String ) )
 			{
-				HICProperty p2 = obj->getProperty( "_ConnectContext" );
+				HICProperty p2 = obj->getProperty( QLatin1String( "_ConnectContext" ) );
 				receiver = p2.value().toString().toLocal8Bit();
 			}
 
@@ -640,9 +641,9 @@ bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
 	QString idstr = id
 					.toString()
 					.toUpper()
-					.replace( "{", "" )
-					.replace( "}", "" )
-					.replace( "-", "_" );
+					.replace( L'{', QString() )
+					.replace( L'}', QString() )
+					.replace( L'-', QLatin1String( "_" ) );
 
 	tsOut << "/**********************************************************************************\n"
 			 "*\n"
@@ -748,9 +749,9 @@ bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& bas
 	{
 		QString ctx;
 
-		if( uiObject->hasProperty( "TrContext", HICP_String ) )
+		if( uiObject->hasProperty( QLatin1String( "TrContext" ), HICP_String ) )
 		{
-			ctx = uiObject->getProperty( "TrContext" ).value().toString();
+			ctx = uiObject->getProperty( QLatin1String( "TrContext" ) ).value().toString();
 		}
 
 		if( ctx.isEmpty() )
@@ -898,8 +899,10 @@ int HeavenInterfaceCompiler::run()
 
 	if( sl.count() != 4 )
 	{
+		qDebug() << arguments();
+
 		fprintf( stderr, "Usage: %s <input> <output-header> <output-source\n",
-				 qPrintable( sl[ 0 ] ) );
+				 sl.count() ? qPrintable( sl[ 0 ] ) : "" );
 		return -1;
 	}
 

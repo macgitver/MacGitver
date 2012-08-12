@@ -21,7 +21,7 @@ DiffRawView::DiffRawView( QWidget* parent )
 	: QTextBrowser( parent )
 {
 	new DiffRawHighlighter( this );
-	setFont( QFont( "Monospace", 8 ) );
+	setFont( QFont( QLatin1String( "Monospace" ), 8 ) );
 
 	setFrameShape( QFrame::NoFrame );
 }

@@ -24,7 +24,7 @@
 #include "BranchesView.h"
 
 BranchesView::BranchesView()
-	: View( "Branches" )
+	: View( QLatin1String( "Branches" ) )
 {
 	mListWidget = new QListWidget();
 	mListWidget->setFrameStyle( QFrame::NoFrame );

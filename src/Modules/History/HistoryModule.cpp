@@ -41,14 +41,14 @@ Heaven::View* HistoryModule::createHistoryView()
 
 void HistoryModule::initialize()
 {
-	registerView( "History",
+	registerView( QLatin1String( "History" ),
 				  Heaven::GlobalViewType,
 				  &HistoryModule::createHistoryView );
 }
 
 void HistoryModule::deinitialize()
 {
-	unregisterView( "History" );
+	unregisterView( QLatin1String( "History" ) );
 }
 
 Q_EXPORT_PLUGIN2( History, HistoryModule )

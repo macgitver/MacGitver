@@ -110,7 +110,7 @@ Patch::Ptr Patch::readPatch( QIODevice* dev )
 				continue;
 			}
 
-			pathNames.append( QString( diffParts[ i ] ) );
+			pathNames.append( QString::fromUtf8( diffParts[ i ].constData() ) );
 		}
 		Q_ASSERT( pathNames.length() == 2 );
 
@@ -123,7 +123,7 @@ Patch::Ptr Patch::readPatch( QIODevice* dev )
 				continue;
 			}
 
-			diff->addOption( diffParts[ i ] );
+			diff->addOption( QString::fromUtf8( diffParts[ i ].constData() ) );
 		}
 
 		line = nextLine( dev );
@@ -132,7 +132,7 @@ Patch::Ptr Patch::readPatch( QIODevice* dev )
 			   !line.startsWith( "diff " ) &&
 			   !dev->atEnd() )
 		{
-			diff->addOptionLine( line );
+			diff->addOptionLine( QString::fromUtf8( line.constData() ) );
 			line = nextLine( dev );
 		}
 
@@ -182,9 +182,13 @@ Patch::Ptr Patch::readPatch( QIODevice* dev )
 
 			if( hunkParts.count() > 4 )
 			{
-				QString name = hunkParts[ 4 ];
+				QString name = QString::fromUtf8( hunkParts[ 4 ].constData() );
+
 				for( int i = 5; i < hunkParts.count(); i++ )
-					name += " " + hunkParts[ i ];
+				{
+					name += L' ' + QString::fromUtf8( hunkParts[ i ].constData() );
+				}
+
 				hunk->setHunkName( name );
 			}
 
@@ -201,7 +205,7 @@ Patch::Ptr Patch::readPatch( QIODevice* dev )
 
 					while( line[ 0 ] == ' ' && ( leftLength || rightLength ) )
 					{
-						QByteArray realLine = line.mid( 1 );
+						QString realLine = QString::fromUtf8( line.mid( 1 ).constData() );
 						differ->sideLines( 0 )->addLine( realLine );
 						leftLength--;
 						leftStart++;
@@ -222,7 +226,7 @@ Patch::Ptr Patch::readPatch( QIODevice* dev )
 
 					while( line[ 0 ] == '-' && ( leftLength || rightLength ) )
 					{
-						QByteArray realLine = line.mid( 1 );
+						QString realLine = QString::fromUtf8( line.mid( 1 ).constData() );
 						differ->sideLines( 0 )->addLine( realLine );
 						leftLength--;
 						leftStart++;
@@ -232,7 +236,7 @@ Patch::Ptr Patch::readPatch( QIODevice* dev )
 
 					while( line[ 0 ] == '+' && ( leftLength || rightLength ) )
 					{
-						QByteArray realLine = line.mid( 1 );
+						QString realLine = QString::fromUtf8( line.mid( 1 ).constData() );
 						differ->sideLines( 1 )->addLine( realLine );
 						rightLength--;
 						rightStart++;

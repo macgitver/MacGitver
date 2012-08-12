@@ -194,7 +194,7 @@ namespace Heaven
 		switch( mType & BaseMask )
 		{
 		case Tab:
-			mTabWidget->insertTab( pos, container->containerWidget(), "Container" );
+			mTabWidget->insertTab( pos, container->containerWidget(), trUtf8( "Container" ) );
 			return;
 
 		case Splitter:

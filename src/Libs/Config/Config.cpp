@@ -59,7 +59,7 @@ void Config::loadLevels( const QString& fileName )
 	QDomElement e2 = e1.firstChildElement();
 	while( e2.isElement() )
 	{
-		Q_ASSERT( e2.tagName() == "level" );
+		Q_ASSERT( e2.tagName() == QLatin1String( "level" ) );
 		UserLevelDefinition::Ptr lvldef = UserLevelDefinition::read( e2 );
 		if( !lvldef )
 		{
@@ -102,6 +102,16 @@ void Config::saveSettings()
 	{
 		mSettings->sync();
 	}
+}
+
+QVariant Config::get( const char* szPath, const char* szDefaultValue ) const
+{
+	return get( szPath, QLatin1String( szDefaultValue ) );
+}
+
+QVariant Config::get( const char* szPath, const QVariant& defaultValue ) const
+{
+	return get( QLatin1String( szPath ), defaultValue );
 }
 
 QVariant Config::get( const QString& path, const QVariant& defaultValue ) const

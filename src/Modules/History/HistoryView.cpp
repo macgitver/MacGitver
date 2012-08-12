@@ -404,11 +404,11 @@ QSize HistoryViewDelegate::sizeHint( const QStyleOptionViewItem& option,
 
 
 HistoryView::HistoryView()
-	: GlobalView( "History" )
+	: GlobalView( QLatin1String( "History" ) )
 {
 	setViewName( trUtf8( "History" ) );
 
-	setFont( QFont( "Verdana", 8 ) );
+	setFont( QFont( QLatin1String( "Verdana" ), 8 ) );
 
 	setSizePolicy( QSizePolicy::MinimumExpanding,
 				   QSizePolicy::MinimumExpanding );

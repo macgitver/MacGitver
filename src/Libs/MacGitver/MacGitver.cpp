@@ -29,8 +29,8 @@ MacGitver::MacGitver( int argc, char** argv )
 {
 	Git::initLibGit();
 
-	setOrganizationName( "SaCu" );
-	setApplicationName( "MacGitver" );
+	setOrganizationName( QLatin1String( "SaCu" ) );
+	setApplicationName( QLatin1String( "MacGitver" ) );
 
 	mWatcher = new FSWatcher( this );
 

@@ -41,7 +41,7 @@ namespace Git
 
 	QString ObjectId::toString() const
 	{
-		return QString( toAscii() );
+		return QString::fromUtf8( toAscii().constData() );	// UTF-8 is Ascii, actually :-)
 	}
 
 	QByteArray ObjectId::toAscii() const

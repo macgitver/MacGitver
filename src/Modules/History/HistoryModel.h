@@ -17,34 +17,38 @@
 #ifndef HISTORY_MODEL_H
 #define HISTORY_MODEL_H
 
+#include <QList>
 #include <QAbstractTableModel>
 
 #include "GitWrap/Repository.h"
 
 class HistoryEntry;
-class HistoryEntries;
+class HistoryBuilder;
 
 class HistoryModel : public QAbstractTableModel
 {
+	friend class HistoryBuilder;
 	Q_OBJECT
 public:
 	HistoryModel( QObject* parent = NULL );
+	~HistoryModel();
 
 public:
 	HistoryEntry* indexToEntry( const QModelIndex& index ) const;
-	int rowCount( const QModelIndex& parent ) const;
-	int columnCount( const QModelIndex& parent ) const;
+	HistoryEntry* at( int row, bool populate = true ) const;
+
+	int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+	int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 	QVariant data( const QModelIndex& index, int role ) const;
 	QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
 public:
+	void append( HistoryEntry* entry );
+	void updateRow( int row );
 	void setRepository( Git::Repository repo );
 
 public slots:
 	void ensurePopulated( int row );
-
-public:
-	HistoryEntries* entries();
 
 private slots:
 	void beforeClear();
@@ -53,8 +57,8 @@ private slots:
 	void afterAppend();
 
 private:
-	Git::Repository	mRepo;
-	HistoryEntries* mEntries;
+	Git::Repository			mRepo;
+	QList< HistoryEntry* >	mEntries;
 };
 
 #endif

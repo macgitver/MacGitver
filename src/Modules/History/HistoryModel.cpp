@@ -19,8 +19,12 @@
 
 HistoryModel::HistoryModel( QObject* parent )
 	: QAbstractTableModel( parent )
-	, mEntries( NULL )
 {
+}
+
+HistoryModel::~HistoryModel()
+{
+	qDeleteAll( mEntries );
 }
 
 void HistoryModel::setRepository( Git::Repository repo )
@@ -34,7 +38,7 @@ int HistoryModel::rowCount( const QModelIndex& parent ) const
 	{
 		return 0;
 	}
-	return mEntries ? mEntries->count() : 0;
+	return mEntries.count();
 }
 
 int HistoryModel::columnCount( const QModelIndex& parent ) const
@@ -46,6 +50,20 @@ int HistoryModel::columnCount( const QModelIndex& parent ) const
 	return 7;
 }
 
+HistoryEntry* HistoryModel::at( int row, bool populate ) const
+{
+	HistoryEntry* e = mEntries[ row ];
+	Q_ASSERT( e );
+
+	if( populate && !e->isPopulated() )
+	{
+		QMetaObject::invokeMethod( (HistoryModel*)this, "ensurePopulated", Qt::QueuedConnection,
+								   Q_ARG( int, row ) );
+		return NULL;
+	}
+	return e;
+}
+
 HistoryEntry* HistoryModel::indexToEntry( const QModelIndex& index ) const
 {
 	if( !index.isValid() )
@@ -53,16 +71,7 @@ HistoryEntry* HistoryModel::indexToEntry( const QModelIndex& index ) const
 		return NULL;
 	}
 
-	HistoryEntry* e = mEntries->at( index.row() );
-	Q_ASSERT( e );
-
-	if( !e->isPopulated() )
-	{
-		QMetaObject::invokeMethod( (HistoryModel*)this, "ensurePopulated", Qt::QueuedConnection,
-								   Q_ARG( int, index.row() ) );
-		return NULL;
-	}
-	return e;
+	return at( index.row() );
 }
 
 QVariant HistoryModel::data( const QModelIndex& index, int role ) const
@@ -114,28 +123,6 @@ QVariant HistoryModel::headerData( int section, Qt::Orientation orientation, int
 	}
 }
 
-HistoryEntries* HistoryModel::entries()
-{
-	if( !mEntries )
-	{
-		mEntries = new HistoryEntries();
-
-		connect( mEntries, SIGNAL(beforeAppend()),
-				 this, SLOT(beforeAppend()) );
-
-		connect( mEntries, SIGNAL(afterAppend()),
-				 this, SLOT(afterAppend()) );
-
-		connect( mEntries, SIGNAL(beforeClear()),
-				 this, SLOT(beforeClear()) );
-
-		connect( mEntries, SIGNAL(afterClear()),
-				 this, SLOT(afterClear()) );
-	}
-
-	return mEntries;
-}
-
 void HistoryModel::beforeClear()
 {
 	beginResetModel();
@@ -146,9 +133,14 @@ void HistoryModel::afterClear()
 	endResetModel();
 }
 
+void HistoryModel::updateRow( int row )
+{
+	dataChanged( index( row, 0 ), index( row, columnCount() ) );
+}
+
 void HistoryModel::beforeAppend()
 {
-	beginInsertRows( QModelIndex(), mEntries->count(), mEntries->count() );
+	beginInsertRows( QModelIndex(), mEntries.count(), mEntries.count() );
 }
 
 void HistoryModel::afterAppend()
@@ -158,9 +150,9 @@ void HistoryModel::afterAppend()
 
 void HistoryModel::ensurePopulated( int row )
 {
-	Q_ASSERT( mEntries && row < mEntries->count() );
+	Q_ASSERT( row < mEntries.count() );
 
-	HistoryEntry* e = mEntries->at( row );
+	HistoryEntry* e = mEntries[ row ];
 	if( !e || e->isPopulated() )
 	{
 		return;
@@ -170,4 +162,9 @@ void HistoryModel::ensurePopulated( int row )
 	e->populate( commit );
 
 	emit dataChanged( index( row, 0 ), index( row, 6 ) );
+}
+
+void HistoryModel::append( HistoryEntry* entry )
+{
+	mEntries.append( entry );
 }

@@ -24,9 +24,9 @@
 #include "HistoryBuilder.h"
 #include "HistoryEntry.h"
 
-HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryEntries* entries )
+HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryModel* model )
 	: mRepo( repo )
-	, mEntries( entries )
+	, mModel( model )
 {
 	mWalker = mRepo.newWalker();
 	mWalker.setSorting( true, false );
@@ -34,7 +34,6 @@ HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryEntries* entries )
 
 HistoryBuilder::~HistoryBuilder()
 {
-	mEntries->clear();
 }
 
 void HistoryBuilder::addHEAD()
@@ -151,9 +150,10 @@ void HistoryBuilder::updateReferences()
 		refsById[ refs[ ref ] ].append( inlRef );
 	}
 
-	for( int i = 0; i < mEntries->count(); i++ )
+	for( int i = 0; i < mModel->rowCount(); i++ )
 	{
-		HistoryEntry* e = mEntries->at( i );
+		HistoryEntry* e = mModel->at( i, false );
+		Q_ASSERT( e );
 
 		HistoryInlineRefs newRefs = refsById.value( e->id() );
 		HistoryInlineRefs oldRefs = e->refs();
@@ -165,14 +165,14 @@ void HistoryBuilder::updateReferences()
 				continue;
 			}
 			e->setInlineRefs( newRefs );
-			mEntries->updateRow( i );
+			mModel->updateRow( i );
 		}
 		else
 		{
 			if( oldRefs.count() != newRefs.count() )
 			{
 				e->setInlineRefs( newRefs );
-				mEntries->updateRow( i );
+				mModel->updateRow( i );
 				continue;
 			}
 
@@ -193,7 +193,7 @@ void HistoryBuilder::updateReferences()
 			if( diffs )
 			{
 				e->setInlineRefs( newRefs );
-				mEntries->updateRow( i );
+				mModel->updateRow( i );
 			}
 		}
 	}
@@ -229,11 +229,11 @@ void HistoryBuilder::start()
 
 	timer.restart();
 
-	mEntries->beforeClear();
+	mModel->beforeClear();
 
 	for( int curCommitIdx = 0; curCommitIdx < commits.count(); curCommitIdx++ )
 	{
-		mEntries->append( new HistoryEntry( commits[ curCommitIdx ] ) );
+		mModel->append( new HistoryEntry( commits[ curCommitIdx ] ) );
 	}
 
 	updateReferences();
@@ -252,7 +252,7 @@ void HistoryBuilder::start()
 		}
 		curCommit = mRepo.lookupCommit( currentSHA1 );
 
-		HistoryEntry* entry = mEntries->at( curCommitIdx );
+		HistoryEntry* entry = mModel->at( curCommitIdx, false );
 
 		int numParents = curCommit.numParentCommits();
 		bool didFork = false;
@@ -447,14 +447,14 @@ void HistoryBuilder::start()
 
 	}
 
-	mEntries->afterClear();
+	mModel->afterClear();
 
 	dur = timer.nsecsElapsed();
-	avg = double(dur) / double(mEntries->count());
+	avg = double(dur) / double(mModel->rowCount());
 
 	MacGitver::self().log( ltInformation,
 						   trUtf8( "Glyphed %1 commits in %2 ns = %3 ns per Commit" )
-								.arg( mEntries->count() )
+								.arg( mModel->rowCount() )
 								.arg( dur )
 								.arg( avg, 10, 'f', 2 ) );
 }

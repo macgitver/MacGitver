@@ -208,8 +208,14 @@ void HistoryViewDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
 	else
 		p->fillRect( opt.rect, opt.palette.base() );
 
-	HistoryModel* m = const_cast< HistoryModel* >( qobject_cast< const HistoryModel* >( i.model() ) );
-	HistoryEntry* e = m->entries()->at( i.row() );
+	const HistoryModel* m = qobject_cast< const HistoryModel* >( i.model() );
+	HistoryEntry* e = m->at( i.row() );
+
+	if( !e )
+	{
+		// If we're still required to populate that entry, don't do anyhting here
+		return;
+	}
 
 	p->save();
 	p->setRenderHint( QPainter::Antialiasing );
@@ -260,8 +266,14 @@ void HistoryViewDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
 	else
 		p->fillRect( opt.rect, opt.palette.base() );
 
-	HistoryModel* m = const_cast< HistoryModel* >( qobject_cast< const HistoryModel* >( i.model() ) );
-	HistoryEntry* e = m->entries()->at( i.row() );
+	const HistoryModel* m = qobject_cast< const HistoryModel* >( i.model() );
+	HistoryEntry* e = m->at( i.row() );
+
+	if( !e )
+	{
+		// If we're still required to populate that entry, don't do anyhting here
+		return;
+	}
 
 	QRect r = opt.rect;
 	p->save();
@@ -347,40 +359,44 @@ QSize HistoryViewDelegate::sizeHint( const QStyleOptionViewItem& option,
 
 	if( index.column() == 1 )
 	{
-		const HistoryModel* constmodel = qobject_cast< const HistoryModel* >( index.model() );
-		HistoryModel* m = const_cast< HistoryModel* >( constmodel );
-		HistoryEntry* e = m->entries()->at( index.row() );
+		const HistoryModel* m = qobject_cast< const HistoryModel* >( index.model() );
+		HistoryEntry* e = m->at( index.row() );
 
-		HistoryInlineRefs refs = e->refs();
-		int totalWidth = 0;
-
-		if( refs.count() )
+		// e might be NULL, if it's not populated yet. In this case there is no sense in calculating
+		// the size anyhow; assume defaults.
+		if( e )
 		{
-			for( int refIdx = 0; refIdx < refs.count(); refIdx++ )
+			HistoryInlineRefs refs = e->refs();
+			int totalWidth = 0;
+
+			if( refs.count() )
 			{
-				const HistoryInlineRef& ref = refs.at( refIdx );
-				int w;
-				if( ref.mIsCurrent )
+				for( int refIdx = 0; refIdx < refs.count(); refIdx++ )
 				{
-					QFont f = option.font;
-					f.setBold( true );
-					w = QFontMetrics( f ).width( ref.mRefName ) + 6;
+					const HistoryInlineRef& ref = refs.at( refIdx );
+					int w;
+					if( ref.mIsCurrent )
+					{
+						QFont f = option.font;
+						f.setBold( true );
+						w = QFontMetrics( f ).width( ref.mRefName ) + 6;
 
-					s.rheight() += 2;
-				}
-				else
-				{
-					w = option.fontMetrics.width( ref.mRefName ) + 6;
-				}
+						s.rheight() += 2;
+					}
+					else
+					{
+						w = option.fontMetrics.width( ref.mRefName ) + 6;
+					}
 
-				totalWidth += w + 3;
+					totalWidth += w + 3;
+				}
+				totalWidth += 3;
 			}
-			totalWidth += 3;
-		}
 
-		QString txt = index.data().toString();
-		s.rwidth() = option.fontMetrics.width( txt ) + totalWidth;
-		s.rheight() += 2;
+			QString txt = index.data().toString();
+			s.rwidth() = option.fontMetrics.width( txt ) + totalWidth;
+			s.rheight() += 2;
+		}
 	}
 
 	return s;
@@ -456,7 +472,7 @@ void HistoryView::buildHistory()
 
 	if( !mBuilder )
 	{
-		mBuilder = new HistoryBuilder( mRepo, mModel->entries() );
+		mBuilder = new HistoryBuilder( mRepo, mModel );
 	}
 
 	mBuilder->addHEAD();

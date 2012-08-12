@@ -97,31 +97,4 @@ private:
 	HistoryInlineRefs	mRefs;
 };
 
-class HistoryBuilder;
-
-class HistoryEntries : public QObject
-{
-	friend class HistoryBuilder;
-	Q_OBJECT
-public:
-	HistoryEntries();
-	~HistoryEntries();
-
-public:
-	void clear();
-	int count() const;
-	HistoryEntry* at( int index );
-	void append( HistoryEntry* entry );
-	void updateRow( int row );
-
-signals:
-	void beforeClear();
-	void afterClear();
-	void beforeAppend();
-	void afterAppend();
-
-private:
-	QList< HistoryEntry* > mEntries;
-};
-
 #endif

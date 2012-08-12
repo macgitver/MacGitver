@@ -46,11 +46,11 @@ int HistoryModel::columnCount( const QModelIndex& parent ) const
 	return 7;
 }
 
-QVariant HistoryModel::data( const QModelIndex& index, int role ) const
+HistoryEntry* HistoryModel::indexToEntry( const QModelIndex& index ) const
 {
 	if( !index.isValid() )
 	{
-		return QVariant();
+		return NULL;
 	}
 
 	HistoryEntry* e = mEntries->at( index.row() );
@@ -60,6 +60,16 @@ QVariant HistoryModel::data( const QModelIndex& index, int role ) const
 	{
 		QMetaObject::invokeMethod( (HistoryModel*)this, "ensurePopulated", Qt::QueuedConnection,
 								   Q_ARG( int, index.row() ) );
+		return NULL;
+	}
+	return e;
+}
+
+QVariant HistoryModel::data( const QModelIndex& index, int role ) const
+{
+	HistoryEntry* e = indexToEntry( index );
+	if( !e )
+	{
 		return QVariant();
 	}
 

@@ -47,7 +47,7 @@ void HistoryBuilder::addAllRefs()
 	QStringList sl = mRepo.allBranches();
 	foreach( QString s, sl )
 	{
-		mWalker.pushRef( s.toAscii() );
+		mWalker.pushRef( s );
 	}
 }
 

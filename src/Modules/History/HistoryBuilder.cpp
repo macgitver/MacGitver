@@ -132,9 +132,9 @@ void HistoryBuilder::updateReferences()
 			inlRef.mIsCurrent = false;
 			inlRef.mIsStash = false;
 		}
-		else if( ref == "refs/stash" )
+		else if( ref == QLatin1String( "refs/stash" ) )
 		{
-			inlRef.mRefName = tr( "<recent stash>" );
+			inlRef.mRefName = trUtf8( "<recent stash>" );
 			inlRef.mIsBranch = false;
 			inlRef.mIsCurrent = true;
 			inlRef.mIsRemote = false;

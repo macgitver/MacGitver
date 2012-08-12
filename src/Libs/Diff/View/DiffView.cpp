@@ -29,11 +29,11 @@
 #include "Diff/RawView/DiffRawView.h"
 
 DiffView::DiffView()
-	: View( "Diff" )
+	: View( trUtf8( "Diff" ) )
 	, mPatch( NULL )
 	, mTree( NULL )
 {
-	setFont( QFont( "Monospace", 8 ) );
+	setFont( QFont( QLatin1String( "Monospace" ), 8 ) );
 //	setViewName( trUtf8( "Differences" ) );
 
 	QHBoxLayout* l = new QHBoxLayout;
@@ -63,7 +63,7 @@ DiffView::DiffView()
 
 	l->addWidget( s1 );
 
-	setPatch( Patch::readPatch( "/work/test.diff" ) );
+//	setPatch( Patch::readPatch( "/work/test.diff" ) );
 }
 
 DiffView::~DiffView()

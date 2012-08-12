@@ -26,25 +26,27 @@ void DiffRawHighlighter::highlightBlock( const QString& text )
 {
 	QColor c = Qt::black;
 
-	if( text.startsWith( "diff" ) || text.startsWith( "---" || text.startsWith( "+++" ) ) )
+	if( text.startsWith( QLatin1String( "diff" ) ) ||
+		text.startsWith( QLatin1String( "---" ) ) ||
+		text.startsWith( QLatin1String( "+++" ) ) )
 	{
 		c = Qt::darkGreen;
 	}
-	else if( text.startsWith( '-' ) )
+	else if( text.startsWith( L'-' ) )
 	{
 		c = Qt::darkRed;
 	}
-	else if( text.startsWith( '+' ) )
+	else if( text.startsWith( L'+' ) )
 	{
 		c = Qt::darkCyan;
 	}
-	else if( text.startsWith( ' ' ) )
+	else if( text.startsWith( L' ' ) )
 	{
 		c = Qt::gray;
 	}
-	else if( text.startsWith( "@@" ) )
+	else if( text.startsWith( QLatin1String( "@@" ) ) )
 	{
-		int i = text.indexOf( "@@", 2 );
+		int i = text.indexOf( QLatin1String( "@@" ), 2 );
 		i += 2;
 		setFormat( 0, i, Qt::darkYellow );
 		setFormat( i, text.length() - i, Qt::blue );

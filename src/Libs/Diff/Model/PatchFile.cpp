@@ -63,12 +63,12 @@ void PatchFile::exportRaw( QTextStream& stream )
 {
 	Q_ASSERT( mPathNames.count() == 2 );
 
-	stream << "diff " << mOptions.join( " " );
+	stream << "diff " << mOptions.join( QLatin1String( " " ) );
 	if( mOptions.count() > 0 )
 		stream << ' ';
-	stream << mPathNames.join( " " ) << '\n';
+	stream << mPathNames.join( QLatin1String( " " ) ) << '\n';
 
-	stream << mOptionLines.join( "\n" );
+	stream << mOptionLines.join( QLatin1String( "\n" ) );
 	if( mOptionLines.count() > 0 )
 		stream << '\n';
 

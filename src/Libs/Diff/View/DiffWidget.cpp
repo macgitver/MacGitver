@@ -24,7 +24,7 @@
 DiffWidget::DiffWidget()
 {
 	mDiff = NULL;
-	mFont = QFont( "Monospace", 10 );
+	mFont = QFont( QLatin1String( "Monospace" ), 10 );
 }
 
 DiffWidget::~DiffWidget()

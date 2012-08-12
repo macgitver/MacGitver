@@ -245,7 +245,7 @@ namespace Git
 
 		if( refHEAD.isValid() )
 		{
-			if( refHEAD.name() == "HEAD" )
+			if( refHEAD.name() == QLatin1String( "HEAD" ) )
 			{
 				return QString();
 			}
@@ -337,7 +337,7 @@ namespace Git
 	{
 		qDebug( "%s - %s",
 				qPrintable( QString::number( status, 2 ) ),
-				qPrintable( name ) );
+				name );
 		return GIT_OK;
 	}
 

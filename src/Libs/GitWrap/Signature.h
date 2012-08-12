@@ -70,14 +70,14 @@ namespace Git
 
 		QString fullName() const
 		{
-			return QString( "%1 <%2>" )
+			return QString( QLatin1String( "%1 <%2>" ) )
 					.arg( mName )
 					.arg( mEMail );
 		}
 
 		QString toNaturalString() const
 		{
-			return QString( "%1 <%2> %3" )
+			return QString( QLatin1String( "%1 <%2> %3" ) )
 					.arg( mName )
 					.arg( mEMail )
 					.arg( mWhen.toString( Qt::ISODate ) );

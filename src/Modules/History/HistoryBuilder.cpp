@@ -24,9 +24,9 @@
 #include "HistoryBuilder.h"
 #include "HistoryEntry.h"
 
-HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryEntries* entries )
+HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryModel* model )
 	: mRepo( repo )
-	, mEntries( entries )
+	, mModel( model )
 {
 	mWalker = mRepo.newWalker();
 	mWalker.setSorting( true, false );
@@ -34,7 +34,6 @@ HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryEntries* entries )
 
 HistoryBuilder::~HistoryBuilder()
 {
-	mEntries->clear();
 }
 
 void HistoryBuilder::addHEAD()
@@ -47,7 +46,7 @@ void HistoryBuilder::addAllRefs()
 	QStringList sl = mRepo.allBranches();
 	foreach( QString s, sl )
 	{
-		mWalker.pushRef( s.toAscii() );
+		mWalker.pushRef( s );
 	}
 }
 
@@ -87,22 +86,165 @@ int HistoryBuilder::createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nex
 	return mCurrentGlyphs.count() - 1;
 }
 
-void HistoryBuilder::start()
+void HistoryBuilder::updateReferences()
 {
-	QElapsedTimer timer;
+	qint64				dur;
+	double				avg;
+	QElapsedTimer		timer;
+	Git::ResolvedRefs	refs;
+	QString				curBranch;
+	QHash< Git::ObjectId, HistoryInlineRefs > refsById;
+
 	timer.start();
 
-	mEntries->beforeClear();
+	refs = mRepo.allResolvedRefs();
 
-	Git::ObjectId		currentSHA1;
-	Git::ObjectCommit	curCommit;
+	curBranch = mRepo.currentBranch();
+
+	foreach( QString ref, refs.keys() )
+	{
+		HistoryInlineRef inlRef;
+
+		if( ref.startsWith( QLatin1String( "refs/heads/" ) ) )
+		{
+			inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
+			inlRef.mIsBranch = true;
+			inlRef.mIsRemote = false;
+			inlRef.mIsTag = false;
+			inlRef.mIsStash = false;
+			inlRef.mIsCurrent = inlRef.mRefName == curBranch;
+		}
+		else if( ref.startsWith( QLatin1String( "refs/tags/" ) ) )
+		{
+			inlRef.mRefName = ref.mid( strlen( "refs/tags/" ) );
+			inlRef.mIsBranch = false;
+			inlRef.mIsRemote = false;
+			inlRef.mIsTag = true;
+			inlRef.mIsCurrent = false;
+			inlRef.mIsStash = false;
+		}
+		else if( ref.startsWith( QLatin1String( "refs/remotes/" ) ) )
+		{
+			inlRef.mRefName = ref.mid( strlen( "refs/remotes/" ) );
+			inlRef.mIsBranch = true;
+			inlRef.mIsRemote = true;
+			inlRef.mIsTag = false;
+			inlRef.mIsCurrent = false;
+			inlRef.mIsStash = false;
+		}
+		else if( ref == "refs/stash" )
+		{
+			inlRef.mRefName = tr( "<recent stash>" );
+			inlRef.mIsBranch = false;
+			inlRef.mIsCurrent = true;
+			inlRef.mIsRemote = false;
+			inlRef.mIsTag = false;
+			inlRef.mIsStash = true;
+		}
+
+		if( !refsById.contains( refs[ ref ] ) )
+		{
+			refsById.insert( refs[ ref ], HistoryInlineRefs() );
+		}
+
+		refsById[ refs[ ref ] ].append( inlRef );
+	}
+
+	for( int i = 0; i < mModel->rowCount(); i++ )
+	{
+		HistoryEntry* e = mModel->at( i, false );
+		Q_ASSERT( e );
+
+		HistoryInlineRefs newRefs = refsById.value( e->id() );
+		HistoryInlineRefs oldRefs = e->refs();
+
+		if( !newRefs.count() )
+		{
+			if( !oldRefs.count() )
+			{
+				continue;
+			}
+			e->setInlineRefs( newRefs );
+			mModel->updateRow( i );
+		}
+		else
+		{
+			if( oldRefs.count() != newRefs.count() )
+			{
+				e->setInlineRefs( newRefs );
+				mModel->updateRow( i );
+				continue;
+			}
+
+			int diffs = newRefs.count();
+			for( int j = 0; j < newRefs.count(); j++ )
+			{
+				QString newRef = newRefs.at( j ).mRefName;
+				for( int k = 0; k < oldRefs.count(); k++ )
+				{
+					if( oldRefs.at( k ).mRefName == newRef )
+					{
+						diffs--;
+						break;
+					}
+				}
+			}
+
+			if( diffs )
+			{
+				e->setInlineRefs( newRefs );
+				mModel->updateRow( i );
+			}
+		}
+	}
+
+	dur = timer.nsecsElapsed();
+	avg = double( dur ) / double( refs.count() );
+	MacGitver::self().log( ltInformation,
+						   trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
+								.arg( refs.count() )
+								.arg( dur )
+								.arg( avg, 10, 'f', 2 ) );
+}
+
+void HistoryBuilder::start()
+{
+	QVector< Git::ObjectId >	commits;
+	Git::ObjectId				currentSHA1;
+	Git::ObjectCommit			curCommit;
+	qint64						dur;
+	double						avg;
+	QElapsedTimer				timer;
+
+	timer.start();
+	commits = mWalker.all();
+
+	dur = timer.nsecsElapsed();
+	avg = double( dur ) / double( commits.count() );
+	MacGitver::self().log( ltInformation,
+						   trUtf8( "Walked %1 commits in %2 ns = %3 ns per commit." )
+								.arg( commits.count() )
+								.arg( dur )
+								.arg( avg, 10, 'f', 2 ) );
+
+	timer.restart();
+
+	mModel->beforeClear();
+
+	for( int curCommitIdx = 0; curCommitIdx < commits.count(); curCommitIdx++ )
+	{
+		mModel->append( new HistoryEntry( commits[ curCommitIdx ] ) );
+	}
+
+	updateReferences();
 
 	mNextParent.clear();
 	mCurrentGlyphs.clear();
 	mCurrentLine = -1;
 
-	while( mWalker.next( currentSHA1 ) )
+	for( int curCommitIdx = 0; curCommitIdx < commits.count(); curCommitIdx++ )
 	{
+		currentSHA1 = commits[ curCommitIdx ];
 		if( mCurrentLine == -1 )
 		{
 			createGlyphSlot( ggBranch, currentSHA1 );
@@ -110,8 +252,7 @@ void HistoryBuilder::start()
 		}
 		curCommit = mRepo.lookupCommit( currentSHA1 );
 
-		HistoryEntry* entry = new HistoryEntry( curCommit );
-		mEntries->append( entry );
+		HistoryEntry* entry = mModel->at( curCommitIdx, false );
 
 		int numParents = curCommit.numParentCommits();
 		bool didFork = false;
@@ -306,15 +447,14 @@ void HistoryBuilder::start()
 
 	}
 
-	mEntries->afterClear();
+	mModel->afterClear();
 
-	qint64 dur = timer.nsecsElapsed();
-	double avg = double(dur) / double(mEntries->count());
-	QString s = QString::number( avg, 'f' );
+	dur = timer.nsecsElapsed();
+	avg = double(dur) / double(mModel->rowCount());
 
 	MacGitver::self().log( ltInformation,
 						   trUtf8( "Glyphed %1 commits in %2 ns = %3 ns per Commit" )
-								.arg( mEntries->count() )
+								.arg( mModel->rowCount() )
 								.arg( dur )
-								.arg( s ) );
+								.arg( avg, 10, 'f', 2 ) );
 }

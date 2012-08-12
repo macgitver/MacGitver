@@ -17,26 +17,41 @@
 #include "HistoryEntry.h"
 
 
-HistoryEntry::HistoryEntry( const Git::ObjectCommit& commit )
+HistoryEntry::HistoryEntry( const Git::ObjectId& sha1 )
+	: mSha1( sha1 )
+	, mPopulated( false )
 {
+}
+
+void HistoryEntry::populate( const Git::ObjectCommit& commit )
+{
+	Q_ASSERT( !mPopulated );
+	mPopulated = true;
 	mCommiter = commit.committer();
 	mAuthor = commit.author();
-	mSha1 = commit.id();
 	mCommitMessage = commit.shortMessage();
+}
+
+bool HistoryEntry::isPopulated() const
+{
+	return mPopulated;
 }
 
 QString HistoryEntry::message() const
 {
+	Q_ASSERT( mPopulated );
 	return mCommitMessage;
 }
 
 const Git::Signature& HistoryEntry::committer() const
 {
+	Q_ASSERT( mPopulated );
 	return mCommiter;
 }
 
 const Git::Signature& HistoryEntry::author() const
 {
+	Q_ASSERT( mPopulated );
 	return mAuthor;
 }
 
@@ -55,42 +70,12 @@ const GraphGlyphVector&	HistoryEntry::glyphs() const
 	return mGlyphs;
 }
 
-//-----------
-
-HistoryEntries::HistoryEntries()
+void HistoryEntry::setInlineRefs( const HistoryInlineRefs& refs )
 {
+	mRefs = refs;
 }
 
-HistoryEntries::~HistoryEntries()
+const HistoryInlineRefs& HistoryEntry::refs() const
 {
-	qDeleteAll( mEntries );
-}
-
-int HistoryEntries::count() const
-{
-	return mEntries.count();
-}
-
-HistoryEntry* HistoryEntries::at( int index )
-{
-	return mEntries.at( index );
-}
-
-void HistoryEntries::append( HistoryEntry* entry )
-{
-//	emit beforeAppend();
-
-	mEntries.append( entry );
-
-//	emit afterAppend();
-}
-
-void HistoryEntries::clear()
-{
-	emit beforeClear();
-
-	qDeleteAll( mEntries );
-	mEntries.clear();
-
-	emit afterClear();
+	return mRefs;
 }

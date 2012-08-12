@@ -25,12 +25,13 @@
 #include "GitWrap/RevisionWalker.h"
 
 #include "HistoryEntry.h"
+#include "HistoryModel.h"
 
 class HistoryBuilder : public QObject
 {
 	Q_OBJECT
 public:
-	HistoryBuilder( Git::Repository repo, HistoryEntries* entries );
+	HistoryBuilder( Git::Repository repo, HistoryModel* model );
 	~HistoryBuilder();
 
 public:
@@ -45,9 +46,12 @@ private:
 	int createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nextSha1InSlot, int start = 0 );
 
 private:
+	void updateReferences();
+
+private:
 	Git::Repository		mRepo;
 	Git::RevisionWalker	mWalker;
-	HistoryEntries*		mEntries;
+	HistoryModel*		mModel;
 	GraphGlyphVector	mCurrentGlyphs;
 	int					mCurrentLine;
 	Git::ObjectIdList	mNextParent;

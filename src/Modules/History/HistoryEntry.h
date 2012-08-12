@@ -53,53 +53,48 @@ enum GraphGlyphs
 
 typedef QVector< GraphGlyphs > GraphGlyphVector;
 
+struct HistoryInlineRef
+{
+	QString		mRefName;
+	bool		mIsBranch	: 1;
+	bool		mIsCurrent	: 1;
+	bool		mIsRemote	: 1;
+	bool		mIsTag		: 1;
+	bool		mIsStash	: 1;
+};
+
+typedef QVector< HistoryInlineRef > HistoryInlineRefs;
+
 class HistoryEntry
 {
 public:
-	HistoryEntry( const Git::ObjectCommit& commit );
+	HistoryEntry( const Git::ObjectId& sha1 );
 
 public:
-	QString message() const;
-	const Git::Signature&	committer() const;
-	const Git::Signature&	author() const;
-	const Git::ObjectId&	id() const;
-	const GraphGlyphVector&	glyphs() const;
+	bool						isPopulated() const;
+
+	QString						message() const;
+	const Git::Signature&		committer() const;
+	const Git::Signature&		author() const;
+	const Git::ObjectId&		id() const;
+	const GraphGlyphVector&		glyphs() const;
+	const HistoryInlineRefs&	refs() const;
 
 public:
+	void populate( const Git::ObjectCommit& commit );
 	void setGlyphs( const GraphGlyphVector& glyphs );
+	void setInlineRefs( const HistoryInlineRefs& refs );
 
 private:
-	QString				mCommitMessage;
 	Git::ObjectId		mSha1;
+	bool				mPopulated;
+
+	QString				mCommitMessage;
 	Git::Signature		mCommiter;
 	Git::Signature		mAuthor;
+
 	GraphGlyphVector	mGlyphs;
-};
-
-class HistoryBuilder;
-
-class HistoryEntries : public QObject
-{
-	friend class HistoryBuilder;
-	Q_OBJECT
-public:
-	HistoryEntries();
-	~HistoryEntries();
-
-public:
-	void clear();
-	int count() const;
-	HistoryEntry* at( int index );
-	void append( HistoryEntry* entry );
-
-signals:
-	void beforeClear();
-	void afterClear();
-	void beforeAppend();
-	void afterAppend();
-
-private:
-	QList< HistoryEntry* > mEntries;
+	HistoryInlineRefs	mRefs;
 };
 
 #endif

@@ -15,6 +15,7 @@
  */
 
 #include <QFileSystemWatcher>
+#include <QStringBuilder>
 #include <QDir>
 #include <QDateTime>
 #include <QFileInfo>
@@ -54,7 +55,7 @@ public:
 	{
 		if( type == RootDirectoryFile )
 			return path;
-		return path + "/" + name;
+		return path % QChar( L'/' ) % name;
 	}
 
 public:
@@ -196,7 +197,7 @@ void FSWatcherPrivate::foundFile( FileInfo* path, const QString& name )
 {
 	Q_ASSERT( path );
 
-	QFileInfo rawFi( path->fullPath() + "/" + name );
+	QFileInfo rawFi( path->fullPath() % QChar( L'/' ) % name );
 
 	FileInfo* fi = new FileInfo();
 	fi->path = path->fullPath();
@@ -219,36 +220,37 @@ void FSWatcherPrivate::foundFile( FileInfo* path, const QString& name )
 		qDebug( "Git-File: local=%s", qPrintable( gitLocalFile ) );
 		#endif
 
-		if( gitLocalFile.startsWith( "refs" ) || gitLocalFile == "packed-refs" )
+		if( gitLocalFile.startsWith( QLatin1String( "refs" ) ) ||
+			gitLocalFile == QLatin1String( "packed-refs" ) )
 		{
 			fi->type = RefsFile;
 		}
-		else if( gitLocalFile.startsWith( "logs" ) )
+		else if( gitLocalFile.startsWith( QLatin1String( "logs" ) ) )
 		{
 			fi->type = RefLogFile;
 		}
-		else if( gitLocalFile == "index" )
+		else if( gitLocalFile == QLatin1String( "index" ) )
 		{
 			fi->type = IndexFile;
 		}
-		else if( gitLocalFile == "config" )
+		else if( gitLocalFile == QLatin1String( "config" ) )
 		{
 			fi->type = ConfigFile;
 		}
-		else if( gitLocalFile == "description" )
+		else if( gitLocalFile == QLatin1String( "description" ) )
 		{
 			fi->type = DescriptionFile;
 		}
-		else if( gitLocalFile == "HEAD" )
+		else if( gitLocalFile == QLatin1String( "HEAD" ) )
 		{
 			fi->type = HeadFile;
 		}
 	}
 	else
 	{
-		if( fi->name == ".gitattributes" ||
-			fi->name == ".gitignore" ||
-			fi->name == ".gitmodules" )
+		if( fi->name == QLatin1String( ".gitattributes" ) ||
+			fi->name == QLatin1String( ".gitignore" ) ||
+			fi->name == QLatin1String( ".gitmodules" ) )
 		{
 			fi->type = RepoGitFile;
 		}
@@ -464,7 +466,7 @@ void FSWatcher::setRepository( Git::Repository repo )
 
 		d->mRoot = d->mkFileInfoForPath( d->mRepo.basePath() );
 		d->mWatcher->addPath( d->mRepo.basePath() );
-		d->foundDirectory( d->mRoot, ".git" );
+		d->foundDirectory( d->mRoot, QLatin1String( ".git" ) );
 		d->seekLostAndFoundFiles( d->mRoot );
 	}
 }
@@ -479,7 +481,7 @@ void FSWatcher::directoryChanged( const QString& path )
 	FileInfo* fi = d->mRoot;
 	if( !repoPath.isEmpty() )
 	{
-		QStringList sl = repoPath.split( "/" );
+		QStringList sl = repoPath.split( L'/' );
 		foreach( QString sub, sl )
 		{
 			FileInfo* fi2 = fi->children.value( sub, NULL );

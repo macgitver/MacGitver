@@ -59,7 +59,7 @@ void Config::loadLevels( const QString& fileName )
 	QDomElement e2 = e1.firstChildElement();
 	while( e2.isElement() )
 	{
-		Q_ASSERT( e2.tagName() == "level" );
+		Q_ASSERT( e2.tagName() == QLatin1String( "level" ) );
 		UserLevelDefinition::Ptr lvldef = UserLevelDefinition::read( e2 );
 		if( !lvldef )
 		{

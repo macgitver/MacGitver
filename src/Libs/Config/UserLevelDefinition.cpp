@@ -62,13 +62,13 @@ bool EnableDisableList::read( const QDomElement& parent )
 	QDomElement e = parent.firstChildElement();
 	while( e.isElement() )
 	{
-		if( e.tagName() == "Enable" )
+		if( e.tagName() == QLatin1String( "Enable" ) )
 		{
-			mList.append( EnableDisable( e.attribute( "Name" ), true ) );
+			mList.append( EnableDisable( e.attribute( QLatin1String( "Name" ) ), true ) );
 		}
-		else if( e.tagName() == "Disable" )
+		else if( e.tagName() == QLatin1String( "Disable" ) )
 		{
-			mList.append( EnableDisable( e.attribute( "Name" ), false ) );
+			mList.append( EnableDisable( e.attribute( QLatin1String( "Name" ) ), false ) );
 		}
 		else
 		{
@@ -170,16 +170,16 @@ QString UserLevelDefaultLayoutEntry::name() const
 
 bool UserLevelDefaultLayoutEntry::parseOrient( const QString& s )
 {
-	return s == "Vert";
+	return s == QLatin1String( "Vert" );
 }
 
 UserLevelDefaultLayoutEntry::TabPos UserLevelDefaultLayoutEntry::parseCaption( const QString& s )
 {
-	if( s == "Left" )
+	if( s == QLatin1String( "Left" ) )
 		return Left;
-	if( s == "Right" )
+	if( s == QLatin1String( "Right" ) )
 		return Right;
-	if( s == "Bottom" )
+	if( s == QLatin1String( "Bottom" ) )
 		return Bottom;
 
 	return Top;
@@ -236,23 +236,23 @@ UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayoutEntry::read( const QDomEl
 {
 	UserLevelDefaultLayoutEntry::Ptr entry( new UserLevelDefaultLayoutEntry );
 
-	if( el.tagName() == "Split" )
+	if( el.tagName() == QLatin1String( "Split" ) )
 	{
 		entry->mType = Split;
-		entry->mVertical = parseOrient( el.attribute( "Orient" ) );
-		entry->mStretch = el.attribute( "Stretch", "0" ).toInt();
+		entry->mVertical = parseOrient( el.attribute( QLatin1String( "Orient" ) ) );
+		entry->mStretch = el.attribute( QLatin1String( "Stretch" ), QLatin1String( "0" ) ).toInt();
 	}
-	else if( el.tagName() == "Tab" )
+	else if( el.tagName() == QLatin1String( "Tab" ) )
 	{
 		entry->mType = Tab;
-		entry->mTabPos = parseCaption( el.attribute( "Caption" ) );
-		entry->mStretch = el.attribute( "Stretch", "0" ).toInt();
+		entry->mTabPos = parseCaption( el.attribute( QLatin1String( "Caption" ) ) );
+		entry->mStretch = el.attribute( QLatin1String( "Stretch" ), QLatin1String( "0" ) ).toInt();
 	}
-	else if( el.tagName() == "View" )
+	else if( el.tagName() == QLatin1String( "View" ) )
 	{
 		entry->mType = View;
-		entry->mName = el.attribute( "Name" );
-		entry->mStretch = el.attribute( "Stretch", "0" ).toInt();
+		entry->mName = el.attribute( QLatin1String( "Name" ) );
+		entry->mStretch = el.attribute( QLatin1String( "Stretch" ), QLatin1String( "0" ) ).toInt();
 	}
 	else
 	{
@@ -354,19 +354,19 @@ Heaven::Mode* UserLevelMode::createHeavenMode( Heaven::MainWindow* mainWindow )
 
 UserLevelMode::Ptr UserLevelMode::read( const QDomElement& el )
 {
-	UserLevelMode::Ptr mode( new UserLevelMode( el.attribute( "Name" ) ) );
+	UserLevelMode::Ptr mode( new UserLevelMode( el.attribute( QLatin1String( "Name" ) ) ) );
 
-	if( el.hasAttribute( "Selectable" ) )
+	if( el.hasAttribute( QLatin1String( "Selectable" ) ) )
 	{
-		if( el.attribute( "Selectable" ) == "0" )
+		if( el.attribute( QLatin1String( "Selectable" ) ) == QLatin1String( "0" ) )
 		{
 			mode->mIsUserSelectable = false;
 		}
 	}
 
-	if( el.hasAttribute( "Locking" ) )
+	if( el.hasAttribute( QLatin1String( "Locking" ) ) )
 	{
-		if( el.attribute( "Locking" ) == "1" )
+		if( el.attribute( QLatin1String( "Locking" ) ) == QLatin1String( "1" ) )
 		{
 			mode->mIsLocking = true;
 		}
@@ -374,11 +374,11 @@ UserLevelMode::Ptr UserLevelMode::read( const QDomElement& el )
 
 	for( QDomElement e = el.firstChildElement(); e.isElement(); e = e.nextSiblingElement() )
 	{
-		if( e.tagName() == "Views" )
+		if( e.tagName() == QLatin1String( "Views" ) )
 		{
 			mode->mAllowedViews = EnableDisableList( e );
 		}
-		else if( e.tagName() == "DefaultLayout" )
+		else if( e.tagName() == QLatin1String( "DefaultLayout" ) )
 		{
 			mode->mDefaultLayout = UserLevelDefaultLayout::read( e );
 		}
@@ -399,21 +399,23 @@ UserLevelDefinition::Ptr UserLevelDefinition::read( const QDomElement& el )
 {
 	UserLevelDefinition::Ptr def( new UserLevelDefinition );
 
-	def->mName = el.attribute( "name" );
-	def->mId = el.attribute( "id" );
-	def->mAppLevel = el.attribute( "applevel" ).toInt();
-	def->mPrecedence = el.attribute( "precedence" ).toInt();
+	def->mName = el.attribute( QLatin1String( "name" ) );
+	def->mId = el.attribute( QLatin1String( "id" ) );
+	def->mAppLevel = el.attribute( QLatin1String( "applevel" ) ).toInt();
+	def->mPrecedence = el.attribute( QLatin1String( "precedence" ) ).toInt();
 
 	QString foo;
 	QTextStream ts( &foo );
-	el.firstChildElement( "desc" ).save( ts, 0 );
+	el.firstChildElement( QLatin1String( "desc" ) ).save( ts, 0 );
 
-	def->mDescription = foo.replace( "<desc", "<html" ).simplified();
+	def->mDescription = foo.replace(
+							QLatin1String( "<desc" ),
+							QLatin1String( "<html" ) ).simplified();
 
-	QDomElement e = el.firstChildElement( "gui" );
+	QDomElement e = el.firstChildElement( QLatin1String( "gui" ) );
 	if( e.isElement() )
 	{
-		def->readGuiDef( e.attribute( "file" ) );
+		def->readGuiDef( e.attribute( QLatin1String( "file" ) ) );
 	}
 
 	return def;
@@ -456,9 +458,9 @@ QString UserLevelDefinition::preset( const QString& type ) const
 		return mHeavenPresets.value( type );
 	}
 
-	if( mHeavenPresets.contains( "*" ) )
+	if( mHeavenPresets.contains( QLatin1String( "*" ) ) )
 	{
-		return mHeavenPresets[ "*" ];
+		return mHeavenPresets[ QLatin1String( "*" ) ];
 	}
 
 	return QString();
@@ -479,7 +481,7 @@ void UserLevelDefinition::readGuiDef( const QString& fileName )
 
 	while( el.isElement() )
 	{
-		if( el.tagName() == "Mode" )
+		if( el.tagName() == QLatin1String( "Mode" ) )
 		{
 			UserLevelMode::Ptr mode = UserLevelMode::read( el );
 			if( !mode )
@@ -488,10 +490,10 @@ void UserLevelDefinition::readGuiDef( const QString& fileName )
 			}
 			mModes.append( mode );
 		}
-		else if( el.tagName() == "Preset" )
+		else if( el.tagName() == QLatin1String( "Preset" ) )
 		{
-			QString preset = el.attribute( "Name" );
-			QString mode = el.attribute( "Mode" );
+			QString preset = el.attribute( QLatin1String( "Name" ) );
+			QString mode = el.attribute( QLatin1String( "Mode" ) );
 			mHeavenPresets.insert( preset, mode );
 		}
 

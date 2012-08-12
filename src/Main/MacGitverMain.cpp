@@ -38,7 +38,7 @@ void MacGitverMain::loadModules()
 	QDir binDir( applicationDirPath() );
 
 	QStringList modFiles;
-	modFiles << "Mod*.mgv";
+	modFiles << QLatin1String( "Mod*.mgv" );
 	foreach( QString modName, binDir.entryList( modFiles ) )
 	{
 		QPluginLoader* loader = new QPluginLoader( binDir.filePath( modName ), this );
@@ -62,7 +62,7 @@ void MacGitverMain::loadModules()
 
 void MacGitverMain::loadLevels()
 {
-	Config::self().loadLevels( ":/Xml/Levels.xml" );
+	Config::self().loadLevels( QLatin1String( ":/Xml/Levels.xml" ) );
 }
 
 void MacGitverMain::boot()

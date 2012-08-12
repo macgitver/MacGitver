@@ -21,16 +21,16 @@
 #include "WelcomeView.h"
 
 WelcomeView::WelcomeView()
-	: View( "Welcome" )
+	: View( QLatin1String( "Welcome" ) )
 {
 	setViewName( trUtf8( "Welcome" ) );
 
 	mBrowser = new QTextBrowser;
 	mBrowser->setFrameShape( QFrame::NoFrame );
 
-	QFile f( ":/ModWelcome/Welcome.html" );
+	QFile f( QLatin1String( ":/ModWelcome/Welcome.html" ) );
 	f.open( QFile::ReadOnly );
-	mBrowser->setHtml( QString::fromUtf8( f.readAll() ) );
+	mBrowser->setHtml( QString::fromUtf8( f.readAll().constData() ) );
 
 	QVBoxLayout* l = new QVBoxLayout;
 	l->addWidget( mBrowser );

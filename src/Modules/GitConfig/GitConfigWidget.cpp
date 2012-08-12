@@ -55,7 +55,7 @@ void GitConfigWidget::setConfigs( const QStringList& fileNames )
 		cfg.addFile( mConfigFiles[ i ], i + 1 );
 
 		if( !flat.isEmpty() )
-			flat += "\n";
+			flat += L'\n';
 
 		flat += mConfigFiles[ i ];
 	}

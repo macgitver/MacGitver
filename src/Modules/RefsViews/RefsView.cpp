@@ -23,7 +23,7 @@
 #include "RefsView.h"
 
 RefsView::RefsView()
-	: View( "Refs" )
+	: View( QLatin1String( "Refs" ) )
 {
 	mListView = new QListView();
 	mListView->setFrameStyle( QFrame::NoFrame );

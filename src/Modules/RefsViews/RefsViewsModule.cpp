@@ -54,24 +54,24 @@ Heaven::View* RefsViewsModule::createRefsView()
 
 void RefsViewsModule::initialize()
 {
-	registerView( "Branches",
+	registerView( QLatin1String( "Branches" ),
 				  Heaven::GlobalViewType,
 				  &RefsViewsModule::createBranchesView );
 
-	registerView( "Refs",
+	registerView( QLatin1String( "Refs" ),
 				  Heaven::GlobalViewType,
 				  &RefsViewsModule::createRefsView );
 
-	registerView( "Tags",
+	registerView( QLatin1String( "Tags" ),
 				  Heaven::GlobalViewType,
 				  &RefsViewsModule::createTagsView );
 }
 
 void RefsViewsModule::deinitialize()
 {
-	unregisterView( "Branches" );
-	unregisterView( "Refs" );
-	unregisterView( "Tags" );
+	unregisterView( QLatin1String( "Branches" ) );
+	unregisterView( QLatin1String( "Refs" ) );
+	unregisterView( QLatin1String( "Tags" ) );
 }
 
 Q_EXPORT_PLUGIN2( RefsViews, RefsViewsModule )

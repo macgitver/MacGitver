@@ -33,7 +33,7 @@ GitConfigDialog::GitConfigDialog( QWidget* parent, Git::Repository& repo )
 
 	if( mRepo.isValid() )
 	{
-		fnRepo = mRepo.gitPath() + "/config";
+		fnRepo = mRepo.gitPath() + QLatin1String( "/config" );
 		cfgRepository->setConfig( fnRepo );
 		cfgs << fnRepo;
 	}

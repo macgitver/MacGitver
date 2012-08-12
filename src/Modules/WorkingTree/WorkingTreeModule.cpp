@@ -41,14 +41,14 @@ Heaven::View* WorkingTreeModule::createWorkTreeView()
 
 void WorkingTreeModule::initialize()
 {
-	registerView( "WorkTree",
+	registerView( QLatin1String( "WorkTree" ),
 				  Heaven::SingleViewType,
 				  &WorkingTreeModule::createWorkTreeView );
 }
 
 void WorkingTreeModule::deinitialize()
 {
-	unregisterView( "WorkTree" );
+	unregisterView( QLatin1String( "WorkTree" ) );
 }
 
 Q_EXPORT_PLUGIN2( WorkingTree, WorkingTreeModule )

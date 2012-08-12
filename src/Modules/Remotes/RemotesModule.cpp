@@ -46,13 +46,13 @@ void RemotesModule::initialize()
 	setupActions( this );
 	acRemotesAC->mergeInto( "RemotesMP" );
 
-	MacGitver::self().registerView( "Remotes", Heaven::GlobalViewType,
+	MacGitver::self().registerView( QLatin1String( "Remotes" ), Heaven::GlobalViewType,
 									&RemotesModule::createRemotesView );
 }
 
 void RemotesModule::deinitialize()
 {
-	MacGitver::self().unregisterView( "Remotes" );
+	MacGitver::self().unregisterView( QLatin1String( "Remotes" ) );
 }
 
 void RemotesModule::onRemoteCreate()

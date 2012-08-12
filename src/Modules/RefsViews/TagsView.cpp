@@ -22,7 +22,7 @@
 #include "TagsView.h"
 
 TagsView::TagsView()
-	: View( "Tags" )
+	: View( QLatin1String( "Tags" ) )
 {
 	mListWidget = new QListWidget();
 	mListWidget->setFrameStyle( QFrame::NoFrame );

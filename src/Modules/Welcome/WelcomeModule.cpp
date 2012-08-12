@@ -42,14 +42,14 @@ Heaven::View* WelcomeModule::createWelcomeView()
 
 void WelcomeModule::initialize()
 {
-	registerView( "Welcome",
+	registerView( QLatin1String( "Welcome" ),
 				  Heaven::SingleViewType,
 				  &WelcomeModule::createWelcomeView );
 }
 
 void WelcomeModule::deinitialize()
 {
-	unregisterView( "Welcome" );
+	unregisterView( QLatin1String( "Welcome" ) );
 }
 
 Q_EXPORT_PLUGIN2( Welcome, WelcomeModule )

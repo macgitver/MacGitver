@@ -1,4 +1,5 @@
 
+OPTION( Qt5 "Use Qt5" OFF )
 
 # Common stuff:
 
@@ -10,4 +11,9 @@ MACRO( _ADD_NOCASTS )
 	)
 ENDMACRO()
 
-INCLUDE( cmake/Qt4.cmake )
+# Paths are relative to Top-Src-Dir. Duh.
+IF( Qt5 )
+	INCLUDE( cmake/Qt5.cmake )
+ELSE()
+	INCLUDE( cmake/Qt4.cmake )
+ENDIF()

@@ -10,6 +10,12 @@ INCLUDE( cmake/LibGit2.cmake )		# Our LibGit2 integration
 IF( UNIX )
 	GCC_ADD_FLAG( "-Wall" )
 	GCC_ADD_FLAG( "-fvisibility=hidden" )
+
+	# Work-around until Qt's CMake macros work (cmake 2.8.9 uses differnt codepath)
+	IF( Qt5 )
+		GCC_ADD_FLAG( "-fPIC" )
+	ENDIF()
+
 ENDIF()
 
 SET_OUTPUT_PATHS()

@@ -27,6 +27,10 @@
 #include "MacGitver/MacGitverApi.h"
 #include "MacGitver/MacGitver.h"
 
+#if QT_VERSION < 0x050000
+#define Q_PLUGIN_METADATA(x)
+#endif
+
 class MGV_CORE_API Module : public QObject, public IModule
 {
 	Q_INTERFACES( IModule )

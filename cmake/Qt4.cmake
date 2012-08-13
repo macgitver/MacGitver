@@ -98,3 +98,39 @@ MACRO(QT_RCC infiles outfiles )
 	ENDFOREACH (it)
 
 ENDMACRO(QT_RCC)
+
+MACRO( QT_PREPARE )
+
+	FOREACH( use ${ARGN} )
+
+		IF( ${use} STREQUAL "-Gui" )
+		SET( QT_DONT_USE_QTGUI 1 )
+		ELSEIF( ${use} STREQUAL "Widgets" )
+			# Dont do anything for Widgets
+		ELSEIF( ${use} STREQUAL "Core" )
+			# Dont do anything for Core
+		ELSE()
+			STRING( TOUPPER ${use} useUpper )
+			SET( QT_USE_QT${useUpper} 1 )
+		ENDIF()
+	ENDFOREACH()
+
+	INCLUDE( ${QT_USE_FILE} )
+
+ENDMACRO()
+
+MACRO( ADD_QT_LIBRARY _target )
+
+	ADD_LIBRARY( ${_target} ${ARGN} )
+	TARGET_LINK_LIBRARIES( ${_target} ${QT_LIBRARIES} )
+	_ADD_NOCASTS()
+
+ENDMACRO( ADD_QT_LIBRARY )
+
+MACRO( ADD_QT_EXECUTABLE _target )
+
+	ADD_EXECUTABLE( ${_target} ${ARGN} )
+	TARGET_LINK_LIBRARIES( ${_target} ${QT_LIBRARIES} )
+	_ADD_NOCASTS()
+
+ENDMACRO( ADD_QT_EXECUTABLE )

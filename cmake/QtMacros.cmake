@@ -1,6 +1,4 @@
 
-# Paths are relative to Top-Src-Dir. Duh.
-INCLUDE( cmake/Qt4.cmake )
 
 # Common stuff:
 
@@ -12,18 +10,4 @@ MACRO( _ADD_NOCASTS )
 	)
 ENDMACRO()
 
-MACRO( ADD_QT_LIBRARY _target )
-
-	ADD_LIBRARY( ${_target} ${ARGN} )
-	TARGET_LINK_LIBRARIES( ${_target} ${QT_LIBRARIES} )
-	_ADD_NOCASTS()
-
-ENDMACRO( ADD_QT_LIBRARY )
-
-MACRO( ADD_QT_EXECUTABLE _target )
-
-	ADD_EXECUTABLE( ${_target} ${ARGN} )
-	TARGET_LINK_LIBRARIES( ${_target} ${QT_LIBRARIES} )
-	_ADD_NOCASTS()
-
-ENDMACRO( ADD_QT_EXECUTABLE )
+INCLUDE( cmake/Qt4.cmake )

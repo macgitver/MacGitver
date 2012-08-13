@@ -1,5 +1,4 @@
 
-SET( QT_DONT_USE_QTGUI 1 )
-INCLUDE( ${QT_USE_FILE} )
+QT_PREPARE( Core -Gui )
 
 ADD_QT_EXECUTABLE( hic hic.h hic.cpp )

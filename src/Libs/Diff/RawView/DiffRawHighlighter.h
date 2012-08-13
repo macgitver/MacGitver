@@ -19,6 +19,8 @@
 
 #include <QSyntaxHighlighter>
 
+class QTextEdit;
+
 class DiffRawHighlighter : public QSyntaxHighlighter
 {
 public:

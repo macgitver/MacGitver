@@ -14,11 +14,12 @@
  *
  */
 
+#include <QTextEdit>
+
 #include "Diff/RawView/DiffRawHighlighter.h"
 
-
 DiffRawHighlighter::DiffRawHighlighter( QTextEdit* editor )
-	: QSyntaxHighlighter( editor )
+	: QSyntaxHighlighter( editor->document() )
 {
 }
 

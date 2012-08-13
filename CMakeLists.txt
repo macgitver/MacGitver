@@ -1,32 +1,19 @@
 
 PROJECT( MacGitver )
-
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8.8 )
 
 FIND_PACKAGE( Qt4 4.8.2 REQUIRED )
 
-SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
-SET( LIBRARY_OUTPUT_PATH    ${CMAKE_BINARY_DIR}/bin )
-
-INCLUDE( cmake/QtMacros.cmake )			# Our own set of Qt4 Macros
-INCLUDE( cmake/hic.cmake )              # The HI-Compiler
+INCLUDE( cmake/Utils.cmake )		# Tools for cmake
+INCLUDE( cmake/QtMacros.cmake )		# Our own set of Qt Macros
+INCLUDE( cmake/hic.cmake )			# Our HI-Compiler
 
 IF( UNIX )
+	GCC_ADD_FLAG( "-Wall" )
+	GCC_ADD_FLAG( "-fvisibility=hidden" )
+ENDIF()
 
-    IF( NOT DEFINED CMAKE_CXX_FLAGS )
-        SET( CMAKE_CXX_FLAGS "-Wall" CACHE STRING "C++ Build Flags" FORCE )
-    ENDIF( NOT DEFINED CMAKE_CXX_FLAGS )
-
-    IF( NOT "${CMAKE_CXX_FLAGS}" MATCHES ".*-Wall.*" )
-        SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" CACHE STRING "C++ Build Flags" FORCE )
-    ENDIF( NOT "${CMAKE_CXX_FLAGS}" MATCHES ".*-Wall.*" )
-
-    # We can NOW be sure that it is defined
-    IF( NOT "${CMAKE_CXX_FLAGS}" MATCHES ".*-fvisibility=.*" )
-        SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden" CACHE STRING "C++ Build Flags" FORCE )
-    ENDIF( NOT "${CMAKE_CXX_FLAGS}" MATCHES ".*-fvisibility=.*" )
-
-ENDIF( UNIX )
+SET_OUTPUT_PATHS()
 
 OPTION(LIBGIT2_SUBMOD "Use libgit2 from our submodule" ON)
 

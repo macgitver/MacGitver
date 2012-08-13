@@ -22,6 +22,9 @@
 class RefsViewsModule : public Module
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
+	Q_INTERFACES( IModule )
+
 public:
 	RefsViewsModule();
 

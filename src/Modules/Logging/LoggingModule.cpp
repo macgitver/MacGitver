@@ -59,4 +59,6 @@ void LoggingModule::addMessage( LogType type, const QString& message )
 	qDebug( "%i: %s", int(type), qPrintable( message ) );
 }
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN2( Logging, LoggingModule )
+#endif

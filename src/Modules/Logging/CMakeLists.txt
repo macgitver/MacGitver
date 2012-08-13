@@ -21,7 +21,7 @@ SET( HDR_FILES
 		LoggingModule.h
 )
 
-QT4_MOC( MOC_FILES ${HDR_FILES} )
+QT_MOC( MOC_FILES ${HDR_FILES} )
 
 ADD_MGV_MODULE(
 		Logging

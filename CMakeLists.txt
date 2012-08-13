@@ -2,8 +2,6 @@
 PROJECT( MacGitver )
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8.8 )
 
-FIND_PACKAGE( Qt4 4.8.2 REQUIRED )
-
 INCLUDE( cmake/Utils.cmake )		# Tools for cmake
 INCLUDE( cmake/QtMacros.cmake )		# Our own set of Qt Macros
 INCLUDE( cmake/hic.cmake )			# Our HI-Compiler

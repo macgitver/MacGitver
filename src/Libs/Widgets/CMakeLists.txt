@@ -13,6 +13,7 @@ SET( SRC_FILES
 
 	FontSelectWidget.cpp
 	LineEdit.cpp
+	StringSelectorWidget.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -21,9 +22,11 @@ SET( PUB_HDR_FILES
 
 	FontSelectWidget.h
 	LineEdit.h
+	StringSelectorWidget.h
 )
 
 SET( PRI_HDR_FILES
+	StringSelectorWidgetPrivate.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

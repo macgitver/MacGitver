@@ -61,6 +61,15 @@ namespace Git
 		return !!memcmp( data, other.data, 20 );
 	}
 
+	bool ObjectId::isNull() const
+	{
+		for( int i = 0; i < 20; i++ )
+			if( data[ i ] )
+				return false;
+
+		return true;
+	}
+
 	static uint hash(const unsigned char *p, int n)
 	{
 		uint h = 0;

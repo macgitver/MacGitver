@@ -83,6 +83,8 @@ void HistoryDetails::calculate()
 	}
 
 	mHeader = QRect( 3, 3, w - 3 - 3, headheight );
+
+	viewport()->update();
 }
 
 void HistoryDetails::setRepository( Git::Repository repo )
@@ -94,10 +96,16 @@ void HistoryDetails::setRepository( Git::Repository repo )
 void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 {
 	Q_ASSERT( mRepo.isValid() );
+	mHeaders.clear();
+
+	if( sha1.isNull() )
+	{
+		calculate();
+		return;
+	}
+
 	Git::ObjectCommit commit = mRepo.lookupCommit( sha1 );
 	Q_ASSERT( commit.isValid() );
-
-	mHeaders.clear();
 
 	mHeaders.append( HeaderEntry( trUtf8( "Author" ), commit.author().fullName() ) );
 	mHeaders.append( HeaderEntry( trUtf8( "Author date" ), commit.author().when().toString() ) );
@@ -108,5 +116,4 @@ void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 	mHeaders.append( HeaderEntry( trUtf8( "SHA-1" ), sha1.toString(), true ) );
 
 	calculate();
-	viewport()->update();
 }

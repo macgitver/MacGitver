@@ -43,6 +43,8 @@ namespace Git
 			return data;
 		}
 
+		bool isNull() const;
+
 		bool operator==( const ObjectId& other ) const;
 		bool operator!=( const ObjectId& other ) const;
 

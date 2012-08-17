@@ -17,6 +17,8 @@
 #ifndef HISTORY_LIST_H
 #define HISTORY_LIST_H
 
+#include "GitWrap/ObjectId.h"
+
 #include <QTreeView>
 
 class HistoryList : public QTreeView
@@ -24,6 +26,15 @@ class HistoryList : public QTreeView
 	Q_OBJECT
 public:
 	HistoryList();
+
+public:
+	void setModel( QAbstractItemModel* model );
+
+signals:
+	void currentCommitChanged( const Git::ObjectId& sha1 );
+
+private slots:
+	void onCurrentChanged();
 };
 
 #endif

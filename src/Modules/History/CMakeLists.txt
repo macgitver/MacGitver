@@ -13,6 +13,7 @@ SET( SRC_FILES
 
     HistoryView.cpp
     HistoryList.cpp
+	HistoryDetails.cpp
     HistoryEntry.cpp
     HistoryBuilder.cpp
     HistoryModel.cpp
@@ -23,7 +24,8 @@ SET( HDR_FILES
 
     HistoryView.h
     HistoryList.h
-    HistoryEntry.h
+	HistoryEntry.h
+	HistoryDetails.h
     HistoryBuilder.h
     HistoryModel.h
     HistoryModule.h

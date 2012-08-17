@@ -15,8 +15,39 @@
  */
 
 #include "HistoryList.h"
+#include "HistoryModel.h"
+#include "HistoryEntry.h"
 
 HistoryList::HistoryList()
 {
 	setRootIsDecorated( false );
+}
+
+void HistoryList::onCurrentChanged()
+{
+	if( currentIndex().isValid() )
+	{
+		const HistoryModel* hm = qobject_cast< const HistoryModel* >( currentIndex().model() );
+		Q_ASSERT( hm );
+		HistoryEntry* e = hm->indexToEntry( currentIndex() );
+		if( !e )
+		{
+			emit currentCommitChanged( Git::ObjectId() );
+			return;
+		}
+
+		emit currentCommitChanged( e->id() );
+	}
+	else
+	{
+		emit currentCommitChanged( Git::ObjectId() );
+	}
+}
+
+void HistoryList::setModel( QAbstractItemModel* model )
+{
+	QTreeView::setModel( model );
+
+	connect( selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+			 this, SLOT(onCurrentChanged()) );
 }

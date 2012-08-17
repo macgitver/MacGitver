@@ -30,6 +30,7 @@ class QToolBar;
 
 class HistoryBuilder;
 class HistoryModel;
+class HistoryDetails;
 class HistoryList;
 
 class HistoryViewDelegate : public QItemDelegate
@@ -61,9 +62,13 @@ public slots:
 private:
 	void buildHistory();
 
+private slots:
+	void currentCommitChanged( const Git::ObjectId& sh1 );
+
 private:
 	HistoryModel*		mModel;
 	HistoryList*		mList;
+	HistoryDetails*		mDetails;
 	HistoryBuilder*		mBuilder;
 	QToolBar*			mToolBar;
 	Git::Repository		mRepo;

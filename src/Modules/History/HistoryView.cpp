@@ -23,6 +23,8 @@
 #include "GitWrap/Reference.h"
 #include "GitWrap/ObjectCommit.h"
 
+#include "Heaven/Widgets/MiniSplitter.h"
+
 #include "MacGitver/MacGitver.h"
 
 #include "HistoryView.h"
@@ -30,6 +32,7 @@
 #include "HistoryModel.h"
 #include "HistoryBuilder.h"
 #include "HistoryList.h"
+#include "HistoryDetails.h"
 
 void HistoryViewDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2,
 										  int height, const QColor& col, const QColor& activeCol,
@@ -408,7 +411,7 @@ HistoryView::HistoryView()
 {
 	setViewName( trUtf8( "History" ) );
 
-	setFont( QFont( QLatin1String( "Verdana" ), 8 ) );
+//	setFont( QFont( QLatin1String( "Verdana" ), 8 ) );
 
 	setSizePolicy( QSizePolicy::MinimumExpanding,
 				   QSizePolicy::MinimumExpanding );
@@ -425,14 +428,23 @@ HistoryView::HistoryView()
 
 	l->addWidget( mToolBar );
 
+	Heaven::MiniSplitter* ms1 = new Heaven::MiniSplitter( Qt::Vertical );
+	l->addWidget( ms1 );
+
 	mList = new HistoryList;
 	mList->setFrameShape( QFrame::NoFrame );
-	l->addWidget( mList );
+	ms1->addWidget( mList );
 
 	mModel = new HistoryModel( this );
 	mList->setModel( mModel );
 
+	connect( mList, SIGNAL(currentCommitChanged(Git::ObjectId)),
+			 this, SLOT(currentCommitChanged(Git::ObjectId)) );
+
 	mList->setItemDelegate( new HistoryViewDelegate );
+
+	mDetails = new HistoryDetails;
+	ms1->addWidget( mDetails );
 
 	mBuilder = NULL;
 
@@ -456,6 +468,7 @@ void HistoryView::repositoryChanged( Git::Repository repo )
 
 	mRepo = repo;
 	mModel->setRepository( repo );
+	mDetails->setRepository( repo );
 
 	if( mRepo.isValid() )
 	{
@@ -477,4 +490,9 @@ void HistoryView::buildHistory()
 
 	mBuilder->addHEAD();
 	mBuilder->start();
+}
+
+void HistoryView::currentCommitChanged( const Git::ObjectId& sha1 )
+{
+	mDetails->setCommit( sha1 );
 }

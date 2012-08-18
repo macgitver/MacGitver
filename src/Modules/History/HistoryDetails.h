@@ -22,6 +22,21 @@
 
 #include <QAbstractScrollArea>
 
+enum HistoryHeaderDetails
+{
+	HHD_Author = 1,
+	HHD_AuthorName,
+	HHD_AuthorMail,
+	HHD_AuthorDate,
+	HHD_Committer,
+	HHD_CommitterName,
+	HHD_CommitterDate,
+	HHD_CommitterMail,
+	HHD_SHA1,
+	HHD_ChildrenList,
+	HHD_ParentsList
+};
+
 class HistoryDetails : public QAbstractScrollArea
 {
 	Q_OBJECT
@@ -46,22 +61,28 @@ private:
 			: mParameter( param )
 			, mValue( value )
 			, mFixedFont( fixed )
+			, mHovered( false )
 		{
 		}
 
 		QString	mParameter;
 		QString	mValue;
-		bool	mFixedFont;
+		QRect	mValueRect;
+		bool	mFixedFont	: 1;
+		bool	mHovered	: 1;
 	};
 
 	typedef QList< HeaderEntry > HeaderEntries;
 
-	QString			mTitle;
-	HeaderEntries	mHeaders;
-	QStringList		mDetails;
-	QRect			mHeader;
-	int				mParamNameWidth;
-	Git::Repository	mRepo;
+	QString							mTitle;
+	HeaderEntries					mHeaders;
+	QStringList						mDetails;
+	QRect							mHeader;
+	int								mParamNameWidth;
+	Git::Repository					mRepo;
+	QList< HistoryHeaderDetails >	mViewDetailRows;
+	bool							mViewSubject : 1;
+	bool							mViewDetails : 1;
 };
 
 #endif

@@ -17,9 +17,11 @@
 #include <QtPlugin>
 
 #include "Interfaces/IMainWindow.h"
+#include "Interfaces/IConfigDialog.h"
 
 #include "HistoryModule.h"
 #include "HistoryView.h"
+#include "HistoryConfigPage.h"
 
 HistoryModule::HistoryModule()
 {
@@ -27,6 +29,7 @@ HistoryModule::HistoryModule()
 
 void HistoryModule::setupConfigPages( IConfigDialog* dialog )
 {
+	dialog->addPage( new HistoryConfigPage( dialog ) );
 }
 
 Module::Types HistoryModule::providesModuleTypes() const

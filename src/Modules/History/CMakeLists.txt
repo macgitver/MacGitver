@@ -4,40 +4,49 @@ PROJECT( MGV_MOD_HISTORY )
 QT_PREPARE( Core Gui Widgets )
 
 INCLUDE_DIRECTORIES(
-    ${MGV_LIBS_SOURCE_DIR}
-    ${MGV_MOD_HISTORY_SOURCE_DIR}
-    ${MGV_MOD_HISTORY_BINARY_DIR}
+	${MGV_LIBS_SOURCE_DIR}
+	${MGV_MOD_HISTORY_SOURCE_DIR}
+	${MGV_MOD_HISTORY_BINARY_DIR}
 )
 
 SET( SRC_FILES
 
-    HistoryView.cpp
-    HistoryList.cpp
+	HistoryView.cpp
+	HistoryList.cpp
 	HistoryDetails.cpp
-    HistoryEntry.cpp
-    HistoryBuilder.cpp
-    HistoryModel.cpp
-    HistoryModule.cpp
+	HistoryEntry.cpp
+	HistoryBuilder.cpp
+	HistoryModel.cpp
+	HistoryModule.cpp
+	HistoryConfigPage.cpp
 )
 
 SET( HDR_FILES
 
-    HistoryView.h
-    HistoryList.h
+	HistoryView.h
+	HistoryList.h
 	HistoryEntry.h
 	HistoryDetails.h
-    HistoryBuilder.h
-    HistoryModel.h
-    HistoryModule.h
+	HistoryBuilder.h
+	HistoryModel.h
+	HistoryModule.h
+	HistoryConfigPage.h
+)
+
+SET( UI_FILES
+
+	HistoryConfigPage.ui
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )
+QT_UIC( UIC_FILES ${UI_FILES} )
 
 ADD_MGV_MODULE(
-    History
+	History
 
-    ${SRC_FILES}
-    ${HDR_FILES}
-    ${MOC_FILES}
+	${SRC_FILES}
+	${HDR_FILES}
+	${MOC_FILES}
+	${UIC_FILES}
 )
 

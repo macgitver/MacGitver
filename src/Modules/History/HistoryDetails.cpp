@@ -16,6 +16,8 @@
 
 #include <QPainter>
 
+#include "Config/Config.h"
+
 #include "GitWrap/ObjectCommit.h"
 
 #include "HistoryDetails.h"
@@ -24,6 +26,19 @@ HistoryDetails::HistoryDetails( QWidget* parent )
 	: QAbstractScrollArea( parent )
 {
 	setFrameShape( NoFrame );
+
+	QVariant vList = Config::self().get( "History/Details/List" );
+	QString sList = vList.toString();
+	QStringList details = sList.split( QChar( L';' ) );
+
+	foreach( QString s, details )
+	{
+		mViewDetailRows.append( HistoryHeaderDetails( s.toInt() ) );
+	}
+
+	mViewSubject = Config::self().get( "History/Details/Subject", true ).toBool();
+	mViewDetails = Config::self().get( "History/Details/Details", true ).toBool();
+
 	calculate();
 }
 
@@ -31,9 +46,6 @@ HistoryDetails::HistoryDetails( QWidget* parent )
 void HistoryDetails::paintEvent( QPaintEvent* ev )
 {
 	QPainter p( viewport() );
-
-	qDebug() << mHeader;
-
 	QFontMetrics fm( font() );
 
 	p.fillRect( mHeader, Qt::gray );

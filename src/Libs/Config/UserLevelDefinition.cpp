@@ -192,7 +192,7 @@ void UserLevelDefaultLayoutEntry::addToWindowState( Heaven::WindowStateBase* par
 	{
 	case Tab:
 		{
-			Heaven::ViewContainer::Type subType = 0;
+			Heaven::ViewContainer::Type subType = Heaven::ViewContainer::Type( 0 );
 			switch( mTabPos )
 			{
 			case Left:		subType = Heaven::ViewContainer::SubTabLeft;	break;

@@ -141,7 +141,7 @@ void MainWindow::createPartialLayout( Heaven::ViewContainer* parent,
 	{
 	case UserLevelDefaultLayoutEntry::Tab:
 		{
-			Heaven::ViewContainer::Type subType;
+			Heaven::ViewContainer::Type subType = 0;
 			switch( entry->tabPos() )
 			{
 			case UserLevelDefaultLayoutEntry::Left:

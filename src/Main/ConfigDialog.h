@@ -41,6 +41,9 @@ public:
 	void setModified( IConfigPage* page, bool value );
 	void addPage( IConfigPage* page );
 
+private slots:
+	void onWidgetChange( QTreeWidgetItem* newCurrent );
+
 private:
 	QHash< QByteArray, QTreeWidgetItem* >	mGroupsById;
 	QHash< QByteArray, IConfigPage* >		mPagesById;

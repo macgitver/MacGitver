@@ -23,6 +23,9 @@
 ConfigDialog::ConfigDialog()
 {
 	setupUi( this );
+
+	connect( widgetTree, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+			 this, SLOT(onWidgetChange(QTreeWidgetItem*)) );
 }
 
 ConfigDialog::~ConfigDialog()
@@ -62,4 +65,26 @@ int ConfigDialog::exec()
 	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( false );
 
 	return QDialog::exec();
+}
+
+void ConfigDialog::onWidgetChange( QTreeWidgetItem* newCurrent )
+{
+	if( !newCurrent )
+	{
+		return;
+	}
+
+	QByteArray pageId = mPageIdsByTree.value( newCurrent, QByteArray() );
+	if( pageId.isEmpty() )
+	{
+		return;
+	}
+
+	IConfigPage* page = mPagesById.value( pageId, NULL );
+	if( !page )
+	{
+		return;
+	}
+
+	widgets->setCurrentWidget( page->widget() );
 }

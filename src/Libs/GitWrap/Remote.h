@@ -33,6 +33,7 @@ namespace Git
 	public:
 		Remote();
 		Remote( RemotePrivate* _d );
+		Remote( const Remote& other );
 		~Remote();
 		Remote& operator=( const Remote& other );
 

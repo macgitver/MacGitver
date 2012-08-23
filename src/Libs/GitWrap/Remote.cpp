@@ -43,6 +43,11 @@ namespace Git
 	{
 	}
 
+	Remote::Remote( const Remote& other )
+		: d( other.d )
+	{
+	}
+
 	Remote::~Remote()
 	{
 	}

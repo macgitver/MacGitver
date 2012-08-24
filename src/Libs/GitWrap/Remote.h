@@ -54,6 +54,11 @@ namespace Git
 		static bool isValidUrl( const QString& url );
 		static bool isSupportedUrl( const QString& url );
 
+		bool connect( bool forFetch );
+		void disconnect();
+		bool download();
+		bool updateTips();
+
 	private:
 		GitPtr< RemotePrivate > d;
 	};

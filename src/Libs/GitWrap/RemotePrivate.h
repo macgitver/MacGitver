@@ -31,6 +31,8 @@ namespace Git
 
 	public:
 		git_remote*			mRemote;
+		git_off_t			mBytes;
+		git_indexer_stats	mStats;
 	};
 
 }

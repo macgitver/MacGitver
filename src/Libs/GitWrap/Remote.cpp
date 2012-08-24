@@ -146,5 +146,47 @@ namespace Git
 		return git_remote_supported_url( url.toUtf8().constData() );
 	}
 
+
+	bool Remote::connect( bool forFetch )
+	{
+		if( d )
+		{
+			int rc = git_remote_connect( d->mRemote, forFetch ? GIT_DIR_FETCH : GIT_DIR_PUSH );
+			return d->handleErrors( rc );
+		}
+
+		return false;
+	}
+
+	void Remote::disconnect()
+	{
+		if( d )
+		{
+			git_remote_disconnect( d->mRemote );
+		}
+	}
+
+	bool Remote::download()
+	{
+		if( d )
+		{
+			int rc = git_remote_download( d->mRemote, &d->mBytes, &d->mStats );
+			return d->handleErrors( rc );
+		}
+
+		return false;
+	}
+
+	bool Remote::updateTips()
+	{
+		if( d )
+		{
+			int rc = git_remote_update_tips( d->mRemote );
+			return d->handleErrors( rc );
+		}
+
+		return false;
+	}
+
 }
 

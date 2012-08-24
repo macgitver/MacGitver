@@ -32,6 +32,10 @@ SET( SRC_FILES
 	RevisionWalker.cpp
 	Signature.cpp
 	Submodule.cpp
+	BackgroundTasks.cpp
+	BackgroundFetch.cpp
+	BackgroundCheckout.cpp
+	BackgroundClone.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -55,6 +59,10 @@ SET( PUB_HDR_FILES
 	RevisionWalker.h
 	Signature.h
 	Submodule.h
+	BackgroundTasks.h
+	BackgroundFetch.h
+	BackgroundCheckout.h
+	BackgroundClone.h
 )
 
 SET( PRI_HDR_FILES
@@ -73,11 +81,14 @@ SET( PRI_HDR_FILES
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
+QT_MOC( MOC_FILES ${HDR_FILES} )
+
 ADD_QT_LIBRARY(
 	GitWrap SHARED
 
 	${SRC_FILES}
 	${HDR_FILES}
+	${MOC_FILES}
 )
 
 TARGET_LINK_LIBRARIES(

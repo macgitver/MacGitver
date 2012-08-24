@@ -19,6 +19,7 @@
 #include <QFileDialog>
 
 #include "GitWrap/Git.h"
+#include "GitWrap/BackgroundClone.h"
 
 #include "CloneRepositoryDlg.h"
 
@@ -105,4 +106,21 @@ void CloneRepositoryDlg::checkValid()
 
 void CloneRepositoryDlg::accept()
 {
+	Git::BackgroundClone* clone = new Git::BackgroundClone;
+	clone->setFrom( txtUrl->text(), txtPath->text() );
+	clone->setType(
+				chkCloneBare->isChecked(),
+				chkCloneMirror->isChecked(),
+				chkCheckout->isChecked() );
+	clone->setRemoteName( txtRemoteName->text() );
+	clone->setSubmodule(
+				chkInitSubmodules->isChecked(),
+				chkSubmodulesRecursive->isChecked() );
+
+	Git::Repository repo = clone->repository();
+
+	Git::BackgroundThead* thread = new Git::BackgroundThead();
+	thread->queue( clone );
+	thread->start();
+	thread->wait();
 }

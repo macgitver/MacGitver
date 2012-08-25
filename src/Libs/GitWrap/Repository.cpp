@@ -591,7 +591,7 @@ namespace Git
 		RepositoryPrivate* repo;
 	};
 
-	static int cb_enum_submodules( const char* name, void* payload )
+	static int cb_enum_submodules( git_submodule* sm, const char* name, void* payload )
 	{
 		cb_enum_submodules_t* d = static_cast< cb_enum_submodules_t* >( payload );
 		Q_ASSERT( d && d->subs && name );

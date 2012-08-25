@@ -92,21 +92,34 @@ namespace Git
 	QString Submodule::path() const
 	{
 		git_submodule* sm = getSM( mRepo, mName );
-		const char* data = sm ? sm->path : NULL;
+		if( !sm )
+		{
+			return QString();
+		}
+		const char* data = git_submodule_path( sm );
 		return data ? QString::fromUtf8( data ) : QString();
 	}
 
 	QString Submodule::url() const
 	{
 		git_submodule* sm = getSM( mRepo, mName );
-		const char* data = sm ? sm->url : NULL;
+		if( !sm )
+		{
+			return QString();
+		}
+		const char* data = git_submodule_url( sm );
 		return data ? QString::fromUtf8( data ) : QString();
 	}
 
 	bool Submodule::fetchRecursive() const
 	{
 		git_submodule* sm = getSM( mRepo, mName );
-		return sm ? sm->fetch_recurse : false;
+		if( !sm )
+		{
+			return false;
+		}
+		Q_ASSERT( false ); // Missing api?
+		return false;
 	}
 
 	Submodule::IgnoreStrategy Submodule::ignoreStrategy() const
@@ -116,7 +129,7 @@ namespace Git
 		{
 			return None;
 		}
-		switch( sm->ignore )
+		switch( git_submodule_ignore( sm ) )
 		{
 		case GIT_SUBMODULE_IGNORE_ALL:			return All;
 		case GIT_SUBMODULE_IGNORE_DIRTY:		return Dirty;
@@ -133,7 +146,7 @@ namespace Git
 		{
 			return Ignore;
 		}
-		switch( sm->update )
+		switch( git_submodule_update( sm ) )
 		{
 		default:
 		case GIT_SUBMODULE_UPDATE_CHECKOUT:	return Checkout;
@@ -151,7 +164,13 @@ namespace Git
 			return ObjectId();
 		}
 
-		return ObjectId::fromRaw( sm->oid.id );
+		const git_oid* oid = git_submodule_head_oid( sm );
+		if( !oid )
+		{
+			return ObjectId();
+		}
+
+		return ObjectId::fromRaw( oid->id );
 	}
 
 }

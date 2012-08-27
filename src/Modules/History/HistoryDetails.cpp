@@ -119,13 +119,33 @@ void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 	Git::ObjectCommit commit = mRepo.lookupCommit( sha1 );
 	Q_ASSERT( commit.isValid() );
 
-	mHeaders.append( HeaderEntry( trUtf8( "Author" ), commit.author().fullName() ) );
-	mHeaders.append( HeaderEntry( trUtf8( "Author date" ), commit.author().when().toString() ) );
+	if( mViewDetailRows.contains( HHD_Author ) )
+		mHeaders.append( HeaderEntry( trUtf8( "Author" ), commit.author().fullName() ) );
 
-	mHeaders.append( HeaderEntry( trUtf8( "Committer" ), commit.committer().fullName() ) );
-	mHeaders.append( HeaderEntry( trUtf8( "Committer date" ), commit.committer().when().toString() ) );
+	if( mViewDetailRows.contains( HHD_AuthorDate ) )
+		mHeaders.append( HeaderEntry( trUtf8( "Author date" ), commit.author().when().toString() ) );
 
-	mHeaders.append( HeaderEntry( trUtf8( "SHA-1" ), sha1.toString(), true ) );
+	if( mViewDetailRows.contains( HHD_AuthorMail ) )
+		mHeaders.append( HeaderEntry( trUtf8( "Author mail" ), commit.author().email() ) );
+
+	if( mViewDetailRows.contains( HHD_AuthorName ) )
+		mHeaders.append( HeaderEntry( trUtf8( "Author name" ), commit.author().name() ) );
+
+
+	if( mViewDetailRows.contains( HHD_Committer ) )
+		mHeaders.append( HeaderEntry( trUtf8( "Committer" ), commit.committer().fullName() ) );
+
+	if( mViewDetailRows.contains( HHD_CommitterDate ) )
+		mHeaders.append( HeaderEntry( trUtf8( "Committer date" ), commit.committer().when().toString() ) );
+
+	if( mViewDetailRows.contains( HHD_CommitterMail ) )
+		mHeaders.append( HeaderEntry( trUtf8( "Committer mail" ), commit.committer().email() ) );
+
+	if( mViewDetailRows.contains( HHD_CommitterName ) )
+		mHeaders.append( HeaderEntry( trUtf8( "Committer name" ), commit.committer().name() ) );
+
+	if( mViewDetailRows.contains( HHD_SHA1 ) )
+		mHeaders.append( HeaderEntry( trUtf8( "SHA-1" ), sha1.toString(), true ) );
 
 	calculate();
 }

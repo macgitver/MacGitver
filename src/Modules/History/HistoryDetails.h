@@ -53,6 +53,9 @@ private:
 protected:
 	void paintEvent( QPaintEvent* ev );
 	void resizeEvent( QResizeEvent* ev );
+	void mouseMoveEvent( QMouseEvent* ev );
+	void mousePressEvent( QMouseEvent* ev );
+	void mouseReleaseEvent( QMouseEvent* ev );
 
 private:
 	struct HeaderEntry

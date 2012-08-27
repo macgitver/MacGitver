@@ -42,6 +42,18 @@ HistoryDetails::HistoryDetails( QWidget* parent )
 	calculate();
 }
 
+void HistoryDetails::mouseMoveEvent( QMouseEvent* ev )
+{
+}
+
+void HistoryDetails::mousePressEvent( QMouseEvent* ev )
+{
+}
+
+void HistoryDetails::mouseReleaseEvent( QMouseEvent* ev )
+{
+}
+
 
 void HistoryDetails::paintEvent( QPaintEvent* ev )
 {
@@ -92,6 +104,7 @@ void HistoryDetails::calculate()
 		QRect r( 0, 0, valueWidth, 50000 );
 		QRect r2 = fm.boundingRect( r, Qt::TextWordWrap, mHeaders[ i ].mValue );
 		headheight += r2.height() + 3;
+
 	}
 
 	mHeader = QRect( 3, 3, w - 3 - 3, headheight );

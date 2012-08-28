@@ -69,7 +69,6 @@ namespace Git
 
 		ResolvedRefs allResolvedRefs();
 
-		bool deleteBranch( const QString& name, bool local );
 		bool renameBranch( const QString& oldName, const QString& newName, bool force = false );
 
 		Index index();

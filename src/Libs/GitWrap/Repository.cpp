@@ -280,19 +280,6 @@ namespace Git
 		return sl;
 	}
 
-	bool Repository::deleteBranch( const QString& name, bool local )
-	{
-		if( !d )
-		{
-			return false;
-		}
-
-		int rc = git_branch_delete( d->mRepo, name.toUtf8().constData(),
-									local ? GIT_BRANCH_LOCAL : GIT_BRANCH_REMOTE );
-
-		return d->handleErrors( rc );
-	}
-
 	bool Repository::renameBranch( const QString& oldName, const QString& newName, bool force )
 	{
 		if( !d )

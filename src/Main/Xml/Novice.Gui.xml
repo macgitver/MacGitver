@@ -23,6 +23,20 @@
 			<Disable Match="*"/>
 			<Enable  Match="History"/>
 			<Enable  Match="WorkTree"/>
+		</Views>
+
+		<DefaultLayout>
+			<Tab Caption="Top">
+				<View Name="History"/>
+				<View Name="WorkTree"/>
+			</Tab>
+		</DefaultLayout>
+
+	<!--
+		<Views>
+			<Disable Match="*"/>
+			<Enable  Match="History"/>
+			<Enable  Match="WorkTree"/>
 			<Enable  Match="Branches"/>
 			<Enable  Match="Tags"/>
 			<Enable  Match="Log"/>
@@ -45,7 +59,7 @@
 				</Tab>
 			</Split>
 		</DefaultLayout>
-
+	-->
 	</Mode>
 
 </Heaven>

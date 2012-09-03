@@ -27,13 +27,22 @@ HistoryDetails::HistoryDetails( QWidget* parent )
 {
 	setFrameShape( NoFrame );
 
-	QVariant vList = Config::self().get( "History/Details/List" );
+	QVariant vList = Config::self().get( "History/Details/List", QLatin1String( "#" ) );
 	QString sList = vList.toString();
-	QStringList details = sList.split( QChar( L';' ) );
 
-	foreach( QString s, details )
+	if( sList == QLatin1String( "#" ) )
 	{
-		mViewDetailRows.append( HistoryHeaderDetails( s.toInt() ) );
+		mViewDetailRows << HHD_AuthorName << HHD_AuthorMail << HHD_AuthorDate
+						   << HHD_SHA1 << HHD_ChildrenList << HHD_ParentsList;
+	}
+	else
+	{
+		QStringList details = sList.split( QChar( L';' ) );
+
+		foreach( QString s, details )
+		{
+			mViewDetailRows.append( HistoryHeaderDetails( s.toInt() ) );
+		}
 	}
 
 	mViewSubject = Config::self().get( "History/Details/Subject", true ).toBool();
@@ -58,7 +67,17 @@ void HistoryDetails::mouseReleaseEvent( QMouseEvent* ev )
 void HistoryDetails::paintEvent( QPaintEvent* ev )
 {
 	QPainter p( viewport() );
-	QFontMetrics fm( font() );
+
+	if( mCurrentSHA1.isNull() )
+	{
+		return;
+	}
+
+	QFont fontDefault = Config::defaultFont();
+	QFont fontFixed = Config::defaultFixedFont();
+
+	QFontMetrics fmDefault( fontDefault );
+	QFontMetrics fmFixed( fontFixed );
 
 	p.fillRect( mHeader, Qt::gray );
 	p.setPen( Qt::black );
@@ -68,13 +87,29 @@ void HistoryDetails::paintEvent( QPaintEvent* ev )
 	int t = 3;
 	for( int i = 0; i < mHeaders.count(); i++ )
 	{
+		bool useFixedFont = mHeaders[ i ].mFixedFont;
+		QFontMetrics& fm = (useFixedFont ? fmFixed : fmDefault );
+		p.setFont( fontDefault );
 		p.drawText( 6, mHeader.top() + t, mParamNameWidth, fm.lineSpacing(), 0, mHeaders[ i ].mParameter );
+
 		QRect r1( mHeader.left() + 3, mHeader.top() + t, mHeader.width() - mParamNameWidth - 9, 5000 );
 		QRect r2 = fm.boundingRect( r1, Qt::TextWordWrap, mHeaders[ i ].mValue );
 
+		p.setFont( useFixedFont ? fontFixed : fontDefault );
 		p.drawText( r2.adjusted( mHeader.left() + mParamNameWidth + 6, 0, mHeader.left() + mParamNameWidth + 6, 0 ), Qt::TextWordWrap, mHeaders[ i ].mValue );
 
 		t += qMax( fm.lineSpacing(), r2.height() + 3 );
+	}
+
+	p.setPen( Qt::black );
+	p.setFont( fontFixed );
+
+	int top = mDetailsRect.top();
+	for( int i = 0; i < mDetails.count(); i++ )
+	{
+		QRect r = QRect( 10, top, mDetailsRect.width(), fmFixed.lineSpacing() );
+		p.drawText( r, mDetails[ i ] );
+		top += fmFixed.lineSpacing();
 	}
 }
 
@@ -86,7 +121,11 @@ void HistoryDetails::resizeEvent( QResizeEvent* ev )
 
 void HistoryDetails::calculate()
 {
-	QFontMetrics fm( font() );
+	QFont font = Config::defaultFont();
+	QFont fontFixed = Config::defaultFixedFont();
+
+	QFontMetrics fm( font );
+	QFontMetrics fmFixed( fontFixed );
 
 	int w = width();
 
@@ -104,10 +143,18 @@ void HistoryDetails::calculate()
 		QRect r( 0, 0, valueWidth, 50000 );
 		QRect r2 = fm.boundingRect( r, Qt::TextWordWrap, mHeaders[ i ].mValue );
 		headheight += r2.height() + 3;
-
 	}
 
 	mHeader = QRect( 3, 3, w - 3 - 3, headheight );
+
+	int minWidth = 0;
+	for( int i = 0; i < mDetails.count(); i++ )
+	{
+		int width = fm.width( mDetails[ i ] );
+		minWidth = qMax( width, minWidth );
+	}
+
+	mDetailsRect = QRect( 3, 10 + headheight, minWidth, mDetails.count() * fm.lineSpacing() );
 
 	viewport()->update();
 }
@@ -122,6 +169,8 @@ void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 {
 	Q_ASSERT( mRepo.isValid() );
 	mHeaders.clear();
+
+	mCurrentSHA1 = sha1;
 
 	if( sha1.isNull() )
 	{
@@ -159,6 +208,9 @@ void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 
 	if( mViewDetailRows.contains( HHD_SHA1 ) )
 		mHeaders.append( HeaderEntry( trUtf8( "SHA-1" ), sha1.toString(), true ) );
+
+	mDetails = commit.message().split( QChar( L'\n' ) );
+	mDetails.removeFirst();
 
 	calculate();
 }

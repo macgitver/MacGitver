@@ -78,8 +78,10 @@ private:
 	typedef QList< HeaderEntry > HeaderEntries;
 
 	QString							mTitle;
+	Git::ObjectId					mCurrentSHA1;
 	HeaderEntries					mHeaders;
 	QStringList						mDetails;
+	QRect							mDetailsRect;
 	QRect							mHeader;
 	int								mParamNameWidth;
 	Git::Repository					mRepo;

@@ -142,3 +142,49 @@ void Config::set( const QString& path, const QVariant& value )
 	mSettings->setValue( path, value );
 }
 
+
+QFont Config::defaultFont()
+{
+	Config& that( self() );
+
+	if( that.mDefaultFont == QFont() )
+	{
+		QString fontName = that.get( QLatin1String( "General/Font" ), QLatin1String( "#" ) ).toString();
+		if( fontName == QLatin1String( "#" ) )
+			that.mDefaultFont = QFont( QLatin1String( "Sans Serif" ), 10 );
+		else
+			that.mDefaultFont.fromString( fontName );
+	}
+
+	return that.mDefaultFont;
+}
+
+QFont Config::defaultFixedFont()
+{
+	Config& that( self() );
+
+	if( that.mDefaultFixedFont == QFont() )
+	{
+		QString fontName = that.get( QLatin1String( "General/FixedFont" ), QLatin1String( "#" ) ).toString();
+		if( fontName == QLatin1String( "#" ) )
+			that.mDefaultFixedFont = QFont( QLatin1String( "Courier New" ), 10 );
+		else
+			that.mDefaultFixedFont.fromString( fontName );
+	}
+
+	return that.mDefaultFixedFont;
+}
+
+void Config::setDefaultFont( const QFont& font )
+{
+	mDefaultFont = font;
+
+	set( QLatin1String( "General/Font" ), font.toString() );
+}
+
+void Config::setDefaultFixedFont( const QFont& font )
+{
+	mDefaultFixedFont = font;
+
+	set( QLatin1String( "General/FixedFont" ), font.toString() );
+}

@@ -20,6 +20,7 @@
 #include <QList>
 #include <QString>
 #include <QVariant>
+#include <QFont>
 
 class QSettings;
 
@@ -42,6 +43,12 @@ public:
 	QVariant get( const QString& path, const QVariant& defaultValue = QVariant() ) const;
 	void set( const QString& path, const QVariant& value );
 
+	static QFont defaultFont();
+	static QFont defaultFixedFont();
+
+	void setDefaultFont( const QFont& font );
+	void setDefaultFixedFont( const QFont& font );
+
 private:
 	void addUserLevel( UserLevelDefinition::Ptr level );
 
@@ -51,6 +58,8 @@ private:
 	~Config();
 	QList< UserLevelDefinition::Ptr >	mLevels;
 	QSettings*							mSettings;
+	QFont								mDefaultFont;
+	QFont								mDefaultFixedFont;
 };
 
 #endif

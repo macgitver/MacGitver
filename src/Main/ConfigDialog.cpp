@@ -41,6 +41,9 @@ void ConfigDialog::addPage( IConfigPage* page )
 	{
 		groupItem = new QTreeWidgetItem( widgetTree, QStringList( page->groupName() ) );
 		mGroupsById.insert( page->groupId(), groupItem );
+		QFont f = font();
+		f.setBold( true );
+		groupItem->setFont( 0, f );
 		groupItem->setExpanded( true );
 		groupItem->setFlags( Qt::ItemIsEnabled );
 	}

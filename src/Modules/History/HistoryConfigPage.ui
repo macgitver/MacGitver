@@ -82,13 +82,6 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QCheckBox" name="chkViewSubjectLine">
-            <property name="text">
-             <string>View subject line</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QCheckBox" name="chkViewCommitDetails">
             <property name="text">
              <string>View detailed commit message</string>

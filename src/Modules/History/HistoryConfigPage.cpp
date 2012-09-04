@@ -19,6 +19,7 @@ void HistoryConfigPage::apply()
 
 void HistoryConfigPage::init()
 {
+	sswDetailsOverview->addEntry( trUtf8( "Subject" ), false, HHD_Subject );
 	sswDetailsOverview->addEntry( trUtf8( "Author" ), false, HHD_Author );
 	sswDetailsOverview->addEntry( trUtf8( "Author date" ), false, HHD_AuthorDate );
 	sswDetailsOverview->addEntry( trUtf8( "Author name" ), false, HHD_AuthorName );

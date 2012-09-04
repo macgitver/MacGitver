@@ -24,7 +24,8 @@
 
 enum HistoryHeaderDetails
 {
-	HHD_Author = 1,
+	HHD_Subject = 1,
+	HHD_Author,
 	HHD_AuthorName,
 	HHD_AuthorMail,
 	HHD_AuthorDate,

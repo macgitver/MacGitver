@@ -32,7 +32,7 @@ HistoryDetails::HistoryDetails( QWidget* parent )
 
 	if( sList == QLatin1String( "#" ) )
 	{
-		mViewDetailRows << HHD_AuthorName << HHD_AuthorMail << HHD_AuthorDate
+		mViewDetailRows << HHD_Subject << HHD_AuthorName << HHD_AuthorMail << HHD_AuthorDate
 						   << HHD_SHA1 << HHD_ChildrenList << HHD_ParentsList;
 	}
 	else
@@ -150,11 +150,11 @@ void HistoryDetails::calculate()
 	int minWidth = 0;
 	for( int i = 0; i < mDetails.count(); i++ )
 	{
-		int width = fm.width( mDetails[ i ] );
+		int width = fmFixed.width( mDetails[ i ] );
 		minWidth = qMax( width, minWidth );
 	}
 
-	mDetailsRect = QRect( 3, 10 + headheight, minWidth, mDetails.count() * fm.lineSpacing() );
+	mDetailsRect = QRect( 3, 10 + headheight, minWidth, mDetails.count() * fmFixed.lineSpacing() );
 
 	viewport()->update();
 }
@@ -181,33 +181,57 @@ void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 	Git::ObjectCommit commit = mRepo.lookupCommit( sha1 );
 	Q_ASSERT( commit.isValid() );
 
-	if( mViewDetailRows.contains( HHD_Author ) )
-		mHeaders.append( HeaderEntry( trUtf8( "Author" ), commit.author().fullName() ) );
+	for( int i = 0; i < mViewDetailRows.count(); i++ )
+	{
+		switch( mViewDetailRows[ i ] )
+		{
+		case HHD_Subject:
+			mHeaders.append( HeaderEntry( trUtf8( "Subject" ), commit.shortMessage() ) );
+			break;
 
-	if( mViewDetailRows.contains( HHD_AuthorDate ) )
-		mHeaders.append( HeaderEntry( trUtf8( "Author date" ), commit.author().when().toString() ) );
+		case HHD_Author:
+			mHeaders.append( HeaderEntry( trUtf8( "Author" ), commit.author().fullName() ) );
+			break;
 
-	if( mViewDetailRows.contains( HHD_AuthorMail ) )
-		mHeaders.append( HeaderEntry( trUtf8( "Author mail" ), commit.author().email() ) );
+		case HHD_AuthorDate:
+			mHeaders.append( HeaderEntry( trUtf8( "Author date" ),
+										  commit.author().when().toString() ) );
+			break;
 
-	if( mViewDetailRows.contains( HHD_AuthorName ) )
-		mHeaders.append( HeaderEntry( trUtf8( "Author name" ), commit.author().name() ) );
+		case HHD_AuthorMail:
+			mHeaders.append( HeaderEntry( trUtf8( "Author mail" ), commit.author().email() ) );
+			break;
 
+		case HHD_AuthorName:
+			mHeaders.append( HeaderEntry( trUtf8( "Author name" ), commit.author().name() ) );
+			break;
 
-	if( mViewDetailRows.contains( HHD_Committer ) )
-		mHeaders.append( HeaderEntry( trUtf8( "Committer" ), commit.committer().fullName() ) );
+		case HHD_Committer:
+			mHeaders.append( HeaderEntry( trUtf8( "Committer" ), commit.committer().fullName() ) );
+			break;
 
-	if( mViewDetailRows.contains( HHD_CommitterDate ) )
-		mHeaders.append( HeaderEntry( trUtf8( "Committer date" ), commit.committer().when().toString() ) );
+		case HHD_CommitterDate:
+			mHeaders.append( HeaderEntry( trUtf8( "Committer date" ),
+										  commit.committer().when().toString() ) );
+			break;
 
-	if( mViewDetailRows.contains( HHD_CommitterMail ) )
-		mHeaders.append( HeaderEntry( trUtf8( "Committer mail" ), commit.committer().email() ) );
+		case HHD_CommitterMail:
+			mHeaders.append( HeaderEntry( trUtf8( "Committer mail" ),
+										  commit.committer().email() ) );
+			break;
 
-	if( mViewDetailRows.contains( HHD_CommitterName ) )
-		mHeaders.append( HeaderEntry( trUtf8( "Committer name" ), commit.committer().name() ) );
+		case HHD_CommitterName:
+			mHeaders.append( HeaderEntry( trUtf8( "Committer name" ), commit.committer().name() ) );
+			break;
 
-	if( mViewDetailRows.contains( HHD_SHA1 ) )
-		mHeaders.append( HeaderEntry( trUtf8( "SHA-1" ), sha1.toString(), true ) );
+		case HHD_SHA1:
+			mHeaders.append( HeaderEntry( trUtf8( "SHA-1" ), sha1.toString(), true ) );
+			break;
+
+		default:
+			break;
+		}
+	}
 
 	mDetails = commit.message().split( QChar( L'\n' ) );
 	mDetails.removeFirst();

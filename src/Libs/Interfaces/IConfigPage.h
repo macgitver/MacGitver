@@ -39,6 +39,8 @@ public:
 
 	virtual QWidget* widget() = 0;
 
+	virtual void apply() = 0;
+
 protected:
 	void setModified( bool value = true );
 

@@ -26,6 +26,9 @@ ConfigDialog::ConfigDialog()
 
 	connect( widgetTree, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
 			 this, SLOT(onWidgetChange(QTreeWidgetItem*)) );
+
+	connect( buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()),
+			 this, SLOT(onApply()) );
 }
 
 ConfigDialog::~ConfigDialog()
@@ -60,6 +63,18 @@ void ConfigDialog::setModified( IConfigPage* page, bool value )
 	Q_ASSERT( page );
 	buttonBox->button( QDialogButtonBox::Apply )->setEnabled( value );
 	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( value );
+}
+
+void ConfigDialog::onApply()
+{
+	QWidget* w = widgets->currentWidget();
+	IConfigPage* page = qobject_cast< IConfigPage* >( w );
+	if( !page )
+	{
+		return;
+	}
+
+	page->apply();
 }
 
 int ConfigDialog::exec()

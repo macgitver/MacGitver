@@ -42,6 +42,7 @@ public:
 	void addPage( IConfigPage* page );
 
 private slots:
+	void onApply();
 	void onWidgetChange( QTreeWidgetItem* newCurrent );
 
 private:

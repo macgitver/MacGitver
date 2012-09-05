@@ -71,6 +71,7 @@ void HistoryDetails::mouseReleaseEvent( QMouseEvent* ev )
 void HistoryDetails::paintEvent( QPaintEvent* ev )
 {
 	QPainter p( viewport() );
+	QPalette pal( palette() );
 
 	if( mCurrentSHA1.isNull() )
 	{
@@ -83,16 +84,16 @@ void HistoryDetails::paintEvent( QPaintEvent* ev )
 	QFontMetrics fmDefault( fontDefault );
 	QFontMetrics fmFixed( fontFixed );
 
-	p.fillRect( mHeader, Qt::gray );
+	p.fillRect( mHeader, pal.color( QPalette::Highlight ) );
 	p.setPen( Qt::black );
 	p.drawRect( mHeader );
-	p.setPen( Qt::white );
+	p.setPen( pal.color( QPalette::HighlightedText ) );
 
 	int t = 3;
 	for( int i = 0; i < mHeaders.count(); i++ )
 	{
 		bool useFixedFont = mHeaders[ i ].mFixedFont;
-		QFontMetrics& fm = (useFixedFont ? fmFixed : fmDefault );
+		QFontMetrics& fm = ( useFixedFont ? fmFixed : fmDefault );
 		p.setFont( fontDefault );
 		p.drawText( 6, mHeader.top() + t, mParamNameWidth, fm.lineSpacing(), 0, mHeaders[ i ].mParameter );
 
@@ -105,7 +106,7 @@ void HistoryDetails::paintEvent( QPaintEvent* ev )
 		t += qMax( fm.lineSpacing(), r2.height() + 3 );
 	}
 
-	p.setPen( Qt::black );
+	p.setPen( pal.color( QPalette::Text ) );
 	p.setFont( fontFixed );
 
 	int top = mDetailsRect.top();

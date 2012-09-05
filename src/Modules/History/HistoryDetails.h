@@ -58,6 +58,9 @@ protected:
 	void mousePressEvent( QMouseEvent* ev );
 	void mouseReleaseEvent( QMouseEvent* ev );
 
+public:
+	void readConfig();
+
 private:
 	struct HeaderEntry
 	{

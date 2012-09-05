@@ -27,6 +27,11 @@ HistoryDetails::HistoryDetails( QWidget* parent )
 {
 	setFrameShape( NoFrame );
 
+	readConfig();
+}
+
+void HistoryDetails::readConfig()
+{
 	QVariant vList = Config::self().get( "History/Details/List", QLatin1String( "#" ) );
 	QString sList = vList.toString();
 
@@ -47,7 +52,7 @@ HistoryDetails::HistoryDetails( QWidget* parent )
 
 	mViewDetails = Config::self().get( "History/Details/Details", true ).toBool();
 
-	calculate();
+	setCommit( mCurrentSHA1 );
 }
 
 void HistoryDetails::mouseMoveEvent( QMouseEvent* ev )
@@ -166,7 +171,7 @@ void HistoryDetails::setRepository( Git::Repository repo )
 
 void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 {
-	Q_ASSERT( mRepo.isValid() );
+	Q_ASSERT( mRepo.isValid() || sha1.isNull() );
 	mHeaders.clear();
 
 	mCurrentSHA1 = sha1;

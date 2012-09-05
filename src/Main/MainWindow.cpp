@@ -61,9 +61,9 @@ MainWindow::MainWindow()
 		}
 	}
 
-	QVariant v = Config::self().get( "Main/Font", QFont() );
-	QFont f = v.value< QFont >();
-	setFont( f );
+	QFont font = Config::defaultFont();
+	setFont( font );
+	QApplication::setFont( font );
 }
 
 MainWindow::~MainWindow()

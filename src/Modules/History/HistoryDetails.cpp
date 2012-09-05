@@ -45,7 +45,6 @@ HistoryDetails::HistoryDetails( QWidget* parent )
 		}
 	}
 
-	mViewSubject = Config::self().get( "History/Details/Subject", true ).toBool();
 	mViewDetails = Config::self().get( "History/Details/Details", true ).toBool();
 
 	calculate();

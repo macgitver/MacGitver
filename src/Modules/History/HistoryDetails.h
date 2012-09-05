@@ -87,7 +87,6 @@ private:
 	int								mParamNameWidth;
 	Git::Repository					mRepo;
 	QList< HistoryHeaderDetails >	mViewDetailRows;
-	bool							mViewSubject : 1;
 	bool							mViewDetails : 1;
 };
 

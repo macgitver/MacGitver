@@ -30,6 +30,7 @@ namespace Ui
 class GeneralConfigPage : public QWidget, public IConfigPage
 {
 	Q_OBJECT
+	Q_INTERFACES( IConfigPage )
 public:
 	GeneralConfigPage( IConfigDialog* dlg );
 	~GeneralConfigPage();

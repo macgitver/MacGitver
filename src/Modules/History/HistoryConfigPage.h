@@ -27,6 +27,8 @@
 class HistoryConfigPage : public QWidget, public IConfigPage, Ui::HistoryConfigPage
 {
 	Q_OBJECT
+	Q_INTERFACES( IConfigPage )
+
 public:
 	HistoryConfigPage( IConfigDialog* dlg );
 	~HistoryConfigPage();

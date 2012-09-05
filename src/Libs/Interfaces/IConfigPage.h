@@ -17,6 +17,8 @@
 #ifndef MGV_I_CONFIG_PAGE_H
 #define MGV_I_CONFIG_PAGE_H
 
+#include <QtPlugin>
+
 #include "Interfaces/InterfaceApi.h"
 
 class QWidget;
@@ -43,5 +45,8 @@ protected:
 private:
 	IConfigDialog*			mDialog;
 };
+
+Q_DECLARE_INTERFACE( IConfigPage,
+					 "org.macgitver.macgitver.configpage/1.0")
 
 #endif

@@ -18,6 +18,7 @@
 #include <QDomDocument>
 #include <QTextStream>
 #include <QSettings>
+#include <QApplication>
 
 #include "Config/Config.h"
 
@@ -151,7 +152,7 @@ QFont Config::defaultFont()
 	{
 		QString fontName = that.get( QLatin1String( "General/Font" ), QLatin1String( "#" ) ).toString();
 		if( fontName == QLatin1String( "#" ) )
-			that.mDefaultFont = QFont( QLatin1String( "Sans Serif" ), 10 );
+			that.mDefaultFont = QApplication::font();
 		else
 			that.mDefaultFont.fromString( fontName );
 	}

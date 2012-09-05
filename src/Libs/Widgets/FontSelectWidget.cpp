@@ -26,6 +26,7 @@ FontSelectWidget::FontSelectWidget( QWidget* parent )
 	QHBoxLayout* l = new QHBoxLayout;
 
 	mcboFontName = new QFontComboBox;
+	mcboFontName->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	l->addWidget( mcboFontName );
 
 	mcboSize = new QComboBox;

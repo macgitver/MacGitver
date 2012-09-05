@@ -16,6 +16,7 @@
 
 #include "FontSelectWidget.h"
 
+#include <QDebug>
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QFontComboBox>
@@ -43,6 +44,11 @@ FontSelectWidget::FontSelectWidget( QWidget* parent )
 
 	connect( mcboFontName, SIGNAL(currentFontChanged(QFont)),
 			 this, SLOT(onCurrentFontChanged(QFont)) );
+
+	connect( mcboSize, SIGNAL(currentIndexChanged(int)),
+			 this, SLOT(onSizeChanged()) );
+
+	onCurrentFontChanged( mcboFontName->font() );
 }
 
 FontSelectWidget::~FontSelectWidget()
@@ -61,7 +67,7 @@ QFontComboBox::FontFilters FontSelectWidget::fontFilters() const
 
 void FontSelectWidget::setFontName( const QString& fontName )
 {
-	mcboFontName->setFont( QFont( fontName ) );
+	mcboFontName->setCurrentFont( QFont( fontName, fontSize() ) );
 }
 
 void FontSelectWidget::setFontSize( int size )
@@ -104,7 +110,7 @@ bool FontSelectWidget::italic() const
 
 QString FontSelectWidget::fontName() const
 {
-	return mcboFontName->fontInfo().family();
+	return mcboFontName->currentFont().family();
 }
 
 int FontSelectWidget::fontSize() const
@@ -130,6 +136,7 @@ void FontSelectWidget::onCurrentFontChanged( QFont font )
 	font.setItalic( italic() );
 	QList< int > sizes = db.pointSizes( font.family(), font.styleName() );
 
+	disconnect( mcboSize, SIGNAL(currentIndexChanged(int)), this, SLOT(onSizeChanged()) );
 	mcboSize->clear();
 	for( int i = 0; i < sizes.count(); i++ )
 	{
@@ -139,5 +146,32 @@ void FontSelectWidget::onCurrentFontChanged( QFont font )
 			mcboSize->setCurrentIndex( i );
 		}
 	}
+	connect( mcboSize, SIGNAL(currentIndexChanged(int)), this, SLOT(onSizeChanged()) );
+
+	emit currentFontChanged( font );
 }
 
+void FontSelectWidget::onSizeChanged()
+{
+	QFont f( selectedFont() );
+	emit currentFontChanged( f );
+}
+
+void FontSelectWidget::setSelectedFont( const QFont& font )
+{
+	mcboFontName->setCurrentFont( font );
+	setFontSize( font.pointSize() );
+	qDebug() << font << "=>" << mcboFontName->currentFont();
+	setItalic( font.italic() );
+	setBold( font.bold() );
+}
+
+QFont FontSelectWidget::selectedFont()
+{
+	QFont f( fontName(), fontSize() );
+
+	f.setBold( bold() );
+	f.setItalic( italic() );
+
+	return f;
+}

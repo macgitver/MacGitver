@@ -33,6 +33,9 @@ public:
 	~FontSelectWidget();
 
 public:
+	void setSelectedFont( const QFont& font );
+	QFont selectedFont();
+
 	void setFontName( const QString& fontName );
 	void setFontSize( int size );
 	void setBold( bool v );
@@ -46,7 +49,11 @@ public:
 	void setFontFilters( QFontComboBox::FontFilters filters );
 	QFontComboBox::FontFilters fontFilters() const;
 
+signals:
+	void currentFontChanged( const QFont& font );
+
 private slots:
+	void onSizeChanged();
 	void onCurrentFontChanged( QFont font );
 
 private:

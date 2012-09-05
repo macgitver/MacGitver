@@ -41,4 +41,10 @@ ADD_QT_LIBRARY(
 	${MOC_FILES}
 )
 
+TARGET_LINK_LIBRARIES(
+	Widgets
+
+	Config
+)
+
 INSTALL_MGV_LIB( Widgets )

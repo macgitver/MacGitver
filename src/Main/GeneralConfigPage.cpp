@@ -29,7 +29,16 @@ GeneralConfigPage::GeneralConfigPage( IConfigDialog* dlg )
 	, ui( new Ui::GeneralConfigPage )
 {
 	ui->setupUi( this );
+
+	//ui->fontGeneral->setFontFilters( QFontComboBox::ScalableFonts | QFontComboBox::ProportionalFonts );
+	ui->fontGeneral->setSelectedFont( Config::defaultFont() );
+	connect( ui->fontGeneral, SIGNAL(currentFontChanged(QFont)),
+			 this, SLOT(onFontChanged()) );
+
 	ui->fontSourceCode->setFontFilters( QFontComboBox::MonospacedFonts );
+	ui->fontSourceCode->setSelectedFont( Config::defaultFixedFont() );
+	connect( ui->fontSourceCode, SIGNAL(currentFontChanged(QFont)),
+			 this, SLOT(onFontChanged()) );
 
 	foreach( UserLevelDefinition::Ptr lvl, Config::self().levels() )
 	{
@@ -53,6 +62,14 @@ void GeneralConfigPage::init()
 
 void GeneralConfigPage::apply()
 {
+	Config::self().setDefaultFont( ui->fontGeneral->selectedFont() );
+	Config::self().setDefaultFixedFont( ui->fontSourceCode->selectedFont() );
+	setModified( false );
+}
+
+void GeneralConfigPage::onFontChanged()
+{
+	setModified();
 }
 
 void GeneralConfigPage::onUserLevelChanged( int index )

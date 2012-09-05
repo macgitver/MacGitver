@@ -48,6 +48,7 @@ public:
 	QWidget* widget();
 
 private slots:
+	void onFontChanged();
 	void onUserLevelChanged( int index );
 
 private:

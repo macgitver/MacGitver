@@ -108,7 +108,7 @@ namespace Git
 		{
 			git_oid oid;
 			int rc = git_revwalk_next( &oid, d->mWalker );
-			if( rc == GIT_REVWALKOVER )
+			if( rc == GIT_ITEROVER )
 			{
 				return false;
 			}

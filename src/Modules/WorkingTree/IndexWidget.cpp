@@ -58,8 +58,17 @@ IndexWidget::IndexWidget()
 
 	setViewName( trUtf8( "Working tree" ) );
 
+	mFilterRecursion = true;
+	WorkingTreeFilters filters = mTreeView->filters();
+
+	actShowAll->setChecked( filters == WTF_All );
+	actShowIgnored->setChecked( filters & WTF_Ignored );
+	actShowMissing->setChecked( filters & WTF_Missing );
+	actShowModified->setChecked( filters & WTF_Changed );
+	actShowUnchanged->setChecked( filters & WTF_Unchanged );
+	actShowUntracked->setChecked( filters & WTF_Untracked );
+
 	mFilterRecursion = false;
-	setTreeFilter( WTF_All );
 
 	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
 			 this, SLOT(repositoryChanged(Git::Repository)) );

@@ -14,13 +14,20 @@
  *
  */
 
+#include "Config/Config.h"
+
+#include "Widgets/HeaderView.h"
+
 #include "WorkingTreeItemView.h"
 #include "WorkingTreeModel.h"
 
 WorkingTreeItemView::WorkingTreeItemView()
 {
-	mModel = new WorkingTreeModel( Git::Repository(), this );
-	setModel( mModel );
+	mModel = NULL;
+
+	QVariant v = Config::self().get( QLatin1String( "Worktree/Filters" ),
+									 int( WTF_All ) );
+	mFilters = WorkingTreeFilters( v.toInt() );
 }
 
 void WorkingTreeItemView::setRepository( const Git::Repository& repo )
@@ -38,8 +45,13 @@ void WorkingTreeItemView::setRepository( const Git::Repository& repo )
 	{
 		mModel = new WorkingTreeModel( Git::Repository(), this );
 		mModel->setRepository( mRepo );
+		mModel->setFilters( mFilters );
 		setModel( mModel );
 	}
+
+	HeaderView* hv = new HeaderView( Qt::Horizontal );
+	setHeader( hv );
+	hv->setConfigName( QLatin1String( "Worktree/Columns" ) );
 }
 
 WorkingTreeFilters WorkingTreeItemView::filters() const
@@ -50,5 +62,10 @@ WorkingTreeFilters WorkingTreeItemView::filters() const
 void WorkingTreeItemView::setFilter( WorkingTreeFilters filters )
 {
 	mFilters = filters;
-	mModel->setFilters( filters );
+	if( mModel )
+	{
+		mModel->setFilters( filters );
+	}
+
+	Config::self().set( QLatin1String( "Worktree/Filters" ), int( mFilters ) );
 }

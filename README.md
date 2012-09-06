@@ -27,8 +27,6 @@ The main release goal for _Genesis_ is almost feature parity to QGit 2.4.
 
 Features still to finish:
 - General
-  - Font selection
-  - Unclutter unfinished _libHeaven_ features (Just to provide a usable basic user interface)
   - Invoke manual refresh
   - Borrow some icons somewhere :)
 

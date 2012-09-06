@@ -61,10 +61,10 @@ MainWindow::MainWindow()
 		}
 	}
 
-	QFont font = Config::defaultFont();
-	setFont( font );
-	QApplication::setFont( font );
-	QApplication::setFont( Config::defaultDialogFont(), "QDialog" );
+	setupFonts();
+
+	connect( &Config::self(), SIGNAL(fontsChanged()),
+			 this, SLOT(setupFonts()) );
 }
 
 MainWindow::~MainWindow()
@@ -97,6 +97,14 @@ void MainWindow::setupUi()
 	addToolBar( tbMainBar->toolBarFor( this ) );
 
 	moveToCenter();
+}
+
+void MainWindow::setupFonts()
+{
+	QFont font = Config::defaultFont();
+	setFont( font );
+	QApplication::setFont( font );
+	QApplication::setFont( Config::defaultDialogFont(), "QDialog" );
 }
 
 void MainWindow::moveToCenter()

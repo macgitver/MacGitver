@@ -200,6 +200,8 @@ void Config::setDefaultFont( const QFont& font )
 	mDefaultFont = font;
 
 	set( QLatin1String( "General/Font" ), font.toString() );
+
+	emit fontsChanged();
 }
 
 void Config::setDefaultDialogFont( const QFont& font )
@@ -207,6 +209,8 @@ void Config::setDefaultDialogFont( const QFont& font )
 	mDefaultDialogFont = font;
 
 	set( QLatin1String( "General/DialogFont" ), font.toString() );
+
+	emit fontsChanged();
 }
 
 void Config::setDefaultFixedFont( const QFont& font )
@@ -214,4 +218,6 @@ void Config::setDefaultFixedFont( const QFont& font )
 	mDefaultFixedFont = font;
 
 	set( QLatin1String( "General/FixedFont" ), font.toString() );
+
+	emit fontsChanged();
 }

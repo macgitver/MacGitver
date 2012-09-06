@@ -26,8 +26,10 @@ class QSettings;
 
 #include "Config/UserLevelDefinition.h"
 
-class CONFIG_API Config
+class CONFIG_API Config : public QObject
 {
+	Q_OBJECT
+
 public:
 	static Config& self();
 
@@ -50,6 +52,9 @@ public:
 	void setDefaultFont( const QFont& font );
 	void setDefaultDialogFont( const QFont& font );
 	void setDefaultFixedFont( const QFont& font );
+
+signals:
+	void fontsChanged();
 
 private:
 	void addUserLevel( UserLevelDefinition::Ptr level );

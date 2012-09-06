@@ -54,6 +54,7 @@ public slots:
 private slots:
 	void onHelpAbout();
 	void onToolsPreferences();
+	void setupFonts();
 
 public:
 	void integrateView( Heaven::View* view, Heaven::Positions position );

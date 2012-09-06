@@ -44,9 +44,11 @@ public:
 	void set( const QString& path, const QVariant& value );
 
 	static QFont defaultFont();
+	static QFont defaultDialogFont();
 	static QFont defaultFixedFont();
 
 	void setDefaultFont( const QFont& font );
+	void setDefaultDialogFont( const QFont& font );
 	void setDefaultFixedFont( const QFont& font );
 
 private:
@@ -59,6 +61,7 @@ private:
 	QList< UserLevelDefinition::Ptr >	mLevels;
 	QSettings*							mSettings;
 	QFont								mDefaultFont;
+	QFont								mDefaultDialogFont;
 	QFont								mDefaultFixedFont;
 };
 

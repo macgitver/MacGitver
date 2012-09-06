@@ -30,9 +30,12 @@ GeneralConfigPage::GeneralConfigPage( IConfigDialog* dlg )
 {
 	ui->setupUi( this );
 
-	//ui->fontGeneral->setFontFilters( QFontComboBox::ScalableFonts | QFontComboBox::ProportionalFonts );
 	ui->fontGeneral->setSelectedFont( Config::defaultFont() );
 	connect( ui->fontGeneral, SIGNAL(currentFontChanged(QFont)),
+			 this, SLOT(onFontChanged()) );
+
+	ui->fontDialogs->setSelectedFont( Config::defaultDialogFont() );
+	connect( ui->fontDialogs, SIGNAL(currentFontChanged(QFont)),
 			 this, SLOT(onFontChanged()) );
 
 	ui->fontSourceCode->setFontFilters( QFontComboBox::MonospacedFonts );
@@ -63,6 +66,7 @@ void GeneralConfigPage::init()
 void GeneralConfigPage::apply()
 {
 	Config::self().setDefaultFont( ui->fontGeneral->selectedFont() );
+	Config::self().setDefaultDialogFont( ui->fontDialogs->selectedFont() );
 	Config::self().setDefaultFixedFont( ui->fontSourceCode->selectedFont() );
 	setModified( false );
 }

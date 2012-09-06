@@ -64,6 +64,7 @@ MainWindow::MainWindow()
 	QFont font = Config::defaultFont();
 	setFont( font );
 	QApplication::setFont( font );
+	QApplication::setFont( Config::defaultDialogFont(), "QDialog" );
 }
 
 MainWindow::~MainWindow()

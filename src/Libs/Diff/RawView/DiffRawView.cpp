@@ -14,6 +14,8 @@
  *
  */
 
+#include "Config/Config.h"
+
 #include "Diff/RawView/DiffRawHighlighter.h"
 #include "Diff/RawView/DiffRawView.h"
 
@@ -21,7 +23,7 @@ DiffRawView::DiffRawView( QWidget* parent )
 	: QTextBrowser( parent )
 {
 	new DiffRawHighlighter( this );
-	setFont( QFont( QLatin1String( "Monospace" ), 8 ) );
+	setFont( Config::defaultFixedFont() );
 
 	setFrameShape( QFrame::NoFrame );
 }

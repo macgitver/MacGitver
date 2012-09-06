@@ -14,6 +14,7 @@ SET( SRC_FILES
 	FontSelectWidget.cpp
 	LineEdit.cpp
 	StringSelectorWidget.cpp
+	HeaderView.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -23,6 +24,7 @@ SET( PUB_HDR_FILES
 	FontSelectWidget.h
 	LineEdit.h
 	StringSelectorWidget.h
+	HeaderView.h
 )
 
 SET( PRI_HDR_FILES

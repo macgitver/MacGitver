@@ -14,6 +14,8 @@
  *
  */
 
+#include "Widgets/HeaderView.h"
+
 #include "HistoryList.h"
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
@@ -50,4 +52,8 @@ void HistoryList::setModel( QAbstractItemModel* model )
 
 	connect( selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
 			 this, SLOT(onCurrentChanged()) );
+
+	HeaderView* hv = new HeaderView( Qt::Horizontal );
+	setHeader( hv );
+	hv->setConfigName( QLatin1String( "History/Columns" ) );
 }

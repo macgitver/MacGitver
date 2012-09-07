@@ -1,7 +1,7 @@
 
 PROJECT( MACGITVER )
 
-QT_PREPARE( Core Gui Widgets Xml )
+QT_PREPARE( Core Gui Widgets Xml Main )
 
 INCLUDE_DIRECTORIES(
 	${MACGITVER_SOURCE_DIR}

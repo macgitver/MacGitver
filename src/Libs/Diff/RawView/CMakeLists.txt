@@ -38,4 +38,9 @@ ADD_QT_LIBRARY(
 	${MOC_FILES}
 )
 
+TARGET_LINK_LIBRARIES(
+	DiffRawView
+	Config
+)
+
 INSTALL_MGV_LIB( DiffRawView )

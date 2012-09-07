@@ -52,3 +52,4 @@ ADD_MGV_MODULE(
 	${UIC_FILES}
 )
 
+TARGET_LINK_LIBRARIES( ModHistory DiffRawView )

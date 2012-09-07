@@ -114,7 +114,11 @@ MACRO( QT_PREPARE )
 
 	FOREACH( mod ${ARGN} )
 
-		IF( NOT ${mod} STREQUAL "-Gui" )
+		IF( ${mod} STREQUAL "Main" )
+
+			# Don't do anything
+
+		ELSEIF( NOT ${mod} STREQUAL "-Gui" )
 
 			IF( "${Qt5${mod}_DIR}" STREQUAL "" )
 				FIND_PACKAGE( Qt5${mod} REQUIRED )

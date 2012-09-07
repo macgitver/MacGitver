@@ -410,9 +410,6 @@ HistoryView::HistoryView()
 	: GlobalView( QLatin1String( "History" ) )
 {
 	setViewName( trUtf8( "History" ) );
-
-//	setFont( QFont( QLatin1String( "Verdana" ), 8 ) );
-
 	setSizePolicy( QSizePolicy::MinimumExpanding,
 				   QSizePolicy::MinimumExpanding );
 

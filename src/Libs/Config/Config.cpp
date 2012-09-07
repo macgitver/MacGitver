@@ -96,6 +96,25 @@ void Config::loadSettings()
 {
 	delete mSettings;
 	mSettings = new QSettings();
+
+
+	QString fontName = get( "General/Font", "#" ).toString();
+	if( fontName == QLatin1String( "#" ) )
+		mDefaultFont = QFont();
+	else
+		mDefaultFont.fromString( fontName );
+
+	fontName = get( "General/DialogFont", "#" ).toString();
+	if( fontName == QLatin1String( "#" ) )
+		mDefaultDialogFont = mDefaultFont;
+	else
+		mDefaultDialogFont.fromString( fontName );
+
+	fontName = get( "General/FixedFont", "#" ).toString();
+	if( fontName == QLatin1String( "#" ) )
+		mDefaultFixedFont = QFont( QLatin1String( "Courier New" ), 10 );
+	else
+		mDefaultFixedFont.fromString( fontName );
 }
 
 void Config::saveSettings()
@@ -161,50 +180,17 @@ void Config::set( const QString& path, const QVariant& value )
 
 QFont Config::defaultFont()
 {
-	Config& that( self() );
-
-	if( that.mDefaultFont == QFont() )
-	{
-		QString fontName = that.get( "General/Font", "#" ).toString();
-		if( fontName == QLatin1String( "#" ) )
-			that.mDefaultFont = QApplication::font();
-		else
-			that.mDefaultFont.fromString( fontName );
-	}
-
-	return that.mDefaultFont;
+	return self().mDefaultFont;
 }
 
 QFont Config::defaultDialogFont()
 {
-	Config& that( self() );
-
-	if( that.mDefaultFont == QFont() )
-	{
-		QString fontName = that.get( "General/DialogFont", "#" ).toString();
-		if( fontName == QLatin1String( "#" ) )
-			that.mDefaultDialogFont = defaultFont();
-		else
-			that.mDefaultDialogFont.fromString( fontName );
-	}
-
-	return that.mDefaultDialogFont;
+	return self().mDefaultDialogFont;
 }
 
 QFont Config::defaultFixedFont()
 {
-	Config& that( self() );
-
-	if( that.mDefaultFixedFont == QFont() )
-	{
-		QString fontName = that.get( "General/FixedFont", "#" ).toString();
-		if( fontName == QLatin1String( "#" ) )
-			that.mDefaultFixedFont = QFont( QLatin1String( "Courier New" ), 10 );
-		else
-			that.mDefaultFixedFont.fromString( fontName );
-	}
-
-	return that.mDefaultFixedFont;
+	return self().mDefaultFixedFont;
 }
 
 void Config::setDefaultFont( const QFont& font )

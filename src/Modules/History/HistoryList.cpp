@@ -14,6 +14,8 @@
  *
  */
 
+#include <QDebug>
+
 #include "Widgets/HeaderView.h"
 
 #include "HistoryList.h"
@@ -21,6 +23,7 @@
 #include "HistoryEntry.h"
 
 HistoryList::HistoryList()
+	: ConfigUser( "History" )
 {
 	setRootIsDecorated( false );
 }
@@ -55,5 +58,10 @@ void HistoryList::setModel( QAbstractItemModel* model )
 
 	HeaderView* hv = new HeaderView( Qt::Horizontal );
 	setHeader( hv );
-	hv->setConfigName( QLatin1String( "History/Columns" ) );
+	hv->setConfigName( configSubPath( "Columns" ) );
+}
+
+void HistoryList::configChanged( const QString& subPath, const QVariant& value )
+{
+	qDebug() << "ConfigChange:" << subPath << "=>" << value;
 }

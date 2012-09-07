@@ -17,11 +17,13 @@
 #ifndef HISTORY_LIST_H
 #define HISTORY_LIST_H
 
+#include "Config/ConfigUser.h"
+
 #include "GitWrap/ObjectId.h"
 
 #include <QTreeView>
 
-class HistoryList : public QTreeView
+class HistoryList : public QTreeView, private ConfigUser
 {
 	Q_OBJECT
 public:
@@ -32,6 +34,9 @@ public:
 
 signals:
 	void currentCommitChanged( const Git::ObjectId& sha1 );
+
+private:
+	void configChanged( const QString& subPath, const QVariant& value );
 
 private slots:
 	void onCurrentChanged();

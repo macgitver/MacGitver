@@ -150,9 +150,9 @@ void Config::set( const QString& path, const QVariant& value )
 
 	foreach( ConfigUser* user, mConfigUsers )
 	{
-		if( path.startsWith( user->basePath() ) )
+		if( path.startsWith( user->configBasePath() ) )
 		{
-			QString subPath = path.mid( user->basePath().length() + 1 );
+			QString subPath = path.mid( user->configBasePath().length() + 1 );
 			user->configChanged( subPath, value );
 		}
 	}

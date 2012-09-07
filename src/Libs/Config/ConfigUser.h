@@ -38,7 +38,7 @@ public:
 	QString configSubPath( const QString& subPath ) const;
 	QString configSubPath( const char* pszSubPath ) const;
 
-	QString basePath() const;
+	QString configBasePath() const;
 
 public:
 	virtual void configChanged( const QString& subPath, const QVariant& value );

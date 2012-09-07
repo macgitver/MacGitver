@@ -69,7 +69,7 @@ void ConfigUser::configSet( const char* pszSubPath, const QVariant& value ) cons
 	Config::self().set( configSubPath( pszSubPath ), value );
 }
 
-QString ConfigUser::basePath() const
+QString ConfigUser::configBasePath() const
 {
 	return mConfigBase;
 }

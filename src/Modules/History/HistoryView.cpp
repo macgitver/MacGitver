@@ -34,8 +34,8 @@
 #include "HistoryModel.h"
 #include "HistoryBuilder.h"
 #include "HistoryList.h"
+#include "HistoryListDelegate.h"
 #include "HistoryDetails.h"
-#include "HistoryViewDelegate.h"
 
 HistoryView::HistoryView()
 	: GlobalView( QLatin1String( "History" ) )
@@ -68,7 +68,7 @@ HistoryView::HistoryView()
 	connect( mList, SIGNAL(currentCommitChanged(Git::ObjectId)),
 			 this, SLOT(currentCommitChanged(Git::ObjectId)) );
 
-	mList->setItemDelegate( new HistoryViewDelegate );
+	mList->setItemDelegate( new HistoryListDelegate );
 
 	mDetails = new HistoryDetails;
 	ms1->addWidget( mDetails );

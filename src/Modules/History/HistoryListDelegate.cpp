@@ -17,9 +17,9 @@
 #include <QPainter>
 
 #include "HistoryModel.h"
-#include "HistoryViewDelegate.h"
+#include "HistoryListDelegate.h"
 
-void HistoryViewDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2,
+void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2,
 										  int height, const QColor& col, const QColor& activeCol,
 										  const QBrush& back ) const
 {
@@ -181,7 +181,7 @@ void HistoryViewDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1
 	#undef R_CENTER
 }
 
-void HistoryViewDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
+void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
 									  const QModelIndex& i ) const
 {
 	static const QColor colors[] = { Qt::red, //DARK_GREEN,
@@ -244,7 +244,7 @@ void HistoryViewDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
 	p->restore();
 }
 
-void HistoryViewDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
+void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
 										const QModelIndex& i ) const
 {
 	if( opt.state & QStyle::State_Selected )
@@ -316,7 +316,7 @@ void HistoryViewDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
 	p->restore();
 }
 
-void HistoryViewDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
+void HistoryListDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 								 const QModelIndex& index ) const
 {
 	if( index.column() > 1 )
@@ -340,7 +340,7 @@ void HistoryViewDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
 }
 
 
-QSize HistoryViewDelegate::sizeHint( const QStyleOptionViewItem& option,
+QSize HistoryListDelegate::sizeHint( const QStyleOptionViewItem& option,
 									 const QModelIndex& index) const
 {
 	QSize s = QItemDelegate::sizeHint( option, index );

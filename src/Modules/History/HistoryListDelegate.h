@@ -21,8 +21,9 @@
 
 #include "HistoryEntry.h"
 
-class HistoryViewDelegate : public QItemDelegate
+class HistoryListDelegate : public QItemDelegate
 {
+	Q_OBJECT
 public:
 	void paint( QPainter* painter, const QStyleOptionViewItem& option,
 				const QModelIndex& index ) const;

@@ -22,14 +22,19 @@ class QToolBar;
 #include "GitWrap/Git.h"
 #include "GitWrap/Repository.h"
 
+#include "Config/ConfigUser.h"
+
 #include "Heaven/Views/GlobalView.h"
+#include "Heaven/Widgets/MiniSplitter.h"
 
 class HistoryBuilder;
 class HistoryModel;
 class HistoryDetails;
 class HistoryList;
 
-class HistoryView : public Heaven::GlobalView
+class DiffRawView;
+
+class HistoryView : public Heaven::GlobalView, private ConfigUser
 {
 	Q_OBJECT
 public:
@@ -45,12 +50,20 @@ private slots:
 	void currentCommitChanged( const Git::ObjectId& sh1 );
 
 private:
-	HistoryModel*		mModel;
-	HistoryList*		mList;
-	HistoryDetails*		mDetails;
-	HistoryBuilder*		mBuilder;
-	QToolBar*			mToolBar;
-	Git::Repository		mRepo;
+	void configChanged( const QString& subPath, const QVariant& value );
+
+	void initSplitters();
+
+private:
+	Heaven::MiniSplitter*	mVertSplit;
+	Heaven::MiniSplitter*	mHorzSplit;
+	HistoryModel*			mModel;
+	HistoryList*			mList;
+	HistoryDetails*			mDetails;
+	HistoryBuilder*			mBuilder;
+	DiffRawView*			mRawDiffView;
+	QToolBar*				mToolBar;
+	Git::Repository			mRepo;
 };
 
 #endif

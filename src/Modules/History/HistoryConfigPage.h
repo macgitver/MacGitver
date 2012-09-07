@@ -44,6 +44,9 @@ public:
 	QString groupName() const;
 
 	QWidget* widget();
+
+private slots:
+	void onDiffPosChanged( int newPos );
 };
 
 #endif

@@ -1,3 +1,22 @@
+/*
+ * MacGitver
+ * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License (Version 2) as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#include <QSignalMapper>
+
+#include "Config/Config.h"
 
 #include "HistoryConfigPage.h"
 #include "HistoryDetails.h"
@@ -15,6 +34,15 @@ HistoryConfigPage::~HistoryConfigPage()
 
 void HistoryConfigPage::apply()
 {
+	int i = 1;
+	if( chkDiffAndHistoryBottom->isChecked() )
+		i = 1;
+	else if( chkDiffAboveDetails->isChecked() )
+		i = 2;
+	else if( chkDiffRight->isChecked() )
+		i = 3;
+
+	Config::self().set( "History/SplitLayout", i );
 }
 
 void HistoryConfigPage::init()
@@ -28,6 +56,22 @@ void HistoryConfigPage::init()
 	sswDetailsOverview->addEntry( trUtf8( "Committer date" ), false, HHD_CommitterDate );
 	sswDetailsOverview->addEntry( trUtf8( "Committer name" ), false, HHD_CommitterName );
 	sswDetailsOverview->addEntry( trUtf8( "Committer mail" ), false, HHD_CommitterMail );
+
+	QSignalMapper* map = new QSignalMapper( this );
+	map->setMapping( chkDiffAndHistoryBottom, 1 );
+	map->setMapping( chkDiffAboveDetails, 2 );
+	map->setMapping( chkDiffRight, 3 );
+
+	connect( chkDiffAboveDetails, SIGNAL(clicked()), map, SLOT(map()) );
+	connect( chkDiffAndHistoryBottom, SIGNAL(clicked()), map, SLOT(map()) );
+	connect( chkDiffRight, SIGNAL(clicked()), map, SLOT(map()) );
+
+	int i = Config::self().get( "History/SplitLayout", 1 ).toInt();
+	chkDiffAndHistoryBottom->setChecked( i == 1 );
+	chkDiffAboveDetails->setChecked( i == 2 );
+	chkDiffRight->setChecked( i == 3 );
+
+	connect( map, SIGNAL(mapped(int)), this, SLOT(onDiffPosChanged(int)) );
 }
 
 QByteArray HistoryConfigPage::pageId() const
@@ -53,4 +97,9 @@ QString HistoryConfigPage::groupName() const
 QWidget* HistoryConfigPage::widget()
 {
 	return this;
+}
+
+void HistoryConfigPage::onDiffPosChanged( int newPos )
+{
+	setModified( this );
 }

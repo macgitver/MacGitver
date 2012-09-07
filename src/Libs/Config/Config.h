@@ -43,6 +43,7 @@ public:
 	QVariant get( const char* szPath, const char* szDefaultValue ) const;
 	QVariant get( const char* szPath, const QVariant& defaultValue = QVariant() ) const;
 	QVariant get( const QString& path, const QVariant& defaultValue = QVariant() ) const;
+	void set( const char* pszPath, const QVariant& value );
 	void set( const QString& path, const QVariant& value );
 
 	static QFont defaultFont();

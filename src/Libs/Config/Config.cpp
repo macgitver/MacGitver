@@ -132,6 +132,11 @@ QVariant Config::get( const QString& path, const QVariant& defaultValue ) const
 	return defaultValue;
 }
 
+void Config::set( const char* pszPath, const QVariant& value )
+{
+	set( QLatin1String( pszPath ), value );
+}
+
 void Config::set( const QString& path, const QVariant& value )
 {
 	if( !mSettings )
@@ -150,8 +155,7 @@ QFont Config::defaultFont()
 
 	if( that.mDefaultFont == QFont() )
 	{
-		QString fontName = that.get( QLatin1String( "General/Font" ),
-									 QLatin1String( "#" ) ).toString();
+		QString fontName = that.get( "General/Font", "#" ).toString();
 		if( fontName == QLatin1String( "#" ) )
 			that.mDefaultFont = QApplication::font();
 		else
@@ -167,8 +171,7 @@ QFont Config::defaultDialogFont()
 
 	if( that.mDefaultFont == QFont() )
 	{
-		QString fontName = that.get( QLatin1String( "General/DialogFont" ),
-									 QLatin1String( "#" ) ).toString();
+		QString fontName = that.get( "General/DialogFont", "#" ).toString();
 		if( fontName == QLatin1String( "#" ) )
 			that.mDefaultDialogFont = defaultFont();
 		else
@@ -184,8 +187,7 @@ QFont Config::defaultFixedFont()
 
 	if( that.mDefaultFixedFont == QFont() )
 	{
-		QString fontName = that.get( QLatin1String( "General/FixedFont" ),
-									 QLatin1String( "#" ) ).toString();
+		QString fontName = that.get( "General/FixedFont", "#" ).toString();
 		if( fontName == QLatin1String( "#" ) )
 			that.mDefaultFixedFont = QFont( QLatin1String( "Courier New" ), 10 );
 		else
@@ -199,7 +201,7 @@ void Config::setDefaultFont( const QFont& font )
 {
 	mDefaultFont = font;
 
-	set( QLatin1String( "General/Font" ), font.toString() );
+	set( "General/Font", font.toString() );
 
 	emit fontsChanged();
 }
@@ -208,7 +210,7 @@ void Config::setDefaultDialogFont( const QFont& font )
 {
 	mDefaultDialogFont = font;
 
-	set( QLatin1String( "General/DialogFont" ), font.toString() );
+	set( "General/DialogFont", font.toString() );
 
 	emit fontsChanged();
 }

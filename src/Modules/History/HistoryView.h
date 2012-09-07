@@ -17,8 +17,6 @@
 #ifndef MGV_HISTORY_VIEW_H
 #define MGV_HISTORY_VIEW_H
 
-#include <QItemDelegate>
-
 class QToolBar;
 
 #include "GitWrap/Git.h"
@@ -26,29 +24,10 @@ class QToolBar;
 
 #include "Heaven/Views/GlobalView.h"
 
-#include "HistoryEntry.h"
-
 class HistoryBuilder;
 class HistoryModel;
 class HistoryDetails;
 class HistoryList;
-
-class HistoryViewDelegate : public QItemDelegate
-{
-public:
-	void paint( QPainter* painter, const QStyleOptionViewItem& option,
-				const QModelIndex& index ) const;
-	QSize sizeHint( const QStyleOptionViewItem& option,
-					const QModelIndex& index) const;
-
-private:
-	void paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2, int height,
-						 const QColor& col, const QColor& activeCol, const QBrush& back ) const;
-	void paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
-					 const QModelIndex& i ) const;
-	void paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
-					   const QModelIndex& i ) const;
-};
 
 class HistoryView : public Heaven::GlobalView
 {

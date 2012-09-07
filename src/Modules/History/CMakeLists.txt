@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
 SET( SRC_FILES
 
 	HistoryView.cpp
+	HistoryViewDelegate.cpp
 	HistoryList.cpp
 	HistoryDetails.cpp
 	HistoryEntry.cpp
@@ -24,6 +25,7 @@ SET( SRC_FILES
 SET( HDR_FILES
 
 	HistoryView.h
+	HistoryViewDelegate.h
 	HistoryList.h
 	HistoryEntry.h
 	HistoryDetails.h

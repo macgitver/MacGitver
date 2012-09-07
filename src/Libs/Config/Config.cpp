@@ -21,6 +21,7 @@
 #include <QApplication>
 
 #include "Config/Config.h"
+#include "Config/ConfigUser.h"
 
 Config::Config()
 	: mSettings( NULL )
@@ -146,6 +147,15 @@ void Config::set( const QString& path, const QVariant& value )
 	Q_ASSERT( mSettings );
 
 	mSettings->setValue( path, value );
+
+	foreach( ConfigUser* user, mConfigUsers )
+	{
+		if( path.startsWith( user->basePath() ) )
+		{
+			QString subPath = path.mid( user->basePath().length() + 1 );
+			user->configChanged( subPath, value );
+		}
+	}
 }
 
 
@@ -219,7 +229,19 @@ void Config::setDefaultFixedFont( const QFont& font )
 {
 	mDefaultFixedFont = font;
 
-	set( QLatin1String( "General/FixedFont" ), font.toString() );
+	set( "General/FixedFont", font.toString() );
 
 	emit fontsChanged();
+}
+
+void Config::addConfigUser( ConfigUser* user )
+{
+	Q_ASSERT( !mConfigUsers.contains( user ) );
+	mConfigUsers.insert( user );
+}
+
+void Config::delConfigUser( ConfigUser* user )
+{
+	Q_ASSERT( mConfigUsers.contains( user ) );
+	mConfigUsers.remove( user );
 }

@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(
 SET( SRC_FILES
 
 	Config.cpp
+	ConfigUser.cpp
 	UserLevelDefinition.cpp
 )
 
@@ -19,6 +20,7 @@ SET( PUB_HDR_FILES
 
 	ConfigApi.h
 	Config.h
+	ConfigUser.h
 	UserLevelDefinition.h
 )
 

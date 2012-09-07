@@ -18,6 +18,7 @@
 #define MGV_CONFIG_H
 
 #include <QList>
+#include <QSet>
 #include <QString>
 #include <QVariant>
 #include <QFont>
@@ -26,9 +27,12 @@ class QSettings;
 
 #include "Config/UserLevelDefinition.h"
 
+class ConfigUser;
+
 class CONFIG_API Config : public QObject
 {
 	Q_OBJECT
+	friend class ConfigUser;
 
 public:
 	static Config& self();
@@ -60,11 +64,15 @@ signals:
 private:
 	void addUserLevel( UserLevelDefinition::Ptr level );
 
+	void addConfigUser( ConfigUser* user );
+	void delConfigUser( ConfigUser* user );
+
 private:
 	static Config* sSelf;
 	Config();
 	~Config();
 	QList< UserLevelDefinition::Ptr >	mLevels;
+	QSet< ConfigUser* >					mConfigUsers;
 	QSettings*							mSettings;
 	QFont								mDefaultFont;
 	QFont								mDefaultDialogFont;

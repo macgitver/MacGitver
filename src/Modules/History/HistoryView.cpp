@@ -23,6 +23,8 @@
 #include "GitWrap/Reference.h"
 #include "GitWrap/ObjectCommit.h"
 
+#include "Diff/RawView/DiffRawView.h"
+
 #include "Heaven/Widgets/MiniSplitter.h"
 
 #include "MacGitver/MacGitver.h"
@@ -426,7 +428,6 @@ HistoryView::HistoryView()
 	l->addWidget( mToolBar );
 
 	Heaven::MiniSplitter* ms1 = new Heaven::MiniSplitter( Qt::Vertical );
-	l->addWidget( ms1 );
 
 	mList = new HistoryList;
 	mList->setFrameShape( QFrame::NoFrame );
@@ -442,6 +443,14 @@ HistoryView::HistoryView()
 
 	mDetails = new HistoryDetails;
 	ms1->addWidget( mDetails );
+
+	Heaven::MiniSplitter* ms2 = new Heaven::MiniSplitter( Qt::Horizontal );
+	ms2->addWidget( ms1 );
+
+	DiffRawView* rawDiff = new DiffRawView;
+	ms2->addWidget( rawDiff );
+
+	l->addWidget( ms2 );
 
 	mBuilder = NULL;
 

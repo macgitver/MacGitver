@@ -34,19 +34,16 @@ void HistoryList::onCurrentChanged()
 	{
 		const HistoryModel* hm = qobject_cast< const HistoryModel* >( currentIndex().model() );
 		Q_ASSERT( hm );
+
 		HistoryEntry* e = hm->indexToEntry( currentIndex() );
-		if( !e )
+		if( e )
 		{
-			emit currentCommitChanged( Git::ObjectId() );
+			emit currentCommitChanged( e->id() );
 			return;
 		}
+	}
 
-		emit currentCommitChanged( e->id() );
-	}
-	else
-	{
-		emit currentCommitChanged( Git::ObjectId() );
-	}
+	emit currentCommitChanged( Git::ObjectId() );
 }
 
 void HistoryList::setModel( QAbstractItemModel* model )

@@ -116,9 +116,8 @@ namespace Git
 		git_submodule* sm = getSM( mRepo, mName );
 		if( !sm )
 		{
-			return false;
+			return git_submodule_fetch_recurse_submodules( sm );
 		}
-		Q_ASSERT( false ); // Missing api?
 		return false;
 	}
 

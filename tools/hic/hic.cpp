@@ -762,7 +762,7 @@ bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& bas
 		tsOut << "QString "<< uiObject->name() << "::" << "trUtf8( const char* sourceText )\n"
 				 "{\n"
 				 "\treturn QApplication::translate( \"" << latin1Encode( ctx ) << "\", sourceText, "
-					"NULL, QCoreApplication::UnicodeUTF8 );\n"
+					"NULL );\n"
 				 "}\n"
 				 "\n";
 

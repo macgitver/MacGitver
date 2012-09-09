@@ -39,6 +39,8 @@ namespace Git
 		ObjectId( const QByteArray& raw );
 
 	public:
+		static ObjectId fromString( const QString& oid, int max = 40, bool *success = NULL );
+		static ObjectId fromAscii( const QByteArray& oid, int max = 40, bool *success = NULL );
 		static ObjectId fromRaw( const unsigned char* raw, int n = 20 );
 
 		QString toString() const;

@@ -32,6 +32,33 @@ namespace Git
 		memcpy( data, d.constData(), 20 );
 	}
 
+
+	ObjectId ObjectId::fromString( const QString& oid, int max, bool* success )
+	{
+		return fromAscii( oid.toAscii(), max, success );
+	}
+
+	ObjectId ObjectId::fromAscii( const QByteArray& oid, int max, bool* success )
+	{
+		git_oid gitoid;
+
+		if( git_oid_fromstrn( &gitoid, oid.constData(), qMin( qMin( max, 40 ), oid.length() ) ) < 0 )
+		{
+			if( success )
+			{
+				*success = false;
+			}
+			return ObjectId();
+		}
+
+		if( success )
+		{
+			*success = true;
+		}
+
+		return fromRaw( gitoid.id, 20 );
+	}
+
 	ObjectId ObjectId::fromRaw( const unsigned char* d, int len )
 	{
 		ObjectId id;

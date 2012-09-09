@@ -165,7 +165,7 @@ void HistoryView::initSplitters()
 	mDetails->hide();
 	mDetails->setParent( NULL );
 
-	int i = configGet( "SplitLayout", 1 ).toInt();
+	int i = configGet( "SplitLayout", 1 );
 	switch( i )
 	{
 	default:

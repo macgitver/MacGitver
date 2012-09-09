@@ -29,8 +29,8 @@ protected:
 	virtual ~ConfigUser();
 
 public:
-	QVariant configGet( const QString& subPath, const QVariant& defaultValue = QVariant() ) const;
-	QVariant configGet( const char* pszSubPath, const QVariant& defaultValue = QVariant() ) const;
+	QVariant configGetV( const QString& subPath, const QVariant& defaultValue = QVariant() ) const;
+	QVariant configGetV( const char* pszSubPath, const QVariant& defaultValue = QVariant() ) const;
 
 	void configSet( const QString& subPath, const QVariant& value ) const;
 	void configSet( const char* pszsubPath, const QVariant& value ) const;
@@ -39,6 +39,25 @@ public:
 	QString configSubPath( const char* pszSubPath ) const;
 
 	QString configBasePath() const;
+
+	template< class T >
+	inline T configGet( const char* pszSubPath, const T& t ) const
+	{
+		QVariant vT; vT = t;
+		return configGetV( pszSubPath, vT ).value< T >();
+	}
+
+	template< class T >
+	inline T configGet( const QString& subPath, const T& t ) const
+	{
+		QVariant vT; vT = t;
+		return configGetV( subPath, vT ).value< T >();
+	}
+
+	inline QString configGet( const char* pszSubPath, const char* pszValue ) const
+	{
+		return configGet< QString >( pszSubPath, QLatin1String( pszValue ) );
+	}
 
 public:
 	virtual void configChanged( const QString& subPath, const QVariant& value );

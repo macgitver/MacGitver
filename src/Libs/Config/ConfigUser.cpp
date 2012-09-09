@@ -47,14 +47,14 @@ QString ConfigUser::configSubPath( const char* pszSubPath ) const
 	return mConfigBase % QChar( L'/' ) % QLatin1String( pszSubPath );
 }
 
-QVariant ConfigUser::configGet( const QString& subPath,
-								const QVariant& defaultValue ) const
+QVariant ConfigUser::configGetV( const QString& subPath,
+								 const QVariant& defaultValue ) const
 {
 	return Config::self().get( configSubPath( subPath ), defaultValue );
 }
 
-QVariant ConfigUser::configGet( const char* pszSubPath,
-								const QVariant& defaultValue ) const
+QVariant ConfigUser::configGetV( const char* pszSubPath,
+								 const QVariant& defaultValue ) const
 {
 	return Config::self().get( configSubPath( pszSubPath ), defaultValue );
 }

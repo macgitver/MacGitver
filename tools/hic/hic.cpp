@@ -905,7 +905,7 @@ int HeavenInterfaceCompiler::run()
 	{
 		qDebug() << arguments();
 
-		fprintf( stderr, "Usage: %s <input> <output-header> <output-source\n",
+		fprintf( stderr, "Usage: %s <input> <output-header> <output-source>\n",
 				 sl.count() ? qPrintable( sl[ 0 ] ) : "" );
 		return -1;
 	}

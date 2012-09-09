@@ -33,6 +33,7 @@
 #include "HistoryEntry.h"
 #include "HistoryModel.h"
 #include "HistoryBuilder.h"
+#include "HistoryDiff.h"
 #include "HistoryList.h"
 #include "HistoryListDelegate.h"
 #include "HistoryDetails.h"
@@ -65,7 +66,7 @@ HistoryView::HistoryView()
 
 	mDetails = new HistoryDetails;
 
-	mRawDiffView = new DiffRawView;
+	mDiff = new HistoryDiff;
 
 	QVBoxLayout* l = new QVBoxLayout;
 	l->setSpacing( 0 );
@@ -155,8 +156,8 @@ void HistoryView::initSplitters()
 		mHorzSplit->setParent( NULL );
 	}
 
-	mRawDiffView->hide();
-	mRawDiffView->setParent( NULL );
+	mDiff->hide();
+	mDiff->setParent( NULL );
 
 	mList->hide();
 	mList->setParent( NULL );
@@ -170,14 +171,14 @@ void HistoryView::initSplitters()
 	default:
 	case 1:
 		mHorzSplit->addWidget( mDetails );
-		mHorzSplit->addWidget( mRawDiffView );
+		mHorzSplit->addWidget( mDiff );
 		mVertSplit->addWidget( mList );
 		mVertSplit->addWidget( mHorzSplit );
 		layout()->addWidget( mVertSplit );
 		break;
 	case 2:
 		mVertSplit->addWidget( mDetails );
-		mVertSplit->addWidget( mRawDiffView );
+		mVertSplit->addWidget( mDiff );
 		mHorzSplit->addWidget( mList );
 		mHorzSplit->addWidget( mVertSplit );
 		layout()->addWidget( mHorzSplit );
@@ -186,14 +187,14 @@ void HistoryView::initSplitters()
 		mVertSplit->addWidget( mList );
 		mVertSplit->addWidget( mDetails );
 		mHorzSplit->addWidget( mVertSplit );
-		mHorzSplit->addWidget( mRawDiffView );
+		mHorzSplit->addWidget( mDiff );
 		layout()->addWidget( mHorzSplit );
 		break;
 	}
 
 	mVertSplit->show();
 	mHorzSplit->show();
-	mRawDiffView->show();
+	mDiff->show();
 	mList->show();
 	mDetails->show();
 }

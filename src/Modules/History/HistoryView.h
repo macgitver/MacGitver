@@ -32,7 +32,7 @@ class HistoryModel;
 class HistoryDetails;
 class HistoryList;
 
-class DiffRawView;
+class HistoryDiff;
 
 class HistoryView : public Heaven::GlobalView, private ConfigUser
 {
@@ -61,7 +61,7 @@ private:
 	HistoryList*			mList;
 	HistoryDetails*			mDetails;
 	HistoryBuilder*			mBuilder;
-	DiffRawView*			mRawDiffView;
+	HistoryDiff*			mDiff;
 	QToolBar*				mToolBar;
 	Git::Repository			mRepo;
 };

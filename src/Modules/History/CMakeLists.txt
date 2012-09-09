@@ -20,6 +20,7 @@ SET( SRC_FILES
 	HistoryModel.cpp
 	HistoryModule.cpp
 	HistoryConfigPage.cpp
+	HistoryDiff.cpp
 )
 
 SET( HDR_FILES
@@ -33,6 +34,7 @@ SET( HDR_FILES
 	HistoryModel.h
 	HistoryModule.h
 	HistoryConfigPage.h
+	HistoryDiff.h
 )
 
 SET( UI_FILES

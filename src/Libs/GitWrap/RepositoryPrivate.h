@@ -53,8 +53,6 @@ namespace Git
 
 	private:
 		QAtomicInt				mRefCounter;
-
-		friend int status_callback( const char* name, unsigned int status, void* );
 	};
 
     /**@}*/

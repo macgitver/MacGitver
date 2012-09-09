@@ -135,8 +135,6 @@ namespace Git
 		QList< Submodule > submodules();
 		Submodule submodule( const QString& name );
 
-		void test();
-
 	private:
 		GitPtr< RepositoryPrivate > d;
 	};

@@ -332,20 +332,6 @@ namespace Git
 		return slFromStrArray( &arr );
 	}
 
-
-	int status_callback( const char* name, unsigned int status, void* )
-	{
-		qDebug( "%s - %s",
-				qPrintable( QString::number( status, 2 ) ),
-				name );
-		return GIT_OK;
-	}
-
-	void Repository::test()
-	{
-		git_status_foreach( d->mRepo, &status_callback, 0 );
-	}
-
 	static int statusHashCB( const char* fn, unsigned int status, void* rawSH )
 	{
 		#if 0

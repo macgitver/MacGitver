@@ -95,7 +95,7 @@ void RepositoryModule::onRepositoryOpen()
 
 void RepositoryModule::onRepositoryOpenHelper()
 {
-    QFileDialog *fd = dynamic_cast<QFileDialog *>(sender());
+    QFileDialog *fd = qobject_cast<QFileDialog *>(sender());
     Q_ASSERT(fd != 0);
 
     if ( fd->selectedFiles().isEmpty() )

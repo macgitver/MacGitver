@@ -19,6 +19,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The ConfigPrivate class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class ConfigPrivate
 	{
 	public:
@@ -36,4 +42,5 @@ namespace Git
 		QAtomicInt		mRefCounter;
 	};
 
+    /**@}*/
 }

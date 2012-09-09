@@ -27,6 +27,12 @@ namespace Git
 
 	class DiffListPrivate;
 
+    /**
+     * @brief The DiffList class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API DiffList
 	{
 	public:
@@ -53,6 +59,7 @@ namespace Git
 		GitPtr< DiffListPrivate > d;
 	};
 
+    /**@}*/
 }
 
 #endif

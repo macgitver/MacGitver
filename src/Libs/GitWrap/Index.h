@@ -24,6 +24,12 @@ namespace Git
 
 	class IndexPrivate;
 
+    /**
+     * @brief The Index class provides functionality to access the Git index.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API Index
 	{
 	public:
@@ -47,6 +53,7 @@ namespace Git
 		GitPtr< IndexPrivate > d;
 	};
 
+    /**@}*/
 }
 
 #endif

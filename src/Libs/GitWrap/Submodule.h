@@ -26,6 +26,12 @@ namespace Git
 	class Repository;
 	class RepositoryPrivate;
 
+    /**
+     * @brief The Submodule class represents a Git submodule.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API Submodule
 	{
 	public:
@@ -70,6 +76,7 @@ namespace Git
 		QString						mName;
 	};
 
+    /**@*/
 }
 
 #endif

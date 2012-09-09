@@ -22,6 +22,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The PatchConsumer class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API PatchConsumer
 	{
 	public:
@@ -53,6 +59,7 @@ namespace Git
 		virtual bool appendDeletion( const QString& content );
 	};
 
+    /**@}*/
 }
 
 #endif

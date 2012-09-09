@@ -26,6 +26,12 @@ namespace Git
 
 	class DiffList;
 
+    /**
+     * @brief The ObjectTree class represents a Git tree object.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API ObjectTree : public Object
 	{
 	public:
@@ -41,6 +47,7 @@ namespace Git
 		DiffList diffToWorkingDir();
 	};
 
+    /**@}*/
 }
 
 #endif

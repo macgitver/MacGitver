@@ -23,6 +23,12 @@ namespace Git
 
 	typedef QHash< QString, QString > ConfigValues;
 
+    /**
+     * @brief The Config class provides functionality to access the Git configuration files.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API Config
 	{
 	public:
@@ -49,4 +55,5 @@ namespace Git
 		GitPtr< ConfigPrivate > d;
 	};
 
+    /**@}*/
 }

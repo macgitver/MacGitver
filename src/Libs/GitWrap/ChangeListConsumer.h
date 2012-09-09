@@ -22,6 +22,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The ChangeListConsumer class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API ChangeListConsumer
 	{
 	public:
@@ -47,6 +53,7 @@ namespace Git
 
 	};
 
+    /**@}*/
 }
 
 #endif

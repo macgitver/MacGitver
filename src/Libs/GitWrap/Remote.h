@@ -28,6 +28,12 @@ namespace Git
 	class Reference;
 	class RefSpec;
 
+    /**
+     * @brief The Remote class represents a Git remote item, used to synchronize with remote repositories.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API Remote
 	{
 	public:
@@ -63,6 +69,7 @@ namespace Git
 		GitPtr< RemotePrivate > d;
 	};
 
+    /**@}*/
 }
 
 #endif

@@ -24,6 +24,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The ObjectBlob class provides access to Git BLOB (Binary Large Object) items.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API ObjectBlob : public Object
 	{
 	public:
@@ -32,6 +38,7 @@ namespace Git
 		ObjectBlob( const ObjectBlob& o );
 	};
 
+    /**@}*/
 }
 
 #endif

@@ -32,6 +32,12 @@ namespace Git
 
 	class Repository;
 
+    /**
+     * @brief The Object class is the base class for Git repository objects.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API Object
 	{
 	public:
@@ -64,6 +70,7 @@ namespace Git
 		GitPtr< ObjectPrivate > d;
 	};
 
+    /**@}*/
 }
 
 #endif

@@ -27,6 +27,12 @@ namespace Git
 	class ObjectId;
 	class Reference;
 
+    /**
+     * @brief The RevisionWalker class provides functionality to access a Git repository's history.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API RevisionWalker
 	{
 	public:
@@ -53,6 +59,7 @@ namespace Git
 		GitPtr< RevisionWalkerPrivate > d;
 	};
 
+    /**@}*/
 }
 
 #endif

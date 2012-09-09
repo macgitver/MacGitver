@@ -26,6 +26,12 @@ namespace Git
 
 	class Error;
 
+    /**
+     * @brief The RepositoryPrivate class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class RepositoryPrivate
 	{
 	public:
@@ -51,7 +57,7 @@ namespace Git
 		friend int status_callback( const char* name, unsigned int status, void* );
 	};
 
-
+    /**@}*/
 }
 
 #endif

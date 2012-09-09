@@ -23,6 +23,12 @@ namespace Git
 {
 	class RepositoryPrivate;
 
+    /**
+     * @brief The RepoObject class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class RepoObject
 	{
 	public:
@@ -42,6 +48,7 @@ namespace Git
 		QAtomicInt			mRefCounter;
 	};
 
+    /**@}*/
 }
 
 #endif

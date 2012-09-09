@@ -23,6 +23,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The RevisionWalkerPrivate class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class RevisionWalkerPrivate : public RepoObject
 	{
 	public:
@@ -33,6 +39,7 @@ namespace Git
 		git_revwalk*		mWalker;
 	};
 
+    /**@*/
 }
 
 #endif

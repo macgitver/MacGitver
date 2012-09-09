@@ -24,6 +24,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The BackgroundClone class provides functionality to clone a repository in a background thread.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API BackgroundClone : public BackgroundTask
 	{
 		Q_OBJECT
@@ -59,6 +65,7 @@ namespace Git
 		QString			mCheckoutBranch;
 	};
 
+    /**@}*/
 }
 
 #endif

@@ -27,6 +27,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The Signature class represents a Git commit signature (the commit info).
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API Signature
 	{
 	public:
@@ -89,6 +95,7 @@ namespace Git
 		QDateTime	mWhen;
 	};
 
+    /**@}*/
 }
 
 inline QDebug operator<<( QDebug debug, const Git::Signature& sig )

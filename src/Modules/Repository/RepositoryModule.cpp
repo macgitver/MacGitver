@@ -83,13 +83,25 @@ void RepositoryModule::onRepositoryOpen()
 {
 	QWidget* main = MacGitver::self().mainWindow()->widget();
 
-	QString fn = QFileDialog::getExistingDirectory( main, trUtf8( "Open repository" ) );
-	if( fn.isEmpty() )
-	{
-		return;
-	}
+    QFileDialog *fd = new QFileDialog(main);
+#ifdef Q_OS_MAC
+    fd->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
+#else
+    fd->setFileMode(QFileDialog::Directory);
+#endif
+    fd->setWindowTitle( trUtf8("Open a Git repository") );
+    fd->open(this, SLOT(onRepositoryOpenHelper()));
+}
 
-	Git::Repository repo = Git::Repository::open( fn );
+void RepositoryModule::onRepositoryOpenHelper()
+{
+    QFileDialog *fd = qobject_cast<QFileDialog *>(sender());
+    Q_ASSERT(fd != 0);
+
+    if ( fd->selectedFiles().isEmpty() )
+        return;
+
+    Git::Repository repo = Git::Repository::open( fd->selectedFiles().first() );
 	if( repo.isValid() )
 	{
 		MacGitver::self().setRepository( repo );

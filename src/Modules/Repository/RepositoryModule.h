@@ -46,6 +46,10 @@ private slots:
 	void onRepositoryCreate();
 	void onRepositoryClone();
 	void onRepositoryOpen();
+    /**
+     * @brief Helper slot to open a git repository using an OS specific dialog.
+     */
+    void onRepositoryOpenHelper();
 	void onRepositoryClose();
 
 private:

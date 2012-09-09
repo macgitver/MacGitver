@@ -14,11 +14,16 @@
  *
  */
 
+#include <QToolBar>
+#include <QComboBox>
+#include <QLabel>
 #include <QVBoxLayout>
 
-#include "HistoryDiff.h"
-
 #include "Diff/RawView/DiffRawView.h"
+
+#include "Widgets/SHA1Input.h"
+
+#include "HistoryDiff.h"
 
 HistoryDiff::HistoryDiff()
 {
@@ -29,6 +34,25 @@ HistoryDiff::HistoryDiff()
 	l->setSpacing( 0 );
 	setLayout( l );
 
+	mToolbar = new QToolBar;
+
+	mDiffTo = new QComboBox();
+	mDiffTo->addItem( trUtf8( "Workingtree" ), DTT_WT );
+	mDiffTo->addItem( trUtf8( "Index" ), DTT_Index );
+	mDiffTo->addItem( trUtf8( "Workingtree + Index" ), DTT_WT_and_Index );
+	mDiffTo->addItem( trUtf8( "HEAD" ), DTT_HEAD );
+	mDiffTo->addItem( trUtf8( "SHA-1" ), DTT_AnySHA1 );
+	mDiffTo->addItem( trUtf8( "All parents" ), DTT_AllParents );
+
+	mToolbar->addWidget( new QLabel( trUtf8( "Diff to:" ) ) );
+	mToolbar->addWidget( mDiffTo );
+
+	l->addWidget( mToolbar );
 	l->addWidget( mRawView );
 	setLayout( l );
 }
+
+void HistoryDiff::setCommitId( const Git::ObjectId& sha1 )
+{
+}
+

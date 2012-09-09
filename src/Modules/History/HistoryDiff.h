@@ -19,7 +19,13 @@
 
 #include <QWidget>
 
+#include "GitWrap/ObjectId.h"
+
+class QToolBar;
+class QComboBox;
+
 class DiffRawView;
+class SHA1Input;
 
 class HistoryDiff : public QWidget
 {
@@ -27,8 +33,26 @@ class HistoryDiff : public QWidget
 public:
 	HistoryDiff();
 
+public slots:
+	void setCommitId( const Git::ObjectId& sha1 );
+
 private:
-	DiffRawView*		mRawView;
+	DiffRawView*	mRawView;
+	QToolBar*		mToolbar;
+	QComboBox*		mDiffTo;
+	SHA1Input*		mSha1Input;
+
+	enum DiffToTypes
+	{
+		DTT_WT = -1,
+		DTT_Index = -2,
+		DTT_WT_and_Index = -3,
+		DTT_HEAD = -4,
+		DTT_AllParents = -5,
+		DTT_AnySHA1 = -6,
+		DTT_Branch = -7,
+		DTT_Tag = -8
+	};
 };
 
 #endif

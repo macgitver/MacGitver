@@ -18,6 +18,7 @@ SET( SRC_FILES
 	FlatTreeComboBox.cpp
 	FlatTreeModel.cpp
 	FlatTreeDelegate.cpp
+	SHA1Input.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -31,6 +32,7 @@ SET( PUB_HDR_FILES
 	FlatTreeComboBox.h
 	FlatTreeModel.h
 	FlatTreeDelegate.h
+	SHA1Input.h
 )
 
 SET( PRI_HDR_FILES

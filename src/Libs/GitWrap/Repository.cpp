@@ -53,19 +53,6 @@ namespace Git
 		git_repository_free( mRepo );
 	}
 
-	void RepositoryPrivate::ref()
-	{
-		mRefCounter.ref();
-	}
-
-	void RepositoryPrivate::deref()
-	{
-		if( !mRefCounter.deref() )
-		{
-			delete this;
-		}
-	}
-
 	bool RepositoryPrivate::handleErrors( int rc ) const
 	{
 		if( rc < 0 )

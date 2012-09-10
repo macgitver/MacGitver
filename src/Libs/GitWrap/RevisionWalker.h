@@ -45,10 +45,16 @@ namespace Git
 		bool isValid() const;
 
 		void reset();
+
 		void push( const ObjectId& id );
 		void push( const Reference& ref );
 		void pushRef( const QString& name );
 		void pushHead();
+
+		void hide( const ObjectId& id );
+		void hide( const Reference& ref );
+		void hideRef( const QString& name );
+		void hideHead();
 
 		bool next( ObjectId& oidNext );
 		QVector< ObjectId > all();

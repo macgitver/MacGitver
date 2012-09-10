@@ -100,6 +100,41 @@ namespace Git
 		}
 	}
 
+	void RevisionWalker::hide( const ObjectId& id )
+	{
+		Q_ASSERT( d );
+		if( d )
+		{
+			int rc = git_revwalk_hide( d->mWalker, (const git_oid*) id.raw() );
+			d->handleErrors( rc );
+		}
+	}
+
+	void RevisionWalker::hide( const Reference& ref )
+	{
+		hideRef( ref.name() );
+	}
+
+	void RevisionWalker::hideRef( const QString& name )
+	{
+		Q_ASSERT( d );
+		if( d )
+		{
+			int rc = git_revwalk_hide_ref( d->mWalker, name.toUtf8().constData() );
+			d->handleErrors( rc );
+		}
+	}
+
+	void RevisionWalker::hideHead()
+	{
+		Q_ASSERT( d );
+		if( d )
+		{
+			int rc = git_revwalk_hide_head( d->mWalker );
+			d->handleErrors( rc );
+		}
+	}
+
 	bool RevisionWalker::next( ObjectId& oidNext )
 	{
 		Q_ASSERT( d );

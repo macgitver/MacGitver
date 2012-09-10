@@ -30,20 +30,6 @@ namespace Git
 		git_config_free( mCfg );
 	}
 
-	void ConfigPrivate::ref()
-	{
-		mRefCounter.ref();
-	}
-
-	void ConfigPrivate::deref()
-	{
-		if( !mRefCounter.deref() )
-		{
-			delete this;
-		}
-	}
-
-
 	Config::Config()
 	{
 	}

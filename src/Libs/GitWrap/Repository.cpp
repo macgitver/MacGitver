@@ -36,6 +36,8 @@
 #include "RevisionWalkerPrivate.h"
 #include "Submodule.h"
 
+#include <QFile>
+
 namespace Git
 {
 
@@ -124,8 +126,21 @@ namespace Git
 			return Repository();
 		}
 
-		return Repository( new RepositoryPrivate( repo ) );
-	}
+        return Repository( new RepositoryPrivate( repo ) );
+    }
+
+    QString Repository::discover(const QString& startPath, bool acrossFs, const QStringList& ceilingDirs)
+    {
+        QByteArray repoPath(GIT_PATH_MAX, Qt::Uninitialized);
+        QByteArray joinedCeilingDirs = QFile::encodeName( ceilingDirs.join(QChar::fromLatin1(GIT_PATH_LIST_SEPARATOR)) );
+
+        git_repository_discover( repoPath.data(), repoPath.length()
+                                 , QFile::encodeName(startPath).constData()
+                                 , acrossFs, joinedCeilingDirs.constData()
+                                 );
+
+        return QFile::decodeName(repoPath);
+    }
 
 	Repository Repository::open( const QString& path )
 	{

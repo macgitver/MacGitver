@@ -101,11 +101,17 @@ void RepositoryModule::onRepositoryOpenHelper()
 	if ( fd->selectedFiles().isEmpty() )
 		return;
 
-	Git::Repository repo = Git::Repository::open( fd->selectedFiles().first() );
-	if( repo.isValid() )
-	{
-		MacGitver::self().setRepository( repo );
-	}
+    //! @todo error handling
+    QString repoDir = Git::Repository::discover( fd->selectedFiles().first() );
+    if ( repoDir.isEmpty() )
+        return;
+
+    //! @todo error handling
+    Git::Repository repo = Git::Repository::open( repoDir );
+    if( !repo.isValid() )
+        return;
+
+    MacGitver::self().setRepository( repo );
 }
 
 void RepositoryModule::onRepositoryClone()

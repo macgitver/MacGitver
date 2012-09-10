@@ -18,7 +18,6 @@
 #include "RevisionWalkerPrivate.h"
 #include "ObjectId.h"
 #include "Reference.h"
-#include "Git_p.h"
 
 namespace Git
 {

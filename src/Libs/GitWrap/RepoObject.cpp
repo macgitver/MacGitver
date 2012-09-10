@@ -21,6 +21,27 @@
 namespace Git
 {
 
+	BasicObject::BasicObject()
+	{
+	}
+
+	BasicObject::~BasicObject()
+	{
+	}
+
+	void BasicObject::ref()
+	{
+		mRefCounter.ref();
+	}
+
+	void BasicObject::deref()
+	{
+		if( !mRefCounter.deref() )
+		{
+			delete this;
+		}
+	}
+
 	RepoObject::RepoObject( RepositoryPrivate* repo )
 		: mRepo( repo )
 	{
@@ -37,19 +58,6 @@ namespace Git
 		{
 			mRepo->deref();
 			mRepo = NULL;
-		}
-	}
-
-	void RepoObject::ref()
-	{
-		mRefCounter.ref();
-	}
-
-	void RepoObject::deref()
-	{
-		if( !mRefCounter.deref() )
-		{
-			delete this;
 		}
 	}
 

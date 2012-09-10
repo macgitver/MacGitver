@@ -24,28 +24,44 @@ namespace Git
 	class RepositoryPrivate;
 
     /**
+     * @internal
+     * @brief The BaseObject class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
+	class BasicObject
+	{
+	public:
+		BasicObject();
+		virtual ~BasicObject();
+
+	public:
+		void ref();
+		void deref();
+
+	private:
+		QAtomicInt			mRefCounter;
+	};
+
+    /**
+     * @internal
      * @brief The RepoObject class
      *
      * @ingroup GitWrap
      * @{
      */
-	class RepoObject
+	class RepoObject : public BasicObject
 	{
 	public:
 		RepoObject( RepositoryPrivate* repo );
-		virtual ~RepoObject();
-
-	public:
-		void ref();
-		void deref();
+		~RepoObject();
 
 		RepositoryPrivate* repo() const;
 		bool handleErrors( int rc ) const;
 
 	protected:
 		RepositoryPrivate*	mRepo;
-	private:
-		QAtomicInt			mRefCounter;
 	};
 
     /**@}*/

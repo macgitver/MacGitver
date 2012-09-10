@@ -32,6 +32,8 @@ SET( SRC_FILES
 	RevisionWalker.cpp
 	Signature.cpp
 	Submodule.cpp
+	TreeBuilder.cpp
+	TreeEntry.cpp
 	BackgroundTasks.cpp
 	BackgroundFetch.cpp
 	BackgroundCheckout.cpp
@@ -59,6 +61,8 @@ SET( PUB_HDR_FILES
 	RevisionWalker.h
 	Signature.h
 	Submodule.h
+	TreeBuilder.h
+	TreeEntry.h
 	BackgroundTasks.h
 	BackgroundFetch.h
 	BackgroundCheckout.h
@@ -77,6 +81,8 @@ SET( PRI_HDR_FILES
 	RepoObject.h
 	RepositoryPrivate.h
 	RevisionWalkerPrivate.h
+	TreeBuilderPrivate.h
+	TreeEntryPrivate.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

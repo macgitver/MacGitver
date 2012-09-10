@@ -110,7 +110,7 @@ namespace Git
 
 		if( pc->startHunk( range->new_start, range->new_lines,
 						   range->old_start, range->old_lines,
-						   header ? QString::fromUtf8( header, header_len ) : QString() ) )
+						   header ? QString::fromUtf8( header, int( header_len ) ) : QString() ) )
 		{
 			return GIT_ERROR;
 		}
@@ -129,7 +129,7 @@ namespace Git
 			if( content[ content_len - 1 ] == '\n' )
 				--content_len;
 
-			ct = QString::fromUtf8( content, content_len );
+			ct = QString::fromUtf8( content, int( content_len ) );
 		}
 
 		switch( line_origin )

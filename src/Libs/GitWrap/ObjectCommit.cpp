@@ -216,7 +216,7 @@ namespace Git
 
 		git_commit* commit = (git_commit*) d->mObj;
 		const char* msg = git_commit_message( commit );
-		int len = strlen( msg );
+		int len = int( strlen( msg ) );
 
 		if( len && msg[ len - 1 ] == '\n' )
 			len--;

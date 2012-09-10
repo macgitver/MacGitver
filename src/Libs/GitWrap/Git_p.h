@@ -102,6 +102,22 @@ namespace Git
 	git_signature* signature2git( const Signature& sig );
 	RefSpec mkRefSpec( const git_refspec* refspec );
 
+	static inline git_filemode_t teattr2filemode( TreeEntryAttributes attr )
+	{
+		switch( attr )
+		{
+		case UnkownAttr:			return GIT_FILEMODE_NEW;
+		case TreeAttr:				return GIT_FILEMODE_TREE;
+		case FileAttr:				return GIT_FILEMODE_BLOB;
+		case FileExecutableAttr:	return GIT_FILEMODE_BLOB_EXECUTABLE;
+		case GitLinkAttr:			return GIT_FILEMODE_LINK;
+		case SubmoduleAttr:			return GIT_FILEMODE_COMMIT;
+		}
+		Q_ASSERT( false );
+		// Why is there no "Q_ASSUME( false );"???
+		return GIT_FILEMODE_NEW;
+	}
+
 }
 
 #endif

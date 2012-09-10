@@ -76,6 +76,16 @@ namespace Git
 		otAny = -1
 	};
 
+	enum TreeEntryAttributes
+	{
+		UnkownAttr			= 0,
+		TreeAttr			= 0040000,
+		FileAttr			= 0100644,
+		FileExecutableAttr	= 0100755,
+		GitLinkAttr			= 0120000,
+		SubmoduleAttr		= 0160000
+	};
+
 	enum FileStatus	// These are 1:1 to libgit2 for now
 	{
 		StatusCurrent				= 0,

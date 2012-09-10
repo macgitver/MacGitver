@@ -30,6 +30,7 @@ protected:
 
 private slots:
 	void onBrowse();
+	void onBrowseHelper( const QString& directory );
 	void checkValid();
 };
 

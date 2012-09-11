@@ -14,6 +14,7 @@
  *
  */
 
+#include "ObjectId.h"
 #include "TreeEntry.h"
 #include "TreeEntryPrivate.h"
 
@@ -62,6 +63,63 @@ namespace Git
 	bool TreeEntry::isValid() const
 	{
 		return d;
+	}
+
+
+	TreeEntry TreeEntry::clone() const
+	{
+		if( !d )
+		{
+			return TreeEntry();
+		}
+
+		git_tree_entry* entry = git_tree_entry_dup( d->mEntry );
+		Q_ASSERT( entry );
+
+		return new TreeEntryPrivate( entry );
+	}
+
+	ObjectId TreeEntry::sha1() const
+	{
+		if( !d )
+		{
+			return ObjectId();
+		}
+
+		const git_oid* oid = git_tree_entry_id( d->mEntry );
+		if( !oid )
+		{
+			return ObjectId();
+		}
+
+		return ObjectId::fromRaw( oid->id );
+	}
+
+	QString TreeEntry::name() const
+	{
+		if( !d )
+		{
+			return QString();
+		}
+
+		const char* szName = git_tree_entry_name( d->mEntry );
+
+		if( !szName )
+		{
+			return QString();
+		}
+
+		return QString::fromUtf8( szName );
+	}
+
+	ObjectType TreeEntry::type() const
+	{
+		if( !d )
+		{
+			return otAny;
+		}
+
+		return gitotype2ObjectType( git_tree_entry_type( d->mEntry ) );
 	}
 
 }

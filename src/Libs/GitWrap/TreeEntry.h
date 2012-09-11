@@ -22,6 +22,7 @@
 namespace Git
 {
 
+	class ObjectId;
 	class TreeEntryPrivate;
 
 	class GITWRAP_API TreeEntry
@@ -36,7 +37,11 @@ namespace Git
 	public:
 		bool isValid() const;
 
-		// TBD
+		TreeEntry clone() const;
+
+		ObjectId sha1() const;
+		QString name() const;
+		ObjectType type() const;
 
 	private:
 		GitPtr< TreeEntryPrivate > d;

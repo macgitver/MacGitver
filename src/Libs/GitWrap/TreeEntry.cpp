@@ -21,7 +21,7 @@
 namespace Git
 {
 
-	TreeEntryPrivate::TreeEntryPrivate( git_tree_entry* entry, bool unmanaged )
+	TreeEntryPrivate::TreeEntryPrivate( const git_tree_entry* entry, bool unmanaged )
 		: mEntry( entry )
 		, mUnmanaged( unmanaged )
 	{
@@ -32,7 +32,7 @@ namespace Git
 	{
 		if( !mUnmanaged )
 		{
-			git_tree_entry_free( mEntry );
+			git_tree_entry_free( const_cast< git_tree_entry* >( mEntry ) );
 		}
 	}
 

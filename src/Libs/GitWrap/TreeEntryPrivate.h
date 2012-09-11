@@ -26,12 +26,12 @@ namespace Git
 	class TreeEntryPrivate : public BasicObject
 	{
 	public:
-		TreeEntryPrivate( git_tree_entry* entry, bool unmanaged = false );
+		TreeEntryPrivate( const git_tree_entry* entry, bool unmanaged = false );
 		~TreeEntryPrivate();
 
 	public:
-		git_tree_entry*		mEntry;
-		bool				mUnmanaged;
+		const git_tree_entry*	mEntry;
+		bool					mUnmanaged;
 	};
 
 }

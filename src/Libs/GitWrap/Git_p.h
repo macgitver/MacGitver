@@ -118,6 +118,19 @@ namespace Git
 		return GIT_FILEMODE_NEW;
 	}
 
+	static inline ObjectType gitotype2ObjectType( git_otype otype )
+	{
+		switch( otype )
+		{
+		case GIT_OBJ_BLOB:		return otBlob;
+		case GIT_OBJ_COMMIT:	return otCommit;
+		case GIT_OBJ_TREE:		return otTree;
+		case GIT_OBJ_TAG:		return otTag;
+		default:				Q_ASSERT( false );
+								return otAny;
+		}
+	}
+
 }
 
 #endif

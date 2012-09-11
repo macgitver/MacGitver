@@ -23,6 +23,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The DiffListPrivate class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class DiffListPrivate : public RepoObject
 	{
 	public:
@@ -33,6 +39,7 @@ namespace Git
 		git_diff_list*	mDiffList;
 	};
 
+    /**@}*/
 }
 
 #endif

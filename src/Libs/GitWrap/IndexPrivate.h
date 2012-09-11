@@ -23,6 +23,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The IndexPrivate class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class IndexPrivate : public RepoObject
 	{
 	public:
@@ -33,6 +39,7 @@ namespace Git
 		git_index*			mIndex;
 	};
 
+    /**@}*/
 }
 
 #endif

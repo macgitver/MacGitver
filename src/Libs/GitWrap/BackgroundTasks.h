@@ -28,6 +28,12 @@ namespace Git
 
 	class BackgroundThead;
 
+    /**
+     * @brief The BackgroundTask class provides a common background worker thread.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API BackgroundTask : public QObject
 	{
 		Q_OBJECT
@@ -63,6 +69,7 @@ namespace Git
 		QQueue< BackgroundTask* >	mTasks;
 	};
 
+    /**@}*/
 }
 
 #endif

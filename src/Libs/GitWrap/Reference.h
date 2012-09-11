@@ -26,6 +26,12 @@ namespace Git
 
 	class ObjectId;
 
+    /**
+     * @brief The Reference class represents a Git reference.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API Reference
 	{
 	public:
@@ -56,6 +62,7 @@ namespace Git
 		GitPtr< ReferencePrivate > d;
 	};
 
+    /**@}*/
 }
 
 #endif

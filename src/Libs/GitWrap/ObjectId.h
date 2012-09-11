@@ -26,6 +26,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The ObjectId class represents the object identifier (OID) of a Git object.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API ObjectId
 	{
 	public:
@@ -56,6 +62,7 @@ namespace Git
 
 	GITWRAP_API uint qHash( const ObjectId& sha1 );
 
+    /**@}*/
 }
 
 inline QDebug operator<<( QDebug debug, const Git::ObjectId& id )

@@ -24,6 +24,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The ObjectTag class represents a Git tag reference.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API ObjectTag : public Object
 	{
 	public:
@@ -32,6 +38,7 @@ namespace Git
 		ObjectTag( const ObjectTag& o );
 	};
 
+    /**@}*/
 }
 
 #endif

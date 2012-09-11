@@ -24,6 +24,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The RefSpec class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class RefSpec
 	{
 	public:
@@ -40,6 +46,7 @@ namespace Git
 		QString mDst;
 	};
 
+    /**@}*/
 }
 
 #endif

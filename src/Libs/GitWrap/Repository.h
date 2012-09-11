@@ -40,6 +40,12 @@ namespace Git
 
 	typedef QHash< QString, ObjectId > ResolvedRefs;
 
+    /**
+     * @brief The Repository class represents a Git repository.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API Repository
 	{
 	public:
@@ -109,6 +115,7 @@ namespace Git
 		GitPtr< RepositoryPrivate > d;
 	};
 
+    /**@}*/
 }
 
 #endif

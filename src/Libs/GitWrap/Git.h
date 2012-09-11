@@ -20,6 +20,10 @@
 #include <QString>
 #include <QHash>
 
+/** @defgroup GitWrap Qt-based wrapper for Git revision control featuring libgit2
+ * Wrapper for the LibGit2 library based on Qt4/Qt5.
+ */
+
 #ifdef GitWrap_EXPORTS
 #	define GITWRAP_API Q_DECL_EXPORT
 #else

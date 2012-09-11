@@ -23,6 +23,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The RemotePrivate class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class RemotePrivate : public RepoObject
 	{
 	public:
@@ -35,6 +41,7 @@ namespace Git
 		git_indexer_stats	mStats;
 	};
 
+    /**@}*/
 }
 
 #endif

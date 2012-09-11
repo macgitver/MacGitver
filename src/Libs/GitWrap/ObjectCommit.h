@@ -31,6 +31,12 @@ namespace Git
 	class Reference;
 	class ObjectTree;
 
+    /**
+     * @brief The ObjectCommit class represents a Git commit object.
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class GITWRAP_API ObjectCommit : public Object
 	{
 	public:
@@ -77,6 +83,7 @@ namespace Git
 		return qHash( c.id() );
 	}
 
+    /**@}*/
 }
 
 inline QDebug operator<<( QDebug debug, const Git::ObjectCommit& commit )

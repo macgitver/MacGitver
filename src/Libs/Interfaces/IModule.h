@@ -29,6 +29,10 @@ namespace Git
 	class Repository;
 }
 
+/**
+ * @brief The IModule class provides an interface for implementing application plugins.
+ * This interface is not used directly. Use the abstract class @see Module instead.
+ */
 class INTERFACES_API IModule
 {
 public:
@@ -45,16 +49,37 @@ public:
 	typedef QFlags< Type > Types;
 
 public:
-	IModule();
+    // @todo Interfaces don't have constructors. Causes compiler error on call. The destructor should have an empty default implementation though.
+    IModule();
 	virtual ~IModule();
 
 public:
+    /**
+     * @brief Informs a module about the currently referenced repository has changed.
+     * @param newRepository
+     */
 	virtual void repositoryChanged( Git::Repository newRepository ) = 0;
 
+    /**
+     * @brief Setup a configuration dialog for a module, which is used in the settings.
+     * @param dialog
+     */
 	virtual void setupConfigPages( IConfigDialog* dialog ) = 0;
+
+    /**
+     * @brief Modules can define a type to specify their functionality roughly.
+     * @return the @see Types flags defined by the module.
+     */
 	virtual Types providesModuleTypes() const = 0;
 
+    /**
+     * @brief Tells the module to initialize itself, after it was loaded and instantiated.
+     */
 	virtual void initialize() = 0;
+
+    /**
+     * @brief Called before a module is unloaded, telling it to clean up itself.
+     */
 	virtual void deinitialize() = 0;
 };
 

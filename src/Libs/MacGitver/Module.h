@@ -31,6 +31,10 @@
 #define Q_PLUGIN_METADATA(x)
 #endif
 
+/**
+ * @brief The Module class provides an abstract implementation for application plugins.
+ * Use this, when implementing new plugins.
+ */
 class MGV_CORE_API Module : public QObject, public IModule
 {
 	Q_INTERFACES( IModule )
@@ -45,7 +49,18 @@ public:
 	void repositoryChanged( Git::Repository newRepository );
 
 protected:
-	void registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator );
+    /**
+     * @brief If the module has a view, it can register it here to the application.
+     * @param identifier the key to access this module's view (must be unique)
+     * @param type the view type, to specify the behaviour
+     * @param creator the creator used to setup the view
+     */
+    void registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator );
+
+    /**
+     * @brief Unregister a previously registered module view.
+     * @param identifier the view identifier used to register the view
+     */
 	void unregisterView( const QString& identifier );
 };
 

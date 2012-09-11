@@ -22,6 +22,12 @@
 namespace Git
 {
 
+    /**
+     * @brief The ReferencePrivate class
+     *
+     * @ingroup GitWrap
+     * @{
+     */
 	class ReferencePrivate : public RepoObject
 	{
 	public:
@@ -32,6 +38,7 @@ namespace Git
 		git_reference*		mRef;
 	};
 
+    /**@}*/
 }
 
 #endif

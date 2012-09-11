@@ -22,6 +22,7 @@
 namespace Git
 {
 
+	class TreeEntry;
 	class TreeBuilderPrivate;
 
 	class ObjectId;
@@ -40,6 +41,7 @@ namespace Git
 
 		void clear();
 
+		TreeEntry get( const QString& name );
 		bool insert( const QString& fileName, TreeEntryAttributes type, const ObjectId& oid );
 		bool remove( const QString& fileName );
 		ObjectId write();

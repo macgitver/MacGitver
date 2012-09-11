@@ -14,6 +14,8 @@
  *
  */
 
+#include "TreeEntry.h"
+#include "TreeEntryPrivate.h"
 #include "TreeBuilder.h"
 #include "TreeBuilderPrivate.h"
 #include "ObjectId.h"
@@ -117,4 +119,22 @@ namespace Git
 
 		return ObjectId();
 	}
+
+
+	TreeEntry TreeBuilder::get( const QString& name )
+	{
+		if( !d )
+		{
+			return TreeEntry();
+		}
+
+		const git_tree_entry* entry = git_treebuilder_get( d->mBuilder, name.toUtf8().constData() );
+		if( !entry )
+		{
+			return TreeEntry();
+		}
+
+		return new TreeEntryPrivate( entry, true );
+	}
+
 }

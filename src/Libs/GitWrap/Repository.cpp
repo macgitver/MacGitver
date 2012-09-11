@@ -124,8 +124,21 @@ namespace Git
 			return Repository();
 		}
 
-		return Repository( new RepositoryPrivate( repo ) );
-	}
+        return Repository( new RepositoryPrivate( repo ) );
+    }
+
+    QString Repository::discover(const QString& startPath, bool acrossFs, const QStringList& ceilingDirs)
+    {
+        QByteArray repoPath(GIT_PATH_MAX, Qt::Uninitialized);
+        QByteArray joinedCeilingDirs = ceilingDirs.join(QChar::fromLatin1(GIT_PATH_LIST_SEPARATOR)).toUtf8();
+
+        git_repository_discover( repoPath.data(), repoPath.length()
+                                 , QString(startPath).toUtf8().constData()
+                                 , acrossFs, joinedCeilingDirs.constData()
+                                 );
+
+        return QString::fromUtf8(repoPath.constData());
+    }
 
 	Repository Repository::open( const QString& path )
 	{

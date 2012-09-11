@@ -59,7 +59,33 @@ namespace Git
 
 	public:
 		static Repository create( const QString& path, bool bare );
-		static Repository open( const QString& path );
+
+        /**
+         * @brief Lookup a git repository by walking parent directories starting from startPath.
+         *
+         * The lookup ends when the first repository is found or when reaching one of the ceilingDirs directories.
+         *
+         * The method will automatically detect if the repository is bare (if there is a
+         * repository).
+         *
+         * @param startPath
+         * The base path where the lookup starts.
+         *
+         * @param acrossFs
+         * If true, then the lookup will not stop when a filesystem change is detected
+         * while exploring parent directories.
+         *
+         * @param ceilingDirs
+         * A list of absolute paths (no symbolic links). The lookup will stop when one of these
+         * paths is reached and no repository was found.
+         *
+         * @return the path of the found repository or an empty QString
+         */
+        static QString discover( const QString& startPath,
+                                 bool acrossFs = false,
+                                 const QStringList& ceilingDirs = QStringList() );
+
+        static Repository open( const QString& path );
 
 		bool isValid() const;
 		bool isBare() const;

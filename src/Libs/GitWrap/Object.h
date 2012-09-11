@@ -49,22 +49,90 @@ namespace Git
 	public:
 		Object& operator=( const Object& other );
 		bool operator==( const Object& other ) const;
+
+        /**
+         * @brief Checks, if this is a valid Git object.
+         *
+         * A Git object is valid, when it has a valid pointer.
+         *
+         * @return true or false
+         */
 		bool isValid() const;
 
-		ObjectType type() const;
+        /**
+         * @return the object's type
+         */
+        ObjectType type() const;
+
+        /**
+         * @return the object's id (OID)
+         */
 		ObjectId id() const;
 
-		ObjectTree asTree();
-		ObjectCommit asCommit();
-		ObjectBlob asBlob();
-		ObjectTag asTag();
+        /**
+         * @brief Converts a generic object into a Git tree object.
+         *
+         * @return the valid or invalid converted ObjectTree
+         *
+         * @see isValid()
+         */
+        ObjectTree asTree();
 
+        /**
+         * @brief Converts a generic object into a Git commit object.
+         *
+         * @return the valid or invalid converted ObjectCommit
+         *
+         * @see isValid()
+         */
+        ObjectCommit asCommit();
+
+        /**
+         * @brief Converts a generic object into a Git BLOB object.
+         *
+         * @return the valid or invalid converted ObjectBlob
+         *
+         * @see isValid()
+         */
+        ObjectBlob asBlob();
+
+        /**
+         * @brief Converts a generic object into a Git tag object.
+         *
+         * @return the valid or invalid converted ObjectTag
+         *
+         * @see isValid()
+         */
+        ObjectTag asTag();
+
+        /**
+         * @brief Checks, if this is a ObjectTree object.
+         * @return true or false
+         */
 		bool isTree() const;
-		bool isTag() const;
-		bool isCommit() const;
-		bool isBlob() const;
 
-		Repository repository() const;
+        /**
+         * @brief Checks, if this is a ObjectTree object.
+         * @return true or false
+         */
+        bool isTag() const;
+
+        /**
+         * @brief Checks, if this is a ObjectTree object.
+         * @return true or false
+         */
+        bool isCommit() const;
+
+        /**
+         * @brief Checks, if this is a ObjectTree object.
+         * @return true or false
+         */
+        bool isBlob() const;
+
+        /**
+         * @return the owner repository or an invalid repository
+         */
+        Repository repository() const;
 
 	protected:
 		GitPtr< ObjectPrivate > d;

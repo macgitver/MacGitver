@@ -20,6 +20,7 @@
 #include "Git.h"
 #include "ObjectId.h"
 #include "Object.h"
+#include "TreeEntry.h"
 
 namespace Git
 {
@@ -45,6 +46,21 @@ namespace Git
 		DiffList diffToTree( ObjectTree newTree );
 		DiffList diffToIndex();
 		DiffList diffToWorkingDir();
+
+		size_t entryCount() const;
+		TreeEntry entryAt( size_t index ) const;
+		TreeEntry entry( const QString& fileName ) const;
+
+	public:
+		inline TreeEntry operator[]( size_t index ) const
+		{
+			return entryAt( index );
+		}
+
+		inline TreeEntry operator[]( const QString& fileName ) const
+		{
+			return entry( fileName );
+		}
 	};
 
     /**@}*/

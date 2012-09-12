@@ -35,7 +35,7 @@ namespace Git
 
 	ObjectId ObjectId::fromString( const QString& oid, int max, bool* success )
 	{
-		return fromAscii( oid.toAscii(), max, success );
+		return fromAscii( oid.toUtf8(), max, success );
 	}
 
 	ObjectId ObjectId::fromAscii( const QByteArray& oid, int max, bool* success )

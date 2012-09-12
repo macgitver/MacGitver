@@ -170,7 +170,7 @@ namespace Git
 				return Index();
 			}
 
-			d->mIndex = new IndexPrivate( d, index );
+			d->mIndex = new Internal::IndexPrivate( d, index );
 		}
 
 		return Index( d->mIndex );
@@ -383,7 +383,7 @@ namespace Git
 				return Reference();
 			}
 
-			ref = new ReferencePrivate( d, refHead );
+			ref = new Internal::ReferencePrivate( d, refHead );
 		}
 
 		return ref;

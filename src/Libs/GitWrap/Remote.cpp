@@ -124,7 +124,7 @@ namespace Git
 	{
 		if( d )
 		{
-			return mkRefSpec( git_remote_fetchspec( d->mRemote ) );
+			return Internal::mkRefSpec( git_remote_fetchspec( d->mRemote ) );
 		}
 
 		return RefSpec();
@@ -134,7 +134,7 @@ namespace Git
 	{
 		if( d )
 		{
-			return mkRefSpec( git_remote_pushspec( d->mRemote ) );
+			return Internal::mkRefSpec( git_remote_pushspec( d->mRemote ) );
 		}
 
 		return RefSpec();

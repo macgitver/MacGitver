@@ -38,7 +38,7 @@ namespace Git
 	{
 	}
 
-	Config::Config( ConfigPrivate* cfg )
+	Config::Config( Internal::ConfigPrivate* cfg )
 		: d( cfg )
 	{
 	}
@@ -103,7 +103,7 @@ namespace Git
 			return Config();
 		}
 
-		return new ConfigPrivate( cfg );
+		return new Internal::ConfigPrivate( cfg );
 	}
 
 	Config Config::user()
@@ -123,7 +123,7 @@ namespace Git
 			return Config();
 		}
 
-		return new ConfigPrivate( cfg );
+		return new Internal::ConfigPrivate( cfg );
 	}
 
 	Config Config::file( const QString& fileName )
@@ -137,7 +137,7 @@ namespace Git
 			return Config();
 		}
 
-		return new ConfigPrivate( cfg );
+		return new Internal::ConfigPrivate( cfg );
 	}
 
 	Config Config::create()
@@ -150,7 +150,7 @@ namespace Git
 			return Config();
 		}
 
-		return new ConfigPrivate( cfg );
+		return new Internal::ConfigPrivate( cfg );
 	}
 
 	bool Config::addFile( const QString& fileName, int priority )

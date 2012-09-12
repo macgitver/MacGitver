@@ -50,7 +50,7 @@ namespace Git
 	{
 	}
 
-	DiffList::DiffList( DiffListPrivate* _d )
+	DiffList::DiffList( Internal::DiffListPrivate* _d )
 		: d( _d )
 	{
 	}

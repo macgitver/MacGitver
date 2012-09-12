@@ -25,8 +25,7 @@
 #define END_INTERNAL_DECL()		}
 
 #define BEGIN_INTERNAL_IMPL()	namespace Internal {
-#define END_INTERNAL_IMPL()		} \
-								using namespace Internal;
+#define END_INTERNAL_IMPL()		}
 
 namespace Git
 {

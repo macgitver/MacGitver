@@ -42,7 +42,7 @@ namespace Git
 	{
 	}
 
-	RevisionWalker::RevisionWalker( RevisionWalkerPrivate* _d )
+	RevisionWalker::RevisionWalker( Internal::RevisionWalkerPrivate* _d )
 		: d( _d )
 	{
 	}

@@ -52,7 +52,7 @@ namespace Git
 	{
 	}
 
-	Index::Index( IndexPrivate* _d )
+	Index::Index( Internal::IndexPrivate* _d )
 		: d( _d )
 	{
 	}

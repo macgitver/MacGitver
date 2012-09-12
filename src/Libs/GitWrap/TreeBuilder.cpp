@@ -94,7 +94,7 @@ namespace Git
 		if( d )
 		{
 			const git_tree_entry* te = NULL;
-			git_filemode_t fm = teattr2filemode( type );
+			git_filemode_t fm = Internal::teattr2filemode( type );
 
 			int rc = git_treebuilder_insert( &te, d->mBuilder, fileName.toUtf8().constData(),
 											 (const git_oid*) oid.raw(), fm );

@@ -46,7 +46,7 @@ namespace Git
 	{
 	}
 
-	Reference::Reference( ReferencePrivate* _d )
+	Reference::Reference( Internal::ReferencePrivate* _d )
 		: d( _d )
 	{
 	}

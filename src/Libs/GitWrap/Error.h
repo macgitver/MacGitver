@@ -43,15 +43,15 @@ namespace Git
 		QString		mErrorText;
 	};
 
-	class GITWRAP_API ResultCode
+	class GITWRAP_API Result
 	{
 	public:
-		ResultCode();
-		ResultCode( const ResultCode& other );
-		explicit ResultCode( int resultCode );
-		~ResultCode();
-		ResultCode& operator=( const ResultCode& other );
-		ResultCode& operator=( int );
+		Result();
+		Result( const Result& other );
+		explicit Result( int resultCode );
+		~Result();
+		Result& operator=( const Result& other );
+		Result& operator=( int );
 
 	public:
 		operator bool() const;
@@ -64,8 +64,8 @@ namespace Git
 		void setError( int resultCode );
 
 	public:
-		static ResultCode invalidObject();
-		static ResultCode success();
+		static Result invalidObject();
+		static Result success();
 
 	private:
 		int			mCode;
@@ -73,12 +73,12 @@ namespace Git
 		QString		mText;
 	};
 
-	inline ResultCode::ResultCode()
+	inline Result::Result()
 		: mCode( 0 )
 	{
 	}
 
-	inline ResultCode::ResultCode( const ResultCode& other )
+	inline Result::Result( const Result& other )
 	{
 		if( ( mCode = other.mCode ) )
 		{
@@ -87,11 +87,11 @@ namespace Git
 		}
 	}
 
-	inline ResultCode::~ResultCode()
+	inline Result::~Result()
 	{
 	}
 
-	inline ResultCode& ResultCode::operator=( const ResultCode& other )
+	inline Result& Result::operator=( const Result& other )
 	{
 		if( ( mCode = other.mCode ) )
 		{
@@ -102,22 +102,22 @@ namespace Git
 		return *this;
 	}
 
-	inline ResultCode::operator bool() const
+	inline Result::operator bool() const
 	{
 		return mCode == 0;
 	}
 
-	inline int ResultCode::errorCode() const
+	inline int Result::errorCode() const
 	{
 		return mCode;
 	}
 
-	inline int ResultCode::errorClass() const
+	inline int Result::errorClass() const
 	{
 		return mClass;
 	}
 
-	inline const QString& ResultCode::errorText() const
+	inline const QString& Result::errorText() const
 	{
 		return mText;
 	}

@@ -22,6 +22,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	RevisionWalkerPrivate::RevisionWalkerPrivate( RepositoryPrivate* repo, git_revwalk* walker )
 		: RepoObject( repo )
 		, mWalker( walker )
@@ -33,6 +35,8 @@ namespace Git
 	{
 		git_revwalk_free( mWalker );
 	}
+
+	END_INTERNAL_IMPL()
 
 	RevisionWalker::RevisionWalker()
 	{

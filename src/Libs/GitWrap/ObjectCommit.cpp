@@ -30,7 +30,7 @@ namespace Git
 	{
 	}
 
-	ObjectCommit::ObjectCommit( ObjectPrivate* _d )
+	ObjectCommit::ObjectCommit( Internal::ObjectPrivate* _d )
 		: Object( _d )
 	{
 		Q_ASSERT( type() == otCommit );
@@ -54,7 +54,7 @@ namespace Git
 			return ObjectTree();
 		}
 
-		return new ObjectPrivate( d->repo(), (git_object*) tree );
+		return new Internal::ObjectPrivate( d->repo(), (git_object*) tree );
 	}
 
 	ObjectId ObjectCommit::treeId()
@@ -95,7 +95,7 @@ namespace Git
 			int rc = git_commit_parent( &gitparent, commit, index );
 			if( d->handleErrors( rc ) )
 			{
-				parent = new ObjectPrivate( d->repo(), (git_object*) gitparent );
+				parent = new Internal::ObjectPrivate( d->repo(), (git_object*) gitparent );
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace Git
 					return QList< ObjectCommit >();
 				}
 
-				objs.append( new ObjectPrivate( d->repo(), (git_object*) parent ) );
+				objs.append( new Internal::ObjectPrivate( d->repo(), (git_object*) parent ) );
 			}
 		}
 
@@ -199,7 +199,7 @@ namespace Git
 		Q_ASSERT( d );
 		git_commit* commit = (git_commit*) d->mObj;
 		const git_signature* sig = git_commit_author( commit );
-		return git2Signature( sig );
+		return Internal::git2Signature( sig );
 	}
 
 	Signature ObjectCommit::committer() const
@@ -207,7 +207,7 @@ namespace Git
 		Q_ASSERT( d );
 		git_commit* commit = (git_commit*) d->mObj;
 		const git_signature* sig = git_commit_committer( commit );
-		return git2Signature( sig );
+		return Internal::git2Signature( sig );
 	}
 
 	QString ObjectCommit::message() const
@@ -253,7 +253,7 @@ namespace Git
 			return Reference();
 		}
 
-		return Reference( new ReferencePrivate( d->repo(), ref ) );
+		return Reference( new Internal::ReferencePrivate( d->repo(), ref ) );
 	}
 
 }

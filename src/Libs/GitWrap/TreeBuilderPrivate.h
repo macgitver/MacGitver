@@ -23,6 +23,13 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_DECL()
+
+	/**
+	 * @internal
+	 * @ingroup		GitWrap
+	 * @brief		The TreeBuilderPrivate class
+	 */
 	class TreeBuilderPrivate : public RepoObject
 	{
 	public:
@@ -32,6 +39,8 @@ namespace Git
 	public:
 		git_treebuilder*	mBuilder;
 	};
+
+	END_INTERNAL_DECL()
 
 }
 

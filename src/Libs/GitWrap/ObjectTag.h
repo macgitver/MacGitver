@@ -25,20 +25,18 @@ namespace Git
 {
 
     /**
-     * @brief The ObjectTag class represents a Git tag reference.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Represents a git tag reference.
+	 *
      */
 	class GITWRAP_API ObjectTag : public Object
 	{
 	public:
 		ObjectTag();
-		ObjectTag( ObjectPrivate* _d );
+		ObjectTag( Internal::ObjectPrivate* _d );
 		ObjectTag( const ObjectTag& o );
 	};
 
-    /**@}*/
 }
 
 #endif

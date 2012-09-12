@@ -22,22 +22,24 @@
 namespace Git
 {
 
-	class RevisionWalkerPrivate;
+	namespace Internal
+	{
+		class RevisionWalkerPrivate;
+	}
 
 	class ObjectId;
 	class Reference;
 
     /**
-     * @brief The RevisionWalker class provides functionality to access a Git repository's history.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Provides access to a git repository's history
+	 *
      */
 	class GITWRAP_API RevisionWalker
 	{
 	public:
 		RevisionWalker();
-		RevisionWalker( RevisionWalkerPrivate* _d );
+		RevisionWalker( Internal::RevisionWalkerPrivate* _d );
 		~RevisionWalker();
 		RevisionWalker& operator=( const RevisionWalker& other );
 
@@ -62,10 +64,9 @@ namespace Git
 		void setSorting( bool topological, bool timed );
 
 	private:
-		GitPtr< RevisionWalkerPrivate > d;
+		Internal::GitPtr< Internal::RevisionWalkerPrivate > d;
 	};
 
-    /**@}*/
 }
 
 #endif

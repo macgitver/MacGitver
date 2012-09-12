@@ -19,21 +19,23 @@
 namespace Git
 {
 
-	class ConfigPrivate;
+	namespace Internal
+	{
+		class ConfigPrivate;
+	}
 
 	typedef QHash< QString, QString > ConfigValues;
 
     /**
-     * @brief The Config class provides functionality to access the Git configuration files.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Provides access git configuration files
+	 *
      */
 	class GITWRAP_API Config
 	{
 	public:
 		Config();
-		Config( ConfigPrivate* cfg );
+		Config( Internal::ConfigPrivate* cfg );
 		Config( const Config& other );
 		~Config();
 		Config& operator=( const Config& other );
@@ -52,8 +54,7 @@ namespace Git
 		static Config create();
 
 	private:
-		GitPtr< ConfigPrivate > d;
+		Internal::GitPtr< Internal::ConfigPrivate > d;
 	};
 
-    /**@}*/
 }

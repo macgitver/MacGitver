@@ -25,6 +25,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	DiffListPrivate::DiffListPrivate( RepositoryPrivate* repo, git_diff_list* difflist )
 		: RepoObject( repo )
 		, mDiffList( difflist )
@@ -41,6 +43,8 @@ namespace Git
 			git_diff_list_free( mDiffList );
 		}
 	}
+
+	END_INTERNAL_IMPL()
 
 	DiffList::DiffList()
 	{

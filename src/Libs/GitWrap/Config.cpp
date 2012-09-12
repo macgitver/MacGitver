@@ -20,6 +20,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	ConfigPrivate::ConfigPrivate( git_config* cfg )
 		: mCfg( cfg )
 	{
@@ -29,6 +31,8 @@ namespace Git
 	{
 		git_config_free( mCfg );
 	}
+
+	END_INTERNAL_IMPL()
 
 	Config::Config()
 	{

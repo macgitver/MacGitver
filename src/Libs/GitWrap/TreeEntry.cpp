@@ -21,6 +21,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	TreeEntryPrivate::TreeEntryPrivate( const git_tree_entry* entry, bool unmanaged )
 		: mEntry( entry )
 		, mUnmanaged( unmanaged )
@@ -36,6 +38,8 @@ namespace Git
 		}
 	}
 
+	END_INTERNAL_IMPL()
+
 	TreeEntry::TreeEntry()
 	{
 	}
@@ -45,7 +49,7 @@ namespace Git
 	{
 	}
 
-	TreeEntry::TreeEntry( TreeEntryPrivate* _d )
+	TreeEntry::TreeEntry( Internal::TreeEntryPrivate* _d )
 		: d( _d )
 	{
 	}
@@ -76,7 +80,7 @@ namespace Git
 		git_tree_entry* entry = git_tree_entry_dup( d->mEntry );
 		Q_ASSERT( entry );
 
-		return new TreeEntryPrivate( entry );
+		return new Internal::TreeEntryPrivate( entry );
 	}
 
 	ObjectId TreeEntry::sha1() const
@@ -119,7 +123,7 @@ namespace Git
 			return otAny;
 		}
 
-		return gitotype2ObjectType( git_tree_entry_type( d->mEntry ) );
+		return Internal::gitotype2ObjectType( git_tree_entry_type( d->mEntry ) );
 	}
 
 }

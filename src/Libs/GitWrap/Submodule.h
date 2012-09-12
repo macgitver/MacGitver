@@ -22,15 +22,18 @@
 namespace Git
 {
 
+	namespace Internal
+	{
+		class RepositoryPrivate;
+	}
+
 	class ObjectId;
 	class Repository;
-	class RepositoryPrivate;
 
     /**
-     * @brief The Submodule class represents a Git submodule.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Represents a git submodule
+	 *
      */
 	class GITWRAP_API Submodule
 	{
@@ -52,7 +55,7 @@ namespace Git
 		};
 
 	public:
-		Submodule( RepositoryPrivate* repo, const QString& name );
+		Submodule( Internal::RepositoryPrivate* repo, const QString& name );
 		Submodule( const Submodule& other );
 		Submodule();
 		~Submodule();
@@ -72,11 +75,10 @@ namespace Git
 		ObjectId currentSHA1() const;
 
 	private:
-		GitPtr< RepositoryPrivate >	mRepo;
+		Internal::GitPtr< Internal::RepositoryPrivate >	mRepo;
 		QString						mName;
 	};
 
-    /**@*/
 }
 
 #endif

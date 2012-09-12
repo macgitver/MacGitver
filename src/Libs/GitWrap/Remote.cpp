@@ -22,6 +22,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	RemotePrivate::RemotePrivate( RepositoryPrivate* repo, git_remote* remote )
 		: RepoObject( repo )
 		, mRemote( remote )
@@ -34,11 +36,13 @@ namespace Git
 		git_remote_free( mRemote );
 	}
 
+	END_INTERNAL_IMPL()
+
 	Remote::Remote()
 	{
 	}
 
-	Remote::Remote( RemotePrivate* _d )
+	Remote::Remote( Internal::RemotePrivate* _d )
 		: d( _d )
 	{
 	}

@@ -27,12 +27,13 @@ namespace Git
 
 	class Error;
 
+	BEGIN_INTERNAL_DECL()
+
     /**
      * @internal
+	 * @ingroup GitWrap
      * @brief The RepositoryPrivate class
-     *
-     * @ingroup GitWrap
-     * @{
+	 *
      */
 	class RepositoryPrivate : public BasicObject
 	{
@@ -50,7 +51,8 @@ namespace Git
 		mutable QMutex			mErrorListMtx;
 	};
 
-    /**@}*/
+	END_INTERNAL_DECL()
+
 }
 
 #endif

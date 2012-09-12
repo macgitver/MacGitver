@@ -36,20 +36,23 @@ namespace Git
 	class ObjectId;
 	class RevisionWalker;
 	class Remote;
-	class RepositoryPrivate;
+
+	namespace Internal
+	{
+		class RepositoryPrivate;
+	}
 
 	typedef QHash< QString, ObjectId > ResolvedRefs;
 
     /**
-     * @brief The Repository class represents a Git repository.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		A git repository
+	 *
      */
 	class GITWRAP_API Repository
 	{
 	public:
-		explicit Repository( RepositoryPrivate* _d );
+		explicit Repository( Internal::RepositoryPrivate* _d );
 		Repository();
 		Repository( const Repository& other );
 		Repository& operator=( const Repository& other );
@@ -136,10 +139,9 @@ namespace Git
 		Submodule submodule( const QString& name );
 
 	private:
-		GitPtr< RepositoryPrivate > d;
+		Internal::GitPtr< Internal::RepositoryPrivate > d;
 	};
 
-    /**@}*/
 }
 
 #endif

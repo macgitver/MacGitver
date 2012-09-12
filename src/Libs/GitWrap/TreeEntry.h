@@ -22,14 +22,22 @@
 namespace Git
 {
 
-	class ObjectId;
-	class TreeEntryPrivate;
+	namespace Internal
+	{
+		class TreeEntryPrivate;
+	}
 
+	class ObjectId;
+
+	/**
+	 * @ingroup		GitWrap
+	 * @brief		Represents an entry in a git tree
+	 */
 	class GITWRAP_API TreeEntry
 	{
 	public:
 		TreeEntry();
-		TreeEntry( TreeEntryPrivate* _d );
+		TreeEntry( Internal::TreeEntryPrivate* _d );
 		TreeEntry( const TreeEntry& other );
 		~TreeEntry();
 		TreeEntry& operator=( const TreeEntry& other );
@@ -44,7 +52,7 @@ namespace Git
 		ObjectType type() const;
 
 	private:
-		GitPtr< TreeEntryPrivate > d;
+		Internal::GitPtr< Internal::TreeEntryPrivate > d;
 	};
 
 }

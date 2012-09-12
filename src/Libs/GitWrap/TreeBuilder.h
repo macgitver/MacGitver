@@ -22,16 +22,19 @@
 namespace Git
 {
 
-	class TreeEntry;
-	class TreeBuilderPrivate;
+	namespace Internal
+	{
+		class TreeBuilderPrivate;
+	}
 
+	class TreeEntry;
 	class ObjectId;
 
 	class GITWRAP_API TreeBuilder
 	{
 	public:
 		TreeBuilder();
-		TreeBuilder( TreeBuilderPrivate* _d );
+		TreeBuilder( Internal::TreeBuilderPrivate* _d );
 		TreeBuilder( const TreeBuilder& other );
 		~TreeBuilder();
 		TreeBuilder& operator=( const TreeBuilder& other );
@@ -47,7 +50,7 @@ namespace Git
 		ObjectId write();
 
 	private:
-		GitPtr< TreeBuilderPrivate > d;
+		Internal::GitPtr< Internal::TreeBuilderPrivate > d;
 	};
 
 }

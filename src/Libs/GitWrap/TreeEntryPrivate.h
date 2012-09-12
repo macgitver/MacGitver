@@ -23,6 +23,13 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_DECL()
+
+	/**
+	 * @internal
+	 * @ingroup		GitWrap
+	 * @brief		The TreeEntryPrivate class
+	 */
 	class TreeEntryPrivate : public BasicObject
 	{
 	public:
@@ -33,6 +40,8 @@ namespace Git
 		const git_tree_entry*	mEntry;
 		bool					mUnmanaged;
 	};
+
+	END_INTERNAL_DECL()
 
 }
 

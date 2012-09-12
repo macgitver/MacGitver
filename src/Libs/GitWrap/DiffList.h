@@ -25,7 +25,10 @@ namespace Git
 	class ChangeListConsumer;
 	class PatchConsumer;
 
-	class DiffListPrivate;
+	namespace Internal
+	{
+		class DiffListPrivate;
+	}
 
     /**
      * @brief The DiffList class
@@ -36,7 +39,7 @@ namespace Git
 	class GITWRAP_API DiffList
 	{
 	public:
-		explicit DiffList( DiffListPrivate* _d );
+		explicit DiffList( Internal::DiffListPrivate* _d );
 
 	public:
 		DiffList( const DiffList& other );
@@ -56,7 +59,7 @@ namespace Git
 		bool consumeChangeList( ChangeListConsumer* consumer ) const;
 
 	private:
-		GitPtr< DiffListPrivate > d;
+		Internal::GitPtr< Internal::DiffListPrivate > d;
 	};
 
     /**@}*/

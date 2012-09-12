@@ -25,6 +25,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	TreeBuilderPrivate::TreeBuilderPrivate( RepositoryPrivate* repo, git_treebuilder* builder )
 		: RepoObject( repo )
 		, mBuilder( builder )
@@ -37,6 +39,8 @@ namespace Git
 		git_treebuilder_free( mBuilder );
 	}
 
+	END_INTERNAL_IMPL()
+
 	TreeBuilder::TreeBuilder()
 	{
 	}
@@ -46,7 +50,7 @@ namespace Git
 	{
 	}
 
-	TreeBuilder::TreeBuilder( TreeBuilderPrivate* _d )
+	TreeBuilder::TreeBuilder( Internal::TreeBuilderPrivate* _d )
 		: d( _d )
 	{
 	}
@@ -134,7 +138,7 @@ namespace Git
 			return TreeEntry();
 		}
 
-		return new TreeEntryPrivate( entry, true );
+		return new Internal::TreeEntryPrivate( entry, true );
 	}
 
 }

@@ -20,12 +20,13 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_DECL()
+
     /**
      * @internal
-     * @brief The ConfigPrivate class
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		The ConfigPrivate class
+	 *
      */
 	class ConfigPrivate : public BasicObject
 	{
@@ -37,5 +38,5 @@ namespace Git
 		git_config*		mCfg;
 	};
 
-    /**@}*/
+	END_INTERNAL_DECL()
 }

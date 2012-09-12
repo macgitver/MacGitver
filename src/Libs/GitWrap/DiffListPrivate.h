@@ -23,6 +23,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_DECL()
+
     /**
      * @brief The DiffListPrivate class
      *
@@ -39,7 +41,8 @@ namespace Git
 		git_diff_list*	mDiffList;
 	};
 
-    /**@}*/
+	END_INTERNAL_DECL()
+
 }
 
 #endif

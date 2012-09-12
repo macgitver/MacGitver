@@ -22,15 +22,17 @@
 namespace Git
 {
 
-	class ReferencePrivate;
+	namespace Internal
+	{
+		class ReferencePrivate;
+	}
 
 	class ObjectId;
 
     /**
-     * @brief The Reference class represents a Git reference.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Represents a git reference
+	 *
      */
 	class GITWRAP_API Reference
 	{
@@ -42,7 +44,7 @@ namespace Git
 
 	public:
 		Reference();
-		Reference( ReferencePrivate* p );
+		Reference( Internal::ReferencePrivate* p );
 		Reference( const Reference& other );
 		~Reference();
 		Reference& operator=( const Reference& other );
@@ -59,10 +61,9 @@ namespace Git
 		Repository repository() const;
 
 	private:
-		GitPtr< ReferencePrivate > d;
+		Internal::GitPtr< Internal::ReferencePrivate > d;
 	};
 
-    /**@}*/
 }
 
 #endif

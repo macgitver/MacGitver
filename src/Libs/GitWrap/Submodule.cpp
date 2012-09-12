@@ -22,7 +22,7 @@
 namespace Git
 {
 
-	static inline git_submodule* getSM( const RepositoryPrivate* repo, const QString& smName )
+	static inline git_submodule* getSM( const Internal::RepositoryPrivate* repo, const QString& smName )
 	{
 		git_submodule* result = NULL;
 
@@ -43,7 +43,7 @@ namespace Git
 	{
 	}
 
-	Submodule::Submodule( RepositoryPrivate* repo, const QString& name )
+	Submodule::Submodule( Internal::RepositoryPrivate* repo, const QString& name )
 		: mRepo( repo )
 		, mName( name )
 	{

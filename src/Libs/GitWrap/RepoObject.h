@@ -19,52 +19,56 @@
 
 #include <QAtomicInt>
 
+#include "Git_p.h"
+
 namespace Git
 {
-	class RepositoryPrivate;
-
-    /**
-     * @internal
-     * @brief The BaseObject class
-     *
-     * @ingroup GitWrap
-     * @{
-     */
-	class BasicObject
+	namespace Internal
 	{
-	public:
-		BasicObject();
-		virtual ~BasicObject();
 
-	public:
-		void ref();
-		void deref();
+		class RepositoryPrivate;
 
-	private:
-		QAtomicInt			mRefCounter;
-	};
+		/**
+		 * @internal
+		 * @ingroup GitWrap
+		 * @brief The BaseObject class
+		 *
+		 */
+		class BasicObject
+		{
+		public:
+			BasicObject();
+			virtual ~BasicObject();
 
-    /**
-     * @internal
-     * @brief The RepoObject class
-     *
-     * @ingroup GitWrap
-     * @{
-     */
-	class RepoObject : public BasicObject
-	{
-	public:
-		RepoObject( RepositoryPrivate* repo );
-		~RepoObject();
+		public:
+			void ref();
+			void deref();
 
-		RepositoryPrivate* repo() const;
-		bool handleErrors( int rc ) const;
+		private:
+			QAtomicInt			mRefCounter;
+		};
 
-	protected:
-		RepositoryPrivate*	mRepo;
-	};
+		/**
+		 * @internal
+		 * @ingroup GitWrap
+		 * @brief The RepoObject class
+		 *
+		 */
+		class RepoObject : public BasicObject
+		{
+		public:
+			RepoObject( RepositoryPrivate* repo );
+			~RepoObject();
 
-    /**@}*/
+			RepositoryPrivate* repo() const;
+			bool handleErrors( int rc ) const;
+
+		protected:
+			RepositoryPrivate*	mRepo;
+		};
+
+	}
+
 }
 
 #endif

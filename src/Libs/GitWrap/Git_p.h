@@ -21,8 +21,20 @@
 
 #include "Git.h"
 
+#define BEGIN_INTERNAL_DECL()	namespace Internal {
+#define END_INTERNAL_DECL()		}
+
+#define BEGIN_INTERNAL_IMPL()	namespace Internal {
+#define END_INTERNAL_IMPL()		} \
+								using namespace Internal;
+
 namespace Git
 {
+
+	class Signature;
+	class RefSpec;
+
+	BEGIN_INTERNAL_DECL()
 
 	template< class T >
 	GitPtr< T >::GitPtr()
@@ -95,13 +107,17 @@ namespace Git
 	class IndexPrivate;
 	class ObjectPrivate;
 
-	class Signature;
-	class RefSpec;
-
 	Signature git2Signature( const git_signature* gitsig );
 	git_signature* signature2git( const Signature& sig );
 	RefSpec mkRefSpec( const git_refspec* refspec );
 
+	/**
+	 * @internal
+	 * @ingroup		GitWrap
+	 * @brief		convert GitWrap's TreeEntryAttributes convert to LibGit2 file mode
+	 * @param[in]	attr	GitWrap's TreeEntryAttributes
+	 * @return		LibGit2's git_filemode_t
+	 */
 	static inline git_filemode_t teattr2filemode( TreeEntryAttributes attr )
 	{
 		switch( attr )
@@ -118,6 +134,13 @@ namespace Git
 		return GIT_FILEMODE_NEW;
 	}
 
+	/**
+	 * @internal
+	 * @ingroup		GitWrap
+	 * @brief		Convert LibGit2 object type to GitWrap object type
+	 * @param[in]	otype	LibGit2's object type
+	 * @return		LibGitWrap's object type
+	 */
 	static inline ObjectType gitotype2ObjectType( git_otype otype )
 	{
 		switch( otype )
@@ -131,6 +154,7 @@ namespace Git
 		}
 	}
 
+	END_INTERNAL_DECL()
 }
 
 #endif

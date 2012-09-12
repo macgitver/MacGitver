@@ -18,6 +18,8 @@
 #include <QDir>
 #include <QFileDialog>
 
+#include "Config/Config.h"
+
 #include "GitWrap/Git.h"
 #include "GitWrap/BackgroundClone.h"
 
@@ -41,13 +43,33 @@ CloneRepositoryDlg::CloneRepositoryDlg()
 void CloneRepositoryDlg::onBrowse()
 {
 	QString fn = txtPath->text();
-	fn = QFileDialog::getExistingDirectory( this, trUtf8( "Browse" ), fn );
 	if( fn.isEmpty() )
+	{
+		fn = Config::self().get( "Repository/lastUsedDir", QDir::homePath() ).toString();
+	}
+
+	QFileDialog* fd = new QFileDialog( this, trUtf8( "Select repository location" ) );
+
+	#ifdef Q_OS_MAC
+	fd->setFilter( QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden );
+	#else
+	fd->setFileMode( QFileDialog::Directory );
+	#endif
+
+	fd->setDirectory( fn );
+	fd->setAcceptMode( QFileDialog::AcceptSave );
+	fd->open( this, SLOT(onBrowseHelper(QString)) );
+}
+
+void CloneRepositoryDlg::onBrowseHelper( const QString& directory )
+{
+	if( directory.isEmpty() )
 	{
 		return;
 	}
 
-	txtPath->setText( fn );
+	Config::self().set( "Repository/lastUsedDir", directory );
+	txtPath->setText( directory );
 }
 
 void CloneRepositoryDlg::onCheckout( bool value )

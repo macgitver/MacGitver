@@ -19,11 +19,13 @@
 
 #include "MacGitver/Module.h"
 
+#include "Config/ConfigUser.h"
+
 #include "hic_RepositoryModule.h"
 
 class RepositoryCore;
 
-class RepositoryModule : public Module, public RepositoryActions
+class RepositoryModule : public Module, public RepositoryActions, private ConfigUser
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
@@ -46,10 +48,10 @@ private slots:
 	void onRepositoryCreate();
 	void onRepositoryClone();
 	void onRepositoryOpen();
-    /**
-     * @brief Helper slot to open a git repository using an OS specific dialog.
-     */
-    void onRepositoryOpenHelper();
+	/**
+	 * @brief Helper slot to open a git repository using an OS specific dialog.
+	 */
+	void onRepositoryOpenHelper();
 	void onRepositoryClose();
 
 private:

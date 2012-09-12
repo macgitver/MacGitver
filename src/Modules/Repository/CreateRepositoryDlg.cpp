@@ -18,6 +18,8 @@
 #include <QDir>
 #include <QFileDialog>
 
+#include "Config/Config.h"
+
 #include "GitWrap/Git.h"
 
 #include "CreateRepositoryDlg.h"
@@ -37,11 +39,33 @@ CreateRepositoryDlg::CreateRepositoryDlg()
 void CreateRepositoryDlg::onBrowse()
 {
 	QString fn = txtPath->text();
-	fn = QFileDialog::getExistingDirectory( this, trUtf8( "Browse" ), fn );
 	if( fn.isEmpty() )
-		return;
+	{
+		fn = Config::self().get( "Repository/lastUsedDir", QDir::homePath() ).toString();
+	}
 
-	txtPath->setText( fn );
+	QFileDialog* fd = new QFileDialog( this, trUtf8( "Select repository location" ) );
+
+	#ifdef Q_OS_MAC
+	fd->setFilter( QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden );
+	#else
+	fd->setFileMode( QFileDialog::Directory );
+	#endif
+
+	fd->setDirectory( fn );
+	fd->setAcceptMode( QFileDialog::AcceptSave );
+	fd->open( this, SLOT(onBrowseHelper(QString)) );
+}
+
+void CreateRepositoryDlg::onBrowseHelper( const QString& directory )
+{
+	if( directory.isEmpty() )
+	{
+		return;
+	}
+
+	Config::self().set( "Repository/lastUsedDir", directory );
+	txtPath->setText( directory );
 }
 
 void CreateRepositoryDlg::checkValid()

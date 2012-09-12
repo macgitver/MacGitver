@@ -14,6 +14,8 @@
  *
  */
 
+#include "Git_p.h"
+
 #include "Error.h"
 
 namespace Git
@@ -36,6 +38,28 @@ namespace Git
 	QString Error::text() const
 	{
 		return mErrorText;
+	}
+
+	Result::Result( int resultCode )
+	{
+		setError( resultCode );
+	}
+
+	void Result::setError( int resultCode )
+	{
+		mCode = resultCode;
+		if( mCode < 0 )
+		{
+			const git_error* err = giterr_last();
+			mClass = err->klass;	/// @todo wrap this
+			mText = QString::fromUtf8( err->message );
+		}
+	}
+
+	Result& Result::operator =( int resultCode )
+	{
+		setError( resultCode );
+		return *this;
 	}
 
 }

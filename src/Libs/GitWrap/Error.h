@@ -80,7 +80,7 @@ namespace Git
 
 	inline ResultCode::ResultCode( const ResultCode& other )
 	{
-		if( mCode = other.mCode )
+		if( ( mCode = other.mCode ) )
 		{
 			mClass = other.mClass;
 			mText = other.mText;
@@ -93,7 +93,7 @@ namespace Git
 
 	inline ResultCode& ResultCode::operator=( const ResultCode& other )
 	{
-		if( mCode = other.mCode )
+		if( ( mCode = other.mCode ) )
 		{
 			mClass = other.mClass;
 			mText = other.mText;

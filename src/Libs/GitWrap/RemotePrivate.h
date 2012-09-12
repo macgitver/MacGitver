@@ -26,6 +26,7 @@ namespace Git
 	BEGIN_INTERNAL_DECL()
 
     /**
+	 * @internal
 	 * @ingroup GitWrap
      * @brief The RemotePrivate class
      *

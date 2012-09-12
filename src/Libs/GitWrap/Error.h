@@ -25,10 +25,9 @@ namespace Git
 {
 
     /**
-     * @brief The Error class wraps the git_error class.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Wraps the git_error
+	 *
      */
 	class GITWRAP_API Error
 	{
@@ -44,7 +43,6 @@ namespace Git
 		QString		mErrorText;
 	};
 
-    /**@}*/
 }
 
 #endif

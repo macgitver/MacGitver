@@ -26,8 +26,9 @@ namespace Git
 	BEGIN_INTERNAL_DECL()
 
     /**
-	 * @ingroup GitWrap
-     * @brief The RevisionWalkerPrivate class
+	 * @internal
+	 * @ingroup		GitWrap
+	 * @brief		The RevisionWalkerPrivate class
      *
      */
 	class RevisionWalkerPrivate : public RepoObject

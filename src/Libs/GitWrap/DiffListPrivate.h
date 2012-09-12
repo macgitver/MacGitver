@@ -26,11 +26,11 @@ namespace Git
 	BEGIN_INTERNAL_DECL()
 
     /**
-     * @brief The DiffListPrivate class
-     *
-     * @ingroup GitWrap
-     * @{
-     */
+	 * @internal
+	 * @ingroup		GitWrap
+	 * @brief		The DiffListPrivate class
+	 *
+	 */
 	class DiffListPrivate : public RepoObject
 	{
 	public:

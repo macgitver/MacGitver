@@ -23,19 +23,47 @@ namespace Git
 
 	ObjectId::ObjectId()
 	{
-		memset( data, 0, 20 );
+		memset( data, 0, SHA1_Length );
 	}
 
 	ObjectId::ObjectId( const QByteArray& d )
 	{
-		Q_ASSERT( d.length() == 20 );
-		memcpy( data, d.constData(), 20 );
+		Q_ASSERT( d.length() == SHA1_Length );
+		memcpy( data, d.constData(), SHA1_Length );
+	}
+
+
+	ObjectId ObjectId::fromString( const QString& oid, int max, bool* success )
+	{
+		return fromAscii( oid.toAscii(), max, success );
+	}
+
+	ObjectId ObjectId::fromAscii( const QByteArray& oid, int max, bool* success )
+	{
+		git_oid gitoid;
+
+		if( git_oid_fromstrn( &gitoid, oid.constData(),
+							  qMin( qMin( max, int(SHA1_LengthHex) ), oid.length() ) ) < 0 )
+		{
+			if( success )
+			{
+				*success = false;
+			}
+			return ObjectId();
+		}
+
+		if( success )
+		{
+			*success = true;
+		}
+
+		return fromRaw( gitoid.id, SHA1_Length );
 	}
 
 	ObjectId ObjectId::fromRaw( const unsigned char* d, int len )
 	{
 		ObjectId id;
-		memcpy( id.data, d, qMin( len, 20 ) );
+		memcpy( id.data, d, qMin( len, int( SHA1_Length ) ) );
 		return id;
 	}
 
@@ -46,24 +74,24 @@ namespace Git
 
 	QByteArray ObjectId::toAscii() const
 	{
-		QByteArray id( 41, 0 );
-		git_oid_tostr( id.data(), 41, (const git_oid*) data );
+		QByteArray id( SHA1_LengthHex + 1, 0 );
+		git_oid_tostr( id.data(), SHA1_LengthHex +  1, (const git_oid*) data );
 		return id;
 	}
 
 	bool ObjectId::operator==( const ObjectId& other ) const
 	{
-		return !memcmp( data, other.data, 20 );
+		return !memcmp( data, other.data, SHA1_Length );
 	}
 
 	bool ObjectId::operator!=( const ObjectId& other ) const
 	{
-		return !!memcmp( data, other.data, 20 );
+		return !!memcmp( data, other.data, SHA1_Length );
 	}
 
 	bool ObjectId::isNull() const
 	{
-		for( int i = 0; i < 20; i++ )
+		for( int i = 0; i < SHA1_Length; i++ )
 			if( data[ i ] )
 				return false;
 

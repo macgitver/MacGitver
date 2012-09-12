@@ -14,26 +14,47 @@
  *
  */
 
-#include "Git_p.h"
+#ifndef GIT_TREE_ENTRY_H
+#define GIT_TREE_ENTRY_H
 
-#include "ObjectBlob.h"
+#include "Git.h"
 
 namespace Git
 {
 
-	ObjectBlob::ObjectBlob()
+	namespace Internal
 	{
+		class TreeEntryPrivate;
 	}
 
-	ObjectBlob::ObjectBlob( Internal::ObjectPrivate* _d )
-		: Object( _d )
-	{
-		Q_ASSERT( type() == otBlob );
-	}
+	class ObjectId;
 
-	ObjectBlob::ObjectBlob( const ObjectBlob& o )
-		: Object( o )
+	/**
+	 * @ingroup		GitWrap
+	 * @brief		Represents an entry in a git tree
+	 */
+	class GITWRAP_API TreeEntry
 	{
-	}
+	public:
+		TreeEntry();
+		TreeEntry( Internal::TreeEntryPrivate* _d );
+		TreeEntry( const TreeEntry& other );
+		~TreeEntry();
+		TreeEntry& operator=( const TreeEntry& other );
+
+	public:
+		bool isValid() const;
+
+		TreeEntry clone() const;
+
+		ObjectId sha1() const;
+		QString name() const;
+		ObjectType type() const;
+
+	private:
+		Internal::GitPtr< Internal::TreeEntryPrivate > d;
+	};
 
 }
+
+#endif

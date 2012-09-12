@@ -25,6 +25,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	DiffListPrivate::DiffListPrivate( RepositoryPrivate* repo, git_diff_list* difflist )
 		: RepoObject( repo )
 		, mDiffList( difflist )
@@ -42,11 +44,13 @@ namespace Git
 		}
 	}
 
+	END_INTERNAL_IMPL()
+
 	DiffList::DiffList()
 	{
 	}
 
-	DiffList::DiffList( DiffListPrivate* _d )
+	DiffList::DiffList( Internal::DiffListPrivate* _d )
 		: d( _d )
 	{
 	}
@@ -110,7 +114,7 @@ namespace Git
 
 		if( pc->startHunk( range->new_start, range->new_lines,
 						   range->old_start, range->old_lines,
-						   header ? QString::fromUtf8( header, header_len ) : QString() ) )
+						   header ? QString::fromUtf8( header, int( header_len ) ) : QString() ) )
 		{
 			return GIT_ERROR;
 		}
@@ -129,7 +133,7 @@ namespace Git
 			if( content[ content_len - 1 ] == '\n' )
 				--content_len;
 
-			ct = QString::fromUtf8( content, content_len );
+			ct = QString::fromUtf8( content, int( content_len ) );
 		}
 
 		switch( line_origin )

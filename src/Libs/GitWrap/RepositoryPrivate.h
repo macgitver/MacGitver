@@ -20,27 +20,26 @@
 #include <QMutex>
 
 #include "Git_p.h"
+#include "RepoObject.h"
 
 namespace Git
 {
 
 	class Error;
 
+	BEGIN_INTERNAL_DECL()
+
     /**
+     * @internal
+	 * @ingroup GitWrap
      * @brief The RepositoryPrivate class
-     *
-     * @ingroup GitWrap
-     * @{
+	 *
      */
-	class RepositoryPrivate
+	class RepositoryPrivate : public BasicObject
 	{
 	public:
 		RepositoryPrivate( git_repository* repo );
 		~RepositoryPrivate();
-
-	public:
-		void ref();
-		void deref();
 
 	public:
 		bool handleErrors( int rc ) const;
@@ -50,14 +49,10 @@ namespace Git
 		IndexPrivate*			mIndex;
 		mutable QList< Error >	mErrors;
 		mutable QMutex			mErrorListMtx;
-
-	private:
-		QAtomicInt				mRefCounter;
-
-		friend int status_callback( const char* name, unsigned int status, void* );
 	};
 
-    /**@}*/
+	END_INTERNAL_DECL()
+
 }
 
 #endif

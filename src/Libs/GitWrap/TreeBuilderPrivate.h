@@ -14,26 +14,34 @@
  *
  */
 
-#include "Git_p.h"
+#ifndef GIT_TREEBUILDER_PRIVATE_H
+#define GIT_TREEBUILDER_PRIVATE_H
 
-#include "ObjectBlob.h"
+#include "Git_p.h"
+#include "RepoObject.h"
 
 namespace Git
 {
 
-	ObjectBlob::ObjectBlob()
-	{
-	}
+	BEGIN_INTERNAL_DECL()
 
-	ObjectBlob::ObjectBlob( Internal::ObjectPrivate* _d )
-		: Object( _d )
+	/**
+	 * @internal
+	 * @ingroup		GitWrap
+	 * @brief		The TreeBuilderPrivate class
+	 */
+	class TreeBuilderPrivate : public RepoObject
 	{
-		Q_ASSERT( type() == otBlob );
-	}
+	public:
+		TreeBuilderPrivate( RepositoryPrivate* repo, git_treebuilder* builder );
+		~TreeBuilderPrivate();
 
-	ObjectBlob::ObjectBlob( const ObjectBlob& o )
-		: Object( o )
-	{
-	}
+	public:
+		git_treebuilder*	mBuilder;
+	};
+
+	END_INTERNAL_DECL()
 
 }
+
+#endif

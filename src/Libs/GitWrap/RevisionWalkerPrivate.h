@@ -23,11 +23,12 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_DECL()
+
     /**
+	 * @ingroup GitWrap
      * @brief The RevisionWalkerPrivate class
      *
-     * @ingroup GitWrap
-     * @{
      */
 	class RevisionWalkerPrivate : public RepoObject
 	{
@@ -39,7 +40,8 @@ namespace Git
 		git_revwalk*		mWalker;
 	};
 
-    /**@*/
+	END_INTERNAL_DECL()
+
 }
 
 #endif

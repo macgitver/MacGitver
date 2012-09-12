@@ -32,16 +32,15 @@ namespace Git
 	class ObjectTree;
 
     /**
-     * @brief The ObjectCommit class represents a Git commit object.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Represents a git commit object.
+	 *
      */
 	class GITWRAP_API ObjectCommit : public Object
 	{
 	public:
 		ObjectCommit();
-		ObjectCommit( ObjectPrivate* _d );
+		ObjectCommit( Internal::ObjectPrivate* _d );
 		ObjectCommit( const ObjectCommit& o );
 
 	public:
@@ -78,14 +77,25 @@ namespace Git
 		Reference createBranch( const QString& name, bool force );
 	};
 
+	/**
+	 * @ingroup		GitWrap
+	 * @brief		qHash() for Git::ObjectCommit
+	 */
 	inline uint qHash( const ObjectCommit& c )
 	{
 		return qHash( c.id() );
 	}
 
-    /**@}*/
 }
 
+// Should we keep this? If yes, we should provide them for all GitWrap-classes.
+/**
+ * @ingroup		GitWrap
+ * @brief		Debug-Stream support of Git::ObjectCommit
+ * @param[in]	debug	The Debug-Stream to output into
+ * @param[in]	commit	The commit object to output
+ * @return		The Debug-Stream
+ */
 inline QDebug operator<<( QDebug debug, const Git::ObjectCommit& commit )
 {
 	return debug << "Commit(id=" << commit.id() << ";author=" << commit.author() << ")";

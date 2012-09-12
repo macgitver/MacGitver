@@ -23,7 +23,10 @@
 namespace Git
 {
 
-	class ObjectPrivate;
+	namespace Internal
+	{
+		class ObjectPrivate;
+	}
 
 	class ObjectTree;
 	class ObjectBlob;
@@ -41,7 +44,7 @@ namespace Git
 	class GITWRAP_API Object
 	{
 	public:
-		Object( ObjectPrivate* _d );
+		Object( Internal::ObjectPrivate* _d );
 		Object( const Object& other );
 		Object();
 		~Object();
@@ -135,10 +138,9 @@ namespace Git
         Repository repository() const;
 
 	protected:
-		GitPtr< ObjectPrivate > d;
+		Internal::GitPtr< Internal::ObjectPrivate > d;
 	};
 
-    /**@}*/
 }
 
 #endif

@@ -20,6 +20,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	ConfigPrivate::ConfigPrivate( git_config* cfg )
 		: mCfg( cfg )
 	{
@@ -30,25 +32,13 @@ namespace Git
 		git_config_free( mCfg );
 	}
 
-	void ConfigPrivate::ref()
-	{
-		mRefCounter.ref();
-	}
-
-	void ConfigPrivate::deref()
-	{
-		if( !mRefCounter.deref() )
-		{
-			delete this;
-		}
-	}
-
+	END_INTERNAL_IMPL()
 
 	Config::Config()
 	{
 	}
 
-	Config::Config( ConfigPrivate* cfg )
+	Config::Config( Internal::ConfigPrivate* cfg )
 		: d( cfg )
 	{
 	}
@@ -113,7 +103,7 @@ namespace Git
 			return Config();
 		}
 
-		return new ConfigPrivate( cfg );
+		return new Internal::ConfigPrivate( cfg );
 	}
 
 	Config Config::user()
@@ -133,7 +123,7 @@ namespace Git
 			return Config();
 		}
 
-		return new ConfigPrivate( cfg );
+		return new Internal::ConfigPrivate( cfg );
 	}
 
 	Config Config::file( const QString& fileName )
@@ -147,7 +137,7 @@ namespace Git
 			return Config();
 		}
 
-		return new ConfigPrivate( cfg );
+		return new Internal::ConfigPrivate( cfg );
 	}
 
 	Config Config::create()
@@ -160,7 +150,7 @@ namespace Git
 			return Config();
 		}
 
-		return new ConfigPrivate( cfg );
+		return new Internal::ConfigPrivate( cfg );
 	}
 
 	bool Config::addFile( const QString& fileName, int priority )

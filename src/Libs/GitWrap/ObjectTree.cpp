@@ -21,6 +21,7 @@
 #include "ObjectPrivate.h"
 #include "ObjectTree.h"
 #include "RepositoryPrivate.h"
+#include "TreeEntryPrivate.h"
 
 namespace Git
 {
@@ -29,7 +30,7 @@ namespace Git
 	{
 	}
 
-	ObjectTree::ObjectTree( ObjectPrivate* _d )
+	ObjectTree::ObjectTree( Internal::ObjectPrivate* _d )
 		: Object( _d )
 	{
 		Q_ASSERT( type() == otTree );
@@ -64,7 +65,7 @@ namespace Git
 			return ObjectTree();
 		}
 
-		return new ObjectPrivate( d->repo(), subObject );
+		return new Internal::ObjectPrivate( d->repo(), subObject );
 	}
 
 	DiffList ObjectTree::diffToTree( ObjectTree newTree )
@@ -84,7 +85,7 @@ namespace Git
 			return DiffList();
 		}
 
-		return DiffList( new DiffListPrivate( d->repo(), diffList ) );
+		return DiffList( new Internal::DiffListPrivate( d->repo(), diffList ) );
 	}
 
 	DiffList ObjectTree::diffToIndex()
@@ -103,7 +104,7 @@ namespace Git
 			return DiffList();
 		}
 
-		return DiffList( new DiffListPrivate( d->repo(), diffList ) );
+		return DiffList( new Internal::DiffListPrivate( d->repo(), diffList ) );
 	}
 
 	DiffList ObjectTree::diffToWorkingDir()
@@ -122,7 +123,45 @@ namespace Git
 			return DiffList();
 		}
 
-		return DiffList( new DiffListPrivate( d->repo(), diffList ) );
+		return DiffList( new Internal::DiffListPrivate( d->repo(), diffList ) );
+	}
+
+	size_t ObjectTree::entryCount() const
+	{
+		if( !d )
+		{
+			return 0;
+		}
+
+		git_tree* gitTree = (git_tree*) d->mObj;
+		return git_tree_entrycount( gitTree );
+	}
+
+	TreeEntry ObjectTree::entryAt( size_t index ) const
+	{
+		if( !d )
+		{
+			return TreeEntry();
+		}
+
+		git_tree* gitTree = (git_tree*) d->mObj;
+
+		const git_tree_entry* entry = git_tree_entry_byindex( gitTree, index );
+		return new Internal::TreeEntryPrivate( entry );
+	}
+
+	TreeEntry ObjectTree::entry( const QString& fileName ) const
+	{
+		if( !d )
+		{
+			return TreeEntry();
+		}
+
+		git_tree* gitTree = (git_tree*) d->mObj;
+
+		const git_tree_entry* entry = git_tree_entry_byname( gitTree,
+															 fileName.toUtf8().constData() );
+		return new Internal::TreeEntryPrivate( entry );
 	}
 
 }

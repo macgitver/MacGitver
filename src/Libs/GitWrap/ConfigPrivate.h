@@ -15,32 +15,28 @@
  */
 
 #include "Git_p.h"
+#include "RepoObject.h"
 
 namespace Git
 {
 
+	BEGIN_INTERNAL_DECL()
+
     /**
-     * @brief The ConfigPrivate class
-     *
-     * @ingroup GitWrap
-     * @{
+     * @internal
+	 * @ingroup		GitWrap
+	 * @brief		The ConfigPrivate class
+	 *
      */
-	class ConfigPrivate
+	class ConfigPrivate : public BasicObject
 	{
 	public:
 		ConfigPrivate( git_config* cfg );
 		~ConfigPrivate();
 
 	public:
-		void ref();
-		void deref();
-
-	public:
 		git_config*		mCfg;
-
-	private:
-		QAtomicInt		mRefCounter;
 	};
 
-    /**@}*/
+	END_INTERNAL_DECL()
 }

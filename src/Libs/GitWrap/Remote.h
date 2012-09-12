@@ -22,23 +22,28 @@
 namespace Git
 {
 
-	class RemotePrivate;
+	namespace Internal
+	{
+		class RemotePrivate;
+	}
 
 	class ObjectId;
 	class Reference;
 	class RefSpec;
 
     /**
-     * @brief The Remote class represents a Git remote item, used to synchronize with remote repositories.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Represents a git remote.
+	 *
+	 * Remotes are used to synchronize with foreign repositories, which may actually be on the local
+	 * or on a remote site.
+	 *
      */
 	class GITWRAP_API Remote
 	{
 	public:
 		Remote();
-		Remote( RemotePrivate* _d );
+		Remote( Internal::RemotePrivate* _d );
 		Remote( const Remote& other );
 		~Remote();
 		Remote& operator=( const Remote& other );
@@ -66,10 +71,9 @@ namespace Git
 		bool updateTips();
 
 	private:
-		GitPtr< RemotePrivate > d;
+		Internal::GitPtr< Internal::RemotePrivate > d;
 	};
 
-    /**@}*/
 }
 
 #endif

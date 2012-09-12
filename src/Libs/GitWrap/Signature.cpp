@@ -20,33 +20,38 @@
 namespace Git
 {
 
-	Signature git2Signature( const git_signature* gitsig )
+	namespace Internal
 	{
-		QDateTime dt = QDateTime::fromTime_t( gitsig->when.time );
-		dt.setUtcOffset( gitsig->when.offset * 60 );
 
-		return Signature(
-			QString::fromUtf8( gitsig->name ),
-			QString::fromUtf8( gitsig->email ),
-			dt );
-	}
-
-	git_signature* signature2git( const Signature& sig )
-	{
-		git_signature* gitsig = 0;
-
-		int rc = git_signature_new( &gitsig,
-									sig.name().toUtf8().constData(),
-									sig.email().toUtf8().constData(),
-									sig.when().toTime_t(),
-									sig.when().utcOffset() / 60 );
-
-		if( rc < GIT_OK )
+		Signature git2Signature( const git_signature* gitsig )
 		{
-			return NULL;
+			QDateTime dt = QDateTime::fromTime_t( gitsig->when.time );
+			dt.setUtcOffset( gitsig->when.offset * 60 );
+
+			return Signature(
+				QString::fromUtf8( gitsig->name ),
+				QString::fromUtf8( gitsig->email ),
+				dt );
 		}
 
-		return gitsig;
+		git_signature* signature2git( const Signature& sig )
+		{
+			git_signature* gitsig = 0;
+
+			int rc = git_signature_new( &gitsig,
+										sig.name().toUtf8().constData(),
+										sig.email().toUtf8().constData(),
+										sig.when().toTime_t(),
+										sig.when().utcOffset() / 60 );
+
+			if( rc < GIT_OK )
+			{
+				return NULL;
+			}
+
+			return gitsig;
+		}
+
 	}
 
 }

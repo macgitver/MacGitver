@@ -26,6 +26,9 @@
 
 namespace Git
 {
+
+	BEGIN_INTERNAL_IMPL()
+
 	ObjectPrivate::ObjectPrivate( RepositoryPrivate* repo, git_object* o )
 		: RepoObject( repo )
 		, mObj( o )
@@ -38,7 +41,9 @@ namespace Git
 		git_object_free( mObj );
 	}
 
-	Object::Object( ObjectPrivate* _d )
+	END_INTERNAL_IMPL()
+
+	Object::Object( Internal::ObjectPrivate* _d )
 		: d( _d )
 	{
 	}

@@ -14,26 +14,35 @@
  *
  */
 
-#include "Git_p.h"
+#ifndef GIT_TREE_ENTRY_PRIVATE_H
+#define GIT_TREE_ENTRY_PRIVATE_H
 
-#include "ObjectBlob.h"
+#include "Git_p.h"
+#include "RepoObject.h"
 
 namespace Git
 {
 
-	ObjectBlob::ObjectBlob()
-	{
-	}
+	BEGIN_INTERNAL_DECL()
 
-	ObjectBlob::ObjectBlob( Internal::ObjectPrivate* _d )
-		: Object( _d )
+	/**
+	 * @internal
+	 * @ingroup		GitWrap
+	 * @brief		The TreeEntryPrivate class
+	 */
+	class TreeEntryPrivate : public BasicObject
 	{
-		Q_ASSERT( type() == otBlob );
-	}
+	public:
+		TreeEntryPrivate( const git_tree_entry* entry, bool unmanaged = false );
+		~TreeEntryPrivate();
 
-	ObjectBlob::ObjectBlob( const ObjectBlob& o )
-		: Object( o )
-	{
-	}
+	public:
+		const git_tree_entry*	mEntry;
+		bool					mUnmanaged;
+	};
+
+	END_INTERNAL_DECL()
 
 }
+
+#endif

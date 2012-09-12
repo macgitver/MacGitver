@@ -23,6 +23,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	IndexPrivate::IndexPrivate( RepositoryPrivate* repo, git_index* index )
 		: RepoObject( repo )
 		, mIndex( index )
@@ -44,11 +46,13 @@ namespace Git
 		}
 	}
 
+	END_INTERNAL_IMPL()
+
 	Index::Index()
 	{
 	}
 
-	Index::Index( IndexPrivate* _d )
+	Index::Index( Internal::IndexPrivate* _d )
 		: d( _d )
 	{
 	}

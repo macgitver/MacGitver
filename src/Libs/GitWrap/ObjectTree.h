@@ -20,6 +20,7 @@
 #include "Git.h"
 #include "ObjectId.h"
 #include "Object.h"
+#include "TreeEntry.h"
 
 namespace Git
 {
@@ -27,16 +28,15 @@ namespace Git
 	class DiffList;
 
     /**
-     * @brief The ObjectTree class represents a Git tree object.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Represents a git tree object
+	 *
      */
 	class GITWRAP_API ObjectTree : public Object
 	{
 	public:
 		ObjectTree();
-		ObjectTree( ObjectPrivate* _d );
+		ObjectTree( Internal::ObjectPrivate* _d );
 		ObjectTree( const ObjectTree& o );
 
 	public:
@@ -45,9 +45,23 @@ namespace Git
 		DiffList diffToTree( ObjectTree newTree );
 		DiffList diffToIndex();
 		DiffList diffToWorkingDir();
+
+		size_t entryCount() const;
+		TreeEntry entryAt( size_t index ) const;
+		TreeEntry entry( const QString& fileName ) const;
+
+	public:
+		inline TreeEntry operator[]( size_t index ) const
+		{
+			return entryAt( index );
+		}
+
+		inline TreeEntry operator[]( const QString& fileName ) const
+		{
+			return entry( fileName );
+		}
 	};
 
-    /**@}*/
 }
 
 #endif

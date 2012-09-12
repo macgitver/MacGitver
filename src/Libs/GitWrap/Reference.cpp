@@ -23,6 +23,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	ReferencePrivate::ReferencePrivate( RepositoryPrivate* repo, git_reference* ref )
 		: RepoObject( repo )
 		, mRef( ref )
@@ -38,11 +40,13 @@ namespace Git
 		}
 	}
 
+	END_INTERNAL_IMPL()
+
 	Reference::Reference()
 	{
 	}
 
-	Reference::Reference( ReferencePrivate* _d )
+	Reference::Reference( Internal::ReferencePrivate* _d )
 		: d( _d )
 	{
 	}

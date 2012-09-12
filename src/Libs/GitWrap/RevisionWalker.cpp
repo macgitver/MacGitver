@@ -18,10 +18,11 @@
 #include "RevisionWalkerPrivate.h"
 #include "ObjectId.h"
 #include "Reference.h"
-#include "Git_p.h"
 
 namespace Git
 {
+
+	BEGIN_INTERNAL_IMPL()
 
 	RevisionWalkerPrivate::RevisionWalkerPrivate( RepositoryPrivate* repo, git_revwalk* walker )
 		: RepoObject( repo )
@@ -35,11 +36,13 @@ namespace Git
 		git_revwalk_free( mWalker );
 	}
 
+	END_INTERNAL_IMPL()
+
 	RevisionWalker::RevisionWalker()
 	{
 	}
 
-	RevisionWalker::RevisionWalker( RevisionWalkerPrivate* _d )
+	RevisionWalker::RevisionWalker( Internal::RevisionWalkerPrivate* _d )
 		: d( _d )
 	{
 	}
@@ -96,6 +99,41 @@ namespace Git
 		if( d )
 		{
 			int rc = git_revwalk_push_head( d->mWalker );
+			d->handleErrors( rc );
+		}
+	}
+
+	void RevisionWalker::hide( const ObjectId& id )
+	{
+		Q_ASSERT( d );
+		if( d )
+		{
+			int rc = git_revwalk_hide( d->mWalker, (const git_oid*) id.raw() );
+			d->handleErrors( rc );
+		}
+	}
+
+	void RevisionWalker::hide( const Reference& ref )
+	{
+		hideRef( ref.name() );
+	}
+
+	void RevisionWalker::hideRef( const QString& name )
+	{
+		Q_ASSERT( d );
+		if( d )
+		{
+			int rc = git_revwalk_hide_ref( d->mWalker, name.toUtf8().constData() );
+			d->handleErrors( rc );
+		}
+	}
+
+	void RevisionWalker::hideHead()
+	{
+		Q_ASSERT( d );
+		if( d )
+		{
+			int rc = git_revwalk_hide_head( d->mWalker );
 			d->handleErrors( rc );
 		}
 	}

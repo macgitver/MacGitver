@@ -14,62 +14,45 @@
  *
  */
 
-#ifndef GIT_REPO_OBJECT_H
-#define GIT_REPO_OBJECT_H
+#ifndef GIT_TREE_BUILDER_H
+#define GIT_TREE_BUILDER_H
 
-#include <QAtomicInt>
-
-#include "Git_p.h"
+#include "Git.h"
 
 namespace Git
 {
+
 	namespace Internal
 	{
-
-		class RepositoryPrivate;
-
-		/**
-		 * @internal
-		 * @ingroup GitWrap
-		 * @brief The BaseObject class
-		 *
-		 */
-		class BasicObject
-		{
-		public:
-			BasicObject();
-			virtual ~BasicObject();
-
-		public:
-			void ref();
-			void deref();
-
-		private:
-			QAtomicInt			mRefCounter;
-		};
-
-		/**
-		 * @internal
-		 * @ingroup GitWrap
-		 * @brief The RepoObject class
-		 *
-		 */
-		class RepoObject : public BasicObject
-		{
-		public:
-			RepoObject( RepositoryPrivate* repo );
-			~RepoObject();
-
-			RepositoryPrivate* repo() const;
-			bool handleErrors( int rc ) const;
-
-		protected:
-			RepositoryPrivate*	mRepo;
-		};
-
+		class TreeBuilderPrivate;
 	}
+
+	class TreeEntry;
+	class ObjectId;
+
+	class GITWRAP_API TreeBuilder
+	{
+	public:
+		TreeBuilder();
+		TreeBuilder( Internal::TreeBuilderPrivate* _d );
+		TreeBuilder( const TreeBuilder& other );
+		~TreeBuilder();
+		TreeBuilder& operator=( const TreeBuilder& other );
+
+	public:
+		bool isValid() const;
+
+		void clear();
+
+		TreeEntry get( const QString& name );
+		bool insert( const QString& fileName, TreeEntryAttributes type, const ObjectId& oid );
+		bool remove( const QString& fileName );
+		ObjectId write();
+
+	private:
+		Internal::GitPtr< Internal::TreeBuilderPrivate > d;
+	};
 
 }
 
 #endif
-

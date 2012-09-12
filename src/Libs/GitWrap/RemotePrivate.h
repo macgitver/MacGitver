@@ -23,11 +23,12 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_DECL()
+
     /**
+	 * @ingroup GitWrap
      * @brief The RemotePrivate class
      *
-     * @ingroup GitWrap
-     * @{
      */
 	class RemotePrivate : public RepoObject
 	{
@@ -41,7 +42,8 @@ namespace Git
 		git_indexer_stats	mStats;
 	};
 
-    /**@}*/
+	END_INTERNAL_DECL()
+
 }
 
 #endif

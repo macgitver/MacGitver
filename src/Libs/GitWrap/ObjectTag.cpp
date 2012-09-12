@@ -25,7 +25,7 @@ namespace Git
 	{
 	}
 
-	ObjectTag::ObjectTag( ObjectPrivate* _d )
+	ObjectTag::ObjectTag( Internal::ObjectPrivate* _d )
 		: Object( _d )
 	{
 		Q_ASSERT( type() == otTag );

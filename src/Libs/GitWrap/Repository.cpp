@@ -39,6 +39,8 @@
 namespace Git
 {
 
+	BEGIN_INTERNAL_IMPL()
+
 	RepositoryPrivate::RepositoryPrivate( git_repository* repo )
 		: mRepo( repo )
 		, mIndex( NULL )
@@ -51,19 +53,6 @@ namespace Git
 		Q_ASSERT( !mIndex );
 
 		git_repository_free( mRepo );
-	}
-
-	void RepositoryPrivate::ref()
-	{
-		mRefCounter.ref();
-	}
-
-	void RepositoryPrivate::deref()
-	{
-		if( !mRefCounter.deref() )
-		{
-			delete this;
-		}
 	}
 
 	bool RepositoryPrivate::handleErrors( int rc ) const
@@ -85,7 +74,9 @@ namespace Git
 		return true;
 	}
 
-	Repository::Repository( RepositoryPrivate* _d )
+	END_INTERNAL_IMPL()
+
+	Repository::Repository( Internal::RepositoryPrivate* _d )
 		: d( _d )
 	{
 	}
@@ -124,7 +115,7 @@ namespace Git
 			return Repository();
 		}
 
-        return Repository( new RepositoryPrivate( repo ) );
+		return Repository( new Internal::RepositoryPrivate( repo ) );
     }
 
     QString Repository::discover(const QString& startPath, bool acrossFs, const QStringList& ceilingDirs)
@@ -150,7 +141,7 @@ namespace Git
 			return Repository();
 		}
 
-		return Repository( new RepositoryPrivate( repo ) );
+		return Repository( new Internal::RepositoryPrivate( repo ) );
 	}
 
 	bool Repository::isBare() const
@@ -179,7 +170,7 @@ namespace Git
 				return Index();
 			}
 
-			d->mIndex = new IndexPrivate( d, index );
+			d->mIndex = new Internal::IndexPrivate( d, index );
 		}
 
 		return Index( d->mIndex );
@@ -332,20 +323,6 @@ namespace Git
 		return slFromStrArray( &arr );
 	}
 
-
-	int status_callback( const char* name, unsigned int status, void* )
-	{
-		qDebug( "%s - %s",
-				qPrintable( QString::number( status, 2 ) ),
-				name );
-		return GIT_OK;
-	}
-
-	void Repository::test()
-	{
-		git_status_foreach( d->mRepo, &status_callback, 0 );
-	}
-
 	static int statusHashCB( const char* fn, unsigned int status, void* rawSH )
 	{
 		#if 0
@@ -406,7 +383,7 @@ namespace Git
 				return Reference();
 			}
 
-			ref = new ReferencePrivate( d, refHead );
+			ref = new Internal::ReferencePrivate( d, refHead );
 		}
 
 		return ref;
@@ -435,7 +412,7 @@ namespace Git
 			return Object();
 		}
 
-		return new ObjectPrivate( d, obj );
+		return new Internal::ObjectPrivate( d, obj );
 	}
 
 	ObjectCommit Repository::lookupCommit( const ObjectId& id )
@@ -471,7 +448,7 @@ namespace Git
 				return RevisionWalker();
 			}
 
-			return new RevisionWalkerPrivate( d, walker );
+			return new Internal::RevisionWalkerPrivate( d, walker );
 		}
 
 		return RevisionWalker();
@@ -516,7 +493,7 @@ namespace Git
 			return Remote();
 		}
 
-		return new RemotePrivate( const_cast< RepositoryPrivate* >( *d ), remote );
+		return new Internal::RemotePrivate( const_cast< Internal::RepositoryPrivate* >( *d ), remote );
 	}
 
 	Remote Repository::createRemote( const QString& remoteName, const QString& url,
@@ -532,7 +509,7 @@ namespace Git
 			return Remote();
 		}
 
-		return new RemotePrivate( const_cast< RepositoryPrivate* >( *d ), remote );
+		return new Internal::RemotePrivate( *d, remote );
 	}
 
 	DiffList Repository::diffCommitToCommit( ObjectCommit oldCommit, ObjectCommit newCommit )
@@ -569,7 +546,7 @@ namespace Git
 			return DiffList();
 		}
 
-		return DiffList( new DiffListPrivate( d, diffList ) );
+		return DiffList( new Internal::DiffListPrivate( d, diffList ) );
 	}
 
 
@@ -588,7 +565,7 @@ namespace Git
 	struct cb_enum_submodules_t
 	{
 		QList< Submodule >* subs;
-		RepositoryPrivate* repo;
+		Internal::RepositoryPrivate* repo;
 	};
 
 	static int cb_enum_submodules( git_submodule* sm, const char* name, void* payload )

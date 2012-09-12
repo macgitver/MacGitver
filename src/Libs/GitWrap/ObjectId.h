@@ -27,21 +27,31 @@ namespace Git
 {
 
     /**
-     * @brief The ObjectId class represents the object identifier (OID) of a Git object.
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Represents an object identifier (OID) of a git object.
+	 *
      */
 	class GITWRAP_API ObjectId
 	{
+	public:
+		enum
+		{
+			SHA1_Length		= 20,
+			SHA1_LengthHex	= 40
+		};
+
 	public:
 		ObjectId();
 		ObjectId( const QByteArray& raw );
 
 	public:
-		static ObjectId fromString( const QString& oid, int max = 40, bool *success = NULL );
-		static ObjectId fromAscii( const QByteArray& oid, int max = 40, bool *success = NULL );
-		static ObjectId fromRaw( const unsigned char* raw, int n = 20 );
+		static ObjectId fromString( const QString& oid, int max = SHA1_LengthHex,
+									bool *success = NULL );
+
+		static ObjectId fromAscii( const QByteArray& oid, int max = SHA1_LengthHex,
+								   bool *success = NULL );
+
+		static ObjectId fromRaw( const unsigned char* raw, int n = SHA1_Length );
 
 		QString toString() const;
 		QByteArray toAscii() const;
@@ -57,14 +67,13 @@ namespace Git
 		bool operator!=( const ObjectId& other ) const;
 
 	private:
-		unsigned char data[ 20 ];
+		unsigned char data[ SHA1_Length ];
 	};
 
 	typedef QVector< ObjectId > ObjectIdList;
 
 	GITWRAP_API uint qHash( const ObjectId& sha1 );
 
-    /**@}*/
 }
 
 inline QDebug operator<<( QDebug debug, const Git::ObjectId& id )

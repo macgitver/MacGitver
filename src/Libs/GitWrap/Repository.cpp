@@ -76,6 +76,11 @@ namespace Git
 
 	END_INTERNAL_IMPL()
 
+	/**
+	 * @internal
+	 * @brief		Create a Repository object
+	 * @param[in]	_d	Pointer to private data.
+	 */
 	Repository::Repository( Internal::RepositoryPrivate* _d )
 		: d( _d )
 	{
@@ -86,6 +91,9 @@ namespace Git
 	{
 	}
 
+	/**
+	 * @brief		Create an invalid Repository object
+	 */
 	Repository::Repository()
 	{
 	}
@@ -105,12 +113,39 @@ namespace Git
 		return d;
 	}
 
-	Repository Repository::create( const QString& path, bool bare )
+	/**
+	 * @brief		Create a new repository
+	 *
+	 * A new git repository will be created in @a path. The path pointed to by @a path must either
+	 * be empty or not exist at all.
+	 *
+	 * Capabilities of the current operating system and the file system at @a path will be checked
+	 * and the repository's config will be setup accordingly.
+	 *
+	 * @param[in]		path	The path where the new repository will be created.
+	 * @param[in]		bare	If `true`, a bare repository will be created. If `false` a working
+	 *							tree will be setup.
+	 * @param[in,out]	result	A Result object; see @ref GitWrapErrorHandling
+	 *
+	 * @return	If successful, a `Repository` object for the newly created repostiory will be
+	 *			returned. Otherwise an invalid `Repository` object will be returned and the Result
+	 *			object is filled with the error.
+	 *
+	 * @see	Repository::open()
+	 */
+	Repository Repository::create( const QString& path,
+								   bool bare,
+								   Result& result )
 	{
-		git_repository* repo = NULL;
+		if( !result )
+		{
+			return Repository();
+		}
 
-		int rc = git_repository_init( &repo, path.toLatin1().constData(), bare );
-		if( rc < GIT_OK )
+		git_repository* repo = NULL;
+		result = git_repository_init( &repo, path.toUtf8().constData(), bare );
+
+		if( !result )
 		{
 			return Repository();
 		}
@@ -118,25 +153,81 @@ namespace Git
 		return Repository( new Internal::RepositoryPrivate( repo ) );
     }
 
-    QString Repository::discover(const QString& startPath, bool acrossFs, const QStringList& ceilingDirs)
+	/**
+	 * @brief Lookup a git repository by walking parent directories starting from startPath
+	 *
+	 * The lookup ends when the first repository is found or when reaching one of the @a ceilingDirs
+	 * directories.
+	 *
+	 * The method will automatically detect if the repository is bare (if there is a repository).
+	 *
+	 * @param[in] startPath
+	 * The base path where the lookup starts.
+	 *
+	 * @param[in] acrossFs
+	 * If `true`, then the lookup will not stop when a filesystem change is detected
+	 * while exploring parent directories.
+	 *
+	 * @param[in] ceilingDirs
+	 * A list of absolute paths (not symbolic links). The lookup will stop when one of these
+	 * paths is reached and no repository was found.
+	 *
+	 * @param[in,out] result
+	 * A Result object; see @ref GitWrapErrorHandling
+	 *
+	 * @return the path of the found repository or an empty QString
+	 *
+	 * @see	Repository::open(), Repository::create()
+	 */
+	QString Repository::discover( const QString& startPath,
+								  bool acrossFs,
+								  const QStringList& ceilingDirs,
+								  Result& result )
     {
+		if( !result )
+		{
+			return QString();
+		}
+
         QByteArray repoPath(GIT_PATH_MAX, Qt::Uninitialized);
         QByteArray joinedCeilingDirs = ceilingDirs.join(QChar::fromLatin1(GIT_PATH_LIST_SEPARATOR)).toUtf8();
 
-        git_repository_discover( repoPath.data(), repoPath.length()
-                                 , QString(startPath).toUtf8().constData()
-                                 , acrossFs, joinedCeilingDirs.constData()
-                                 );
+		result = git_repository_discover( repoPath.data(), repoPath.length(),
+										  startPath.toUtf8().constData(), acrossFs,
+										  joinedCeilingDirs.constData() );
 
-        return QString::fromUtf8(repoPath.constData());
+		return result ? QString::fromUtf8(repoPath.constData()) : QString();
     }
 
-	Repository Repository::open( const QString& path )
+	/**
+	 * @brief		Open an existing repository
+	 *
+	 * Opens the repository at @a path. The repository may be bare or have a working tree.
+	 *
+	 * This method will not try to discover a repository, if there is no repository found at
+	 * @a path.
+	 *
+	 * @param[in]		path	The path of the repository to open.
+	 * @param[in,out]	result	A Result object; see @ref GitWrapErrorHandling
+	 *
+	 * @return	If successful, a `Repository` object for the opened repostiory will be returned.
+	 *			Otherwise an invalid `Repository` object will be returned and the Result object
+	 *			is filled with the error.
+	 *
+	 * @sa	Repository::discover(), Repository::create()
+	 */
+	Repository Repository::open( const QString& path,
+								 Result& result )
 	{
+		if( !result )
+		{
+			return Repository();
+		}
 		git_repository* repo = NULL;
 
-		int rc = git_repository_open( &repo, path.toLatin1().constData() );
-		if( rc < GIT_OK )
+
+		result = git_repository_open( &repo, path.toUtf8().constData() );
+		if( !result )
 		{
 			return Repository();
 		}

@@ -15,7 +15,7 @@ SET( SRC_FILES
 	Config.cpp
 	ChangeListConsumer.cpp
 	DiffList.cpp
-	Git.cpp
+	GitWrap.cpp
 	Index.cpp
 	Object.cpp
 	ObjectBlob.cpp
@@ -45,7 +45,7 @@ SET( PUB_HDR_FILES
 	Error.h
 	Config.h
 	ChangeListConsumer.h
-	Git.h
+	GitWrap.h
 	DiffList.h
 	Index.h
 	Object.h

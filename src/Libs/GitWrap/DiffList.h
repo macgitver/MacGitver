@@ -17,7 +17,7 @@
 #ifndef GIT_DIFFLIST_H
 #define GIT_DIFFLIST_H
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {

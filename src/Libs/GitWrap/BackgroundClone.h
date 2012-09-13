@@ -17,7 +17,7 @@
 #ifndef GIT_BACKGROUND_CLONE_H
 #define GIT_BACKGROUND_CLONE_H
 
-#include "Git.h"
+#include "GitWrap.h"
 #include "Repository.h"
 #include "BackgroundTasks.h"
 

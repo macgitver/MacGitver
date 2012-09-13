@@ -19,7 +19,7 @@
 
 #include "git2.h"
 
-#include "Git.h"
+#include "GitWrap.h"
 
 #define BEGIN_INTERNAL_DECL()	namespace Internal {
 #define END_INTERNAL_DECL()		}

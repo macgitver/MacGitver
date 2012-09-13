@@ -22,7 +22,7 @@
 #include <QString>
 #include <QDateTime>
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {

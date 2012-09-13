@@ -17,7 +17,7 @@
 #ifndef GIT_INDEX_H
 #define GIT_INDEX_H
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {

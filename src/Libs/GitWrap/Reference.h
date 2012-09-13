@@ -17,7 +17,7 @@
 #ifndef GIT_REFERENCE_H
 #define GIT_REFERENCE_H
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {

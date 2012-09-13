@@ -17,7 +17,7 @@
 #ifndef GIT_SUBMODULE_H
 #define GIT_SUBMODULE_H
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {

@@ -27,8 +27,6 @@ MacGitver::MacGitver( int argc, char** argv )
 	, mMainWindow( NULL )
 	, mLog( NULL )
 {
-	Git::initLibGit();
-
 	setOrganizationName( QLatin1String( "SaCu" ) );
 	setApplicationName( QLatin1String( "MacGitver" ) );
 

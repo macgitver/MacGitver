@@ -1,0 +1,49 @@
+/**
+@page GitWrapErrorHandling Error handling in GitWrap
+
+Handling of errors in GitWrap is done by so called Result objects. Result objects are designed to be
+extremely light weight value classes.
+
+Error handling depends on API type
+----------------------------------
+Generally spoken, there are three kinds of APIs in GitWrap:
+
+- __Simple getter Methods__ \n
+  Simple getters will _just_ return the value. These methods won't do any error handling, _if_ no error
+  happens. If a getter is invoked upon an invalid object, it will return a default value of the property
+  that should have been get. \n
+  If, however, the object is valid and an error occurs during the invocation of the underlying `libgit2`
+  call, then the result will be put into the per-thread `Result` object.
+
+- __Methods returning a Result__ \n
+  A second category of methods are those that return a Result. These can also be invoked upon an invalid
+  object and will "just" fail.
+
+- __Methods to query for another object__ \n
+  Methods returning another object take an additional parameter, which is a reference to a Result. On
+  success, the method will return the queried object and not touch the given Result object at all.
+  You can either check the returned object via `obj.isValid()` or directly refer to the Result. \n
+  For convenience, the additional parameter defaults to the per-thread `Result` object.
+
+Working with Result objects
+---------------------------
+A Result object automatically casts itself to `bool`. This turns it to be a very simple task to check for
+success or failure conditions:
+
+@code
+bool openFooRepository()
+{
+	Git::Result res;
+	Git::Repository repo = Git::Repository::open( "/foo/bar", res );
+	if( !res )
+	{
+		qDebug() << res.errorText();
+	}
+	return res;
+}
+@endcode
+
+The Thread Result object
+------------------------
+
+*/

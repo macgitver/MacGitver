@@ -1,0 +1,18 @@
+/**
+@page 	GitWrapGettingStarted	Getting Started with GitWrap
+
+Before you can start using the GitWrap objects, you have to initialize the library.
+
+This is done by creating a GitWrap object.
+
+@code
+int main( int argc, char** argv )
+{
+	QApplication app( argc, argv );
+	Git::GitWrap gitWrap();
+
+	return app.exec();
+}
+@endcode
+
+*/

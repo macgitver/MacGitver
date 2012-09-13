@@ -22,18 +22,42 @@
 namespace Git
 {
 
-	// INDEX
-
-	// tools
-
-	void initLibGit()
+	namespace Internal
 	{
-		git_threads_init();
+
+		GitWrapPrivate* GitWrapPrivate::self = NULL;
+
 	}
 
-	void deinitLibGit()
+	GitWrap::GitWrap()
 	{
+		git_threads_init();
+
+		Q_ASSERT( Internal::GitWrapPrivate::self == NULL );
+		Internal::GitWrapPrivate::self = new Internal::GitWrapPrivate;
+	}
+
+	GitWrap::~GitWrap()
+	{
+		Q_ASSERT( Internal::GitWrapPrivate::self != NULL );
+		delete Internal::GitWrapPrivate::self;
+		Internal::GitWrapPrivate::self = NULL;
+
 		git_threads_shutdown();
+	}
+
+	Result& GitWrap::lastResult()
+	{
+		Q_ASSERT( Internal::GitWrapPrivate::self != NULL );
+
+		if( !Internal::GitWrapPrivate::self->mTLStore.hasLocalData() )
+		{
+			Internal::GitWrapTLS* tls = new Internal::GitWrapTLS;
+			Internal::GitWrapPrivate::self->mTLStore.setLocalData( tls );
+		}
+
+		Internal::GitWrapTLS* tls = Internal::GitWrapPrivate::self->mTLStore.localData();
+		return tls->mLastResult;
 	}
 
 }

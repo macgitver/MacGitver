@@ -17,9 +17,12 @@
 #ifndef GIT_P_H
 #define GIT_P_H
 
+#include <QThreadStorage>
+
 #include "git2.h"
 
 #include "GitWrap.h"
+#include "Error.h"
 
 #define BEGIN_INTERNAL_DECL()	namespace Internal {
 #define END_INTERNAL_DECL()		}
@@ -188,6 +191,20 @@ namespace Git
 									return otAny;
 			}
 		}
+
+		class GitWrapTLS
+		{
+		public:
+			Result			mLastResult;
+		};
+
+		class GitWrapPrivate
+		{
+		public:
+			QThreadStorage< GitWrapTLS* >	mTLStore;
+
+			static GitWrapPrivate* self;		// Make this an QAtomicPointer
+		};
 
 	}
 

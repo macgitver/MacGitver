@@ -14,7 +14,7 @@
  *
  */
 
-#include "Git_p.h"
+#include "GitWrapPrivate.h"
 #include "ChangeListConsumer.h"
 #include "PatchConsumer.h"
 #include "DiffList.h"

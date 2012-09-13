@@ -43,6 +43,10 @@ namespace Git
 		QString		mErrorText;
 	};
 
+	/**
+	 * @ingroup		GitWrap
+	 * @brief		Encapsulates a result
+	 */
 	class GITWRAP_API Result
 	{
 	public:

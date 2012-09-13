@@ -71,7 +71,7 @@ SET( PUB_HDR_FILES
 
 SET( PRI_HDR_FILES
 
-	Git_p.h
+	GitWrapPrivate.h
 	ConfigPrivate.h
 	DiffListPrivate.h
 	IndexPrivate.h

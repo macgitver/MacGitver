@@ -14,7 +14,7 @@
  *
  */
 
-#include "Git_p.h"
+#include "GitWrapPrivate.h"
 #include "Index.h"
 #include "Repository.h"
 #include "RepositoryPrivate.h"

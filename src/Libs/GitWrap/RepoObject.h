@@ -19,7 +19,7 @@
 
 #include <QAtomicInt>
 
-#include "Git_p.h"
+#include "GitWrapPrivate.h"
 
 namespace Git
 {

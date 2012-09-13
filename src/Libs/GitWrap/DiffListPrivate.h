@@ -17,7 +17,7 @@
 #ifndef GIT_DIFFLIST_PRIVATE_H
 #define GIT_DIFFLIST_PRIVATE_H
 
-#include "Git_p.h"
+#include "GitWrapPrivate.h"
 #include "RepoObject.h"
 
 namespace Git

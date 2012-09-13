@@ -22,12 +22,13 @@
 namespace Git
 {
 
+	class ObjectId;
+	class Repository;
+
 	namespace Internal
 	{
 		class ReferencePrivate;
 	}
-
-	class ObjectId;
 
     /**
 	 * @ingroup		GitWrap

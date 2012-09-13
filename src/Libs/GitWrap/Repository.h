@@ -29,6 +29,7 @@ namespace Git
 	class Error;
 	class ResultCode;
 	class DiffList;
+	class Index;
 	class Object;
 	class ObjectCommit;
 	class ObjectTag;

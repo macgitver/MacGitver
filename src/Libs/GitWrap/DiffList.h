@@ -22,6 +22,7 @@
 namespace Git
 {
 
+	class Repository;
 	class ChangeListConsumer;
 	class PatchConsumer;
 

@@ -36,9 +36,6 @@ namespace Git
 	GITWRAP_API void initLibGit();
 	GITWRAP_API void deinitLibGit();
 
-	class Repository;
-	class Index;
-
 	namespace Internal
 	{
 

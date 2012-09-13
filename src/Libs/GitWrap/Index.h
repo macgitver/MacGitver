@@ -22,6 +22,8 @@
 namespace Git
 {
 
+	class Repository;
+
 	namespace Internal
 	{
 		class IndexPrivate;

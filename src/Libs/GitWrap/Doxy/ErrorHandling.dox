@@ -43,7 +43,65 @@ bool openFooRepository()
 }
 @endcode
 
-The Thread Result object
-------------------------
+Error chaining
+--------------
+Any GitWrap API which takes a reference to a Result object as [in,out] parameter, will never do anything
+if the Result object already contains an error.
+
+This comes handy in simplification of error handling. Consider:
+
+@code
+Git::Submodule getSubmodule( QString repo, QString submodule )
+{
+	Git::Result res;
+	Git::Repository repo = Git::Repository::open( repo, res );
+	Git::Submodule sub = repo.submodule( submodule, res );
+	
+	if( !res )
+	{
+		qDebug() << res.errorText();
+	}
+	return sub;
+}
+@endcode
+
+Here, either the call to open() or the call to submodule() might fail. Usually one would have to check
+twice for the error condition. Due to our "error chaining", the submodule() call will simply do nothing
+if it encounters the fact that open() has failed before.
+
+The per-thread Result object
+----------------------------
+If no specific Result object is present, GitWrap automatically uses a per-thread Result object. This
+per-thread Result object can be accessed via `Git::GitWrap::lastResult()`.
+
+We strongly discourage to using the per-thread Result when the GitWrap API provides other means to
+specifiy a Result object. In those cases, the compiler will fetch the per-thread Result object from
+the thread local store _before_ it invokes the GitWrap method. This is obviously more overhead than
+simply creating an instance of Git::Result on the stack right before calling into GitWrap.
+
+In cases where it is unlikely but not impossible that an error will occur, the per-thread Result
+object comes in handy. (i.e. when invoking Repository::index() and the repository is valid, it will
+not fail unless the repositroy is bare, in which case you wouldn't actually want to access an index).
+
+@code
+Git::Index getIndex( Git::Repository repo )
+{
+	Git::Index index = repo.index();
+	if( !index.isValid() )
+	{
+		qDebug() << "Cannot get index because:\n"
+				 << Git::GitWrap::lastResult().errorText();
+	}
+	return index;
+}
+@endcode
+
+In the above example, Git::Repository::index() doesn't need to access the thread local storage, unless
+something is wrong. In this case it will put the error into the pre-thread Result object and return an
+invalid Git::Index. If we learn that `index.isValid()` is not true, we can get the lastResult() and
+act upon it. This means: In the usual case of success, _no_ Result object is involved at any time.
+
+
+Note that error chaining does not work in conjunction with per-thread Result objects.
 
 */

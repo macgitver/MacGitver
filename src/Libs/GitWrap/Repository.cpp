@@ -86,6 +86,15 @@ namespace Git
 	{
 	}
 
+	/**
+	 * @brief		Copy Constructor
+	 *
+	 * Creates a Repository object that represents the same repository as @a o. If @a o is an
+	 * invalid Repository object, this will become an invalid one too.
+	 *
+	 * @param[in]	o	An existing Repository object
+	 *
+	 */
 	Repository::Repository( const Repository& o )
 		: d( o.d )
 	{
@@ -98,16 +107,31 @@ namespace Git
 	{
 	}
 
+	/**
+	 * @brief		Destructor
+	 */
 	Repository::~Repository()
 	{
 	}
 
+	/**
+	 * @brief		Assignment operator
+	 *
+	 * @param[in]	o	An existing Repository object
+	 *
+	 * @return	A reference to this repository object.
+	 */
 	Repository& Repository::operator=( const Repository& o )
 	{
 		d = o.d;
 		return * this;
 	}
 
+	/**
+	 * @brief		Check validty of this repository
+	 *
+	 * @return		`true`, if this repository is valid, `false` otherwise.
+	 */
 	bool Repository::isValid() const
 	{
 		return d;

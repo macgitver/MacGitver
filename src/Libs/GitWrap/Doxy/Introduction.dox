@@ -1,6 +1,39 @@
 /**
 @page GitWrapIntroduction	Introduction to GitWrap
 
+What is git?
+------------
+Git is a _distributed version control system_ (DVCS). Git mostly consists of a big bunch of
+low level concepts and a reference implementation around them. The git man page itself
+describes git as the __G__lobal __I__nformation __T__racker.
+
+The reference implementation consists of a command line tool, written in plain C which can
+be ammended by scriptlets.
+
+Git's conceptional father is __Linus Torvalds__ (Linux Foundation), who initially implemented
+all of his concepts based on shell scripts. Git is nowadays developed by a wide variety of
+developers, coordinated by __Junio C. Hamano__ (Google Inc.).
+
+What is GitWrap then?
+---------------------
+The command line tool provided by git comes pretty handy when you're a shell script. It is
+partly not very well suited for graphical user interfaces or as building block for a huge
+website for managing source code.
+
+`libgit2` is a reimplementation of the core concepts of git. It is implemented in C and
+designed to be a library right from the beginning. While it was meant to replace the
+internal core of git, this goal seems to be far out of sight. `libgit2` is nowadays mostly
+maintained and developed by __GitHub__, a US based company providing git web hosting.
+The GitHub Inc. as of today employees some of the core master minds of the git world;
+including but by far not limited to Scott Chancon and Jeff King.
+
+GitWrap is a C++ library that was built on top of `libgit2` and `QtCore`. `QtCore` is a
+platform independent abstraction layer around: multi threading, file system access,
+localization and various other building blocks. `QtCore` is the fundamental base of
+the Qt Gui Framework.
+
+GitWrap was designed and built with ease of use in mind.
+
 - @subpage	GitWrapGettingStarted
 - @subpage	GitWrapErrorHandling
 - @subpage	GitWrapRepositories

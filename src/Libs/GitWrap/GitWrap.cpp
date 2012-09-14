@@ -27,6 +27,25 @@ namespace Git
 
 		GitWrapPrivate* GitWrapPrivate::self = NULL;
 
+		/**
+		 * @internal
+		 * @brief		Create a QStringList from a git_starray
+		 * @param[in]	arry	Pointer to the git_starrray
+		 * @return		A QStringList with all entries of @a arry converted to UTF-8.
+		 */
+		QStringList slFromStrArray( git_strarray* arry )
+		{
+			QStringList sl;
+
+			for( unsigned int i = 0; i < arry->count; i++ )
+			{
+				sl << QString::fromUtf8( arry->strings[ i ] );
+			}
+
+			git_strarray_free( arry );
+			return sl;
+		}
+
 	}
 
 	GitWrap::GitWrap()

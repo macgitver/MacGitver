@@ -145,9 +145,11 @@ namespace Git
 		class IndexPrivate;
 		class ObjectPrivate;
 
+		// Some internal helpers
 		Signature git2Signature( const git_signature* gitsig );
 		git_signature* signature2git( const Signature& sig );
 		RefSpec mkRefSpec( const git_refspec* refspec );
+		QStringList slFromStrArray( git_strarray* arry );
 
 		/**
 		 * @internal

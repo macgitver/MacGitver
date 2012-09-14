@@ -40,22 +40,52 @@ namespace Git
 		return mErrorText;
 	}
 
+	/**
+	 * @internal
+	 */
 	Result::Result( int resultCode )
 	{
 		setError( resultCode );
 	}
 
+	/**
+	 * @internal
+	 */
+	void Result::setInvalidObject()
+	{
+		mCode = -1;
+		mClass = -1;
+		mText = QLatin1String( "An invalid GitWrap object was used." );
+	}
+
+	/**
+	 * @internal
+	 * @brief		_Import_ an error from `libgit2`
+	 *
+	 * @param[in]	resultCode	The result code as returned from `libgit2`
+	 *
+	 */
 	void Result::setError( int resultCode )
 	{
 		mCode = resultCode;
 		if( mCode < 0 )
 		{
 			const git_error* err = giterr_last();
-			mClass = err->klass;	/// @todo wrap this
+			mClass = err->klass;
 			mText = QString::fromUtf8( err->message );
 		}
 	}
 
+	/**
+	 * @internal
+	 * @brief		Assignment operator
+	 *
+	 * @param[in]	resultCode	The result code as returned from `libgit2`
+	 *
+	 * @return		A reference to this result object
+	 *
+	 * Just a short-cut for setError()
+	 */
 	Result& Result::operator =( int resultCode )
 	{
 		setError( resultCode );

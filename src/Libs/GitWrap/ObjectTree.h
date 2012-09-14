@@ -27,11 +27,11 @@ namespace Git
 
 	class DiffList;
 
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		Represents a git tree object
 	 *
-     */
+	 */
 	class GITWRAP_API ObjectTree : public Object
 	{
 	public:
@@ -42,9 +42,9 @@ namespace Git
 	public:
 		ObjectTree subPath( const QString& pathName ) const;
 
-		DiffList diffToTree( ObjectTree newTree );
-		DiffList diffToIndex();
-		DiffList diffToWorkingDir();
+		DiffList diffToTree( ObjectTree newTree, Result& result = GitWrap::lastResult() );
+		DiffList diffToIndex( Result& result = GitWrap::lastResult() );
+		DiffList diffToWorkingDir( Result& result = GitWrap::lastResult() );
 
 		size_t entryCount() const;
 		TreeEntry entryAt( size_t index ) const;

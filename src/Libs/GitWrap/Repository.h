@@ -45,11 +45,11 @@ namespace Git
 
 	typedef QHash< QString, ObjectId > ResolvedRefs;
 
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		A git repository
 	 *
-     */
+	 */
 	class GITWRAP_API Repository
 	{
 	public:
@@ -80,44 +80,49 @@ namespace Git
 		QString basePath() const;
 		QString gitPath() const;
 
-		QStringList allReferences();
+		QStringList allReferences( Result& result = GitWrap::lastResult() );
 		QStringList allBranches();
 		QString currentBranch();
 		QStringList branches( bool local = true, bool remote = false );
 		QStringList allTags();
 
-		ResolvedRefs allResolvedRefs();
+		ResolvedRefs allResolvedRefs( Result& result = GitWrap::lastResult() );
 
 		bool renameBranch( const QString& oldName, const QString& newName, bool force = false );
 
-		Index index();
+		Index index( Result& result = GitWrap::lastResult() );
 
-		StatusHash statusHash();
+		StatusHash statusHash( Result& result = GitWrap::lastResult() );
 
-		Reference HEAD();
+		Reference HEAD( Result& result = GitWrap::lastResult() );
 
-		Object lookup( const ObjectId& id, ObjectType ot = otAny );
-		ObjectCommit lookupCommit( const ObjectId& id );
-		ObjectTree lookupTree( const ObjectId& id );
-		ObjectBlob lookupBlob( const ObjectId& id );
-		ObjectTag lookupTag( const ObjectId& id );
+		Object lookup( const ObjectId& id, ObjectType ot = otAny,
+					   Result& result = GitWrap::lastResult() );
 
-		bool shouldIgnore( const QString& filePath ) const;
+		ObjectCommit lookupCommit( const ObjectId& id, Result& result = GitWrap::lastResult() );
+		ObjectTree lookupTree( const ObjectId& id, Result& result = GitWrap::lastResult() );
+		ObjectBlob lookupBlob( const ObjectId& id, Result& result = GitWrap::lastResult() );
+		ObjectTag lookupTag( const ObjectId& id, Result& result = GitWrap::lastResult() );
 
-		RevisionWalker newWalker();
+		bool shouldIgnore( const QString& filePath, Result& result = GitWrap::lastResult() ) const;
 
-		QStringList allRemotes() const;
-		Remote remote( const QString& remoteName ) const;
+		RevisionWalker newWalker( Result& result = GitWrap::lastResult() );
+
+		QStringList allRemotes( Result& result = GitWrap::lastResult() ) const;
+		Remote remote( const QString& remoteName, Result& result = GitWrap::lastResult() ) const;
 		Remote createRemote( const QString& remoteName, const QString& url,
-							 const QString& fetchSpec );
+							 const QString& fetchSpec, Result& result = GitWrap::lastResult() );
 
-		DiffList diffCommitToCommit( ObjectCommit oldCommit, ObjectCommit newCommit );
-		DiffList diffTreeToTree( ObjectTree oldTree, ObjectTree newTree );
-		DiffList diffIndexToTree( ObjectTree oldTree );
-		DiffList diffTreeToWorkingDir( ObjectTree oldTree );
-		DiffList diffIndexToWorkingDir();
+		DiffList diffCommitToCommit( ObjectCommit oldCommit, ObjectCommit newCommit,
+									 Result& result = GitWrap::lastResult() );
 
-		QList< Error > recentErrors();
+		DiffList diffTreeToTree( ObjectTree oldTree, ObjectTree newTree,
+								 Result& result = GitWrap::lastResult());
+
+		DiffList diffIndexToTree( ObjectTree oldTree, Result& result = GitWrap::lastResult() );
+
+		DiffList diffTreeToWorkingDir( ObjectTree oldTree, Result& result = GitWrap::lastResult() );
+		DiffList diffIndexToWorkingDir( Result& result = GitWrap::lastResult() );
 
 		QList< Submodule > submodules();
 		Submodule submodule( const QString& name );

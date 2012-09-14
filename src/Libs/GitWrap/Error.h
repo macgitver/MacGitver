@@ -24,11 +24,11 @@
 namespace Git
 {
 
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		Wraps the git_error
 	 *
-     */
+	 */
 	class GITWRAP_API Error
 	{
 	public:
@@ -46,6 +46,12 @@ namespace Git
 	/**
 	 * @ingroup		GitWrap
 	 * @brief		Encapsulates a result
+	 *
+	 * A result object represents either the success or failure (including an error text) of a call
+	 * to a GitWrap API.
+	 *
+	 * See @ref GitWrapErrorHandling on examples of how to handle result objects correctly.
+	 *
 	 */
 	class GITWRAP_API Result
 	{
@@ -66,10 +72,7 @@ namespace Git
 
 	public:
 		void setError( int resultCode );
-
-	public:
-		static Result invalidObject();
-		static Result success();
+		void setInvalidObject();
 
 	private:
 		int			mCode;
@@ -77,27 +80,44 @@ namespace Git
 		QString		mText;
 	};
 
+	/**
+	 * @brief		Default Constructor
+	 *
+	 * Creates a valid Result object
+	 */
 	inline Result::Result()
 		: mCode( 0 )
 	{
 	}
 
+	/**
+	 * @brief		Copy Constructor
+	 * @param[in]	other	The result to copy
+	 */
 	inline Result::Result( const Result& other )
 	{
-		if( ( mCode = other.mCode ) )
+		if( ( mCode = other.mCode ) < 0 )
 		{
 			mClass = other.mClass;
 			mText = other.mText;
 		}
 	}
 
+	/**
+	 * @brief	Destructor
+	 */
 	inline Result::~Result()
 	{
 	}
 
+	/**
+	 * @brief		Assignment operator
+	 * @param[in]	other	The result to asign
+	 * @return		A reference to this result
+	 */
 	inline Result& Result::operator=( const Result& other )
 	{
-		if( ( mCode = other.mCode ) )
+		if( ( mCode = other.mCode ) < 0 )
 		{
 			mClass = other.mClass;
 			mText = other.mText;
@@ -106,11 +126,27 @@ namespace Git
 		return *this;
 	}
 
+	/**
+	 * @brief		Implicit cast to bool
+	 *
+	 * Automatically casts a result to `bool`.
+	 *
+	 * @return		`true`, if this result object contains no error (i.e. it was freshly created or
+	 *				the last operation did succeed) or `false` if the last operation had an error.
+	 *
+	 * If this returns `false` use errorCode(), errorClass() and errorText() to get the details.
+	 *
+	 */
 	inline Result::operator bool() const
 	{
 		return mCode == 0;
 	}
 
+	/**
+	 * @brief		Access the error code
+	 * @return		Error code as it was reported by `libgit2`. In most cases this will simply be
+	 *				-1.
+	 */
 	inline int Result::errorCode() const
 	{
 		return mCode;
@@ -121,6 +157,10 @@ namespace Git
 		return mClass;
 	}
 
+	/**
+	 * @brief		Access the error text
+	 * @return		Error text as it was reported by `libgit2`. This text is not localized.
+	 */
 	inline const QString& Result::errorText() const
 	{
 		return mText;

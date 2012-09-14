@@ -68,10 +68,16 @@ namespace Git
 		return new Internal::ObjectPrivate( d->repo(), subObject );
 	}
 
-	DiffList ObjectTree::diffToTree( ObjectTree newTree )
+	DiffList ObjectTree::diffToTree( ObjectTree newTree, Result& result )
 	{
+		if( !result )
+		{
+			return DiffList();
+		}
+
 		if( !d )
 		{
+			result.setInvalidObject();
 			return DiffList();
 		}
 
@@ -79,8 +85,8 @@ namespace Git
 		git_tree* gitNewTree = (git_tree*) newTree.d->mObj;
 
 		git_diff_list* diffList = NULL;
-		int rc = git_diff_tree_to_tree( d->repo()->mRepo, NULL, gitTree, gitNewTree, &diffList );
-		if( !d->handleErrors( rc ) )
+		result = git_diff_tree_to_tree( d->repo()->mRepo, NULL, gitTree, gitNewTree, &diffList );
+		if( !result )
 		{
 			return DiffList();
 		}
@@ -88,18 +94,24 @@ namespace Git
 		return DiffList( new Internal::DiffListPrivate( d->repo(), diffList ) );
 	}
 
-	DiffList ObjectTree::diffToIndex()
+	DiffList ObjectTree::diffToIndex( Result& result )
 	{
+		if( !result )
+		{
+			return DiffList();
+		}
+
 		if( !d )
 		{
+			result.setInvalidObject();
 			return DiffList();
 		}
 
 		git_tree* gitTree = (git_tree*) d->mObj;
 
 		git_diff_list* diffList = NULL;
-		int rc = git_diff_index_to_tree( d->repo()->mRepo, NULL, gitTree, &diffList );
-		if( !d->handleErrors( rc ) )
+		result = git_diff_index_to_tree( d->repo()->mRepo, NULL, gitTree, &diffList );
+		if( !result )
 		{
 			return DiffList();
 		}
@@ -107,18 +119,24 @@ namespace Git
 		return DiffList( new Internal::DiffListPrivate( d->repo(), diffList ) );
 	}
 
-	DiffList ObjectTree::diffToWorkingDir()
+	DiffList ObjectTree::diffToWorkingDir( Result& result )
 	{
+		if( !result )
+		{
+			return DiffList();
+		}
+
 		if( !d )
 		{
+			result.setInvalidObject();
 			return DiffList();
 		}
 
 		git_tree* gitTree = (git_tree*) d->mObj;
 
 		git_diff_list* diffList = NULL;
-		int rc = git_diff_workdir_to_tree( d->repo()->mRepo, NULL, gitTree, &diffList );
-		if( !d->handleErrors( rc ) )
+		result = git_diff_workdir_to_tree( d->repo()->mRepo, NULL, gitTree, &diffList );
+		if( !result )
 		{
 			return DiffList();
 		}

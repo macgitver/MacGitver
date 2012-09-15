@@ -52,7 +52,27 @@ HistoryDiff::HistoryDiff()
 	setLayout( l );
 }
 
+void HistoryDiff::setRepository( Git::Repository repo )
+{
+	mRepo = repo;
+}
+
 void HistoryDiff::setCommitId( const Git::ObjectId& sha1 )
 {
+	mRawView->setText( QString() );
+
+	if( !mRepo.isValid() )
+	{
+		return;
+	}
+
+	mCommit = mRepo.lookupCommit( sha1 );
+	if( !mCommit.isValid() )
+	{
+		return;
+	}
+
+	// mRepo.index().read();
+
 }
 

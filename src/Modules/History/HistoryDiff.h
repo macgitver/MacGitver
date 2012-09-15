@@ -20,6 +20,8 @@
 #include <QWidget>
 
 #include "GitWrap/ObjectId.h"
+#include "GitWrap/ObjectCommit.h"
+#include "GitWrap/Repository.h"
 
 class QToolBar;
 class QComboBox;
@@ -33,14 +35,19 @@ class HistoryDiff : public QWidget
 public:
 	HistoryDiff();
 
+public:
+	void setRepository( Git::Repository repo );
+
 public slots:
 	void setCommitId( const Git::ObjectId& sha1 );
 
 private:
-	DiffRawView*	mRawView;
-	QToolBar*		mToolbar;
-	QComboBox*		mDiffTo;
-	SHA1Input*		mSha1Input;
+	DiffRawView*		mRawView;
+	QToolBar*			mToolbar;
+	QComboBox*			mDiffTo;
+	SHA1Input*			mSha1Input;
+	Git::Repository		mRepo;
+	Git::ObjectCommit	mCommit;
 
 	enum DiffToTypes
 	{

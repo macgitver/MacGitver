@@ -34,20 +34,20 @@ namespace Git
 				dt );
 		}
 
-		git_signature* signature2git( const Signature& sig )
+		git_signature* signature2git( const Signature& sig, Result& result )
 		{
+			if( !result )
+			{
+				return NULL;
+			}
+
 			git_signature* gitsig = 0;
 
-			int rc = git_signature_new( &gitsig,
+			result = git_signature_new( &gitsig,
 										sig.name().toUtf8().constData(),
 										sig.email().toUtf8().constData(),
 										sig.when().toTime_t(),
 										sig.when().utcOffset() / 60 );
-
-			if( rc < GIT_OK )
-			{
-				return NULL;
-			}
 
 			return gitsig;
 		}

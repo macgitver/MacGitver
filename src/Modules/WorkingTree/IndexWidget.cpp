@@ -27,6 +27,7 @@
 #include "Diff/RawView/DiffRawView.h"
 
 #include "MacGitver/MacGitver.h"
+#include "MacGitver/FSWatcher.h"
 
 #include "IndexWidget.h"
 
@@ -73,6 +74,9 @@ IndexWidget::IndexWidget()
 	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
 			 this, SLOT(repositoryChanged(Git::Repository)) );
 
+	connect( MacGitver::self().watcher(), SIGNAL(workingTreeChanged()),
+			 this, SLOT(workingTreeChanged()) );
+
 	Git::Repository repo = MacGitver::self().repository();
 	if( repo.isValid() )
 	{
@@ -87,13 +91,17 @@ void IndexWidget::repositoryChanged( Git::Repository repo )
 
 	if( mRepo.isValid() )
 	{
-		GitPatchConsumer p;
-		Git::Result r;
-		Git::DiffList dl = mRepo.diffIndexToWorkingDir( r );
-		dl.consumePatch( &p, r );
-
-		mRawDiff->setText( p.patch()->toString() );
+		updateDiff();
 	}
+}
+
+void IndexWidget::updateDiff()
+{
+	Git::Result r;
+	Git::DiffList dl = mRepo.diffIndexToWorkingDir( r );
+	dl.consumePatch( &p, r );
+
+	mRawDiff->setText( p.patch()->toString() );
 }
 
 void IndexWidget::onShowAll( bool enabled )
@@ -223,4 +231,5 @@ void IndexWidget::workingTreeChanged()
 	}
 
 	model->update();
+	updateDiff();
 }

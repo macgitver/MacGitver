@@ -30,11 +30,11 @@ namespace Git
 	class ObjectId;
 	class Reference;
 
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		Provides access to a git repository's history
 	 *
-     */
+	 */
 	class GITWRAP_API RevisionWalker
 	{
 	public:
@@ -46,22 +46,22 @@ namespace Git
 	public:
 		bool isValid() const;
 
-		void reset();
+		void reset( Result& result = GitWrap::lastResult() );
 
-		void push( const ObjectId& id );
-		void push( const Reference& ref );
-		void pushRef( const QString& name );
-		void pushHead();
+		void push( const ObjectId& id, Result& result = GitWrap::lastResult()  );
+		void push( const Reference& ref, Result& result = GitWrap::lastResult() );
+		void pushRef( const QString& name, Result& result = GitWrap::lastResult() );
+		void pushHead( Result& result = GitWrap::lastResult() );
 
-		void hide( const ObjectId& id );
-		void hide( const Reference& ref );
-		void hideRef( const QString& name );
-		void hideHead();
+		void hide( const ObjectId& id, Result& result = GitWrap::lastResult() );
+		void hide( const Reference& ref, Result& result = GitWrap::lastResult() );
+		void hideRef( const QString& name, Result& result = GitWrap::lastResult() );
+		void hideHead( Result& result = GitWrap::lastResult() );
 
-		bool next( ObjectId& oidNext );
-		QVector< ObjectId > all();
+		bool next( ObjectId& oidNext, Result& result = GitWrap::lastResult() );
+		QVector< ObjectId > all( Result& result = GitWrap::lastResult() );
 
-		void setSorting( bool topological, bool timed );
+		void setSorting( bool topological, bool timed, Result& result = GitWrap::lastResult() );
 
 	private:
 		Internal::GitPtr< Internal::RevisionWalkerPrivate > d;

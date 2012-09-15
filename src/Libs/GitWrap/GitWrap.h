@@ -33,12 +33,6 @@
 namespace Git
 {
 
-	GITWRAP_API void initLibGit();
-	GITWRAP_API void deinitLibGit();
-
-	class Repository;
-	class Index;
-
 	namespace Internal
 	{
 
@@ -110,6 +104,17 @@ namespace Git
 
 	typedef QHash< QString, FileStati > StatusHash;
 
+	class Result;
+
+	class GITWRAP_API GitWrap
+	{
+	public:
+		GitWrap();
+		~GitWrap();
+
+	public:
+		static Result& lastResult();
+	};
 }
 
 #endif

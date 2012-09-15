@@ -1,0 +1,107 @@
+/**
+@page GitWrapErrorHandling Error handling in GitWrap
+
+Handling of errors in GitWrap is done by so called Result objects. Result objects are designed to be
+extremely light weight value classes.
+
+Error handling depends on API type
+----------------------------------
+Generally spoken, there are three kinds of APIs in GitWrap:
+
+- __Simple getter Methods__ \n
+  Simple getters will _just_ return the value. These methods won't do any error handling, _if_ no error
+  happens. If a getter is invoked upon an invalid object, it will return a default value of the property
+  that should have been get. \n
+  If, however, the object is valid and an error occurs during the invocation of the underlying `libgit2`
+  call, then the result will be put into the per-thread `Result` object.
+
+- __Methods returning a Result__ \n
+  A second category of methods are those that return a Result. These can also be invoked upon an invalid
+  object and will "just" fail.
+
+- __Methods to query for another object__ \n
+  Methods returning another object take an additional parameter, which is a reference to a Result. On
+  success, the method will return the queried object and not touch the given Result object at all.
+  You can either check the returned object via `obj.isValid()` or directly refer to the Result. \n
+  For convenience, the additional parameter defaults to the per-thread `Result` object.
+
+Working with Result objects
+---------------------------
+A Result object automatically casts itself to `bool`. This turns it to be a very simple task to check for
+success or failure conditions:
+
+@code
+bool openFooRepository()
+{
+	Git::Result res;
+	Git::Repository repo = Git::Repository::open( "/foo/bar", res );
+	if( !res )
+	{
+		qDebug() << res.errorText();
+	}
+	return res;
+}
+@endcode
+
+Error chaining
+--------------
+Any GitWrap API which takes a reference to a Result object as [in,out] parameter, will never do anything
+if the Result object already contains an error.
+
+This comes handy in simplification of error handling. Consider:
+
+@code
+Git::Submodule getSubmodule( QString repo, QString submodule )
+{
+	Git::Result res;
+	Git::Repository repo = Git::Repository::open( repo, res );
+	Git::Submodule sub = repo.submodule( submodule, res );
+	
+	if( !res )
+	{
+		qDebug() << res.errorText();
+	}
+	return sub;
+}
+@endcode
+
+Here, either the call to open() or the call to submodule() might fail. Usually one would have to check
+twice for the error condition. Due to our "error chaining", the submodule() call will simply do nothing
+if it encounters the fact that open() has failed before.
+
+The per-thread Result object
+----------------------------
+If no specific Result object is present, GitWrap automatically uses a per-thread Result object. This
+per-thread Result object can be accessed via `Git::GitWrap::lastResult()`.
+
+We strongly discourage to using the per-thread Result when the GitWrap API provides other means to
+specifiy a Result object. In those cases, the compiler will fetch the per-thread Result object from
+the thread local store _before_ it invokes the GitWrap method. This is obviously more overhead than
+simply creating an instance of Git::Result on the stack right before calling into GitWrap.
+
+In cases where it is unlikely but not impossible that an error will occur, the per-thread Result
+object comes in handy. (i.e. when invoking Repository::index() and the repository is valid, it will
+not fail unless the repositroy is bare, in which case you wouldn't actually want to access an index).
+
+@code
+Git::Index getIndex( Git::Repository repo )
+{
+	Git::Index index = repo.index();
+	if( !index.isValid() )
+	{
+		qDebug() << "Cannot get index because:\n"
+				 << Git::GitWrap::lastResult().errorText();
+	}
+	return index;
+}
+@endcode
+
+In the above example, Git::Repository::index() doesn't need to access the thread local storage, unless
+something is wrong. In this case it will put the error into the pre-thread Result object and return an
+invalid Git::Index. If we learn that `index.isValid()` is not true, we can get the lastResult() and
+act upon it. This means: In the usual case of success, _no_ Result object is involved at any time.
+
+
+Note that error chaining does not work in conjunction with per-thread Result objects.
+
+*/

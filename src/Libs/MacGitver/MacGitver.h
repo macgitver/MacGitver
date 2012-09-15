@@ -82,6 +82,7 @@ private:
 	IMainWindow*		mMainWindow;
 	ILog*				mLog;
 	FSWatcher*			mWatcher;
+	Git::GitWrap		mGitWrap;
 	Git::Repository		mRepository;
 	QHash< QString, ViewInfo >	mViews;
 };

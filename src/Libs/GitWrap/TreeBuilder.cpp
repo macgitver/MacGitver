@@ -70,65 +70,99 @@ namespace Git
 		return d;
 	}
 
-	void TreeBuilder::clear()
+	void TreeBuilder::clear( Result& result )
 	{
-		if( d )
+		if( !result )
 		{
-			git_treebuilder_clear( d->mBuilder );
-		}
-	}
-
-	bool TreeBuilder::remove( const QString& fileName )
-	{
-		if( d )
-		{
-			int rc = git_treebuilder_remove( d->mBuilder, fileName.toUtf8().constData() );
-			return d->handleErrors( rc );
+			return;
 		}
 
-		return false;
-	}
-
-	bool TreeBuilder::insert( const QString& fileName, TreeEntryAttributes type, const ObjectId& oid )
-	{
-		if( d )
-		{
-			const git_tree_entry* te = NULL;
-			git_filemode_t fm = Internal::teattr2filemode( type );
-
-			int rc = git_treebuilder_insert( &te, d->mBuilder, fileName.toUtf8().constData(),
-											 (const git_oid*) oid.raw(), fm );
-
-			/* ignoring the returned tree-entry pointer; can be fetched by 'get' */
-			return d->handleErrors( rc );
-		}
-
-		return false;
-	}
-
-	ObjectId TreeBuilder::write()
-	{
-		if( d )
-		{
-			git_oid oid;
-
-			int rc = git_treebuilder_write( &oid, d->repo()->mRepo, d->mBuilder );
-			if( !d->handleErrors( rc ) )
-			{
-				return ObjectId();
-			}
-
-			return ObjectId::fromRaw( oid.id );
-		}
-
-		return ObjectId();
-	}
-
-
-	TreeEntry TreeBuilder::get( const QString& name )
-	{
 		if( !d )
 		{
+			result.setInvalidObject();
+			return;
+		}
+
+		git_treebuilder_clear( d->mBuilder );
+	}
+
+	bool TreeBuilder::remove( const QString& fileName, Result& result )
+	{
+		if( !result )
+		{
+			return false;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return false;
+		}
+
+
+		result = git_treebuilder_remove( d->mBuilder, fileName.toUtf8().constData() );
+		return result;
+	}
+
+	bool TreeBuilder::insert( const QString& fileName, TreeEntryAttributes type,
+							  const ObjectId& oid, Result& result )
+	{
+		if( !result )
+		{
+			return false;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return false;
+		}
+
+		const git_tree_entry* te = NULL;
+		git_filemode_t fm = Internal::teattr2filemode( type );
+
+		result = git_treebuilder_insert( &te, d->mBuilder, fileName.toUtf8().constData(),
+										 (const git_oid*) oid.raw(), fm );
+
+		/* ignoring the returned tree-entry pointer; can be fetched by 'get' */
+		return result;
+	}
+
+	ObjectId TreeBuilder::write( Result& result )
+	{
+		if( !result )
+		{
+			return ObjectId();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return ObjectId();
+		}
+
+		git_oid oid;
+		result = git_treebuilder_write( &oid, d->repo()->mRepo, d->mBuilder );
+
+		if( !result )
+		{
+			return ObjectId();
+		}
+
+		return ObjectId::fromRaw( oid.id );
+	}
+
+
+	TreeEntry TreeBuilder::get( const QString& name, Result& result )
+	{
+		if( !result )
+		{
+			return TreeEntry();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
 			return TreeEntry();
 		}
 

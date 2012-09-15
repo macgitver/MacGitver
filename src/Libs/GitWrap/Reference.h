@@ -17,29 +17,30 @@
 #ifndef GIT_REFERENCE_H
 #define GIT_REFERENCE_H
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {
+
+	class ObjectId;
+	class Repository;
 
 	namespace Internal
 	{
 		class ReferencePrivate;
 	}
 
-	class ObjectId;
-
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		Represents a git reference
 	 *
-     */
+	 */
 	class GITWRAP_API Reference
 	{
 	public:
 		enum Type
 		{
-			Direct, Symbolic
+			Direct, Symbolic, Invalid = -1
 		};
 
 	public:
@@ -51,14 +52,14 @@ namespace Git
 
 	public:
 		bool isValid() const;
-		bool destroy();
+		bool destroy( Result& result = GitWrap::lastResult() );
 		QString name() const;
 
-		Type type() const;
-		ObjectId objectId() const;
-		QString target() const;
+		Type type( Result& result = GitWrap::lastResult() ) const;
+		ObjectId objectId( Result& result = GitWrap::lastResult() ) const;
+		QString target( Result& result = GitWrap::lastResult() ) const;
 
-		Repository repository() const;
+		Repository repository( Result& result = GitWrap::lastResult() ) const;
 
 	private:
 		Internal::GitPtr< Internal::ReferencePrivate > d;

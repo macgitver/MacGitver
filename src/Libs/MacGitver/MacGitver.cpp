@@ -14,7 +14,7 @@
  *
  */
 
-#include "GitWrap/Git.h"
+#include "GitWrap/GitWrap.h"
 
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"
@@ -27,8 +27,6 @@ MacGitver::MacGitver( int argc, char** argv )
 	, mMainWindow( NULL )
 	, mLog( NULL )
 {
-	Git::initLibGit();
-
 	setOrganizationName( QLatin1String( "SaCu" ) );
 	setApplicationName( QLatin1String( "MacGitver" ) );
 

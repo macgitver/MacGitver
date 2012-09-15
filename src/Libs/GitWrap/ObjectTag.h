@@ -17,7 +17,7 @@
 #ifndef GIT_OBJECT_TAG_H
 #define GIT_OBJECT_TAG_H
 
-#include "Git.h"
+#include "GitWrap.h"
 #include "ObjectId.h"
 #include "Object.h"
 

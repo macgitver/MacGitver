@@ -62,130 +62,222 @@ namespace Git
 		return d;
 	}
 
-	void RevisionWalker::reset()
+	void RevisionWalker::reset( Result& result )
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
 		git_revwalk_reset( d->mWalker );
 	}
 
-	void RevisionWalker::push( const ObjectId& id )
+	void RevisionWalker::push( const ObjectId& id, Result& result )
 	{
-		Q_ASSERT( d );
-		if( d )
+		if( !result )
 		{
-			int rc = git_revwalk_push( d->mWalker, (const git_oid*) id.raw() );
-			d->handleErrors( rc );
-		}
-	}
-
-	void RevisionWalker::push( const Reference& ref )
-	{
-		pushRef( ref.name() );
-	}
-
-	void RevisionWalker::pushRef( const QString& name )
-	{
-		Q_ASSERT( d );
-		if( d )
-		{
-			int rc = git_revwalk_push_ref( d->mWalker, name.toUtf8().constData() );
-			d->handleErrors( rc );
-		}
-	}
-
-	void RevisionWalker::pushHead()
-	{
-		Q_ASSERT( d );
-		if( d )
-		{
-			int rc = git_revwalk_push_head( d->mWalker );
-			d->handleErrors( rc );
-		}
-	}
-
-	void RevisionWalker::hide( const ObjectId& id )
-	{
-		Q_ASSERT( d );
-		if( d )
-		{
-			int rc = git_revwalk_hide( d->mWalker, (const git_oid*) id.raw() );
-			d->handleErrors( rc );
-		}
-	}
-
-	void RevisionWalker::hide( const Reference& ref )
-	{
-		hideRef( ref.name() );
-	}
-
-	void RevisionWalker::hideRef( const QString& name )
-	{
-		Q_ASSERT( d );
-		if( d )
-		{
-			int rc = git_revwalk_hide_ref( d->mWalker, name.toUtf8().constData() );
-			d->handleErrors( rc );
-		}
-	}
-
-	void RevisionWalker::hideHead()
-	{
-		Q_ASSERT( d );
-		if( d )
-		{
-			int rc = git_revwalk_hide_head( d->mWalker );
-			d->handleErrors( rc );
-		}
-	}
-
-	bool RevisionWalker::next( ObjectId& oidNext )
-	{
-		Q_ASSERT( d );
-
-		if( d )
-		{
-			git_oid oid;
-			int rc = git_revwalk_next( &oid, d->mWalker );
-			if( rc == GIT_ITEROVER )
-			{
-				return false;
-			}
-
-			if( !d->handleErrors( rc ) )
-			{
-				return false;
-			}
-
-			oidNext = ObjectId::fromRaw( oid.id );
-			return true;
+			return;
 		}
 
-		return false;
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		result = git_revwalk_push( d->mWalker, (const git_oid*) id.raw() );
 	}
 
-	QVector< ObjectId > RevisionWalker::all()
+	void RevisionWalker::push( const Reference& ref, Result& result )
 	{
-		QVector< ObjectId > ids ;
+
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		pushRef( ref.name(), result );
+	}
+
+	void RevisionWalker::pushRef( const QString& name, Result& result )
+	{
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		result = git_revwalk_push_ref( d->mWalker, name.toUtf8().constData() );
+	}
+
+	void RevisionWalker::pushHead( Result& result )
+	{
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		result = git_revwalk_push_head( d->mWalker );
+	}
+
+	void RevisionWalker::hide( const ObjectId& id, Result& result )
+	{
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		result = git_revwalk_hide( d->mWalker, (const git_oid*) id.raw() );
+	}
+
+	void RevisionWalker::hide( const Reference& ref, Result& result )
+	{
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		hideRef( ref.name(), result );
+	}
+
+	void RevisionWalker::hideRef( const QString& name, Result& result )
+	{
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		result = git_revwalk_hide_ref( d->mWalker, name.toUtf8().constData() );
+	}
+
+	void RevisionWalker::hideHead( Result& result )
+	{
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		result = git_revwalk_hide_head( d->mWalker );
+	}
+
+	bool RevisionWalker::next( ObjectId& oidNext, Result& result )
+	{
+		if( !result )
+		{
+			return false;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return false;
+		}
+
+		git_oid oid;
+		Result tmp( git_revwalk_next( &oid, d->mWalker ) );
+		if( tmp.errorCode() == GIT_ITEROVER )
+		{
+			return false;
+		}
+		if( !tmp )
+		{
+			result = tmp;
+			return false;
+		}
+
+		oidNext = ObjectId::fromRaw( oid.id );
+		return true;
+	}
+
+	QVector< ObjectId > RevisionWalker::all( Result& result )
+	{
+		QVector< ObjectId > ids;
+
+		if( !result )
+		{
+			return ids;
+		}
+
+		if( !d )
+		{
+			return ids;
+		}
+
 		ObjectId id;
-
-		while( next( id ) )
+		while( next( id, result ) )
 		{
+			if( !result )
+			{
+				return QVector< ObjectId >();
+			}
 			ids.append( id );
 		}
 
 		return ids;
 	}
 
-	void RevisionWalker::setSorting( bool topological, bool timed )
+	void RevisionWalker::setSorting( bool topological, bool timed, Result& result )
 	{
-		Q_ASSERT( d );
-
-		if( d )
+		if( !result )
 		{
-			git_revwalk_sorting( d->mWalker,
-								 ( topological ? GIT_SORT_TOPOLOGICAL : 0 ) |
-								 ( timed ? GIT_SORT_TIME : 0 ) );
+			return;
 		}
+
+		if( !d )
+		{
+			return;
+		}
+
+		git_revwalk_sorting( d->mWalker,
+							 ( topological ? GIT_SORT_TOPOLOGICAL : 0 ) |
+							 ( timed ? GIT_SORT_TIME : 0 ) );
 	}
 
 }

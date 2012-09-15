@@ -17,21 +17,23 @@
 #ifndef GIT_INDEX_H
 #define GIT_INDEX_H
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {
+
+	class Repository;
 
 	namespace Internal
 	{
 		class IndexPrivate;
 	}
 
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		Provides access to the git index.
 	 *
-     */
+	 */
 	class GITWRAP_API Index
 	{
 	public:
@@ -47,9 +49,9 @@ namespace Git
 
 	public:
 		bool isValid() const;
-		int count() const;
 
-		Repository repository() const;
+		int count( Result& result = GitWrap::lastResult() ) const;
+		Repository repository( Result& result = GitWrap::lastResult() ) const;
 
 	private:
 		Internal::GitPtr< Internal::IndexPrivate > d;

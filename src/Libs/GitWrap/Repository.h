@@ -19,7 +19,7 @@
 
 #include <QStringList>
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {
@@ -28,6 +28,7 @@ namespace Git
 	class Reference;
 	class Error;
 	class DiffList;
+	class Index;
 	class Object;
 	class ObjectCommit;
 	class ObjectTag;
@@ -44,11 +45,11 @@ namespace Git
 
 	typedef QHash< QString, ObjectId > ResolvedRefs;
 
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		A git repository
 	 *
-     */
+	 */
 	class GITWRAP_API Repository
 	{
 	public:
@@ -61,34 +62,17 @@ namespace Git
 		~Repository();
 
 	public:
-		static Repository create( const QString& path, bool bare );
+		static Repository create( const QString& path,
+								  bool bare,
+								  Result& result = GitWrap::lastResult() );
 
-        /**
-         * @brief Lookup a git repository by walking parent directories starting from startPath.
-         *
-         * The lookup ends when the first repository is found or when reaching one of the ceilingDirs directories.
-         *
-         * The method will automatically detect if the repository is bare (if there is a
-         * repository).
-         *
-         * @param startPath
-         * The base path where the lookup starts.
-         *
-         * @param acrossFs
-         * If true, then the lookup will not stop when a filesystem change is detected
-         * while exploring parent directories.
-         *
-         * @param ceilingDirs
-         * A list of absolute paths (no symbolic links). The lookup will stop when one of these
-         * paths is reached and no repository was found.
-         *
-         * @return the path of the found repository or an empty QString
-         */
-        static QString discover( const QString& startPath,
-                                 bool acrossFs = false,
-                                 const QStringList& ceilingDirs = QStringList() );
+		static QString discover( const QString& startPath,
+								 bool acrossFs = false,
+								 const QStringList& ceilingDirs = QStringList(),
+								 Result& result = GitWrap::lastResult() );
 
-        static Repository open( const QString& path );
+		static Repository open( const QString& path,
+								Result& result = GitWrap::lastResult() );
 
 		bool isValid() const;
 		bool isBare() const;
@@ -96,47 +80,53 @@ namespace Git
 		QString basePath() const;
 		QString gitPath() const;
 
-		QStringList allReferences();
-		QStringList allBranches();
-		QString currentBranch();
-		QStringList branches( bool local = true, bool remote = false );
-		QStringList allTags();
+		QStringList allReferences( Result& result = GitWrap::lastResult() );
+		QStringList allBranches( Result& result = GitWrap::lastResult() );
+		QString currentBranch( Result& result = GitWrap::lastResult() );
+		QStringList branches( bool local, bool remote, Result& result = GitWrap::lastResult() );
+		QStringList allTags( Result& result = GitWrap::lastResult() );
 
-		ResolvedRefs allResolvedRefs();
+		ResolvedRefs allResolvedRefs( Result& result = GitWrap::lastResult() );
 
-		bool renameBranch( const QString& oldName, const QString& newName, bool force = false );
+		bool renameBranch( const QString& oldName, const QString& newName, bool force = false,
+						   Result& result = GitWrap::lastResult() );
 
-		Index index();
+		Index index( Result& result = GitWrap::lastResult() );
 
-		StatusHash statusHash();
+		StatusHash statusHash( Result& result = GitWrap::lastResult() );
 
-		Reference HEAD();
+		Reference HEAD( Result& result = GitWrap::lastResult() );
 
-		Object lookup( const ObjectId& id, ObjectType ot = otAny );
-		ObjectCommit lookupCommit( const ObjectId& id );
-		ObjectTree lookupTree( const ObjectId& id );
-		ObjectBlob lookupBlob( const ObjectId& id );
-		ObjectTag lookupTag( const ObjectId& id );
+		Object lookup( const ObjectId& id, ObjectType ot = otAny,
+					   Result& result = GitWrap::lastResult() );
 
-		bool shouldIgnore( const QString& filePath ) const;
+		ObjectCommit lookupCommit( const ObjectId& id, Result& result = GitWrap::lastResult() );
+		ObjectTree lookupTree( const ObjectId& id, Result& result = GitWrap::lastResult() );
+		ObjectBlob lookupBlob( const ObjectId& id, Result& result = GitWrap::lastResult() );
+		ObjectTag lookupTag( const ObjectId& id, Result& result = GitWrap::lastResult() );
 
-		RevisionWalker newWalker();
+		bool shouldIgnore( const QString& filePath, Result& result = GitWrap::lastResult() ) const;
 
-		QStringList allRemotes() const;
-		Remote remote( const QString& remoteName ) const;
+		RevisionWalker newWalker( Result& result = GitWrap::lastResult() );
+
+		QStringList allRemotes( Result& result = GitWrap::lastResult() ) const;
+		Remote remote( const QString& remoteName, Result& result = GitWrap::lastResult() ) const;
 		Remote createRemote( const QString& remoteName, const QString& url,
-							 const QString& fetchSpec );
+							 const QString& fetchSpec, Result& result = GitWrap::lastResult() );
 
-		DiffList diffCommitToCommit( ObjectCommit oldCommit, ObjectCommit newCommit );
-		DiffList diffTreeToTree( ObjectTree oldTree, ObjectTree newTree );
-		DiffList diffIndexToTree( ObjectTree oldTree );
-		DiffList diffTreeToWorkingDir( ObjectTree oldTree );
-		DiffList diffIndexToWorkingDir();
+		DiffList diffCommitToCommit( ObjectCommit oldCommit, ObjectCommit newCommit,
+									 Result& result = GitWrap::lastResult() );
 
-		QList< Error > recentErrors();
+		DiffList diffTreeToTree( ObjectTree oldTree, ObjectTree newTree,
+								 Result& result = GitWrap::lastResult());
 
-		QList< Submodule > submodules();
-		Submodule submodule( const QString& name );
+		DiffList diffIndexToTree( ObjectTree oldTree, Result& result = GitWrap::lastResult() );
+
+		DiffList diffTreeToWorkingDir( ObjectTree oldTree, Result& result = GitWrap::lastResult() );
+		DiffList diffIndexToWorkingDir( Result& result = GitWrap::lastResult() );
+
+		QList< Submodule > submodules( Result& result = GitWrap::lastResult() );
+		Submodule submodule( const QString& name, Result& result = GitWrap::lastResult() );
 
 	private:
 		Internal::GitPtr< Internal::RepositoryPrivate > d;

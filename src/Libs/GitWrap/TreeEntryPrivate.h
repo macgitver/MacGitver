@@ -17,7 +17,7 @@
 #ifndef GIT_TREE_ENTRY_PRIVATE_H
 #define GIT_TREE_ENTRY_PRIVATE_H
 
-#include "Git_p.h"
+#include "GitWrapPrivate.h"
 #include "RepoObject.h"
 
 namespace Git

@@ -154,6 +154,11 @@ void WorkingTreeModel::setRepository( Git::Repository repo )
 
 void WorkingTreeModel::update()
 {
+	if( !mRepo.isValid() )
+	{
+		return;
+	}
+
 	QFileIconProvider ip;
 	QIcon folderIcon = ip.icon( QFileIconProvider::Folder );
 

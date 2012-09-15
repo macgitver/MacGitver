@@ -21,7 +21,7 @@
 #include <QByteArray>
 #include <QDebug>
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {

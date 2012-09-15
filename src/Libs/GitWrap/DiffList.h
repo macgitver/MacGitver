@@ -17,11 +17,12 @@
 #ifndef GIT_DIFFLIST_H
 #define GIT_DIFFLIST_H
 
-#include "Git.h"
+#include "GitWrap.h"
 
 namespace Git
 {
 
+	class Repository;
 	class ChangeListConsumer;
 	class PatchConsumer;
 
@@ -30,12 +31,12 @@ namespace Git
 		class DiffListPrivate;
 	}
 
-    /**
-     * @brief The DiffList class
-     *
-     * @ingroup GitWrap
-     * @{
-     */
+	/**
+	 * @brief The DiffList class
+	 *
+	 * @ingroup GitWrap
+	 * @{
+	 */
 	class GITWRAP_API DiffList
 	{
 	public:
@@ -51,18 +52,19 @@ namespace Git
 
 	public:
 		bool isValid() const;
-		Repository repository() const;
+		Repository repository( Result& result = GitWrap::lastResult() ) const;
 
-		bool mergeOnto( DiffList other ) const;
+		bool mergeOnto( DiffList other, Result& result = GitWrap::lastResult() ) const;
 
-		bool consumePatch( PatchConsumer* consumer ) const;
-		bool consumeChangeList( ChangeListConsumer* consumer ) const;
+		bool consumePatch( PatchConsumer* consumer, Result& result = GitWrap::lastResult() ) const;
+		bool consumeChangeList( ChangeListConsumer* consumer,
+								Result& result = GitWrap::lastResult() ) const;
 
 	private:
 		Internal::GitPtr< Internal::DiffListPrivate > d;
 	};
 
-    /**@}*/
+	/**@}*/
 }
 
 #endif

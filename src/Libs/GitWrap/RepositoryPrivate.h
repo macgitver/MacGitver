@@ -19,7 +19,7 @@
 
 #include <QMutex>
 
-#include "Git_p.h"
+#include "GitWrapPrivate.h"
 #include "RepoObject.h"
 
 namespace Git

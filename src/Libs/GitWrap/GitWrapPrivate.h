@@ -147,7 +147,7 @@ namespace Git
 
 		// Some internal helpers
 		Signature git2Signature( const git_signature* gitsig );
-		git_signature* signature2git( const Signature& sig );
+		git_signature* signature2git( const Signature& sig, Result& result );
 		RefSpec mkRefSpec( const git_refspec* refspec );
 		QStringList slFromStrArray( git_strarray* arry );
 

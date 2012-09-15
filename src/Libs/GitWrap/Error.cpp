@@ -14,6 +14,8 @@
  *
  */
 
+#include <QDebug>
+
 #include "GitWrapPrivate.h"
 
 #include "Error.h"
@@ -71,8 +73,16 @@ namespace Git
 		if( mCode < 0 )
 		{
 			const git_error* err = giterr_last();
-			mClass = err->klass;
-			mText = QString::fromUtf8( err->message );
+			if( err )
+			{
+				mClass = err->klass;
+				mText = QString::fromUtf8( err->message );
+			}
+			else
+			{
+				qDebug() << "Notice: LibGit2 returned" << mCode << "but did not supply a "
+							"suitable error message.";
+			}
 		}
 	}
 

@@ -31,14 +31,14 @@ namespace Git
 	class Reference;
 	class RefSpec;
 
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		Represents a git remote.
 	 *
 	 * Remotes are used to synchronize with foreign repositories, which may actually be on the local
 	 * or on a remote site.
 	 *
-     */
+	 */
 	class GITWRAP_API Remote
 	{
 	public:
@@ -51,13 +51,13 @@ namespace Git
 	public:
 		bool isValid() const;
 
-		bool save();
+		bool save( Result& result = GitWrap::lastResult() );
 
 		QString name() const;
 		QString url() const;
 
-		bool setFetchSpec( const QString& spec );
-		bool setPushSpec( const QString& spec );
+		bool setFetchSpec( const QString& spec, Result& result = GitWrap::lastResult() );
+		bool setPushSpec( const QString& spec, Result& result = GitWrap::lastResult() );
 
 		RefSpec fetchSpec() const;
 		RefSpec pushSpec() const;
@@ -65,10 +65,10 @@ namespace Git
 		static bool isValidUrl( const QString& url );
 		static bool isSupportedUrl( const QString& url );
 
-		bool connect( bool forFetch );
-		void disconnect();
-		bool download();
-		bool updateTips();
+		bool connect( bool forFetch, Result& result = GitWrap::lastResult() );
+		void disconnect( Result& result = GitWrap::lastResult() );
+		bool download( Result& result = GitWrap::lastResult() );
+		bool updateTips( Result& result = GitWrap::lastResult() );
 
 	private:
 		Internal::GitPtr< Internal::RemotePrivate > d;

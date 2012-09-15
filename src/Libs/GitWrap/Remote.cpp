@@ -22,21 +22,22 @@
 namespace Git
 {
 
-	BEGIN_INTERNAL_IMPL()
-
-	RemotePrivate::RemotePrivate( RepositoryPrivate* repo, git_remote* remote )
-		: RepoObject( repo )
-		, mRemote( remote )
+	namespace Internal
 	{
-		Q_ASSERT( remote );
-	}
 
-	RemotePrivate::~RemotePrivate()
-	{
-		git_remote_free( mRemote );
-	}
+		RemotePrivate::RemotePrivate( RepositoryPrivate* repo, git_remote* remote )
+			: RepoObject( repo )
+			, mRemote( remote )
+		{
+			Q_ASSERT( remote );
+		}
 
-	END_INTERNAL_IMPL()
+		RemotePrivate::~RemotePrivate()
+		{
+			git_remote_free( mRemote );
+		}
+
+	}
 
 	Remote::Remote()
 	{
@@ -67,77 +68,96 @@ namespace Git
 		return d;
 	}
 
-	bool Remote::save()
+	bool Remote::save( Result& result )
 	{
-		Q_ASSERT( d );
-		if( d )
+		if( !result )
 		{
-			int rc = git_remote_save( d->mRemote );
-			return d->handleErrors( rc );
+			return false;
 		}
-		return false;
+		if( !d )
+		{
+			result.setInvalidObject();
+			return false;
+		}
+
+		result = git_remote_save( d->mRemote );
+		return result;
 	}
 
 	QString Remote::name() const
 	{
-		if( d )
+		if( !d )
 		{
-			return QString::fromUtf8( git_remote_name( d->mRemote ) );
+			GitWrap::lastResult().setInvalidObject();
+			return QString();
 		}
-		return QString();
+
+		return QString::fromUtf8( git_remote_name( d->mRemote ) );
 	}
 
 	QString Remote::url() const
 	{
-		if( d )
+		if( !d )
 		{
-			return QString::fromUtf8( git_remote_url( d->mRemote ) );
+			GitWrap::lastResult().setInvalidObject();
+			return QString();
 		}
-		return QString();
+
+		return QString::fromUtf8( git_remote_url( d->mRemote ) );
 	}
 
-	bool Remote::setFetchSpec( const QString& spec )
+	bool Remote::setFetchSpec( const QString& spec, Result& result )
 	{
-		Q_ASSERT( d );
-		if( d )
+		if( !result )
 		{
-			int rc = git_remote_set_fetchspec( d->mRemote, spec.toUtf8().constData() );
-			return d->handleErrors( rc );
+			return false;
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return false;
 		}
 
-		return false;
+		result = git_remote_set_fetchspec( d->mRemote, spec.toUtf8().constData() );
+		return result;
 	}
 
-	bool Remote::setPushSpec( const QString& spec )
+	bool Remote::setPushSpec( const QString& spec, Result& result )
 	{
-		Q_ASSERT( d );
-		if( d )
+		if( !result )
 		{
-			int rc = git_remote_set_pushspec( d->mRemote, spec.toUtf8().constData() );
-			return d->handleErrors( rc );
+			return false;
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return false;
 		}
 
-		return false;
+		result = git_remote_set_pushspec( d->mRemote, spec.toUtf8().constData() );
+		return result;
 	}
 
 	RefSpec Remote::fetchSpec() const
 	{
-		if( d )
+		if( !d )
 		{
-			return Internal::mkRefSpec( git_remote_fetchspec( d->mRemote ) );
+			GitWrap::lastResult().setInvalidObject();
+			return RefSpec();
 		}
 
-		return RefSpec();
+		return Internal::mkRefSpec( git_remote_fetchspec( d->mRemote ) );
 	}
 
 	RefSpec Remote::pushSpec() const
 	{
-		if( d )
+		if( !d )
 		{
-			return Internal::mkRefSpec( git_remote_pushspec( d->mRemote ) );
+			GitWrap::lastResult().setInvalidObject();
+			return RefSpec();
 		}
 
-		return RefSpec();
+		return Internal::mkRefSpec( git_remote_pushspec( d->mRemote ) );
 	}
 
 	bool Remote::isValidUrl( const QString& url )
@@ -151,45 +171,71 @@ namespace Git
 	}
 
 
-	bool Remote::connect( bool forFetch )
+	bool Remote::connect( bool forFetch, Result& result )
 	{
-		if( d )
+		if( !result )
 		{
-			int rc = git_remote_connect( d->mRemote, forFetch ? GIT_DIR_FETCH : GIT_DIR_PUSH );
-			return d->handleErrors( rc );
+			return false;
 		}
 
-		return false;
+		if( !d )
+		{
+			result.setInvalidObject();
+			return false;
+		}
+
+		result = git_remote_connect( d->mRemote, forFetch ? GIT_DIR_FETCH : GIT_DIR_PUSH );
+		return result;
 	}
 
-	void Remote::disconnect()
+	void Remote::disconnect( Result& result )
 	{
-		if( d )
+		if( !result )
 		{
-			git_remote_disconnect( d->mRemote );
+			return;
 		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		git_remote_disconnect( d->mRemote );
 	}
 
-	bool Remote::download()
+	bool Remote::download( Result& result )
 	{
-		if( d )
+		if( !result )
 		{
-			int rc = git_remote_download( d->mRemote, &d->mBytes, &d->mStats );
-			return d->handleErrors( rc );
+			return false;
 		}
 
-		return false;
+		if( !d )
+		{
+			result.setInvalidObject();
+			return false;
+		}
+
+		result = git_remote_download( d->mRemote, &d->mBytes, &d->mStats );
+		return result;
 	}
 
-	bool Remote::updateTips()
+	bool Remote::updateTips( Result& result )
 	{
-		if( d )
+		if( !result )
 		{
-			int rc = git_remote_update_tips( d->mRemote );
-			return d->handleErrors( rc );
+			return false;
 		}
 
-		return false;
+		if( !d )
+		{
+			result.setInvalidObject();
+			return false;
+		}
+
+		result = git_remote_update_tips( d->mRemote );
+		return result;
 	}
 
 }

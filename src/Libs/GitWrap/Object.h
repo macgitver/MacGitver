@@ -35,12 +35,12 @@ namespace Git
 
 	class Repository;
 
-    /**
-     * @brief The Object class is the base class for Git repository objects.
-     *
-     * @ingroup GitWrap
-     * @{
-     */
+	/**
+	 * @brief The Object class is the base class for Git repository objects.
+	 *
+	 * @ingroup GitWrap
+	 * @{
+	 */
 	class GITWRAP_API Object
 	{
 	public:
@@ -53,89 +53,89 @@ namespace Git
 		Object& operator=( const Object& other );
 		bool operator==( const Object& other ) const;
 
-        /**
-         * @brief Checks, if this is a valid Git object.
-         *
-         * A Git object is valid, when it has a valid pointer.
-         *
-         * @return true or false
-         */
+		/**
+		 * @brief Checks, if this is a valid Git object.
+		 *
+		 * A Git object is valid, when it has a valid pointer.
+		 *
+		 * @return true or false
+		 */
 		bool isValid() const;
 
-        /**
-         * @return the object's type
-         */
-        ObjectType type() const;
+		/**
+		 * @return the object's type
+		 */
+		ObjectType type( Result& result = GitWrap::lastResult() ) const;
 
-        /**
-         * @return the object's id (OID)
-         */
-		ObjectId id() const;
+		/**
+		 * @return the object's id (OID)
+		 */
+		ObjectId id( Result& result = GitWrap::lastResult() ) const;
 
-        /**
-         * @brief Converts a generic object into a Git tree object.
-         *
-         * @return the valid or invalid converted ObjectTree
-         *
-         * @see isValid()
-         */
-        ObjectTree asTree();
+		/**
+		 * @brief Converts a generic object into a Git tree object.
+		 *
+		 * @return the valid or invalid converted ObjectTree
+		 *
+		 * @see isValid()
+		 */
+		ObjectTree asTree( Result& result = GitWrap::lastResult() );
 
-        /**
-         * @brief Converts a generic object into a Git commit object.
-         *
-         * @return the valid or invalid converted ObjectCommit
-         *
-         * @see isValid()
-         */
-        ObjectCommit asCommit();
+		/**
+		 * @brief Converts a generic object into a Git commit object.
+		 *
+		 * @return the valid or invalid converted ObjectCommit
+		 *
+		 * @see isValid()
+		 */
+		ObjectCommit asCommit( Result& result = GitWrap::lastResult() );
 
-        /**
-         * @brief Converts a generic object into a Git BLOB object.
-         *
-         * @return the valid or invalid converted ObjectBlob
-         *
-         * @see isValid()
-         */
-        ObjectBlob asBlob();
+		/**
+		 * @brief Converts a generic object into a Git BLOB object.
+		 *
+		 * @return the valid or invalid converted ObjectBlob
+		 *
+		 * @see isValid()
+		 */
+		ObjectBlob asBlob( Result& result = GitWrap::lastResult() );
 
-        /**
-         * @brief Converts a generic object into a Git tag object.
-         *
-         * @return the valid or invalid converted ObjectTag
-         *
-         * @see isValid()
-         */
-        ObjectTag asTag();
+		/**
+		 * @brief Converts a generic object into a Git tag object.
+		 *
+		 * @return the valid or invalid converted ObjectTag
+		 *
+		 * @see isValid()
+		 */
+		ObjectTag asTag( Result& result = GitWrap::lastResult() );
 
-        /**
-         * @brief Checks, if this is a ObjectTree object.
-         * @return true or false
-         */
-		bool isTree() const;
+		/**
+		 * @brief Checks, if this is a ObjectTree object.
+		 * @return true or false
+		 */
+		bool isTree( Result& result = GitWrap::lastResult() ) const;
 
-        /**
-         * @brief Checks, if this is a ObjectTree object.
-         * @return true or false
-         */
-        bool isTag() const;
+		/**
+		 * @brief Checks, if this is a ObjectTree object.
+		 * @return true or false
+		 */
+		bool isTag( Result& result = GitWrap::lastResult() ) const;
 
-        /**
-         * @brief Checks, if this is a ObjectTree object.
-         * @return true or false
-         */
-        bool isCommit() const;
+		/**
+		 * @brief Checks, if this is a ObjectTree object.
+		 * @return true or false
+		 */
+		bool isCommit( Result& result = GitWrap::lastResult() ) const;
 
-        /**
-         * @brief Checks, if this is a ObjectTree object.
-         * @return true or false
-         */
-        bool isBlob() const;
+		/**
+		 * @brief Checks, if this is a ObjectTree object.
+		 * @return true or false
+		 */
+		bool isBlob( Result& result = GitWrap::lastResult() ) const;
 
-        /**
-         * @return the owner repository or an invalid repository
-         */
-        Repository repository() const;
+		/**
+		 * @return the owner repository or an invalid repository
+		 */
+		Repository repository( Result& result = GitWrap::lastResult() ) const;
 
 	protected:
 		Internal::GitPtr< Internal::ObjectPrivate > d;

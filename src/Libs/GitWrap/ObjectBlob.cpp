@@ -28,7 +28,9 @@ namespace Git
 	ObjectBlob::ObjectBlob( Internal::ObjectPrivate* _d )
 		: Object( _d )
 	{
-		Q_ASSERT( type() == otBlob );
+		Result r;
+		Q_UNUSED( r );
+		Q_ASSERT( type(r) == otBlob );
 	}
 
 	ObjectBlob::ObjectBlob( const ObjectBlob& o )

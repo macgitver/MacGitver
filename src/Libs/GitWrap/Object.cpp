@@ -77,9 +77,19 @@ namespace Git
 		return d;
 	}
 
-	ObjectType Object::type() const
+	ObjectType Object::type( Result& result ) const
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return otAny;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return otAny;
+		}
+
 		switch( git_object_type( d->mObj ) )
 		{
 		case GIT_OBJ_BLOB:		return otBlob;
@@ -91,77 +101,98 @@ namespace Git
 		}
 	}
 
-	ObjectId Object::id() const
+	ObjectId Object::id( Result& result ) const
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return ObjectId();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return ObjectId();
+		}
+
 		const git_oid* oid = git_object_id( d->mObj );
 		return ObjectId::fromRaw( oid->id );
 	}
 
 
-	ObjectTree Object::asTree()
+	ObjectTree Object::asTree( Result& result )
 	{
 		ObjectTree o;
-		if( isTree() )
+		if( isTree( result ) )
 		{
 			o = ObjectTree( d );
 		}
 		return o;
 	}
 
-	ObjectCommit Object::asCommit()
+	ObjectCommit Object::asCommit( Result& result )
 	{
 		ObjectCommit o;
-		if( isCommit() )
+		if( isCommit( result ) )
 		{
 			o = ObjectCommit( d );
 		}
 		return o;
 	}
 
-	ObjectBlob Object::asBlob()
+	ObjectBlob Object::asBlob( Result& result )
 	{
 		ObjectBlob o;
-		if( isBlob() )
+		if( isBlob( result ) )
 		{
 			o = ObjectBlob( d );
 		}
 		return o;
 	}
 
-	ObjectTag Object::asTag()
+	ObjectTag Object::asTag( Result& result )
 	{
 		ObjectTag o;
-		if( isTag() )
+		if( isTag( result ) )
 		{
 			o = ObjectTag( d );
 		}
 		return o;
 	}
 
-	bool Object::isTree() const
+	bool Object::isTree( Result& result ) const
 	{
-		return type() == otTree;
+		return type( result ) == otTree;
 	}
 
-	bool Object::isTag() const
+	bool Object::isTag( Result& result ) const
 	{
-		return type() == otTag;
+		return type( result ) == otTag;
 	}
 
-	bool Object::isCommit() const
+	bool Object::isCommit( Result& result ) const
 	{
-		return type() == otCommit;
+		return type( result ) == otCommit;
 	}
 
-	bool Object::isBlob() const
+	bool Object::isBlob( Result& result ) const
 	{
-		return type() == otBlob;
+		return type( result ) == otBlob;
 	}
 
-	Repository Object::repository() const
+	Repository Object::repository( Result& result ) const
 	{
-		return Repository( d ? d->repo() : NULL );
+		if( !result )
+		{
+			return Repository();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return Repository();
+		}
+
+		return Repository( d->repo() );
 	}
 
 }

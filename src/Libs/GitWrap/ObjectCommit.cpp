@@ -33,7 +33,9 @@ namespace Git
 	ObjectCommit::ObjectCommit( Internal::ObjectPrivate* _d )
 		: Object( _d )
 	{
-		Q_ASSERT( type() == otCommit );
+		Result r;
+		Q_UNUSED( r );
+		Q_ASSERT( type(r) == otCommit );
 	}
 
 	ObjectCommit::ObjectCommit( const ObjectCommit& o )
@@ -41,15 +43,23 @@ namespace Git
 	{
 	}
 
-	ObjectTree ObjectCommit::tree()
+	ObjectTree ObjectCommit::tree( Result& result )
 	{
-		Q_ASSERT( d );
-		git_commit* commit = (git_commit*) d->mObj;
+		if( !result )
+		{
+			return ObjectTree();
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return ObjectTree();
+		}
 
+		git_commit* commit = (git_commit*) d->mObj;
 		git_tree* tree = 0;
 
-		int rc = git_commit_tree( &tree, commit );
-		if( !d->handleErrors( rc ) )
+		result = git_commit_tree( &tree, commit );
+		if( !result )
 		{
 			return ObjectTree();
 		}
@@ -57,54 +67,85 @@ namespace Git
 		return new Internal::ObjectPrivate( d->repo(), (git_object*) tree );
 	}
 
-	ObjectId ObjectCommit::treeId()
+	ObjectId ObjectCommit::treeId( Result& result )
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return ObjectId();
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return ObjectId();
+		}
+
 		git_commit* commit = (git_commit*) d->mObj;
 
 		return ObjectId::fromRaw( git_commit_tree_oid( commit )->id );
 	}
 
-	ObjectIdList ObjectCommit::parentCommitIds() const
+	ObjectIdList ObjectCommit::parentCommitIds( Result& result ) const
 	{
 		ObjectIdList ids;
 
-		if( d )
+		if( !result )
 		{
-			git_commit* commit = (git_commit*) d->mObj;
+			return ids;
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return ids;
+		}
 
-			for( unsigned int i = 0; i < numParentCommits(); i++ )
-			{
-				ObjectId id = ObjectId::fromRaw( git_commit_parent_oid( commit, i )->id );
-				ids.append( id );
-			}
+		git_commit* commit = (git_commit*) d->mObj;
+
+		for( unsigned int i = 0; i < numParentCommits(); i++ )
+		{
+			ObjectId id = ObjectId::fromRaw( git_commit_parent_oid( commit, i )->id );
+			ids.append( id );
 		}
 
 		return ids;
 	}
 
-	ObjectCommit ObjectCommit::parentCommit( unsigned int index ) const
+	ObjectCommit ObjectCommit::parentCommit( unsigned int index, Result& result ) const
 	{
-		ObjectCommit parent;
-
-		if( d && numParentCommits() > index )
+		if( !result )
 		{
-			git_commit* commit = (git_commit*) d->mObj;
-			git_commit* gitparent = NULL;
-
-			int rc = git_commit_parent( &gitparent, commit, index );
-			if( d->handleErrors( rc ) )
-			{
-				parent = new Internal::ObjectPrivate( d->repo(), (git_object*) gitparent );
-			}
+			return ObjectCommit();
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return ObjectCommit();
 		}
 
-		return parent;
+		git_commit* commit = (git_commit*) d->mObj;
+		git_commit* gitparent = NULL;
+
+		result = git_commit_parent( &gitparent, commit, index );
+		if( !result )
+		{
+			return ObjectCommit();
+		}
+
+		return new Internal::ObjectPrivate( d->repo(), (git_object*) gitparent );
 	}
 
-	ObjectId ObjectCommit::parentCommitId( unsigned int index ) const
+	ObjectId ObjectCommit::parentCommitId( unsigned int index, Result& result ) const
 	{
-		if( d && numParentCommits() > index )
+		if( !result )
+		{
+			return ObjectId();
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return ObjectId();
+		}
+
+		if( numParentCommits() > index )
 		{
 			git_commit* commit = (git_commit*) d->mObj;
 
@@ -118,26 +159,33 @@ namespace Git
 		return ObjectId();
 	}
 
-	QList< ObjectCommit > ObjectCommit::parentCommits() const
+	QList< ObjectCommit > ObjectCommit::parentCommits( Result& result ) const
 	{
+		if( !result )
+		{
+			return QList< ObjectCommit >();
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return QList< ObjectCommit >();
+		}
+
 		QList< ObjectCommit > objs;
 
-		if( d )
+		git_commit* commit = (git_commit*) d->mObj;
+
+		for( unsigned int i = 0; i < numParentCommits(); i++ )
 		{
-			git_commit* commit = (git_commit*) d->mObj;
+			git_commit* parent = NULL;
 
-			for( unsigned int i = 0; i < numParentCommits(); i++ )
+			result = git_commit_parent( &parent, commit, i );
+			if( !result )
 			{
-				git_commit* parent = NULL;
-
-				int rc = git_commit_parent( &parent, commit, i );
-				if( !d->handleErrors( rc ) )
-				{
-					return QList< ObjectCommit >();
-				}
-
-				objs.append( new Internal::ObjectPrivate( d->repo(), (git_object*) parent ) );
+				return QList< ObjectCommit >();
 			}
+
+			objs.append( new Internal::ObjectPrivate( d->repo(), (git_object*) parent ) );
 		}
 
 		return objs;
@@ -145,110 +193,150 @@ namespace Git
 
 	unsigned int ObjectCommit::numParentCommits() const
 	{
-		if( d )
+		if( !d )
 		{
-			git_commit* commit = (git_commit*) d->mObj;
-
-			return git_commit_parentcount( commit );
+			return 0;
 		}
 
-		return 0;
+		git_commit* commit = (git_commit*) d->mObj;
+		return git_commit_parentcount( commit );
 	}
 
-	bool ObjectCommit::isParentOf( const Git::ObjectCommit& child ) const
+	bool ObjectCommit::isParentOf( const Git::ObjectCommit& child, Result& result ) const
 	{
-		if( d )
-		{
-			QList< Git::ObjectCommit > parents = child.parentCommits();
+		QList< Git::ObjectCommit > parents = child.parentCommits( result );
 
-			for( int i = 0; i < parents.count(); i++ )
+		for( int i = 0; result && i < parents.count(); i++ )
+		{
+			if( isEqual( parents[ i ], result ) )
+				return true;
+		}
+
+		return false;
+	}
+
+	bool ObjectCommit::isChildOf( const Git::ObjectCommit& parent, Result& result ) const
+	{
+		QList< Git::ObjectCommit > children = parentCommits( result );
+
+		for( int i = 0; result && i < children.count(); i++ )
+		{
+			if( parent.isEqual( children[ i ], result ) )
 			{
-				if( isEqual( parents[ i ] ) )
-					return true;
+				return true;
 			}
 		}
 
 		return false;
 	}
 
-	bool ObjectCommit::isChildOf( const Git::ObjectCommit& parent ) const
+	bool ObjectCommit::isEqual( const Git::ObjectCommit& commit, Result& result ) const
 	{
-		if( d )
-		{
-			QList< Git::ObjectCommit > children = parentCommits();
+		return id( result ) == commit.id( result ) && result;
+	}
 
-			for( int i = 0; i < children.count(); i++ )
-			{
-				if( parent.isEqual( children[ i ] ) )
-				{
-					return true;
-				}
-			}
+	Signature ObjectCommit::author( Result& result ) const
+	{
+		if( !result )
+		{
+			return Signature();
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return Signature();
 		}
 
-		return false;
-	}
-
-	bool ObjectCommit::isEqual( const Git::ObjectCommit& commit ) const
-	{
-		return id() == commit.id();
-	}
-
-	Signature ObjectCommit::author() const
-	{
-		Q_ASSERT( d );
 		git_commit* commit = (git_commit*) d->mObj;
 		const git_signature* sig = git_commit_author( commit );
+
 		return Internal::git2Signature( sig );
 	}
 
-	Signature ObjectCommit::committer() const
+	Signature ObjectCommit::committer( Result& result ) const
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return Signature();
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return Signature();
+		}
+
 		git_commit* commit = (git_commit*) d->mObj;
 		const git_signature* sig = git_commit_committer( commit );
+
 		return Internal::git2Signature( sig );
 	}
 
-	QString ObjectCommit::message() const
+	QString ObjectCommit::message( Result& result ) const
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return QString();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return QString();
+		}
 
 		git_commit* commit = (git_commit*) d->mObj;
 		const char* msg = git_commit_message( commit );
 		int len = int( strlen( msg ) );
 
 		if( len && msg[ len - 1 ] == '\n' )
+		{
 			len--;
+		}
 
 		return QString::fromUtf8( msg, len );
 	}
 
-	QString ObjectCommit::shortMessage() const
+	QString ObjectCommit::shortMessage( Result& result ) const
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return QString();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return QString();
+		}
 
 		git_commit* commit = (git_commit*) d->mObj;
 		const char* msg = git_commit_message( commit );
 
 		int len = 0;
 		while( msg[ len ] && msg[ len ] != '\n' )
+		{
 			len++;
+		}
 
 		return QString::fromUtf8( msg, len );
 	}
 
-	Reference ObjectCommit::createBranch( const QString& name, bool force )
+	Reference ObjectCommit::createBranch( const QString& name, bool force, Result& result )
 	{
+		if( !result )
+		{
+			return Reference();
+		}
 		if( !d )
 		{
+			result.setInvalidObject();
 			return Reference();
 		}
 
 		git_reference* ref = NULL;
-		int rc = git_branch_create( &ref, d->repo()->mRepo, name.toUtf8().constData(),
+		result = git_branch_create( &ref, d->repo()->mRepo, name.toUtf8().constData(),
 									d->mObj, force );
-		if( !d->handleErrors( rc ) )
+		if( !result )
 		{
 			return Reference();
 		}

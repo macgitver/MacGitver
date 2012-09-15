@@ -31,11 +31,11 @@ namespace Git
 	class Reference;
 	class ObjectTree;
 
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		Represents a git commit object.
 	 *
-     */
+	 */
 	class GITWRAP_API ObjectCommit : public Object
 	{
 	public:
@@ -55,26 +55,27 @@ namespace Git
 		}
 
 	public:
-		ObjectTree tree();
-		ObjectId treeId();
+		ObjectTree tree( Result& result = GitWrap::lastResult() );
+		ObjectId treeId( Result& result = GitWrap::lastResult() );
 
-		ObjectIdList parentCommitIds() const;
-		QList< ObjectCommit > parentCommits() const;
-		ObjectCommit parentCommit( unsigned int index ) const;
-		ObjectId parentCommitId( unsigned int index ) const;
+		ObjectIdList parentCommitIds( Result& result = GitWrap::lastResult() ) const;
+		QList< ObjectCommit > parentCommits( Result& result = GitWrap::lastResult() ) const;
+		ObjectCommit parentCommit( unsigned int index, Result& result = GitWrap::lastResult() ) const;
+		ObjectId parentCommitId( unsigned int index, Result& result = GitWrap::lastResult() ) const;
 		unsigned int numParentCommits() const;
 
-		bool isParentOf( const Git::ObjectCommit& child ) const;
-		bool isChildOf( const Git::ObjectCommit& parent ) const;
-		bool isEqual( const Git::ObjectCommit& commit ) const;
+		bool isParentOf( const Git::ObjectCommit& child, Result& result = GitWrap::lastResult() ) const;
+		bool isChildOf( const Git::ObjectCommit& parent, Result& result = GitWrap::lastResult() ) const;
+		bool isEqual( const Git::ObjectCommit& commit, Result& result = GitWrap::lastResult() ) const;
 
-		Signature author() const;
-		Signature committer() const;
+		Signature author( Result& result = GitWrap::lastResult() ) const;
+		Signature committer( Result& result = GitWrap::lastResult() ) const;
 
-		QString message() const;
-		QString shortMessage() const;
+		QString message( Result& result = GitWrap::lastResult() ) const;
+		QString shortMessage( Result& result = GitWrap::lastResult() ) const;
 
-		Reference createBranch( const QString& name, bool force );
+		Reference createBranch( const QString& name, bool force,
+								Result& result = GitWrap::lastResult() );
 	};
 
 	/**

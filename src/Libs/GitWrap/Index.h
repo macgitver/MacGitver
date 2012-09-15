@@ -29,11 +29,11 @@ namespace Git
 		class IndexPrivate;
 	}
 
-    /**
+	/**
 	 * @ingroup		GitWrap
 	 * @brief		Provides access to the git index.
 	 *
-     */
+	 */
 	class GITWRAP_API Index
 	{
 	public:
@@ -49,9 +49,9 @@ namespace Git
 
 	public:
 		bool isValid() const;
-		int count() const;
 
-		Repository repository() const;
+		int count( Result& result = GitWrap::lastResult() ) const;
+		Repository repository( Result& result = GitWrap::lastResult() ) const;
 
 	private:
 		Internal::GitPtr< Internal::IndexPrivate > d;

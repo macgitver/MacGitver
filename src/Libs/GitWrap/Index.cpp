@@ -72,20 +72,40 @@ namespace Git
 		return *this;
 	}
 
-	int Index::count() const
-	{
-		Q_ASSERT( d );
-		return git_index_entrycount( d->mIndex );
-	}
-
 	bool Index::isValid() const
 	{
 		return d;
 	}
 
-	Repository Index::repository() const
+	int Index::count( Result& result ) const
 	{
-		return Repository( d ? d->repo() : NULL );
+		if( !result )
+		{
+			return 0;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return 0;
+		}
+		return git_index_entrycount( d->mIndex );
+	}
+
+	Repository Index::repository( Result& result ) const
+	{
+		if( !result )
+		{
+			return Repository();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return Repository();
+		}
+
+		return Repository( d->repo() );
 	}
 
 }

@@ -426,17 +426,34 @@ namespace Git
 		return data.refs;
 	}
 
-	QStringList Repository::allBranches()
+	QStringList Repository::allBranches( Result& result )
 	{
-		return branches( true, true );
+		return branches( true, true, result );
 	}
 
-	QString Repository::currentBranch()
+	QString Repository::currentBranch( Result& result )
 	{
-		Git::Reference refHEAD = HEAD();
-
-		if( refHEAD.isValid() )
+		if( !result )
 		{
+			return QString();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return QString();
+		}
+
+		Git::Reference refHEAD = HEAD( result );
+		if( !result )
+		{
+			return QString();
+		}
+
+		if( refHEAD.isValid() )	// According to new "Error Handling", must be valid now, right?
+		{
+			// ???
+			// NOTE: Shoot the guy that writes such things without comments... Oh my dear, it was me.
 			if( refHEAD.name() == QLatin1String( "HEAD" ) )
 			{
 				return QString();
@@ -447,24 +464,37 @@ namespace Git
 		return QString();
 	}
 
-	static int listBranches( const char* branchName, git_branch_t brachType, void* payload )
+	namespace Internal
 	{
-		QStringList* sl = (QStringList*) payload;
-		sl->append( QString::fromUtf8( branchName ) );
-		return 0;
+
+		static int listBranches( const char* branchName, git_branch_t brachType, void* payload )
+		{
+			QStringList* sl = (QStringList*) payload;
+			sl->append( QString::fromUtf8( branchName ) );
+			return 0;
+		}
+
 	}
 
-	QStringList Repository::branches( bool local, bool remote )
+	QStringList Repository::branches( bool local, bool remote, Result& result )
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return QStringList();
+		}
+		if( !d )
+		{
+			result.setInvalidObject();
+			return QStringList();
+		}
 
 		QStringList sl;
-		int rc = git_branch_foreach( d->mRepo,
+		result = git_branch_foreach( d->mRepo,
 									 ( local ? GIT_BRANCH_LOCAL : 0 ) |
 									 ( remote ? GIT_BRANCH_REMOTE : 0 ),
-									 &listBranches,
+									 &Internal::listBranches,
 									 (void*) &sl );
-		if( !d->handleErrors( rc ) )
+		if( !result )
 		{
 			return QStringList();
 		}
@@ -472,38 +502,58 @@ namespace Git
 		return sl;
 	}
 
-	bool Repository::renameBranch( const QString& oldName, const QString& newName, bool force )
+	bool Repository::renameBranch( const QString& oldName, const QString& newName, bool force,
+								   Result& result )
 	{
+		if( !result )
+		{
+			return false;
+		}
 		if( !d )
 		{
+			result.setInvalidObject();
 			return false;
 		}
 
 		git_reference* ref = NULL;
 
-		int rc = git_branch_lookup( &ref, d->mRepo, oldName.toUtf8().constData(), GIT_BRANCH_LOCAL );
-		if( rc == GITERR_REFERENCE )
+		result = git_branch_lookup( &ref, d->mRepo, oldName.toUtf8().constData(),
+									GIT_BRANCH_LOCAL );
+
+		if( result.errorCode() == GITERR_REFERENCE )
 		{
-			rc = git_branch_lookup( &ref, d->mRepo, oldName.toUtf8().constData(), GIT_BRANCH_REMOTE );
+			result = git_branch_lookup( &ref, d->mRepo, oldName.toUtf8().constData(),
+										GIT_BRANCH_REMOTE );
 		}
-		if( !d->handleErrors( rc ) )
+
+		if( !result )
 		{
 			return false;
 		}
 
-		rc = git_branch_move( ref, newName.toUtf8().constData(), force );
+		result = git_branch_move( ref, newName.toUtf8().constData(), force );
 		git_reference_free( ref );
 
-		return d->handleErrors( rc );
+		return result;
 	}
 
-	QStringList Repository::allTags()
+	QStringList Repository::allTags( Result& result )
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return QStringList();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return QStringList();
+		}
 
 		git_strarray arr;
-		int rc = git_tag_list( &arr, d->mRepo );
-		if( !d->handleErrors( rc ) )
+		result = git_tag_list( &arr, d->mRepo );
+
+		if( !result )
 		{
 			return QStringList();
 		}
@@ -826,38 +876,65 @@ namespace Git
 		return DiffList( new Internal::DiffListPrivate( d, diffList ) );
 	}
 
-	struct cb_enum_submodules_t
+	namespace Internal
 	{
-		QList< Submodule >* subs;
-		Internal::RepositoryPrivate* repo;
-	};
 
-	static int cb_enum_submodules( git_submodule* sm, const char* name, void* payload )
-	{
-		cb_enum_submodules_t* d = static_cast< cb_enum_submodules_t* >( payload );
-		Q_ASSERT( d && d->subs && name );
+		struct cb_enum_submodules_t
+		{
+			QList< Submodule >*	subs;
+			RepositoryPrivate*	repo;
+		};
 
-		d->subs->append( Submodule( d->repo, QString::fromUtf8( name ) ) );
-		return 0;
+		static int cb_enum_submodules( git_submodule* sm, const char* name, void* payload )
+		{
+			cb_enum_submodules_t* d = static_cast< cb_enum_submodules_t* >( payload );
+			Q_ASSERT( d && d->subs && name );
+
+			d->subs->append( Submodule( d->repo, QString::fromUtf8( name ) ) );
+			return 0;
+		}
+
 	}
 
-	QList< Submodule > Repository::submodules()
+	QList< Submodule > Repository::submodules( Result& result )
 	{
-		QList< Submodule > result;
+		QList< Submodule > list;
 
-		cb_enum_submodules_t data = { &result, d };
+		if( !result )
+		{
+			return list;
+		}
 
-		int rc = git_submodule_foreach( d->mRepo, &cb_enum_submodules, &data );
-		if( !d->handleErrors( rc ) )
+		if( !d )
+		{
+			result.setInvalidObject();
+			return list;
+		}
+
+		Internal::cb_enum_submodules_t data = { &list, d };
+
+		result = git_submodule_foreach( d->mRepo, &Internal::cb_enum_submodules, &data );
+		if( !result )
 		{
 			return QList< Submodule >();
 		}
 
-		return result;
+		return list;
 	}
 
-	Submodule Repository::submodule( const QString& name )
+	Submodule Repository::submodule( const QString& name, Result& result  )
 	{
+		if( !result )
+		{
+			return Submodule();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return Submodule();
+		}
+
 		return Submodule( d, name );
 	}
 

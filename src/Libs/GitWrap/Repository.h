@@ -81,14 +81,15 @@ namespace Git
 		QString gitPath() const;
 
 		QStringList allReferences( Result& result = GitWrap::lastResult() );
-		QStringList allBranches();
-		QString currentBranch();
-		QStringList branches( bool local = true, bool remote = false );
-		QStringList allTags();
+		QStringList allBranches( Result& result = GitWrap::lastResult() );
+		QString currentBranch( Result& result = GitWrap::lastResult() );
+		QStringList branches( bool local, bool remote, Result& result = GitWrap::lastResult() );
+		QStringList allTags( Result& result = GitWrap::lastResult() );
 
 		ResolvedRefs allResolvedRefs( Result& result = GitWrap::lastResult() );
 
-		bool renameBranch( const QString& oldName, const QString& newName, bool force = false );
+		bool renameBranch( const QString& oldName, const QString& newName, bool force = false,
+						   Result& result = GitWrap::lastResult() );
 
 		Index index( Result& result = GitWrap::lastResult() );
 
@@ -124,8 +125,8 @@ namespace Git
 		DiffList diffTreeToWorkingDir( ObjectTree oldTree, Result& result = GitWrap::lastResult() );
 		DiffList diffIndexToWorkingDir( Result& result = GitWrap::lastResult() );
 
-		QList< Submodule > submodules();
-		Submodule submodule( const QString& name );
+		QList< Submodule > submodules( Result& result = GitWrap::lastResult() );
+		Submodule submodule( const QString& name, Result& result = GitWrap::lastResult() );
 
 	private:
 		Internal::GitPtr< Internal::RepositoryPrivate > d;

@@ -15,4 +15,11 @@ int main( int argc, char** argv )
 }
 @endcode
 
+Objects in GitWrap
+------------------
+Almost all classes in GitWrap are designed to be used as so called value classes. That means, one has never
+ever to `new` any of the GitWrap classes. Where `libgit2` allows it to us, we use reference counting and a
+private data container behind the scenes.
+
+
 */

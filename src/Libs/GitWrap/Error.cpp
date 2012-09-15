@@ -55,7 +55,7 @@ namespace Git
 	 */
 	void Result::setInvalidObject()
 	{
-		mCode = -1;
+		mCode = -255;
 		mClass = -1;
 		mText = QLatin1String( "An invalid GitWrap object was used." );
 	}

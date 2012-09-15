@@ -69,57 +69,108 @@ namespace Git
 
 	bool Reference::isValid() const
 	{
-		return d && d->mRef;	// libGit2 allows a Reference to become invalid though it's still
-								// internally refCounted;
+		// libGit2 allows a Reference to become invalid though _WE_ still refCount it...
+		return d && d->mRef;
 	}
 
-	bool Reference::destroy()
+	bool Reference::destroy( Result& result )
 	{
-		if( isValid() )
+		if( !result )
 		{
-			int rc = git_reference_delete( d->mRef );
-			if( d->handleErrors( rc ) )
-			{
-				return false;
-			}
-
-			d->mRef = NULL;
+			return false;
 		}
+
+		if( !isValid() )
+		{
+			return false;
+		}
+
+		result = git_reference_delete( d->mRef );
+		if( !result )
+		{
+			return false;
+		}
+
+		// Clear our ref out. This ReferencePrivate object is invalid from now on.
+		// libgit2 free'ed d->mRef.
+		d->mRef = NULL;
 
 		return false;
 	}
 
 	QString Reference::name() const
 	{
-		Q_ASSERT( isValid() );
+		if( !isValid() )
+		{
+			GitWrap::lastResult().setInvalidObject();
+			return QString();
+		}
+
 		return QString::fromUtf8( git_reference_name( d->mRef ) );
 	}
 
 
-	Reference::Type Reference::type() const
+	Reference::Type Reference::type( Result& result ) const
 	{
-		Q_ASSERT( isValid() );
+		if( !result )
+		{
+			return Invalid;
+		}
+
+		if( !isValid() )
+		{
+			result.setInvalidObject();
+			return Invalid;
+		}
+
 		if( git_reference_type( d->mRef ) == GIT_REF_SYMBOLIC )
 			return Symbolic;
 		else
 			return Direct;
 	}
 
-	ObjectId Reference::objectId() const
+	ObjectId Reference::objectId( Result& result ) const
 	{
-		Q_ASSERT( isValid() && type() == Direct );
+		if( !result )
+		{
+			return ObjectId();
+		}
+
+		if( !type( result ) == Direct )	// Does the isValid() check for us, no need to repeat it
+		{
+			return ObjectId();
+		}
+
 		return ObjectId::fromRaw( git_reference_oid( d->mRef )->id );
 	}
 
-	QString Reference::target() const
+	QString Reference::target( Result& result ) const
 	{
-		Q_ASSERT( isValid() && type() == Symbolic );
+		if( !result )
+		{
+			return QString();
+		}
+
+		if( !type( result ) == Symbolic )	// Does the isValid() check for us, no need to repeat it
+		{
+			return QString();
+		}
 		return QString::fromUtf8( git_reference_target( d->mRef ) );
 	}
 
-	Repository Reference::repository() const
+	Repository Reference::repository( Result& result ) const
 	{
-		return Repository( d ? d->repo() : NULL );
+		if( !result )
+		{
+			return Repository();
+		}
+
+		if( !d )
+		{
+			return Repository();
+		}
+
+		return Repository( d->repo() );
 	}
 
 }

@@ -39,42 +39,35 @@
 namespace Git
 {
 
-	BEGIN_INTERNAL_IMPL()
-
-	RepositoryPrivate::RepositoryPrivate( git_repository* repo )
-		: mRepo( repo )
-		, mIndex( NULL )
+	namespace Internal
 	{
-	}
 
-	RepositoryPrivate::~RepositoryPrivate()
-	{
-		Q_ASSERT( mRepo );
-		Q_ASSERT( !mIndex );
-
-		git_repository_free( mRepo );
-	}
-
-	bool RepositoryPrivate::handleErrors( int rc ) const
-	{
-		if( rc < 0 )
+		RepositoryPrivate::RepositoryPrivate( git_repository* repo )
+			: mRepo( repo )
+			, mIndex( NULL )
 		{
-			const git_error* giterror = giterr_last();
-			Error err( QString::fromLocal8Bit( giterror->message ) );
-			giterr_clear();
-
-			mErrorListMtx.lock();
-			mErrors.append( err );
-			mErrorListMtx.unlock();
-
-			qDebug( "git2-Error: %s", qPrintable( err.text() ) );
-
-			return false;
 		}
-		return true;
-	}
 
-	END_INTERNAL_IMPL()
+		RepositoryPrivate::~RepositoryPrivate()
+		{
+			Q_ASSERT( mRepo );
+
+			// This assert may not look right in the first place, but it IS:
+			// mIndex is of type IndexPrivate* and will get a value as soon as Repository::index()
+			// is called for the first time. IndexPrivate is a RepoObject and as such it increases
+			// the reference counter on the Repository object. In fact, this means the Repository
+			// will never be deleted unless the Index has gone _before_ - When the Index is deleted
+			// (due to the refCount dropping to zero) it will set mIndex to NULL.
+			//
+			// I'm documenting this mainly for one reason: Last week I spent 3 hours trying to fix
+			// a race-condition in libgit2, which - as I later understood - is not at all there
+			// because outer constraints - like the above - prohibited the race to happen.
+			Q_ASSERT( !mIndex );
+
+			git_repository_free( mRepo );
+		}
+
+	}
 
 	/**
 	 * @internal

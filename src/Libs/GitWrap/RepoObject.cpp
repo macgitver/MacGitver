@@ -69,11 +69,6 @@ namespace Git
 			return mRepo;
 		}
 
-		bool RepoObject::handleErrors( int rc ) const
-		{
-			return mRepo->handleErrors( rc );
-		}
-
 	}
 
 }

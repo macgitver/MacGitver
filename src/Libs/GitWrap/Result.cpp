@@ -18,7 +18,7 @@
 
 #include "GitWrapPrivate.h"
 
-#include "Error.h"
+#include "Result.h"
 
 namespace Git
 {

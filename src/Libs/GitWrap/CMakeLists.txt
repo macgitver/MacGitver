@@ -11,7 +11,6 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
-	Error.cpp
 	Config.cpp
 	ChangeListConsumer.cpp
 	DiffList.cpp
@@ -29,6 +28,7 @@ SET( SRC_FILES
 	Remote.cpp
 	RepoObject.cpp
 	Repository.cpp
+	Result.cpp
 	RevisionWalker.cpp
 	Signature.cpp
 	Submodule.cpp
@@ -42,7 +42,7 @@ SET( SRC_FILES
 
 SET( PUB_HDR_FILES
 
-	Error.h
+	Result.h
 	Config.h
 	ChangeListConsumer.h
 	GitWrap.h

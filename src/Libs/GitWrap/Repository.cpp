@@ -15,7 +15,7 @@
  */
 
 #include "GitWrapPrivate.h"
-#include "Error.h"
+#include "Result.h"
 #include "Index.h"
 #include "IndexPrivate.h"
 #include "Remote.h"

@@ -22,7 +22,7 @@
 #include "git2.h"
 
 #include "GitWrap.h"
-#include "Error.h"
+#include "Result.h"
 
 #define BEGIN_INTERNAL_DECL()	namespace Internal {
 #define END_INTERNAL_DECL()		}

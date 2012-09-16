@@ -20,6 +20,7 @@
 
 #include "GitWrap/ObjectId.h"
 #include "GitWrap/Reference.h"
+#include "GitWrap/Result.h"
 
 #include "HistoryBuilder.h"
 #include "HistoryEntry.h"
@@ -92,14 +93,24 @@ void HistoryBuilder::updateReferences()
 	double				avg;
 	QElapsedTimer		timer;
 	Git::ResolvedRefs	refs;
+	Git::Result			r;
 	QString				curBranch;
 	QHash< Git::ObjectId, HistoryInlineRefs > refsById;
 
+	if( !mRepo.isValid() )
+	{
+		return;
+	}
+
+	refs = mRepo.allResolvedRefs( r );
+	curBranch = mRepo.currentBranch( r );
+	if( !r )
+	{
+		MacGitver::self().log( ltError, r.errorText() );
+		return;
+	}
+
 	timer.start();
-
-	refs = mRepo.allResolvedRefs();
-
-	curBranch = mRepo.currentBranch();
 
 	foreach( QString ref, refs.keys() )
 	{
@@ -212,12 +223,13 @@ void HistoryBuilder::start()
 	QVector< Git::ObjectId >	commits;
 	Git::ObjectId				currentSHA1;
 	Git::ObjectCommit			curCommit;
+	Git::Result					r;
 	qint64						dur;
 	double						avg;
 	QElapsedTimer				timer;
 
 	timer.start();
-	commits = mWalker.all();
+	commits = mWalker.all( r );
 
 	dur = timer.nsecsElapsed();
 	avg = double( dur ) / double( commits.count() );
@@ -250,7 +262,12 @@ void HistoryBuilder::start()
 			createGlyphSlot( ggBranch, currentSHA1 );
 			mCurrentLine++;
 		}
-		curCommit = mRepo.lookupCommit( currentSHA1 );
+		curCommit = mRepo.lookupCommit( currentSHA1, r );
+		if( !r )
+		{
+			MacGitver::self().log( ltError, r, "Could not find a commit the RevWalker gave us." );
+			break;
+		}
 
 		HistoryEntry* entry = mModel->at( curCommitIdx, false );
 
@@ -330,7 +347,7 @@ void HistoryBuilder::start()
 
 			for( int j = 1; j < numParents; j++ )
 			{
-				Git::ObjectId parentSha1 = curCommit.parentCommitId( j );
+				Git::ObjectId parentSha1 = curCommit.parentCommitId( j, r );
 				int idx = nextParent( parentSha1 );
 				if( idx != -1 )
 				{
@@ -404,7 +421,7 @@ void HistoryBuilder::start()
 		}
 		else
 		{
-			mNextParent[ mCurrentLine ] = curCommit.parentCommitId( 0 );
+			mNextParent[ mCurrentLine ] = curCommit.parentCommitId( 0, r );
 		}
 
 		if( numParents > 1 )

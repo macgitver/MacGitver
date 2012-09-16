@@ -99,9 +99,10 @@ void IndexWidget::updateDiff()
 {
 	Git::Result r;
 	Git::DiffList dl = mRepo.diffIndexToWorkingDir( r );
+	GitPatchConsumer p;
 	dl.consumePatch( &p, r );
 
-	mRawDiff->setText( p.patch()->toString() );
+	mRawDiff->setPatch( p.patch() );
 }
 
 void IndexWidget::onShowAll( bool enabled )

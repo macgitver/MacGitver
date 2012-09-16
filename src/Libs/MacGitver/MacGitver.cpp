@@ -144,3 +144,20 @@ void MacGitver::log( LogType type, const char* logMessage )
 		mLog->addMessage( type, QString::fromUtf8( logMessage ) );
 	}
 }
+
+void MacGitver::log( LogType type, const Git::Result& r, const char* logMessage )
+{
+	if( mLog )
+	{
+		if( logMessage )
+		{
+			mLog->addMessage( type, QString::fromUtf8( "GitWrap-Error: %1\n(%2)" )
+							  .arg( r.errorText() ).arg( QLatin1String( logMessage ) ) );
+		}
+		else
+		{
+			mLog->addMessage( type, QString::fromUtf8( "GitWrap-Error: %1" )
+							  .arg( r.errorText() ) );
+		}
+		}
+}

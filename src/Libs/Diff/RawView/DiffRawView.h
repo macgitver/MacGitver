@@ -19,6 +19,8 @@
 
 #include <QTextBrowser>
 
+#include "Diff/Model/Patch.h"
+
 #include "Diff/RawView/DiffRawViewApi.h"
 
 class DIFF_RAW_VIEW_API DiffRawView : public QTextBrowser
@@ -28,7 +30,11 @@ public:
 	DiffRawView( QWidget* parent = 0 );
 	~DiffRawView();
 
+public:
+	void setPatch( Patch::Ptr patch );
+
 private:
+	Patch::Ptr		mCurrentPatch;
 };
 
 #endif

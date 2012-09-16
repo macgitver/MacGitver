@@ -31,3 +31,17 @@ DiffRawView::DiffRawView( QWidget* parent )
 DiffRawView::~DiffRawView()
 {
 }
+
+void DiffRawView::setPatch( Patch::Ptr patch )
+{
+	QString patchText;
+
+	mCurrentPatch = patch;
+
+	if( patch )
+	{
+		patchText = patch->toString();
+	}
+
+	setText( patchText );
+}

@@ -83,4 +83,15 @@ namespace Git
 		return *this;
 	}
 
+	/**
+	 * @brief		Clear this result
+	 *
+	 * The result will become _valid_ again.
+	 *
+	 */
+	void Result::clear()
+	{
+		mCode = 0;
+	}
+
 }

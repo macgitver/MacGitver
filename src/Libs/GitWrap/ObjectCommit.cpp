@@ -34,8 +34,10 @@ namespace Git
 		: Object( _d )
 	{
 		Result r;
-		Q_UNUSED( r );
-		Q_ASSERT( type(r) == otCommit );
+		if( ( type( r ) != otCommit ) || !r )
+		{
+			d = NULL;
+		}
 	}
 
 	ObjectCommit::ObjectCommit( const ObjectCommit& o )

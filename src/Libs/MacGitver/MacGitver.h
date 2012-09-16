@@ -68,6 +68,7 @@ public:
 	ILog* log();
 	void setLog( ILog* log );
 	void log( LogType type, const QString& logMessage );
+	void log( LogType type, const char* logMessage );
 
 signals:
 	void repositoryChanged( const Git::Repository& repo );

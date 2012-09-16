@@ -136,3 +136,11 @@ void MacGitver::log( LogType type, const QString& logMessage )
 		mLog->addMessage( type, logMessage );
 	}
 }
+
+void MacGitver::log( LogType type, const char* logMessage )
+{
+	if( mLog )
+	{
+		mLog->addMessage( type, QString::fromUtf8( logMessage ) );
+	}
+}

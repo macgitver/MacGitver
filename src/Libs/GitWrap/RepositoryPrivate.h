@@ -25,33 +25,27 @@
 namespace Git
 {
 
-	class Error;
-
-	BEGIN_INTERNAL_DECL()
-
-    /**
-     * @internal
-	 * @ingroup GitWrap
-     * @brief The RepositoryPrivate class
-	 *
-     */
-	class RepositoryPrivate : public BasicObject
+	namespace Internal
 	{
-	public:
-		RepositoryPrivate( git_repository* repo );
-		~RepositoryPrivate();
 
-	public:
-		bool handleErrors( int rc ) const;
+		/**
+		 * @internal
+		 * @ingroup GitWrap
+		 * @brief The RepositoryPrivate class
+		 *
+		 */
+		class RepositoryPrivate : public BasicObject
+		{
+		public:
+			RepositoryPrivate( git_repository* repo );
+			~RepositoryPrivate();
 
-	public:
-		git_repository*			mRepo;
-		IndexPrivate*			mIndex;
-		mutable QList< Error >	mErrors;
-		mutable QMutex			mErrorListMtx;
-	};
+		public:
+			git_repository*			mRepo;
+			IndexPrivate*			mIndex;
+		};
 
-	END_INTERNAL_DECL()
+	}
 
 }
 

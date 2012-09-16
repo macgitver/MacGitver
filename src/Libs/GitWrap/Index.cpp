@@ -108,4 +108,53 @@ namespace Git
 		return Repository( d->repo() );
 	}
 
+	/**
+	 * @brief			Read the index from storage
+	 *
+	 * Refills this index object with data obtained from hard disc. Any local modifications to this
+	 * index object will be lost.
+	 *
+	 * @param[in,out]	result	A Result object; see @ref GitWrapErrorHandling
+	 *
+	 */
+	void Index::read( Result& result )
+	{
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		result = git_index_read( d->mIndex );
+	}
+
+	/**
+	 * @brief			Write the index to storage
+	 *
+	 * Writes this index object to the hard disc.
+	 *
+	 * @param[in,out]	result	A Result object; see @ref GitWrapErrorHandling
+	 *
+	 */
+	void Index::write( Result& result )
+	{
+		if( !result )
+		{
+			return;
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return;
+		}
+
+		result = git_index_write( d->mIndex );
+	}
+
 }

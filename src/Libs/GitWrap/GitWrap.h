@@ -14,8 +14,8 @@
  *
  */
 
-#ifndef CORE_GIT_H
-#define CORE_GIT_H
+#ifndef GITWRAP_GITWRAP_H
+#define GITWRAP_GITWRAP_H
 
 #include <QString>
 #include <QHash>

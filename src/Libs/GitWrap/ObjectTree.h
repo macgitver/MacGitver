@@ -40,7 +40,7 @@ namespace Git
 		ObjectTree( const ObjectTree& o );
 
 	public:
-		ObjectTree subPath( const QString& pathName ) const;
+		ObjectTree subPath( const QString& pathName, Result& result = GitWrap::lastResult() ) const;
 
 		DiffList diffToTree( ObjectTree newTree, Result& result = GitWrap::lastResult() );
 		DiffList diffToIndex( Result& result = GitWrap::lastResult() );

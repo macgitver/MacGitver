@@ -30,6 +30,10 @@ namespace Git
 	class TreeEntry;
 	class ObjectId;
 
+	/**
+	 * @ingroup		GitWrap
+	 * @brief		Tool for creating tree objects
+	 */
 	class GITWRAP_API TreeBuilder
 	{
 	public:

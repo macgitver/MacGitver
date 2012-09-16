@@ -26,25 +26,6 @@ namespace Git
 
 	/**
 	 * @ingroup		GitWrap
-	 * @brief		Wraps the git_error
-	 *
-	 */
-	class GITWRAP_API Error
-	{
-	public:
-		Error( const QString& errorText );
-		Error( const Error& other );
-		~Error();
-
-	public:
-		QString text() const;
-
-	private:
-		QString		mErrorText;
-	};
-
-	/**
-	 * @ingroup		GitWrap
 	 * @brief		Encapsulates a result
 	 *
 	 * A result object represents either the success or failure (including an error text) of a call

@@ -41,9 +41,19 @@ namespace Git
 	{
 	}
 
-	ObjectTree ObjectTree::subPath( const QString& pathName ) const
+	ObjectTree ObjectTree::subPath( const QString& pathName, Result& result ) const
 	{
-		Q_ASSERT( d );
+		if( !result )
+		{
+			return ObjectTree();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return ObjectTree();
+		}
+
 		git_tree* d2 = (git_tree*) d->mObj;
 
 		const git_tree_entry* entry = git_tree_entry_byname( d2, pathName.toUtf8().constData() );
@@ -53,8 +63,8 @@ namespace Git
 		}
 
 		git_object* subObject = 0;
-		int rc = git_tree_entry_to_object( &subObject, d->repo()->mRepo, entry );
-		if( d->handleErrors( rc ) || !subObject )
+		result = git_tree_entry_to_object( &subObject, d->repo()->mRepo, entry );
+		if( !result )
 		{
 			return ObjectTree();
 		}

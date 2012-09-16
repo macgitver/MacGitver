@@ -50,6 +50,9 @@ namespace Git
 	public:
 		bool isValid() const;
 
+		void read( Result& result = GitWrap::lastResult() );
+		void write( Result& result = GitWrap::lastResult() );
+
 		int count( Result& result = GitWrap::lastResult() ) const;
 		Repository repository( Result& result = GitWrap::lastResult() ) const;
 

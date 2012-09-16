@@ -61,7 +61,6 @@ namespace Git
 			~RepoObject();
 
 			RepositoryPrivate* repo() const;
-			bool handleErrors( int rc ) const;
 
 		protected:
 			RepositoryPrivate*	mRepo;

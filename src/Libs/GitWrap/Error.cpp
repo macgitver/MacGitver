@@ -23,25 +23,6 @@
 namespace Git
 {
 
-	Error::Error( const QString& errorText )
-		: mErrorText( errorText )
-	{
-	}
-
-	Error::Error( const Error& other )
-		: mErrorText( other.mErrorText )
-	{
-	}
-
-	Error::~Error()
-	{
-	}
-
-	QString Error::text() const
-	{
-		return mErrorText;
-	}
-
 	/**
 	 * @internal
 	 */

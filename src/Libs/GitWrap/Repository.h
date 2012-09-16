@@ -26,7 +26,6 @@ namespace Git
 
 	class Submodule;
 	class Reference;
-	class Error;
 	class DiffList;
 	class Index;
 	class Object;

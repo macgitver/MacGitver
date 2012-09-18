@@ -59,6 +59,7 @@ protected:
 	void mouseReleaseEvent( QMouseEvent* ev );
 
 public:
+	void clear();
 	void readConfig();
 
 private:

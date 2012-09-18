@@ -19,6 +19,9 @@
 #include "Config/Config.h"
 
 #include "GitWrap/ObjectCommit.h"
+#include "GitWrap/Result.h"
+
+#include "MacGitver/MacGitver.h"
 
 #include "HistoryDetails.h"
 
@@ -164,69 +167,89 @@ void HistoryDetails::calculate()
 	viewport()->update();
 }
 
+void HistoryDetails::clear()
+{
+	mCurrentSHA1 = Git::ObjectId();
+	mHeaders.clear();
+	mDetails.clear();
+	calculate();
+}
+
 void HistoryDetails::setRepository( Git::Repository repo )
 {
 	mRepo = repo;
-	calculate();
+	clear();
 }
 
 void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 {
+	Git::Result r;
+
 	Q_ASSERT( mRepo.isValid() || sha1.isNull() );
-	mHeaders.clear();
 
-	mCurrentSHA1 = sha1;
-
+	clear();
 	if( sha1.isNull() )
 	{
-		calculate();
 		return;
 	}
 
-	Git::ObjectCommit commit = mRepo.lookupCommit( sha1 );
-	Q_ASSERT( commit.isValid() );
+	mCurrentSHA1 = sha1;
+
+	Git::ObjectCommit commit = mRepo.lookupCommit( sha1, r );
+	if( !r )
+	{
+		MacGitver::self().log( ltError, r, "Reading commit details" );
+		clear();
+		return;
+	}
 
 	for( int i = 0; i < mViewDetailRows.count(); i++ )
 	{
 		switch( mViewDetailRows[ i ] )
 		{
 		case HHD_Subject:
-			mHeaders.append( HeaderEntry( trUtf8( "Subject" ), commit.shortMessage() ) );
+			mHeaders.append( HeaderEntry( trUtf8( "Subject" ),
+										  commit.shortMessage( r ) ) );
 			break;
 
 		case HHD_Author:
-			mHeaders.append( HeaderEntry( trUtf8( "Author" ), commit.author().fullName() ) );
+			mHeaders.append( HeaderEntry( trUtf8( "Author" ),
+										  commit.author( r ).fullName() ) );
 			break;
 
 		case HHD_AuthorDate:
 			mHeaders.append( HeaderEntry( trUtf8( "Author date" ),
-										  commit.author().when().toString() ) );
+										  commit.author( r ).when().toString() ) );
 			break;
 
 		case HHD_AuthorMail:
-			mHeaders.append( HeaderEntry( trUtf8( "Author mail" ), commit.author().email() ) );
+			mHeaders.append( HeaderEntry( trUtf8( "Author mail" ),
+										  commit.author( r ).email() ) );
 			break;
 
 		case HHD_AuthorName:
-			mHeaders.append( HeaderEntry( trUtf8( "Author name" ), commit.author().name() ) );
+			mHeaders.append( HeaderEntry( trUtf8( "Author name" ),
+										  commit.author( r ).name() ) );
 			break;
 
 		case HHD_Committer:
-			mHeaders.append( HeaderEntry( trUtf8( "Committer" ), commit.committer().fullName() ) );
+			mHeaders.append( HeaderEntry( trUtf8( "Committer" ),
+										  commit.committer( r ).fullName() ) );
 			break;
 
 		case HHD_CommitterDate:
 			mHeaders.append( HeaderEntry( trUtf8( "Committer date" ),
-										  commit.committer().when().toString() ) );
+										  commit.committer( r ).when().toString() ) );
 			break;
 
 		case HHD_CommitterMail:
 			mHeaders.append( HeaderEntry( trUtf8( "Committer mail" ),
-										  commit.committer().email() ) );
+										  commit.committer( r ).email() ) );
 			break;
 
 		case HHD_CommitterName:
-			mHeaders.append( HeaderEntry( trUtf8( "Committer name" ), commit.committer().name() ) );
+			mHeaders.append( HeaderEntry( trUtf8( "Committer name" ),
+										  commit.committer( r ).name() ) );
 			break;
 
 		case HHD_SHA1:
@@ -236,9 +259,15 @@ void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 		default:
 			break;
 		}
+
+		if( !r )
+		{
+			MacGitver::self().log( ltError, r, "Reading commit details" );
+			r.clear();
+		}
 	}
 
-	mDetails = commit.message().split( QChar( L'\n' ) );
+	mDetails = commit.message( r ).split( QChar( L'\n' ) );
 	mDetails.removeFirst();
 
 	calculate();

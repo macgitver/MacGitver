@@ -28,10 +28,30 @@ namespace Git
 {
 
     /**
-     * @brief The Signature class represents a Git commit signature (the commit info).
-     *
-     * @ingroup GitWrap
-     * @{
+	 * @ingroup		GitWrap
+	 * @brief		Commit signature
+	 *
+	 * A signature object is used to identify the originator and a time of a commit. Each commit has
+	 * two signatures assigned to it:
+	 * - __Author__ \n
+	 *   The author is the person, who initially wrote a change set. (To be seen in terms of
+	 *   copyright).
+	 * - __Committer__ \n
+	 *   The committer is the person, who committed the change set into the repository.
+	 *
+	 * This concept is specific to distributed VCSes: The person creating a change might not even
+	 * have access to the repository where it should be committed to. The commit is transported to
+	 * a person _who actually_ has that access. Depending on defined workflow, it may get reviewed,
+	 * tested or otherwise validated along that way.
+	 *
+	 * Git itself has several ways to transport a change set from one place to another, which means
+	 * there are different rules when committer and author will vary. I.e. if the transport is
+	 * E-Mail, the committer information is not transported at all.
+	 *
+	 * OTOH, if you're using a integrated git hosting service, like github, you might see that a
+	 * cross merge from one repository to another will leave the committer intact; while
+	 * cherry-picking a commit, will not.
+	 *
      */
 	class GITWRAP_API Signature
 	{
@@ -95,7 +115,6 @@ namespace Git
 		QDateTime	mWhen;
 	};
 
-    /**@}*/
 }
 
 inline QDebug operator<<( QDebug debug, const Git::Signature& sig )

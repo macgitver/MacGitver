@@ -22,12 +22,11 @@
 namespace Git
 {
 
-    /**
-     * @brief The ChangeListConsumer class
-     *
-     * @ingroup GitWrap
-     * @{
-     */
+	/**
+	 * @ingroup		GitWrap
+	 * @brief		Callback interface to consume a list of differences
+	 *
+	 */
 	class GITWRAP_API ChangeListConsumer
 	{
 	public:
@@ -53,7 +52,6 @@ namespace Git
 
 	};
 
-    /**@}*/
 }
 
 #endif

@@ -67,4 +67,6 @@ namespace Git
 
 }
 
+Q_DECLARE_METATYPE( Git::Reference )
+
 #endif

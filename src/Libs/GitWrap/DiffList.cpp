@@ -225,7 +225,7 @@ namespace Git
 								   &Internal::patchHunkCallBack,
 								   &Internal::patchDataCallBack );
 
-		return true;
+		return result;
 	}
 
 	bool DiffList::consumeChangeList( ChangeListConsumer* consumer, Result& result ) const

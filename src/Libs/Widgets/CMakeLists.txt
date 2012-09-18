@@ -19,6 +19,7 @@ SET( SRC_FILES
 	FlatTreeModel.cpp
 	FlatTreeDelegate.cpp
 	SHA1Input.cpp
+	ShortCommitModel.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -33,6 +34,7 @@ SET( PUB_HDR_FILES
 	FlatTreeModel.h
 	FlatTreeDelegate.h
 	SHA1Input.h
+	ShortCommitModel.h
 )
 
 SET( PRI_HDR_FILES

@@ -15,6 +15,9 @@ SET( SRC_FILES
 	LineEdit.cpp
 	StringSelectorWidget.cpp
 	HeaderView.cpp
+	FlatTreeComboBox.cpp
+	FlatTreeModel.cpp
+	FlatTreeDelegate.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -25,10 +28,14 @@ SET( PUB_HDR_FILES
 	LineEdit.h
 	StringSelectorWidget.h
 	HeaderView.h
+	FlatTreeComboBox.h
+	FlatTreeModel.h
+	FlatTreeDelegate.h
 )
 
 SET( PRI_HDR_FILES
 	StringSelectorWidgetPrivate.h
+	FlatTreeModelPrivate.h
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
@@ -47,6 +54,7 @@ TARGET_LINK_LIBRARIES(
 	Widgets
 
 	Config
+	GitWrap
 )
 
 INSTALL_MGV_LIB( Widgets )

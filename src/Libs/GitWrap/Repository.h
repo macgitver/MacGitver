@@ -95,6 +95,8 @@ namespace Git
 		StatusHash statusHash( Result& result = GitWrap::lastResult() );
 
 		Reference HEAD( Result& result = GitWrap::lastResult() );
+		Reference lookupRef( const QString& refName, Result& result = GitWrap::lastResult() );
+		ObjectId resolveRef( const QString& refName, Result& result = GitWrap::lastResult() );
 
 		Object lookup( const ObjectId& id, ObjectType ot = otAny,
 					   Result& result = GitWrap::lastResult() );
@@ -103,6 +105,14 @@ namespace Git
 		ObjectTree lookupTree( const ObjectId& id, Result& result = GitWrap::lastResult() );
 		ObjectBlob lookupBlob( const ObjectId& id, Result& result = GitWrap::lastResult() );
 		ObjectTag lookupTag( const ObjectId& id, Result& result = GitWrap::lastResult() );
+
+		Object lookup( const QString& refName, ObjectType ot = otAny,
+					   Result& result = GitWrap::lastResult() );
+
+		ObjectCommit lookupCommit( const QString& refName, Result& result = GitWrap::lastResult() );
+		ObjectTree lookupTree( const QString& refName, Result& result = GitWrap::lastResult() );
+		ObjectBlob lookupBlob( const QString& refName, Result& result = GitWrap::lastResult() );
+		ObjectTag lookupTag( const QString& refName, Result& result = GitWrap::lastResult() );
 
 		bool shouldIgnore( const QString& filePath, Result& result = GitWrap::lastResult() ) const;
 

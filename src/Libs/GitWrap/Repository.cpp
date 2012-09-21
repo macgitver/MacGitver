@@ -686,22 +686,47 @@ namespace Git
 
 	ObjectCommit Repository::lookupCommit( const ObjectId& id, Result& result )
 	{
-		return lookup( id, otCommit, result ).asCommit();
+		return lookup( id, otCommit, result ).asCommit( result );
 	}
 
 	ObjectTree Repository::lookupTree( const ObjectId& id, Result& result )
 	{
-		return lookup( id, otTree, result ).asTree();
+		return lookup( id, otTree, result ).asTree( result );
 	}
 
 	ObjectBlob Repository::lookupBlob( const ObjectId& id, Result& result )
 	{
-		return lookup( id, otBlob, result ).asBlob();
+		return lookup( id, otBlob, result ).asBlob( result );
 	}
 
 	ObjectTag Repository::lookupTag( const ObjectId& id, Result& result )
 	{
-		return lookup( id, otTag, result ).asTag();
+		return lookup( id, otTag, result ).asTag( result );
+	}
+
+	Object Repository::lookup( const QString& refName, ObjectType ot, Result& result )
+	{
+		return lookup( lookupRef( refName, result ).resolveToObjectId( result ), ot, result );
+	}
+
+	ObjectCommit Repository::lookupCommit( const QString& refName, Result& result )
+	{
+		return lookupCommit( lookupRef( refName, result ).resolveToObjectId( result ), result );
+	}
+
+	ObjectTree Repository::lookupTree( const QString& refName, Result& result )
+	{
+		return lookupTree( lookupRef( refName, result ).resolveToObjectId( result ), result );
+	}
+
+	ObjectBlob Repository::lookupBlob( const QString& refName, Result& result )
+	{
+		return lookupBlob( lookupRef( refName, result ).resolveToObjectId( result ), result );
+	}
+
+	ObjectTag Repository::lookupTag( const QString& refName, Result& result )
+	{
+		return lookupTag( lookupRef( refName, result ).resolveToObjectId( result ), result );
 	}
 
 	RevisionWalker Repository::newWalker( Result& result )
@@ -929,6 +954,30 @@ namespace Git
 		}
 
 		return Submodule( d, name );
+	}
+
+	Reference Repository::lookupRef( const QString& refName, Result& result )
+	{
+		if( !result )
+		{
+			return Reference();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return Reference();
+		}
+
+		git_reference* ref = NULL;
+		result = git_reference_lookup( &ref, d->mRepo, refName.toUtf8().constData() );
+
+		if( !result )
+		{
+			return Reference();
+		}
+
+		return new Internal::ReferencePrivate( d, ref );
 	}
 
 }

@@ -33,7 +33,11 @@ namespace Git
 	ObjectTree::ObjectTree( Internal::ObjectPrivate* _d )
 		: Object( _d )
 	{
-		Q_ASSERT( type() == otTree );
+		Result r;
+		if( ( type( r ) != otTree ) || !r )
+		{
+			d = NULL;
+		}
 	}
 
 	ObjectTree::ObjectTree( const ObjectTree& o )

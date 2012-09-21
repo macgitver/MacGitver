@@ -33,6 +33,8 @@ public:
 	~FlatTreeModel();
 
 public:
+	void clear();
+
 	void add( const QString& entry );
 	void add( const QStringList& entries );
 

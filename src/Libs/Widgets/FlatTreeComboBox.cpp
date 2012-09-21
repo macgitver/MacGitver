@@ -35,6 +35,13 @@ void FlatTreeComboBox::setModel( FlatTreeModel* model )
 	QComboBox::setModel( model );
 }
 
+void FlatTreeComboBox::clear()
+{
+	FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
+	Q_ASSERT( m );
+	m->clear();
+}
+
 void FlatTreeComboBox::add( const QString& entry )
 {
 	FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );

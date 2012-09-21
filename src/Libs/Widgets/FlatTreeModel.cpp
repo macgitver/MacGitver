@@ -215,6 +215,17 @@ FlatTreeModel::~FlatTreeModel()
 	delete d;
 }
 
+void FlatTreeModel::clear()
+{
+	beginResetModel();
+
+	qDeleteAll( d->mEntries );
+	d->mRoot.mFirstChild = d->mRoot.mNextSibling = NULL;
+	d->mEntries.clear();
+
+	endResetModel();
+}
+
 void FlatTreeModel::add( const QStringList& entries )
 {
 	foreach( QString s, entries )

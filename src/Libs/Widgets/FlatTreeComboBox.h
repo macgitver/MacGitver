@@ -30,6 +30,8 @@ public:
 	FlatTreeComboBox( QWidget* parent = 0 );
 
 public:
+	void clear();
+
 	void setModel( FlatTreeModel* model );
 
 	void add( const QString& entry );

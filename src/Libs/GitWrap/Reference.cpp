@@ -173,4 +173,37 @@ namespace Git
 		return Repository( d->repo() );
 	}
 
+	Reference Reference::resolved( Result& result )
+	{
+		if( !result )
+		{
+			return Reference();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return Reference();
+		}
+
+		git_reference* ref;
+		result = git_reference_resolve( &ref, d->mRef );
+		if( !result )
+		{
+			return Reference();
+		}
+
+		return new Internal::ReferencePrivate( d->repo(), ref );
+	}
+
+	ObjectId Reference::resolveToObjectId( Result& result )
+	{
+		Reference resolvedRef = resolved( result );
+		if( !result )
+		{
+			return ObjectId();
+		}
+		return resolvedRef.objectId( result );
+	}
+
 }

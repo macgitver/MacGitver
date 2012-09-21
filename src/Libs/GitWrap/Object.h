@@ -143,4 +143,6 @@ namespace Git
 
 }
 
+Q_DECLARE_METATYPE( Git::Object )
+
 #endif

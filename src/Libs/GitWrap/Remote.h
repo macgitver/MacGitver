@@ -76,4 +76,6 @@ namespace Git
 
 }
 
+Q_DECLARE_METATYPE( Git::Remote )
+
 #endif

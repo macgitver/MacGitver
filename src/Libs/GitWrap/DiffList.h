@@ -32,10 +32,9 @@ namespace Git
 	}
 
 	/**
-	 * @brief The DiffList class
+	 * @ingroup		GitWrap
+	 * @brief		List of differences between to objects
 	 *
-	 * @ingroup GitWrap
-	 * @{
 	 */
 	class GITWRAP_API DiffList
 	{
@@ -64,7 +63,8 @@ namespace Git
 		Internal::GitPtr< Internal::DiffListPrivate > d;
 	};
 
-	/**@}*/
 }
+
+Q_DECLARE_METATYPE( Git::DiffList )
 
 #endif

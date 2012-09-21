@@ -39,4 +39,6 @@ namespace Git
 
 }
 
+Q_DECLARE_METATYPE( Git::ObjectBlob )
+
 #endif

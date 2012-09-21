@@ -24,6 +24,7 @@
 #include "ObjectId.h"
 #include "Object.h"
 #include "Signature.h"
+#include "DiffList.h"
 
 namespace Git
 {
@@ -76,6 +77,9 @@ namespace Git
 
 		Reference createBranch( const QString& name, bool force,
 								Result& result = GitWrap::lastResult() );
+
+		DiffList diffFromParent( unsigned int index, Result& result = GitWrap::lastResult() );
+		DiffList diffFromAllParents( Result& result = GitWrap::lastResult() );
 	};
 
 	/**

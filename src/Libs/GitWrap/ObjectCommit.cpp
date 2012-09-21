@@ -34,8 +34,10 @@ namespace Git
 		: Object( _d )
 	{
 		Result r;
-		Q_UNUSED( r );
-		Q_ASSERT( type(r) == otCommit );
+		if( ( type( r ) != otCommit ) || !r )
+		{
+			d = NULL;
+		}
 	}
 
 	ObjectCommit::ObjectCommit( const ObjectCommit& o )
@@ -342,6 +344,53 @@ namespace Git
 		}
 
 		return Reference( new Internal::ReferencePrivate( d->repo(), ref ) );
+	}
+
+	DiffList ObjectCommit::diffFromParent( unsigned int index, Result& result )
+	{
+		if( !result )
+		{
+			return DiffList();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return DiffList();
+		}
+
+		ObjectCommit parentObjCommit = parentCommit( index, result );
+		ObjectTree parentObjTree = parentObjCommit.tree( result );
+
+		return parentObjTree.diffToTree( tree( result ), result );
+	}
+
+	DiffList ObjectCommit::diffFromAllParents( Result& result )
+	{
+		if( !result )
+		{
+			return DiffList();
+		}
+
+		if( !d )
+		{
+			result.setInvalidObject();
+			return DiffList();
+		}
+
+		if( numParentCommits() == 0 )
+		{
+			return DiffList();
+		}
+
+		DiffList dl = diffFromParent( 0, result );
+		for( unsigned int i = 1; i < numParentCommits(); i++ )
+		{
+			DiffList dl2 = diffFromParent( i, result );
+			dl2.mergeOnto( dl, result );
+		}
+
+		return dl;
 	}
 
 }

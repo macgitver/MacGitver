@@ -19,6 +19,7 @@
 
 #include <QString>
 #include <QHash>
+#include <QMetaType>
 
 /** @defgroup GitWrap Qt-based wrapper for Git revision control featuring libgit2
  * Wrapper for the LibGit2 library based on Qt4/Qt5.

@@ -52,6 +52,9 @@ namespace Git
 		const QString& errorText() const;
 
 	public:
+		void clear();
+
+	public:
 		void setError( int resultCode );
 		void setInvalidObject();
 

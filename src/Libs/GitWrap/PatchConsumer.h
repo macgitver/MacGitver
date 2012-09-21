@@ -23,10 +23,9 @@ namespace Git
 {
 
     /**
-     * @brief The PatchConsumer class
+	 * @ingroup		GitWrap
+	 * @brief		Callback interface to consume a list of differences
      *
-     * @ingroup GitWrap
-     * @{
      */
 	class GITWRAP_API PatchConsumer
 	{
@@ -59,7 +58,6 @@ namespace Git
 		virtual bool appendDeletion( const QString& content );
 	};
 
-    /**@}*/
 }
 
 #endif

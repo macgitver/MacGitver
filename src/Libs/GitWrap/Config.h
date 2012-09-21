@@ -14,6 +14,9 @@
  *
  */
 
+#ifndef GITWRAP_CONFIG_H
+#define GITWRAP_CONFIG_H
+
 #include "GitWrap.h"
 
 namespace Git
@@ -58,3 +61,7 @@ namespace Git
 	};
 
 }
+
+Q_DECLARE_METATYPE( Git::Config )
+
+#endif

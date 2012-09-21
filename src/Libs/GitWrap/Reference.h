@@ -60,11 +60,15 @@ namespace Git
 		QString target( Result& result = GitWrap::lastResult() ) const;
 
 		Repository repository( Result& result = GitWrap::lastResult() ) const;
+		Reference resolved( Result& result = GitWrap::lastResult() );
+		ObjectId resolveToObjectId( Result& result = GitWrap::lastResult() );
 
 	private:
 		Internal::GitPtr< Internal::ReferencePrivate > d;
 	};
 
 }
+
+Q_DECLARE_METATYPE( Git::Reference )
 
 #endif

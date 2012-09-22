@@ -1,3 +1,18 @@
+/*
+ * MacGitver
+ * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License (Version 2) as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #include <QDebug>
 #include <QDateTime>
@@ -5,73 +20,10 @@
 #include <QFile>
 #include <QUuid>
 
-#include "hic.h"
+#include "HIC.h"
 
 QHash< QString, HIDTokenId > HeavenInterfaceCompiler::sTokens;
 
-/*
- * HADFile				:= RootObjectDef
- *
- * RootObjectDef		:= Keyword_Ui <identifer> '{' PropertyList '}' ';'
- *						:= ObjectFwdDef RootObjectDef;
- *
- * ObjectDef			:= ObjectFwdDef
- *						:= RealObjectDef
- *
- * RealObjectDef		:= ClassName <identifier> '{' PropertyList '}' ';'
- *
- * ObjectFwdDef			:= ClassName <identifier> ';'
- *
- * PropertyList			:= PropertyListEntry
- *						:= PropertyListEntry PropertyList
- *
- * PropertyListEntry	:= PropertyDef
- *						:= ObjectDef
- *						:= ContentList
- *						:= ContentRef
- *
- * PropertyDef			:= <identifier> PropertyValue ';'
- *
- * PropertyValue		:= Keyword_True
- *						:= Keyword_False
- *						:= <identifier>
- *						:= TranslatedString
- *
- * TranslatedString		:= '"' AnyChars '"'
- *
- * ContentList			:= Keyword_Content '[' ContentRefs ']'
- *
- * ContentRefs			:= ContentRef
- *						:= ContentRefs ContentRef
- *
- * ContentRef			:= ObjectDef
- *						:= Separator
- *
- * ClassName			:= Keyword_Action
- *						:= Keyword_Menu
- *						:= Keyword_MenuBar
- *						:= Keyword_ToolBar
- *						:= Keyword_MergePoint
- *						:= Keyword_Container
- *
- * Separator			:= Keyword_Separator ';'
- *
- * Keyword_True			:= "true"
- * Keyword_False		:= "false"
- * Keyword_Content		:= "Content"
- * Keyword_Ui			:= "Ui"
- * Keyword_Action		:= "Action"
- * Keyword_Menu			:= "Menu"
- * Keyword_MenuBar		:= "MenuBar"
- * Keyword_ToolBar		:= "ToolBar"
- * Keyword_Separator	:= "Sep"
- *						:= "Separator"
- * Keyword_MergePlace	:= "MergePlace"
- * Keyword_Container	:= "Container"
- *
- * AnyChars				:= >> Every Char other than " <<
- *
- */
 
 static inline QString latin1Encode( const QString& src )
 {
@@ -951,9 +903,4 @@ int HeavenInterfaceCompiler::run()
 	spitSource( tsOutput2, QFileInfo( fOutput1 ).fileName() );
 
 	return 0;
-}
-
-int main( int c, char** v )
-{
-	return HeavenInterfaceCompiler( c, v ).run();
 }

@@ -1,3 +1,18 @@
+/*
+ * MacGitver
+ * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License (Version 2) as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #ifndef HIC_H
 #define HIC_H
@@ -9,18 +24,7 @@
 #include <QVariant>
 #include <QList>
 
-enum ObjectTypes
-{
-	HACO_Ui,
-	HACO_Action,
-	HACO_Menu,
-	HACO_MenuBar,
-	HACO_ToolBar,
-	HACO_Separator,
-	HACO_Container,
-	HACO_MergePlace,
-	HACO_WidgetAction
-};
+#include "HICObject.h"
 
 enum HIDTokenId
 {
@@ -51,133 +55,11 @@ enum HIDTokenId
 	Token_Semicolon
 };
 
-enum HICPropertyTypes
-{
-	HICP_Any = -1,
-	HICP_NULL,
-	HICP_String,
-	HICP_TRString,
-	HICP_Boolean,
-	HICP_Integer
-};
-
 struct HIDToken
 {
 	HIDTokenId		id;
 	int				line;
 	QString			value;
-};
-
-class HICProperty
-{
-public:
-	HICProperty( QVariant v, HICPropertyTypes type )
-		: mValue( v ), mType( type )
-	{
-	}
-
-	HICProperty()
-		: mType( HICP_NULL )
-	{
-	}
-
-	QVariant value() const{ return mValue; }
-	HICPropertyTypes type() const{ return mType; }
-
-private:
-	QVariant mValue;
-	HICPropertyTypes mType;
-};
-
-class HICObject;
-
-class HICObjects : public QList< HICObject* >
-{
-public:
-	HICObjects() {}
-
-public:
-	HICObjects byType( ObjectTypes type ) const;
-};
-
-class HICObject
-{
-public:
-	HICObject( ObjectTypes type )
-		: mType( type )
-	{
-	}
-
-public:
-	ObjectTypes type(){ return mType; }
-
-	void setName( const QString& name )
-	{
-		mName = name;
-	}
-
-	QString name() const
-	{
-		return mName;
-	}
-
-	bool hasProperty( const QString& name, HICPropertyTypes type = HICP_Any ) const
-	{
-		if( type == HICP_Any )
-		{
-			return mProperties.contains( name );
-		}
-
-		if( mProperties.contains( name ) )
-		{
-			const HICProperty& p = mProperties[ name ];
-			return p.type() == type;
-		}
-
-		return false;
-	}
-
-	HICProperty getProperty( const QString& name ) const
-	{
-		return mProperties.value( name, HICProperty() );
-	}
-
-	QStringList propertyNames() const
-	{
-		return mProperties.keys();
-	}
-
-	void addProperty( QString name, HICProperty p )
-	{
-		Q_ASSERT( !mProperties.contains( name ) );
-		mProperties.insert( name, p );
-	}
-
-	void addContent( HICObject* content )
-	{
-		mContent.append( content );
-	}
-
-	HICObjects content() const
-	{
-		return mContent;
-	}
-
-	HICObjects content( ObjectTypes type ) const
-	{
-		return mContent.byType( type );
-	}
-
-	bool hasReferenceTo( HICObject* obj )
-	{
-		return mContent.contains( obj );
-	}
-
-private:
-	ObjectTypes mType;
-	QString mName;
-	QHash< QString, HICProperty > mProperties;
-	HICObjects mContent;
 };
 
 class HeavenInterfaceCompiler : public QCoreApplication

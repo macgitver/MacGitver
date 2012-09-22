@@ -2,18 +2,23 @@
 QT_PREPARE( Core -Gui )
 
 SET( SRC_FILES
-	hic.cpp
+    main.cpp
+    HIC.cpp
+    HICObject.cpp
+    HICProperty.cpp
 )
 
 SET( HDR_FILES
-	hic.h
+    HIC.h
+    HICObject.h
+    HICProperty.h
 )
 
 ADD_QT_EXECUTABLE(
-	hic
+    hic
 
-	${SRC_FILES}
-	${HDR_FILES}
+    ${SRC_FILES}
+    ${HDR_FILES}
 
-	HIDGrammar.md
+    HIDGrammar.md
 )

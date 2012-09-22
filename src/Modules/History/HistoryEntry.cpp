@@ -14,8 +14,11 @@
  *
  */
 
-#include "HistoryEntry.h"
+#include "GitWrap/Result.h"
 
+#include "MacGitver/MacGitver.h"
+
+#include "HistoryEntry.h"
 
 HistoryEntry::HistoryEntry( const Git::ObjectId& sha1 )
 	: mSha1( sha1 )
@@ -26,10 +29,19 @@ HistoryEntry::HistoryEntry( const Git::ObjectId& sha1 )
 void HistoryEntry::populate( const Git::ObjectCommit& commit )
 {
 	Q_ASSERT( !mPopulated );
-	mPopulated = true;
-	mCommiter = commit.committer();
-	mAuthor = commit.author();
-	mCommitMessage = commit.shortMessage();
+
+	Git::Result r;
+
+	mCommiter = commit.committer( r );
+	mAuthor = commit.author( r );
+	mCommitMessage = commit.shortMessage( r );
+
+	mPopulated = r;
+
+	if( !mPopulated )
+	{
+		MacGitver::self().log( ltError, r, "Populating a HistoryEntry" );
+	}
 }
 
 bool HistoryEntry::isPopulated() const

@@ -14,27 +14,29 @@
  *
  */
 
-#ifndef MGV_DIFF_RAW_VIEW_H
-#define MGV_DIFF_RAW_VIEW_H
+#ifndef MGV_SHA1_INPUT_H
+#define MGV_SHA1_INPUT_H
 
-#include <QTextBrowser>
+#include "Widgets/LineEdit.h"
 
-#include "Diff/Model/Patch.h"
+#include "GitWrap/ObjectId.h"
 
-#include "Diff/RawView/DiffRawViewApi.h"
-
-class DIFF_RAW_VIEW_API DiffRawView : public QTextBrowser
+class WIDGETS_API SHA1Input : public LineEdit
 {
-	Q_OBJECT
 public:
-	DiffRawView( QWidget* parent = 0 );
-	~DiffRawView();
+	explicit SHA1Input( QWidget* parent = NULL );
 
 public:
-	void setPatch( Patch::Ptr patch );
+	bool isValid() const;
+
+	Git::ObjectId objectId() const;
+	void setObjectId( const Git::ObjectId& sha1 );
 
 private:
-	Patch::Ptr		mCurrentPatch;
+	using QLineEdit::text;
+	using QLineEdit::setText;
 };
 
 #endif
+
+

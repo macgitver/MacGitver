@@ -19,7 +19,22 @@
 
 #include <QWidget>
 
+#include "GitWrap/ObjectId.h"
+#include "GitWrap/ObjectCommit.h"
+#include "GitWrap/Repository.h"
+
+#include "Diff/Model/Patch.h"
+
+class QToolBar;
+class QTreeView;
+class QComboBox;
+
 class DiffRawView;
+
+	//Libs/Widgets
+class SHA1Input;
+class ShortCommitModel;
+class FlatTreeComboBox;
 
 class HistoryDiff : public QWidget
 {
@@ -27,8 +42,49 @@ class HistoryDiff : public QWidget
 public:
 	HistoryDiff();
 
+public:
+	void setRepository( Git::Repository repo );
+
+public:
+	void setCommitId( const Git::ObjectId& sha1 );
+
+private slots:
+	void onDiffToChanged( int index );
+	void createPatch();
+
 private:
+	Git::DiffList makePatchTo( const QString& ref );
+	void setPatch( Patch::Ptr patchFile );
+
+private:
+	enum DiffToTypes
+	{
+		DTT_WT = -1,
+		DTT_Index = -2,
+		DTT_WT_and_Index = -3,
+		DTT_HEAD = -4,
+		DTT_AllParents = -5,
+		DTT_AnySHA1 = -6,
+		DTT_Parent = -7,
+		DTT_Branch = -8,
+		DTT_Tag = -9
+	};
+
 	DiffRawView*		mRawView;
+	QToolBar*			mToolbar;
+	QComboBox*			mDiffTo;
+	FlatTreeComboBox*	mDiffToBranch;
+	FlatTreeComboBox*	mDiffToTag;
+	QComboBox*			mDiffToParent;
+	SHA1Input*			mDiffToSha1;
+	ShortCommitModel*	mParentsModel;
+	QTreeView*			mParentsList;
+
+	QHash< DiffToTypes,
+		QAction* >		mDiffToActions;
+
+	Git::Repository		mRepo;
+	Git::ObjectCommit	mCommit;
 };
 
 #endif

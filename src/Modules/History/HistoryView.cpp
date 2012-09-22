@@ -98,6 +98,7 @@ void HistoryView::repositoryChanged( Git::Repository repo )
 	mRepo = repo;
 	mModel->setRepository( repo );
 	mDetails->setRepository( repo );
+	mDiff->setRepository( repo );
 
 	if( mRepo.isValid() )
 	{
@@ -124,6 +125,7 @@ void HistoryView::buildHistory()
 void HistoryView::currentCommitChanged( const Git::ObjectId& sha1 )
 {
 	mDetails->setCommit( sha1 );
+	mDiff->setCommitId( sha1 );
 }
 
 void HistoryView::configChanged( const QString& subPath, const QVariant& value )

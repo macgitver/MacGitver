@@ -14,27 +14,28 @@
  *
  */
 
-#ifndef MGV_DIFF_RAW_VIEW_H
-#define MGV_DIFF_RAW_VIEW_H
+#include <QRegExpValidator>
 
-#include <QTextBrowser>
+#include "Widgets/SHA1Input.h"
 
-#include "Diff/Model/Patch.h"
-
-#include "Diff/RawView/DiffRawViewApi.h"
-
-class DIFF_RAW_VIEW_API DiffRawView : public QTextBrowser
+SHA1Input::SHA1Input( QWidget* parent )
+	: LineEdit( parent )
 {
-	Q_OBJECT
-public:
-	DiffRawView( QWidget* parent = 0 );
-	~DiffRawView();
+	QRegExp re( QLatin1String( "[0-9a-fA-F]{5,40}" ) );
+	setValidator( new QRegExpValidator( re, this ) );
+}
 
-public:
-	void setPatch( Patch::Ptr patch );
+bool SHA1Input::isValid() const
+{
+	return true;
+}
 
-private:
-	Patch::Ptr		mCurrentPatch;
-};
+Git::ObjectId SHA1Input::objectId() const
+{
+	return Git::ObjectId::fromString( text() );
+}
 
-#endif
+void SHA1Input::setObjectId( const Git::ObjectId& sha1 )
+{
+	setText( sha1.toString() );
+}

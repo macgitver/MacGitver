@@ -78,7 +78,12 @@ HistoryDiff::HistoryDiff()
 	mParentsList = new QTreeView;
 	mParentsList->setHeaderHidden( true );
 	mParentsList->setRootIsDecorated( false );
+
+	#if QT_VERSION < 0x050000
+	// QT5: Recheck this.
 	mParentsList->header()->setResizeMode( QHeaderView::ResizeToContents );
+	#endif
+
 	mParentsList->setModel( mParentsModel );
 	mDiffToParent->setView( mParentsList );
 

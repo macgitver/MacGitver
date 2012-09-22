@@ -35,10 +35,7 @@ Features still to finish:
 
 - History
   - Column selection (Or at least provide sane default)
-  - View diff on selected items
   - Multi-selection?
-  - Show the "working tree" as commit
-	- If yes: Allow diff against it in History view
   - Figure what went wrong with the glyphing of graph
   - Create tags from within History View
   - Delete tags from within History View

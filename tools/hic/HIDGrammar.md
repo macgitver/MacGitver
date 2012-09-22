@@ -1,4 +1,6 @@
 
+This is a rough specification for `Heaven Interface Definition` files:
+
 ```
 HADFile             := RootObjectDef
 

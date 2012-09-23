@@ -14,29 +14,24 @@
  *
  */
 
-#ifndef HIC_H
-#define HIC_H
+#ifndef HI_GEN_SOURCE_H
+#define HI_GEN_SOURCE_H
 
-#include <QCoreApplication>
+#include "HIGeneratorBase.h"
 
-class QString;
-class QTextStream;
-
-class HIDModel;
-class HICObject;
-
-class HeavenInterfaceCompiler : public QCoreApplication
+class HIGenSource : public HIGeneratorBase
 {
 public:
-	HeavenInterfaceCompiler( int argc, char** argv );
+	HIGenSource( const HIDModel& model, const QString& fileName, const QString& baseName );
 
-public:
-	int run();
+protected:
+	bool run();
 
-	bool spitHeader( const HIDModel& model, QTextStream& tsOut );
-	bool spitSource( const HIDModel& model, QTextStream& tsOut, const QString& basename );
-	void spitSetProperties(QTextStream& tsOut, HICObject* obj,
-						   const char* whitespace, const char* prefix );
+private:
+	void writeSetProperties( HICObject* obj, const char* whitespace, const char* prefix );
+
+private:
+	QString		mBaseName;
 };
 
 #endif

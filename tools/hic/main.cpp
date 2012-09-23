@@ -14,9 +14,65 @@
  *
  */
 
-#include "HIC.h"
+#include <stdio.h>
 
-int main( int c, char** v )
+#include <QCoreApplication>
+#include <QStringList>
+#include <QFileInfo>
+
+#include "HICObject.h"
+#include "HIDLexer.h"
+#include "HIDParser.h"
+#include "HIGenHeader.h"
+#include "HIGenSource.h"
+
+int main( int argc, char** argv )
 {
-	return HeavenInterfaceCompiler( c, v ).run();
+	QCoreApplication app( argc, argv );
+	HIDTokenStream mTokenStream;
+	HIDModel model;
+
+	QStringList sl = QCoreApplication::arguments();
+
+	if( sl.count() != 4 )
+	{
+		fprintf( stderr, "Usage: %s <input> <output-header> <output-source>\n",
+				 sl.count() ? qPrintable( sl[ 0 ] ) : "" );
+		return -1;
+	}
+
+	QFile fInput( sl[ 1 ] );
+	if( !fInput.open( QFile::ReadOnly ) )
+	{
+		fprintf( stderr, "Cannot read from %s\n", qPrintable( sl[ 1 ] ) );
+		return -1;
+	}
+
+	if( !HIDLexer::lex( fInput, mTokenStream ) )
+	{
+		fprintf( stderr, "Could not tokenize input from %s\n", qPrintable( sl[ 1 ] ) );
+		return -1;
+	}
+
+	if( !HIDParser::parse( mTokenStream, model ) )
+	{
+		fprintf( stderr, "Could not parse input from %s\n", qPrintable( sl[ 1 ] ) );
+		return -1;
+	}
+
+	HIGenHeader genHeader( model, sl[ 2 ] );
+	if( !genHeader.generate() )
+	{
+		fprintf( stderr, "Could not generate %s\n", qPrintable( sl[ 2 ] ) );
+		return -1;
+	}
+
+	HIGenSource genSource( model, sl[ 3 ], QFileInfo( sl[ 2 ] ).fileName() );
+	if( !genSource.generate() )
+	{
+		fprintf( stderr, "Could not generate %s\n", qPrintable( sl[ 3 ] ) );
+		return -1;
+	}
+
+	return 0;
 }

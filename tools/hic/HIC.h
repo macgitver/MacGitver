@@ -25,42 +25,7 @@
 #include <QList>
 
 #include "HICObject.h"
-
-enum HIDTokenId
-{
-	Token_EOF		= 0,
-
-	Token_Ui,
-	Token_Action,
-	Token_Menu,
-	Token_MenuBar,
-	Token_ToolBar,
-	Token_Separator,
-	Token_Container,
-	Token_MergePlace,
-	Token_Content,
-	Token_WidgetAction,
-
-	Token_string,
-	Token_translateString,
-	Token_integer,
-	Token_true,
-	Token_false,
-
-	Token_OpenCurly,
-	Token_CloseCurly,
-	Token_OpenSquare,
-	Token_CloseSquare,
-	Token_Comma,
-	Token_Semicolon
-};
-
-struct HIDToken
-{
-	HIDTokenId		id;
-	int				line;
-	QString			value;
-};
+#include "HIDLexer.h"
 
 class HeavenInterfaceCompiler : public QCoreApplication
 {
@@ -71,10 +36,8 @@ public:
 	int run();
 
 private:
-	HIDTokenId cur(){ return ( tokenPos < tokens.count() ) ? tokens[ tokenPos ].id : Token_EOF; }
+	HIDTokenId cur(){ return ( tokenPos < mTokenStream.count() ) ? mTokenStream[ tokenPos ].id : Token_EOF; }
 	bool parse();
-	bool tokenize( const QString& text );
-	void flush( int line );
 	bool parseNewObject();
 	bool parseProperty();
 	bool parseObjectContent();
@@ -90,14 +53,13 @@ private:
 
 private:
 	int	tokenPos;
-	QList< HIDToken > tokens;
-	QString currentText;
-	static QHash< QString, HIDTokenId > sTokens;
 
 	HICObject* currentObject;
 	HICObject* lastCreatedObject;
 	HICObject* currentUiObject;
 	QHash< QString, HICObject* > objects;
+
+	HIDTokenStream mTokenStream;
 };
 
 #endif

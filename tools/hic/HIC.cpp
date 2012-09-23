@@ -22,8 +22,6 @@
 
 #include "HIC.h"
 
-QHash< QString, HIDTokenId > HeavenInterfaceCompiler::sTokens;
-
 
 static inline QString latin1Encode( const QString& src )
 {
@@ -73,27 +71,6 @@ HeavenInterfaceCompiler::HeavenInterfaceCompiler( int argc , char** argv )
 {
 	QStringList sl = arguments();
 
-	if( sTokens.count() == 0 )
-	{
-		#define T(t) sTokens[ QLatin1String( #t ) ] = Token_##t
-		#define T2(t1,t2) sTokens[ QLatin1String( #t1 ) ] = Token_##t2
-		T(Ui);
-		T(Action);
-		T(Menu);
-		T(MenuBar);
-		T(ToolBar);
-		T(Separator);
-		T(Container);
-		T(MergePlace);
-		T(WidgetAction);
-		T2(Sep,Separator);
-		T(Content);
-		T(true);
-		T(false);
-		#undef T1
-		#undef T2
-	}
-
 	currentUiObject = lastCreatedObject = currentObject = NULL;
 }
 
@@ -102,7 +79,7 @@ bool HeavenInterfaceCompiler::parseNewObject()
 	HICObject* oldCurrent = currentObject;
 
 	ObjectTypes t;
-	switch( tokens[ tokenPos ].id )
+	switch( mTokenStream[ tokenPos ].id )
 	{
 	case Token_Ui:				t = HACO_Ui;			break;
 	case Token_Action:			t = HACO_Action;		break;
@@ -118,13 +95,13 @@ bool HeavenInterfaceCompiler::parseNewObject()
 	}
 	tokenPos++;
 
-	if( tokens[ tokenPos ].id != Token_string )
+	if( mTokenStream[ tokenPos ].id != Token_string )
 	{
 		error( "Expected object name" );
 		return false;
 	}
 
-	QString oname = tokens[ tokenPos ].value;
+	QString oname = mTokenStream[ tokenPos ].value;
 
 	if( objects.contains( oname ) )
 	{
@@ -156,7 +133,7 @@ bool HeavenInterfaceCompiler::parseNewObject()
 
 	tokenPos++;
 
-	switch( tokens[ tokenPos ].id )
+	switch( mTokenStream[ tokenPos ].id )
 	{
 	case Token_Semicolon:
 		tokenPos++;
@@ -173,13 +150,13 @@ bool HeavenInterfaceCompiler::parseNewObject()
 			return false;
 		}
 
-		if( tokens[ tokenPos ].id != Token_CloseCurly )
+		if( mTokenStream[ tokenPos ].id != Token_CloseCurly )
 		{
 			error( "Expected closing curly brace" );
 			return false;
 		}
 		tokenPos++;
-		if( tokens[ tokenPos ].id != Token_Semicolon )
+		if( mTokenStream[ tokenPos ].id != Token_Semicolon )
 		{
 			error( "Expected semicolon" );
 			return false;
@@ -200,7 +177,7 @@ bool HeavenInterfaceCompiler::parseObjectContent()
 {
 	tokenPos++;
 
-	if( tokens[ tokenPos ].id != Token_OpenSquare )
+	if( mTokenStream[ tokenPos ].id != Token_OpenSquare )
 	{
 		error( "Expected [" );
 		return false;
@@ -209,11 +186,11 @@ bool HeavenInterfaceCompiler::parseObjectContent()
 
 	do
 	{
-		switch( tokens[ tokenPos ].id )
+		switch( mTokenStream[ tokenPos ].id )
 		{
 		case Token_CloseSquare:
 			tokenPos++;
-			if( tokens[ tokenPos ].id != Token_Semicolon )
+			if( mTokenStream[ tokenPos ].id != Token_Semicolon )
 			{
 				error( "Expected Semicolon" );
 				return false;
@@ -241,7 +218,7 @@ bool HeavenInterfaceCompiler::parseObjectContent()
 
 		case Token_Separator:
 			tokenPos++;
-			if( tokens[ tokenPos ].id != Token_Semicolon )
+			if( mTokenStream[ tokenPos ].id != Token_Semicolon )
 			{
 				error( "Expected Semicolon" );
 				return false;
@@ -262,7 +239,7 @@ bool HeavenInterfaceCompiler::parseProperty()
 {
 	do
 	{
-		switch( tokens[ tokenPos ].id )
+		switch( mTokenStream[ tokenPos ].id )
 		{
 		case Token_CloseCurly:
 			return true;
@@ -286,7 +263,7 @@ bool HeavenInterfaceCompiler::parseProperty()
 
 		case Token_Separator:
 			tokenPos++;
-			if( tokens[ tokenPos ].id != Token_Semicolon )
+			if( mTokenStream[ tokenPos ].id != Token_Semicolon )
 			{
 				error( "Expected Semicolon" );
 				return false;
@@ -297,17 +274,17 @@ bool HeavenInterfaceCompiler::parseProperty()
 
 		case Token_string:
 			{
-				QString pname = tokens[ tokenPos++ ].value;
-				switch( tokens[ tokenPos ].id )
+				QString pname = mTokenStream[ tokenPos++ ].value;
+				switch( mTokenStream[ tokenPos ].id )
 				{
 				case Token_translateString:
 					currentObject->addProperty( pname,
-								HICProperty( tokens[ tokenPos ].value, HICP_TRString ) );
+								HICProperty( mTokenStream[ tokenPos ].value, HICP_TRString ) );
 					break;
 
 				case Token_string:
 					currentObject->addProperty( pname,
-								HICProperty( tokens[ tokenPos ].value, HICP_String ) );
+								HICProperty( mTokenStream[ tokenPos ].value, HICP_String ) );
 					break;
 
 				case Token_true:
@@ -324,7 +301,7 @@ bool HeavenInterfaceCompiler::parseProperty()
 					return false;
 				}
 				tokenPos++;
-				if( tokens[ tokenPos ].id != Token_Semicolon )
+				if( mTokenStream[ tokenPos ].id != Token_Semicolon )
 				{
 					error( "Expected Semicolon" );
 					return false;
@@ -349,7 +326,7 @@ bool HeavenInterfaceCompiler::parseProperty()
 
 void HeavenInterfaceCompiler::error(const char *pszText )
 {
-	error( pszText, tokens[ tokenPos ].line );
+	error( pszText, mTokenStream[ tokenPos ].line );
 }
 
 void HeavenInterfaceCompiler::error(const char *pszText, int line)
@@ -360,9 +337,9 @@ void HeavenInterfaceCompiler::error(const char *pszText, int line)
 bool HeavenInterfaceCompiler::parse()
 {
 	tokenPos = 0;
-	while( tokenPos < tokens.count() )
+	while( tokenPos < mTokenStream.count() )
 	{
-		if( tokens[ tokenPos ].id == Token_EOF )
+		if( mTokenStream[ tokenPos ].id == Token_EOF )
 			break;
 
 		if( !parseNewObject() )
@@ -371,137 +348,6 @@ bool HeavenInterfaceCompiler::parse()
 		}
 	}
 
-	return true;
-}
-
-void HeavenInterfaceCompiler::flush( int line )
-{
-	if( currentText.count() )
-	{
-		HIDToken t;
-		if( sTokens.contains( currentText ) )
-		{
-			t.id = sTokens[ currentText ];
-		}
-		else
-		{
-			t.id = Token_string;
-			t.value = currentText;
-		}
-		t.line = line;
-		tokens.append( t );
-		currentText = QString();
-	}
-}
-
-bool HeavenInterfaceCompiler::tokenize( const QString& text )
-{
-	int line = 1;
-	int pos = 0;
-
-	while( pos < text.count() )
-	{
-		Next:
-		QChar c = text[ pos++ ];
-		switch( c.unicode() )
-		{
-		case L'\n': flush( line++ ); continue;
-		case L' ':
-		case L'\t':
-		case L'\r':
-			flush( line );
-			continue;
-
-		case L'{': { flush( line ); HIDToken t; t.line = line; t.id = Token_OpenCurly; tokens.append(t); continue; }
-		case L'}': { flush( line ); HIDToken t; t.line = line; t.id = Token_CloseCurly; tokens.append(t); continue; }
-		case L'[': { flush( line ); HIDToken t; t.line = line; t.id = Token_OpenSquare; tokens.append(t); continue; }
-		case L']': { flush( line ); HIDToken t; t.line = line; t.id = Token_CloseSquare; tokens.append(t); continue; }
-		case L';': { flush( line ); HIDToken t; t.line = line; t.id = Token_Semicolon; tokens.append(t); continue; }
-		case L',': { flush( line ); HIDToken t; t.line = line; t.id = Token_Comma; tokens.append(t); continue; }
-
-		case L'/':
-			flush( line );
-			if( text[ pos ] == L'/' )
-			{
-				while( text[ pos ] != L'\n' )
-					if( ++pos == text.count() )
-						return true;	// actually, it's a successful lexer run, if we encounter
-										// EOF in a one-line-comment
-				line++;
-				continue;
-			}
-
-			if( text[ pos ] == L'*' )
-			{
-				pos++;
-				while( pos < text.count() )
-				{
-					switch( text[ pos ].unicode() )
-					{
-					case L'*':
-						pos++;
-						if( text[ pos ] == L'/' )
-						{
-							pos++;
-							goto Next;
-						}
-						continue;
-
-					case L'\n':
-						line++;
-					default:
-						pos++;
-						continue;
-					}
-				}
-			}
-			return false;
-
-		case L'"':
-			{
-				flush( line );
-				QString s;
-				while( text[ pos ] != L'"' )
-				{
-					s += text[ pos++ ];
-					if( pos == text.count() )
-					{
-						return false;
-					}
-				}
-				pos++;
-
-				HIDToken t;
-				t.id = Token_translateString;
-				t.value = s;
-				t.line = line;
-				tokens.append( t );
-			}
-			continue;
-
-		default:
-			currentText += c;
-			break;
-		}
-	}
-
-	flush( line );
-
-	HIDToken tEof; tEof.id = Token_EOF; tokens.append( tEof );
-
-#if 0
-	foreach( HADToken t, tokens )
-	{
-		switch( t.id )
-		{
-		case Token_string: printf( "'%s'\n", qPrintable( t.value ) ); break;
-		case Token_translateString: printf( "\"%s\"\n", qPrintable( t.value ) ); break;
-		default:
-			printf( "T(%i)\n", int(t.id) );
-			break;
-		}
-	}
-#endif
 	return true;
 }
 
@@ -868,9 +714,7 @@ int HeavenInterfaceCompiler::run()
 		fprintf( stderr, "Cannot read from %s\n", qPrintable( sl[ 1 ] ) );
 		return -1;
 	}
-	QTextStream tsInput( &fInput );
-	tsInput.setCodec( "UTF-8" );
-	if( !tokenize( tsInput.readAll() ) )
+	if( !HIDLexer::lex( fInput, mTokenStream ) )
 	{
 		fprintf( stderr, "Could not tokenize input from %s\n", qPrintable( sl[ 1 ] ) );
 		return -1;

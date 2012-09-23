@@ -6,12 +6,15 @@ SET( SRC_FILES
     HIC.cpp
     HICObject.cpp
     HICProperty.cpp
+    HIDLexer.cpp
 )
 
 SET( HDR_FILES
     HIC.h
     HICObject.h
     HICProperty.h
+    HIDLexer.h
+    HIDToken.h
 )
 
 ADD_QT_EXECUTABLE(

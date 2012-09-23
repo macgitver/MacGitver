@@ -14,33 +14,29 @@
  *
  */
 
-#ifndef HIC_PROPERTY_H
-#define HIC_PROPERTY_H
+#ifndef HID_LEXER_H
+#define HID_LEXER_H
 
-#include <QVariant>
+#include "HIDToken.h"
 
-enum HICPropertyTypes
+class QIODevice;
+
+class HIDLexer
 {
-	HICP_Any = -1,
-	HICP_NULL,
-	HICP_String,
-	HICP_TRString,
-	HICP_Boolean,
-	HICP_Integer
-};
+private:
+	HIDLexer( HIDTokenStream& stream );
 
-class HICProperty
-{
 public:
-	HICProperty( const QVariant& v, HICPropertyTypes type );
-	HICProperty();
-
-	QVariant value() const;
-	HICPropertyTypes type() const;
+	static bool lex( QIODevice& fInput, HIDTokenStream& stream );
 
 private:
-	QVariant mValue;
-	HICPropertyTypes mType;
+	bool tokenize( const QString& text );
+	void flush( int line );
+
+private:
+	HIDTokenStream& mOutStream;
+	QString currentText;
+	static QHash< QString, HIDTokenId > sTokens;
 };
 
 #endif

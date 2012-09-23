@@ -14,33 +14,48 @@
  *
  */
 
-#ifndef HIC_PROPERTY_H
-#define HIC_PROPERTY_H
+#ifndef HID_TOKEN_H
+#define HID_TOKEN_H
 
-#include <QVariant>
+#include <QString>
+#include <QList>
 
-enum HICPropertyTypes
+enum HIDTokenId
 {
-	HICP_Any = -1,
-	HICP_NULL,
-	HICP_String,
-	HICP_TRString,
-	HICP_Boolean,
-	HICP_Integer
+	Token_EOF		= 0,
+
+	Token_Ui,
+	Token_Action,
+	Token_Menu,
+	Token_MenuBar,
+	Token_ToolBar,
+	Token_Separator,
+	Token_Container,
+	Token_MergePlace,
+	Token_Content,
+	Token_WidgetAction,
+
+	Token_string,
+	Token_translateString,
+	Token_integer,
+	Token_true,
+	Token_false,
+
+	Token_OpenCurly,
+	Token_CloseCurly,
+	Token_OpenSquare,
+	Token_CloseSquare,
+	Token_Comma,
+	Token_Semicolon
 };
 
-class HICProperty
+struct HIDToken
 {
-public:
-	HICProperty( const QVariant& v, HICPropertyTypes type );
-	HICProperty();
-
-	QVariant value() const;
-	HICPropertyTypes type() const;
-
-private:
-	QVariant mValue;
-	HICPropertyTypes mType;
+	HIDTokenId		id;
+	int				line;
+	QString			value;
 };
+
+typedef QList< HIDToken > HIDTokenStream;
 
 #endif

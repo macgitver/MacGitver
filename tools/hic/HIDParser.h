@@ -14,29 +14,37 @@
  *
  */
 
-#ifndef HIC_H
-#define HIC_H
+#ifndef HID_PARSER_H
+#define HID_PARSER_H
 
-#include <QCoreApplication>
-
-class QString;
-class QTextStream;
-
-class HIDModel;
 class HICObject;
 
-class HeavenInterfaceCompiler : public QCoreApplication
+class HIDTokenStream;
+class HIDModel;
+
+class HIDParser
 {
-public:
-	HeavenInterfaceCompiler( int argc, char** argv );
+private:
+	HIDParser( const HIDTokenStream& tokenStream, HIDModel& model );
 
 public:
-	int run();
+	static bool parse( const HIDTokenStream& tokenStream, HIDModel& model );
 
-	bool spitHeader( const HIDModel& model, QTextStream& tsOut );
-	bool spitSource( const HIDModel& model, QTextStream& tsOut, const QString& basename );
-	void spitSetProperties(QTextStream& tsOut, HICObject* obj,
-						   const char* whitespace, const char* prefix );
+private:
+	bool parse();
+	bool parseNewObject();
+	bool parseProperty();
+	bool parseObjectContent();
+	void error( const char* pszText, int line );
+	void error( const char* pszText );
+
+private:
+	HICObject* currentObject;
+	HICObject* lastCreatedObject;
+	HICObject* currentUiObject;
+
+	const HIDTokenStream& mTokenStream;
+	HIDModel& mModel;
 };
 
 #endif

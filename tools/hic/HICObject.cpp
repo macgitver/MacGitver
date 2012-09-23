@@ -88,3 +88,50 @@ bool HICObject::hasReferenceTo( HICObject* obj ) const
 	return mContent.contains( obj );
 }
 
+HICObjects::HICObjects()
+{
+}
+
+HICObjects HICObjects::byType( ObjectTypes type ) const
+{
+	HICObjects result;
+
+	foreach( HICObject* obj, *this )
+	{
+		if( obj->type() == type )
+		{
+			result.append( obj );
+		}
+	}
+
+	return result;
+}
+
+HIDModel::HIDModel()
+{
+}
+
+HIDObjectHash& HIDModel::objects()
+{
+	return mObjects;
+}
+
+const HIDObjectHash& HIDModel::objects() const
+{
+	return mObjects;
+}
+
+HICObjects HIDModel::allObjects( ObjectTypes byType ) const
+{
+	HICObjects result;
+
+	foreach( HICObject* obj, mObjects )
+	{
+		if( obj->type() == byType )
+		{
+			result.append( obj );
+		}
+	}
+
+	return result;
+}

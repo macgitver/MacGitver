@@ -190,7 +190,7 @@ bool HIDLexer::tokenize( const QString& text )
 	mOutStream.append( nextToken );
 
 #if 0
-	foreach( HADToken t, mOutStream )
+	foreach( HIDToken t, mOutStream )
 	{
 		switch( t.id )
 		{

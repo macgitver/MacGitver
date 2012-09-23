@@ -22,6 +22,10 @@
 
 #include "HIC.h"
 
+#include "HICObject.h"
+
+#include "HIDLexer.h"
+#include "HIDParser.h"
 
 static inline QString latin1Encode( const QString& src )
 {
@@ -51,319 +55,10 @@ static inline QString utf8Encode( const QString& src )
 	return result;
 }
 
-HICObjects HICObjects::byType( ObjectTypes type ) const
-{
-	HICObjects result;
-
-	foreach( HICObject* obj, *this )
-	{
-		if( obj->type() == type )
-		{
-			result.append( obj );
-		}
-	}
-
-	return result;
-}
-
 HeavenInterfaceCompiler::HeavenInterfaceCompiler( int argc , char** argv )
 	: QCoreApplication( argc, argv )
 {
 	QStringList sl = arguments();
-
-	currentUiObject = lastCreatedObject = currentObject = NULL;
-}
-
-bool HeavenInterfaceCompiler::parseNewObject()
-{
-	HICObject* oldCurrent = currentObject;
-
-	ObjectTypes t;
-	switch( mTokenStream[ tokenPos ].id )
-	{
-	case Token_Ui:				t = HACO_Ui;			break;
-	case Token_Action:			t = HACO_Action;		break;
-	case Token_Container:		t = HACO_Container;		break;
-	case Token_Menu:			t = HACO_Menu;			break;
-	case Token_MenuBar:			t = HACO_MenuBar;		break;
-	case Token_MergePlace:		t = HACO_MergePlace;	break;
-	case Token_ToolBar:			t = HACO_ToolBar;		break;
-	case Token_WidgetAction:	t = HACO_WidgetAction;	break;
-	default:
-		error( "Expected new object" );
-		return false;
-	}
-	tokenPos++;
-
-	if( mTokenStream[ tokenPos ].id != Token_string )
-	{
-		error( "Expected object name" );
-		return false;
-	}
-
-	QString oname = mTokenStream[ tokenPos ].value;
-
-	if( objects.contains( oname ) )
-	{
-		currentObject = objects[ oname ];
-		if( currentObject->type() != t )
-		{
-			error( "Redeclaration of object with different type" );
-			return false;
-		}
-	}
-	else
-	{
-		currentObject = new HICObject( t );
-		currentObject->setName( oname );
-		objects[ oname ] = currentObject;
-	}
-
-	if( currentObject->type() == HACO_Ui )
-	{
-		currentUiObject = currentObject;
-	}
-	else
-	{
-		if( currentUiObject && !currentUiObject->hasReferenceTo( currentObject ) )
-		{
-			currentUiObject->addContent( currentObject );
-		}
-	}
-
-	tokenPos++;
-
-	switch( mTokenStream[ tokenPos ].id )
-	{
-	case Token_Semicolon:
-		tokenPos++;
-		lastCreatedObject = currentObject;
-		currentObject = oldCurrent;
-		return true;
-
-	case Token_OpenCurly:
-		tokenPos++;
-
-		if( !parseProperty() )
-		{
-			error( "Expected Property List" );
-			return false;
-		}
-
-		if( mTokenStream[ tokenPos ].id != Token_CloseCurly )
-		{
-			error( "Expected closing curly brace" );
-			return false;
-		}
-		tokenPos++;
-		if( mTokenStream[ tokenPos ].id != Token_Semicolon )
-		{
-			error( "Expected semicolon" );
-			return false;
-		}
-		tokenPos++;
-
-		lastCreatedObject = currentObject;
-		currentObject = oldCurrent;
-		return true;
-
-	default:
-		error( "Expected Properties or semicolon" );
-		return false;
-	}
-}
-
-bool HeavenInterfaceCompiler::parseObjectContent()
-{
-	tokenPos++;
-
-	if( mTokenStream[ tokenPos ].id != Token_OpenSquare )
-	{
-		error( "Expected [" );
-		return false;
-	}
-	tokenPos++;
-
-	do
-	{
-		switch( mTokenStream[ tokenPos ].id )
-		{
-		case Token_CloseSquare:
-			tokenPos++;
-			if( mTokenStream[ tokenPos ].id != Token_Semicolon )
-			{
-				error( "Expected Semicolon" );
-				return false;
-			}
-			tokenPos++;
-			return true;
-
-		case Token_Ui:
-		case Token_Action:
-		case Token_Container:
-		case Token_Menu:
-		case Token_MenuBar:
-		case Token_MergePlace:
-		case Token_ToolBar:
-		case Token_WidgetAction:
-			if( !parseNewObject() )
-			{
-				return false;
-			}
-			if( !currentObject->hasReferenceTo( lastCreatedObject ) )
-			{
-				currentObject->addContent( lastCreatedObject );
-			}
-			break;
-
-		case Token_Separator:
-			tokenPos++;
-			if( mTokenStream[ tokenPos ].id != Token_Semicolon )
-			{
-				error( "Expected Semicolon" );
-				return false;
-			}
-			tokenPos++;
-			currentObject->addContent( new HICObject( HACO_Separator ) );
-			break;
-
-		default:
-			error( "Expected Ref or new object" );
-			return false;
-		}
-
-	} while( 1 );
-}
-
-bool HeavenInterfaceCompiler::parseProperty()
-{
-	do
-	{
-		switch( mTokenStream[ tokenPos ].id )
-		{
-		case Token_CloseCurly:
-			return true;
-
-		case Token_Ui:
-		case Token_Action:
-		case Token_Container:
-		case Token_Menu:
-		case Token_MenuBar:
-		case Token_MergePlace:
-		case Token_ToolBar:
-			if( !parseNewObject() )
-			{
-				return false;
-			}
-			if( !currentObject->hasReferenceTo( lastCreatedObject ) )
-			{
-				currentObject->addContent( lastCreatedObject );
-			}
-			break;
-
-		case Token_Separator:
-			tokenPos++;
-			if( mTokenStream[ tokenPos ].id != Token_Semicolon )
-			{
-				error( "Expected Semicolon" );
-				return false;
-			}
-			tokenPos++;
-			currentObject->addContent( new HICObject( HACO_Separator ) );
-			break;
-
-		case Token_string:
-			{
-				QString pname = mTokenStream[ tokenPos++ ].value;
-				switch( mTokenStream[ tokenPos ].id )
-				{
-				case Token_translateString:
-					currentObject->addProperty( pname,
-								HICProperty( mTokenStream[ tokenPos ].value, HICP_TRString ) );
-					break;
-
-				case Token_string:
-					currentObject->addProperty( pname,
-								HICProperty( mTokenStream[ tokenPos ].value, HICP_String ) );
-					break;
-
-				case Token_true:
-					currentObject->addProperty( pname,
-								HICProperty( true, HICP_Boolean ) );
-					break;
-
-				case Token_false:
-					currentObject->addProperty( pname,
-								HICProperty( false, HICP_Boolean ) );
-					break;
-				default:
-					error( "Expected property value" );
-					return false;
-				}
-				tokenPos++;
-				if( mTokenStream[ tokenPos ].id != Token_Semicolon )
-				{
-					error( "Expected Semicolon" );
-					return false;
-				}
-				tokenPos++;
-			}
-			break;
-
-		case Token_Content:
-			if( !parseObjectContent() )
-			{
-				return false;
-			}
-			break;
-
-		default:
-			error( "Expected }, Property-Assignment or content list" );
-			return false;
-		}
-	} while( 1 );
-}
-
-void HeavenInterfaceCompiler::error(const char *pszText )
-{
-	error( pszText, mTokenStream[ tokenPos ].line );
-}
-
-void HeavenInterfaceCompiler::error(const char *pszText, int line)
-{
-	fprintf( stderr, "Error: %s at about line %i or before\n", pszText, line );
-}
-
-bool HeavenInterfaceCompiler::parse()
-{
-	tokenPos = 0;
-	while( tokenPos < mTokenStream.count() )
-	{
-		if( mTokenStream[ tokenPos ].id == Token_EOF )
-			break;
-
-		if( !parseNewObject() )
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-HICObjects HeavenInterfaceCompiler::allObjects( ObjectTypes byType ) const
-{
-	HICObjects result;
-
-	foreach( HICObject* obj, objects )
-	{
-		if( obj->type() == byType )
-		{
-			result.append( obj );
-		}
-	}
-
-	return result;
 }
 
 void HeavenInterfaceCompiler::spitSetProperties( QTextStream& tsOut, HICObject* obj,
@@ -433,7 +128,7 @@ void HeavenInterfaceCompiler::spitSetProperties( QTextStream& tsOut, HICObject* 
 
 }
 
-bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
+bool HeavenInterfaceCompiler::spitHeader( const HIDModel& model, QTextStream& tsOut )
 {
 	QUuid id = QUuid::createUuid();
 	QString idstr = id
@@ -466,7 +161,7 @@ bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
 			 "#include \"Heaven/Actions/ActionContainer.h\"\n"
 			 "\n";
 
-	foreach( HICObject* uiObject, allObjects( HACO_Ui ) )
+	foreach( HICObject* uiObject, model.allObjects( HACO_Ui ) )
 	{
 		tsOut << "#ifndef HIC_" << uiObject->name() << "\n"
 				 "#define HIC_" << uiObject->name() << "\n\n"
@@ -519,14 +214,15 @@ bool HeavenInterfaceCompiler::spitHeader( QTextStream& tsOut )
 		tsOut << "};\n\n";
 
 		tsOut << "#endif\n\n";
-
-		tsOut << "#endif\n\n";
 	}
+
+	tsOut << "#endif\n\n";
 
 	return true;
 }
 
-bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& baseName )
+bool HeavenInterfaceCompiler::spitSource( const HIDModel& model, QTextStream& tsOut,
+										  const QString& baseName )
 {
 	tsOut << "/**********************************************************************************\n"
 			 "*\n"
@@ -543,7 +239,7 @@ bool HeavenInterfaceCompiler::spitSource( QTextStream& tsOut, const QString& bas
 			 "\n"
 			 "#include \"" << baseName << "\"\n\n";
 
-	foreach( HICObject* uiObject, allObjects( HACO_Ui ) )
+	foreach( HICObject* uiObject, model.allObjects( HACO_Ui ) )
 	{
 		QString ctx;
 
@@ -714,13 +410,15 @@ int HeavenInterfaceCompiler::run()
 		fprintf( stderr, "Cannot read from %s\n", qPrintable( sl[ 1 ] ) );
 		return -1;
 	}
+HIDTokenStream mTokenStream;
+HIDModel model;
 	if( !HIDLexer::lex( fInput, mTokenStream ) )
 	{
 		fprintf( stderr, "Could not tokenize input from %s\n", qPrintable( sl[ 1 ] ) );
 		return -1;
 	}
 
-	if( !parse() )
+	if( !HIDParser::parse( mTokenStream, model ) )
 	{
 		fprintf( stderr, "Could not parse input from %s\n", qPrintable( sl[ 1 ] ) );
 		return -1;
@@ -734,7 +432,7 @@ int HeavenInterfaceCompiler::run()
 	}
 
 	QTextStream tsOutput1( &fOutput1 );
-	spitHeader( tsOutput1 );
+	spitHeader( model, tsOutput1 );
 
 	QFile fOutput2( sl[ 3 ] );
 	if( !fOutput2.open( QFile::WriteOnly ) )
@@ -744,7 +442,7 @@ int HeavenInterfaceCompiler::run()
 	}
 
 	QTextStream tsOutput2( &fOutput2 );
-	spitSource( tsOutput2, QFileInfo( fOutput1 ).fileName() );
+	spitSource( model, tsOutput2, QFileInfo( fOutput1 ).fileName() );
 
 	return 0;
 }

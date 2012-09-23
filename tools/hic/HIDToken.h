@@ -56,6 +56,26 @@ struct HIDToken
 	QString			value;
 };
 
-typedef QList< HIDToken > HIDTokenStream;
+class HIDTokenStream : private /* public */ QList< HIDToken >
+{
+public:
+	HIDTokenStream();
+
+public:
+	void append( const HIDToken& token );
+
+public:
+	bool endOfStream() const;
+	HIDTokenId cur() const;
+	const HIDToken& curToken() const;
+	QString curValue() const;
+
+public:
+	void advance() const;
+	bool advanceAndExpect( HIDTokenId id ) const;
+
+private:
+	mutable int mReadPos;
+};
 
 #endif

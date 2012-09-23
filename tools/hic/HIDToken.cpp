@@ -14,29 +14,45 @@
  *
  */
 
-#ifndef HIC_H
-#define HIC_H
+#include "HIDToken.h"
 
-#include <QCoreApplication>
-
-class QString;
-class QTextStream;
-
-class HIDModel;
-class HICObject;
-
-class HeavenInterfaceCompiler : public QCoreApplication
+HIDTokenStream::HIDTokenStream()
 {
-public:
-	HeavenInterfaceCompiler( int argc, char** argv );
+	mReadPos = 0;
+}
 
-public:
-	int run();
+HIDTokenId HIDTokenStream::cur() const
+{
+	return endOfStream() ? Token_EOF : at( mReadPos ).id;
+}
 
-	bool spitHeader( const HIDModel& model, QTextStream& tsOut );
-	bool spitSource( const HIDModel& model, QTextStream& tsOut, const QString& basename );
-	void spitSetProperties(QTextStream& tsOut, HICObject* obj,
-						   const char* whitespace, const char* prefix );
-};
+void HIDTokenStream::append( const HIDToken& token )
+{
+	QList::append( token );
+}
 
-#endif
+const HIDToken& HIDTokenStream::curToken() const
+{
+	return at( mReadPos );
+}
+
+QString HIDTokenStream::curValue() const
+{
+	return at( mReadPos ).value;
+}
+
+void HIDTokenStream::advance() const
+{
+	mReadPos++;
+}
+
+bool HIDTokenStream::advanceAndExpect( HIDTokenId id ) const
+{
+	advance();
+	return cur() == id;
+}
+
+bool HIDTokenStream::endOfStream() const
+{
+	return !( mReadPos < count() );
+}

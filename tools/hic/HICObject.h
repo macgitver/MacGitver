@@ -39,7 +39,7 @@ class HICObject;
 class HICObjects : public QList< HICObject* >
 {
 public:
-	HICObjects() {}
+	HICObjects();
 
 public:
 	HICObjects byType( ObjectTypes type ) const;
@@ -74,6 +74,23 @@ private:
 	QString mName;
 	QHash< QString, HICProperty > mProperties;
 	HICObjects mContent;
+};
+
+typedef QHash< QString, HICObject* > HIDObjectHash;
+
+class HIDModel
+{
+public:
+	HIDModel();
+
+public:
+	HIDObjectHash& objects();
+	const HIDObjectHash& objects() const;
+
+	HICObjects allObjects( ObjectTypes byType ) const;
+
+private:
+	HIDObjectHash mObjects;
 };
 
 #endif

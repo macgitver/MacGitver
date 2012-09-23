@@ -61,9 +61,8 @@ bool HIDParser::parseNewObject()
 		error( "Expected new object" );
 		return false;
 	}
-	mTokenStream.advance();
 
-	if( mTokenStream.cur() != Token_string )
+	if( !mTokenStream.advanceAndExpect( Token_string ) )
 	{
 		error( "Expected object name" );
 		return false;
@@ -146,9 +145,7 @@ bool HIDParser::parseNewObject()
 
 bool HIDParser::parseObjectContent()
 {
-	mTokenStream.advance();
-
-	if( mTokenStream.cur() != Token_OpenSquare )
+	if( !mTokenStream.advanceAndExpect( Token_OpenSquare ) )
 	{
 		error( "Expected [" );
 		return false;
@@ -160,8 +157,7 @@ bool HIDParser::parseObjectContent()
 		switch( mTokenStream.cur() )
 		{
 		case Token_CloseSquare:
-			mTokenStream.advance();
-			if( mTokenStream.cur() != Token_Semicolon )
+			if( !mTokenStream.advanceAndExpect( Token_Semicolon ) )
 			{
 				error( "Expected Semicolon" );
 				return false;
@@ -188,8 +184,7 @@ bool HIDParser::parseObjectContent()
 			break;
 
 		case Token_Separator:
-			mTokenStream.advance();
-			if( mTokenStream.cur() != Token_Semicolon )
+			if( !mTokenStream.advanceAndExpect( Token_Semicolon ) )
 			{
 				error( "Expected Semicolon" );
 				return false;
@@ -233,8 +228,7 @@ bool HIDParser::parseProperty()
 			break;
 
 		case Token_Separator:
-			mTokenStream.advance();
-			if( mTokenStream.cur() != Token_Semicolon )
+			if( !mTokenStream.advanceAndExpect( Token_Semicolon ) )
 			{
 				error( "Expected Semicolon" );
 				return false;
@@ -277,8 +271,7 @@ bool HIDParser::parseProperty()
 					return false;
 				}
 
-				mTokenStream.advance();
-				if( mTokenStream.cur() != Token_Semicolon )
+				if( !mTokenStream.advanceAndExpect( Token_Semicolon ) )
 				{
 					error( "Expected Semicolon" );
 					return false;

@@ -40,6 +40,8 @@ ADD_QT_LIBRARY(
 
 TARGET_LINK_LIBRARIES(
 	DiffRawView
+
+	DiffModel
 	Config
 )
 

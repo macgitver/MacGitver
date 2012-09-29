@@ -25,232 +25,238 @@
 namespace Git
 {
 
-	namespace Internal
-	{
+    namespace Internal
+    {
 
-		DiffListPrivate::DiffListPrivate( RepositoryPrivate* repo, git_diff_list* difflist )
-			: RepoObject( repo )
-			, mDiffList( difflist )
-		{
-			Q_ASSERT( difflist );
-		}
+        DiffListPrivate::DiffListPrivate( RepositoryPrivate* repo, git_diff_list* difflist )
+            : RepoObject( repo )
+            , mDiffList( difflist )
+        {
+            Q_ASSERT( difflist );
+        }
 
-		DiffListPrivate::~DiffListPrivate()
-		{
-			Q_ASSERT( mRepo );
+        DiffListPrivate::~DiffListPrivate()
+        {
+            Q_ASSERT( mRepo );
 
-			if( mDiffList )
-			{
-				git_diff_list_free( mDiffList );
-			}
-		}
+            if( mDiffList )
+            {
+                git_diff_list_free( mDiffList );
+            }
+        }
 
-		static int patchFileCallBack( void* cb_data, git_diff_delta* delta, float )
-		{
-			PatchConsumer* pc = (PatchConsumer*) cb_data;
+        static int patchFileCallBack( void* cb_data, const git_diff_delta* delta, float )
+        {
+            PatchConsumer* pc = (PatchConsumer*) cb_data;
 
-			if( pc->startFile( QString::fromUtf8( delta->old_file.path ),
-							   QString::fromUtf8( delta->new_file.path ),
-							   PatchConsumer::Type( delta->status ),
-							   delta->similarity,
-							   delta->binary ) )
-			{
-				return GIT_ERROR;
-			}
+            if( pc->startFile( QString::fromUtf8( delta->old_file.path ),
+                               QString::fromUtf8( delta->new_file.path ),
+                               PatchConsumer::Type( delta->status ),
+                               delta->similarity,
+                               delta->binary ) )
+            {
+                return GIT_ERROR;
+            }
 
-			return GIT_OK;
-		}
+            return GIT_OK;
+        }
 
-		static int patchHunkCallBack( void* cb_data, git_diff_delta* delta, git_diff_range* range,
-									  const char* header, size_t header_len )
-		{
-			PatchConsumer* pc = (PatchConsumer*) cb_data;
+        static int patchHunkCallBack( void* cb_data,
+                                      const git_diff_delta* delta,
+                                      const git_diff_range* range,
+                                      const char* header, size_t header_len )
+        {
+            PatchConsumer* pc = (PatchConsumer*) cb_data;
 
-			if( pc->startHunk( range->new_start, range->new_lines,
-							   range->old_start, range->old_lines,
-							   header ? QString::fromUtf8( header, int( header_len ) ) : QString() ) )
-			{
-				return GIT_ERROR;
-			}
+            if( pc->startHunk( range->new_start, range->new_lines,
+                               range->old_start, range->old_lines,
+                               header ? QString::fromUtf8( header, int( header_len ) ) : QString() ) )
+            {
+                return GIT_ERROR;
+            }
 
-			return GIT_OK;
-		}
+            return GIT_OK;
+        }
 
-		static int patchDataCallBack( void* cb_data, git_diff_delta* delta, git_diff_range* range,
-									  char line_origin, const char *content, size_t content_len )
-		{
-			PatchConsumer* pc = (PatchConsumer*) cb_data;
+        static int patchDataCallBack( void* cb_data,
+                                      const git_diff_delta* delta,
+                                      const git_diff_range* range,
+                                      char line_origin,
+                                      const char *content,
+                                      size_t content_len )
+        {
+            PatchConsumer* pc = (PatchConsumer*) cb_data;
 
-			QString ct;
-			if( content && content_len )
-			{
-				if( content[ content_len - 1 ] == '\n' )
-					--content_len;
+            QString ct;
+            if( content && content_len )
+            {
+                if( content[ content_len - 1 ] == '\n' )
+                    --content_len;
 
-				ct = QString::fromUtf8( content, int( content_len ) );
-			}
+                ct = QString::fromUtf8( content, int( content_len ) );
+            }
 
-			switch( line_origin )
-			{
-			case GIT_DIFF_LINE_CONTEXT:
-				if( pc->appendContext( ct ) )
-				{
-					return GIT_ERROR;
-				}
-				break;
+            switch( line_origin )
+            {
+            case GIT_DIFF_LINE_CONTEXT:
+                if( pc->appendContext( ct ) )
+                {
+                    return GIT_ERROR;
+                }
+                break;
 
-			case GIT_DIFF_LINE_ADDITION:
-				if( pc->appendAddition( ct ) )
-				{
-					return GIT_ERROR;
-				}
-				break;
+            case GIT_DIFF_LINE_ADDITION:
+                if( pc->appendAddition( ct ) )
+                {
+                    return GIT_ERROR;
+                }
+                break;
 
-			case GIT_DIFF_LINE_DELETION:
-				if( pc->appendDeletion( ct ) )
-				{
-					return GIT_ERROR;
-				}
-				break;
+            case GIT_DIFF_LINE_DELETION:
+                if( pc->appendDeletion( ct ) )
+                {
+                    return GIT_ERROR;
+                }
+                break;
 
-			default:
-				qDebug( "Foo: t=%i", int(line_origin) );
+            default:
+                qDebug( "Foo: t=%i", int(line_origin) );
 
-			}
+            }
 
-			return GIT_OK;
-		}
+            return GIT_OK;
+        }
 
-		static int changeListCallBack( void* cb_data, git_diff_delta* delta, float )
-		{
-			ChangeListConsumer* consumer = (ChangeListConsumer*) cb_data;
+        static int changeListCallBack( void* cb_data, const git_diff_delta* delta, float )
+        {
+            ChangeListConsumer* consumer = (ChangeListConsumer*) cb_data;
 
-			if( consumer->raw( QString::fromUtf8( delta->old_file.path ),
-							   QString::fromUtf8( delta->new_file.path ),
-							   ChangeListConsumer::Type( delta->status ),
-							   delta->similarity,
-							   delta->binary ) )
-			{
-				return GIT_ERROR;
-			}
+            if( consumer->raw( QString::fromUtf8( delta->old_file.path ),
+                               QString::fromUtf8( delta->new_file.path ),
+                               ChangeListConsumer::Type( delta->status ),
+                               delta->similarity,
+                               delta->binary ) )
+            {
+                return GIT_ERROR;
+            }
 
-			return GIT_OK;
-		}
+            return GIT_OK;
+        }
 
-	}
+    }
 
-	DiffList::DiffList()
-	{
-	}
+    DiffList::DiffList()
+    {
+    }
 
-	DiffList::DiffList( Internal::DiffListPrivate* _d )
-		: d( _d )
-	{
-	}
+    DiffList::DiffList( Internal::DiffListPrivate* _d )
+        : d( _d )
+    {
+    }
 
-	DiffList::DiffList( const DiffList& o )
-		: d( o.d )
-	{
-	}
+    DiffList::DiffList( const DiffList& o )
+        : d( o.d )
+    {
+    }
 
-	DiffList::~DiffList()
-	{
-	}
+    DiffList::~DiffList()
+    {
+    }
 
-	DiffList& DiffList::operator=( const DiffList& other )
-	{
-		d = other.d;
-		return *this;
-	}
+    DiffList& DiffList::operator=( const DiffList& other )
+    {
+        d = other.d;
+        return *this;
+    }
 
-	bool DiffList::isValid() const
-	{
-		return d;
-	}
+    bool DiffList::isValid() const
+    {
+        return d;
+    }
 
-	Repository DiffList::repository( Result& result ) const
-	{
-		if( !result )
-		{
-			return Repository();
-		}
+    Repository DiffList::repository( Result& result ) const
+    {
+        if( !result )
+        {
+            return Repository();
+        }
 
-		if( !d )
-		{
-			result.setInvalidObject();
-			return Repository();
-		}
+        if( !d )
+        {
+            result.setInvalidObject();
+            return Repository();
+        }
 
-		return Repository( d->repo() );
-	}
+        return Repository( d->repo() );
+    }
 
-	bool DiffList::mergeOnto( DiffList onto, Result& result ) const
-	{
-		if( !result )
-		{
-			return false;
-		}
+    bool DiffList::mergeOnto( DiffList onto, Result& result ) const
+    {
+        if( !result )
+        {
+            return false;
+        }
 
-		if( !d || !onto.isValid() )
-		{
-			result.setInvalidObject();
-			return false;
-		}
+        if( !d || !onto.isValid() )
+        {
+            result.setInvalidObject();
+            return false;
+        }
 
-		result = git_diff_merge( onto.d->mDiffList, d->mDiffList );
-		return result;
-	}
+        result = git_diff_merge( onto.d->mDiffList, d->mDiffList );
+        return result;
+    }
 
-	bool DiffList::consumePatch( PatchConsumer* consumer, Result& result ) const
-	{
-		if( !result )
-		{
-			return false;
-		}
+    bool DiffList::consumePatch( PatchConsumer* consumer, Result& result ) const
+    {
+        if( !result )
+        {
+            return false;
+        }
 
-		if( !d )
-		{
-			result.setInvalidObject();
-			return false;
-		}
+        if( !d )
+        {
+            result.setInvalidObject();
+            return false;
+        }
 
-		if( !consumer )
-		{
-			result.setInvalidObject();
-			return false;
-		}
+        if( !consumer )
+        {
+            result.setInvalidObject();
+            return false;
+        }
 
-		result = git_diff_foreach( d->mDiffList, consumer,
-								   &Internal::patchFileCallBack,
-								   &Internal::patchHunkCallBack,
-								   &Internal::patchDataCallBack );
+        result = git_diff_foreach( d->mDiffList, consumer,
+                                   &Internal::patchFileCallBack,
+                                   &Internal::patchHunkCallBack,
+                                   &Internal::patchDataCallBack );
 
-		return result;
-	}
+        return result;
+    }
 
-	bool DiffList::consumeChangeList( ChangeListConsumer* consumer, Result& result ) const
-	{
-		if( !result )
-		{
-			return false;
-		}
+    bool DiffList::consumeChangeList( ChangeListConsumer* consumer, Result& result ) const
+    {
+        if( !result )
+        {
+            return false;
+        }
 
-		if( !d )
-		{
-			result.setInvalidObject();
-			return false;
-		}
+        if( !d )
+        {
+            result.setInvalidObject();
+            return false;
+        }
 
-		if( !consumer )
-		{
-			result.setInvalidObject();
-			return false;
-		}
+        if( !consumer )
+        {
+            result.setInvalidObject();
+            return false;
+        }
 
-		result = git_diff_foreach( d->mDiffList, consumer,
-								   &Internal::changeListCallBack, NULL, NULL );
+        result = git_diff_foreach( d->mDiffList, consumer,
+                                   &Internal::changeListCallBack, NULL, NULL );
 
-		return result;
-	}
+        return result;
+    }
 
 }

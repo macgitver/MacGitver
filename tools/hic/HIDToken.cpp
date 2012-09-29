@@ -28,7 +28,7 @@ HIDTokenId HIDTokenStream::cur() const
 
 void HIDTokenStream::append( const HIDToken& token )
 {
-	QList::append( token );
+    QList<HIDToken>::append( token );
 }
 
 const HIDToken& HIDTokenStream::curToken() const

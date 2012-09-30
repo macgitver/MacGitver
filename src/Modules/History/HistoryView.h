@@ -27,6 +27,8 @@ class QToolBar;
 #include "Heaven/Views/GlobalView.h"
 #include "Heaven/Widgets/MiniSplitter.h"
 
+#include "hic_HistoryViewActions.h"
+
 class HistoryBuilder;
 class HistoryModel;
 class HistoryDetails;
@@ -34,7 +36,9 @@ class HistoryList;
 
 class HistoryDiff;
 
-class HistoryView : public Heaven::GlobalView, private ConfigUser
+class HistoryView : public Heaven::GlobalView,
+					private HistoryViewActions,
+					private ConfigUser
 {
 	Q_OBJECT
 public:
@@ -62,7 +66,6 @@ private:
 	HistoryDetails*			mDetails;
 	HistoryBuilder*			mBuilder;
 	HistoryDiff*			mDiff;
-	QToolBar*				mToolBar;
 	Git::Repository			mRepo;
 };
 

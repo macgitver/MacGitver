@@ -42,16 +42,13 @@ HistoryView::HistoryView()
 	: GlobalView( QLatin1String( "History" ) )
 	, ConfigUser( "History" )
 {
+	setupActions( this );
+
 	mVertSplit = mHorzSplit = NULL;
 
 	setViewName( trUtf8( "History" ) );
 	setSizePolicy( QSizePolicy::MinimumExpanding,
 				   QSizePolicy::MinimumExpanding );
-
-	mToolBar = new QToolBar;
-
-	QAction* a = mToolBar->addAction( trUtf8( "All Branches" ), this, SLOT(onViewAllBranches()) );
-	a->setCheckable( true );
 
 	mList = new HistoryList;
 	mList->setFrameShape( QFrame::NoFrame );
@@ -71,7 +68,7 @@ HistoryView::HistoryView()
 	QVBoxLayout* l = new QVBoxLayout;
 	l->setSpacing( 0 );
 	l->setMargin( 0 );
-	l->addWidget( mToolBar );
+	l->addWidget( tbHistoryViewToolBar->toolBarFor( this ) );
 	setLayout( l );
 	initSplitters();
 

@@ -48,3 +48,32 @@ QString ConfigSetting::validatorRule() const
 {
 	return mValidatorRule;
 }
+
+ConfigSection::ConfigSection( QDomElement el )
+{
+	mClassName = el.attribute( QLatin1String( "Class" ) );
+	mConfigPath = el.attribute( QLatin1String( "ConfigPath" ) );
+
+	QDomElement elChild = el.firstChildElement();
+	while( elChild.isElement() )
+	{
+		mSettings.append( new ConfigSetting( elChild ) );
+		elChild = elChild.nextSiblingElement();
+	}
+
+}
+
+ConfigSection::~ConfigSection()
+{
+	qDeleteAll( mSettings );
+}
+
+QString ConfigSection::className() const
+{
+	return mClassName;
+}
+
+QString ConfigSection::configPath() const
+{
+	return mConfigPath;
+}

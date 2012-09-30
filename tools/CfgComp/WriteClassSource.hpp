@@ -14,48 +14,27 @@
  *
  */
 
-#ifndef CFGCOMP_MODEL_HPP
-#define CFGCOMP_MODEL_HPP
+#ifndef CFGCOMP_WRITE_CLASS_SOURCE_HPP
+#define CFGCOMP_WRITE_CLASS_SOURCE_HPP
 
-#include <QDomElement>
+#include <QTextStream>
+#include <QFile>
 
-#include "VariantTypes.hpp"
+#include "Model.hpp"
 
-class ConfigSetting
+class WriteClassSource
 {
 public:
-	ConfigSetting( QDomElement el );
+	WriteClassSource( const QString& outFile, const ConfigSection& section );
 
 public:
-	QString name() const;
-	VariantType type() const;
-
-	QString typeName() const;
-	QString subTypeName() const;
-
-	QString validatorRule() const;
+	void generate();
 
 private:
-	QString			mName;
-	QString			mType;
-	QString			mSubType;
-	QString			mValidatorRule;
-};
-
-class ConfigSection
-{
-public:
-	ConfigSection( QDomElement el );
-	~ConfigSection();
-
-public:
-	QString className() const;
-	QString configPath() const;
-
-private:
-	QString					mConfigPath;
-	QString					mClassName;
-	QList< ConfigSetting* >	mSettings;
+	QString					mOutFileName;
+	QFile					mOutFile;
+	const ConfigSection&	mSection;
+	QTextStream				mOutStream;
 };
 
 #endif

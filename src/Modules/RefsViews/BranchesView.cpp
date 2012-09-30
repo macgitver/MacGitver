@@ -79,9 +79,9 @@ void BranchesView::rereadBranches()
 
 	if( mRepo.isValid() )
 	{
-		QString curBranch = mRepo.currentBranch();
-
-		QStringList sl = mRepo.branches( mBtnLocals->isChecked(), mBtnRemotes->isChecked() );
+		Git::Result r;
+		QString curBranch = mRepo.currentBranch( r );
+		QStringList sl = mRepo.branches( mBtnLocals->isChecked(), mBtnRemotes->isChecked(), r );
 
 		for( int i = 0; i < sl.count(); i++ )
 		{

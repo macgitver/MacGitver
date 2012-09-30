@@ -87,9 +87,10 @@ void IndexWidget::repositoryChanged( Git::Repository repo )
 
 	if( mRepo.isValid() )
 	{
-		Git::DiffList dl = mRepo.diffIndexToWorkingDir();
 		GitPatchConsumer p;
-		dl.consumePatch( &p );
+		Git::Result r;
+		Git::DiffList dl = mRepo.diffIndexToWorkingDir( r );
+		dl.consumePatch( &p, r );
 
 		mRawDiff->setText( p.patch()->toString() );
 	}

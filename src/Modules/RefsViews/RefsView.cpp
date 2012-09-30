@@ -56,7 +56,8 @@ void RefsView::repositoryChanged( Git::Repository repo )
 
 	if( mRepo.isValid() )
 	{
-		mModel->syncTo( mRepo.allReferences() );
+		Git::Result r;
+		mModel->syncTo( mRepo.allReferences( r ) );
 	}
 	else
 	{

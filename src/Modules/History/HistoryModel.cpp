@@ -205,10 +205,18 @@ void HistoryModel::ensurePopulated( int row )
 		return;
 	}
 
-	Git::ObjectCommit commit = mRepo.lookupCommit( e->id() );
-	e->populate( commit );
+	Git::Result r;
+	Git::ObjectCommit commit = mRepo.lookupCommit( e->id(), r );
+	if( !r || !commit.isValid() )
+	{
+		e->populate( commit );
 
-	emit dataChanged( index( row, 0 ), index( row, columnMap( -1 ) - 1 ) );
+		emit dataChanged( index( row, 0 ), index( row, columnMap( -1 ) - 1 ) );
+	}
+	else
+	{
+		qDebug() << "Failed to lookup a commit" << r.errorText();
+	}
 }
 
 void HistoryModel::append( HistoryEntry* entry )

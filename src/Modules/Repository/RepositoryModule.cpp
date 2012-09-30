@@ -110,15 +110,17 @@ void RepositoryModule::onRepositoryOpenHelper()
 	if ( fd->selectedFiles().isEmpty() )
 		return;
 
-    //! @todo error handling
-    QString repoDir = Git::Repository::discover( fd->selectedFiles().first() );
-    if ( repoDir.isEmpty() )
-        return;
+	//! @todo error handling
+	Git::Result r;
+	QString repoDir = Git::Repository::discover( fd->selectedFiles().first(), false,
+												 QStringList(), r );
+	if ( repoDir.isEmpty() )
+		return;
 
-    //! @todo error handling
-    Git::Repository repo = Git::Repository::open( repoDir );
-    if( !repo.isValid() )
-        return;
+	//! @todo error handling
+	Git::Repository repo = Git::Repository::open( repoDir, r );
+	if( !repo.isValid() )
+		return;
 
 	// If we successfully loaded the repository at that directory,
 	// we store it as "lastUsedDir"

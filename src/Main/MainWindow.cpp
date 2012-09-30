@@ -246,7 +246,8 @@ void MainWindow::setHeadLabel()
 	if( mRepo.isValid() )
 	{
 		QString curBranch;
-		Git::Reference HEAD = mRepo.HEAD();
+		Git::Result r;
+		Git::Reference HEAD = mRepo.HEAD( r );
 
 		if( HEAD.isValid() )
 		{
@@ -258,7 +259,7 @@ void MainWindow::setHeadLabel()
 			else
 			{
 				curBranch = trUtf8( "on detached HEAD at <b>%1</b>" )
-							.arg( HEAD.objectId().toString() );
+							.arg( HEAD.objectId( r ).toString() );
 			}
 		}
 		else

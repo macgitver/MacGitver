@@ -29,8 +29,9 @@ HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryModel* model )
 	: mRepo( repo )
 	, mModel( model )
 {
-	mWalker = mRepo.newWalker();
-	mWalker.setSorting( true, false );
+	Git::Result r;
+	mWalker = mRepo.newWalker( r );
+	mWalker.setSorting( true, false, r );
 }
 
 HistoryBuilder::~HistoryBuilder()
@@ -39,15 +40,17 @@ HistoryBuilder::~HistoryBuilder()
 
 void HistoryBuilder::addHEAD()
 {
-	mWalker.pushHead();
+	Git::Result r;
+	mWalker.pushHead( r );
 }
 
 void HistoryBuilder::addAllRefs()
 {
-	QStringList sl = mRepo.allBranches();
+	Git::Result r;
+	QStringList sl = mRepo.allBranches( r );
 	foreach( QString s, sl )
 	{
-		mWalker.pushRef( s );
+		mWalker.pushRef( s, r );
 	}
 }
 

@@ -264,8 +264,9 @@ void HistoryDiff::createPatch()
 
 	if( dl.isValid() )
 	{
+		Git::Result r;
 		GitPatchConsumer p;
-		dl.consumePatch( &p );
+		dl.consumePatch( &p, r );
 		setPatch( p.patch() );
 	}
 	else

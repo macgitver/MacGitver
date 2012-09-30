@@ -140,8 +140,9 @@ void SubmodulesView::readSubmodules()
 		#ifdef LIBGIT_IMPROVED
 		submodules = mRepo.submodules();
 		#else
-		Git::Repository r = Git::Repository::open( mRepo.basePath() );
-		submodules = r.submodules();
+		Git::Result r;
+		Git::Repository repo = Git::Repository::open( mRepo.basePath(), r );
+		submodules = repo.submodules( r );
 		#endif
 	}
 

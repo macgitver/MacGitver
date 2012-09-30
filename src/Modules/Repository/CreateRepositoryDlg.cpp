@@ -89,13 +89,15 @@ void CreateRepositoryDlg::accept()
 {
 	QString fn = QDir::toNativeSeparators( txtPath->text() );
 	bool makeBare = chkMakeBare->isChecked() && chkMakeBare->isEnabled();
-	Git::Repository repo = Git::Repository::create( fn, makeBare );
+	Git::Result r;
+	Git::Repository repo = Git::Repository::create( fn, makeBare, r );
 
-	if( !repo.isValid() )
+	if( !r || !repo.isValid() )
 	{
 		QMessageBox::critical( this,
 							   trUtf8( "Error" ),
-							   trUtf8( "Failed to create the repository." ) );
+							   trUtf8( "Failed to create the repository.\n%1" )
+							   .arg( r.errorText()) );
 		return;
 	}
 

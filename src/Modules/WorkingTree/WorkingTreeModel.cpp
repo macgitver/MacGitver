@@ -17,6 +17,8 @@
 #include <QFileIconProvider>
 #include <QFileInfo>
 
+#include "GitWrap/Result.h"
+
 #include "WorkingTreeModel.h"
 #include "WorkingTreeAbstractItem.h"
 #include "WorkingTreeDirItem.h"
@@ -33,7 +35,7 @@ QIcon getWindowsIcon( const QString& pathName )
 	DWORD flags = SHGFI_ICON | SHGFI_USEFILEATTRIBUTES | SHGFI_SMALLICON;
 	SHGetFileInfoW( (LPCWSTR) pathName.utf16(), FILE_ATTRIBUTE_NORMAL, &shfi, sizeof(shfi), flags );
 
-	QPixmap pm = QPixmap::fromWinHICON( shfi.hIcon );
+	QPixmap pm = QPixmap::fromWinHICON( shfi.hIcon );	// Undefined für Qt5!
 	DestroyIcon( shfi.hIcon );
 	return QIcon( pm );
 }
@@ -162,7 +164,8 @@ void WorkingTreeModel::update()
 	QFileIconProvider ip;
 	QIcon folderIcon = ip.icon( QFileIconProvider::Folder );
 
-	Git::StatusHash sh = mRepo.statusHash();
+	Git::Result r;
+	Git::StatusHash sh = mRepo.statusHash( r );
 	Git::StatusHash::ConstIterator it = sh.constBegin();
 	while( it != sh.constEnd() )
 	{

@@ -207,7 +207,7 @@ void HistoryModel::ensurePopulated( int row )
 
 	Git::Result r;
 	Git::ObjectCommit commit = mRepo.lookupCommit( e->id(), r );
-	if( !r || !commit.isValid() )
+	if( r && commit.isValid() )
 	{
 		e->populate( commit );
 

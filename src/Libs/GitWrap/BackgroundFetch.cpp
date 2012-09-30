@@ -15,6 +15,7 @@
  */
 
 #include "BackgroundFetch.h"
+#include "Result.h"
 
 namespace Git
 {
@@ -35,22 +36,24 @@ namespace Git
 
 	bool BackgroundFetch::execute()
 	{
-		if( !mRemote.connect( true ) )
+		Result r;
+
+		if( !mRemote.connect( true, r ) )
 		{
 			return false;
 		}
 
-		if( !mRemote.download() )
+		if( !mRemote.download( r ) )
 		{
 			return false;
 		}
 
-		if( !mRemote.updateTips() )
+		if( !mRemote.updateTips( r ) )
 		{
 			return false;
 		}
 
-		mRemote.disconnect();
+		mRemote.disconnect( r );
 		return true;
 	}
 

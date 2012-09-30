@@ -852,7 +852,7 @@ namespace Git
 	DiffList Repository::diffCommitToCommit( ObjectCommit oldCommit, ObjectCommit newCommit,
 											 Result& result )
 	{
-		return diffTreeToTree( oldCommit.tree(), newCommit.tree(), result );
+		return diffTreeToTree( oldCommit.tree( result ), newCommit.tree( result ), result );
 	}
 
 	DiffList Repository::diffTreeToTree( ObjectTree oldTree, ObjectTree newTree,

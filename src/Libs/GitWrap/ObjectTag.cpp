@@ -17,6 +17,7 @@
 #include "GitWrapPrivate.h"
 
 #include "ObjectTag.h"
+#include "ObjectPrivate.h"
 
 namespace Git
 {
@@ -28,7 +29,11 @@ namespace Git
 	ObjectTag::ObjectTag( Internal::ObjectPrivate* _d )
 		: Object( _d )
 	{
-		Q_ASSERT( type() == otTag );
+		Result r;
+		if( ( type( r ) != otTag ) || !r )
+		{
+			d = NULL;
+		}
 	}
 
 	ObjectTag::ObjectTag( const ObjectTag& o )

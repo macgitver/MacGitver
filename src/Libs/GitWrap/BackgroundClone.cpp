@@ -17,6 +17,7 @@
 #include "BackgroundClone.h"
 #include "BackgroundFetch.h"
 #include "Remote.h"
+#include "Result.h"
 
 namespace Git
 {
@@ -67,9 +68,11 @@ namespace Git
 
 	bool BackgroundClone::prepare()
 	{
+		Result r;
+
 		if( !mPrepared )
 		{
-			mRepo = Repository::create( mPath, mBare );
+			mRepo = Repository::create( mPath, mBare, r );
 			mPrepared = true;
 		}
 
@@ -78,6 +81,8 @@ namespace Git
 
 	bool BackgroundClone::execute()
 	{
+		Result r;
+
 		if( !mPrepared )
 		{
 			if( !prepare() )
@@ -92,14 +97,14 @@ namespace Git
 
 		QString refSpec = QLatin1String( "+refs/heads/*:refs/remotes/%1/*" );
 
-		Remote remote = mRepo.createRemote( mRemoteName, mUrl, refSpec.arg( mRemoteName ) );
+		Remote remote = mRepo.createRemote( mRemoteName, mUrl, refSpec.arg( mRemoteName ), r );
 
 		if( !remote.isValid() )
 		{
 			return false;
 		}
 
-		remote.save();
+		remote.save( r );
 
 		BackgroundFetch* fetch = new BackgroundFetch();
 		fetch->setRepository( mRepo );

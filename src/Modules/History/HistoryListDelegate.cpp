@@ -189,13 +189,6 @@ void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
 											   Qt::magenta //, ORANGE
 											 };
 
-	if( opt.state & QStyle::State_Selected )
-		p->fillRect( opt.rect, opt.palette.highlight() );
-	else if( i.row() & 1 )
-		p->fillRect( opt.rect, opt.palette.alternateBase() );
-	else
-		p->fillRect( opt.rect, opt.palette.base() );
-
 	const HistoryModel* m = qobject_cast< const HistoryModel* >( i.model() );
 	HistoryEntry* e = m->at( i.row() );
 
@@ -247,13 +240,6 @@ void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
 void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
 										const QModelIndex& i ) const
 {
-	if( opt.state & QStyle::State_Selected )
-		p->fillRect( opt.rect, opt.palette.highlight() );
-	else if( i.row() & 1 )
-		p->fillRect( opt.rect, opt.palette.alternateBase() );
-	else
-		p->fillRect( opt.rect, opt.palette.base() );
-
 	const HistoryModel* m = qobject_cast< const HistoryModel* >( i.model() );
 	HistoryEntry* e = m->at( i.row() );
 
@@ -319,6 +305,13 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
 void HistoryListDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 								 const QModelIndex& index ) const
 {
+	if( option.state & QStyle::State_Selected )
+		painter->fillRect( option.rect, option.palette.highlight() );
+	else if( index.row() & 1 )
+		painter->fillRect( option.rect, option.palette.alternateBase() );
+	else
+		painter->fillRect( option.rect, option.palette.base() );
+
 	if( index.column() > 1 )
 	{
 		QItemDelegate::paint( painter, option, index );

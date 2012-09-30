@@ -34,13 +34,13 @@ HistoryConfigPage::~HistoryConfigPage()
 
 void HistoryConfigPage::apply()
 {
-	int i = 1;
+	int i = 0;
 	if( chkDiffAndHistoryBottom->isChecked() )
-		i = 1;
+		i = 0;
 	else if( chkDiffAboveDetails->isChecked() )
-		i = 2;
+		i = 1;
 	else if( chkDiffRight->isChecked() )
-		i = 3;
+		i = 2;
 
 	Config::self().set( "History/SplitLayout", i );
 }
@@ -58,18 +58,18 @@ void HistoryConfigPage::init()
 	sswDetailsOverview->addEntry( trUtf8( "Committer mail" ), false, HHD_CommitterMail );
 
 	QSignalMapper* map = new QSignalMapper( this );
-	map->setMapping( chkDiffAndHistoryBottom, 1 );
-	map->setMapping( chkDiffAboveDetails, 2 );
-	map->setMapping( chkDiffRight, 3 );
+	map->setMapping( chkDiffAndHistoryBottom, 0 );
+	map->setMapping( chkDiffAboveDetails, 1 );
+	map->setMapping( chkDiffRight, 2 );
 
 	connect( chkDiffAboveDetails, SIGNAL(clicked()), map, SLOT(map()) );
 	connect( chkDiffAndHistoryBottom, SIGNAL(clicked()), map, SLOT(map()) );
 	connect( chkDiffRight, SIGNAL(clicked()), map, SLOT(map()) );
 
-	int i = Config::self().get( "History/SplitLayout", 1 ).toInt();
-	chkDiffAndHistoryBottom->setChecked( i == 1 );
-	chkDiffAboveDetails->setChecked( i == 2 );
-	chkDiffRight->setChecked( i == 3 );
+	int i = Config::self().get( "History/SplitLayout", 0 ).toInt();
+	chkDiffAndHistoryBottom->setChecked( i == 0 );
+	chkDiffAboveDetails->setChecked( i == 1 );
+	chkDiffRight->setChecked( i == 2 );
 
 	connect( map, SIGNAL(mapped(int)), this, SLOT(onDiffPosChanged(int)) );
 }

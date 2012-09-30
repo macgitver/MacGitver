@@ -51,13 +51,13 @@ namespace Git
 	public:
 		bool isValid() const;
 
-		bool save( Result& result = GitWrap::lastResult() );
+		bool save( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 		QString name() const;
 		QString url() const;
 
-		bool setFetchSpec( const QString& spec, Result& result = GitWrap::lastResult() );
-		bool setPushSpec( const QString& spec, Result& result = GitWrap::lastResult() );
+		bool setFetchSpec( const QString& spec, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		bool setPushSpec( const QString& spec, Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 		RefSpec fetchSpec() const;
 		RefSpec pushSpec() const;
@@ -65,10 +65,10 @@ namespace Git
 		static bool isValidUrl( const QString& url );
 		static bool isSupportedUrl( const QString& url );
 
-		bool connect( bool forFetch, Result& result = GitWrap::lastResult() );
-		void disconnect( Result& result = GitWrap::lastResult() );
-		bool download( Result& result = GitWrap::lastResult() );
-		bool updateTips( Result& result = GitWrap::lastResult() );
+		bool connect( bool forFetch, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		void disconnect( Result& result GITWRAP_DEFAULT_TLSRESULT );
+		bool download( Result& result GITWRAP_DEFAULT_TLSRESULT );
+		bool updateTips( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 	private:
 		Internal::GitPtr< Internal::RemotePrivate > d;

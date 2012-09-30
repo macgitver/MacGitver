@@ -52,16 +52,16 @@ namespace Git
 
 	public:
 		bool isValid() const;
-		bool destroy( Result& result = GitWrap::lastResult() );
+		bool destroy( Result& result GITWRAP_DEFAULT_TLSRESULT );
 		QString name() const;
 
-		Type type( Result& result = GitWrap::lastResult() ) const;
-		ObjectId objectId( Result& result = GitWrap::lastResult() ) const;
-		QString target( Result& result = GitWrap::lastResult() ) const;
+		Type type( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		ObjectId objectId( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		QString target( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
-		Repository repository( Result& result = GitWrap::lastResult() ) const;
-		Reference resolved( Result& result = GitWrap::lastResult() );
-		ObjectId resolveToObjectId( Result& result = GitWrap::lastResult() );
+		Repository repository( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		Reference resolved( Result& result GITWRAP_DEFAULT_TLSRESULT );
+		ObjectId resolveToObjectId( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 	private:
 		Internal::GitPtr< Internal::ReferencePrivate > d;

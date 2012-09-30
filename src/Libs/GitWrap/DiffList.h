@@ -51,13 +51,13 @@ namespace Git
 
 	public:
 		bool isValid() const;
-		Repository repository( Result& result = GitWrap::lastResult() ) const;
+		Repository repository( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
-		bool mergeOnto( DiffList other, Result& result = GitWrap::lastResult() ) const;
+		bool mergeOnto( DiffList other, Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
-		bool consumePatch( PatchConsumer* consumer, Result& result = GitWrap::lastResult() ) const;
+		bool consumePatch( PatchConsumer* consumer, Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 		bool consumeChangeList( ChangeListConsumer* consumer,
-								Result& result = GitWrap::lastResult() ) const;
+								Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 	private:
 		Internal::GitPtr< Internal::DiffListPrivate > d;

@@ -46,13 +46,13 @@ namespace Git
 	public:
 		bool isValid() const;
 
-		void clear( Result& result = GitWrap::lastResult());
+		void clear( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
-		TreeEntry get( const QString& name, Result& result = GitWrap::lastResult() );
+		TreeEntry get( const QString& name, Result& result GITWRAP_DEFAULT_TLSRESULT );
 		bool insert( const QString& fileName, TreeEntryAttributes type, const ObjectId& oid,
-					 Result& result = GitWrap::lastResult() );
-		bool remove( const QString& fileName, Result& result = GitWrap::lastResult() );
-		ObjectId write( Result& result = GitWrap::lastResult() );
+					 Result& result GITWRAP_DEFAULT_TLSRESULT );
+		bool remove( const QString& fileName, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		ObjectId write( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 	private:
 		Internal::GitPtr< Internal::TreeBuilderPrivate > d;

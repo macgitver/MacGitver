@@ -25,6 +25,7 @@
 #include "Object.h"
 #include "Signature.h"
 #include "DiffList.h"
+#include "Result.h"
 
 namespace Git
 {
@@ -47,39 +48,41 @@ namespace Git
 	public:
 		bool operator==( const Git::ObjectCommit& commit ) const
 		{
-			return isEqual( commit );
+			Result r;
+			return isEqual( commit, r ) && r;
 		}
 
 		bool operator!=( const Git::ObjectCommit& commit ) const
 		{
-			return !isEqual( commit );
+			Result r;
+			return !isEqual( commit, r ) && r;
 		}
 
 	public:
-		ObjectTree tree( Result& result = GitWrap::lastResult() );
-		ObjectId treeId( Result& result = GitWrap::lastResult() );
+		ObjectTree tree( Result& result GITWRAP_DEFAULT_TLSRESULT );
+		ObjectId treeId( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
-		ObjectIdList parentCommitIds( Result& result = GitWrap::lastResult() ) const;
-		QList< ObjectCommit > parentCommits( Result& result = GitWrap::lastResult() ) const;
-		ObjectCommit parentCommit( unsigned int index, Result& result = GitWrap::lastResult() ) const;
-		ObjectId parentCommitId( unsigned int index, Result& result = GitWrap::lastResult() ) const;
+		ObjectIdList parentCommitIds( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		QList< ObjectCommit > parentCommits( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		ObjectCommit parentCommit( unsigned int index, Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		ObjectId parentCommitId( unsigned int index, Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 		unsigned int numParentCommits() const;
 
-		bool isParentOf( const Git::ObjectCommit& child, Result& result = GitWrap::lastResult() ) const;
-		bool isChildOf( const Git::ObjectCommit& parent, Result& result = GitWrap::lastResult() ) const;
-		bool isEqual( const Git::ObjectCommit& commit, Result& result = GitWrap::lastResult() ) const;
+		bool isParentOf( const Git::ObjectCommit& child, Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		bool isChildOf( const Git::ObjectCommit& parent, Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		bool isEqual( const Git::ObjectCommit& commit, Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
-		Signature author( Result& result = GitWrap::lastResult() ) const;
-		Signature committer( Result& result = GitWrap::lastResult() ) const;
+		Signature author( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		Signature committer( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
-		QString message( Result& result = GitWrap::lastResult() ) const;
-		QString shortMessage( Result& result = GitWrap::lastResult() ) const;
+		QString message( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		QString shortMessage( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 		Reference createBranch( const QString& name, bool force,
-								Result& result = GitWrap::lastResult() );
+								Result& result GITWRAP_DEFAULT_TLSRESULT );
 
-		DiffList diffFromParent( unsigned int index, Result& result = GitWrap::lastResult() );
-		DiffList diffFromAllParents( Result& result = GitWrap::lastResult() );
+		DiffList diffFromParent( unsigned int index, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		DiffList diffFromAllParents( Result& result GITWRAP_DEFAULT_TLSRESULT );
 	};
 
 	/**
@@ -88,7 +91,8 @@ namespace Git
 	 */
 	inline uint qHash( const ObjectCommit& c )
 	{
-		return qHash( c.id() );
+		Result r;
+		return qHash( c.id( r ) );
 	}
 
 }
@@ -103,7 +107,8 @@ namespace Git
  */
 inline QDebug operator<<( QDebug debug, const Git::ObjectCommit& commit )
 {
-	return debug << "Commit(id=" << commit.id() << ";author=" << commit.author() << ")";
+	Git::Result r;
+	return debug << "Commit(id=" << commit.id( r ) << ";author=" << commit.author( r ) << ")";
 }
 
 #endif

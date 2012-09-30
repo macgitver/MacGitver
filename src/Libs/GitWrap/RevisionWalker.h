@@ -46,22 +46,22 @@ namespace Git
 	public:
 		bool isValid() const;
 
-		void reset( Result& result = GitWrap::lastResult() );
+		void reset( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
-		void push( const ObjectId& id, Result& result = GitWrap::lastResult()  );
-		void push( const Reference& ref, Result& result = GitWrap::lastResult() );
-		void pushRef( const QString& name, Result& result = GitWrap::lastResult() );
-		void pushHead( Result& result = GitWrap::lastResult() );
+		void push( const ObjectId& id, Result& result GITWRAP_DEFAULT_TLSRESULT  );
+		void push( const Reference& ref, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		void pushRef( const QString& name, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		void pushHead( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
-		void hide( const ObjectId& id, Result& result = GitWrap::lastResult() );
-		void hide( const Reference& ref, Result& result = GitWrap::lastResult() );
-		void hideRef( const QString& name, Result& result = GitWrap::lastResult() );
-		void hideHead( Result& result = GitWrap::lastResult() );
+		void hide( const ObjectId& id, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		void hide( const Reference& ref, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		void hideRef( const QString& name, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		void hideHead( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
-		bool next( ObjectId& oidNext, Result& result = GitWrap::lastResult() );
-		QVector< ObjectId > all( Result& result = GitWrap::lastResult() );
+		bool next( ObjectId& oidNext, Result& result GITWRAP_DEFAULT_TLSRESULT );
+		QVector< ObjectId > all( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
-		void setSorting( bool topological, bool timed, Result& result = GitWrap::lastResult() );
+		void setSorting( bool topological, bool timed, Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 	private:
 		Internal::GitPtr< Internal::RevisionWalkerPrivate > d;

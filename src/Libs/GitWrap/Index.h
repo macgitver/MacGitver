@@ -50,11 +50,11 @@ namespace Git
 	public:
 		bool isValid() const;
 
-		void read( Result& result = GitWrap::lastResult() );
-		void write( Result& result = GitWrap::lastResult() );
+		void read( Result& result GITWRAP_DEFAULT_TLSRESULT );
+		void write( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
-		int count( Result& result = GitWrap::lastResult() ) const;
-		Repository repository( Result& result = GitWrap::lastResult() ) const;
+		int count( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
+		Repository repository( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 	private:
 		Internal::GitPtr< Internal::IndexPrivate > d;

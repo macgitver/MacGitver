@@ -65,12 +65,12 @@ namespace Git
 		/**
 		 * @return the object's type
 		 */
-		ObjectType type( Result& result = GitWrap::lastResult() ) const;
+		ObjectType type( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 		/**
 		 * @return the object's id (OID)
 		 */
-		ObjectId id( Result& result = GitWrap::lastResult() ) const;
+		ObjectId id( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 		/**
 		 * @brief Converts a generic object into a Git tree object.
@@ -79,7 +79,7 @@ namespace Git
 		 *
 		 * @see isValid()
 		 */
-		ObjectTree asTree( Result& result = GitWrap::lastResult() );
+		ObjectTree asTree( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 		/**
 		 * @brief Converts a generic object into a Git commit object.
@@ -88,7 +88,7 @@ namespace Git
 		 *
 		 * @see isValid()
 		 */
-		ObjectCommit asCommit( Result& result = GitWrap::lastResult() );
+		ObjectCommit asCommit( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 		/**
 		 * @brief Converts a generic object into a Git BLOB object.
@@ -97,7 +97,7 @@ namespace Git
 		 *
 		 * @see isValid()
 		 */
-		ObjectBlob asBlob( Result& result = GitWrap::lastResult() );
+		ObjectBlob asBlob( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 		/**
 		 * @brief Converts a generic object into a Git tag object.
@@ -106,36 +106,36 @@ namespace Git
 		 *
 		 * @see isValid()
 		 */
-		ObjectTag asTag( Result& result = GitWrap::lastResult() );
+		ObjectTag asTag( Result& result GITWRAP_DEFAULT_TLSRESULT );
 
 		/**
 		 * @brief Checks, if this is a ObjectTree object.
 		 * @return true or false
 		 */
-		bool isTree( Result& result = GitWrap::lastResult() ) const;
+		bool isTree( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 		/**
 		 * @brief Checks, if this is a ObjectTree object.
 		 * @return true or false
 		 */
-		bool isTag( Result& result = GitWrap::lastResult() ) const;
+		bool isTag( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 		/**
 		 * @brief Checks, if this is a ObjectTree object.
 		 * @return true or false
 		 */
-		bool isCommit( Result& result = GitWrap::lastResult() ) const;
+		bool isCommit( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 		/**
 		 * @brief Checks, if this is a ObjectTree object.
 		 * @return true or false
 		 */
-		bool isBlob( Result& result = GitWrap::lastResult() ) const;
+		bool isBlob( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 		/**
 		 * @return the owner repository or an invalid repository
 		 */
-		Repository repository( Result& result = GitWrap::lastResult() ) const;
+		Repository repository( Result& result GITWRAP_DEFAULT_TLSRESULT ) const;
 
 	protected:
 		Internal::GitPtr< Internal::ObjectPrivate > d;

@@ -31,6 +31,8 @@
 #	define GITWRAP_API Q_DECL_IMPORT
 #endif
 
+#define GITWRAP_DEFAULT_TLSRESULT /* Nothing */
+
 namespace Git
 {
 

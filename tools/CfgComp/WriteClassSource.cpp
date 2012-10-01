@@ -91,4 +91,38 @@ void WriteClassSource::generate()
 					  "}\n"
 					  "\n";
 	}
+
+	mOutStream << "void " << mSection.className() << "::configChanged( const QString& subPath, const QVariant& value )\n"
+				  "{";
+
+	foreach( ConfigSetting* setting, mSection.allSettings() )
+	{
+		mOutStream << "\n\tif( subPath == QLatin1String( \"" << setting->fullPath() << "\" ) )\n"
+					  "\t{\n"
+					  "\t\tmValue" << setting->fullName() << " = value.";
+
+//		if( setting->type().requiresTemplateMagic() )
+//		{
+			mOutStream << "value< " << setting->type().typeIdName() << " >()";
+//		}
+//		else
+//		{
+//			mOutStream << "to" << setting->type().typeIdName() << "()";
+//		}
+
+		mOutStream << ";\n";
+
+		if( setting->emitSignal() )
+		{
+			QString getName = setting->fullName();
+			getName[ 0 ] = getName[ 0 ].toLower();
+
+			mOutStream << "\t\temit " << getName << "Changed( mValue" << setting->fullName() << " );\n";
+		}
+		mOutStream << "\t\treturn;\n"
+					  "\t}\n";
+	}
+
+	mOutStream << "}\n"
+				  "\n";
 }

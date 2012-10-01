@@ -75,6 +75,11 @@ QVariant::Type VariantType::typeId() const
 	return mTypeId;
 }
 
+QString VariantType::typeIdName() const
+{
+	return QLatin1String( QVariant::typeToName( mTypeId ) );
+}
+
 QString VariantType::defaultCTored() const
 {
 	switch( mTypeId )

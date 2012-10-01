@@ -74,8 +74,7 @@ void WriteClassHeader::generate()
 		mOutStream << "\n";
 	}
 
-	mOutStream << "\n"
-				  "protected:\n"
+	mOutStream << "protected:\n"
 				  "\tvoid configChanged( const QString& subPath, const QVariant& value );\n";
 
 	mOutStream << "\n"

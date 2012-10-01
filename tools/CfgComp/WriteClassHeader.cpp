@@ -48,12 +48,27 @@ void WriteClassHeader::generate()
 				  "\tQ_OBJECT\n"
 				  "public:\n"
 				  "\t" << mSection.className() << "( QObject* parent = 0 );\n"
+				  "\t~" << mSection.className() << "();\n"
 				  "\n"
 				  "private:\n"
-				  "\tvoid read();\n";
+				  "\tvoid read();\n"
+				  "\n"
+				  "public:\n";
+
+	foreach( ConfigSetting* setting, mSection.settings() )
+	{
+		QString getName = setting->name();
+		getName[ 0 ] = getName[ 0 ].toLower();
+
+		mOutStream << "\tstatic " << setting->type().cppType() << " " << getName << "();\n"
+					  "\tstatic void set" << setting->name() << "( " << setting->type().cppType()
+				   << " value );\n";
+
+	}
 
 	mOutStream << "\n"
-				  "private:\n";
+				  "private:\n"
+				  "\tstatic " << mSection.className() << "* sSelf;\n\n";
 
 	foreach( ConfigSetting* setting, mSection.settings() )
 	{

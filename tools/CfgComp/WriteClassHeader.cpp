@@ -52,21 +52,31 @@ void WriteClassHeader::generate()
 				  "\n"
 				  "private:\n"
 				  "\tvoid read();\n"
-				  "\n"
-				  "public:\n";
+				  "\n";
 
 	foreach( ConfigSetting* setting, mSection.allSettings() )
 	{
 		QString getName = setting->fullName();
 		getName[ 0 ] = getName[ 0 ].toLower();
 
-		mOutStream << "\t\t// " << mSection.configPath() << "/" << setting->fullPath() << "\n"
+		mOutStream << "public:\t// " << mSection.configPath() << "/" << setting->fullPath() << "\n"
 					  "\tstatic " << setting->type().cppType() << " " << getName << "();\n"
 					  "\tstatic void set" << setting->fullName() << "( " << setting->type().cppType()
-				   << " value );\n"
-					  "\n";
+				   << " value );\n";
 
+		if( setting->emitSignal() )
+		{
+			mOutStream << "signals:\n"
+						  "\tvoid " << getName << "Changed( " << setting->type().cppType()
+					   << " newValue );\n";
+		}
+
+		mOutStream << "\n";
 	}
+
+	mOutStream << "\n"
+				  "protected:\n"
+				  "\tvoid configChanged( const QString& subPath, const QVariant& value );\n";
 
 	mOutStream << "\n"
 				  "private:\n"

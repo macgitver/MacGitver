@@ -33,6 +33,9 @@ ConfigSetting::ConfigSetting( QDomElement el, ConfigSubSection* parent )
 	mType = el.attribute( QLatin1String( "Type" ) );
 	mSubType = el.attribute( QLatin1String( "Subtype" ), QString() );
 	mValidatorRule = el.attribute( QLatin1String( "Validate" ), QString() );
+
+	mEmitSignal = el.attribute( QLatin1String( "Notify" ), QLatin1String( "no" ) ).toLower() !=
+			QLatin1String( "no" );
 }
 
 bool ConfigSetting::isSubSectioned() const
@@ -65,6 +68,11 @@ QString ConfigSetting::fullPath() const
 		return mSubSection->fullPath() % QChar( L'/' ) % mName;
 	else
 		return mName;
+}
+
+bool ConfigSetting::emitSignal() const
+{
+	return mEmitSignal;
 }
 
 VariantType ConfigSetting::type() const

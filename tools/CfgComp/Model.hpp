@@ -33,6 +33,8 @@ public:
 	QString fullPath() const;
 	bool isSubSectioned() const;
 
+	bool emitSignal() const;
+
 	QString name() const;
 	VariantType type() const;
 
@@ -46,6 +48,7 @@ public:
 
 private:
 	ConfigSubSection*	mSubSection;
+	bool				mEmitSignal;
 	QString				mName;
 	QString				mDefaultValue;
 	QString				mType;

@@ -90,6 +90,13 @@ void WriteClassSource::generate()
 					  "\treturn sSelf->mValue" << setting->fullName() << ";\n"
 					  "}\n"
 					  "\n";
+
+		mOutStream << "void " << mSection.className() << "::set" << setting->fullName() << "( "
+				   << setting->type().cppType() << " value )\n"
+					  "{\n"
+					  "\tsSelf->configSet( \"" << setting->fullPath() << "\", value );\n"
+					  "}\n"
+					  "\n";
 	}
 
 	mOutStream << "void " << mSection.className() << "::configChanged( const QString& subPath, const QVariant& value )\n"

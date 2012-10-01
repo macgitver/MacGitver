@@ -88,7 +88,8 @@ int main( int argc, char** argv )
 
 	ConfigSection sect( doc.documentElement() );
 
-	WriteClassSource wcs( outputFileDir % sect.className() % QLatin1String( ".cpp" ), sect );
+	WriteClassSource wcs( outputFileDir % sect.className() % QLatin1String( ".cpp" ),
+						  sect.className() % QLatin1String( ".hpp" ), sect );
 	wcs.generate();
 
 	WriteClassHeader wch( outputFileDir % sect.className() % QLatin1String( ".hpp" ), sect );

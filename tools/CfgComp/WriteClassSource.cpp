@@ -16,10 +16,12 @@
 
 #include "WriteClassSource.hpp"
 
-WriteClassSource::WriteClassSource( const QString& outFile, const ConfigSection& section )
+WriteClassSource::WriteClassSource( const QString& outFile, const QString& headerName,
+									const ConfigSection& section )
 	: mOutFileName( outFile )
 	, mOutFile( outFile )
 	, mSection( section )
+	, mHeaderName( headerName )
 {
 	if( !mOutFile.open( QFile::WriteOnly ) )
 	{
@@ -31,5 +33,8 @@ WriteClassSource::WriteClassSource( const QString& outFile, const ConfigSection&
 
 void WriteClassSource::generate()
 {
+	mOutStream << "\n"
+				  "#include \"" << mHeaderName << "\"\n"
+				  "\n";
 
 }

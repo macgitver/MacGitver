@@ -31,5 +31,25 @@ WriteClassHeader::WriteClassHeader( const QString& outFile, const ConfigSection&
 
 void WriteClassHeader::generate()
 {
+	QString protector = QLatin1String( "CFGCOMP_" ) + mSection.className().toUpper() +
+			QLatin1String( "_HPP" );
 
+	mOutStream << "\n"
+				  "#ifndef " << protector << "\n"
+				  "#define " << protector << "\n"
+				  "\n"
+				  "#include <QVariant>\n"
+				  "#include <QObject>\n"
+				  "\n"
+				  "class " << mSection.className() << " : public QObject\n"
+				  "{\n"
+				  "\tQ_OBJECT\n"
+				  "public:\n"
+				  "\t" << mSection.className() << "( QObject* parent = 0 );\n";
+
+	mOutStream << "};\n";
+
+	mOutStream << "\n"
+				  "#endif\n"
+				  "\n";
 }

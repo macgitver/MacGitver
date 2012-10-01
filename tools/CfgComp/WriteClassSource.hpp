@@ -25,7 +25,8 @@
 class WriteClassSource
 {
 public:
-	WriteClassSource( const QString& outFile, const ConfigSection& section );
+	WriteClassSource( const QString& outFile, const QString& headerName,
+					  const ConfigSection& section );
 
 public:
 	void generate();
@@ -35,6 +36,7 @@ private:
 	QFile					mOutFile;
 	const ConfigSection&	mSection;
 	QTextStream				mOutStream;
+	QString					mHeaderName;
 };
 
 #endif

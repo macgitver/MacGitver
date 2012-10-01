@@ -19,6 +19,7 @@
 ConfigSetting::ConfigSetting( QDomElement el )
 {
 	mName = el.attribute( QLatin1String( "Name" ) );
+	mDefaultValue = el.attribute( QLatin1String( "Default" ), QString() );
 	mType = el.attribute( QLatin1String( "Type" ) );
 	mSubType = el.attribute( QLatin1String( "Subtype" ), QString() );
 	mValidatorRule = el.attribute( QLatin1String( "Validate" ), QString() );
@@ -49,6 +50,11 @@ QString ConfigSetting::validatorRule() const
 	return mValidatorRule;
 }
 
+QString ConfigSetting::defaultValue() const
+{
+	return mDefaultValue;
+}
+
 ConfigSection::ConfigSection( QDomElement el )
 {
 	mClassName = el.attribute( QLatin1String( "Class" ) );
@@ -66,6 +72,11 @@ ConfigSection::ConfigSection( QDomElement el )
 ConfigSection::~ConfigSection()
 {
 	qDeleteAll( mSettings );
+}
+
+QList< ConfigSetting* > ConfigSection::settings() const
+{
+	return mSettings;
 }
 
 QString ConfigSection::className() const

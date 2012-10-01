@@ -35,8 +35,11 @@ public:
 
 	QString validatorRule() const;
 
+	QString defaultValue() const;
+
 private:
 	QString			mName;
+	QString			mDefaultValue;
 	QString			mType;
 	QString			mSubType;
 	QString			mValidatorRule;
@@ -51,6 +54,8 @@ public:
 public:
 	QString className() const;
 	QString configPath() const;
+
+	QList< ConfigSetting* > settings() const;
 
 private:
 	QString					mConfigPath;

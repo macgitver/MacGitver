@@ -7,4 +7,13 @@
 				Default="0"
 	/>
 
+	<SubSection	Name="Details">
+
+		<Setting	Name="List"
+					Type="String"
+					Default="#"
+		/>
+
+	</SubSection>
+
 </CCfg>

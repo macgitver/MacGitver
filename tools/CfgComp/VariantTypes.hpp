@@ -46,6 +46,8 @@ public:
 	QString subType() const;
 	QVariant::Type typeId() const;
 
+	QString defaultCTored() const;
+
 private:
 	QString			mType;
 	QString			mSubType;

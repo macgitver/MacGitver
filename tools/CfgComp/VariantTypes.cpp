@@ -75,6 +75,43 @@ QVariant::Type VariantType::typeId() const
 	return mTypeId;
 }
 
+QString VariantType::defaultCTored() const
+{
+	switch( mTypeId )
+	{
+	case QVariant::Bool:		return QLatin1String( "false" );
+	case QVariant::Int:
+	case QVariant::UInt:		return QLatin1String( "0" );
+	case QVariant::LongLong:
+	case QVariant::ULongLong:	return QLatin1String( "0LL" );
+	case QVariant::Double:		return QLatin1String( "0.0" );
+	case QVariant::Char:		return QLatin1String( "'\\0'" );
+
+	case QVariant::Map:
+	case QVariant::List:
+	case QVariant::String:
+	case QVariant::StringList:
+	case QVariant::ByteArray:
+	case QVariant::BitArray:
+	case QVariant::Date:
+	case QVariant::Time:
+	case QVariant::DateTime:
+	case QVariant::Url:
+	case QVariant::Locale:
+	case QVariant::Rect:
+	case QVariant::RectF:
+	case QVariant::Size:
+	case QVariant::SizeF:
+	case QVariant::Line:
+	case QVariant::LineF:
+	case QVariant::Point:
+	case QVariant::PointF:
+	case QVariant::RegExp:
+	case QVariant::Hash:		return mCppType + QLatin1String( "()" );
+	default:					return QLatin1String( "/* UNSUPPORTED */" );
+	}
+}
+
 VariantTypes::VariantTypes()
 {
 	mTypes.append( VariantType( QLatin1String( "String" ),
@@ -86,7 +123,7 @@ VariantTypes::VariantTypes()
 								QLatin1String( "qint32" ) ) );
 
 	mTypes.append( VariantType( QLatin1String( "UInt" ),
-								QVariant::Int,
+								QVariant::UInt,
 								QLatin1String( "quint32" ) ) );
 }
 

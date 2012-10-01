@@ -55,14 +55,16 @@ void WriteClassHeader::generate()
 				  "\n"
 				  "public:\n";
 
-	foreach( ConfigSetting* setting, mSection.settings() )
+	foreach( ConfigSetting* setting, mSection.allSettings() )
 	{
-		QString getName = setting->name();
+		QString getName = setting->fullName();
 		getName[ 0 ] = getName[ 0 ].toLower();
 
-		mOutStream << "\tstatic " << setting->type().cppType() << " " << getName << "();\n"
-					  "\tstatic void set" << setting->name() << "( " << setting->type().cppType()
-				   << " value );\n";
+		mOutStream << "\t\t// " << mSection.configPath() << "/" << setting->fullPath() << "\n"
+					  "\tstatic " << setting->type().cppType() << " " << getName << "();\n"
+					  "\tstatic void set" << setting->fullName() << "( " << setting->type().cppType()
+				   << " value );\n"
+					  "\n";
 
 	}
 
@@ -70,9 +72,9 @@ void WriteClassHeader::generate()
 				  "private:\n"
 				  "\tstatic " << mSection.className() << "* sSelf;\n\n";
 
-	foreach( ConfigSetting* setting, mSection.settings() )
+	foreach( ConfigSetting* setting, mSection.allSettings() )
 	{
-		mOutStream << "\t" << setting->type().cppType() << " mValue" << setting->name() << ";\n";
+		mOutStream << "\t" << setting->type().cppType() << " mValue" << setting->fullName() << ";\n";
 	}
 
 	mOutStream << "};\n";

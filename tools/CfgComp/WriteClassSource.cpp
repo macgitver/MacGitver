@@ -69,11 +69,26 @@ void WriteClassSource::generate()
 				  "void " << mSection.className() << "::read()\n"
 				  "{\n";
 
-	foreach( ConfigSetting* setting, mSection.settings() )
+	foreach( ConfigSetting* setting, mSection.allSettings() )
 	{
-		mOutStream << "\tmValue" << setting->name() << " = configGet< " << setting->type().cppType() << " >( \"" << setting->name() << "\", " << setting->defaultInitializer() << " );\n";
+		mOutStream << "\tmValue" << setting->fullName() << " = configGet< " <<
+					  setting->type().cppType() << " >( \"" << setting->fullPath() << "\", "
+				   << setting->defaultInitializer() << " );\n";
 	}
 
 	mOutStream << "}\n"
 				  "\n";
+
+	foreach( ConfigSetting* setting, mSection.allSettings() )
+	{
+		QString getName = setting->fullName();
+		getName[ 0 ] = getName[ 0 ].toLower();
+
+		mOutStream << setting->type().cppType() << " " << mSection.className() << "::" << getName << "()\n"
+					  "{\n"
+					  "\tQ_ASSERT( sSelf != NULL );\n"
+					  "\treturn sSelf->mValue" << setting->fullName() << ";\n"
+					  "}\n"
+					  "\n";
+	}
 }

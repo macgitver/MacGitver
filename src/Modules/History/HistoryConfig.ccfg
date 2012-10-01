@@ -12,6 +12,7 @@
 		<Setting	Name="List"
 					Type="String"
 					Default="#"
+					Notify="yes"
 		/>
 
 	</SubSection>

@@ -41,11 +41,24 @@ void WriteClassHeader::generate()
 				  "#include <QVariant>\n"
 				  "#include <QObject>\n"
 				  "\n"
-				  "class " << mSection.className() << " : public QObject\n"
+				  "#include \"Config/ConfigUser.h\"\n"
+				  "\n"
+				  "class " << mSection.className() << " : public QObject, private ConfigUser\n"
 				  "{\n"
 				  "\tQ_OBJECT\n"
 				  "public:\n"
-				  "\t" << mSection.className() << "( QObject* parent = 0 );\n";
+				  "\t" << mSection.className() << "( QObject* parent = 0 );\n"
+				  "\n"
+				  "private:\n"
+				  "\tvoid read();\n";
+
+	mOutStream << "\n"
+				  "private:\n";
+
+	foreach( ConfigSetting* setting, mSection.settings() )
+	{
+		mOutStream << "\t" << setting->type().cppType() << " mValue" << setting->name() << ";\n";
+	}
 
 	mOutStream << "};\n";
 

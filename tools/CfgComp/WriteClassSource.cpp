@@ -16,6 +16,11 @@
 
 #include "WriteClassSource.hpp"
 
+QString utf8Encoded( QString str )
+{
+	return str;
+}
+
 WriteClassSource::WriteClassSource( const QString& outFile, const QString& headerName,
 									const ConfigSection& section )
 	: mOutFileName( outFile )
@@ -35,6 +40,43 @@ void WriteClassSource::generate()
 {
 	mOutStream << "\n"
 				  "#include \"" << mHeaderName << "\"\n"
-				  "\n";
+				  "\n"
+			   << mSection.className() << "::" << mSection.className() << "( QObject* parent )\n"
+				  "\t: QObject( parent )\n"
+				  "\t, ConfigUser( \"" << mSection.configPath() << "\" )\n";
 
+	foreach( ConfigSetting* setting, mSection.settings() )
+	{
+		QString defaultValue = setting->defaultValue();
+		if( defaultValue.isEmpty() )
+		{
+			continue;
+		}
+
+		mOutStream << "\t, mValue" << setting->name() << "( ";
+		if( setting->typeName() == QLatin1String( "String" ) )
+		{
+			mOutStream << "QString::fromUtf8( \"" << utf8Encoded( defaultValue ) << "\" )";
+		}
+		else
+		{
+			mOutStream << defaultValue;
+		}
+		mOutStream << " )\n";
+	}
+
+	mOutStream << "{\n"
+				  "\tread();\n"
+				  "}\n"
+				  "\n"
+				  "void " << mSection.className() << "::read()\n"
+				  "{\n";
+
+	foreach( ConfigSetting* setting, mSection.settings() )
+	{
+
+	}
+
+	mOutStream << "}\n"
+				  "\n";
 }

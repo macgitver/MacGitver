@@ -14,7 +14,14 @@
  *
  */
 
+#include <QStringBuilder>
+
 #include "Model.hpp"
+
+QString utf8Encoded( QString str )
+{
+	return str;
+}
 
 ConfigSetting::ConfigSetting( QDomElement el )
 {
@@ -53,6 +60,20 @@ QString ConfigSetting::validatorRule() const
 QString ConfigSetting::defaultValue() const
 {
 	return mDefaultValue;
+}
+
+QString ConfigSetting::defaultInitializer() const
+{
+	if( mType == QLatin1String( "String" ) )
+	{
+		return QLatin1String( "QString::fromUtf8( \"" )
+				% utf8Encoded( mDefaultValue )
+				% QLatin1String( "\" )" );
+	}
+	else
+	{
+		return mDefaultValue;
+	}
 }
 
 ConfigSection::ConfigSection( QDomElement el )

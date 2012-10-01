@@ -36,6 +36,7 @@ public:
 	QString validatorRule() const;
 
 	QString defaultValue() const;
+	QString defaultInitializer() const;
 
 private:
 	QString			mName;

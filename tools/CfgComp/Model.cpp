@@ -14,6 +14,7 @@
  *
  */
 
+#include <QDebug>
 #include <QStringBuilder>
 
 #include "Model.hpp"
@@ -23,8 +24,10 @@ QString utf8Encoded( QString str )
 	return str;
 }
 
-ConfigSetting::ConfigSetting( QDomElement el )
+ConfigSetting::ConfigSetting( QDomElement el, ConfigSubSection* parent )
 {
+	mSubSection = parent;
+
 	mName = el.attribute( QLatin1String( "Name" ) );
 	mDefaultValue = el.attribute( QLatin1String( "Default" ), QString() );
 	mType = el.attribute( QLatin1String( "Type" ) );
@@ -32,9 +35,36 @@ ConfigSetting::ConfigSetting( QDomElement el )
 	mValidatorRule = el.attribute( QLatin1String( "Validate" ), QString() );
 }
 
+bool ConfigSetting::isSubSectioned() const
+{
+	return mSubSection != NULL;
+}
+
 QString ConfigSetting::name() const
 {
 	return mName;
+}
+
+QString ConfigSetting::fullName() const
+{
+	QString fn;
+
+	if( mSubSection )
+		fn = mSubSection->fullName() % mName;
+	else
+		fn = mName;
+
+	//qDebug() << "CS::fn => " << fn;
+
+	return fn;
+}
+
+QString ConfigSetting::fullPath() const
+{
+	if( mSubSection )
+		return mSubSection->fullPath() % QChar( L'/' ) % mName;
+	else
+		return mName;
 }
 
 VariantType ConfigSetting::type() const
@@ -70,11 +100,90 @@ QString ConfigSetting::defaultInitializer() const
 				% utf8Encoded( mDefaultValue )
 				% QLatin1String( "\" )" );
 	}
+	else if( mDefaultValue.isEmpty() )
+	{
+		return type().defaultCTored();
+	}
 	else
 	{
 		return mDefaultValue;
 	}
 }
+
+ConfigSubSection::ConfigSubSection( QDomElement el, ConfigSubSection* parent )
+{
+	mParent = parent;
+	mName = el.attribute( QLatin1String( "Name" ), QString() );
+
+	//qDebug() << "Subsection:" << mName;
+
+	QDomElement elChild = el.firstChildElement();
+	while( elChild.isElement() )
+	{
+		if( elChild.tagName() == QLatin1String( "Setting" ) )
+		{
+			mSettings.append( new ConfigSetting( elChild, this ) );
+		}
+		else if( elChild.tagName() == QLatin1String( "SubSection" ) )
+		{
+			mSections.append( new ConfigSubSection( elChild, this ) );
+		}
+		elChild = elChild.nextSiblingElement();
+	}
+}
+
+ConfigSubSection::~ConfigSubSection()
+{
+	qDeleteAll( mSections );
+	qDeleteAll( mSettings );
+}
+
+QList< ConfigSubSection* > ConfigSubSection::sections() const
+{
+	return mSections;
+}
+
+QList< ConfigSetting* > ConfigSubSection::settings() const
+{
+	return mSettings;
+}
+
+QString ConfigSubSection::name() const
+{
+	return mName;
+}
+
+QString ConfigSubSection::fullName() const
+{
+	QString fn;
+	if( mParent )
+		fn = mParent->fullName() % mName;
+	else
+		fn = mName;
+
+	//qDebug() << "CSS::fn = " << fn;
+
+	return fn;
+}
+
+QString ConfigSubSection::fullPath() const
+{
+	if( mParent )
+		return mParent->fullName() % QChar( L'/' ) % mName;
+	else
+		return mName;
+}
+
+void ConfigSubSection::addAllSettings( QList< ConfigSetting* >& settings) const
+{
+	settings += mSettings;
+
+	foreach( ConfigSubSection* sub, mSections )
+	{
+		sub->addAllSettings( settings );
+	}
+}
+
 
 ConfigSection::ConfigSection( QDomElement el )
 {
@@ -84,7 +193,14 @@ ConfigSection::ConfigSection( QDomElement el )
 	QDomElement elChild = el.firstChildElement();
 	while( elChild.isElement() )
 	{
-		mSettings.append( new ConfigSetting( elChild ) );
+		if( elChild.tagName() == QLatin1String( "Setting" ) )
+		{
+			mSettings.append( new ConfigSetting( elChild ) );
+		}
+		else if( elChild.tagName() == QLatin1String( "SubSection" ) )
+		{
+			mSections.append( new ConfigSubSection( elChild ) );
+		}
 		elChild = elChild.nextSiblingElement();
 	}
 
@@ -92,12 +208,30 @@ ConfigSection::ConfigSection( QDomElement el )
 
 ConfigSection::~ConfigSection()
 {
+	qDeleteAll( mSections );
 	qDeleteAll( mSettings );
+}
+
+QList< ConfigSubSection* > ConfigSection::sections() const
+{
+	return mSections;
 }
 
 QList< ConfigSetting* > ConfigSection::settings() const
 {
 	return mSettings;
+}
+
+QList< ConfigSetting* > ConfigSection::allSettings() const
+{
+	QList< ConfigSetting* > settings = mSettings;
+
+	foreach( ConfigSubSection* sub, mSections )
+	{
+		sub->addAllSettings( settings );
+	}
+
+	return settings;
 }
 
 QString ConfigSection::className() const

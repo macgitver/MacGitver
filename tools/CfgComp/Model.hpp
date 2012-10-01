@@ -21,12 +21,18 @@
 
 #include "VariantTypes.hpp"
 
+class ConfigSubSection;
+
 class ConfigSetting
 {
 public:
-	ConfigSetting( QDomElement el );
+	ConfigSetting( QDomElement el, ConfigSubSection* parentSection = NULL );
 
 public:
+	QString fullName() const;
+	QString fullPath() const;
+	bool isSubSectioned() const;
+
 	QString name() const;
 	VariantType type() const;
 
@@ -39,11 +45,35 @@ public:
 	QString defaultInitializer() const;
 
 private:
-	QString			mName;
-	QString			mDefaultValue;
-	QString			mType;
-	QString			mSubType;
-	QString			mValidatorRule;
+	ConfigSubSection*	mSubSection;
+	QString				mName;
+	QString				mDefaultValue;
+	QString				mType;
+	QString				mSubType;
+	QString				mValidatorRule;
+};
+
+class ConfigSubSection
+{
+public:
+	ConfigSubSection( QDomElement el, ConfigSubSection* parent = NULL );
+	~ConfigSubSection();
+
+public:
+	QList< ConfigSubSection* > sections() const;
+	QList< ConfigSetting* > settings() const;
+
+	QString name() const;
+	QString fullPath() const;
+	QString fullName() const;
+
+	void addAllSettings( QList< ConfigSetting* >& settings) const;
+
+private:
+	QString						mName;
+	ConfigSubSection*			mParent;
+	QList< ConfigSubSection* >	mSections;
+	QList< ConfigSetting* >		mSettings;
 };
 
 class ConfigSection
@@ -56,12 +86,15 @@ public:
 	QString className() const;
 	QString configPath() const;
 
+	QList< ConfigSetting* > allSettings() const;
 	QList< ConfigSetting* > settings() const;
+	QList< ConfigSubSection* > sections() const;
 
 private:
-	QString					mConfigPath;
-	QString					mClassName;
-	QList< ConfigSetting* >	mSettings;
+	QString						mConfigPath;
+	QString						mClassName;
+	QList< ConfigSubSection* >	mSections;
+	QList< ConfigSetting* >		mSettings;
 };
 
 #endif

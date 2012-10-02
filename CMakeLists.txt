@@ -6,7 +6,6 @@ INCLUDE( cmake/Utils.cmake )		# Tools for cmake
 SET_OUTPUT_PATHS()
 INCLUDE( cmake/QtMacros.cmake )		# Our own set of Qt Macros
 INCLUDE( cmake/hic.cmake )			# Our HI-Compiler
-INCLUDE( cmake/LibGit2.cmake )		# Our LibGit2 integration
 
 IF( UNIX )
 	GCC_ADD_FLAG( "-Wall" )
@@ -15,6 +14,8 @@ ENDIF()
 
 # Tools required to build MacGitver
 ADD_SUBDIRECTORY( tools )
+
+ADD_SUBDIRECTORY( 3rd )
 
 # MacGitver itself
 ADD_SUBDIRECTORY( src )

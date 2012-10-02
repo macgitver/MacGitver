@@ -1,3 +1,6 @@
-[submodule "libgit2"]
-	path = libgit2
-	url = https://github.com/scunz/libgit2
+[submodule "3rd/libgit2"]
+	path = 3rd/libgit2
+	url = git@github.com:/scunz/libgit2.git
+[submodule "3rd/libHeaven"]
+	path = 3rd/libHeaven
+	url = git@github.com:/macgitver/libHeaven.git

@@ -26,10 +26,10 @@ class QLabel;
 
 #include "Config/UserLevelDefinition.h"
 
-#include "Heaven/Views/TopLevelWidget.h"
-#include "Heaven/Views/MainWindow.h"
+#include "libHeaven/Views/TopLevelWidget.h"
+#include "libHeaven/Views/MainWindow.h"
 
-#include "Heaven/Widgets/ModeSwitchWidget.h"
+#include "libHeaven/Widgets/ModeSwitchWidget.h"
 
 #include "Interfaces/IMainWindow.h"
 

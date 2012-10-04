@@ -19,7 +19,7 @@
 
 #include <QHash>
 
-#include "Heaven/Views/GlobalView.h"
+#include "libHeaven/Views/GlobalView.h"
 
 #include "libGitWrap/Repository.h"
 

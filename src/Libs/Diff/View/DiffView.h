@@ -24,7 +24,7 @@ class QStackedWidget;
 class QTextBrowser;
 class QScrollBar;
 
-#include "Heaven/Views/View.h"
+#include "libHeaven/Views/View.h"
 
 #include "Diff/View/DiffViewApi.h"
 

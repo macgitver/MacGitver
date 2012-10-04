@@ -24,8 +24,8 @@ class QSplitter;
 #include "libGitWrap/GitWrap.h"
 #include "libGitWrap/Repository.h"
 
-#include "Heaven/Views/View.h"
-#include "Heaven/Widgets/MiniSplitter.h"
+#include "libHeaven/Views/View.h"
+#include "libHeaven/Widgets/MiniSplitter.h"
 
 class DiffRawView;
 

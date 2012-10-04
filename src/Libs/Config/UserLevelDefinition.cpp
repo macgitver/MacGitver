@@ -22,8 +22,8 @@
 
 #include "UserLevelDefinition.h"
 
-#include "Heaven/Views/Mode.h"
-#include "Heaven/Views/ViewContainer.h"
+#include "libHeaven/Views/Mode.h"
+#include "libHeaven/Views/ViewContainer.h"
 
 EnableDisable::EnableDisable()
 {

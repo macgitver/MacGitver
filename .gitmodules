@@ -1,3 +1,6 @@
 [submodule "3rd/libHeaven"]
 	path = 3rd/libHeaven
 	url = git@github.com:/macgitver/libHeaven.git
+[submodule "3rd/libGitWrap"]
+	path = 3rd/libGitWrap
+	url = git@github.com:/macgitver/libGitWrap.git

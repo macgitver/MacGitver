@@ -164,25 +164,25 @@ void HistoryView::initSplitters()
 	mDetails->hide();
 	mDetails->setParent( NULL );
 
-	int i = configGet( "SplitLayout", 1 );
+	int i = configGet( "SplitLayout", 0 );
 	switch( i )
 	{
 	default:
-	case 1:
+	case 0:
 		mHorzSplit->addWidget( mDetails );
 		mHorzSplit->addWidget( mDiff );
 		mVertSplit->addWidget( mList );
 		mVertSplit->addWidget( mHorzSplit );
 		layout()->addWidget( mVertSplit );
 		break;
-	case 2:
+	case 1:
 		mVertSplit->addWidget( mDetails );
 		mVertSplit->addWidget( mDiff );
 		mHorzSplit->addWidget( mList );
 		mHorzSplit->addWidget( mVertSplit );
 		layout()->addWidget( mHorzSplit );
 		break;
-	case 3:
+	case 2:
 		mVertSplit->addWidget( mList );
 		mVertSplit->addWidget( mDetails );
 		mHorzSplit->addWidget( mVertSplit );

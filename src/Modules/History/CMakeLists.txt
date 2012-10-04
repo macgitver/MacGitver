@@ -47,6 +47,7 @@ SET( HID_FILES
 	HistoryViewActions.hid
 )
 
+CFGCOMP( CFG_FILES HistoryConfig.ccfg )
 QT_MOC( MOC_FILES ${HDR_FILES} )
 QT_UIC( UIC_FILES ${UI_FILES} )
 HIC( HIC_FILES ${HID_FILES} )
@@ -59,6 +60,7 @@ ADD_MGV_MODULE(
 	${MOC_FILES}
 	${UIC_FILES}
 	${HIC_FILES}
+	${CFG_FILES}
 )
 
 TARGET_LINK_LIBRARIES( ModHistory DiffRawView )

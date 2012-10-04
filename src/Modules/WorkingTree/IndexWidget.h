@@ -21,8 +21,8 @@
 
 class QSplitter;
 
-#include "GitWrap/GitWrap.h"
-#include "GitWrap/Repository.h"
+#include "libGitWrap/GitWrap.h"
+#include "libGitWrap/Repository.h"
 
 #include "Heaven/Views/View.h"
 #include "Heaven/Widgets/MiniSplitter.h"

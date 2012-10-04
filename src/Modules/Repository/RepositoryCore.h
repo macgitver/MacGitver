@@ -19,7 +19,7 @@
 
 #include "Interfaces/IRepositoryCore.h"
 
-#include "GitWrap/Repository.h"
+#include "libGitWrap/Repository.h"
 
 class RepositoryCore : public IRepository
 {

@@ -19,8 +19,8 @@
 
 class QToolBar;
 
-#include "GitWrap/GitWrap.h"
-#include "GitWrap/Repository.h"
+#include "libGitWrap/GitWrap.h"
+#include "libGitWrap/Repository.h"
 
 #include "Config/ConfigUser.h"
 

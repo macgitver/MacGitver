@@ -18,8 +18,8 @@
 
 #include "Config/Config.h"
 
-#include "GitWrap/ObjectCommit.h"
-#include "GitWrap/Result.h"
+#include "libGitWrap/ObjectCommit.h"
+#include "libGitWrap/Result.h"
 
 #include "MacGitver/MacGitver.h"
 

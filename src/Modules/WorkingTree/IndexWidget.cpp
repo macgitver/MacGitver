@@ -19,8 +19,8 @@
 #include <QSplitter>
 #include <QVBoxLayout>
 
-#include "GitWrap/Index.h"
-#include "GitWrap/DiffList.h"
+#include "libGitWrap/Index.h"
+#include "libGitWrap/DiffList.h"
 
 #include "Diff/Model/GitPatchConsumer.h"
 #include "Diff/Model/Patch.h"

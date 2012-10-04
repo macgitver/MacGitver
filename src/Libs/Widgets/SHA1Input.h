@@ -19,7 +19,7 @@
 
 #include "Widgets/LineEdit.h"
 
-#include "GitWrap/ObjectId.h"
+#include "libGitWrap/ObjectId.h"
 
 class WIDGETS_API SHA1Input : public LineEdit
 {

@@ -23,7 +23,7 @@
 #include <QToolBar>
 #include <QTreeView>
 
-#include "GitWrap/ObjectId.h"
+#include "libGitWrap/ObjectId.h"
 
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/FSWatcher.h"

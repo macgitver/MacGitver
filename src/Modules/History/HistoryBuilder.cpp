@@ -18,9 +18,9 @@
 
 #include "MacGitver/MacGitver.h"
 
-#include "GitWrap/ObjectId.h"
-#include "GitWrap/Reference.h"
-#include "GitWrap/Result.h"
+#include "libGitWrap/ObjectId.h"
+#include "libGitWrap/Reference.h"
+#include "libGitWrap/Result.h"
 
 #include "HistoryBuilder.h"
 #include "HistoryEntry.h"

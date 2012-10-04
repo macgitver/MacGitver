@@ -17,8 +17,8 @@
 #ifndef HISTORY_DETAILS_H
 #define HISTORY_DETAILS_H
 
-#include "GitWrap/ObjectId.h"
-#include "GitWrap/Repository.h"
+#include "libGitWrap/ObjectId.h"
+#include "libGitWrap/Repository.h"
 
 #include <QAbstractScrollArea>
 

@@ -23,11 +23,11 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-#include "GitWrap/Result.h"
-#include "GitWrap/Index.h"
-#include "GitWrap/Reference.h"
-#include "GitWrap/ObjectTree.h"
-#include "GitWrap/DiffList.h"
+#include "libGitWrap/Result.h"
+#include "libGitWrap/Index.h"
+#include "libGitWrap/Reference.h"
+#include "libGitWrap/ObjectTree.h"
+#include "libGitWrap/DiffList.h"
 
 #include "Diff/Model/GitPatchConsumer.h"
 #include "Diff/RawView/DiffRawView.h"

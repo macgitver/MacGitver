@@ -20,8 +20,8 @@
 #include <QAction>
 #include <QToolBar>
 
-#include "GitWrap/Reference.h"
-#include "GitWrap/ObjectCommit.h"
+#include "libGitWrap/Reference.h"
+#include "libGitWrap/ObjectCommit.h"
 
 #include "Diff/RawView/DiffRawView.h"
 

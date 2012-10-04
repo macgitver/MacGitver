@@ -21,8 +21,8 @@
 
 #include "Interfaces/ILog.h"
 
-#include "GitWrap/Repository.h"
-#include "GitWrap/Result.h"
+#include "libGitWrap/Repository.h"
+#include "libGitWrap/Result.h"
 
 #include "Heaven/Views/View.h"
 

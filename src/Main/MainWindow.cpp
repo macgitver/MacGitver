@@ -27,8 +27,8 @@
 
 #include "Config/Config.h"
 
-#include "GitWrap/ObjectId.h"
-#include "GitWrap/Reference.h"
+#include "libGitWrap/ObjectId.h"
+#include "libGitWrap/Reference.h"
 
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"

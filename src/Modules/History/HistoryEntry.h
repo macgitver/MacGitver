@@ -17,9 +17,9 @@
 #ifndef HISTORY_ENTRY_H
 #define HISTORY_ENTRY_H
 
-#include "GitWrap/Signature.h"
-#include "GitWrap/ObjectId.h"
-#include "GitWrap/ObjectCommit.h"
+#include "libGitWrap/Signature.h"
+#include "libGitWrap/ObjectId.h"
+#include "libGitWrap/ObjectCommit.h"
 
 enum GraphGlyphs
 {

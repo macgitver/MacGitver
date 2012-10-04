@@ -19,7 +19,7 @@
 
 #include <QDialog>
 
-#include "GitWrap/Repository.h"
+#include "libGitWrap/Repository.h"
 
 #include "ui_GitConfigDialog.h"
 

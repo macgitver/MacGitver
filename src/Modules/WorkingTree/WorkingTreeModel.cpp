@@ -17,7 +17,7 @@
 #include <QFileIconProvider>
 #include <QFileInfo>
 
-#include "GitWrap/Result.h"
+#include "libGitWrap/Result.h"
 
 #include "WorkingTreeModel.h"
 #include "WorkingTreeAbstractItem.h"

@@ -17,7 +17,7 @@
 #ifndef MGV_REMOTES_VIEW_CONTEXT_H
 #define MGV_REMOTES_VIEW_CONTEXT_H
 
-#include "GitWrap/Repository.h"
+#include "libGitWrap/Repository.h"
 
 #include "Heaven/Views/ViewContext.h"
 

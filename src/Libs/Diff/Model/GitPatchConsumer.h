@@ -19,7 +19,7 @@
 
 #include "Diff/Model/DiffModelApi.h"
 
-#include "GitWrap/PatchConsumer.h"
+#include "libGitWrap/PatchConsumer.h"
 
 #include "Diff/Model/Patch.h"
 #include "Diff/Model/PatchFile.h"

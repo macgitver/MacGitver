@@ -20,7 +20,7 @@
 #include <QList>
 #include <QAbstractTableModel>
 
-#include "GitWrap/Repository.h"
+#include "libGitWrap/Repository.h"
 
 class HistoryEntry;
 class HistoryBuilder;

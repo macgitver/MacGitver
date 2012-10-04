@@ -21,7 +21,7 @@
 
 #include <QAbstractItemModel>
 
-#include "GitWrap/ObjectCommit.h"
+#include "libGitWrap/ObjectCommit.h"
 
 class WIDGETS_API ShortCommitModel : public QAbstractTableModel
 {

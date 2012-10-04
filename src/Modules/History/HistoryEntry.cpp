@@ -14,7 +14,7 @@
  *
  */
 
-#include "GitWrap/Result.h"
+#include "libGitWrap/Result.h"
 
 #include "MacGitver/MacGitver.h"
 

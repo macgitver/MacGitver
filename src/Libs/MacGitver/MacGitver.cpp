@@ -14,7 +14,7 @@
  *
  */
 
-#include "GitWrap/GitWrap.h"
+#include "libGitWrap/GitWrap.h"
 
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"

@@ -19,7 +19,7 @@
 
 #include <QObject>
 
-#include "GitWrap/Repository.h"
+#include "libGitWrap/Repository.h"
 
 #include "Interfaces/IModule.h"
 #include "Interfaces/IMainWindow.h"

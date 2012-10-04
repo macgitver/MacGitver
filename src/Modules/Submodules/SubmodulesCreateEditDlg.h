@@ -17,7 +17,7 @@
 #ifndef MGV_SUBMODULES_CREATE_EDIT_DLG_H
 #define MGV_SUBMODULES_CREATE_EDIT_DLG_H
 
-#include "GitWrap/Submodule.h"
+#include "libGitWrap/Submodule.h"
 
 #include "ui_SubmodulesCreateEditDlg.h"
 

@@ -20,8 +20,8 @@
 
 #include "Config/Config.h"
 
-#include "GitWrap/GitWrap.h"
-#include "GitWrap/BackgroundClone.h"
+#include "libGitWrap/GitWrap.h"
+#include "libGitWrap/BackgroundClone.h"
 
 #include "CloneRepositoryDlg.h"
 

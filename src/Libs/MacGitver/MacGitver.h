@@ -24,7 +24,7 @@
 #include "libGitWrap/Repository.h"
 #include "libGitWrap/Result.h"
 
-#include "Heaven/Views/View.h"
+#include "libHeaven/Views/View.h"
 
 #include "MacGitver/MacGitverApi.h"
 

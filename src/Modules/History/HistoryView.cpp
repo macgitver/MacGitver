@@ -25,7 +25,7 @@
 
 #include "Diff/RawView/DiffRawView.h"
 
-#include "Heaven/Widgets/MiniSplitter.h"
+#include "libHeaven/Widgets/MiniSplitter.h"
 
 #include "MacGitver/MacGitver.h"
 

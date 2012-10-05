@@ -24,35 +24,35 @@
 
 namespace Ui
 {
-	class GeneralConfigPage;
+    class GeneralConfigPage;
 }
 
 class GeneralConfigPage : public QWidget, public IConfigPage
 {
-	Q_OBJECT
-	Q_INTERFACES( IConfigPage )
+    Q_OBJECT
+    Q_INTERFACES( IConfigPage )
 public:
-	GeneralConfigPage( IConfigDialog* dlg );
-	~GeneralConfigPage();
+    GeneralConfigPage( IConfigDialog* dlg );
+    ~GeneralConfigPage();
 
 public:
-	void apply();
-	void init();
+    void apply();
+    void init();
 
-	QByteArray pageId() const;
-	QByteArray groupId() const;
+    QByteArray pageId() const;
+    QByteArray groupId() const;
 
-	QString pageName() const;
-	QString groupName() const;
+    QString pageName() const;
+    QString groupName() const;
 
-	QWidget* widget();
+    QWidget* widget();
 
 private slots:
-	void onFontChanged();
-	void onUserLevelChanged( int index );
+    void onFontChanged();
+    void onUserLevelChanged( int index );
 
 private:
-	Ui::GeneralConfigPage*		ui;
+    Ui::GeneralConfigPage* ui;
 };
 
 #endif

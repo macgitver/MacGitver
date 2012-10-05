@@ -37,44 +37,44 @@ class QLabel;
 
 class MainWindow : public Heaven::MainWindow, public IMainWindow, private MainWindowActions
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	MainWindow();
-	~MainWindow();
+    MainWindow();
+    ~MainWindow();
 
 private:
-	void setupUi();
+    void setupUi();
 
 public:
-	void setHeadLabel();
+    void setHeadLabel();
 
 public slots:
-	void repositoryChanged( const Git::Repository& repo );
+    void repositoryChanged( const Git::Repository& repo );
 
 private slots:
-	void onHelpAbout();
-	void onToolsPreferences();
-	void setupFonts();
+    void onHelpAbout();
+    void onToolsPreferences();
+    void setupFonts();
 
 public:
-	void integrateView( Heaven::View* view, Heaven::Positions position );
-	void activateMode( const QString& modeName );
-	void activateLevel( UserLevelDefinition::Ptr uld );
-	QWidget* widget();
-	void addError( const QString& err );
+    void integrateView( Heaven::View* view, Heaven::Positions position );
+    void activateMode( const QString& modeName );
+    void activateLevel( UserLevelDefinition::Ptr uld );
+    QWidget* widget();
+    void addError( const QString& err );
 
 private:
-	void moveToCenter();
-	void activateModeForRepo();
-	void createPartialLayout( Heaven::ViewContainer* parent,
-							  UserLevelDefaultLayoutEntry::Ptr entry );
+    void moveToCenter();
+    void activateModeForRepo();
+    void createPartialLayout( Heaven::ViewContainer* parent,
+                              UserLevelDefaultLayoutEntry::Ptr entry );
 
 private:
-	QLabel*						mLblCurrentBranch;
-	Heaven::TopLevelWidget*		mTop;
-	Heaven::ModeSwitchWidget*	mModes;
-	UserLevelDefinition::Ptr	mCurrentLevel;
-	Git::Repository				mRepo;
+    QLabel*                     mLblCurrentBranch;
+    Heaven::TopLevelWidget*     mTop;
+    Heaven::ModeSwitchWidget*   mModes;
+    UserLevelDefinition::Ptr    mCurrentLevel;
+    Git::Repository             mRepo;
 };
 
 #endif

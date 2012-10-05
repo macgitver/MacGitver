@@ -3,15 +3,15 @@ PROJECT( MGV_LIBS )
 
 MACRO( INSTALL_MGV_LIB _Name )
 
-	IF( UNIX )
+    IF( UNIX )
 
-		INSTALL(
-			TARGETS		${_Name}
-			RUNTIME		DESTINATION bin/macgitver/lib
-			LIBRARY		DESTINATION bin/macgitver/lib
-		)
+        INSTALL(
+            TARGETS		${_Name}
+            RUNTIME		DESTINATION bin/macgitver/lib
+            LIBRARY		DESTINATION bin/macgitver/lib
+        )
 
-	ENDIF()
+    ENDIF()
 
 ENDMACRO()
 

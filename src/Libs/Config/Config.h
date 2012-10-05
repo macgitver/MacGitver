@@ -31,52 +31,52 @@ class ConfigUser;
 
 class CONFIG_API Config : public QObject
 {
-	Q_OBJECT
-	friend class ConfigUser;
+    Q_OBJECT
+    friend class ConfigUser;
 
 public:
-	static Config& self();
+    static Config& self();
 
 public:
-	void loadSettings();
-	void saveSettings();
+    void loadSettings();
+    void saveSettings();
 
-	void loadLevels( const QString& fileName );
-	QList< UserLevelDefinition::Ptr > levels() const;
+    void loadLevels( const QString& fileName );
+    QList< UserLevelDefinition::Ptr > levels() const;
 
-	QVariant get( const char* szPath, const char* szDefaultValue ) const;
-	QVariant get( const char* szPath, const QVariant& defaultValue = QVariant() ) const;
-	QVariant get( const QString& path, const QVariant& defaultValue = QVariant() ) const;
-	void set( const char* pszPath, const QVariant& value );
-	void set( const QString& path, const QVariant& value );
+    QVariant get( const char* szPath, const char* szDefaultValue ) const;
+    QVariant get( const char* szPath, const QVariant& defaultValue = QVariant() ) const;
+    QVariant get( const QString& path, const QVariant& defaultValue = QVariant() ) const;
+    void set( const char* pszPath, const QVariant& value );
+    void set( const QString& path, const QVariant& value );
 
-	static QFont defaultFont();
-	static QFont defaultDialogFont();
-	static QFont defaultFixedFont();
+    static QFont defaultFont();
+    static QFont defaultDialogFont();
+    static QFont defaultFixedFont();
 
-	void setDefaultFont( const QFont& font );
-	void setDefaultDialogFont( const QFont& font );
-	void setDefaultFixedFont( const QFont& font );
+    void setDefaultFont( const QFont& font );
+    void setDefaultDialogFont( const QFont& font );
+    void setDefaultFixedFont( const QFont& font );
 
 signals:
-	void fontsChanged();
+    void fontsChanged();
 
 private:
-	void addUserLevel( UserLevelDefinition::Ptr level );
+    void addUserLevel( UserLevelDefinition::Ptr level );
 
-	void addConfigUser( ConfigUser* user );
-	void delConfigUser( ConfigUser* user );
+    void addConfigUser( ConfigUser* user );
+    void delConfigUser( ConfigUser* user );
 
 private:
-	static Config* sSelf;
-	Config();
-	~Config();
-	QList< UserLevelDefinition::Ptr >	mLevels;
-	QSet< ConfigUser* >					mConfigUsers;
-	QSettings*							mSettings;
-	QFont								mDefaultFont;
-	QFont								mDefaultDialogFont;
-	QFont								mDefaultFixedFont;
+    static Config* sSelf;
+    Config();
+    ~Config();
+    QList< UserLevelDefinition::Ptr >   mLevels;
+    QSet< ConfigUser* >                 mConfigUsers;
+    QSettings*                          mSettings;
+    QFont                               mDefaultFont;
+    QFont                               mDefaultDialogFont;
+    QFont                               mDefaultFixedFont;
 };
 
 #endif

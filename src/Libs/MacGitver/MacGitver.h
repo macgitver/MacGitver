@@ -39,58 +39,58 @@ typedef Heaven::View* (ViewCreator)( );
 
 class MGV_CORE_API MacGitver : public QApplication
 {
-	Q_OBJECT
+    Q_OBJECT
 private:
-	struct ViewInfo
-	{
-		QString				mIdentifier;
-		ViewCreator*		mCreator;
-		Heaven::ViewTypes	mType;
-	};
+    struct ViewInfo
+    {
+        QString             mIdentifier;
+        ViewCreator*        mCreator;
+        Heaven::ViewTypes   mType;
+    };
 
 public:
-	MacGitver( int argc, char **argv );
-	~MacGitver();
+    MacGitver( int argc, char **argv );
+    ~MacGitver();
 
 public:
-	static MacGitver& self();
+    static MacGitver& self();
 
 public:
-	void setRepository( const Git::Repository &repo );
-	Git::Repository repository() const;
-	Modules* modules();
-	FSWatcher* watcher();
+    void setRepository( const Git::Repository &repo );
+    Git::Repository repository() const;
+    Modules* modules();
+    FSWatcher* watcher();
 
-	IMainWindow* mainWindow();
+    IMainWindow* mainWindow();
 
-	void integrateView( Heaven::View* view, Heaven::Positions place );
+    void integrateView( Heaven::View* view, Heaven::Positions place );
 
-	void registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator );
-	void unregisterView( const QString& identifier );
-	Heaven::View* createView( const QString& identifier );
+    void registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator );
+    void unregisterView( const QString& identifier );
+    Heaven::View* createView( const QString& identifier );
 
-	ILog* log();
-	void setLog( ILog* log );
-	void log( LogType type, const QString& logMessage );
-	void log( LogType type, const char* logMessage );
-	void log( LogType type, const Git::Result& r, const char* logMessage = NULL );
+    ILog* log();
+    void setLog( ILog* log );
+    void log( LogType type, const QString& logMessage );
+    void log( LogType type, const char* logMessage );
+    void log( LogType type, const Git::Result& r, const char* logMessage = NULL );
 
 signals:
-	void repositoryChanged( const Git::Repository& repo );
+    void repositoryChanged( const Git::Repository& repo );
 
 protected:
-	void setMainWindow( IMainWindow* mainWindow );
+    void setMainWindow( IMainWindow* mainWindow );
 
 private:
-	static MacGitver*	sSelf;
+    static MacGitver*           sSelf;
 
-	Modules*			mModules;
-	IMainWindow*		mMainWindow;
-	ILog*				mLog;
-	FSWatcher*			mWatcher;
-	Git::GitWrap		mGitWrap;
-	Git::Repository		mRepository;
-	QHash< QString, ViewInfo >	mViews;
+    Modules*                    mModules;
+    IMainWindow*                mMainWindow;
+    ILog*                       mLog;
+    FSWatcher*                  mWatcher;
+    Git::GitWrap                mGitWrap;
+    Git::Repository             mRepository;
+    QHash< QString, ViewInfo >  mViews;
 };
 
 #endif

@@ -37,16 +37,16 @@
  */
 class MGV_CORE_API Module : public QObject, public IModule
 {
-	Q_INTERFACES( IModule )
-	Q_OBJECT
+    Q_INTERFACES( IModule )
+    Q_OBJECT
 public:
-	Module();
+    Module();
 
 public:
-	IMainWindow* mainWindow();
+    IMainWindow* mainWindow();
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
+    void repositoryChanged( Git::Repository newRepository );
 
 protected:
     /**
@@ -61,7 +61,7 @@ protected:
      * @brief Unregister a previously registered module view.
      * @param identifier the view identifier used to register the view
      */
-	void unregisterView( const QString& identifier );
+    void unregisterView( const QString& identifier );
 };
 
 #endif

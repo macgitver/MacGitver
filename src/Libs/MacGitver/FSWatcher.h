@@ -29,34 +29,34 @@ class FSWatcherPrivate;
 
 class MGV_CORE_API FSWatcher : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 private:
-	friend class FSWatcherPrivate;
+    friend class FSWatcherPrivate;
 
 public:
-	FSWatcher( QObject* parent );
-	~FSWatcher();
+    FSWatcher( QObject* parent );
+    ~FSWatcher();
 
 public:
-	void setRepository( Git::Repository repo );
+    void setRepository( Git::Repository repo );
 
 signals:
-	void configChanged();
-	void refsChanged();
-	void refLogChanged();
-	void headChanged();
-	void repoGitFileChanged();
-	void workingTreeChanged();
-	void descriptionChanged();
-	void indexChanged();
-	void modeChanged();
+    void configChanged();
+    void refsChanged();
+    void refLogChanged();
+    void headChanged();
+    void repoGitFileChanged();
+    void workingTreeChanged();
+    void descriptionChanged();
+    void indexChanged();
+    void modeChanged();
 
 private slots:
-	void directoryChanged( const QString& path );
-	void spitOutChanges();
+    void directoryChanged( const QString& path );
+    void spitOutChanges();
 
 private:
-	FSWatcherPrivate* d;
+    FSWatcherPrivate* d;
 };
 
 #endif

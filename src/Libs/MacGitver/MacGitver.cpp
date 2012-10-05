@@ -23,141 +23,141 @@
 #include "Interfaces/IMainWindow.h"
 
 MacGitver::MacGitver( int argc, char** argv )
-	: QApplication( argc, argv )
-	, mMainWindow( NULL )
-	, mLog( NULL )
+    : QApplication( argc, argv )
+    , mMainWindow( NULL )
+    , mLog( NULL )
 {
-	setOrganizationName( QLatin1String( "SaCu" ) );
-	setApplicationName( QLatin1String( "MacGitver" ) );
+    setOrganizationName( QLatin1String( "SaCu" ) );
+    setApplicationName( QLatin1String( "MacGitver" ) );
 
-	mWatcher = new FSWatcher( this );
+    mWatcher = new FSWatcher( this );
 
-	mModules = new Modules( this );
+    mModules = new Modules( this );
 
-	Q_ASSERT( sSelf == NULL );
-	sSelf = this;
+    Q_ASSERT( sSelf == NULL );
+    sSelf = this;
 }
 
 MacGitver::~MacGitver()
 {
-	setRepository( Git::Repository() );
+    setRepository( Git::Repository() );
 
-	delete mModules;
-	sSelf = NULL;
+    delete mModules;
+    sSelf = NULL;
 }
 
 Modules* MacGitver::modules()
 {
-	return mModules;
+    return mModules;
 }
 
 FSWatcher* MacGitver::watcher()
 {
-	return mWatcher;
+    return mWatcher;
 }
 
 Git::Repository MacGitver::repository() const
 {
-	return mRepository;
+    return mRepository;
 }
 
 void MacGitver::setRepository( const Git::Repository& repo )
 {
-	mRepository = repo;
+    mRepository = repo;
 
-	mWatcher->setRepository( repo );
-	mModules->repositoryChanged( repo );
+    mWatcher->setRepository( repo );
+    mModules->repositoryChanged( repo );
 
-	emit repositoryChanged( mRepository );
+    emit repositoryChanged( mRepository );
 }
 
 IMainWindow* MacGitver::mainWindow()
 {
-	Q_ASSERT( mMainWindow );
-	return mMainWindow;
+    Q_ASSERT( mMainWindow );
+    return mMainWindow;
 }
 
 void MacGitver::setMainWindow( IMainWindow* mainWindow )
 {
-	Q_ASSERT( !mMainWindow );
-	mMainWindow = mainWindow;
+    Q_ASSERT( !mMainWindow );
+    mMainWindow = mainWindow;
 }
 
 MacGitver* MacGitver::sSelf = NULL;
 
 MacGitver& MacGitver::self()
 {
-	Q_ASSERT( sSelf );
-	return *sSelf;
+    Q_ASSERT( sSelf );
+    return *sSelf;
 }
 
 void MacGitver::registerView( const QString& identifier, Heaven::ViewTypes type,
-							  ViewCreator* creator )
+                              ViewCreator* creator )
 {
-	Q_ASSERT( !mViews.contains( identifier ) );
+    Q_ASSERT( !mViews.contains( identifier ) );
 
-	ViewInfo vi;
-	vi.mIdentifier = identifier;
-	vi.mType = type;
-	vi.mCreator = creator;
-	mViews.insert( identifier, vi );
+    ViewInfo vi;
+    vi.mIdentifier = identifier;
+    vi.mType = type;
+    vi.mCreator = creator;
+    mViews.insert( identifier, vi );
 }
 
 void MacGitver::unregisterView( const QString& identifier )
 {
-	mViews.remove( identifier );
+    mViews.remove( identifier );
 }
 
 Heaven::View* MacGitver::createView( const QString& identifier )
 {
-	if( mViews.contains( identifier ) )
-	{
-		ViewInfo vi = mViews.value( identifier );
-		return vi.mCreator();
-	}
+    if( mViews.contains( identifier ) )
+    {
+        ViewInfo vi = mViews.value( identifier );
+        return vi.mCreator();
+    }
 
-	return NULL;
+    return NULL;
 }
 
 ILog* MacGitver::log()
 {
-	return mLog;
+    return mLog;
 }
 
 void MacGitver::setLog( ILog* log )
 {
-	mLog = log;
+    mLog = log;
 }
 
 void MacGitver::log( LogType type, const QString& logMessage )
 {
-	if( mLog )
-	{
-		mLog->addMessage( type, logMessage );
-	}
+    if( mLog )
+    {
+        mLog->addMessage( type, logMessage );
+    }
 }
 
 void MacGitver::log( LogType type, const char* logMessage )
 {
-	if( mLog )
-	{
-		mLog->addMessage( type, QString::fromUtf8( logMessage ) );
-	}
+    if( mLog )
+    {
+        mLog->addMessage( type, QString::fromUtf8( logMessage ) );
+    }
 }
 
 void MacGitver::log( LogType type, const Git::Result& r, const char* logMessage )
 {
-	if( mLog )
-	{
-		if( logMessage )
-		{
-			mLog->addMessage( type, QString::fromUtf8( "GitWrap-Error: %1\n(%2)" )
-							  .arg( r.errorText() ).arg( QLatin1String( logMessage ) ) );
-		}
-		else
-		{
-			mLog->addMessage( type, QString::fromUtf8( "GitWrap-Error: %1" )
-							  .arg( r.errorText() ) );
-		}
-		}
+    if( mLog )
+    {
+        if( logMessage )
+        {
+            mLog->addMessage( type, QString::fromUtf8( "GitWrap-Error: %1\n(%2)" )
+                              .arg( r.errorText() ).arg( QLatin1String( logMessage ) ) );
+        }
+        else
+        {
+            mLog->addMessage( type, QString::fromUtf8( "GitWrap-Error: %1" )
+                              .arg( r.errorText() ) );
+        }
+        }
 }

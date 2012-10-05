@@ -23,21 +23,21 @@ Module::Module()
 
 IMainWindow* Module::mainWindow()
 {
-	return MacGitver::self().mainWindow();
+    return MacGitver::self().mainWindow();
 }
 
 
 void Module::repositoryChanged( Git::Repository newRepository )
 {
-	Q_UNUSED( newRepository );
+    Q_UNUSED( newRepository );
 }
 
 void Module::registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator )
 {
-	MacGitver::self().registerView( identifier, type, creator );
+    MacGitver::self().registerView( identifier, type, creator );
 }
 
 void Module::unregisterView( const QString& identifier )
 {
-	MacGitver::self().unregisterView( identifier );
+    MacGitver::self().unregisterView( identifier );
 }

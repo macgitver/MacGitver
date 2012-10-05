@@ -19,78 +19,78 @@
 #include "MacGitver/Modules.h"
 
 Modules::Modules( QObject* parent )
-	: QObject( parent )
+    : QObject( parent )
 {
 }
 
 Modules::~Modules()
 {
-	foreach( Module* module, mModules )
-	{
-		module->repositoryChanged( Git::Repository() );
-		delete module;
-	}
+    foreach( Module* module, mModules )
+    {
+        module->repositoryChanged( Git::Repository() );
+        delete module;
+    }
 }
 
 void Modules::initialize()
 {
-	setupInternals();
+    setupInternals();
 
-	foreach( Module* module, mModules )
-	{
-		module->initialize();
-	}
+    foreach( Module* module, mModules )
+    {
+        module->initialize();
+    }
 }
 
 void Modules::setupInternals()
 {
-	QObjectList ol = QPluginLoader::staticInstances();
+    QObjectList ol = QPluginLoader::staticInstances();
 
-	foreach( QObject* o, ol )
-	{
-		Module* mod = qobject_cast< Module* >( o );
-		if( mod )
-		{
-			addModule( mod );
-		}
-	}
+    foreach( QObject* o, ol )
+    {
+        Module* mod = qobject_cast< Module* >( o );
+        if( mod )
+        {
+            addModule( mod );
+        }
+    }
 
 #if 0
-	int i = 0;
-	while( sInternals[ i ].szName )
-	{
-		qDebug( "Setting up module %s.", sInternals[ i ].szName );
+    int i = 0;
+    while( sInternals[ i ].szName )
+    {
+        qDebug( "Setting up module %s.", sInternals[ i ].szName );
 
-		Module* m = sInternals[ i ].creator();
-		addModule( m );
+        Module* m = sInternals[ i ].creator();
+        addModule( m );
 
-		i++;
-	}
+        i++;
+    }
 #endif
 }
 
 void Modules::repositoryChanged( Git::Repository newRepository )
 {
-	foreach( Module* module, mModules )
-	{
-		module->repositoryChanged( newRepository );
-	}
+    foreach( Module* module, mModules )
+    {
+        module->repositoryChanged( newRepository );
+    }
 }
 
 void Modules::addModule( Module *mod )
 {
-	mModules.insert( mod );
+    mModules.insert( mod );
 }
 
 void Modules::delModule( Module *mod )
 {
-	mModules.remove( mod );
+    mModules.remove( mod );
 }
 
 void Modules::setupConfigPages( IConfigDialog* dlg )
 {
-	foreach( Module* m, mModules )
-	{
-		m->setupConfigPages( dlg );
-	}
+    foreach( Module* m, mModules )
+    {
+        m->setupConfigPages( dlg );
+    }
 }

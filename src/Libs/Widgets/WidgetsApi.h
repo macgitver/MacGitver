@@ -20,9 +20,9 @@
 #include <qglobal.h>
 
 #ifdef Widgets_EXPORTS
-#	define WIDGETS_API Q_DECL_EXPORT
+#   define WIDGETS_API Q_DECL_EXPORT
 #else
-#	define WIDGETS_API Q_DECL_IMPORT
+#   define WIDGETS_API Q_DECL_IMPORT
 #endif
 
 #endif

@@ -20,9 +20,9 @@
 #include <qglobal.h>
 
 #ifdef Config_EXPORTS
-#	define CONFIG_API Q_DECL_EXPORT
+#   define CONFIG_API Q_DECL_EXPORT
 #else
-#	define CONFIG_API Q_DECL_IMPORT
+#   define CONFIG_API Q_DECL_IMPORT
 #endif
 
 #endif

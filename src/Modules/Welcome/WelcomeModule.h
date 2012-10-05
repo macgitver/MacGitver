@@ -23,22 +23,22 @@ class WelcomeView;
 
 class WelcomeModule : public Module
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
-	Q_INTERFACES( IModule )
+    Q_OBJECT
+    Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
+    Q_INTERFACES( IModule )
 
 public:
-	WelcomeModule();
+    WelcomeModule();
 
 public:
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
+    void setupConfigPages( IConfigDialog* dlg );
+    Types providesModuleTypes() const;
 
-	void initialize();
-	void deinitialize();
+    void initialize();
+    void deinitialize();
 
 private:
-	static Heaven::View* createWelcomeView();
+    static Heaven::View* createWelcomeView();
 };
 
 #endif

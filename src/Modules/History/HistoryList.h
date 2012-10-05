@@ -25,21 +25,21 @@
 
 class HistoryList : public QTreeView, private ConfigUser
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	HistoryList();
+    HistoryList();
 
 public:
-	void setModel( QAbstractItemModel* model );
+    void setModel( QAbstractItemModel* model );
 
 signals:
-	void currentCommitChanged( const Git::ObjectId& sha1 );
+    void currentCommitChanged( const Git::ObjectId& sha1 );
 
 private:
-	void configChanged( const QString& subPath, const QVariant& value );
+    void configChanged( const QString& subPath, const QVariant& value );
 
 private slots:
-	void onCurrentChanged();
+    void onCurrentChanged();
 };
 
 #endif

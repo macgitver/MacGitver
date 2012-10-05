@@ -20,346 +20,346 @@
 
 FlatTreeModelPrivate::FlatTreeModelPrivate( FlatTreeModel* owner )
 {
-	mOwner = owner;
-	mSeparator = QChar( L'/' );
-	mRoot.mParent = mRoot.mFirstChild = mRoot.mNextSibling = NULL;
+    mOwner = owner;
+    mSeparator = QChar( L'/' );
+    mRoot.mParent = mRoot.mFirstChild = mRoot.mNextSibling = NULL;
 }
 
 FlatTreeModelEntry* FlatTreeModelPrivate::entryByPath( const QString& path )
 {
-	QStringList remainder;
-	FlatTreeModelEntry* entry = entryByPath( path, remainder );
-	return remainder.count() ? NULL : entry;
+    QStringList remainder;
+    FlatTreeModelEntry* entry = entryByPath( path, remainder );
+    return remainder.count() ? NULL : entry;
 }
 
 FlatTreeModelEntry* FlatTreeModelPrivate::entryByPath( const QString& path, QStringList& remainder )
 {
-	remainder = path.split( mSeparator );
-	return subEntry( &mRoot, remainder );
+    remainder = path.split( mSeparator );
+    return subEntry( &mRoot, remainder );
 }
 
 FlatTreeModelEntry* FlatTreeModelPrivate::subEntry( FlatTreeModelEntry* parent,
-													QStringList& remainder )
+                                                    QStringList& remainder )
 {
-	Q_ASSERT( parent );
+    Q_ASSERT( parent );
 
-	if( remainder.count() == 0 )
-	{
-		return parent;
-	}
+    if( remainder.count() == 0 )
+    {
+        return parent;
+    }
 
-	QString me = remainder.at( 0 );
+    QString me = remainder.at( 0 );
 
-	FlatTreeModelEntry* cur = parent->mFirstChild;
-	while( cur )
-	{
-		if( cur->mText == me )
-		{
-			remainder.removeFirst();
-			return subEntry( cur, remainder );
-		}
+    FlatTreeModelEntry* cur = parent->mFirstChild;
+    while( cur )
+    {
+        if( cur->mText == me )
+        {
+            remainder.removeFirst();
+            return subEntry( cur, remainder );
+        }
 
-		cur = cur->mNextSibling;
-	}
+        cur = cur->mNextSibling;
+    }
 
-	return parent;
+    return parent;
 }
 
 int FlatTreeModelPrivate::updateIndicies( FlatTreeModelEntry* cur, int& currentIndex,
-										  int level, FlatTreeModelEntry* search )
+                                          int level, FlatTreeModelEntry* search )
 {
-	int found = -1;
-	while( cur )
-	{
-		cur->mIndex = currentIndex++;
-		cur->mLevel = level;
-		if( cur == search )
-			found = cur->mIndex;
+    int found = -1;
+    while( cur )
+    {
+        cur->mIndex = currentIndex++;
+        cur->mLevel = level;
+        if( cur == search )
+            found = cur->mIndex;
 
-		if( cur->mFirstChild )
-		{
-			int i = updateIndicies( cur->mFirstChild, currentIndex, level + 1, search );
-			if( found == -1 )
-				found = i;
-		}
+        if( cur->mFirstChild )
+        {
+            int i = updateIndicies( cur->mFirstChild, currentIndex, level + 1, search );
+            if( found == -1 )
+                found = i;
+        }
 
-		cur = cur->mNextSibling;
-	}
+        cur = cur->mNextSibling;
+    }
 
-	return found;
+    return found;
 }
 
 bool FlatTreeModelPrivate::addEntry( const QString& path )
 {
-	QStringList remainder = path.split( mSeparator );
-	FlatTreeModelEntry* cur = subEntry( &mRoot, remainder );
+    QStringList remainder = path.split( mSeparator );
+    FlatTreeModelEntry* cur = subEntry( &mRoot, remainder );
 
-	if( remainder.count() == 0 )
-	{
-		return false;
-	}
+    if( remainder.count() == 0 )
+    {
+        return false;
+    }
 
-	while( remainder.count() )
-	{
-		FlatTreeModelEntry* newEntry = new FlatTreeModelEntry;
-		newEntry->mFirstChild = NULL;
-		newEntry->mParent = cur;
-		
-		if( cur->mFirstChild )
-		{
-			FlatTreeModelEntry** ppar = &cur->mFirstChild;
-			while( *ppar && (*ppar)->mText < remainder.at(0) )
-				ppar = &(*ppar)->mNextSibling;
-			newEntry->mNextSibling = *ppar;
-			*ppar = newEntry;
-		}
-		else
-		{
-			newEntry->mNextSibling = cur->mFirstChild;
-			cur->mFirstChild = newEntry;
-		}
+    while( remainder.count() )
+    {
+        FlatTreeModelEntry* newEntry = new FlatTreeModelEntry;
+        newEntry->mFirstChild = NULL;
+        newEntry->mParent = cur;
 
-		newEntry->mIsHeader = remainder.count() > 1;
-		newEntry->mText = remainder.takeFirst();
+        if( cur->mFirstChild )
+        {
+            FlatTreeModelEntry** ppar = &cur->mFirstChild;
+            while( *ppar && (*ppar)->mText < remainder.at(0) )
+                ppar = &(*ppar)->mNextSibling;
+            newEntry->mNextSibling = *ppar;
+            *ppar = newEntry;
+        }
+        else
+        {
+            newEntry->mNextSibling = cur->mFirstChild;
+            cur->mFirstChild = newEntry;
+        }
 
-		int curIdx = -1;
-		int idx = updateIndicies( &mRoot, curIdx, 0, newEntry );
-		mOwner->beginInsertRows( QModelIndex(), idx, idx );
-		mEntries.insert( idx, newEntry );
-		mOwner->endInsertRows();
+        newEntry->mIsHeader = remainder.count() > 1;
+        newEntry->mText = remainder.takeFirst();
 
-		cur = newEntry;
-	}
+        int curIdx = -1;
+        int idx = updateIndicies( &mRoot, curIdx, 0, newEntry );
+        mOwner->beginInsertRows( QModelIndex(), idx, idx );
+        mEntries.insert( idx, newEntry );
+        mOwner->endInsertRows();
 
-	cur->mPath = path;
+        cur = newEntry;
+    }
 
-	return true;
+    cur->mPath = path;
+
+    return true;
 }
 
 bool FlatTreeModelPrivate::rawRemove( FlatTreeModelEntry* entry )
 {
-	Q_ASSERT( entry && entry->mFirstChild == NULL );
+    Q_ASSERT( entry && entry->mFirstChild == NULL );
 
-	if( entry == &mRoot )
-		return false;
+    if( entry == &mRoot )
+        return false;
 
-	FlatTreeModelEntry* parent = entry->mParent;
-	FlatTreeModelEntry** ppcur = &parent->mFirstChild;
-	while( *ppcur )
-	{
-		if( *ppcur == entry )
-		{
-			*ppcur = entry->mNextSibling;
+    FlatTreeModelEntry* parent = entry->mParent;
+    FlatTreeModelEntry** ppcur = &parent->mFirstChild;
+    while( *ppcur )
+    {
+        if( *ppcur == entry )
+        {
+            *ppcur = entry->mNextSibling;
 
-			mOwner->beginRemoveRows( QModelIndex(), entry->mIndex, entry->mIndex );
-			mEntries.removeAt( entry->mIndex );
-			mOwner->endRemoveRows();
+            mOwner->beginRemoveRows( QModelIndex(), entry->mIndex, entry->mIndex );
+            mEntries.removeAt( entry->mIndex );
+            mOwner->endRemoveRows();
 
-			int curIdx = -1;
-			updateIndicies( &mRoot, curIdx, 0, NULL );
+            int curIdx = -1;
+            updateIndicies( &mRoot, curIdx, 0, NULL );
 
-			delete entry;
+            delete entry;
 
-			if( parent->mFirstChild == NULL && parent != &mRoot )
-			{
-				return rawRemove( parent );
-			}
-			return true;
-		}
-	}
+            if( parent->mFirstChild == NULL && parent != &mRoot )
+            {
+                return rawRemove( parent );
+            }
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
 bool FlatTreeModelPrivate::removeEntry( const QString& entry )
 {
-	QStringList remainder = entry.split( mSeparator );
-	FlatTreeModelEntry* cur = subEntry( &mRoot, remainder );
+    QStringList remainder = entry.split( mSeparator );
+    FlatTreeModelEntry* cur = subEntry( &mRoot, remainder );
 
-	if( remainder.count() != 0 )
-	{
-		return false;
-	}
+    if( remainder.count() != 0 )
+    {
+        return false;
+    }
 
-	return rawRemove( cur );
+    return rawRemove( cur );
 }
 
 FlatTreeModelPrivate::~FlatTreeModelPrivate()
 {
-	qDeleteAll( mEntries );
+    qDeleteAll( mEntries );
 }
 
 FlatTreeModel::FlatTreeModel( QObject* parent )
-	: QAbstractListModel( parent )
+    : QAbstractListModel( parent )
 {
-	d = new FlatTreeModelPrivate( this );
+    d = new FlatTreeModelPrivate( this );
 }
 
 FlatTreeModel::FlatTreeModel( const QStringList& entries, QObject* parent )
-	: QAbstractListModel( parent )
+    : QAbstractListModel( parent )
 {
-	d = new FlatTreeModelPrivate( this );
-	add( entries );
+    d = new FlatTreeModelPrivate( this );
+    add( entries );
 }
 
 FlatTreeModel::FlatTreeModel( const QChar separator, const QStringList& entries, QObject* parent )
-	: QAbstractListModel( parent )
+    : QAbstractListModel( parent )
 {
-	d = new FlatTreeModelPrivate( this );
-	d->mSeparator = separator;
-	add( entries );
+    d = new FlatTreeModelPrivate( this );
+    d->mSeparator = separator;
+    add( entries );
 }
 
 FlatTreeModel::~FlatTreeModel()
 {
-	delete d;
+    delete d;
 }
 
 void FlatTreeModel::clear()
 {
-	beginResetModel();
+    beginResetModel();
 
-	qDeleteAll( d->mEntries );
-	d->mRoot.mFirstChild = d->mRoot.mNextSibling = NULL;
-	d->mEntries.clear();
+    qDeleteAll( d->mEntries );
+    d->mRoot.mFirstChild = d->mRoot.mNextSibling = NULL;
+    d->mEntries.clear();
 
-	endResetModel();
+    endResetModel();
 }
 
 void FlatTreeModel::add( const QStringList& entries )
 {
-	foreach( QString s, entries )
-	{
-		add( s );
-	}
+    foreach( QString s, entries )
+    {
+        add( s );
+    }
 }
 
 void FlatTreeModel::remove( const QStringList& entries )
 {
-	foreach( QString s, entries )
-	{
-		remove( s );
-	}
+    foreach( QString s, entries )
+    {
+        remove( s );
+    }
 }
 
 void FlatTreeModel::add( const QString& entry )
 {
-	d->addEntry( entry );
+    d->addEntry( entry );
 }
 
 void FlatTreeModel::remove( const QString& entry )
 {
-	d->removeEntry( entry );
+    d->removeEntry( entry );
 }
 
 int FlatTreeModel::rowCount( const QModelIndex& parent ) const
 {
-	return parent.isValid() ? 0 : d->mEntries.count();
+    return parent.isValid() ? 0 : d->mEntries.count();
 }
 
 QVariant FlatTreeModel::data( const QModelIndex& index, int role ) const
 {
-	if( !index.isValid() || index.column() != 0 || index.row() >= d->mEntries.count() )
-	{
-		return QVariant();
-	}
+    if( !index.isValid() || index.column() != 0 || index.row() >= d->mEntries.count() )
+    {
+        return QVariant();
+    }
 
-	FlatTreeModelEntry* entry = d->mEntries.at( index.row() );
+    FlatTreeModelEntry* entry = d->mEntries.at( index.row() );
 
-	switch( role )
-	{
-	case Qt::DisplayRole:
-		return entry->mPath;
+    switch( role )
+    {
+    case Qt::DisplayRole:
+        return entry->mPath;
 
-	case Qt::DecorationRole:
-		if( entry->mIcon.isNull() )
-		{
-			return entry->mIsHeader ? d->mDefaultHeaderIcon
-									: d->mDefaultEntryIcon;
-		}
-		return entry->mIcon;
+    case Qt::DecorationRole:
+        if( entry->mIcon.isNull() )
+        {
+            return entry->mIsHeader ? d->mDefaultHeaderIcon
+                                    : d->mDefaultEntryIcon;
+        }
+        return entry->mIcon;
 
-	case Qt::UserRole:
-		return entry->mUserData;
+    case Qt::UserRole:
+        return entry->mUserData;
 
-	case Qt::UserRole + 1:
-		return entry->mIsHeader;
+    case Qt::UserRole + 1:
+        return entry->mIsHeader;
 
-	case Qt::UserRole + 2:
-		return entry->mLevel;
+    case Qt::UserRole + 2:
+        return entry->mLevel;
 
-	case Qt::UserRole + 3:
-		return entry->mText;
+    case Qt::UserRole + 3:
+        return entry->mText;
 
-	default:
-		return QVariant();
-	}
+    default:
+        return QVariant();
+    }
 }
 
 bool FlatTreeModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
-	if( !index.isValid() || index.column() != 0 || index.row() >= d->mEntries.count() )
-	{
-		return false;
-	}
+    if( !index.isValid() || index.column() != 0 || index.row() >= d->mEntries.count() )
+    {
+        return false;
+    }
 
-	FlatTreeModelEntry* entry = d->mEntries.at( index.row() );
-	switch( role )
-	{
-	case Qt::DisplayRole:
-		qDebug( "Cannot change a FlatTreeModelEntry's path" );
-		return false;
+    FlatTreeModelEntry* entry = d->mEntries.at( index.row() );
+    switch( role )
+    {
+    case Qt::DisplayRole:
+        qDebug( "Cannot change a FlatTreeModelEntry's path" );
+        return false;
 
-	case Qt::DecorationRole:
-		entry->mIcon = value.value< QIcon >();
-		emit dataChanged( index, index );
-		return true;
+    case Qt::DecorationRole:
+        entry->mIcon = value.value< QIcon >();
+        emit dataChanged( index, index );
+        return true;
 
-	case Qt::UserRole:
-		entry->mUserData = value;
-		return true;
+    case Qt::UserRole:
+        entry->mUserData = value;
+        return true;
 
-	default:
-		qDebug( "Wrong role given to FlatTreeModel::setData" );
-		return false;
-	}
+    default:
+        qDebug( "Wrong role given to FlatTreeModel::setData" );
+        return false;
+    }
 }
 
 Qt::ItemFlags FlatTreeModel::flags( const QModelIndex& index ) const
 {
-	if( !index.isValid() || index.column() != 0 || index.row() >= d->mEntries.count() )
-	{
-		return Qt::NoItemFlags;
-	}
+    if( !index.isValid() || index.column() != 0 || index.row() >= d->mEntries.count() )
+    {
+        return Qt::NoItemFlags;
+    }
 
-	FlatTreeModelEntry* entry = d->mEntries.at( index.row() );
+    FlatTreeModelEntry* entry = d->mEntries.at( index.row() );
 
-	if( entry->mIsHeader )
-		return Qt::ItemIsEnabled;
-	else
-		return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    if( entry->mIsHeader )
+        return Qt::ItemIsEnabled;
+    else
+        return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
 QIcon FlatTreeModel::defaultHeaderIcon() const
 {
-	return d->mDefaultHeaderIcon;
+    return d->mDefaultHeaderIcon;
 }
 
 QIcon FlatTreeModel::defaultDataIcon() const
 {
-	return d->mDefaultEntryIcon;
+    return d->mDefaultEntryIcon;
 }
 
 void FlatTreeModel::setDefaultHeaderIcon( const QIcon& icon )
 {
-	beginResetModel();
-	d->mDefaultHeaderIcon = icon;
-	endResetModel();
+    beginResetModel();
+    d->mDefaultHeaderIcon = icon;
+    endResetModel();
 }
 
 void FlatTreeModel::setDefaultDataIcon( const QIcon& icon )
 {
-	beginResetModel();
-	d->mDefaultEntryIcon = icon;
-	endResetModel();
+    beginResetModel();
+    d->mDefaultEntryIcon = icon;
+    endResetModel();
 }

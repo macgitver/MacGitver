@@ -27,17 +27,17 @@ class RemotesViewContext;
 
 class RemotesView : public Heaven::GlobalView, private RemotesViewActions
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	RemotesView();
+    RemotesView();
 
 protected:
-	Heaven::ViewContext* createContext();
-	void setContext( Heaven::ViewContext* context );
+    Heaven::ViewContext* createContext();
+    void setContext( Heaven::ViewContext* context );
 
 private:
-	RemotesViewContext*	mCtx;
-	QTreeView*			mTreeView;
+    RemotesViewContext* mCtx;
+    QTreeView*          mTreeView;
 };
 
 #endif

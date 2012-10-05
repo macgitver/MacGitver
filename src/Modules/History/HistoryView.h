@@ -37,36 +37,36 @@ class HistoryList;
 class HistoryDiff;
 
 class HistoryView : public Heaven::GlobalView,
-					private HistoryViewActions,
-					private ConfigUser
+                    private HistoryViewActions,
+                    private ConfigUser
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	HistoryView();
+    HistoryView();
 
 public slots:
-	void repositoryChanged( Git::Repository repo );
+    void repositoryChanged( Git::Repository repo );
 
 private:
-	void buildHistory();
+    void buildHistory();
 
 private slots:
-	void currentCommitChanged( const Git::ObjectId& sh1 );
+    void currentCommitChanged( const Git::ObjectId& sh1 );
 
 private:
-	void configChanged( const QString& subPath, const QVariant& value );
+    void configChanged( const QString& subPath, const QVariant& value );
 
-	void initSplitters();
+    void initSplitters();
 
 private:
-	Heaven::MiniSplitter*	mVertSplit;
-	Heaven::MiniSplitter*	mHorzSplit;
-	HistoryModel*			mModel;
-	HistoryList*			mList;
-	HistoryDetails*			mDetails;
-	HistoryBuilder*			mBuilder;
-	HistoryDiff*			mDiff;
-	Git::Repository			mRepo;
+    Heaven::MiniSplitter*   mVertSplit;
+    Heaven::MiniSplitter*   mHorzSplit;
+    HistoryModel*           mModel;
+    HistoryList*            mList;
+    HistoryDetails*         mDetails;
+    HistoryBuilder*         mBuilder;
+    HistoryDiff*            mDiff;
+    Git::Repository         mRepo;
 };
 
 #endif

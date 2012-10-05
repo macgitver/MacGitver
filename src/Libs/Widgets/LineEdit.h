@@ -23,27 +23,27 @@
 
 class WIDGETS_API LineEdit : public QLineEdit
 {
-	Q_OBJECT
-	Q_PROPERTY( bool mandatory READ isMandatory WRITE setMandatory )
+    Q_OBJECT
+    Q_PROPERTY( bool mandatory READ isMandatory WRITE setMandatory )
 
 public:
-	explicit LineEdit( QWidget* parent = 0 );
-	explicit LineEdit( const QString &text, QWidget* parent = 0 );
+    explicit LineEdit( QWidget* parent = 0 );
+    explicit LineEdit( const QString &text, QWidget* parent = 0 );
 
 public slots:
-	void setMandatory( bool mandatory );
+    void setMandatory( bool mandatory );
 
 public:
-	bool isMandatory() const;
+    bool isMandatory() const;
 
 private slots:
-	void updatePalette();
+    void updatePalette();
 
 private:
-	void init();
+    void init();
 
 private:
-	bool	mMandatory;
+    bool    mMandatory;
 };
 
 #endif

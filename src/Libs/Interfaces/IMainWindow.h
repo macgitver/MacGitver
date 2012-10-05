@@ -22,10 +22,10 @@
 class IMainWindow
 {
 public:
-	virtual void integrateView( Heaven::View* view, Heaven::Positions position ) = 0;
-	virtual QWidget* widget() = 0;
+    virtual void integrateView( Heaven::View* view, Heaven::Positions position ) = 0;
+    virtual QWidget* widget() = 0;
 
-	virtual void activateMode( const QString& modeName ) = 0;
+    virtual void activateMode( const QString& modeName ) = 0;
 };
 
 #endif

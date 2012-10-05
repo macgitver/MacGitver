@@ -21,19 +21,19 @@
 
 class MacGitverMain : public MacGitver
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	MacGitverMain( int argc, char** argv );
+    MacGitverMain( int argc, char** argv );
 
 private:
-	void loadModules();
-	void loadLevels();
+    void loadModules();
+    void loadLevels();
 
 public:
-	int exec();
+    int exec();
 
 private slots:
-	void boot();
+    void boot();
 };
 
 #endif

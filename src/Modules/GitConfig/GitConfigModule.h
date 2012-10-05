@@ -23,27 +23,27 @@
 
 class GitConfigModule : public Module, public GitConfigModuleActions
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
-	Q_INTERFACES( IModule )
+    Q_OBJECT
+    Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
+    Q_INTERFACES( IModule )
 
 public:
-	GitConfigModule();
+    GitConfigModule();
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
+    void repositoryChanged( Git::Repository newRepository );
 
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
+    void setupConfigPages( IConfigDialog* dlg );
+    Types providesModuleTypes() const;
 
-	void initialize();
-	void deinitialize();
+    void initialize();
+    void deinitialize();
 
 private slots:
-	void onToolsGitConfig();
+    void onToolsGitConfig();
 
 private:
-	Git::Repository mRepo;
+    Git::Repository mRepo;
 };
 
 #endif

@@ -26,7 +26,7 @@ class IConfigDialog;
 
 namespace Git
 {
-	class Repository;
+    class Repository;
 }
 
 /**
@@ -36,54 +36,54 @@ namespace Git
 class INTERFACES_API IModule
 {
 public:
-	enum Type
-	{
-		ConfigDialog	= 1 << 0,
-		Repository		= 1 << 1,
+    enum Type
+    {
+        ConfigDialog    = 1 << 0,
+        Repository      = 1 << 1,
 
-		View			= 1 << 16,
+        View            = 1 << 16,
 
 
-		None			= 0	// Silly :)
-	};
-	typedef QFlags< Type > Types;
+        None            = 0	// Silly :)
+    };
+    typedef QFlags< Type > Types;
 
 public:
     // @todo Interfaces don't have constructors. Causes compiler error on call. The destructor should have an empty default implementation though.
     IModule();
-	virtual ~IModule();
+    virtual ~IModule();
 
 public:
     /**
      * @brief Informs a module about the currently referenced repository has changed.
      * @param newRepository
      */
-	virtual void repositoryChanged( Git::Repository newRepository ) = 0;
+    virtual void repositoryChanged( Git::Repository newRepository ) = 0;
 
     /**
      * @brief Setup a configuration dialog for a module, which is used in the settings.
      * @param dialog
      */
-	virtual void setupConfigPages( IConfigDialog* dialog ) = 0;
+    virtual void setupConfigPages( IConfigDialog* dialog ) = 0;
 
     /**
      * @brief Modules can define a type to specify their functionality roughly.
      * @return the @see Types flags defined by the module.
      */
-	virtual Types providesModuleTypes() const = 0;
+    virtual Types providesModuleTypes() const = 0;
 
     /**
      * @brief Tells the module to initialize itself, after it was loaded and instantiated.
      */
-	virtual void initialize() = 0;
+    virtual void initialize() = 0;
 
     /**
      * @brief Called before a module is unloaded, telling it to clean up itself.
      */
-	virtual void deinitialize() = 0;
+    virtual void deinitialize() = 0;
 };
 
 Q_DECLARE_INTERFACE( IModule,
-					 "org.babbelbox.sacu.macgitver.IModule/0.1" )
+                     "org.babbelbox.sacu.macgitver.IModule/0.1" )
 
 #endif

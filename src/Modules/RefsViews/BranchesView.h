@@ -27,25 +27,25 @@ class QToolButton;
 
 class BranchesView : public Heaven::View
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	BranchesView();
+    BranchesView();
 
 public slots:
-	void repositoryChanged( Git::Repository repo );
+    void repositoryChanged( Git::Repository repo );
 
 public:
-	virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
 private slots:
-	void rereadBranches();
+    void rereadBranches();
 
 private:
-	Git::Repository		mRepo;
-	QListWidget*		mListWidget;
-	QToolBar*			mToolBar;
-	QToolButton*		mBtnLocals;
-	QToolButton*		mBtnRemotes;
+    Git::Repository mRepo;
+    QListWidget*    mListWidget;
+    QToolBar*       mToolBar;
+    QToolButton*    mBtnLocals;
+    QToolButton*    mBtnRemotes;
 };
 
 #endif

@@ -16,32 +16,32 @@
 
 Ui SubmodulesViewActions {
 
-	ToolBar SMViewToolbar {
+    ToolBar SMViewToolbar {
 
-		Action			Add {
-			Text		"Add";
-			_ConnectTo	addSubmodule();
-		};
+        Action          Add {
+            Text        "Add";
+            _ConnectTo  addSubmodule();
+        };
 
-		Action			Edit {
-			Text		"Edit";
-			Enabled		false;
-		};
+        Action          Edit {
+            Text        "Edit";
+            Enabled     false;
+        };
 
-		Action			Init {
-			Text		"Init";
-			Enabled		false;
-		};
+        Action          Init {
+            Text        "Init";
+            Enabled     false;
+        };
 
-		Action			Update {
-			Text		"Update";
-			Enabled		false;
-		};
+        Action          Update {
+            Text        "Update";
+            Enabled     false;
+        };
 
-		Action			Remove {
-			Text		"Remove";
-		};
+        Action          Remove {
+            Text        "Remove";
+        };
 
-	};
+    };
 
 };

@@ -35,160 +35,160 @@
 class SubmodulesViewDelegate : public QItemDelegate
 {
 public:
-	SubmodulesViewDelegate( QObject* parent );
+    SubmodulesViewDelegate( QObject* parent );
 public:
-	void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-	QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 };
 
 
 SubmodulesViewDelegate::SubmodulesViewDelegate( QObject* parent )
-	: QItemDelegate( parent )
+    : QItemDelegate( parent )
 {
 }
 
 void SubmodulesViewDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
-									const QModelIndex& index ) const
+                                    const QModelIndex& index ) const
 {
-	const QFontMetrics& fm = option.fontMetrics;
-	if( index.column() != 0 )
-	{
-		QItemDelegate::paint( painter, option, index );
-		return;
-	}
+    const QFontMetrics& fm = option.fontMetrics;
+    if( index.column() != 0 )
+    {
+        QItemDelegate::paint( painter, option, index );
+        return;
+    }
 
-	drawBackground( painter, option, index );
+    drawBackground( painter, option, index );
 
-	QRect textRect = option.rect.adjusted( 1, 1, -1, -1 );
+    QRect textRect = option.rect.adjusted( 1, 1, -1, -1 );
 
-	textRect.setBottom( textRect.top() + fm.lineSpacing() );
-	QFont f( option.font );
-	f.setBold( true );
-	painter->setFont( f );
-	painter->drawText( textRect, index.data().toString() );
+    textRect.setBottom( textRect.top() + fm.lineSpacing() );
+    QFont f( option.font );
+    f.setBold( true );
+    painter->setFont( f );
+    painter->drawText( textRect, index.data().toString() );
 
-	textRect.moveTop( textRect.top() + fm.lineSpacing() );
-	painter->setFont( option.font );
-	painter->drawText( textRect,
-					   index.data( Qt::UserRole + 2 ).toString() %
-					   QLatin1String( " - " ) %
-					   index.data( Qt::UserRole + 1 ).toString() );
+    textRect.moveTop( textRect.top() + fm.lineSpacing() );
+    painter->setFont( option.font );
+    painter->drawText( textRect,
+                       index.data( Qt::UserRole + 2 ).toString() %
+                       QLatin1String( " - " ) %
+                       index.data( Qt::UserRole + 1 ).toString() );
 
-	drawFocus( painter, option, option.rect );
+    drawFocus( painter, option, option.rect );
 }
 
 QSize SubmodulesViewDelegate::sizeHint( const QStyleOptionViewItem& option,
-										const QModelIndex& index ) const
+                                        const QModelIndex& index ) const
 {
-	const QFontMetrics& fm = option.fontMetrics;
+    const QFontMetrics& fm = option.fontMetrics;
 
-	return QSize( 200, 2 + 2 * fm.lineSpacing() );
+    return QSize( 200, 2 + 2 * fm.lineSpacing() );
 }
 
 SubmodulesView::SubmodulesView()
-	: GlobalView( QLatin1String( "Submodules" ) )
+    : GlobalView( QLatin1String( "Submodules" ) )
 {
-	setupActions( this );
+    setupActions( this );
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
+    QVBoxLayout* l = new QVBoxLayout;
+    l->setSpacing( 0 );
+    l->setMargin( 0 );
 
-	l->addWidget( tbSMViewToolbar->toolBarFor( this ) );
+    l->addWidget( tbSMViewToolbar->toolBarFor( this ) );
 
-	mTree = new QTreeView;
-	mTree->setRootIsDecorated( false );
-	mTree->setHeaderHidden( true );
-	mTree->setFrameShape( QFrame::NoFrame );
-	l->addWidget( mTree );
+    mTree = new QTreeView;
+    mTree->setRootIsDecorated( false );
+    mTree->setHeaderHidden( true );
+    mTree->setFrameShape( QFrame::NoFrame );
+    l->addWidget( mTree );
 
-	mModel = new QStandardItemModel( this );
-	mTree->setModel( mModel );
+    mModel = new QStandardItemModel( this );
+    mTree->setModel( mModel );
 
-	mTree->setItemDelegate( new SubmodulesViewDelegate( this ) );
+    mTree->setItemDelegate( new SubmodulesViewDelegate( this ) );
 
-	setLayout( l );
+    setLayout( l );
 
-	setViewName( trUtf8( "Submodules" ) );
+    setViewName( trUtf8( "Submodules" ) );
 
-	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-			 this, SLOT(repositoryChanged(Git::Repository)) );
+    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+             this, SLOT(repositoryChanged(Git::Repository)) );
 
-	Git::Repository repo = MacGitver::self().repository();
-	if( repo.isValid() )
-	{
-		repositoryChanged( repo );
-	}
+    Git::Repository repo = MacGitver::self().repository();
+    if( repo.isValid() )
+    {
+        repositoryChanged( repo );
+    }
 
-	connect( MacGitver::self().watcher(), SIGNAL(repoGitFileChanged()),
-			 this, SLOT(readSubmodules()) );
+    connect( MacGitver::self().watcher(), SIGNAL(repoGitFileChanged()),
+             this, SLOT(readSubmodules()) );
 }
 
 void SubmodulesView::repositoryChanged( Git::Repository repo )
 {
-	mRepo = repo;
-	readSubmodules();
+    mRepo = repo;
+    readSubmodules();
 }
 
 void SubmodulesView::readSubmodules()
 {
-	QList< Git::Submodule > submodules;
+    QList< Git::Submodule > submodules;
 
-	if( mRepo.isValid() )
-	{
-		#ifdef LIBGIT_IMPROVED
-		submodules = mRepo.submodules();
-		#else
-		Git::Result r;
-		Git::Repository repo = Git::Repository::open( mRepo.basePath(), r );
-		submodules = repo.submodules( r );
-		#endif
-	}
+    if( mRepo.isValid() )
+    {
+        #ifdef LIBGIT_IMPROVED
+        submodules = mRepo.submodules();
+        #else
+        Git::Result r;
+        Git::Repository repo = Git::Repository::open( mRepo.basePath(), r );
+        submodules = repo.submodules( r );
+        #endif
+    }
 
-	QStringList toVisit = mNameToItem.keys();
+    QStringList toVisit = mNameToItem.keys();
 
-	foreach( Git::Submodule module, submodules )
-	{
-		if( !module.isValid() )
-			continue;
+    foreach( Git::Submodule module, submodules )
+    {
+        if( !module.isValid() )
+            continue;
 
-		QString name = module.name();
-		QStandardItem* it = mNameToItem.value( name, NULL );
+        QString name = module.name();
+        QStandardItem* it = mNameToItem.value( name, NULL );
 
-		if( it )
-		{
-			int i = toVisit.indexOf( name );
-			if( i != -1 )	// It should really be in, shouldn't it? :)
-			{
-				toVisit.removeAt( i );
-			}
-		}
-		else
-		{
-			it = new QStandardItem( name );
-			it->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
-			mModel->appendRow( it );
-			mNameToItem.insert( name, it );
-		}
+        if( it )
+        {
+            int i = toVisit.indexOf( name );
+            if( i != -1 )	// It should really be in, shouldn't it? :)
+            {
+                toVisit.removeAt( i );
+            }
+        }
+        else
+        {
+            it = new QStandardItem( name );
+            it->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
+            mModel->appendRow( it );
+            mNameToItem.insert( name, it );
+        }
 
-		it->setData( module.path(), Qt::UserRole + 1 );
-		it->setData( module.url(), Qt::UserRole + 2 );
-		it->setData( module.fetchRecursive(), Qt::UserRole + 3 );
-		it->setData( module.updateStrategy(), Qt::UserRole + 4 );
-		it->setData( module.ignoreStrategy(), Qt::UserRole + 5 );
-		it->setData( module.currentSHA1().toString(), Qt::UserRole + 6 );
-	}
+        it->setData( module.path(), Qt::UserRole + 1 );
+        it->setData( module.url(), Qt::UserRole + 2 );
+        it->setData( module.fetchRecursive(), Qt::UserRole + 3 );
+        it->setData( module.updateStrategy(), Qt::UserRole + 4 );
+        it->setData( module.ignoreStrategy(), Qt::UserRole + 5 );
+        it->setData( module.currentSHA1().toString(), Qt::UserRole + 6 );
+    }
 
-	foreach( QString module, toVisit )
-	{
-		QStandardItem* it = mNameToItem.take( module );
-		delete it;
-	}
+    foreach( QString module, toVisit )
+    {
+        QStandardItem* it = mNameToItem.take( module );
+        delete it;
+    }
 }
 
 void SubmodulesView::addSubmodule()
 {
-	SubmodulesCreateEditDlg d;
-	d.exec();
+    SubmodulesCreateEditDlg d;
+    d.exec();
 }

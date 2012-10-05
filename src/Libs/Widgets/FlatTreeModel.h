@@ -24,37 +24,37 @@
 class FlatTreeModelPrivate;
 class WIDGETS_API FlatTreeModel : public QAbstractListModel
 {
-	friend class FlatTreeModelPrivate;
-	Q_OBJECT
+    friend class FlatTreeModelPrivate;
+    Q_OBJECT
 public:
-	explicit FlatTreeModel( QObject* parent = 0 );
-	FlatTreeModel( const QStringList& entries, QObject* parent = 0 );
-	FlatTreeModel( const QChar separator, const QStringList& entries, QObject* parent = 0 );
-	~FlatTreeModel();
-
-public:
-	void clear();
-
-	void add( const QString& entry );
-	void add( const QStringList& entries );
-
-	void remove( const QString& entry );
-	void remove( const QStringList& entries );
-
-	QIcon defaultHeaderIcon() const;
-	QIcon defaultDataIcon() const;
-
-	void setDefaultHeaderIcon( const QIcon& icon );
-	void setDefaultDataIcon( const QIcon& icon );
+    explicit FlatTreeModel( QObject* parent = 0 );
+    FlatTreeModel( const QStringList& entries, QObject* parent = 0 );
+    FlatTreeModel( const QChar separator, const QStringList& entries, QObject* parent = 0 );
+    ~FlatTreeModel();
 
 public:
-	int rowCount( const QModelIndex& parent ) const;
-	QVariant data( const QModelIndex& index, int role ) const;
-	bool setData( const QModelIndex& index, const QVariant& value, int role );
-	Qt::ItemFlags flags( const QModelIndex& index ) const;
+    void clear();
+
+    void add( const QString& entry );
+    void add( const QStringList& entries );
+
+    void remove( const QString& entry );
+    void remove( const QStringList& entries );
+
+    QIcon defaultHeaderIcon() const;
+    QIcon defaultDataIcon() const;
+
+    void setDefaultHeaderIcon( const QIcon& icon );
+    void setDefaultDataIcon( const QIcon& icon );
+
+public:
+    int rowCount( const QModelIndex& parent ) const;
+    QVariant data( const QModelIndex& index, int role ) const;
+    bool setData( const QModelIndex& index, const QVariant& value, int role );
+    Qt::ItemFlags flags( const QModelIndex& index ) const;
 
 private:
-	FlatTreeModelPrivate* d;
+    FlatTreeModelPrivate* d;
 };
 
 #endif

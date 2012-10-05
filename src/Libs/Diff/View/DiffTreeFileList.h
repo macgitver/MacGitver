@@ -21,9 +21,9 @@
 
 class DiffTreeFileList : public QTreeWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	DiffTreeFileList(){}
+    DiffTreeFileList(){}
 };
 
 #endif

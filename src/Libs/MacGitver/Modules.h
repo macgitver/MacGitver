@@ -23,27 +23,27 @@
 
 class MGV_CORE_API Modules : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	Modules( QObject* parent );
-	~Modules();
+    Modules( QObject* parent );
+    ~Modules();
 
 public:
-	void addModule( Module* mod );
-	void delModule( Module* mod );
+    void addModule( Module* mod );
+    void delModule( Module* mod );
 
 public:
-	void initialize();
-	void setupConfigPages( IConfigDialog* dlg );
+    void initialize();
+    void setupConfigPages( IConfigDialog* dlg );
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
+    void repositoryChanged( Git::Repository newRepository );
 
 private:
-	void setupInternals();
+    void setupInternals();
 
 private:
-	QSet< Module* >			mModules;
+    QSet< Module* >     mModules;
 };
 
 #endif

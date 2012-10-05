@@ -29,26 +29,26 @@ class QTreeWidgetItem;
 
 class ConfigDialog : public QDialog, public IConfigDialog, private Ui::ConfigDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ConfigDialog();
-	~ConfigDialog();
+    ConfigDialog();
+    ~ConfigDialog();
 
 public:
-	int exec();
+    int exec();
 
 public:
-	void setModified( IConfigPage* page, bool value );
-	void addPage( IConfigPage* page );
+    void setModified( IConfigPage* page, bool value );
+    void addPage( IConfigPage* page );
 
 private slots:
-	void onApply();
-	void onWidgetChange( QTreeWidgetItem* newCurrent );
+    void onApply();
+    void onWidgetChange( QTreeWidgetItem* newCurrent );
 
 private:
-	QHash< QByteArray, QTreeWidgetItem* >	mGroupsById;
-	QHash< QByteArray, IConfigPage* >		mPagesById;
-	QHash< QTreeWidgetItem*, QByteArray >	mPageIdsByTree;
+    QHash< QByteArray, QTreeWidgetItem* >   mGroupsById;
+    QHash< QByteArray, IConfigPage* >       mPagesById;
+    QHash< QTreeWidgetItem*, QByteArray >   mPageIdsByTree;
 };
 
 #endif

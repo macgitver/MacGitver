@@ -29,32 +29,32 @@
 
 class HistoryBuilder : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	HistoryBuilder( Git::Repository repo, HistoryModel* model );
-	~HistoryBuilder();
-
-public:
-	void addHEAD();
-	void addAllRefs();
+    HistoryBuilder( Git::Repository repo, HistoryModel* model );
+    ~HistoryBuilder();
 
 public:
-	void start();
+    void addHEAD();
+    void addAllRefs();
+
+public:
+    void start();
 
 private:
-	int nextParent( const Git::ObjectId& sha1, int start = 0 );
-	int createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nextSha1InSlot, int start = 0 );
+    int nextParent( const Git::ObjectId& sha1, int start = 0 );
+    int createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nextSha1InSlot, int start = 0 );
 
 private:
-	void updateReferences();
+    void updateReferences();
 
 private:
-	Git::Repository		mRepo;
-	Git::RevisionWalker	mWalker;
-	HistoryModel*		mModel;
-	GraphGlyphVector	mCurrentGlyphs;
-	int					mCurrentLine;
-	Git::ObjectIdList	mNextParent;
+    Git::Repository     mRepo;
+    Git::RevisionWalker mWalker;
+    HistoryModel*       mModel;
+    GraphGlyphVector    mCurrentGlyphs;
+    int                 mCurrentLine;
+    Git::ObjectIdList   mNextParent;
 };
 
 #endif

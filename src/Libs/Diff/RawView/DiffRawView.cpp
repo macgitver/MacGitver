@@ -20,12 +20,12 @@
 #include "Diff/RawView/DiffRawView.h"
 
 DiffRawView::DiffRawView( QWidget* parent )
-	: QTextBrowser( parent )
+    : QTextBrowser( parent )
 {
-	new DiffRawHighlighter( this );
-	setFont( Config::defaultFixedFont() );
+    new DiffRawHighlighter( this );
+    setFont( Config::defaultFixedFont() );
 
-	setFrameShape( QFrame::NoFrame );
+    setFrameShape( QFrame::NoFrame );
 }
 
 DiffRawView::~DiffRawView()
@@ -34,14 +34,14 @@ DiffRawView::~DiffRawView()
 
 void DiffRawView::setPatch( Patch::Ptr patch )
 {
-	QString patchText;
+    QString patchText;
 
-	mCurrentPatch = patch;
+    mCurrentPatch = patch;
 
-	if( patch )
-	{
-		patchText = patch->toString();
-	}
+    if( patch )
+    {
+        patchText = patch->toString();
+    }
 
-	setText( patchText );
+    setText( patchText );
 }

@@ -22,13 +22,13 @@
 
 ConfigDialog::ConfigDialog()
 {
-	setupUi( this );
+    setupUi( this );
 
-	connect( widgetTree, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-			 this, SLOT(onWidgetChange(QTreeWidgetItem*)) );
+    connect( widgetTree, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+             this, SLOT(onWidgetChange(QTreeWidgetItem*)) );
 
-	connect( buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()),
-			 this, SLOT(onApply()) );
+    connect( buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()),
+             this, SLOT(onApply()) );
 }
 
 ConfigDialog::~ConfigDialog()
@@ -37,72 +37,72 @@ ConfigDialog::~ConfigDialog()
 
 void ConfigDialog::addPage( IConfigPage* page )
 {
-	widgets->addWidget( page->widget() );
+    widgets->addWidget( page->widget() );
 
-	QTreeWidgetItem* groupItem = mGroupsById.value( page->groupId(), NULL );
-	if( !groupItem )
-	{
-		groupItem = new QTreeWidgetItem( widgetTree, QStringList( page->groupName() ) );
-		mGroupsById.insert( page->groupId(), groupItem );
-		QFont f = font();
-		f.setBold( true );
-		groupItem->setFont( 0, f );
-		groupItem->setExpanded( true );
-		groupItem->setFlags( Qt::ItemIsEnabled );
-	}
+    QTreeWidgetItem* groupItem = mGroupsById.value( page->groupId(), NULL );
+    if( !groupItem )
+    {
+        groupItem = new QTreeWidgetItem( widgetTree, QStringList( page->groupName() ) );
+        mGroupsById.insert( page->groupId(), groupItem );
+        QFont f = font();
+        f.setBold( true );
+        groupItem->setFont( 0, f );
+        groupItem->setExpanded( true );
+        groupItem->setFlags( Qt::ItemIsEnabled );
+    }
 
-	Q_ASSERT( groupItem );
-	QTreeWidgetItem* pageItem = new QTreeWidgetItem( groupItem, QStringList( page->pageName() ) );
-	QByteArray fullPageId = page->groupId() + "/" + page->pageId();
-	mPagesById.insert( fullPageId, page );
-	mPageIdsByTree.insert( pageItem, fullPageId );
+    Q_ASSERT( groupItem );
+    QTreeWidgetItem* pageItem = new QTreeWidgetItem( groupItem, QStringList( page->pageName() ) );
+    QByteArray fullPageId = page->groupId() + "/" + page->pageId();
+    mPagesById.insert( fullPageId, page );
+    mPageIdsByTree.insert( pageItem, fullPageId );
 }
 
 void ConfigDialog::setModified( IConfigPage* page, bool value )
 {
-	Q_ASSERT( page );
-	buttonBox->button( QDialogButtonBox::Apply )->setEnabled( value );
-	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( value );
+    Q_ASSERT( page );
+    buttonBox->button( QDialogButtonBox::Apply )->setEnabled( value );
+    buttonBox->button( QDialogButtonBox::Ok )->setEnabled( value );
 }
 
 void ConfigDialog::onApply()
 {
-	QWidget* w = widgets->currentWidget();
-	IConfigPage* page = qobject_cast< IConfigPage* >( w );
-	if( !page )
-	{
-		return;
-	}
+    QWidget* w = widgets->currentWidget();
+    IConfigPage* page = qobject_cast< IConfigPage* >( w );
+    if( !page )
+    {
+        return;
+    }
 
-	page->apply();
+    page->apply();
 }
 
 int ConfigDialog::exec()
 {
-	buttonBox->button( QDialogButtonBox::Apply )->setEnabled( false );
-	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( false );
+    buttonBox->button( QDialogButtonBox::Apply )->setEnabled( false );
+    buttonBox->button( QDialogButtonBox::Ok )->setEnabled( false );
 
-	return QDialog::exec();
+    return QDialog::exec();
 }
 
 void ConfigDialog::onWidgetChange( QTreeWidgetItem* newCurrent )
 {
-	if( !newCurrent )
-	{
-		return;
-	}
+    if( !newCurrent )
+    {
+        return;
+    }
 
-	QByteArray pageId = mPageIdsByTree.value( newCurrent, QByteArray() );
-	if( pageId.isEmpty() )
-	{
-		return;
-	}
+    QByteArray pageId = mPageIdsByTree.value( newCurrent, QByteArray() );
+    if( pageId.isEmpty() )
+    {
+        return;
+    }
 
-	IConfigPage* page = mPagesById.value( pageId, NULL );
-	if( !page )
-	{
-		return;
-	}
+    IConfigPage* page = mPagesById.value( pageId, NULL );
+    if( !page )
+    {
+        return;
+    }
 
-	widgets->setCurrentWidget( page->widget() );
+    widgets->setCurrentWidget( page->widget() );
 }

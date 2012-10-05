@@ -26,27 +26,27 @@
 
 class HistoryConfigPage : public QWidget, public IConfigPage, Ui::HistoryConfigPage
 {
-	Q_OBJECT
-	Q_INTERFACES( IConfigPage )
+    Q_OBJECT
+    Q_INTERFACES( IConfigPage )
 
 public:
-	HistoryConfigPage( IConfigDialog* dlg );
-	~HistoryConfigPage();
+    HistoryConfigPage( IConfigDialog* dlg );
+    ~HistoryConfigPage();
 
 public:
-	void apply();
-	void init();
+    void apply();
+    void init();
 
-	QByteArray pageId() const;
-	QByteArray groupId() const;
+    QByteArray pageId() const;
+    QByteArray groupId() const;
 
-	QString pageName() const;
-	QString groupName() const;
+    QString pageName() const;
+    QString groupName() const;
 
-	QWidget* widget();
+    QWidget* widget();
 
 private slots:
-	void onDiffPosChanged( int newPos );
+    void onDiffPosChanged( int newPos );
 };
 
 #endif

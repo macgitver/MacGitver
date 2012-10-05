@@ -33,31 +33,31 @@ void RemotesModule::setupConfigPages( IConfigDialog* dialog )
 
 Module::Types RemotesModule::providesModuleTypes() const
 {
-	return View;
+    return View;
 }
 
 Heaven::View* RemotesModule::createRemotesView()
 {
-	return new RemotesView;
+    return new RemotesView;
 }
 
 void RemotesModule::initialize()
 {
-	setupActions( this );
-	acRemotesAC->mergeInto( "RemotesMP" );
+    setupActions( this );
+    acRemotesAC->mergeInto( "RemotesMP" );
 
-	MacGitver::self().registerView( QLatin1String( "Remotes" ), Heaven::GlobalViewType,
-									&RemotesModule::createRemotesView );
+    MacGitver::self().registerView( QLatin1String( "Remotes" ), Heaven::GlobalViewType,
+                                    &RemotesModule::createRemotesView );
 }
 
 void RemotesModule::deinitialize()
 {
-	MacGitver::self().unregisterView( QLatin1String( "Remotes" ) );
+    MacGitver::self().unregisterView( QLatin1String( "Remotes" ) );
 }
 
 void RemotesModule::onRemoteCreate()
 {
-	RemoteCreateEditDlg().exec();
+    RemoteCreateEditDlg().exec();
 }
 
 #if QT_VERSION < 0x050000

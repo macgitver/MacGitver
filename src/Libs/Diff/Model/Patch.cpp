@@ -25,7 +25,7 @@
 #include "Diff/Model/DiffHunk.h"
 
 Patch::Patch()
-	: mNumSides( 0 )
+    : mNumSides( 0 )
 {
 }
 
@@ -35,244 +35,244 @@ Patch::~Patch()
 
 void Patch::setNumSides( int sides )
 {
-	mNumSides = sides;
+    mNumSides = sides;
 }
 
 int Patch::numSides() const
 {
-	return mNumSides;
+    return mNumSides;
 }
 
 
 void Patch::addPath( PatchFile::Ptr diff )
 {
-	mPaths.append( diff );
+    mPaths.append( diff );
 }
 
 PatchFile::List Patch::allPaths() const
 {
-	return mPaths;
+    return mPaths;
 }
 
 int Patch::numPaths() const
 {
-	return mPaths.count();
+    return mPaths.count();
 }
 
 PatchFile::Ptr Patch::pathAt( int index )
 {
-	return mPaths[ index ];
+    return mPaths[ index ];
 }
 
 Patch::Ptr Patch::readPatch( const QString& fileName )
 {
-	QFile f( fileName );
-	if( !f.open( QFile::ReadOnly ) )
-	{
-		return Patch::Ptr();
-	}
+    QFile f( fileName );
+    if( !f.open( QFile::ReadOnly ) )
+    {
+        return Patch::Ptr();
+    }
 
-	return readPatch( &f );
+    return readPatch( &f );
 }
 
 static inline QByteArray nextLine( QIODevice* dev )
 {
-	QByteArray line = dev->readLine();
-	if( line.endsWith( '\n' ) )
-	{
-		return line.left( line.length() - 1 );
-	}
-	else
-	{
-		return line;
-	}
+    QByteArray line = dev->readLine();
+    if( line.endsWith( '\n' ) )
+    {
+        return line.left( line.length() - 1 );
+    }
+    else
+    {
+        return line;
+    }
 }
 
 Patch::Ptr Patch::readPatch( QIODevice* dev )
 {
-	Patch::Ptr patch( new Patch );
-	patch->setNumSides( 2 );
+    Patch::Ptr patch( new Patch );
+    patch->setNumSides( 2 );
 
-	QByteArray line = nextLine( dev );
-	while( ! dev->atEnd() )
-	{
-		if( !line.startsWith( "diff " ) )
-		{
-			return Patch::Ptr();
-		}
+    QByteArray line = nextLine( dev );
+    while( ! dev->atEnd() )
+    {
+        if( !line.startsWith( "diff " ) )
+        {
+            return Patch::Ptr();
+        }
 
-		QList< QByteArray > diffParts = line.split( ' ' );
-		QStringList pathNames;
-		for( int i = 1; i < diffParts.count(); i++ )
-		{
-			if( diffParts[ i ].startsWith( "--" ) )
-			{
-				continue;
-			}
+        QList< QByteArray > diffParts = line.split( ' ' );
+        QStringList pathNames;
+        for( int i = 1; i < diffParts.count(); i++ )
+        {
+            if( diffParts[ i ].startsWith( "--" ) )
+            {
+                continue;
+            }
 
-			pathNames.append( QString::fromUtf8( diffParts[ i ].constData() ) );
-		}
-		Q_ASSERT( pathNames.length() == 2 );
+            pathNames.append( QString::fromUtf8( diffParts[ i ].constData() ) );
+        }
+        Q_ASSERT( pathNames.length() == 2 );
 
-		PatchFile::Ptr diff( new PatchFile( pathNames ) );
-		patch->addPath( diff );
-		for( int i = 1; i < diffParts.count(); i++ )
-		{
-			if( !diffParts[ i ].startsWith( "--" ) )
-			{
-				continue;
-			}
+        PatchFile::Ptr diff( new PatchFile( pathNames ) );
+        patch->addPath( diff );
+        for( int i = 1; i < diffParts.count(); i++ )
+        {
+            if( !diffParts[ i ].startsWith( "--" ) )
+            {
+                continue;
+            }
 
-			diff->addOption( QString::fromUtf8( diffParts[ i ].constData() ) );
-		}
+            diff->addOption( QString::fromUtf8( diffParts[ i ].constData() ) );
+        }
 
-		line = nextLine( dev );
+        line = nextLine( dev );
 
-		while( !line.startsWith( "---" ) &&
-			   !line.startsWith( "diff " ) &&
-			   !dev->atEnd() )
-		{
-			diff->addOptionLine( QString::fromUtf8( line.constData() ) );
-			line = nextLine( dev );
-		}
+        while( !line.startsWith( "---" ) &&
+               !line.startsWith( "diff " ) &&
+               !dev->atEnd() )
+        {
+            diff->addOptionLine( QString::fromUtf8( line.constData() ) );
+            line = nextLine( dev );
+        }
 
-		if( dev->atEnd() )
-		{
-			return Patch::Ptr();
-		}
+        if( dev->atEnd() )
+        {
+            return Patch::Ptr();
+        }
 
-		if( line.startsWith( "diff " ) )
-		{
-			continue;
-		}
+        if( line.startsWith( "diff " ) )
+        {
+            continue;
+        }
 
-		line = nextLine( dev );
-		if( !line.startsWith( "+++" ) )
-		{
-			return Patch::Ptr();
-		}
+        line = nextLine( dev );
+        if( !line.startsWith( "+++" ) )
+        {
+            return Patch::Ptr();
+        }
 
-		line = nextLine( dev );
-		do
-		{
-			if( line.startsWith( "diff " ) )
-			{
-				break;
-			}
+        line = nextLine( dev );
+        do
+        {
+            if( line.startsWith( "diff " ) )
+            {
+                break;
+            }
 
-			if( !line.startsWith( "@@" ) )
-			{
-				return Patch::Ptr();
-			}
+            if( !line.startsWith( "@@" ) )
+            {
+                return Patch::Ptr();
+            }
 
-			QList< QByteArray > hunkParts = line.split( ' ' );
-			Q_ASSERT( hunkParts[ 1 ].startsWith( '-' ) );
-			Q_ASSERT( hunkParts[ 2 ].startsWith( '+' ) );
+            QList< QByteArray > hunkParts = line.split( ' ' );
+            Q_ASSERT( hunkParts[ 1 ].startsWith( '-' ) );
+            Q_ASSERT( hunkParts[ 2 ].startsWith( '+' ) );
 
-			QList< QByteArray > lineParts = hunkParts[ 1 ].mid( 1 ).split( ',' );
-			int leftStart = lineParts[ 0 ].toInt();
-			int leftLength = lineParts[ 1 ].toInt();
+            QList< QByteArray > lineParts = hunkParts[ 1 ].mid( 1 ).split( ',' );
+            int leftStart = lineParts[ 0 ].toInt();
+            int leftLength = lineParts[ 1 ].toInt();
 
-			lineParts = hunkParts[ 2 ].mid( 1 ).split( ',' );
-			int rightStart = lineParts[ 0 ].toInt();
-			int rightLength = lineParts[ 1 ].toInt();
+            lineParts = hunkParts[ 2 ].mid( 1 ).split( ',' );
+            int rightStart = lineParts[ 0 ].toInt();
+            int rightLength = lineParts[ 1 ].toInt();
 
-			DifferenceHunk::Ptr hunk( new DifferenceHunk() );
-			diff->addHunk( hunk );
+            DifferenceHunk::Ptr hunk( new DifferenceHunk() );
+            diff->addHunk( hunk );
 
-			if( hunkParts.count() > 4 )
-			{
-				QString name = QString::fromUtf8( hunkParts[ 4 ].constData() );
+            if( hunkParts.count() > 4 )
+            {
+                QString name = QString::fromUtf8( hunkParts[ 4 ].constData() );
 
-				for( int i = 5; i < hunkParts.count(); i++ )
-				{
-					name += L' ' + QString::fromUtf8( hunkParts[ i ].constData() );
-				}
+                for( int i = 5; i < hunkParts.count(); i++ )
+                {
+                    name += L' ' + QString::fromUtf8( hunkParts[ i ].constData() );
+                }
 
-				hunk->setHunkName( name );
-			}
+                hunk->setHunkName( name );
+            }
 
-			line = nextLine( dev );
+            line = nextLine( dev );
 
-			while( leftLength || rightLength )
-			{
-				if( line[ 0 ] == ' ' )
-				{
-					Difference::Ptr differ( new Difference( 2, Difference::Context ) );
-					hunk->addDifference( differ );
-					differ->sideLines( 0 )->setFirstLine( leftStart );
-					differ->sideLines( 1 )->setFirstLine( rightStart );
+            while( leftLength || rightLength )
+            {
+                if( line[ 0 ] == ' ' )
+                {
+                    Difference::Ptr differ( new Difference( 2, Difference::Context ) );
+                    hunk->addDifference( differ );
+                    differ->sideLines( 0 )->setFirstLine( leftStart );
+                    differ->sideLines( 1 )->setFirstLine( rightStart );
 
-					while( line[ 0 ] == ' ' && ( leftLength || rightLength ) )
-					{
-						QString realLine = QString::fromUtf8( line.mid( 1 ).constData() );
-						differ->sideLines( 0 )->addLine( realLine );
-						leftLength--;
-						leftStart++;
+                    while( line[ 0 ] == ' ' && ( leftLength || rightLength ) )
+                    {
+                        QString realLine = QString::fromUtf8( line.mid( 1 ).constData() );
+                        differ->sideLines( 0 )->addLine( realLine );
+                        leftLength--;
+                        leftStart++;
 
-						differ->sideLines( 1 )->addLine( realLine );
-						rightLength--;
-						rightStart++;
+                        differ->sideLines( 1 )->addLine( realLine );
+                        rightLength--;
+                        rightStart++;
 
-						line = nextLine( dev );
-					}
-				}
-				else
-				{
-					Difference::Ptr differ( new Difference( 2, Difference::Change ) );
-					hunk->addDifference( differ );
-					differ->sideLines( 0 )->setFirstLine( leftStart );
-					differ->sideLines( 1 )->setFirstLine( rightStart );
+                        line = nextLine( dev );
+                    }
+                }
+                else
+                {
+                    Difference::Ptr differ( new Difference( 2, Difference::Change ) );
+                    hunk->addDifference( differ );
+                    differ->sideLines( 0 )->setFirstLine( leftStart );
+                    differ->sideLines( 1 )->setFirstLine( rightStart );
 
-					while( line[ 0 ] == '-' && ( leftLength || rightLength ) )
-					{
-						QString realLine = QString::fromUtf8( line.mid( 1 ).constData() );
-						differ->sideLines( 0 )->addLine( realLine );
-						leftLength--;
-						leftStart++;
+                    while( line[ 0 ] == '-' && ( leftLength || rightLength ) )
+                    {
+                        QString realLine = QString::fromUtf8( line.mid( 1 ).constData() );
+                        differ->sideLines( 0 )->addLine( realLine );
+                        leftLength--;
+                        leftStart++;
 
-						line = nextLine( dev );
-					}
+                        line = nextLine( dev );
+                    }
 
-					while( line[ 0 ] == '+' && ( leftLength || rightLength ) )
-					{
-						QString realLine = QString::fromUtf8( line.mid( 1 ).constData() );
-						differ->sideLines( 1 )->addLine( realLine );
-						rightLength--;
-						rightStart++;
+                    while( line[ 0 ] == '+' && ( leftLength || rightLength ) )
+                    {
+                        QString realLine = QString::fromUtf8( line.mid( 1 ).constData() );
+                        differ->sideLines( 1 )->addLine( realLine );
+                        rightLength--;
+                        rightStart++;
 
-						line = nextLine( dev );
-					}
+                        line = nextLine( dev );
+                    }
 
-					if( differ->sideLines( 0 )->numLines() == 0 )
-					{
-						differ->setType( Difference::Insert );
-					}
-					else if( differ->sideLines( 1 )->numLines() == 0 )
-					{
-						differ->setType( Difference::Delete );
-					}
-				}
-			}
+                    if( differ->sideLines( 0 )->numLines() == 0 )
+                    {
+                        differ->setType( Difference::Insert );
+                    }
+                    else if( differ->sideLines( 1 )->numLines() == 0 )
+                    {
+                        differ->setType( Difference::Delete );
+                    }
+                }
+            }
 
-		} while( ! dev->atEnd() );
-	}
+        } while( ! dev->atEnd() );
+    }
 
-	return patch;
+    return patch;
 }
 
 void Patch::exportRaw( QTextStream& stream )
 {
-	for( int i = 0; i < mPaths.count(); i++ )
-	{
-		mPaths[ i ]->exportRaw( stream );
-	}
+    for( int i = 0; i < mPaths.count(); i++ )
+    {
+        mPaths[ i ]->exportRaw( stream );
+    }
 }
 
 QString Patch::toString()
 {
-	QString result;
-	QTextStream ts( &result );
-	exportRaw( ts );
-	return result;
+    QString result;
+    QTextStream ts( &result );
+    exportRaw( ts );
+    return result;
 }

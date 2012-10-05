@@ -24,210 +24,210 @@
 #include "Config/ConfigUser.h"
 
 Config::Config()
-	: mSettings( NULL )
+    : mSettings( NULL )
 {
 }
 
 Config::~Config()
 {
-	// QSettings' DTor will sync()
-	delete mSettings;
+    // QSettings' DTor will sync()
+    delete mSettings;
 }
 
 Config* Config::sSelf = NULL;
 
 Config& Config::self()
 {
-	if( !sSelf )
-	{
-		sSelf = new Config;
-	}
-	return *sSelf;
+    if( !sSelf )
+    {
+        sSelf = new Config;
+    }
+    return *sSelf;
 }
 
 void Config::loadLevels( const QString& fileName )
 {
-	QFile f( fileName );
-	if( !f.open( QFile::ReadOnly ) )
-	{
-		qFatal( "Cannot load levels.xml" );
-		return;
-	}
+    QFile f( fileName );
+    if( !f.open( QFile::ReadOnly ) )
+    {
+        qFatal( "Cannot load levels.xml" );
+        return;
+    }
 
-	QDomDocument doc;
-	doc.setContent( &f );
+    QDomDocument doc;
+    doc.setContent( &f );
 
-	QDomElement e1 = doc.documentElement();
-	QDomElement e2 = e1.firstChildElement();
-	while( e2.isElement() )
-	{
-		Q_ASSERT( e2.tagName() == QLatin1String( "level" ) );
-		UserLevelDefinition::Ptr lvldef = UserLevelDefinition::read( e2 );
-		if( !lvldef )
-		{
-			return /*false*/;
-		}
-		addUserLevel( lvldef );
+    QDomElement e1 = doc.documentElement();
+    QDomElement e2 = e1.firstChildElement();
+    while( e2.isElement() )
+    {
+        Q_ASSERT( e2.tagName() == QLatin1String( "level" ) );
+        UserLevelDefinition::Ptr lvldef = UserLevelDefinition::read( e2 );
+        if( !lvldef )
+        {
+            return /*false*/;
+        }
+        addUserLevel( lvldef );
 
-		e2 = e2.nextSiblingElement();
-	}
+        e2 = e2.nextSiblingElement();
+    }
 }
 
 void Config::addUserLevel( UserLevelDefinition::Ptr level )
 {
-	int i = 0;
-	while( i < mLevels.count() )
-	{
-		if( mLevels[ i ]->precedence() < level->precedence() )
-			i++;
-		else
-			break;
-	}
+    int i = 0;
+    while( i < mLevels.count() )
+    {
+        if( mLevels[ i ]->precedence() < level->precedence() )
+            i++;
+        else
+            break;
+    }
 
-	mLevels.insert( i, level );
+    mLevels.insert( i, level );
 }
 
 QList< UserLevelDefinition::Ptr > Config::levels() const
 {
-	return mLevels;
+    return mLevels;
 }
 
 void Config::loadSettings()
 {
-	delete mSettings;
-	mSettings = new QSettings();
+    delete mSettings;
+    mSettings = new QSettings();
 
 
-	QString fontName = get( "General/Font", "#" ).toString();
-	if( fontName == QLatin1String( "#" ) )
-		mDefaultFont = QFont();
-	else
-		mDefaultFont.fromString( fontName );
+    QString fontName = get( "General/Font", "#" ).toString();
+    if( fontName == QLatin1String( "#" ) )
+        mDefaultFont = QFont();
+    else
+        mDefaultFont.fromString( fontName );
 
-	fontName = get( "General/DialogFont", "#" ).toString();
-	if( fontName == QLatin1String( "#" ) )
-		mDefaultDialogFont = mDefaultFont;
-	else
-		mDefaultDialogFont.fromString( fontName );
+    fontName = get( "General/DialogFont", "#" ).toString();
+    if( fontName == QLatin1String( "#" ) )
+        mDefaultDialogFont = mDefaultFont;
+    else
+        mDefaultDialogFont.fromString( fontName );
 
-	fontName = get( "General/FixedFont", "#" ).toString();
-	if( fontName == QLatin1String( "#" ) )
-		mDefaultFixedFont = QFont( QLatin1String( "Courier New" ), 10 );
-	else
-		mDefaultFixedFont.fromString( fontName );
+    fontName = get( "General/FixedFont", "#" ).toString();
+    if( fontName == QLatin1String( "#" ) )
+        mDefaultFixedFont = QFont( QLatin1String( "Courier New" ), 10 );
+    else
+        mDefaultFixedFont.fromString( fontName );
 }
 
 void Config::saveSettings()
 {
-	if( mSettings )
-	{
-		mSettings->sync();
-	}
+    if( mSettings )
+    {
+        mSettings->sync();
+    }
 }
 
 QVariant Config::get( const char* szPath, const char* szDefaultValue ) const
 {
-	return get( szPath, QLatin1String( szDefaultValue ) );
+    return get( szPath, QLatin1String( szDefaultValue ) );
 }
 
 QVariant Config::get( const char* szPath, const QVariant& defaultValue ) const
 {
-	return get( QLatin1String( szPath ), defaultValue );
+    return get( QLatin1String( szPath ), defaultValue );
 }
 
 QVariant Config::get( const QString& path, const QVariant& defaultValue ) const
 {
-	if( mSettings )
-	{
-		return mSettings->value( path, defaultValue );
-	}
+    if( mSettings )
+    {
+        return mSettings->value( path, defaultValue );
+    }
 
-	const_cast< Config* >( this )->loadSettings();
+    const_cast< Config* >( this )->loadSettings();
 
-	if( mSettings )
-	{
-		return mSettings->value( path, defaultValue );
-	}
+    if( mSettings )
+    {
+        return mSettings->value( path, defaultValue );
+    }
 
-	return defaultValue;
+    return defaultValue;
 }
 
 void Config::set( const char* pszPath, const QVariant& value )
 {
-	set( QLatin1String( pszPath ), value );
+    set( QLatin1String( pszPath ), value );
 }
 
 void Config::set( const QString& path, const QVariant& value )
 {
-	if( !mSettings )
-	{
-		loadSettings();
-	}
-	Q_ASSERT( mSettings );
+    if( !mSettings )
+    {
+        loadSettings();
+    }
+    Q_ASSERT( mSettings );
 
-	mSettings->setValue( path, value );
+    mSettings->setValue( path, value );
 
-	foreach( ConfigUser* user, mConfigUsers )
-	{
-		if( path.startsWith( user->configBasePath() ) )
-		{
-			QString subPath = path.mid( user->configBasePath().length() + 1 );
-			user->configChanged( subPath, value );
-		}
-	}
+    foreach( ConfigUser* user, mConfigUsers )
+    {
+        if( path.startsWith( user->configBasePath() ) )
+        {
+            QString subPath = path.mid( user->configBasePath().length() + 1 );
+            user->configChanged( subPath, value );
+        }
+    }
 }
 
 
 QFont Config::defaultFont()
 {
-	return self().mDefaultFont;
+    return self().mDefaultFont;
 }
 
 QFont Config::defaultDialogFont()
 {
-	return self().mDefaultDialogFont;
+    return self().mDefaultDialogFont;
 }
 
 QFont Config::defaultFixedFont()
 {
-	return self().mDefaultFixedFont;
+    return self().mDefaultFixedFont;
 }
 
 void Config::setDefaultFont( const QFont& font )
 {
-	mDefaultFont = font;
+    mDefaultFont = font;
 
-	set( "General/Font", font.toString() );
+    set( "General/Font", font.toString() );
 
-	emit fontsChanged();
+    emit fontsChanged();
 }
 
 void Config::setDefaultDialogFont( const QFont& font )
 {
-	mDefaultDialogFont = font;
+    mDefaultDialogFont = font;
 
-	set( "General/DialogFont", font.toString() );
+    set( "General/DialogFont", font.toString() );
 
-	emit fontsChanged();
+    emit fontsChanged();
 }
 
 void Config::setDefaultFixedFont( const QFont& font )
 {
-	mDefaultFixedFont = font;
+    mDefaultFixedFont = font;
 
-	set( "General/FixedFont", font.toString() );
+    set( "General/FixedFont", font.toString() );
 
-	emit fontsChanged();
+    emit fontsChanged();
 }
 
 void Config::addConfigUser( ConfigUser* user )
 {
-	Q_ASSERT( !mConfigUsers.contains( user ) );
-	mConfigUsers.insert( user );
+    Q_ASSERT( !mConfigUsers.contains( user ) );
+    mConfigUsers.insert( user );
 }
 
 void Config::delConfigUser( ConfigUser* user )
 {
-	Q_ASSERT( mConfigUsers.contains( user ) );
-	mConfigUsers.remove( user );
+    Q_ASSERT( mConfigUsers.contains( user ) );
+    mConfigUsers.remove( user );
 }

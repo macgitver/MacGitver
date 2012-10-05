@@ -22,33 +22,33 @@
 #include <QFontComboBox>
 
 FontSelectWidget::FontSelectWidget( QWidget* parent )
-	: QWidget( parent )
+    : QWidget( parent )
 {
-	QHBoxLayout* l = new QHBoxLayout;
+    QHBoxLayout* l = new QHBoxLayout;
 
-	mcboFontName = new QFontComboBox;
-	mcboFontName->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
-	l->addWidget( mcboFontName );
+    mcboFontName = new QFontComboBox;
+    mcboFontName->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+    l->addWidget( mcboFontName );
 
-	mcboSize = new QComboBox;
-	l->addWidget( mcboSize );
+    mcboSize = new QComboBox;
+    l->addWidget( mcboSize );
 
-	mchkBold = new QCheckBox( trUtf8( "Bold" ) );
-	l->addWidget( mchkBold );
+    mchkBold = new QCheckBox( trUtf8( "Bold" ) );
+    l->addWidget( mchkBold );
 
-	mchkItalic = new QCheckBox( trUtf8( "Italic" ) );
-	l->addWidget( mchkItalic );
+    mchkItalic = new QCheckBox( trUtf8( "Italic" ) );
+    l->addWidget( mchkItalic );
 
-	l->setMargin( 0 );
-	setLayout( l );
+    l->setMargin( 0 );
+    setLayout( l );
 
-	connect( mcboFontName, SIGNAL(currentFontChanged(QFont)),
-			 this, SLOT(onCurrentFontChanged(QFont)) );
+    connect( mcboFontName, SIGNAL(currentFontChanged(QFont)),
+             this, SLOT(onCurrentFontChanged(QFont)) );
 
-	connect( mcboSize, SIGNAL(currentIndexChanged(int)),
-			 this, SLOT(onSizeChanged()) );
+    connect( mcboSize, SIGNAL(currentIndexChanged(int)),
+             this, SLOT(onSizeChanged()) );
 
-	onCurrentFontChanged( mcboFontName->font() );
+    onCurrentFontChanged( mcboFontName->font() );
 }
 
 FontSelectWidget::~FontSelectWidget()
@@ -57,121 +57,121 @@ FontSelectWidget::~FontSelectWidget()
 
 void FontSelectWidget::setFontFilters( QFontComboBox::FontFilters filters )
 {
-	mcboFontName->setFontFilters( filters );
+    mcboFontName->setFontFilters( filters );
 }
 
 QFontComboBox::FontFilters FontSelectWidget::fontFilters() const
 {
-	return mcboFontName->fontFilters();
+    return mcboFontName->fontFilters();
 }
 
 void FontSelectWidget::setFontName( const QString& fontName )
 {
-	mcboFontName->setCurrentFont( QFont( fontName, fontSize() ) );
+    mcboFontName->setCurrentFont( QFont( fontName, fontSize() ) );
 }
 
 void FontSelectWidget::setFontSize( int size )
 {
-	for( int i = 0; i < mcboSize->count(); i++ )
-	{
-		int s = mcboSize->itemData( i ).toInt();
-		if( s == size )
-		{
-			mcboSize->setCurrentIndex( i );
-			return;
-		}
-		if( s > size && i )
-		{
-			mcboSize->setCurrentIndex( i - 1 );
-			return;
-		}
-	}
+    for( int i = 0; i < mcboSize->count(); i++ )
+    {
+        int s = mcboSize->itemData( i ).toInt();
+        if( s == size )
+        {
+            mcboSize->setCurrentIndex( i );
+            return;
+        }
+        if( s > size && i )
+        {
+            mcboSize->setCurrentIndex( i - 1 );
+            return;
+        }
+    }
 }
 
 void FontSelectWidget::setBold( bool v )
 {
-	mchkBold->setChecked( v );
+    mchkBold->setChecked( v );
 }
 
 void FontSelectWidget::setItalic( bool v )
 {
-	mchkItalic->setChecked( v );
+    mchkItalic->setChecked( v );
 }
 
 bool FontSelectWidget::bold() const
 {
-	return mchkBold->isChecked();
+    return mchkBold->isChecked();
 }
 
 bool FontSelectWidget::italic() const
 {
-	return mchkItalic->isChecked();
+    return mchkItalic->isChecked();
 }
 
 QString FontSelectWidget::fontName() const
 {
-	return mcboFontName->currentFont().family();
+    return mcboFontName->currentFont().family();
 }
 
 int FontSelectWidget::fontSize() const
 {
-	if( mcboSize->currentIndex() != -1 )
-	{
-		return mcboSize->itemData( mcboSize->currentIndex() ).toInt();
-	}
-	return -1;
+    if( mcboSize->currentIndex() != -1 )
+    {
+        return mcboSize->itemData( mcboSize->currentIndex() ).toInt();
+    }
+    return -1;
 }
 
 void FontSelectWidget::onCurrentFontChanged( QFont font )
 {
-	QFontDatabase db;
+    QFontDatabase db;
 
-	int oldSize = -1;
-	if( mcboSize->currentIndex() != -1 )
-	{
-		oldSize = mcboSize->itemData( mcboSize->currentIndex() ).toInt();
-	}
+    int oldSize = -1;
+    if( mcboSize->currentIndex() != -1 )
+    {
+        oldSize = mcboSize->itemData( mcboSize->currentIndex() ).toInt();
+    }
 
-	font.setBold( bold() );
-	font.setItalic( italic() );
-	QList< int > sizes = db.pointSizes( font.family(), font.styleName() );
+    font.setBold( bold() );
+    font.setItalic( italic() );
+    QList< int > sizes = db.pointSizes( font.family(), font.styleName() );
 
-	disconnect( mcboSize, SIGNAL(currentIndexChanged(int)), this, SLOT(onSizeChanged()) );
-	mcboSize->clear();
-	for( int i = 0; i < sizes.count(); i++ )
-	{
-		mcboSize->addItem( trUtf8( "%1 pt" ).arg( sizes[ i ] ), sizes[ i ] );
-		if( oldSize == sizes[ i ] )
-		{
-			mcboSize->setCurrentIndex( i );
-		}
-	}
-	connect( mcboSize, SIGNAL(currentIndexChanged(int)), this, SLOT(onSizeChanged()) );
+    disconnect( mcboSize, SIGNAL(currentIndexChanged(int)), this, SLOT(onSizeChanged()) );
+    mcboSize->clear();
+    for( int i = 0; i < sizes.count(); i++ )
+    {
+        mcboSize->addItem( trUtf8( "%1 pt" ).arg( sizes[ i ] ), sizes[ i ] );
+        if( oldSize == sizes[ i ] )
+        {
+            mcboSize->setCurrentIndex( i );
+        }
+    }
+    connect( mcboSize, SIGNAL(currentIndexChanged(int)), this, SLOT(onSizeChanged()) );
 
-	emit currentFontChanged( font );
+    emit currentFontChanged( font );
 }
 
 void FontSelectWidget::onSizeChanged()
 {
-	QFont f( selectedFont() );
-	emit currentFontChanged( f );
+    QFont f( selectedFont() );
+    emit currentFontChanged( f );
 }
 
 void FontSelectWidget::setSelectedFont( const QFont& font )
 {
-	mcboFontName->setCurrentFont( font );
-	setFontSize( font.pointSize() );
-	qDebug() << font << "=>" << mcboFontName->currentFont();
-	setItalic( font.italic() );
-	setBold( font.bold() );
+    mcboFontName->setCurrentFont( font );
+    setFontSize( font.pointSize() );
+    qDebug() << font << "=>" << mcboFontName->currentFont();
+    setItalic( font.italic() );
+    setBold( font.bold() );
 }
 
 QFont FontSelectWidget::selectedFont()
 {
-	QFont f( fontName(), fontSize() );
+    QFont f( fontName(), fontSize() );
 
-	f.setBold( bold() );
-	f.setItalic( italic() );
+    f.setBold( bold() );
+    f.setItalic( italic() );
 
-	return f;
+    return f;
 }

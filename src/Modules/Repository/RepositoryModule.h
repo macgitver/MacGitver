@@ -27,36 +27,36 @@ class RepositoryCore;
 
 class RepositoryModule : public Module, public RepositoryActions, private ConfigUser
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
-	Q_INTERFACES( IModule )
+    Q_OBJECT
+    Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
+    Q_INTERFACES( IModule )
 
 public:
-	RepositoryModule();
-	~RepositoryModule();
+    RepositoryModule();
+    ~RepositoryModule();
 
 public:
-	void repositoryChanged( Git::Repository newRepository );
+    void repositoryChanged( Git::Repository newRepository );
 
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
+    void setupConfigPages( IConfigDialog* dlg );
+    Types providesModuleTypes() const;
 
-	void initialize();
-	void deinitialize();
+    void initialize();
+    void deinitialize();
 
 private slots:
-	void onRepositoryCreate();
-	void onRepositoryClone();
-	void onRepositoryOpen();
-	/**
-	 * @brief Helper slot to open a git repository using an OS specific dialog.
-	 */
-	void onRepositoryOpenHelper();
-	void onRepositoryClose();
+    void onRepositoryCreate();
+    void onRepositoryClone();
+    void onRepositoryOpen();
+    /**
+     * @brief Helper slot to open a git repository using an OS specific dialog.
+     */
+    void onRepositoryOpenHelper();
+    void onRepositoryClose();
 
 private:
-	Git::Repository mRepo;
-	RepositoryCore*	mCore;
+    Git::Repository mRepo;
+    RepositoryCore* mCore;
 };
 
 #endif

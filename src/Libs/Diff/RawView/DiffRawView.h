@@ -25,16 +25,16 @@
 
 class DIFF_RAW_VIEW_API DiffRawView : public QTextBrowser
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	DiffRawView( QWidget* parent = 0 );
-	~DiffRawView();
+    DiffRawView( QWidget* parent = 0 );
+    ~DiffRawView();
 
 public:
-	void setPatch( Patch::Ptr patch );
+    void setPatch( Patch::Ptr patch );
 
 private:
-	Patch::Ptr		mCurrentPatch;
+    Patch::Ptr  mCurrentPatch;
 };
 
 #endif

@@ -23,12 +23,12 @@ class QTextBrowser;
 
 class WelcomeView : public Heaven::View
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	WelcomeView();
+    WelcomeView();
 
 private:
-	QTextBrowser*		mBrowser;
+    QTextBrowser* mBrowser;
 };
 
 #endif

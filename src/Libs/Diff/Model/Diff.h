@@ -29,58 +29,58 @@ class QTextStream;
 class DIFF_MODEL_API DiffLines
 {
 public:
-	DiffLines();
+    DiffLines();
 
 public:
-	int numLines() const;
-	QString lineAt( int i ) const;
-	void addLine( const QString& line );
+    int numLines() const;
+    QString lineAt( int i ) const;
+    void addLine( const QString& line );
 
-	int firstLine() const;
-	int lastLine() const;
+    int firstLine() const;
+    int lastLine() const;
 
-	void setFirstLine( int i );
+    void setFirstLine( int i );
 
-	void exportRaw( QTextStream& stream, char prefix );
+    void exportRaw( QTextStream& stream, char prefix );
 
 private:
-	int					mFirstLine;
-	QStringList			mLines;
+    int             mFirstLine;
+    QStringList     mLines;
 };
 
 class DIFF_MODEL_API Difference : public QSharedData
 {
 public:
-	typedef QExplicitlySharedDataPointer< Difference > Ptr;
-	typedef QList< Ptr > List;
+    typedef QExplicitlySharedDataPointer< Difference > Ptr;
+    typedef QList< Ptr > List;
 
 public:
-	enum Type
-	{
-		Context,
-		Delete,
-		Insert,
-		Change
-	};
+    enum Type
+    {
+        Context,
+        Delete,
+        Insert,
+        Change
+    };
 
 public:
-	Difference( int numSides, Type t = Context );
-	~Difference();
+    Difference( int numSides, Type t = Context );
+    ~Difference();
 
 public:
-	void setType( Type t );
-	Type type() const;
+    void setType( Type t );
+    Type type() const;
 
-	DiffLines* sideLines( int side );
+    DiffLines* sideLines( int side );
 
-	int numLines( int side ) const;
-	int firstLine( int side ) const;
+    int numLines( int side ) const;
+    int firstLine( int side ) const;
 
-	void exportRaw( QTextStream& stream );
+    void exportRaw( QTextStream& stream );
 
 private:
-	Type				mType;
-	QList< DiffLines* >	mSides;
+    Type                mType;
+    QList< DiffLines* > mSides;
 };
 
 #endif

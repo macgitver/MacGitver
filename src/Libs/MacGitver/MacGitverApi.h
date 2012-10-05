@@ -20,9 +20,9 @@
 #include <qglobal.h>
 
 #ifdef MacGitverCore_EXPORTS
-#	define MGV_CORE_API Q_DECL_EXPORT
+#   define MGV_CORE_API Q_DECL_EXPORT
 #else
-#	define MGV_CORE_API Q_DECL_IMPORT
+#   define MGV_CORE_API Q_DECL_IMPORT
 #endif
 
 #endif

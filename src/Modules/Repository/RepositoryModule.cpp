@@ -25,26 +25,26 @@
 #include "CreateRepositoryDlg.h"
 
 RepositoryModule::RepositoryModule()
-	: ConfigUser( "Repository" )
+    : ConfigUser( "Repository" )
 {
-	mCore = new RepositoryCore;
+    mCore = new RepositoryCore;
 }
 
 RepositoryModule::~RepositoryModule()
 {
-	delete mCore;
+    delete mCore;
 }
 
 void RepositoryModule::repositoryChanged( Git::Repository newRepository )
 {
-	mRepo = newRepository;
+    mRepo = newRepository;
 
-	Q_ASSERT( mCore );
-	mCore->setRepository( newRepository );
+    Q_ASSERT( mCore );
+    mCore->setRepository( newRepository );
 
-	bool isValid = mRepo.isValid();
+    bool isValid = mRepo.isValid();
 
-	actRepositoryClose->setEnabled( isValid );
+    actRepositoryClose->setEnabled( isValid );
 }
 
 void RepositoryModule::setupConfigPages( IConfigDialog* dialog )
@@ -53,14 +53,14 @@ void RepositoryModule::setupConfigPages( IConfigDialog* dialog )
 
 Module::Types RepositoryModule::providesModuleTypes() const
 {
-	return Repository;
+    return Repository;
 }
 
 void RepositoryModule::initialize()
 {
-	setupActions( this );
-	acRepositoryMenuAC->mergeInto( "RepositoryMenuMP" );
-	acRepositoryToolBarAC->mergeInto( "RepositoryToolBarMP" );
+    setupActions( this );
+    acRepositoryMenuAC->mergeInto( "RepositoryMenuMP" );
+    acRepositoryToolBarAC->mergeInto( "RepositoryToolBarMP" );
 }
 
 void RepositoryModule::deinitialize()
@@ -69,69 +69,69 @@ void RepositoryModule::deinitialize()
 
 void RepositoryModule::onRepositoryClose()
 {
-	if( mRepo.isValid() )
-	{
-		MacGitver::self().setRepository( Git::Repository() );
-	}
+    if( mRepo.isValid() )
+    {
+        MacGitver::self().setRepository( Git::Repository() );
+    }
 }
 
 void RepositoryModule::onRepositoryCreate()
 {
-	CreateRepositoryDlg().exec();
+    CreateRepositoryDlg().exec();
 }
 
 void RepositoryModule::onRepositoryOpen()
 {
-	QWidget* main = MacGitver::self().mainWindow()->widget();
+    QWidget* main = MacGitver::self().mainWindow()->widget();
 
-	QFileDialog *fd = new QFileDialog(main);
+    QFileDialog *fd = new QFileDialog(main);
 #ifdef Q_OS_MAC
-	fd->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
+    fd->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
 #else
-	fd->setFileMode(QFileDialog::Directory);
+    fd->setFileMode(QFileDialog::Directory);
 #endif
 
-	QString lastUsedDir = configGet( "lastUsedDir", "#" );
-	if( lastUsedDir != QLatin1String( "#" ) )
-	{
-		fd->setDirectory( lastUsedDir );
-	}
+    QString lastUsedDir = configGet( "lastUsedDir", "#" );
+    if( lastUsedDir != QLatin1String( "#" ) )
+    {
+        fd->setDirectory( lastUsedDir );
+    }
 
-	fd->setWindowTitle( trUtf8("Open a Git repository") );
+    fd->setWindowTitle( trUtf8("Open a Git repository") );
 
-	fd->open(this, SLOT(onRepositoryOpenHelper()));
+    fd->open(this, SLOT(onRepositoryOpenHelper()));
 }
 
 void RepositoryModule::onRepositoryOpenHelper()
 {
-	QFileDialog *fd = qobject_cast<QFileDialog *>(sender());
-	Q_ASSERT(fd != 0);
+    QFileDialog *fd = qobject_cast<QFileDialog *>(sender());
+    Q_ASSERT(fd != 0);
 
-	if ( fd->selectedFiles().isEmpty() )
-		return;
+    if ( fd->selectedFiles().isEmpty() )
+        return;
 
-	//! @todo error handling
-	Git::Result r;
-	QString repoDir = Git::Repository::discover( fd->selectedFiles().first(), false,
-												 QStringList(), r );
-	if ( repoDir.isEmpty() )
-		return;
+    //! @todo error handling
+    Git::Result r;
+    QString repoDir = Git::Repository::discover( fd->selectedFiles().first(), false,
+                                                 QStringList(), r );
+    if ( repoDir.isEmpty() )
+        return;
 
-	//! @todo error handling
-	Git::Repository repo = Git::Repository::open( repoDir, r );
-	if( !repo.isValid() )
-		return;
+    //! @todo error handling
+    Git::Repository repo = Git::Repository::open( repoDir, r );
+    if( !repo.isValid() )
+        return;
 
-	// If we successfully loaded the repository at that directory,
-	// we store it as "lastUsedDir"
-	configSet( "lastUsedDir", repoDir );
+    // If we successfully loaded the repository at that directory,
+    // we store it as "lastUsedDir"
+    configSet( "lastUsedDir", repoDir );
 
-	MacGitver::self().setRepository( repo );
+    MacGitver::self().setRepository( repo );
 }
 
 void RepositoryModule::onRepositoryClone()
 {
-	CloneRepositoryDlg().exec();
+    CloneRepositoryDlg().exec();
 }
 
 #if QT_VERSION < 0x050000

@@ -20,9 +20,9 @@
 #include <qglobal.h>
 
 #ifdef DiffModel_EXPORTS
-#	define DIFF_MODEL_API Q_DECL_EXPORT
+#   define DIFF_MODEL_API Q_DECL_EXPORT
 #else
-#	define DIFF_MODEL_API Q_DECL_IMPORT
+#   define DIFF_MODEL_API Q_DECL_IMPORT
 #endif
 
 #endif

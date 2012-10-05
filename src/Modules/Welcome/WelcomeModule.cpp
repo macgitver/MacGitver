@@ -27,29 +27,29 @@ WelcomeModule::WelcomeModule()
 
 void WelcomeModule::setupConfigPages( IConfigDialog* dialog )
 {
-	Q_UNUSED( dialog );
+    Q_UNUSED( dialog );
 }
 
 Module::Types WelcomeModule::providesModuleTypes() const
 {
-	return View;
+    return View;
 }
 
 Heaven::View* WelcomeModule::createWelcomeView()
 {
-	return new WelcomeView();
+    return new WelcomeView();
 }
 
 void WelcomeModule::initialize()
 {
-	registerView( QLatin1String( "Welcome" ),
-				  Heaven::SingleViewType,
-				  &WelcomeModule::createWelcomeView );
+    registerView( QLatin1String( "Welcome" ),
+                  Heaven::SingleViewType,
+                  &WelcomeModule::createWelcomeView );
 }
 
 void WelcomeModule::deinitialize()
 {
-	unregisterView( QLatin1String( "Welcome" ) );
+    unregisterView( QLatin1String( "Welcome" ) );
 }
 
 #if QT_VERSION < 0x050000

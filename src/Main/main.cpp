@@ -18,6 +18,6 @@
 
 int main( int c, char** v )
 {
-	MacGitverMain mgv( c, v );
-	return mgv.exec();
+    MacGitverMain mgv( c, v );
+    return mgv.exec();
 }

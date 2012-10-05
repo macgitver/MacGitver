@@ -27,20 +27,20 @@ class RefsListModel;
 
 class RefsView : public Heaven::View
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	RefsView();
+    RefsView();
 
 public slots:
-	void repositoryChanged( Git::Repository repo );
+    void repositoryChanged( Git::Repository repo );
 
 public:
-	virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
 private:
-	Git::Repository		mRepo;
-	QListView*			mListView;
-	RefsListModel*		mModel;
+    Git::Repository mRepo;
+    QListView*      mListView;
+    RefsListModel*  mModel;
 };
 
 #endif

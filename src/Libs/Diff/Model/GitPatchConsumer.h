@@ -29,33 +29,33 @@ class Difference;
 class DIFF_MODEL_API GitPatchConsumer : public Git::PatchConsumer
 {
 public:
-	GitPatchConsumer();
-	virtual ~GitPatchConsumer();
+    GitPatchConsumer();
+    virtual ~GitPatchConsumer();
 
 private:
-	virtual bool startFile( const QString& oldPath, const QString& newPath, Type type,
-							unsigned int similarity, bool isBinary );
+    virtual bool startFile( const QString& oldPath, const QString& newPath, Type type,
+                            unsigned int similarity, bool isBinary );
 
-	virtual bool startHunk( int newStart, int newLines, int oldStart, int oldLines,
-							const QString& header );
+    virtual bool startHunk( int newStart, int newLines, int oldStart, int oldLines,
+                            const QString& header );
 
-	virtual bool appendContext( const QString& content );
-	virtual bool appendAddition( const QString& content );
-	virtual bool appendDeletion( const QString& content );
+    virtual bool appendContext( const QString& content );
+    virtual bool appendAddition( const QString& content );
+    virtual bool appendDeletion( const QString& content );
 
 public:
-	Patch::Ptr patch() const;
+    Patch::Ptr patch() const;
 
 private:
-	Patch::Ptr			mPatch;
-	PatchFile::Ptr		mCurFile;
-	DifferenceHunk::Ptr	mCurHunk;
-	Difference::Ptr		mCurDiff;
+    Patch::Ptr          mPatch;
+    PatchFile::Ptr      mCurFile;
+    DifferenceHunk::Ptr mCurHunk;
+    Difference::Ptr     mCurDiff;
 
-	int					mRemainsOld, mCurOld;
-	int					mRemainsNew, mCurNew;
-	enum { None, Context, Add, Del, Change }
-						mCurType;
+    int                 mRemainsOld, mCurOld;
+    int                 mRemainsNew, mCurNew;
+    enum { None, Context, Add, Del, Change }
+                        mCurType;
 };
 
 #endif

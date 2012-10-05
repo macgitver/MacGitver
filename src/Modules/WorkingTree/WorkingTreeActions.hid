@@ -1,63 +1,63 @@
 
 Ui WorkingTreeActions {
 
-	ToolBar WorkingTree {
+    ToolBar WorkingTree {
 
-		Menu ToggleFilter {
+        Menu ToggleFilter {
 
-			Text			"Filter";
-		//	Checkable		true;
-		//	Checked			true;
+            Text            "Filter";
+        //  Checkable       true;
+        //  Checked         true;
 
-			Action ShowAll {
-				Text        "All";
-				Checkable   true;
-				Checked     true;
-				_ConnectTo  onShowAll(bool);
-			};
+            Action ShowAll {
+                Text        "All";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowAll(bool);
+            };
 
-			Separator;
+            Separator;
 
-			Action ShowUnchanged {
-				Text        "Unchanged";
-				Checkable   true;
-				Checked     true;
-				_ConnectTo  onShowUnchanged(bool);
-			};
+            Action ShowUnchanged {
+                Text        "Unchanged";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowUnchanged(bool);
+            };
 
-			Action ShowModified {
-				Text        "Modified";
-				Checkable   true;
-				Checked     true;
-				_ConnectTo  onShowModified(bool);
-			};
+            Action ShowModified {
+                Text        "Modified";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowModified(bool);
+            };
 
-			Action ShowMissing {
-				Text        "Missing";
-				Checkable   true;
-				Checked     true;
-				_ConnectTo  onShowMissing(bool);
-			};
+            Action ShowMissing {
+                Text        "Missing";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowMissing(bool);
+            };
 
-			Action ShowIgnored {
-				Text        "Ignored";
-				Checkable   true;
-				Checked     true;
-				_ConnectTo  onShowIgnored(bool);
-			};
+            Action ShowIgnored {
+                Text        "Ignored";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowIgnored(bool);
+            };
 
-			Action ShowUntracked {
-				Text        "Untracked";
-				Checkable   true;
-				Checked     true;
-				_ConnectTo  onShowUntracked(bool);
-			};
-		};
+            Action ShowUntracked {
+                Text        "Untracked";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowUntracked(bool);
+            };
+        };
 
-		Separator;
+        Separator;
 
-		Action WorkingTreeStage;
-		Action WorkingTreeCommit;
-		Action WorkingTreeReset;
-	};
+        Action WorkingTreeStage;
+        Action WorkingTreeCommit;
+        Action WorkingTreeReset;
+    };
 };

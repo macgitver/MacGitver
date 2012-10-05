@@ -29,55 +29,55 @@
 #include "MainWindow.h"
 
 MacGitverMain::MacGitverMain( int argc, char** argv )
-	: MacGitver( argc, argv )
+    : MacGitver( argc, argv )
 {
 }
 
 void MacGitverMain::loadModules()
 {
-	QDir binDir( applicationDirPath() );
+    QDir binDir( applicationDirPath() );
 
-	QStringList modFiles;
-	modFiles << QLatin1String( "Mod*.mgv" );
-	foreach( QString modName, binDir.entryList( modFiles ) )
-	{
-		QPluginLoader* loader = new QPluginLoader( binDir.filePath( modName ), this );
-		QObject* o = loader->instance();
-		if( !o )
-			qDebug( "%s: %s", qPrintable( modName ), qPrintable( loader->errorString() ) );
+    QStringList modFiles;
+    modFiles << QLatin1String( "Mod*.mgv" );
+    foreach( QString modName, binDir.entryList( modFiles ) )
+    {
+        QPluginLoader* loader = new QPluginLoader( binDir.filePath( modName ), this );
+        QObject* o = loader->instance();
+        if( !o )
+            qDebug( "%s: %s", qPrintable( modName ), qPrintable( loader->errorString() ) );
 
-		Module* mod = qobject_cast< Module* >( o );
-		if( mod )
-		{
-			modules()->addModule( mod );
-		}
-		else
-		{
-			delete loader;
-		}
-	}
+        Module* mod = qobject_cast< Module* >( o );
+        if( mod )
+        {
+            modules()->addModule( mod );
+        }
+        else
+        {
+            delete loader;
+        }
+    }
 
-	modules()->initialize();
+    modules()->initialize();
 }
 
 void MacGitverMain::loadLevels()
 {
-	Config::self().loadLevels( QLatin1String( ":/Xml/Levels.xml" ) );
+    Config::self().loadLevels( QLatin1String( ":/Xml/Levels.xml" ) );
 }
 
 void MacGitverMain::boot()
 {
-	loadLevels();
-	loadModules();
+    loadLevels();
+    loadModules();
 
-	MainWindow* mw = new MainWindow;
-	setMainWindow( mw );
+    MainWindow* mw = new MainWindow;
+    setMainWindow( mw );
 
-	mw->show();
+    mw->show();
 }
 
 int MacGitverMain::exec()
 {
-	QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
-	return MacGitver::exec();
+    QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
+    return MacGitver::exec();
 }

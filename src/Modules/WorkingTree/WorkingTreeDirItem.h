@@ -28,37 +28,35 @@ class WorkingTreeFileItem;
 class WorkingTreeDirItem : public WorkingTreeAbstractItem
 {
 public:
-	WorkingTreeDirItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent );
-	~WorkingTreeDirItem();
+    WorkingTreeDirItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent );
+    ~WorkingTreeDirItem();
 
 public:
-	void setName( const QString& name );
-	void setIcon( const QIcon& icon );
+    void setName( const QString& name );
+    void setIcon( const QIcon& icon );
 
 public:
-	QString name() const;
-	bool isDirectory() const;
-	int visibleChildren() const;
-	WorkingTreeAbstractItem* visibleChildAt( int index );
-	QVariant data( int column, int role ) const;
-	int visibleIndex() const;
-	WorkingTreeAbstractItem* childByName( const QString& name );
-	void removeChild( WorkingTreeAbstractItem* child );
-	void appendItem( WorkingTreeAbstractItem* item );
+    QString name() const;
+    bool isDirectory() const;
+    int visibleChildren() const;
+    WorkingTreeAbstractItem* visibleChildAt( int index );
+    QVariant data( int column, int role ) const;
+    int visibleIndex() const;
+    WorkingTreeAbstractItem* childByName( const QString& name );
+    void removeChild( WorkingTreeAbstractItem* child );
+    void appendItem( WorkingTreeAbstractItem* item );
 
-	friend class WorkingTreeAbstractItem;
+    friend class WorkingTreeAbstractItem;
 private:
-	int totalChildren() const{ return mChildren.count(); }
-	WorkingTreeAbstractItem* childAt( int index );
+    int totalChildren() const{ return mChildren.count(); }
+    WorkingTreeAbstractItem* childAt( int index );
 
 private:
-	QString							mName;
-	QIcon							mIcon;
-
-	QVector< WorkingTreeDirItem* >				mDirs;
-	QVector< WorkingTreeFileItem* >				mFiles;
-
-	QHash< QString, WorkingTreeAbstractItem* >	mChildren;
+    QString                                     mName;
+    QIcon                                       mIcon;
+    QVector< WorkingTreeDirItem* >              mDirs;
+    QVector< WorkingTreeFileItem* >             mFiles;
+    QHash< QString, WorkingTreeAbstractItem* >  mChildren;
 };
 
 #endif

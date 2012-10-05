@@ -25,16 +25,16 @@
 class WriteClassHeader
 {
 public:
-	WriteClassHeader( const QString& outFile, const ConfigSection& section );
+    WriteClassHeader( const QString& outFile, const ConfigSection& section );
 
 public:
-	void generate();
+    void generate();
 
 private:
-	QString					mOutFileName;
-	QFile					mOutFile;
-	const ConfigSection&	mSection;
-	QTextStream				mOutStream;
+    QString                 mOutFileName;
+    QFile                   mOutFile;
+    const ConfigSection&    mSection;
+    QTextStream             mOutStream;
 };
 
 #endif

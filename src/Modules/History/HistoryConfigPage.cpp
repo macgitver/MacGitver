@@ -22,10 +22,10 @@
 #include "HistoryDetails.h"
 
 HistoryConfigPage::HistoryConfigPage( IConfigDialog* dlg )
-	: IConfigPage( dlg )
+    : IConfigPage( dlg )
 {
-	setupUi( this );
-	init();
+    setupUi( this );
+    init();
 }
 
 HistoryConfigPage::~HistoryConfigPage()
@@ -34,72 +34,72 @@ HistoryConfigPage::~HistoryConfigPage()
 
 void HistoryConfigPage::apply()
 {
-	int i = 0;
-	if( chkDiffAndHistoryBottom->isChecked() )
-		i = 0;
-	else if( chkDiffAboveDetails->isChecked() )
-		i = 1;
-	else if( chkDiffRight->isChecked() )
-		i = 2;
+    int i = 0;
+    if( chkDiffAndHistoryBottom->isChecked() )
+        i = 0;
+    else if( chkDiffAboveDetails->isChecked() )
+        i = 1;
+    else if( chkDiffRight->isChecked() )
+        i = 2;
 
-	Config::self().set( "History/SplitLayout", i );
+    Config::self().set( "History/SplitLayout", i );
 }
 
 void HistoryConfigPage::init()
 {
-	sswDetailsOverview->addEntry( trUtf8( "Subject" ), false, HHD_Subject );
-	sswDetailsOverview->addEntry( trUtf8( "Author" ), false, HHD_Author );
-	sswDetailsOverview->addEntry( trUtf8( "Author date" ), false, HHD_AuthorDate );
-	sswDetailsOverview->addEntry( trUtf8( "Author name" ), false, HHD_AuthorName );
-	sswDetailsOverview->addEntry( trUtf8( "Author mail" ), false, HHD_AuthorMail );
-	sswDetailsOverview->addEntry( trUtf8( "Committer" ), false, HHD_Committer );
-	sswDetailsOverview->addEntry( trUtf8( "Committer date" ), false, HHD_CommitterDate );
-	sswDetailsOverview->addEntry( trUtf8( "Committer name" ), false, HHD_CommitterName );
-	sswDetailsOverview->addEntry( trUtf8( "Committer mail" ), false, HHD_CommitterMail );
+    sswDetailsOverview->addEntry( trUtf8( "Subject" ), false, HHD_Subject );
+    sswDetailsOverview->addEntry( trUtf8( "Author" ), false, HHD_Author );
+    sswDetailsOverview->addEntry( trUtf8( "Author date" ), false, HHD_AuthorDate );
+    sswDetailsOverview->addEntry( trUtf8( "Author name" ), false, HHD_AuthorName );
+    sswDetailsOverview->addEntry( trUtf8( "Author mail" ), false, HHD_AuthorMail );
+    sswDetailsOverview->addEntry( trUtf8( "Committer" ), false, HHD_Committer );
+    sswDetailsOverview->addEntry( trUtf8( "Committer date" ), false, HHD_CommitterDate );
+    sswDetailsOverview->addEntry( trUtf8( "Committer name" ), false, HHD_CommitterName );
+    sswDetailsOverview->addEntry( trUtf8( "Committer mail" ), false, HHD_CommitterMail );
 
-	QSignalMapper* map = new QSignalMapper( this );
-	map->setMapping( chkDiffAndHistoryBottom, 0 );
-	map->setMapping( chkDiffAboveDetails, 1 );
-	map->setMapping( chkDiffRight, 2 );
+    QSignalMapper* map = new QSignalMapper( this );
+    map->setMapping( chkDiffAndHistoryBottom, 0 );
+    map->setMapping( chkDiffAboveDetails, 1 );
+    map->setMapping( chkDiffRight, 2 );
 
-	connect( chkDiffAboveDetails, SIGNAL(clicked()), map, SLOT(map()) );
-	connect( chkDiffAndHistoryBottom, SIGNAL(clicked()), map, SLOT(map()) );
-	connect( chkDiffRight, SIGNAL(clicked()), map, SLOT(map()) );
+    connect( chkDiffAboveDetails, SIGNAL(clicked()), map, SLOT(map()) );
+    connect( chkDiffAndHistoryBottom, SIGNAL(clicked()), map, SLOT(map()) );
+    connect( chkDiffRight, SIGNAL(clicked()), map, SLOT(map()) );
 
-	int i = Config::self().get( "History/SplitLayout", 0 ).toInt();
-	chkDiffAndHistoryBottom->setChecked( i == 0 );
-	chkDiffAboveDetails->setChecked( i == 1 );
-	chkDiffRight->setChecked( i == 2 );
+    int i = Config::self().get( "History/SplitLayout", 0 ).toInt();
+    chkDiffAndHistoryBottom->setChecked( i == 0 );
+    chkDiffAboveDetails->setChecked( i == 1 );
+    chkDiffRight->setChecked( i == 2 );
 
-	connect( map, SIGNAL(mapped(int)), this, SLOT(onDiffPosChanged(int)) );
+    connect( map, SIGNAL(mapped(int)), this, SLOT(onDiffPosChanged(int)) );
 }
 
 QByteArray HistoryConfigPage::pageId() const
 {
-	return "History";
+    return "History";
 }
 
 QByteArray HistoryConfigPage::groupId() const
 {
-	return "Views";
+    return "Views";
 }
 
 QString HistoryConfigPage::pageName() const
 {
-	return trUtf8( "History" );
+    return trUtf8( "History" );
 }
 
 QString HistoryConfigPage::groupName() const
 {
-	return trUtf8( "Views" );
+    return trUtf8( "Views" );
 }
 
 QWidget* HistoryConfigPage::widget()
 {
-	return this;
+    return this;
 }
 
 void HistoryConfigPage::onDiffPosChanged( int newPos )
 {
-	setModified( this );
+    setModified( this );
 }

@@ -19,23 +19,23 @@
 #include "Widgets/SHA1Input.h"
 
 SHA1Input::SHA1Input( QWidget* parent )
-	: LineEdit( parent )
+    : LineEdit( parent )
 {
-	QRegExp re( QLatin1String( "[0-9a-fA-F]{5,40}" ) );
-	setValidator( new QRegExpValidator( re, this ) );
+    QRegExp re( QLatin1String( "[0-9a-fA-F]{5,40}" ) );
+    setValidator( new QRegExpValidator( re, this ) );
 }
 
 bool SHA1Input::isValid() const
 {
-	return true;
+    return true;
 }
 
 Git::ObjectId SHA1Input::objectId() const
 {
-	return Git::ObjectId::fromString( text() );
+    return Git::ObjectId::fromString( text() );
 }
 
 void SHA1Input::setObjectId( const Git::ObjectId& sha1 )
 {
-	setText( sha1.toString() );
+    setText( sha1.toString() );
 }

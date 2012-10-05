@@ -21,51 +21,51 @@
 #include "FlatTreeComboBox.h"
 
 FlatTreeComboBox::FlatTreeComboBox( QWidget* parent )
-	: QComboBox( parent )
+    : QComboBox( parent )
 {
-	setModel( new FlatTreeModel( this ) );
-	QListView* lv = new QListView;
-	lv->setModel( model() );
-	lv->setItemDelegate( new FlatTreeDelegate( this ) );
-	setView( lv );
+    setModel( new FlatTreeModel( this ) );
+    QListView* lv = new QListView;
+    lv->setModel( model() );
+    lv->setItemDelegate( new FlatTreeDelegate( this ) );
+    setView( lv );
 }
 
 void FlatTreeComboBox::setModel( FlatTreeModel* model )
 {
-	QComboBox::setModel( model );
+    QComboBox::setModel( model );
 }
 
 void FlatTreeComboBox::clear()
 {
-	FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
-	Q_ASSERT( m );
-	m->clear();
+    FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
+    Q_ASSERT( m );
+    m->clear();
 }
 
 void FlatTreeComboBox::add( const QString& entry )
 {
-	FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
-	Q_ASSERT( m );
-	m->remove( entry );
+    FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
+    Q_ASSERT( m );
+    m->remove( entry );
 }
 
 void FlatTreeComboBox::add( const QStringList& entries )
 {
-	FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
-	Q_ASSERT( m );
-	m->add( entries );
+    FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
+    Q_ASSERT( m );
+    m->add( entries );
 }
 
 void FlatTreeComboBox::remove( const QString& entry )
 {
-	FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
-	Q_ASSERT( m );
-	m->remove( entry );
+    FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
+    Q_ASSERT( m );
+    m->remove( entry );
 }
 
 void FlatTreeComboBox::remove( const QStringList& entries )
 {
-	FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
-	Q_ASSERT( m );
-	m->remove( entries );
+    FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );
+    Q_ASSERT( m );
+    m->remove( entries );
 }

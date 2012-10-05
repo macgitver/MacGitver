@@ -21,61 +21,61 @@
 
 
 ConfigUser::ConfigUser( const QString& configBasePath )
-	: mConfigBase( configBasePath )
+    : mConfigBase( configBasePath )
 {
-	Config::self().addConfigUser( this );
+    Config::self().addConfigUser( this );
 }
 
 ConfigUser::ConfigUser( const char* pszConfigBasePath )
-	: mConfigBase( QLatin1String( pszConfigBasePath ) )
+    : mConfigBase( QLatin1String( pszConfigBasePath ) )
 {
-	Config::self().addConfigUser( this );
+    Config::self().addConfigUser( this );
 }
 
 ConfigUser::~ConfigUser()
 {
-	Config::self().delConfigUser( this );
+    Config::self().delConfigUser( this );
 }
 
 QString ConfigUser::configSubPath( const QString& subPath ) const
 {
-	return mConfigBase % QChar( L'/' ) % subPath;
+    return mConfigBase % QChar( L'/' ) % subPath;
 }
 
 QString ConfigUser::configSubPath( const char* pszSubPath ) const
 {
-	return mConfigBase % QChar( L'/' ) % QLatin1String( pszSubPath );
+    return mConfigBase % QChar( L'/' ) % QLatin1String( pszSubPath );
 }
 
 QVariant ConfigUser::configGetV( const QString& subPath,
-								 const QVariant& defaultValue ) const
+                                 const QVariant& defaultValue ) const
 {
-	return Config::self().get( configSubPath( subPath ), defaultValue );
+    return Config::self().get( configSubPath( subPath ), defaultValue );
 }
 
 QVariant ConfigUser::configGetV( const char* pszSubPath,
-								 const QVariant& defaultValue ) const
+                                 const QVariant& defaultValue ) const
 {
-	return Config::self().get( configSubPath( pszSubPath ), defaultValue );
+    return Config::self().get( configSubPath( pszSubPath ), defaultValue );
 }
 
 void ConfigUser::configSet( const QString& subPath, const QVariant& value ) const
 {
-	Config::self().set( configSubPath( subPath ), value );
+    Config::self().set( configSubPath( subPath ), value );
 }
 
 void ConfigUser::configSet( const char* pszSubPath, const QVariant& value ) const
 {
-	Config::self().set( configSubPath( pszSubPath ), value );
+    Config::self().set( configSubPath( pszSubPath ), value );
 }
 
 QString ConfigUser::configBasePath() const
 {
-	return mConfigBase;
+    return mConfigBase;
 }
 
 void ConfigUser::configChanged( const QString& subPath, const QVariant& value )
 {
-	Q_UNUSED( subPath );
-	Q_UNUSED( value );
+    Q_UNUSED( subPath );
+    Q_UNUSED( value );
 }

@@ -23,42 +23,42 @@
 #include "HistoryEntry.h"
 
 HistoryList::HistoryList()
-	: ConfigUser( "History" )
+    : ConfigUser( "History" )
 {
-	setRootIsDecorated( false );
+    setRootIsDecorated( false );
 }
 
 void HistoryList::onCurrentChanged()
 {
-	if( currentIndex().isValid() )
-	{
-		const HistoryModel* hm = qobject_cast< const HistoryModel* >( currentIndex().model() );
-		Q_ASSERT( hm );
+    if( currentIndex().isValid() )
+    {
+        const HistoryModel* hm = qobject_cast< const HistoryModel* >( currentIndex().model() );
+        Q_ASSERT( hm );
 
-		HistoryEntry* e = hm->indexToEntry( currentIndex() );
-		if( e )
-		{
-			emit currentCommitChanged( e->id() );
-			return;
-		}
-	}
+        HistoryEntry* e = hm->indexToEntry( currentIndex() );
+        if( e )
+        {
+            emit currentCommitChanged( e->id() );
+            return;
+        }
+    }
 
-	emit currentCommitChanged( Git::ObjectId() );
+    emit currentCommitChanged( Git::ObjectId() );
 }
 
 void HistoryList::setModel( QAbstractItemModel* model )
 {
-	QTreeView::setModel( model );
+    QTreeView::setModel( model );
 
-	connect( selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-			 this, SLOT(onCurrentChanged()) );
+    connect( selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+             this, SLOT(onCurrentChanged()) );
 
-	HeaderView* hv = new HeaderView( Qt::Horizontal );
-	setHeader( hv );
-	hv->setConfigName( configSubPath( "Columns" ) );
+    HeaderView* hv = new HeaderView( Qt::Horizontal );
+    setHeader( hv );
+    hv->setConfigName( configSubPath( "Columns" ) );
 }
 
 void HistoryList::configChanged( const QString& subPath, const QVariant& value )
 {
-	qDebug() << "ConfigChange:" << subPath << "=>" << value;
+    qDebug() << "ConfigChange:" << subPath << "=>" << value;
 }

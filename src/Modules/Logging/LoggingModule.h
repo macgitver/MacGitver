@@ -23,25 +23,25 @@ class LoggingView;
 
 class LoggingModule : public Module, private ILog
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
-	Q_INTERFACES( IModule )
+    Q_OBJECT
+    Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
+    Q_INTERFACES( IModule )
 
 public:
-	LoggingModule();
+    LoggingModule();
 
 public:
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
+    void setupConfigPages( IConfigDialog* dlg );
+    Types providesModuleTypes() const;
 
-	void initialize();
-	void deinitialize();
-
-private:
-	void addMessage( LogType type, const QString& message );
+    void initialize();
+    void deinitialize();
 
 private:
-	static Heaven::View* createLoggingView();
+    void addMessage( LogType type, const QString& message );
+
+private:
+    static Heaven::View* createLoggingView();
 };
 
 #endif

@@ -24,74 +24,74 @@
 
 enum HistoryHeaderDetails
 {
-	HHD_Subject = 1,
-	HHD_Author,
-	HHD_AuthorName,
-	HHD_AuthorMail,
-	HHD_AuthorDate,
-	HHD_Committer,
-	HHD_CommitterName,
-	HHD_CommitterDate,
-	HHD_CommitterMail,
-	HHD_SHA1,
-	HHD_ChildrenList,
-	HHD_ParentsList
+    HHD_Subject = 1,
+    HHD_Author,
+    HHD_AuthorName,
+    HHD_AuthorMail,
+    HHD_AuthorDate,
+    HHD_Committer,
+    HHD_CommitterName,
+    HHD_CommitterDate,
+    HHD_CommitterMail,
+    HHD_SHA1,
+    HHD_ChildrenList,
+    HHD_ParentsList
 };
 
 class HistoryDetails : public QAbstractScrollArea
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	HistoryDetails( QWidget* parent = 0 );
+    HistoryDetails( QWidget* parent = 0 );
 
 public:
-	void setRepository( Git::Repository repo );
-	void setCommit( const Git::ObjectId& sha1 );
+    void setRepository( Git::Repository repo );
+    void setCommit( const Git::ObjectId& sha1 );
 
 private:
-	void calculate();
+    void calculate();
 
 protected:
-	void paintEvent( QPaintEvent* ev );
-	void resizeEvent( QResizeEvent* ev );
-	void mouseMoveEvent( QMouseEvent* ev );
-	void mousePressEvent( QMouseEvent* ev );
-	void mouseReleaseEvent( QMouseEvent* ev );
+    void paintEvent( QPaintEvent* ev );
+    void resizeEvent( QResizeEvent* ev );
+    void mouseMoveEvent( QMouseEvent* ev );
+    void mousePressEvent( QMouseEvent* ev );
+    void mouseReleaseEvent( QMouseEvent* ev );
 
 public:
-	void clear();
-	void readConfig();
+    void clear();
+    void readConfig();
 
 private:
-	struct HeaderEntry
-	{
-		HeaderEntry( const QString& param, const QString& value, bool fixed = false )
-			: mParameter( param )
-			, mValue( value )
-			, mFixedFont( fixed )
-			, mHovered( false )
-		{
-		}
+    struct HeaderEntry
+    {
+        HeaderEntry( const QString& param, const QString& value, bool fixed = false )
+            : mParameter( param )
+            , mValue( value )
+            , mFixedFont( fixed )
+            , mHovered( false )
+        {
+        }
 
-		QString	mParameter;
-		QString	mValue;
-		QRect	mValueRect;
-		bool	mFixedFont	: 1;
-		bool	mHovered	: 1;
-	};
+        QString mParameter;
+        QString mValue;
+        QRect   mValueRect;
+        bool    mFixedFont  : 1;
+        bool    mHovered    : 1;
+    };
 
-	typedef QList< HeaderEntry > HeaderEntries;
+    typedef QList< HeaderEntry > HeaderEntries;
 
-	QString							mTitle;
-	Git::ObjectId					mCurrentSHA1;
-	HeaderEntries					mHeaders;
-	QStringList						mDetails;
-	QRect							mDetailsRect;
-	QRect							mHeader;
-	int								mParamNameWidth;
-	Git::Repository					mRepo;
-	QList< HistoryHeaderDetails >	mViewDetailRows;
-	bool							mViewDetails : 1;
+    QString                         mTitle;
+    Git::ObjectId                   mCurrentSHA1;
+    HeaderEntries                   mHeaders;
+    QStringList                     mDetails;
+    QRect                           mDetailsRect;
+    QRect                           mHeader;
+    int                             mParamNameWidth;
+    Git::Repository                 mRepo;
+    QList< HistoryHeaderDetails >   mViewDetailRows;
+    bool                            mViewDetails : 1;
 };
 
 #endif

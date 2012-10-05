@@ -30,36 +30,36 @@ class WorkingTreeDirItem;
 class WorkingTreeFileItem : public WorkingTreeAbstractItem
 {
 public:
-	WorkingTreeFileItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent );
-	~WorkingTreeFileItem();
+    WorkingTreeFileItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent );
+    ~WorkingTreeFileItem();
 
 public:
-	void setName( const QString& name );
-	void setState( WorkingTreeFilter state, bool shouldBeVisible );
-	void setIcon( const QIcon& icon );
-	void setSize( qint64 size );
-	void setOwner( const QString& owner );
-	void setLastModified( const QDateTime& lastMod );
+    void setName( const QString& name );
+    void setState( WorkingTreeFilter state, bool shouldBeVisible );
+    void setIcon( const QIcon& icon );
+    void setSize( qint64 size );
+    void setOwner( const QString& owner );
+    void setLastModified( const QDateTime& lastMod );
 
 public:
-	QString name() const;
-	bool isDirectory() const;
-	int visibleChildren() const;
-	WorkingTreeAbstractItem* visibleChildAt( int index );
-	QVariant data( int column, int role ) const;
-	WorkingTreeAbstractItem* parent();
-	int visibleIndex() const;
-	WorkingTreeAbstractItem* childByName( const QString& name );
-	void removeChild( WorkingTreeAbstractItem* child );
-	QModelIndex index() const;
+    QString name() const;
+    bool isDirectory() const;
+    int visibleChildren() const;
+    WorkingTreeAbstractItem* visibleChildAt( int index );
+    QVariant data( int column, int role ) const;
+    WorkingTreeAbstractItem* parent();
+    int visibleIndex() const;
+    WorkingTreeAbstractItem* childByName( const QString& name );
+    void removeChild( WorkingTreeAbstractItem* child );
+    QModelIndex index() const;
 
 private:
-	QString						mName;
-	QIcon						mIcon;
-	QDateTime					mLastMod;
-	QString						mOwner;
-	qint64						mSize;
-	WorkingTreeFilter			mState;
+    QString             mName;
+    QIcon               mIcon;
+    QDateTime           mLastMod;
+    QString             mOwner;
+    qint64              mSize;
+    WorkingTreeFilter   mState;
 };
 
 #endif

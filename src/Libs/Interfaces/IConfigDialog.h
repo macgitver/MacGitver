@@ -24,12 +24,12 @@ class IConfigPage;
 class INTERFACES_API IConfigDialog
 {
 public:
-	IConfigDialog();
-	virtual ~IConfigDialog();
+    IConfigDialog();
+    virtual ~IConfigDialog();
 
 public:
-	virtual void setModified( IConfigPage* page, bool value ) = 0;
-	virtual void addPage( IConfigPage* page ) = 0;
+    virtual void setModified( IConfigPage* page, bool value ) = 0;
+    virtual void addPage( IConfigPage* page ) = 0;
 };
 
 #endif

@@ -26,78 +26,78 @@ class ConfigSubSection;
 class ConfigSetting
 {
 public:
-	ConfigSetting( QDomElement el, ConfigSubSection* parentSection = NULL );
+    ConfigSetting( QDomElement el, ConfigSubSection* parentSection = NULL );
 
 public:
-	QString fullName() const;
-	QString fullPath() const;
-	bool isSubSectioned() const;
+    QString fullName() const;
+    QString fullPath() const;
+    bool isSubSectioned() const;
 
-	bool emitSignal() const;
+    bool emitSignal() const;
 
-	QString name() const;
-	VariantType type() const;
+    QString name() const;
+    VariantType type() const;
 
-	QString typeName() const;
-	QString subTypeName() const;
+    QString typeName() const;
+    QString subTypeName() const;
 
-	QString validatorRule() const;
+    QString validatorRule() const;
 
-	QString defaultValue() const;
-	QString defaultInitializer() const;
+    QString defaultValue() const;
+    QString defaultInitializer() const;
 
 private:
-	ConfigSubSection*	mSubSection;
-	bool				mEmitSignal;
-	QString				mName;
-	QString				mDefaultValue;
-	QString				mType;
-	QString				mSubType;
-	QString				mValidatorRule;
+    ConfigSubSection*   mSubSection;
+    bool                mEmitSignal;
+    QString             mName;
+    QString             mDefaultValue;
+    QString             mType;
+    QString             mSubType;
+    QString             mValidatorRule;
 };
 
 class ConfigSubSection
 {
 public:
-	ConfigSubSection( QDomElement el, ConfigSubSection* parent = NULL );
-	~ConfigSubSection();
+    ConfigSubSection( QDomElement el, ConfigSubSection* parent = NULL );
+    ~ConfigSubSection();
 
 public:
-	QList< ConfigSubSection* > sections() const;
-	QList< ConfigSetting* > settings() const;
+    QList< ConfigSubSection* > sections() const;
+    QList< ConfigSetting* > settings() const;
 
-	QString name() const;
-	QString fullPath() const;
-	QString fullName() const;
+    QString name() const;
+    QString fullPath() const;
+    QString fullName() const;
 
-	void addAllSettings( QList< ConfigSetting* >& settings) const;
+    void addAllSettings( QList< ConfigSetting* >& settings) const;
 
 private:
-	QString						mName;
-	ConfigSubSection*			mParent;
-	QList< ConfigSubSection* >	mSections;
-	QList< ConfigSetting* >		mSettings;
+    QString                     mName;
+    ConfigSubSection*           mParent;
+    QList< ConfigSubSection* >  mSections;
+    QList< ConfigSetting* >     mSettings;
 };
 
 class ConfigSection
 {
 public:
-	ConfigSection( QDomElement el );
-	~ConfigSection();
+    ConfigSection( QDomElement el );
+    ~ConfigSection();
 
 public:
-	QString className() const;
-	QString configPath() const;
+    QString className() const;
+    QString configPath() const;
 
-	QList< ConfigSetting* > allSettings() const;
-	QList< ConfigSetting* > settings() const;
-	QList< ConfigSubSection* > sections() const;
+    QList< ConfigSetting* > allSettings() const;
+    QList< ConfigSetting* > settings() const;
+    QList< ConfigSubSection* > sections() const;
 
 private:
-	QString						mConfigPath;
-	QString						mClassName;
-	QList< ConfigSubSection* >	mSections;
-	QList< ConfigSetting* >		mSettings;
+    QString                     mConfigPath;
+    QString                     mClassName;
+    QList< ConfigSubSection* >  mSections;
+    QList< ConfigSetting* >     mSettings;
 };
 
 #endif

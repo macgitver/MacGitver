@@ -29,23 +29,23 @@ RefsListModel::~RefsListModel()
 
 int RefsListModel::rowCount( const QModelIndex& parent ) const
 {
-	return mOrderedData.count();
+    return mOrderedData.count();
 }
 
 QVariant RefsListModel::data( const QModelIndex& index, int role ) const
 {
-	if( !index.isValid() || index.parent().isValid() )
-	{
-		return QVariant();
-	}
+    if( !index.isValid() || index.parent().isValid() )
+    {
+        return QVariant();
+    }
 
-	switch( role )
-	{
-	case Qt::DisplayRole:
-		return mOrderedData.at( index.row() )->mRefName;
-	}
+    switch( role )
+    {
+    case Qt::DisplayRole:
+        return mOrderedData.at( index.row() )->mRefName;
+    }
 
-	return QVariant();
+    return QVariant();
 }
 
 void RefsListModel::updateRef( const QString& refName )
@@ -54,16 +54,16 @@ void RefsListModel::updateRef( const QString& refName )
 
 void RefsListModel::addRef( const QString& refName )
 {
-	RefInfo* ref = new RefInfo;
-	ref->mRefName = refName;
+    RefInfo* ref = new RefInfo;
+    ref->mRefName = refName;
 
-	mData.insert( refName, ref );
+    mData.insert( refName, ref );
 
-	int row = mOrderedData.count();
+    int row = mOrderedData.count();
 
-	beginInsertRows( QModelIndex(), row, row );
-	mOrderedData.insert( row, ref );
-	endInsertRows();
+    beginInsertRows( QModelIndex(), row, row );
+    mOrderedData.insert( row, ref );
+    endInsertRows();
 }
 
 void RefsListModel::removeRef( const QString& refName )
@@ -72,36 +72,36 @@ void RefsListModel::removeRef( const QString& refName )
 
 void RefsListModel::syncTo( const QStringList& refs )
 {
-	QSet< QString > oldRefs = mData.keys().toSet();
+    QSet< QString > oldRefs = mData.keys().toSet();
 
-	foreach( QString refName, refs )
-	{
-		if( oldRefs.contains( refName ) )
-		{
-			oldRefs.remove( refName );
-		}
-		if( mData.contains( refName ) )
-		{
-			updateRef( refName );
-		}
-		else
-		{
-			addRef( refName );
-		}
-	}
+    foreach( QString refName, refs )
+    {
+        if( oldRefs.contains( refName ) )
+        {
+            oldRefs.remove( refName );
+        }
+        if( mData.contains( refName ) )
+        {
+            updateRef( refName );
+        }
+        else
+        {
+            addRef( refName );
+        }
+    }
 
-	foreach( QString refName, oldRefs )
-	{
-		removeRef( refName );
-	}
+    foreach( QString refName, oldRefs )
+    {
+        removeRef( refName );
+    }
 }
 
 void RefsListModel::clear()
 {
-	beginResetModel();
-	mData.clear();
-	endResetModel();
+    beginResetModel();
+    mData.clear();
+    endResetModel();
 
-	qDeleteAll( mOrderedData );
-	mOrderedData.clear();
+    qDeleteAll( mOrderedData );
+    mOrderedData.clear();
 }

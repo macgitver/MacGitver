@@ -28,21 +28,19 @@ class DiffWidget;
 
 class DiffFrame : public QFrame
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	DiffFrame();
+    DiffFrame();
 
 public:
-	void setPatch( Patch::Ptr patch );
+    void setPatch( Patch::Ptr patch );
 
 private:
-	DiffSplitter*			mSplitter;
-	QScrollBar*				mScrollV;
-	QScrollBar*				mScrollH;
-	QList< DiffWidget* >	mWidgets;
-
-
-	Patch::Ptr				mPatch;
+    DiffSplitter*           mSplitter;
+    QScrollBar*             mScrollV;
+    QScrollBar*             mScrollH;
+    QList< DiffWidget* >    mWidgets;
+    Patch::Ptr              mPatch;
 };
 
 #endif

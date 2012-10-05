@@ -42,29 +42,29 @@
 #include "ui_AboutDlg.h"
 
 MainWindow::MainWindow()
-	: Heaven::MainWindow()
-	, mRepo()
+    : Heaven::MainWindow()
+    , mRepo()
 {
-	setupUi();
+    setupUi();
 
-	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-			 SLOT(repositoryChanged(Git::Repository)) );
+    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+             SLOT(repositoryChanged(Git::Repository)) );
 
-	QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
+    QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
 
-	foreach( UserLevelDefinition::Ptr uld, Config::self().levels() )
-	{
-		if( uld->id() == levelId )
-		{
-			activateLevel( uld );
-			break;
-		}
-	}
+    foreach( UserLevelDefinition::Ptr uld, Config::self().levels() )
+    {
+        if( uld->id() == levelId )
+        {
+            activateLevel( uld );
+            break;
+        }
+    }
 
-	setupFonts();
+    setupFonts();
 
-	connect( &Config::self(), SIGNAL(fontsChanged()),
-			 this, SLOT(setupFonts()) );
+    connect( &Config::self(), SIGNAL(fontsChanged()),
+             this, SLOT(setupFonts()) );
 }
 
 MainWindow::~MainWindow()
@@ -73,162 +73,162 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUi()
 {
-	QIcon icon( QLatin1String( ":/mgv_sak32.png" ) );
-	setWindowIcon( icon );
+    QIcon icon( QLatin1String( ":/mgv_sak32.png" ) );
+    setWindowIcon( icon );
 
-	QFile styleFile( QLatin1String( ":/MacGitver.qss" ) );
-	styleFile.open( QFile::ReadOnly );
-	setStyleSheet( QString::fromUtf8( styleFile.readAll().constData() ) );
+    QFile styleFile( QLatin1String( ":/MacGitver.qss" ) );
+    styleFile.open( QFile::ReadOnly );
+    setStyleSheet( QString::fromUtf8( styleFile.readAll().constData() ) );
 
-	setupActions( this );
-	setMenuBar( mbMainMenuBar->menuBarFor( this ) );
+    setupActions( this );
+    setMenuBar( mbMainMenuBar->menuBarFor( this ) );
 
-	mModes = new Heaven::ModeSwitchWidget();
-	menuBar()->setCornerWidget( mModes );
+    mModes = new Heaven::ModeSwitchWidget();
+    menuBar()->setCornerWidget( mModes );
 
-	setWindowTitle( trUtf8( "MacGitver" ) );
+    setWindowTitle( trUtf8( "MacGitver" ) );
 
-	statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
-	setHeadLabel();
+    statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
+    setHeadLabel();
 
-	mTop = new Heaven::TopLevelWidget();
-	setCentralWidget( mTop );
+    mTop = new Heaven::TopLevelWidget();
+    setCentralWidget( mTop );
 
-	addToolBar( tbMainBar->toolBarFor( this ) );
+    addToolBar( tbMainBar->toolBarFor( this ) );
 
-	moveToCenter();
+    moveToCenter();
 }
 
 void MainWindow::setupFonts()
 {
-	QFont font = Config::defaultFont();
-	setFont( font );
-	QApplication::setFont( font );
-	QApplication::setFont( Config::defaultDialogFont(), "QDialog" );
+    QFont font = Config::defaultFont();
+    setFont( font );
+    QApplication::setFont( font );
+    QApplication::setFont( Config::defaultDialogFont(), "QDialog" );
 }
 
 void MainWindow::moveToCenter()
 {
-	QRect desk = QApplication::desktop()->availableGeometry();
+    QRect desk = QApplication::desktop()->availableGeometry();
 
-	QRect center = QRect( desk.width() / 12, desk.height() / 12,
-						  desk.width() - desk.width() / 6,
-						  desk.height() - desk.height() / 6 );
-	setGeometry( center );
+    QRect center = QRect( desk.width() / 12, desk.height() / 12,
+                          desk.width() - desk.width() / 6,
+                          desk.height() - desk.height() / 6 );
+    setGeometry( center );
 }
 
 void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )
 {
-	QStringList modeNames;
+    QStringList modeNames;
 
-	foreach( UserLevelMode::Ptr mode, uld->userModes() )
-	{
-		modeNames.append( mode->name() );
-	}
+    foreach( UserLevelMode::Ptr mode, uld->userModes() )
+    {
+        modeNames.append( mode->name() );
+    }
 
 //	mModes->setModes( modeNames, QString() );
 
-	mCurrentLevel = uld;
+    mCurrentLevel = uld;
 
-	activateModeForRepo();
+    activateModeForRepo();
 }
 
 void MainWindow::activateModeForRepo()
 {
-	QString preset = QLatin1String( mRepo.isValid() ? "Normal" : "Welcome" );
+    QString preset = QLatin1String( mRepo.isValid() ? "Normal" : "Welcome" );
 
-	QString configPath = mCurrentLevel->id() % QChar( L'/' ) % preset;
-	QString modeName = Config::self().get( configPath, mCurrentLevel->preset( preset ) ).toString();
+    QString configPath = mCurrentLevel->id() % QChar( L'/' ) % preset;
+    QString modeName = Config::self().get( configPath, mCurrentLevel->preset( preset ) ).toString();
 
-	activateMode( modeName );
+    activateMode( modeName );
 }
 
 void MainWindow::createPartialLayout( Heaven::ViewContainer* parent,
-									  UserLevelDefaultLayoutEntry::Ptr entry )
+                                      UserLevelDefaultLayoutEntry::Ptr entry )
 {
-	switch( entry->type() )
-	{
-	case UserLevelDefaultLayoutEntry::Tab:
-		{
-			Heaven::ViewContainer::Type subType = Heaven::ViewContainer::Type( 0 );
-			switch( entry->tabPos() )
-			{
-			case UserLevelDefaultLayoutEntry::Left:
-				subType = Heaven::ViewContainer::SubTabLeft;
-				break;
+    switch( entry->type() )
+    {
+    case UserLevelDefaultLayoutEntry::Tab:
+        {
+            Heaven::ViewContainer::Type subType = Heaven::ViewContainer::Type( 0 );
+            switch( entry->tabPos() )
+            {
+            case UserLevelDefaultLayoutEntry::Left:
+                subType = Heaven::ViewContainer::SubTabLeft;
+                break;
 
-			case UserLevelDefaultLayoutEntry::Right:
-				subType = Heaven::ViewContainer::SubTabRight;
-				break;
+            case UserLevelDefaultLayoutEntry::Right:
+                subType = Heaven::ViewContainer::SubTabRight;
+                break;
 
-			case UserLevelDefaultLayoutEntry::Top:
-				subType = Heaven::ViewContainer::SubTabTop;
-				break;
+            case UserLevelDefaultLayoutEntry::Top:
+                subType = Heaven::ViewContainer::SubTabTop;
+                break;
 
-			case UserLevelDefaultLayoutEntry::Bottom:
-				subType = Heaven::ViewContainer::SubTabBottom;
-				break;
-			}
+            case UserLevelDefaultLayoutEntry::Bottom:
+                subType = Heaven::ViewContainer::SubTabBottom;
+                break;
+            }
 
-			Heaven::ViewContainer* child = new Heaven::ViewContainer(
-											   Heaven::ViewContainer::Tab,
-											   subType,
-											   parent );
+            Heaven::ViewContainer* child = new Heaven::ViewContainer(
+                                               Heaven::ViewContainer::Tab,
+                                               subType,
+                                               parent );
 
-			parent->addContainer( child );
+            parent->addContainer( child );
 
-			foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, entry->children() )
-			{
-				createPartialLayout( child, subEntry );
-			}
-		}
-		break;
+            foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, entry->children() )
+            {
+                createPartialLayout( child, subEntry );
+            }
+        }
+        break;
 
-	case UserLevelDefaultLayoutEntry::Split:
-		{
-			Heaven::ViewContainer* child = new Heaven::ViewContainer(
-											   Heaven::ViewContainer::Splitter,
-											   entry->isVertical() ?
-												   Heaven::ViewContainer::SubSplitVert :
-												   Heaven::ViewContainer::SubSplitHorz,
-											   parent );
+    case UserLevelDefaultLayoutEntry::Split:
+        {
+            Heaven::ViewContainer* child = new Heaven::ViewContainer(
+                                               Heaven::ViewContainer::Splitter,
+                                               entry->isVertical() ?
+                                                   Heaven::ViewContainer::SubSplitVert :
+                                                   Heaven::ViewContainer::SubSplitHorz,
+                                               parent );
 
-			parent->addContainer( child );
+            parent->addContainer( child );
 
-			foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, entry->children() )
-			{
-				createPartialLayout( child, subEntry );
-			}
-		}
-		break;
+            foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, entry->children() )
+            {
+                createPartialLayout( child, subEntry );
+            }
+        }
+        break;
 
-	case UserLevelDefaultLayoutEntry::View:
-		{
-			Heaven::View* v = MacGitver::self().createView( entry->name() );
+    case UserLevelDefaultLayoutEntry::View:
+        {
+            Heaven::View* v = MacGitver::self().createView( entry->name() );
 
-			if( !v )
-			{
-				qDebug( "Could not create a view with id '%s'", qPrintable( entry->name() ) );
-				break;
-			}
+            if( !v )
+            {
+                qDebug( "Could not create a view with id '%s'", qPrintable( entry->name() ) );
+                break;
+            }
 
-			parent->addView( v );
-		}
-		break;
-	}
+            parent->addView( v );
+        }
+        break;
+    }
 }
 
 void MainWindow::activateMode( const QString& modeName )
 {
-	qDebug( "Going to %s mode", qPrintable( modeName ) );
+    qDebug( "Going to %s mode", qPrintable( modeName ) );
 
-	mTop->clear();
+    mTop->clear();
 
-	UserLevelMode::Ptr mode = mCurrentLevel->mode( modeName );
+    UserLevelMode::Ptr mode = mCurrentLevel->mode( modeName );
 
-	UserLevelDefaultLayout::Ptr layout = mode->defaultLayout();
+    UserLevelDefaultLayout::Ptr layout = mode->defaultLayout();
 
-	createPartialLayout( mTop->rootContainer(), layout->root() );
+    createPartialLayout( mTop->rootContainer(), layout->root() );
 
 //	mModes->setEnabled( mode->isLockingMode() );
 //	mModes->setCurrentMode( modeName );
@@ -236,67 +236,67 @@ void MainWindow::activateMode( const QString& modeName )
 
 void MainWindow::repositoryChanged( const Git::Repository& repo )
 {
-	mRepo = repo;
-	activateModeForRepo();
-	setHeadLabel();
+    mRepo = repo;
+    activateModeForRepo();
+    setHeadLabel();
 }
 
 void MainWindow::setHeadLabel()
 {
-	if( mRepo.isValid() )
-	{
-		QString curBranch;
-		Git::Result r;
-		Git::Reference HEAD = mRepo.HEAD( r );
+    if( mRepo.isValid() )
+    {
+        QString curBranch;
+        Git::Result r;
+        Git::Reference HEAD = mRepo.HEAD( r );
 
-		if( HEAD.isValid() )
-		{
-			if( HEAD.name() != QLatin1String( "HEAD" ) )
-			{
-				curBranch = trUtf8( "on branch <b>%1</b>" )
-							.arg( HEAD.name().mid( 11 ) );
-			}
-			else
-			{
-				curBranch = trUtf8( "on detached HEAD at <b>%1</b>" )
-							.arg( HEAD.objectId( r ).toString() );
-			}
-		}
-		else
-		{
-			curBranch = trUtf8( "<b style=\"color: red;\">Branch yet to be born</b>" );
-		}
+        if( HEAD.isValid() )
+        {
+            if( HEAD.name() != QLatin1String( "HEAD" ) )
+            {
+                curBranch = trUtf8( "on branch <b>%1</b>" )
+                            .arg( HEAD.name().mid( 11 ) );
+            }
+            else
+            {
+                curBranch = trUtf8( "on detached HEAD at <b>%1</b>" )
+                            .arg( HEAD.objectId( r ).toString() );
+            }
+        }
+        else
+        {
+            curBranch = trUtf8( "<b style=\"color: red;\">Branch yet to be born</b>" );
+        }
 
-		mLblCurrentBranch->setText( curBranch );
-	}
-	else
-	{
-		mLblCurrentBranch->setText( trUtf8( "No repository loaded" ) );
-	}
+        mLblCurrentBranch->setText( curBranch );
+    }
+    else
+    {
+        mLblCurrentBranch->setText( trUtf8( "No repository loaded" ) );
+    }
 }
 
 void MainWindow::integrateView( Heaven::View* view, Heaven::Positions position )
 {
-	mTop->addView( view, position );
+    mTop->addView( view, position );
 }
 
 QWidget* MainWindow::widget()
 {
-	return this;
+    return this;
 }
 
 void MainWindow::onHelpAbout()
 {
-	QDialog d;
-	Ui::AboutDlg u;
-	u.setupUi( &d );
-	d.exec();
+    QDialog d;
+    Ui::AboutDlg u;
+    u.setupUi( &d );
+    d.exec();
 }
 
 void MainWindow::onToolsPreferences()
 {
-	ConfigDialog d;
-	d.addPage( new GeneralConfigPage( &d ) );
-	MacGitver::self().modules()->setupConfigPages( &d );
-	d.exec();
+    ConfigDialog d;
+    d.addPage( new GeneralConfigPage( &d ) );
+    MacGitver::self().modules()->setupConfigPages( &d );
+    d.exec();
 }

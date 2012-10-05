@@ -22,36 +22,36 @@
 class DiffSplitterHandle : public QSplitterHandle
 {
 public:
-	DiffSplitterHandle( DiffSplitter *parent );
+    DiffSplitterHandle( DiffSplitter *parent );
 
 protected:
-	void paintEvent( QPaintEvent* ev );
+    void paintEvent( QPaintEvent* ev );
 };
 
 DiffSplitterHandle::DiffSplitterHandle( DiffSplitter *parent )
-	: QSplitterHandle( Qt::Horizontal, parent )
+    : QSplitterHandle( Qt::Horizontal, parent )
 {
 }
 
 void DiffSplitterHandle::paintEvent( QPaintEvent* ev )
 {
-	Q_UNUSED( ev );
+    Q_UNUSED( ev );
 
-	QPainter p( this );
+    QPainter p( this );
 
-	p.fillRect( contentsRect(), palette().color( QPalette::Background ) );
+    p.fillRect( contentsRect(), palette().color( QPalette::Background ) );
 }
 
 
 DiffSplitter::DiffSplitter( QWidget* parent )
-	: QSplitter( Qt::Horizontal, parent )
+    : QSplitter( Qt::Horizontal, parent )
 {
-	setHandleWidth( 50 );
-	setProperty( "heavenStyle", false );
+    setHandleWidth( 50 );
+    setProperty( "heavenStyle", false );
 }
 
 QSplitterHandle* DiffSplitter::createHandle()
 {
-	return new DiffSplitterHandle( this );
+    return new DiffSplitterHandle( this );
 }
 

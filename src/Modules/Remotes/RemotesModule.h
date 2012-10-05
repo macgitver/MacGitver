@@ -23,25 +23,25 @@
 
 class RemotesModule : public Module, public RemotesModuleActions
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
-	Q_INTERFACES( IModule )
+    Q_OBJECT
+    Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
+    Q_INTERFACES( IModule )
 
 public:
-	RemotesModule();
+    RemotesModule();
 
 public:
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
+    void setupConfigPages( IConfigDialog* dlg );
+    Types providesModuleTypes() const;
 
-	void initialize();
-	void deinitialize();
+    void initialize();
+    void deinitialize();
 
 private:
-	static Heaven::View* createRemotesView();
+    static Heaven::View* createRemotesView();
 
 private slots:
-	void onRemoteCreate();
+    void onRemoteCreate();
 };
 
 #endif

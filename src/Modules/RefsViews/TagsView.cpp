@@ -22,49 +22,49 @@
 #include "TagsView.h"
 
 TagsView::TagsView()
-	: View( QLatin1String( "Tags" ) )
+    : View( QLatin1String( "Tags" ) )
 {
-	mListWidget = new QListWidget();
-	mListWidget->setFrameStyle( QFrame::NoFrame );
+    mListWidget = new QListWidget();
+    mListWidget->setFrameStyle( QFrame::NoFrame );
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
-	l->addWidget( mListWidget );
+    QVBoxLayout* l = new QVBoxLayout;
+    l->setSpacing( 0 );
+    l->setMargin( 0 );
+    l->addWidget( mListWidget );
 
-	setLayout( l );
+    setLayout( l );
 
-	setViewName( trUtf8( "Tags" ) );
+    setViewName( trUtf8( "Tags" ) );
 
-	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-			 this, SLOT(repositoryChanged(Git::Repository)) );
+    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+             this, SLOT(repositoryChanged(Git::Repository)) );
 
-	Git::Repository repo = MacGitver::self().repository();
-	if( repo.isValid() )
-	{
-		repositoryChanged( repo );
-	}
+    Git::Repository repo = MacGitver::self().repository();
+    if( repo.isValid() )
+    {
+        repositoryChanged( repo );
+    }
 }
 
 void TagsView::repositoryChanged( Git::Repository repo )
 {
-	mRepo = repo;
+    mRepo = repo;
 
-	mListWidget->clear();
+    mListWidget->clear();
 
-	if( mRepo.isValid() )
-	{
-		Git::Result r;
-		QStringList sl = mRepo.allTags( r );
+    if( mRepo.isValid() )
+    {
+        Git::Result r;
+        QStringList sl = mRepo.allTags( r );
 
-		for( int i = 0; i < sl.count(); i++ )
-		{
-			new QListWidgetItem( sl[ i ], mListWidget );
-		}
-	}
+        for( int i = 0; i < sl.count(); i++ )
+        {
+            new QListWidgetItem( sl[ i ], mListWidget );
+        }
+    }
 }
 
 QSize TagsView::sizeHint() const
 {
-	return QSize( 100, 100 );
+    return QSize( 100, 100 );
 }

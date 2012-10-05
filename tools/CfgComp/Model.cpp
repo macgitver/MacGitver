@@ -21,233 +21,233 @@
 
 QString utf8Encoded( QString str )
 {
-	return str;
+    return str;
 }
 
 ConfigSetting::ConfigSetting( QDomElement el, ConfigSubSection* parent )
 {
-	mSubSection = parent;
+    mSubSection = parent;
 
-	mName = el.attribute( QLatin1String( "Name" ) );
-	mDefaultValue = el.attribute( QLatin1String( "Default" ), QString() );
-	mType = el.attribute( QLatin1String( "Type" ) );
-	mSubType = el.attribute( QLatin1String( "Subtype" ), QString() );
-	mValidatorRule = el.attribute( QLatin1String( "Validate" ), QString() );
+    mName = el.attribute( QLatin1String( "Name" ) );
+    mDefaultValue = el.attribute( QLatin1String( "Default" ), QString() );
+    mType = el.attribute( QLatin1String( "Type" ) );
+    mSubType = el.attribute( QLatin1String( "Subtype" ), QString() );
+    mValidatorRule = el.attribute( QLatin1String( "Validate" ), QString() );
 
-	mEmitSignal = el.attribute( QLatin1String( "Notify" ), QLatin1String( "no" ) ).toLower() !=
-			QLatin1String( "no" );
+    mEmitSignal = el.attribute( QLatin1String( "Notify" ), QLatin1String( "no" ) ).toLower() !=
+            QLatin1String( "no" );
 }
 
 bool ConfigSetting::isSubSectioned() const
 {
-	return mSubSection != NULL;
+    return mSubSection != NULL;
 }
 
 QString ConfigSetting::name() const
 {
-	return mName;
+    return mName;
 }
 
 QString ConfigSetting::fullName() const
 {
-	QString fn;
+    QString fn;
 
-	if( mSubSection )
-		fn = mSubSection->fullName() % mName;
-	else
-		fn = mName;
+    if( mSubSection )
+        fn = mSubSection->fullName() % mName;
+    else
+        fn = mName;
 
-	//qDebug() << "CS::fn => " << fn;
+    //qDebug() << "CS::fn => " << fn;
 
-	return fn;
+    return fn;
 }
 
 QString ConfigSetting::fullPath() const
 {
-	if( mSubSection )
-		return mSubSection->fullPath() % QChar( L'/' ) % mName;
-	else
-		return mName;
+    if( mSubSection )
+        return mSubSection->fullPath() % QChar( L'/' ) % mName;
+    else
+        return mName;
 }
 
 bool ConfigSetting::emitSignal() const
 {
-	return mEmitSignal;
+    return mEmitSignal;
 }
 
 VariantType ConfigSetting::type() const
 {
-	return VariantTypes::self().typeFor( mType, mSubType );
+    return VariantTypes::self().typeFor( mType, mSubType );
 }
 
 QString ConfigSetting::typeName() const
 {
-	return mType;
+    return mType;
 }
 
 QString ConfigSetting::subTypeName() const
 {
-	return mSubType;
+    return mSubType;
 }
 
 QString ConfigSetting::validatorRule() const
 {
-	return mValidatorRule;
+    return mValidatorRule;
 }
 
 QString ConfigSetting::defaultValue() const
 {
-	return mDefaultValue;
+    return mDefaultValue;
 }
 
 QString ConfigSetting::defaultInitializer() const
 {
-	if( mType == QLatin1String( "String" ) )
-	{
-		return QLatin1String( "QString::fromUtf8( \"" )
-				% utf8Encoded( mDefaultValue )
-				% QLatin1String( "\" )" );
-	}
-	else if( mDefaultValue.isEmpty() )
-	{
-		return type().defaultCTored();
-	}
-	else
-	{
-		return mDefaultValue;
-	}
+    if( mType == QLatin1String( "String" ) )
+    {
+        return QLatin1String( "QString::fromUtf8( \"" )
+                % utf8Encoded( mDefaultValue )
+                % QLatin1String( "\" )" );
+    }
+    else if( mDefaultValue.isEmpty() )
+    {
+        return type().defaultCTored();
+    }
+    else
+    {
+        return mDefaultValue;
+    }
 }
 
 ConfigSubSection::ConfigSubSection( QDomElement el, ConfigSubSection* parent )
 {
-	mParent = parent;
-	mName = el.attribute( QLatin1String( "Name" ), QString() );
+    mParent = parent;
+    mName = el.attribute( QLatin1String( "Name" ), QString() );
 
-	//qDebug() << "Subsection:" << mName;
+    //qDebug() << "Subsection:" << mName;
 
-	QDomElement elChild = el.firstChildElement();
-	while( elChild.isElement() )
-	{
-		if( elChild.tagName() == QLatin1String( "Setting" ) )
-		{
-			mSettings.append( new ConfigSetting( elChild, this ) );
-		}
-		else if( elChild.tagName() == QLatin1String( "SubSection" ) )
-		{
-			mSections.append( new ConfigSubSection( elChild, this ) );
-		}
-		elChild = elChild.nextSiblingElement();
-	}
+    QDomElement elChild = el.firstChildElement();
+    while( elChild.isElement() )
+    {
+        if( elChild.tagName() == QLatin1String( "Setting" ) )
+        {
+            mSettings.append( new ConfigSetting( elChild, this ) );
+        }
+        else if( elChild.tagName() == QLatin1String( "SubSection" ) )
+        {
+            mSections.append( new ConfigSubSection( elChild, this ) );
+        }
+        elChild = elChild.nextSiblingElement();
+    }
 }
 
 ConfigSubSection::~ConfigSubSection()
 {
-	qDeleteAll( mSections );
-	qDeleteAll( mSettings );
+    qDeleteAll( mSections );
+    qDeleteAll( mSettings );
 }
 
 QList< ConfigSubSection* > ConfigSubSection::sections() const
 {
-	return mSections;
+    return mSections;
 }
 
 QList< ConfigSetting* > ConfigSubSection::settings() const
 {
-	return mSettings;
+    return mSettings;
 }
 
 QString ConfigSubSection::name() const
 {
-	return mName;
+    return mName;
 }
 
 QString ConfigSubSection::fullName() const
 {
-	QString fn;
-	if( mParent )
-		fn = mParent->fullName() % mName;
-	else
-		fn = mName;
+    QString fn;
+    if( mParent )
+        fn = mParent->fullName() % mName;
+    else
+        fn = mName;
 
-	//qDebug() << "CSS::fn = " << fn;
+    //qDebug() << "CSS::fn = " << fn;
 
-	return fn;
+    return fn;
 }
 
 QString ConfigSubSection::fullPath() const
 {
-	if( mParent )
-		return mParent->fullName() % QChar( L'/' ) % mName;
-	else
-		return mName;
+    if( mParent )
+        return mParent->fullName() % QChar( L'/' ) % mName;
+    else
+        return mName;
 }
 
 void ConfigSubSection::addAllSettings( QList< ConfigSetting* >& settings) const
 {
-	settings += mSettings;
+    settings += mSettings;
 
-	foreach( ConfigSubSection* sub, mSections )
-	{
-		sub->addAllSettings( settings );
-	}
+    foreach( ConfigSubSection* sub, mSections )
+    {
+        sub->addAllSettings( settings );
+    }
 }
 
 
 ConfigSection::ConfigSection( QDomElement el )
 {
-	mClassName = el.attribute( QLatin1String( "Class" ) );
-	mConfigPath = el.attribute( QLatin1String( "ConfigPath" ) );
+    mClassName = el.attribute( QLatin1String( "Class" ) );
+    mConfigPath = el.attribute( QLatin1String( "ConfigPath" ) );
 
-	QDomElement elChild = el.firstChildElement();
-	while( elChild.isElement() )
-	{
-		if( elChild.tagName() == QLatin1String( "Setting" ) )
-		{
-			mSettings.append( new ConfigSetting( elChild ) );
-		}
-		else if( elChild.tagName() == QLatin1String( "SubSection" ) )
-		{
-			mSections.append( new ConfigSubSection( elChild ) );
-		}
-		elChild = elChild.nextSiblingElement();
-	}
+    QDomElement elChild = el.firstChildElement();
+    while( elChild.isElement() )
+    {
+        if( elChild.tagName() == QLatin1String( "Setting" ) )
+        {
+            mSettings.append( new ConfigSetting( elChild ) );
+        }
+        else if( elChild.tagName() == QLatin1String( "SubSection" ) )
+        {
+            mSections.append( new ConfigSubSection( elChild ) );
+        }
+        elChild = elChild.nextSiblingElement();
+    }
 
 }
 
 ConfigSection::~ConfigSection()
 {
-	qDeleteAll( mSections );
-	qDeleteAll( mSettings );
+    qDeleteAll( mSections );
+    qDeleteAll( mSettings );
 }
 
 QList< ConfigSubSection* > ConfigSection::sections() const
 {
-	return mSections;
+    return mSections;
 }
 
 QList< ConfigSetting* > ConfigSection::settings() const
 {
-	return mSettings;
+    return mSettings;
 }
 
 QList< ConfigSetting* > ConfigSection::allSettings() const
 {
-	QList< ConfigSetting* > settings = mSettings;
+    QList< ConfigSetting* > settings = mSettings;
 
-	foreach( ConfigSubSection* sub, mSections )
-	{
-		sub->addAllSettings( settings );
-	}
+    foreach( ConfigSubSection* sub, mSections )
+    {
+        sub->addAllSettings( settings );
+    }
 
-	return settings;
+    return settings;
 }
 
 QString ConfigSection::className() const
 {
-	return mClassName;
+    return mClassName;
 }
 
 QString ConfigSection::configPath() const
 {
-	return mConfigPath;
+    return mConfigPath;
 }

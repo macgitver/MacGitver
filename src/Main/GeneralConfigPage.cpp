@@ -24,39 +24,39 @@
 #include "ui_GeneralConfigPage.h"
 
 GeneralConfigPage::GeneralConfigPage( IConfigDialog* dlg )
-	: QWidget()
-	, IConfigPage( dlg )
-	, ui( new Ui::GeneralConfigPage )
+    : QWidget()
+    , IConfigPage( dlg )
+    , ui( new Ui::GeneralConfigPage )
 {
-	ui->setupUi( this );
+    ui->setupUi( this );
 
-	ui->fontGeneral->setSelectedFont( Config::defaultFont() );
-	connect( ui->fontGeneral, SIGNAL(currentFontChanged(QFont)),
-			 this, SLOT(onFontChanged()) );
+    ui->fontGeneral->setSelectedFont( Config::defaultFont() );
+    connect( ui->fontGeneral, SIGNAL(currentFontChanged(QFont)),
+             this, SLOT(onFontChanged()) );
 
-	ui->fontDialogs->setSelectedFont( Config::defaultDialogFont() );
-	connect( ui->fontDialogs, SIGNAL(currentFontChanged(QFont)),
-			 this, SLOT(onFontChanged()) );
+    ui->fontDialogs->setSelectedFont( Config::defaultDialogFont() );
+    connect( ui->fontDialogs, SIGNAL(currentFontChanged(QFont)),
+             this, SLOT(onFontChanged()) );
 
-	ui->fontSourceCode->setFontFilters( QFontComboBox::MonospacedFonts );
-	ui->fontSourceCode->setSelectedFont( Config::defaultFixedFont() );
-	connect( ui->fontSourceCode, SIGNAL(currentFontChanged(QFont)),
-			 this, SLOT(onFontChanged()) );
+    ui->fontSourceCode->setFontFilters( QFontComboBox::MonospacedFonts );
+    ui->fontSourceCode->setSelectedFont( Config::defaultFixedFont() );
+    connect( ui->fontSourceCode, SIGNAL(currentFontChanged(QFont)),
+             this, SLOT(onFontChanged()) );
 
-	foreach( UserLevelDefinition::Ptr lvl, Config::self().levels() )
-	{
-		ui->cboUserLevel->addItem( lvl->name(), lvl->precedence() );
-	}
+    foreach( UserLevelDefinition::Ptr lvl, Config::self().levels() )
+    {
+        ui->cboUserLevel->addItem( lvl->name(), lvl->precedence() );
+    }
 
-	connect( ui->cboUserLevel, SIGNAL(currentIndexChanged(int)),
-			 this, SLOT(onUserLevelChanged(int)) );
+    connect( ui->cboUserLevel, SIGNAL(currentIndexChanged(int)),
+             this, SLOT(onUserLevelChanged(int)) );
 
-	onUserLevelChanged( 0 );
+    onUserLevelChanged( 0 );
 }
 
 GeneralConfigPage::~GeneralConfigPage()
 {
-	delete ui;
+    delete ui;
 }
 
 void GeneralConfigPage::init()
@@ -65,59 +65,59 @@ void GeneralConfigPage::init()
 
 void GeneralConfigPage::apply()
 {
-	Config::self().setDefaultFont( ui->fontGeneral->selectedFont() );
-	Config::self().setDefaultDialogFont( ui->fontDialogs->selectedFont() );
-	Config::self().setDefaultFixedFont( ui->fontSourceCode->selectedFont() );
-	setModified( false );
+    Config::self().setDefaultFont( ui->fontGeneral->selectedFont() );
+    Config::self().setDefaultDialogFont( ui->fontDialogs->selectedFont() );
+    Config::self().setDefaultFixedFont( ui->fontSourceCode->selectedFont() );
+    setModified( false );
 }
 
 void GeneralConfigPage::onFontChanged()
 {
-	setModified();
+    setModified();
 }
 
 void GeneralConfigPage::onUserLevelChanged( int index )
 {
-	if( index == -1 )
-	{
-		return;
-	}
+    if( index == -1 )
+    {
+        return;
+    }
 
-	setModified();
+    setModified();
 
-	int data = ui->cboUserLevel->itemData( index ).toInt();
+    int data = ui->cboUserLevel->itemData( index ).toInt();
 
-	foreach( UserLevelDefinition::Ptr lvl, Config::self().levels() )
-	{
-		if( lvl->precedence() == data )
-		{
-			ui->txtUserLevelDescription->setHtml( lvl->description() );
-			return;
-		}
-	}
+    foreach( UserLevelDefinition::Ptr lvl, Config::self().levels() )
+    {
+        if( lvl->precedence() == data )
+        {
+            ui->txtUserLevelDescription->setHtml( lvl->description() );
+            return;
+        }
+    }
 }
 
 QByteArray GeneralConfigPage::pageId() const
 {
-	return "MacGitver";
+    return "MacGitver";
 }
 
 QString GeneralConfigPage::pageName() const
 {
-	return trUtf8( "MacGitver" );
+    return trUtf8( "MacGitver" );
 }
 
 QByteArray GeneralConfigPage::groupId() const
 {
-	return "General";
+    return "General";
 }
 
 QString GeneralConfigPage::groupName() const
 {
-	return trUtf8( "Gerneral" );
+    return trUtf8( "Gerneral" );
 }
 
 QWidget* GeneralConfigPage::widget()
 {
-	return this;
+    return this;
 }

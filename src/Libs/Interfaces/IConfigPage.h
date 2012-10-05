@@ -28,27 +28,27 @@ class IConfigDialog;
 class INTERFACES_API IConfigPage
 {
 public:
-	IConfigPage( IConfigDialog* dlg );
-	virtual ~IConfigPage();
+    IConfigPage( IConfigDialog* dlg );
+    virtual ~IConfigPage();
 
 public:
-	virtual QByteArray pageId() const = 0;
-	virtual QString pageName() const = 0;
-	virtual QByteArray groupId() const = 0;
-	virtual QString groupName() const = 0;
+    virtual QByteArray pageId() const = 0;
+    virtual QString pageName() const = 0;
+    virtual QByteArray groupId() const = 0;
+    virtual QString groupName() const = 0;
 
-	virtual QWidget* widget() = 0;
+    virtual QWidget* widget() = 0;
 
-	virtual void apply() = 0;
+    virtual void apply() = 0;
 
 protected:
-	void setModified( bool value = true );
+    void setModified( bool value = true );
 
 private:
-	IConfigDialog*			mDialog;
+    IConfigDialog*  mDialog;
 };
 
 Q_DECLARE_INTERFACE( IConfigPage,
-					 "org.macgitver.macgitver.configpage/1.0")
+                     "org.macgitver.macgitver.configpage/1.0")
 
 #endif

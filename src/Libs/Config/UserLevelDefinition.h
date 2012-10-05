@@ -30,188 +30,189 @@ class QDomElement;
 
 namespace Heaven
 {
-	class MainWindow;
-	class Mode;
-	class WindowStateBase;
+    class MainWindow;
+    class Mode;
+    class WindowStateBase;
 }
 
 class CONFIG_API EnableDisable
 {
 public:
-	EnableDisable();
-	EnableDisable( const QString& regex, bool enable );
+    EnableDisable();
+    EnableDisable( const QString& regex, bool enable );
 
 public:
-	QString regex() const;
-	bool enable() const;
+    QString regex() const;
+    bool enable() const;
 
 private:
-	QString	mRegex;
-	bool	mEnable;
+    QString	mRegex;
+    bool	mEnable;
 };
 
 class CONFIG_API EnableDisableList
 {
 public:
-	EnableDisableList();
-	EnableDisableList( const QDomElement& parent );
+    EnableDisableList();
+    EnableDisableList( const QDomElement& parent );
 
 public:
-	QStringList appliedTo( const QStringList& list ) const;
+    QStringList appliedTo( const QStringList& list ) const;
 
 public:
-	int count() const;
-	const EnableDisable& at( int index ) const;
+    int count() const;
+    const EnableDisable& at( int index ) const;
 
 private:
-	bool read( const QDomElement& parent );
+    bool read( const QDomElement& parent );
 
 private:
-	QList< EnableDisable > mList;
+    QList< EnableDisable > mList;
 };
 
 class CONFIG_API UserLevelDefaultLayoutEntry : public QSharedData
 {
 public:
-	typedef QExplicitlySharedDataPointer< UserLevelDefaultLayoutEntry > Ptr;
+    typedef QExplicitlySharedDataPointer< UserLevelDefaultLayoutEntry > Ptr;
+    typedef QVector< Ptr > Vector;
 
 public:
-	enum Type
-	{
-		View,
-		Split,
-		Tab
-	};
+    enum Type
+    {
+        View,
+        Split,
+        Tab
+    };
 
-	enum TabPos
-	{
-		Left,
-		Right,
-		Top,
-		Bottom
-	};
-
-public:
-	UserLevelDefaultLayoutEntry();
-	~UserLevelDefaultLayoutEntry();
+    enum TabPos
+    {
+        Left,
+        Right,
+        Top,
+        Bottom
+    };
 
 public:
-	Type type() const;
-	int numChildren() const;
-	UserLevelDefaultLayoutEntry::Ptr childAt( int index ) const;
-	QVector< UserLevelDefaultLayoutEntry::Ptr > children() const;
-	bool isVertical() const;
-	TabPos tabPos() const;
-	QString name() const;
-
-	void addToWindowState( Heaven::WindowStateBase* parent );
+    UserLevelDefaultLayoutEntry();
+    ~UserLevelDefaultLayoutEntry();
 
 public:
-	static UserLevelDefaultLayoutEntry::Ptr read( const QDomElement& el );
+    Type type() const;
+    int numChildren() const;
+    UserLevelDefaultLayoutEntry::Ptr childAt( int index ) const;
+    QVector< UserLevelDefaultLayoutEntry::Ptr > children() const;
+    bool isVertical() const;
+    TabPos tabPos() const;
+    QString name() const;
+
+    void addToWindowState( Heaven::WindowStateBase* parent );
+
+public:
+    static UserLevelDefaultLayoutEntry::Ptr read( const QDomElement& el );
 
 private:
-	static bool parseOrient( const QString& s );
-	static TabPos parseCaption( const QString& s );
+    static bool parseOrient( const QString& s );
+    static TabPos parseCaption( const QString& s );
 
 private:
-	Type										mType;
-	QString										mName;
-	int											mStretch;
-	bool										mVertical;
-	TabPos										mTabPos;
-	QVector< UserLevelDefaultLayoutEntry::Ptr >	mChildren;
+    Type                                mType;
+    QString                             mName;
+    int                                 mStretch;
+    bool                                mVertical;
+    TabPos                              mTabPos;
+    UserLevelDefaultLayoutEntry::Vector mChildren;
 };
 
 class CONFIG_API UserLevelDefaultLayout : public QSharedData
 {
 public:
-	typedef QExplicitlySharedDataPointer< UserLevelDefaultLayout > Ptr;
+    typedef QExplicitlySharedDataPointer< UserLevelDefaultLayout > Ptr;
 public:
-	UserLevelDefaultLayout();
-	~UserLevelDefaultLayout();
+    UserLevelDefaultLayout();
+    ~UserLevelDefaultLayout();
 
 public:
-	UserLevelDefaultLayoutEntry::Ptr root() const;
+    UserLevelDefaultLayoutEntry::Ptr root() const;
 
 public:
-	static UserLevelDefaultLayout::Ptr read( const QDomElement& el );
+    static UserLevelDefaultLayout::Ptr read( const QDomElement& el );
 
 private:
-	UserLevelDefaultLayoutEntry::Ptr mRoot;
+    UserLevelDefaultLayoutEntry::Ptr mRoot;
 };
 
 class CONFIG_API UserLevelMode : public QSharedData
 {
 public:
-	typedef QExplicitlySharedDataPointer< UserLevelMode > Ptr;
+    typedef QExplicitlySharedDataPointer< UserLevelMode > Ptr;
 public:
-	UserLevelMode();
-	UserLevelMode( const QString& modeName );
-	~UserLevelMode();
-
-public:
-	QString name() const;
-	EnableDisableList& allowedViews();
-	const EnableDisableList& allowedViews() const;
-
-	UserLevelDefaultLayout::Ptr defaultLayout() const;
-
-	bool isLockingMode() const;
-	bool isUserSelectable() const;
-
-	Heaven::Mode* createHeavenMode( Heaven::MainWindow* mainWindow );
+    UserLevelMode();
+    UserLevelMode( const QString& modeName );
+    ~UserLevelMode();
 
 public:
-	static UserLevelMode::Ptr read( const QDomElement& el );
+    QString name() const;
+    EnableDisableList& allowedViews();
+    const EnableDisableList& allowedViews() const;
+
+    UserLevelDefaultLayout::Ptr defaultLayout() const;
+
+    bool isLockingMode() const;
+    bool isUserSelectable() const;
+
+    Heaven::Mode* createHeavenMode( Heaven::MainWindow* mainWindow );
+
+public:
+    static UserLevelMode::Ptr read( const QDomElement& el );
 
 private:
-	QString						mModeName;
-	UserLevelDefaultLayout::Ptr	mDefaultLayout;
-	EnableDisableList			mAllowedViews;
-	bool						mIsLocking;
-	bool						mIsUserSelectable;
+    QString                     mModeName;
+    UserLevelDefaultLayout::Ptr mDefaultLayout;
+    EnableDisableList           mAllowedViews;
+    bool                        mIsLocking;
+    bool                        mIsUserSelectable;
 };
 
 class CONFIG_API UserLevelDefinition : public QSharedData
 {
 public:
-	typedef QExplicitlySharedDataPointer< UserLevelDefinition > Ptr;
+    typedef QExplicitlySharedDataPointer< UserLevelDefinition > Ptr;
 
 public:
-	~UserLevelDefinition();
+    ~UserLevelDefinition();
 
 private:
-	UserLevelDefinition();
+    UserLevelDefinition();
 
 public:
-	void setDescription( const QString& desc );
-	void addPreset( const QString& type, const QString& preset );
+    void setDescription( const QString& desc );
+    void addPreset( const QString& type, const QString& preset );
 
 public:
-	QString name() const;
-	QString id() const;
-	int precedence() const;
-	QString description() const;
-	void readGuiDef(const QString& fileName );
-	QString preset( const QString& type ) const;
+    QString name() const;
+    QString id() const;
+    int precedence() const;
+    QString description() const;
+    void readGuiDef(const QString& fileName );
+    QString preset( const QString& type ) const;
 
-	int numModes() const;
-	QList< UserLevelMode::Ptr > userModes() const;
-	QList< UserLevelMode::Ptr > allModes() const;
-	UserLevelMode::Ptr mode( int index ) const;
-	UserLevelMode::Ptr mode( const QString& name ) const;
+    int numModes() const;
+    QList< UserLevelMode::Ptr > userModes() const;
+    QList< UserLevelMode::Ptr > allModes() const;
+    UserLevelMode::Ptr mode( int index ) const;
+    UserLevelMode::Ptr mode( const QString& name ) const;
 
 public:
-	static UserLevelDefinition::Ptr read( const QDomElement& el );
+    static UserLevelDefinition::Ptr read( const QDomElement& el );
 
 private:
-	QString						mName;
-	QString						mId;
-	int							mAppLevel;
-	int							mPrecedence;
-	QString						mDescription;
-	QList< UserLevelMode::Ptr >	mModes;
-	QHash< QString, QString >	mHeavenPresets;
+    QString                     mName;
+    QString                     mId;
+    int                         mAppLevel;
+    int                         mPrecedence;
+    QString                     mDescription;
+    QList< UserLevelMode::Ptr > mModes;
+    QHash< QString, QString >   mHeavenPresets;
 };
 
 #endif

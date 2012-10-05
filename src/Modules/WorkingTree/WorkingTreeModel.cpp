@@ -30,234 +30,234 @@
 
 QIcon getWindowsIcon( const QString& pathName )
 {
-	SHFILEINFOW shfi;
-	memset( &shfi, 0, sizeof(shfi) );
-	DWORD flags = SHGFI_ICON | SHGFI_USEFILEATTRIBUTES | SHGFI_SMALLICON;
-	SHGetFileInfoW( (LPCWSTR) pathName.utf16(), FILE_ATTRIBUTE_NORMAL, &shfi, sizeof(shfi), flags );
+    SHFILEINFOW shfi;
+    memset( &shfi, 0, sizeof(shfi) );
+    DWORD flags = SHGFI_ICON | SHGFI_USEFILEATTRIBUTES | SHGFI_SMALLICON;
+    SHGetFileInfoW( (LPCWSTR) pathName.utf16(), FILE_ATTRIBUTE_NORMAL, &shfi, sizeof(shfi), flags );
 
-	QPixmap pm = QPixmap::fromWinHICON( shfi.hIcon );	// Undefined für Qt5!
-	DestroyIcon( shfi.hIcon );
-	return QIcon( pm );
+    QPixmap pm = QPixmap::fromWinHICON( shfi.hIcon );	// Undefined für Qt5!
+    DestroyIcon( shfi.hIcon );
+    return QIcon( pm );
 }
 #endif
 
 WorkingTreeModel::WorkingTreeModel( Git::Repository repo, QObject* parent )
-	: QAbstractItemModel( parent )
-	, mRepo( repo )
-	, mRootItem( NULL )
+    : QAbstractItemModel( parent )
+    , mRepo( repo )
+    , mRootItem( NULL )
 {
-	mFilters = WTF_All;
-	mRootItem = new WorkingTreeDirItem( this, NULL );
-	update();
+    mFilters = WTF_All;
+    mRootItem = new WorkingTreeDirItem( this, NULL );
+    update();
 }
 
 WorkingTreeModel::~WorkingTreeModel()
 {
-	delete mRootItem;
+    delete mRootItem;
 }
 
 QVariant WorkingTreeModel::data( const QModelIndex& index, int role ) const
 {
-	if( !index.isValid() )
-	{
-		return QVariant();
-	}
+    if( !index.isValid() )
+    {
+        return QVariant();
+    }
 
-	WorkingTreeAbstractItem* item =
-			static_cast< WorkingTreeAbstractItem* >( index.internalPointer() );
+    WorkingTreeAbstractItem* item =
+            static_cast< WorkingTreeAbstractItem* >( index.internalPointer() );
 
-	return item->data( index.column(), role );
+    return item->data( index.column(), role );
 }
 
 Qt::ItemFlags WorkingTreeModel::flags( const QModelIndex& index ) const
 {
-	return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
 QVariant WorkingTreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
-	if( orientation == Qt::Vertical || role != Qt::DisplayRole )
-	{
-		return QVariant();
-	}
+    if( orientation == Qt::Vertical || role != Qt::DisplayRole )
+    {
+        return QVariant();
+    }
 
-	switch( section )
-	{
-	case 0:		return trUtf8( "Name" );
-	case 1:		return trUtf8( "Size" );
-	case 2:		return trUtf8( "M-Time" );
-	case 3:		return trUtf8( "Owner" );
-	default:	return QVariant();
-	}
+    switch( section )
+    {
+    case 0:		return trUtf8( "Name" );
+    case 1:		return trUtf8( "Size" );
+    case 2:		return trUtf8( "M-Time" );
+    case 3:		return trUtf8( "Owner" );
+    default:	return QVariant();
+    }
 }
 
 QModelIndex WorkingTreeModel::index( int row, int column, const QModelIndex& parent ) const
 {
-	if( !hasIndex( row, column, parent ) )
-	{
-		return QModelIndex();
-	}
+    if( !hasIndex( row, column, parent ) )
+    {
+        return QModelIndex();
+    }
 
-	WorkingTreeAbstractItem* parentItem;
+    WorkingTreeAbstractItem* parentItem;
 
-	if( !parent.isValid() )
-		parentItem = mRootItem;
-	else
-		parentItem = static_cast<WorkingTreeAbstractItem*>( parent.internalPointer() );
+    if( !parent.isValid() )
+        parentItem = mRootItem;
+    else
+        parentItem = static_cast<WorkingTreeAbstractItem*>( parent.internalPointer() );
 
-	WorkingTreeAbstractItem* childItem = parentItem->visibleChildAt( row );
-	if( childItem )
-		return createIndex( row, column, childItem );
-	else
-		return QModelIndex();
+    WorkingTreeAbstractItem* childItem = parentItem->visibleChildAt( row );
+    if( childItem )
+        return createIndex( row, column, childItem );
+    else
+        return QModelIndex();
 }
 
 QModelIndex WorkingTreeModel::parent( const QModelIndex& index ) const
 {
-	if( !index.isValid() )
-		return QModelIndex();
+    if( !index.isValid() )
+        return QModelIndex();
 
-	WorkingTreeAbstractItem* childItem =
-			static_cast< WorkingTreeAbstractItem* >( index.internalPointer() );
-	WorkingTreeAbstractItem* parentItem = childItem->parent();
+    WorkingTreeAbstractItem* childItem =
+            static_cast< WorkingTreeAbstractItem* >( index.internalPointer() );
+    WorkingTreeAbstractItem* parentItem = childItem->parent();
 
-	if( parentItem == mRootItem )
-		return QModelIndex();
+    if( parentItem == mRootItem )
+        return QModelIndex();
 
-	return createIndex( parentItem->visibleIndex(), 0, parentItem );
+    return createIndex( parentItem->visibleIndex(), 0, parentItem );
 }
 
 int WorkingTreeModel::rowCount( const QModelIndex& parent ) const
 {
-	WorkingTreeAbstractItem* parentItem;
-	if( parent.column() > 0 )
-	{
-		return 0;
-	}
+    WorkingTreeAbstractItem* parentItem;
+    if( parent.column() > 0 )
+    {
+        return 0;
+    }
 
-	if( !parent.isValid() )
-		parentItem = mRootItem;
-	else
-		parentItem = static_cast< WorkingTreeAbstractItem* >( parent.internalPointer() );
+    if( !parent.isValid() )
+        parentItem = mRootItem;
+    else
+        parentItem = static_cast< WorkingTreeAbstractItem* >( parent.internalPointer() );
 
-	return parentItem->visibleChildren();
+    return parentItem->visibleChildren();
 }
 
 int WorkingTreeModel::columnCount( const QModelIndex& parent ) const
 {
-	return 4;
+    return 4;
 }
 
 void WorkingTreeModel::setRepository( Git::Repository repo )
 {
-	mRepo = repo;
-	update();
+    mRepo = repo;
+    update();
 }
 
 void WorkingTreeModel::update()
 {
-	if( !mRepo.isValid() )
-	{
-		return;
-	}
+    if( !mRepo.isValid() )
+    {
+        return;
+    }
 
-	QFileIconProvider ip;
-	QIcon folderIcon = ip.icon( QFileIconProvider::Folder );
+    QFileIconProvider ip;
+    QIcon folderIcon = ip.icon( QFileIconProvider::Folder );
 
-	Git::Result r;
-	Git::StatusHash sh = mRepo.statusHash( r );
-	Git::StatusHash::ConstIterator it = sh.constBegin();
-	while( it != sh.constEnd() )
-	{
-		WorkingTreeFilters curState;
+    Git::Result r;
+    Git::StatusHash sh = mRepo.statusHash( r );
+    Git::StatusHash::ConstIterator it = sh.constBegin();
+    while( it != sh.constEnd() )
+    {
+        WorkingTreeFilters curState;
 
-		unsigned int st = it.value();
-		if( st == Git::StatusCurrent )
-			curState |= WTF_Unchanged;
+        unsigned int st = it.value();
+        if( st == Git::StatusCurrent )
+            curState |= WTF_Unchanged;
 
-		else if( st & Git::StatusIgnored )
-			curState |= WTF_Ignored;
+        else if( st & Git::StatusIgnored )
+            curState |= WTF_Ignored;
 
-		else if( st & Git::StatusWorkingTreeModified )
-			curState |= WTF_Changed;
+        else if( st & Git::StatusWorkingTreeModified )
+            curState |= WTF_Changed;
 
-		else if( st & Git::StatusWorkingTreeNew )
-			curState |= WTF_Untracked;
+        else if( st & Git::StatusWorkingTreeNew )
+            curState |= WTF_Untracked;
 
-		else if( st & Git::StatusWorkingTreeDeleted )
-			curState |= WTF_Missing;
+        else if( st & Git::StatusWorkingTreeDeleted )
+            curState |= WTF_Missing;
 
-		#if 0
-		else if( st & Git::StatusIndexModified )
-			curState |= Changed;
+        #if 0
+        else if( st & Git::StatusIndexModified )
+            curState |= Changed;
 
-		else if( st & Git::StatusIndexNew )
-			curState |= Untracked;
+        else if( st & Git::StatusIndexNew )
+            curState |= Untracked;
 
-		else if( st & Git::StatusIndexDeleted )
-			curState |= Missing;
-		#endif
+        else if( st & Git::StatusIndexDeleted )
+            curState |= Missing;
+        #endif
 
-		WorkingTreeDirItem* cur = mRootItem;
-		QStringList slNames = it.key().split( L'/' );
-		while( slNames.count() > 1 )
-		{
-			QString dir = slNames.takeFirst();
-			WorkingTreeDirItem* next = (WorkingTreeDirItem*) cur->childByName( dir );
-			if( !next )
-			{
-				next = new WorkingTreeDirItem( this, cur );
-				next->setName( dir );
-				next->setIcon( folderIcon );
-				cur->appendItem( next );
-			}
-			Q_ASSERT( next->isDirectory() );
-			cur = (WorkingTreeDirItem*) next;
-		}
+        WorkingTreeDirItem* cur = mRootItem;
+        QStringList slNames = it.key().split( L'/' );
+        while( slNames.count() > 1 )
+        {
+            QString dir = slNames.takeFirst();
+            WorkingTreeDirItem* next = (WorkingTreeDirItem*) cur->childByName( dir );
+            if( !next )
+            {
+                next = new WorkingTreeDirItem( this, cur );
+                next->setName( dir );
+                next->setIcon( folderIcon );
+                cur->appendItem( next );
+            }
+            Q_ASSERT( next->isDirectory() );
+            cur = (WorkingTreeDirItem*) next;
+        }
 
-		Q_ASSERT( slNames.count() == 1 );
-		WorkingTreeAbstractItem* fileBase = cur->childByName( slNames[ 0 ] );
-		WorkingTreeFileItem* file;
-		if( fileBase && fileBase->isDirectory() )
-		{
-			cur->removeChild( fileBase );
-			fileBase = NULL;
-		}
+        Q_ASSERT( slNames.count() == 1 );
+        WorkingTreeAbstractItem* fileBase = cur->childByName( slNames[ 0 ] );
+        WorkingTreeFileItem* file;
+        if( fileBase && fileBase->isDirectory() )
+        {
+            cur->removeChild( fileBase );
+            fileBase = NULL;
+        }
 
-		if( !fileBase )
-		{
-			file = new WorkingTreeFileItem( this, cur );
-			file->setName( slNames[ 0 ] );
-			cur->appendItem( file );
-			fileBase = file;
-		}
+        if( !fileBase )
+        {
+            file = new WorkingTreeFileItem( this, cur );
+            file->setName( slNames[ 0 ] );
+            cur->appendItem( file );
+            fileBase = file;
+        }
 
-		Q_ASSERT( fileBase && !fileBase->isDirectory() );
-		file = (WorkingTreeFileItem*) fileBase;
+        Q_ASSERT( fileBase && !fileBase->isDirectory() );
+        file = (WorkingTreeFileItem*) fileBase;
 
-		QFileInfo fi( mRepo.basePath() + L'/' + it.key() );
+        QFileInfo fi( mRepo.basePath() + L'/' + it.key() );
 
 #ifdef Q_OS_WIN
-		file->setIcon( getWindowsIcon( fi.absoluteFilePath() ) );
+        file->setIcon( getWindowsIcon( fi.absoluteFilePath() ) );
 #else
-		file->setIcon( ip.icon( fi ) );
+        file->setIcon( ip.icon( fi ) );
 #endif
-		file->setSize( fi.size() );
-		file->setLastModified( fi.lastModified() );
-		file->setOwner( fi.owner() );
+        file->setSize( fi.size() );
+        file->setLastModified( fi.lastModified() );
+        file->setOwner( fi.owner() );
 
-		WorkingTreeFilter state = WorkingTreeFilter( int( curState ) );
-		file->setState( state, mFilters & state );
+        WorkingTreeFilter state = WorkingTreeFilter( int( curState ) );
+        file->setState( state, mFilters & state );
 
-		++it;
-	}
+        ++it;
+    }
 
-	// TODO: Remove all not visited items (including empty dirs)
+    // TODO: Remove all not visited items (including empty dirs)
 }
 
 void WorkingTreeModel::setFilters( WorkingTreeFilters filters )
 {
-	mFilters = filters;
-	update();
-	// mRootItem->refilter( mFilters );
+    mFilters = filters;
+    update();
+    // mRootItem->refilter( mFilters );
 }

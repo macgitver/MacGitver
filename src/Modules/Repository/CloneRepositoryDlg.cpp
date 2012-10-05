@@ -29,120 +29,120 @@
 
 CloneRepositoryDlg::CloneRepositoryDlg()
 {
-	setupUi( this );
+    setupUi( this );
 
-	connect( btnBrowse, SIGNAL(clicked()), SLOT(onBrowse()) );
-	connect( txtPath, SIGNAL(textChanged(QString)), SLOT(checkValid()) );
-	connect( chkCheckout, SIGNAL(toggled(bool)), this, SLOT(onCheckout(bool)) );
-	connect( chkInitSubmodules, SIGNAL(toggled(bool)), this, SLOT(onInitSubmodules(bool)) );
-	connect( txtCheckoutBranch, SIGNAL(textChanged(QString)), this, SLOT(onCheckoutBranch(QString)) );
+    connect( btnBrowse, SIGNAL(clicked()), SLOT(onBrowse()) );
+    connect( txtPath, SIGNAL(textChanged(QString)), SLOT(checkValid()) );
+    connect( chkCheckout, SIGNAL(toggled(bool)), this, SLOT(onCheckout(bool)) );
+    connect( chkInitSubmodules, SIGNAL(toggled(bool)), this, SLOT(onInitSubmodules(bool)) );
+    connect( txtCheckoutBranch, SIGNAL(textChanged(QString)), this, SLOT(onCheckoutBranch(QString)) );
 
-	checkValid();
+    checkValid();
 }
 
 void CloneRepositoryDlg::onBrowse()
 {
-	QString fn = txtPath->text();
-	if( fn.isEmpty() )
-	{
-		fn = Config::self().get( "Repository/lastUsedDir", QDir::homePath() ).toString();
-	}
+    QString fn = txtPath->text();
+    if( fn.isEmpty() )
+    {
+        fn = Config::self().get( "Repository/lastUsedDir", QDir::homePath() ).toString();
+    }
 
-	QFileDialog* fd = new QFileDialog( this, trUtf8( "Select repository location" ) );
+    QFileDialog* fd = new QFileDialog( this, trUtf8( "Select repository location" ) );
 
-	#ifdef Q_OS_MAC
-	fd->setFilter( QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden );
-	#else
-	fd->setFileMode( QFileDialog::Directory );
-	#endif
+    #ifdef Q_OS_MAC
+    fd->setFilter( QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden );
+    #else
+    fd->setFileMode( QFileDialog::Directory );
+    #endif
 
-	fd->setDirectory( fn );
-	fd->setAcceptMode( QFileDialog::AcceptSave );
-	fd->open( this, SLOT(onBrowseHelper(QString)) );
+    fd->setDirectory( fn );
+    fd->setAcceptMode( QFileDialog::AcceptSave );
+    fd->open( this, SLOT(onBrowseHelper(QString)) );
 }
 
 void CloneRepositoryDlg::onBrowseHelper( const QString& directory )
 {
-	if( directory.isEmpty() )
-	{
-		return;
-	}
+    if( directory.isEmpty() )
+    {
+        return;
+    }
 
-	Config::self().set( "Repository/lastUsedDir", directory );
-	txtPath->setText( directory );
+    Config::self().set( "Repository/lastUsedDir", directory );
+    txtPath->setText( directory );
 }
 
 void CloneRepositoryDlg::onCheckout( bool value )
 {
-	txtCheckoutBranch->setEnabled( value );
-	chkInitSubmodules->setEnabled( value );
+    txtCheckoutBranch->setEnabled( value );
+    chkInitSubmodules->setEnabled( value );
 
-	if( !value )
-	{
-		chkInitSubmodules->setChecked( false );
-		txtCheckoutBranch->setText( QString() );
-	}
+    if( !value )
+    {
+        chkInitSubmodules->setChecked( false );
+        txtCheckoutBranch->setText( QString() );
+    }
 }
 
 void CloneRepositoryDlg::onInitSubmodules( bool value )
 {
-	chkSubmodulesRecursive->setEnabled( value );
-	if( !value )
-	{
-		chkSubmodulesRecursive->setChecked( false );
-	}
+    chkSubmodulesRecursive->setEnabled( value );
+    if( !value )
+    {
+        chkSubmodulesRecursive->setChecked( false );
+    }
 }
 
 void CloneRepositoryDlg::onCheckoutBranch( const QString& branch )
 {
-	if( branch.isEmpty() )
-	{
-		chkFetchOne->setDisabled( true );
-		chkFetchOne->setChecked( false );
-	}
-	else
-	{
-		chkFetchOne->setEnabled( true );
-	}
+    if( branch.isEmpty() )
+    {
+        chkFetchOne->setDisabled( true );
+        chkFetchOne->setChecked( false );
+    }
+    else
+    {
+        chkFetchOne->setEnabled( true );
+    }
 }
 
 void CloneRepositoryDlg::checkValid()
 {
-	bool okay =
-			!txtPath->text().isEmpty() &&
-			!txtUrl->text().isEmpty() &&
-			!txtRemoteName->text().isEmpty();
+    bool okay =
+            !txtPath->text().isEmpty() &&
+            !txtUrl->text().isEmpty() &&
+            !txtRemoteName->text().isEmpty();
 
-	QDir wanted( QDir::toNativeSeparators( txtPath->text() ) );
-	if( wanted.exists() )
-	{
-		QStringList sl = wanted.entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot );
-		if( sl.count() > 0 )
-		{
-			okay = false;
-		}
-	}
+    QDir wanted( QDir::toNativeSeparators( txtPath->text() ) );
+    if( wanted.exists() )
+    {
+        QStringList sl = wanted.entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot );
+        if( sl.count() > 0 )
+        {
+            okay = false;
+        }
+    }
 
-	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
+    buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
 }
 
 void CloneRepositoryDlg::accept()
 {
-	Git::BackgroundClone* clone = new Git::BackgroundClone;
-	clone->setFrom( txtUrl->text(), txtPath->text() );
-	clone->setType(
-				chkCloneBare->isChecked(),
-				chkCloneMirror->isChecked(),
-				chkCheckout->isChecked() );
-	clone->setRemoteName( txtRemoteName->text() );
-	clone->setSubmodule(
-				chkInitSubmodules->isChecked(),
-				chkSubmodulesRecursive->isChecked() );
+    Git::BackgroundClone* clone = new Git::BackgroundClone;
+    clone->setFrom( txtUrl->text(), txtPath->text() );
+    clone->setType(
+                chkCloneBare->isChecked(),
+                chkCloneMirror->isChecked(),
+                chkCheckout->isChecked() );
+    clone->setRemoteName( txtRemoteName->text() );
+    clone->setSubmodule(
+                chkInitSubmodules->isChecked(),
+                chkSubmodulesRecursive->isChecked() );
 
-	Git::Repository repo = clone->repository();
+    Git::Repository repo = clone->repository();
 
-	Git::BackgroundThead* thread = new Git::BackgroundThead();
-	thread->queue( clone );
-	thread->start();
-	thread->wait();
+    Git::BackgroundThead* thread = new Git::BackgroundThead();
+    thread->queue( clone );
+    thread->start();
+    thread->wait();
 }

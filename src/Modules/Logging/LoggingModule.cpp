@@ -31,32 +31,32 @@ void LoggingModule::setupConfigPages( IConfigDialog* dialog )
 
 Module::Types LoggingModule::providesModuleTypes() const
 {
-	return View;
+    return View;
 }
 
 Heaven::View* LoggingModule::createLoggingView()
 {
-	return new LoggingView();
+    return new LoggingView();
 }
 
 void LoggingModule::initialize()
 {
-	MacGitver::self().setLog( this );
+    MacGitver::self().setLog( this );
 
-	registerView( QLatin1String( "Log" ),
-				  Heaven::GlobalViewType,
-				  &LoggingModule::createLoggingView );
+    registerView( QLatin1String( "Log" ),
+                  Heaven::GlobalViewType,
+                  &LoggingModule::createLoggingView );
 }
 
 void LoggingModule::deinitialize()
 {
-	MacGitver::self().setLog( NULL );
-	unregisterView( QLatin1String( "Log" ) );
+    MacGitver::self().setLog( NULL );
+    unregisterView( QLatin1String( "Log" ) );
 }
 
 void LoggingModule::addMessage( LogType type, const QString& message )
 {
-	qDebug( "%i: %s", int(type), qPrintable( message ) );
+    qDebug( "%i: %s", int(type), qPrintable( message ) );
 }
 
 #if QT_VERSION < 0x050000

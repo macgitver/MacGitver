@@ -27,20 +27,20 @@ class WorkingTreeModel;
 
 class WorkingTreeItemView : public QTreeView
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	WorkingTreeItemView();
+    WorkingTreeItemView();
 
 public:
-	void setRepository( const Git::Repository& repo );
+    void setRepository( const Git::Repository& repo );
 
-	WorkingTreeFilters filters() const;
-	void setFilter( WorkingTreeFilters filters );
+    WorkingTreeFilters filters() const;
+    void setFilter( WorkingTreeFilters filters );
 
 private:
-	Git::Repository			mRepo;
-	WorkingTreeModel*		mModel;
-	WorkingTreeFilters		mFilters;
+    Git::Repository         mRepo;
+    WorkingTreeModel*       mModel;
+    WorkingTreeFilters      mFilters;
 };
 
 #endif

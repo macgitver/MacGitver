@@ -24,80 +24,80 @@
 #include "BranchesView.h"
 
 BranchesView::BranchesView()
-	: View( QLatin1String( "Branches" ) )
+    : View( QLatin1String( "Branches" ) )
 {
-	mListWidget = new QListWidget();
-	mListWidget->setFrameStyle( QFrame::NoFrame );
+    mListWidget = new QListWidget();
+    mListWidget->setFrameStyle( QFrame::NoFrame );
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
+    QVBoxLayout* l = new QVBoxLayout;
+    l->setSpacing( 0 );
+    l->setMargin( 0 );
 
-	mToolBar = new QToolBar;
+    mToolBar = new QToolBar;
 
-	mBtnLocals = new QToolButton;
-	mBtnLocals->setText( trUtf8( "Show local" ) );
-	mBtnLocals->setCheckable( true );
-	mBtnLocals->setChecked( true );
-	connect( mBtnLocals, SIGNAL(toggled(bool)), SLOT(rereadBranches()) );
+    mBtnLocals = new QToolButton;
+    mBtnLocals->setText( trUtf8( "Show local" ) );
+    mBtnLocals->setCheckable( true );
+    mBtnLocals->setChecked( true );
+    connect( mBtnLocals, SIGNAL(toggled(bool)), SLOT(rereadBranches()) );
 
-	mBtnRemotes = new QToolButton;
-	mBtnRemotes->setText( trUtf8( "Show remote" ) );
-	mBtnRemotes->setCheckable( true );
-	mBtnRemotes->setChecked( true );
-	connect( mBtnRemotes, SIGNAL(toggled(bool)), SLOT(rereadBranches()) );
+    mBtnRemotes = new QToolButton;
+    mBtnRemotes->setText( trUtf8( "Show remote" ) );
+    mBtnRemotes->setCheckable( true );
+    mBtnRemotes->setChecked( true );
+    connect( mBtnRemotes, SIGNAL(toggled(bool)), SLOT(rereadBranches()) );
 
-	mToolBar->addWidget( mBtnLocals );
-	mToolBar->addWidget( mBtnRemotes );
+    mToolBar->addWidget( mBtnLocals );
+    mToolBar->addWidget( mBtnRemotes );
 
-	l->addWidget( mToolBar );
-	l->addWidget( mListWidget );
+    l->addWidget( mToolBar );
+    l->addWidget( mListWidget );
 
-	setLayout( l );
+    setLayout( l );
 
-	setViewName( trUtf8( "Branches" ) );
+    setViewName( trUtf8( "Branches" ) );
 
-	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-			 this, SLOT(repositoryChanged(Git::Repository)) );
+    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+             this, SLOT(repositoryChanged(Git::Repository)) );
 
-	Git::Repository repo = MacGitver::self().repository();
-	if( repo.isValid() )
-	{
-		repositoryChanged( repo );
-	}
+    Git::Repository repo = MacGitver::self().repository();
+    if( repo.isValid() )
+    {
+        repositoryChanged( repo );
+    }
 }
 
 void BranchesView::repositoryChanged( Git::Repository repo )
 {
-	mRepo = repo;
-	rereadBranches();
+    mRepo = repo;
+    rereadBranches();
 }
 
 void BranchesView::rereadBranches()
 {
-	mListWidget->clear();
+    mListWidget->clear();
 
-	if( mRepo.isValid() )
-	{
-		Git::Result r;
-		QString curBranch = mRepo.currentBranch( r );
-		QStringList sl = mRepo.branches( mBtnLocals->isChecked(), mBtnRemotes->isChecked(), r );
+    if( mRepo.isValid() )
+    {
+        Git::Result r;
+        QString curBranch = mRepo.currentBranch( r );
+        QStringList sl = mRepo.branches( mBtnLocals->isChecked(), mBtnRemotes->isChecked(), r );
 
-		for( int i = 0; i < sl.count(); i++ )
-		{
-			QListWidgetItem* it = new QListWidgetItem( sl[ i ], mListWidget );
-			if( sl[ i ] == curBranch )
-			{
-				QFont f = it->font();
-				f.setBold( true );
-				it->setFont( f );
-			}
-		}
+        for( int i = 0; i < sl.count(); i++ )
+        {
+            QListWidgetItem* it = new QListWidgetItem( sl[ i ], mListWidget );
+            if( sl[ i ] == curBranch )
+            {
+                QFont f = it->font();
+                f.setBold( true );
+                it->setFont( f );
+            }
+        }
 
-	}
+    }
 }
 
 QSize BranchesView::sizeHint() const
 {
-	return QSize( 100, 100 );
+    return QSize( 100, 100 );
 }

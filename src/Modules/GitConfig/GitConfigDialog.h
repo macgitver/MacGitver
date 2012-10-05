@@ -25,12 +25,12 @@
 
 class GitConfigDialog : public QDialog, private Ui::GitConfigDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	GitConfigDialog( QWidget* parent, Git::Repository& repo );
+    GitConfigDialog( QWidget* parent, Git::Repository& repo );
 
 private:
-	Git::Repository		mRepo;
+    Git::Repository mRepo;
 };
 
 #endif

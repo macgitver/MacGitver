@@ -21,17 +21,17 @@
 
 class CreateRepositoryDlg : public QDialog, Ui::CreateRepositoryDlg
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	CreateRepositoryDlg();
+    CreateRepositoryDlg();
 
 protected:
-	void accept();
+    void accept();
 
 private slots:
-	void onBrowse();
-	void onBrowseHelper( const QString& directory );
-	void checkValid();
+    void onBrowse();
+    void onBrowseHelper( const QString& directory );
+    void checkValid();
 };
 
 #endif

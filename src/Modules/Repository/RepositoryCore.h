@@ -24,17 +24,17 @@
 class RepositoryCore : public IRepository
 {
 public:
-	RepositoryCore();
-	~RepositoryCore();
+    RepositoryCore();
+    ~RepositoryCore();
 
 public:
-	void setRepository( Git::Repository repo );
+    void setRepository( Git::Repository repo );
 
 public:
-	bool createBranch( const Git::ObjectId& baseOID, const QString& branchName, bool force );
+    bool createBranch( const Git::ObjectId& baseOID, const QString& branchName, bool force );
 
 private:
-	Git::Repository			mRepo;
+    Git::Repository mRepo;
 };
 
 #endif

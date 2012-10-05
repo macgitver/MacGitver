@@ -23,23 +23,23 @@
 
 class HistoryListDelegate : public QItemDelegate
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	void paint( QPainter* painter, const QStyleOptionViewItem& option,
-				const QModelIndex& index ) const;
+    void paint( QPainter* painter, const QStyleOptionViewItem& option,
+                const QModelIndex& index ) const;
 
-	QSize sizeHint( const QStyleOptionViewItem& option,
-					const QModelIndex& index) const;
+    QSize sizeHint( const QStyleOptionViewItem& option,
+                    const QModelIndex& index) const;
 
 private:
-	void paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2, int height,
-						 const QColor& col, const QColor& activeCol, const QBrush& back ) const;
+    void paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2, int height,
+                         const QColor& col, const QColor& activeCol, const QBrush& back ) const;
 
-	void paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
-					 const QModelIndex& i ) const;
+    void paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
+                     const QModelIndex& i ) const;
 
-	void paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
-					   const QModelIndex& i ) const;
+    void paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
+                       const QModelIndex& i ) const;
 };
 
 #endif

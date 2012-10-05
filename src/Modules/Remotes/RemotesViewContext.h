@@ -27,19 +27,19 @@ class QStandardItemModel;
 
 class RemotesViewContext : public Heaven::ViewContext
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	RemotesViewContext();
+    RemotesViewContext();
 
 private slots:
-	void repositoryChanged( Git::Repository repo );
+    void repositoryChanged( Git::Repository repo );
 
 public:
-	QAbstractItemModel* model();
+    QAbstractItemModel* model();
 
 private:
-	Git::Repository		mRepo;
-	QStandardItemModel*	mModel;
+    Git::Repository     mRepo;
+    QStandardItemModel* mModel;
 };
 
 #endif

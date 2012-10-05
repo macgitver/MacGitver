@@ -11,20 +11,20 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
-	LoggingView.cpp
+    LoggingView.cpp
     LoggingModule.cpp
 )
 
 SET( HDR_FILES
 
-		LoggingView.h
-		LoggingModule.h
+        LoggingView.h
+        LoggingModule.h
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )
 
 ADD_MGV_MODULE(
-		Logging
+        Logging
 
     ${SRC_FILES}
     ${HDR_FILES}

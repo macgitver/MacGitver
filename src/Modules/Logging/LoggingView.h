@@ -1,4 +1,4 @@
-/*
+ /*
  * MacGitver
  * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
  *
@@ -23,15 +23,15 @@ class QTextBrowser;
 
 class LoggingView : public Heaven::GlobalView
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	LoggingView();
+    LoggingView();
 
 public:
-	QSize sizeHint() const;
+    QSize sizeHint() const;
 
 private:
-	QTextBrowser*		mBrowser;
+    QTextBrowser* mBrowser;
 };
 
 #endif

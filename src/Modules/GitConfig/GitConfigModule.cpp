@@ -28,7 +28,7 @@ GitConfigModule::GitConfigModule()
 
 void GitConfigModule::repositoryChanged( Git::Repository newRepository )
 {
-	mRepo = newRepository;
+    mRepo = newRepository;
 }
 
 void GitConfigModule::setupConfigPages( IConfigDialog* dialog )
@@ -37,13 +37,13 @@ void GitConfigModule::setupConfigPages( IConfigDialog* dialog )
 
 Module::Types GitConfigModule::providesModuleTypes() const
 {
-	return View;
+    return View;
 }
 
 void GitConfigModule::initialize()
 {
-	setupActions( this );
-	acGitConfigAC->mergeInto( "ToolsMenuMP" );
+    setupActions( this );
+    acGitConfigAC->mergeInto( "ToolsMenuMP" );
 }
 
 void GitConfigModule::deinitialize()
@@ -52,7 +52,7 @@ void GitConfigModule::deinitialize()
 
 void GitConfigModule::onToolsGitConfig()
 {
-	GitConfigDialog( mainWindow()->widget(), mRepo ).exec();
+    GitConfigDialog( mainWindow()->widget(), mRepo ).exec();
 }
 
 #if QT_VERSION < 0x050000

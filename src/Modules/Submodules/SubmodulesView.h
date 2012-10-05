@@ -31,21 +31,21 @@ class QTreeView;
 
 class SubmodulesView : public Heaven::GlobalView, private SubmodulesViewActions
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	SubmodulesView();
+    SubmodulesView();
 
 private slots:
-	void repositoryChanged( Git::Repository repo );
+    void repositoryChanged( Git::Repository repo );
 
-	void addSubmodule();
-	void readSubmodules();
+    void addSubmodule();
+    void readSubmodules();
 
 private:
-	Git::Repository						mRepo;
-	QTreeView*							mTree;
-	QStandardItemModel*					mModel;
-	QHash< QString, QStandardItem* >	mNameToItem;
+    Git::Repository                     mRepo;
+    QTreeView*                          mTree;
+    QStandardItemModel*                 mModel;
+    QHash< QString, QStandardItem* >    mNameToItem;
 };
 
 #endif

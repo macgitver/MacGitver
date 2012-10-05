@@ -33,45 +33,45 @@ void RefsViewsModule::setupConfigPages( IConfigDialog* dialog )
 
 Module::Types RefsViewsModule::providesModuleTypes() const
 {
-	return View;
+    return View;
 }
 
 
 Heaven::View* RefsViewsModule::createBranchesView()
 {
-	return new BranchesView();
+    return new BranchesView();
 }
 
 Heaven::View* RefsViewsModule::createTagsView()
 {
-	return new TagsView();
+    return new TagsView();
 }
 
 Heaven::View* RefsViewsModule::createRefsView()
 {
-	return new RefsView();
+    return new RefsView();
 }
 
 void RefsViewsModule::initialize()
 {
-	registerView( QLatin1String( "Branches" ),
-				  Heaven::GlobalViewType,
-				  &RefsViewsModule::createBranchesView );
+    registerView( QLatin1String( "Branches" ),
+                  Heaven::GlobalViewType,
+                  &RefsViewsModule::createBranchesView );
 
-	registerView( QLatin1String( "Refs" ),
-				  Heaven::GlobalViewType,
-				  &RefsViewsModule::createRefsView );
+    registerView( QLatin1String( "Refs" ),
+                  Heaven::GlobalViewType,
+                  &RefsViewsModule::createRefsView );
 
-	registerView( QLatin1String( "Tags" ),
-				  Heaven::GlobalViewType,
-				  &RefsViewsModule::createTagsView );
+    registerView( QLatin1String( "Tags" ),
+                  Heaven::GlobalViewType,
+                  &RefsViewsModule::createTagsView );
 }
 
 void RefsViewsModule::deinitialize()
 {
-	unregisterView( QLatin1String( "Branches" ) );
-	unregisterView( QLatin1String( "Refs" ) );
-	unregisterView( QLatin1String( "Tags" ) );
+    unregisterView( QLatin1String( "Branches" ) );
+    unregisterView( QLatin1String( "Refs" ) );
+    unregisterView( QLatin1String( "Tags" ) );
 }
 
 #if QT_VERSION < 0x050000

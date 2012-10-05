@@ -21,73 +21,73 @@
 #include "HistoryEntry.h"
 
 HistoryEntry::HistoryEntry( const Git::ObjectId& sha1 )
-	: mSha1( sha1 )
-	, mPopulated( false )
+    : mSha1( sha1 )
+    , mPopulated( false )
 {
 }
 
 void HistoryEntry::populate( const Git::ObjectCommit& commit )
 {
-	Q_ASSERT( !mPopulated );
+    Q_ASSERT( !mPopulated );
 
-	Git::Result r;
+    Git::Result r;
 
-	mCommiter = commit.committer( r );
-	mAuthor = commit.author( r );
-	mCommitMessage = commit.shortMessage( r );
+    mCommiter = commit.committer( r );
+    mAuthor = commit.author( r );
+    mCommitMessage = commit.shortMessage( r );
 
-	mPopulated = r;
+    mPopulated = r;
 
-	if( !mPopulated )
-	{
-		MacGitver::self().log( ltError, r, "Populating a HistoryEntry" );
-	}
+    if( !mPopulated )
+    {
+        MacGitver::self().log( ltError, r, "Populating a HistoryEntry" );
+    }
 }
 
 bool HistoryEntry::isPopulated() const
 {
-	return mPopulated;
+    return mPopulated;
 }
 
 QString HistoryEntry::message() const
 {
-	Q_ASSERT( mPopulated );
-	return mCommitMessage;
+    Q_ASSERT( mPopulated );
+    return mCommitMessage;
 }
 
 const Git::Signature& HistoryEntry::committer() const
 {
-	Q_ASSERT( mPopulated );
-	return mCommiter;
+    Q_ASSERT( mPopulated );
+    return mCommiter;
 }
 
 const Git::Signature& HistoryEntry::author() const
 {
-	Q_ASSERT( mPopulated );
-	return mAuthor;
+    Q_ASSERT( mPopulated );
+    return mAuthor;
 }
 
 const Git::ObjectId& HistoryEntry::id() const
 {
-	return mSha1;
+    return mSha1;
 }
 
 void HistoryEntry::setGlyphs( const GraphGlyphVector& glyphs )
 {
-	mGlyphs = glyphs;
+    mGlyphs = glyphs;
 }
 
 const GraphGlyphVector&	HistoryEntry::glyphs() const
 {
-	return mGlyphs;
+    return mGlyphs;
 }
 
 void HistoryEntry::setInlineRefs( const HistoryInlineRefs& refs )
 {
-	mRefs = refs;
+    mRefs = refs;
 }
 
 const HistoryInlineRefs& HistoryEntry::refs() const
 {
-	return mRefs;
+    return mRefs;
 }

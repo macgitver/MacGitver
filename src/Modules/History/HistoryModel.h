@@ -27,61 +27,61 @@ class HistoryBuilder;
 
 class HistoryModel : public QAbstractTableModel
 {
-	friend class HistoryBuilder;
-	Q_OBJECT
+    friend class HistoryBuilder;
+    Q_OBJECT
 public:
-	enum Columns
-	{
-		colGraph,
-		colMessage,
-		colAuthor,
-		colAuthorDate,
-		colCommitter,
-		colCommitterDate,
-		colSHA1
-	};
+    enum Columns
+    {
+        colGraph,
+        colMessage,
+        colAuthor,
+        colAuthorDate,
+        colCommitter,
+        colCommitterDate,
+        colSHA1
+    };
 
-	enum Modes
-	{
-		modeFull,
-		modeSimple,
-		modeFancy
-	};
-
-public:
-	HistoryModel( QObject* parent = NULL );
-	~HistoryModel();
+    enum Modes
+    {
+        modeFull,
+        modeSimple,
+        modeFancy
+    };
 
 public:
-	int columnMap( int index ) const;
+    HistoryModel( QObject* parent = NULL );
+    ~HistoryModel();
 
 public:
-	HistoryEntry* indexToEntry( const QModelIndex& index ) const;
-	HistoryEntry* at( int row, bool populate = true ) const;
-
-	int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-	int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-	QVariant data( const QModelIndex& index, int role ) const;
-	QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+    int columnMap( int index ) const;
 
 public:
-	void append( HistoryEntry* entry );
-	void updateRow( int row );
-	void setRepository( Git::Repository repo );
+    HistoryEntry* indexToEntry( const QModelIndex& index ) const;
+    HistoryEntry* at( int row, bool populate = true ) const;
+
+    int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+    QVariant data( const QModelIndex& index, int role ) const;
+    QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+
+public:
+    void append( HistoryEntry* entry );
+    void updateRow( int row );
+    void setRepository( Git::Repository repo );
 
 public slots:
-	void ensurePopulated( int row );
+    void ensurePopulated( int row );
 
 private slots:
-	void beforeClear();
-	void afterClear();
-	void beforeAppend();
-	void afterAppend();
+    void beforeClear();
+    void afterClear();
+    void beforeAppend();
+    void afterAppend();
 
 private:
-	Git::Repository			mRepo;
-	Modes					mMode;
-	QList< HistoryEntry* >	mEntries;
+    Git::Repository         mRepo;
+    Modes                   mMode;
+    QList< HistoryEntry* >  mEntries;
 };
 
 #endif

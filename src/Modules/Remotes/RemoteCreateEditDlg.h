@@ -23,25 +23,25 @@
 
 class RemoteCreateEditDlg : public QDialog, private Ui::RemoteCreateEditDlg
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	RemoteCreateEditDlg();
-	RemoteCreateEditDlg( Git::Remote remote );
+    RemoteCreateEditDlg();
+    RemoteCreateEditDlg( Git::Remote remote );
 
 private:
-	void init();
+    void init();
 
 private:
-	void accept();
+    void accept();
 
 private slots:
-	void onNameChanged( const QString& newName );
-	void onUrlChanged( const QString& newUrl );
+    void onNameChanged( const QString& newName );
+    void onUrlChanged( const QString& newUrl );
 
-	void checkValid();
+    void checkValid();
 
 private:
-	Git::Remote			mRemote;
+    Git::Remote mRemote;
 };
 
 #endif

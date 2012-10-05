@@ -4,41 +4,41 @@ PROJECT( MGV_MOD_REFSVIEWS )
 QT_PREPARE( Core Gui Widgets )
 
 INCLUDE_DIRECTORIES(
-	${MGV_LIBS_SOURCE_DIR}
-	${MGV_MOD_REFSVIEWS_SOURCE_DIR}
-	${MGV_MOD_REFSVIEWS_BINARY_DIR}
+    ${MGV_LIBS_SOURCE_DIR}
+    ${MGV_MOD_REFSVIEWS_SOURCE_DIR}
+    ${MGV_MOD_REFSVIEWS_BINARY_DIR}
 )
 
 SET( SRC_FILES
 
-	RefsViewsModule.cpp
+    RefsViewsModule.cpp
 
-	RefsListModel.cpp
-	RefsListDelegate.cpp
+    RefsListModel.cpp
+    RefsListDelegate.cpp
 
-	RefsView.cpp
-	BranchesView.cpp
-	TagsView.cpp
+    RefsView.cpp
+    BranchesView.cpp
+    TagsView.cpp
 )
 
 SET( HDR_FILES
 
-	RefsViewsModule.h
+    RefsViewsModule.h
 
-	RefsListModel.h
-	RefsListDelegate.h
+    RefsListModel.h
+    RefsListDelegate.h
 
-	RefsView.h
-	BranchesView.h
-	TagsView.h
+    RefsView.h
+    BranchesView.h
+    TagsView.h
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )
 
 ADD_MGV_MODULE(
-	RefsViews
+    RefsViews
 
-	${SRC_FILES}
-	${HDR_FILES}
-	${MOC_FILES}
+    ${SRC_FILES}
+    ${HDR_FILES}
+    ${MOC_FILES}
 )

@@ -29,29 +29,29 @@ HistoryModule::HistoryModule()
 
 void HistoryModule::setupConfigPages( IConfigDialog* dialog )
 {
-	dialog->addPage( new HistoryConfigPage( dialog ) );
+    dialog->addPage( new HistoryConfigPage( dialog ) );
 }
 
 Module::Types HistoryModule::providesModuleTypes() const
 {
-	return View;
+    return View;
 }
 
 Heaven::View* HistoryModule::createHistoryView()
 {
-	return new HistoryView();
+    return new HistoryView();
 }
 
 void HistoryModule::initialize()
 {
-	registerView( QLatin1String( "History" ),
-				  Heaven::GlobalViewType,
-				  &HistoryModule::createHistoryView );
+    registerView( QLatin1String( "History" ),
+                  Heaven::GlobalViewType,
+                  &HistoryModule::createHistoryView );
 }
 
 void HistoryModule::deinitialize()
 {
-	unregisterView( QLatin1String( "History" ) );
+    unregisterView( QLatin1String( "History" ) );
 }
 
 #if QT_VERSION < 0x050000

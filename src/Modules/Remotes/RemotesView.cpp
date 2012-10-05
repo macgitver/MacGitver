@@ -22,38 +22,38 @@
 #include "RemotesViewContext.h"
 
 RemotesView::RemotesView()
-	: GlobalView( QLatin1String( "Remotes" ) )
-	, mCtx( NULL )
+    : GlobalView( QLatin1String( "Remotes" ) )
+    , mCtx( NULL )
 {
-	setupActions( this );
+    setupActions( this );
 
-	QVBoxLayout* l = new QVBoxLayout();
-	l->setMargin( 0 );
-	l->setSpacing( 0 );
-	setLayout( l );
+    QVBoxLayout* l = new QVBoxLayout();
+    l->setMargin( 0 );
+    l->setSpacing( 0 );
+    setLayout( l );
 
-	mTreeView = new QTreeView();
-	mTreeView->setFrameShape( QFrame::NoFrame );
+    mTreeView = new QTreeView();
+    mTreeView->setFrameShape( QFrame::NoFrame );
 
-	l->addWidget( tbRemotesTB->toolBarFor( this ) );
+    l->addWidget( tbRemotesTB->toolBarFor( this ) );
 
-	l->addWidget( mTreeView );
+    l->addWidget( mTreeView );
 
-	setViewName( trUtf8( "Remotes" ) );
+    setViewName( trUtf8( "Remotes" ) );
 }
 
 Heaven::ViewContext* RemotesView::createContext()
 {
-	return new RemotesViewContext;
+    return new RemotesViewContext;
 }
 
 void RemotesView::setContext( Heaven::ViewContext* context )
 {
-	GlobalView::setContext( context );
-	mCtx = qobject_cast< RemotesViewContext* >( context );
-	Q_ASSERT( mCtx );
+    GlobalView::setContext( context );
+    mCtx = qobject_cast< RemotesViewContext* >( context );
+    Q_ASSERT( mCtx );
 
-	mTreeView->setModel( mCtx->model() );
+    mTreeView->setModel( mCtx->model() );
 }
 
 

@@ -16,15 +16,15 @@
 
 Ui GitConfigModuleActions {
 
-	Container GitConfigAC {
+    Container GitConfigAC {
 
-		Action ToolsGitConfig {
-			Text			"&Git configuration...";
-			StatusToolTip	"View and/or edit the global, user or repository configuration of git.";
+        Action ToolsGitConfig {
+            Text            "&Git configuration...";
+            StatusToolTip   "View and/or edit the global, user or repository configuration of git.";
 
-			_ConnectTo		onToolsGitConfig();
-		};
+            _ConnectTo      onToolsGitConfig();
+        };
 
-	};
+    };
 
 };

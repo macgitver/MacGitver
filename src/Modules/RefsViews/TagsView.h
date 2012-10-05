@@ -25,19 +25,19 @@ class QListWidget;
 
 class TagsView : public Heaven::View
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	TagsView();
+    TagsView();
 
 public slots:
-	void repositoryChanged( Git::Repository repo );
+    void repositoryChanged( Git::Repository repo );
 
 public:
-	virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
 private:
-	Git::Repository		mRepo;
-	QListWidget*		mListWidget;
+    Git::Repository mRepo;
+    QListWidget*    mListWidget;
 };
 
 #endif

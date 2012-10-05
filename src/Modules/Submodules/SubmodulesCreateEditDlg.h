@@ -23,21 +23,21 @@
 
 class SubmodulesCreateEditDlg : public QDialog, private Ui::SubmodulesCreateEditDlg
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	SubmodulesCreateEditDlg();
-	SubmodulesCreateEditDlg( Git::Submodule module );
+    SubmodulesCreateEditDlg();
+    SubmodulesCreateEditDlg( Git::Submodule module );
 
 private slots:
-	void onNameChange( const QString& name );
-	void onHasPathChange( bool newValue );
+    void onNameChange( const QString& name );
+    void onHasPathChange( bool newValue );
 
 private:
-	void setupComboboxes();
-	void init();
+    void setupComboboxes();
+    void init();
 
 private:
-	Git::Submodule			mSubmodule;
+    Git::Submodule mSubmodule;
 };
 
 #endif

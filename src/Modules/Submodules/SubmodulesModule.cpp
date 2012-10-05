@@ -32,23 +32,23 @@ void SubmodulesModule::setupConfigPages( IConfigDialog* dialog )
 
 Module::Types SubmodulesModule::providesModuleTypes() const
 {
-	return View;
+    return View;
 }
 
 Heaven::View* SubmodulesModule::createSubmodulesView()
 {
-	return new SubmodulesView;
+    return new SubmodulesView;
 }
 
 void SubmodulesModule::initialize()
 {
-	registerView( QLatin1String( "Submodules" ), Heaven::GlobalViewType,
-				  & SubmodulesModule::createSubmodulesView );
+    registerView( QLatin1String( "Submodules" ), Heaven::GlobalViewType,
+                  & SubmodulesModule::createSubmodulesView );
 }
 
 void SubmodulesModule::deinitialize()
 {
-	unregisterView( QLatin1String( "Submodules" ) );
+    unregisterView( QLatin1String( "Submodules" ) );
 }
 
 #if QT_VERSION < 0x050000

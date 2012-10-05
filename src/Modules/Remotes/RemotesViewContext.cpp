@@ -21,26 +21,26 @@
 #include "RemotesViewContext.h"
 
 RemotesViewContext::RemotesViewContext()
-	: mModel( NULL )
+    : mModel( NULL )
 {
-	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-			 this, SLOT(repositoryChanged(Git::Repository)) );
+    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+             this, SLOT(repositoryChanged(Git::Repository)) );
 
-	mModel = new QStandardItemModel( 0, 1, this );
+    mModel = new QStandardItemModel( 0, 1, this );
 
-	Git::Repository repo = MacGitver::self().repository();
-	if( repo.isValid() )
-	{
-		repositoryChanged( repo );
-	}
+    Git::Repository repo = MacGitver::self().repository();
+    if( repo.isValid() )
+    {
+        repositoryChanged( repo );
+    }
 }
 
 void RemotesViewContext::repositoryChanged( Git::Repository repo )
 {
-	mRepo = repo;
+    mRepo = repo;
 }
 
 QAbstractItemModel* RemotesViewContext::model()
 {
-	return mModel;
+    return mModel;
 }

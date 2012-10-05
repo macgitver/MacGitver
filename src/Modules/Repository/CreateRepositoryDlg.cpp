@@ -28,79 +28,79 @@
 
 CreateRepositoryDlg::CreateRepositoryDlg()
 {
-	setupUi( this );
+    setupUi( this );
 
-	connect( btnSelectPath, SIGNAL(clicked()), SLOT(onBrowse()) );
-	connect( txtPath, SIGNAL(textChanged(QString)), SLOT(checkValid()) );
+    connect( btnSelectPath, SIGNAL(clicked()), SLOT(onBrowse()) );
+    connect( txtPath, SIGNAL(textChanged(QString)), SLOT(checkValid()) );
 
-	checkValid();
+    checkValid();
 }
 
 void CreateRepositoryDlg::onBrowse()
 {
-	QString fn = txtPath->text();
-	if( fn.isEmpty() )
-	{
-		fn = Config::self().get( "Repository/lastUsedDir", QDir::homePath() ).toString();
-	}
+    QString fn = txtPath->text();
+    if( fn.isEmpty() )
+    {
+        fn = Config::self().get( "Repository/lastUsedDir", QDir::homePath() ).toString();
+    }
 
-	QFileDialog* fd = new QFileDialog( this, trUtf8( "Select repository location" ) );
+    QFileDialog* fd = new QFileDialog( this, trUtf8( "Select repository location" ) );
 
-	#ifdef Q_OS_MAC
-	fd->setFilter( QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden );
-	#else
-	fd->setFileMode( QFileDialog::Directory );
-	#endif
+    #ifdef Q_OS_MAC
+    fd->setFilter( QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden );
+    #else
+    fd->setFileMode( QFileDialog::Directory );
+    #endif
 
-	fd->setDirectory( fn );
-	fd->setAcceptMode( QFileDialog::AcceptSave );
-	fd->open( this, SLOT(onBrowseHelper(QString)) );
+    fd->setDirectory( fn );
+    fd->setAcceptMode( QFileDialog::AcceptSave );
+    fd->open( this, SLOT(onBrowseHelper(QString)) );
 }
 
 void CreateRepositoryDlg::onBrowseHelper( const QString& directory )
 {
-	if( directory.isEmpty() )
-	{
-		return;
-	}
+    if( directory.isEmpty() )
+    {
+        return;
+    }
 
-	Config::self().set( "Repository/lastUsedDir", directory );
-	txtPath->setText( directory );
+    Config::self().set( "Repository/lastUsedDir", directory );
+    txtPath->setText( directory );
 }
 
 void CreateRepositoryDlg::checkValid()
 {
-	bool okay = !txtPath->text().isEmpty();
+    bool okay = !txtPath->text().isEmpty();
 
-	QDir wanted( txtPath->text() );
-	if( wanted.exists() )
-	{
-		QStringList sl = wanted.entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot );
-		if( sl.count() > 0 )
-		{
-			okay = false;
-		}
-	}
+    QDir wanted( txtPath->text() );
+    if( wanted.exists() )
+    {
+        QStringList sl = wanted.entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot );
+        if( sl.count() > 0 )
+        {
+            okay = false;
+        }
+    }
 
-	buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
+    buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
 }
 
 void CreateRepositoryDlg::accept()
 {
-	QString fn = QDir::toNativeSeparators( txtPath->text() );
-	bool makeBare = chkMakeBare->isChecked() && chkMakeBare->isEnabled();
-	Git::Result r;
-	Git::Repository repo = Git::Repository::create( fn, makeBare, r );
+    QString fn = QDir::toNativeSeparators( txtPath->text() );
+    bool makeBare = chkMakeBare->isChecked() && chkMakeBare->isEnabled();
+    Git::Result r;
+    Git::Repository repo = Git::Repository::create( fn, makeBare, r );
 
-	if( !r || !repo.isValid() )
-	{
-		QMessageBox::critical( this,
-							   trUtf8( "Error" ),
-							   trUtf8( "Failed to create the repository.\n%1" )
-							   .arg( r.errorText()) );
-		return;
-	}
+    if( !r || !repo.isValid() )
+    {
+        QMessageBox::critical( this,
+                               trUtf8( "Error" ),
+                               trUtf8( "Failed to create the repository.\n%1" )
+                               .arg( r.errorText()) );
+        return;
+    }
 
-	QDialog::accept();
-	MacGitver::self().setRepository( repo );
+    QDialog::accept();
+    MacGitver::self().setRepository( repo );
 }

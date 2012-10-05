@@ -39,161 +39,161 @@
 #include "HistoryDetails.h"
 
 HistoryView::HistoryView()
-	: GlobalView( QLatin1String( "History" ) )
-	, ConfigUser( "History" )
+    : GlobalView( QLatin1String( "History" ) )
+    , ConfigUser( "History" )
 {
-	setupActions( this );
+    setupActions( this );
 
-	mVertSplit = mHorzSplit = NULL;
+    mVertSplit = mHorzSplit = NULL;
 
-	setViewName( trUtf8( "History" ) );
-	setSizePolicy( QSizePolicy::MinimumExpanding,
-				   QSizePolicy::MinimumExpanding );
+    setViewName( trUtf8( "History" ) );
+    setSizePolicy( QSizePolicy::MinimumExpanding,
+                   QSizePolicy::MinimumExpanding );
 
-	mList = new HistoryList;
-	mList->setFrameShape( QFrame::NoFrame );
+    mList = new HistoryList;
+    mList->setFrameShape( QFrame::NoFrame );
 
-	mModel = new HistoryModel( this );
-	mList->setModel( mModel );
+    mModel = new HistoryModel( this );
+    mList->setModel( mModel );
 
-	connect( mList, SIGNAL(currentCommitChanged(Git::ObjectId)),
-			 this, SLOT(currentCommitChanged(Git::ObjectId)) );
+    connect( mList, SIGNAL(currentCommitChanged(Git::ObjectId)),
+             this, SLOT(currentCommitChanged(Git::ObjectId)) );
 
-	mList->setItemDelegate( new HistoryListDelegate );
+    mList->setItemDelegate( new HistoryListDelegate );
 
-	mDetails = new HistoryDetails;
+    mDetails = new HistoryDetails;
 
-	mDiff = new HistoryDiff;
+    mDiff = new HistoryDiff;
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
-	l->addWidget( tbHistoryViewToolBar->toolBarFor( this ) );
-	setLayout( l );
-	initSplitters();
+    QVBoxLayout* l = new QVBoxLayout;
+    l->setSpacing( 0 );
+    l->setMargin( 0 );
+    l->addWidget( tbHistoryViewToolBar->toolBarFor( this ) );
+    setLayout( l );
+    initSplitters();
 
-	mBuilder = NULL;
+    mBuilder = NULL;
 
-	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-			 this, SLOT(repositoryChanged(Git::Repository)) );
+    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+             this, SLOT(repositoryChanged(Git::Repository)) );
 
-	Git::Repository repo = MacGitver::self().repository();
-	if( repo.isValid() )
-	{
-		repositoryChanged( repo );
-	}
+    Git::Repository repo = MacGitver::self().repository();
+    if( repo.isValid() )
+    {
+        repositoryChanged( repo );
+    }
 }
 
 void HistoryView::repositoryChanged( Git::Repository repo )
 {
-	if( mBuilder )
-	{
-		delete mBuilder;
-		mBuilder = NULL;
-	}
+    if( mBuilder )
+    {
+        delete mBuilder;
+        mBuilder = NULL;
+    }
 
-	mRepo = repo;
-	mModel->setRepository( repo );
-	mDetails->setRepository( repo );
-	mDiff->setRepository( repo );
+    mRepo = repo;
+    mModel->setRepository( repo );
+    mDetails->setRepository( repo );
+    mDiff->setRepository( repo );
 
-	if( mRepo.isValid() )
-	{
-		buildHistory();
-	}
+    if( mRepo.isValid() )
+    {
+        buildHistory();
+    }
 }
 
 void HistoryView::buildHistory()
 {
-	if( !mRepo.isValid() )
-	{
-		return;
-	}
+    if( !mRepo.isValid() )
+    {
+        return;
+    }
 
-	if( !mBuilder )
-	{
-		mBuilder = new HistoryBuilder( mRepo, mModel );
-	}
+    if( !mBuilder )
+    {
+        mBuilder = new HistoryBuilder( mRepo, mModel );
+    }
 
-	mBuilder->addHEAD();
-	mBuilder->start();
+    mBuilder->addHEAD();
+    mBuilder->start();
 }
 
 void HistoryView::currentCommitChanged( const Git::ObjectId& sha1 )
 {
-	mDetails->setCommit( sha1 );
-	mDiff->setCommitId( sha1 );
+    mDetails->setCommit( sha1 );
+    mDiff->setCommitId( sha1 );
 }
 
 void HistoryView::configChanged( const QString& subPath, const QVariant& value )
 {
-	if( subPath == QLatin1String( "SplitLayout" ) )
-	{
-		initSplitters();
-	}
+    if( subPath == QLatin1String( "SplitLayout" ) )
+    {
+        initSplitters();
+    }
 }
 
 void HistoryView::initSplitters()
 {
-	if( !mVertSplit )
-	{
-		mVertSplit = new Heaven::MiniSplitter( Qt::Vertical );
-	}
-	else
-	{
-		mVertSplit->hide();
-		mVertSplit->setParent( NULL );
-	}
+    if( !mVertSplit )
+    {
+        mVertSplit = new Heaven::MiniSplitter( Qt::Vertical );
+    }
+    else
+    {
+        mVertSplit->hide();
+        mVertSplit->setParent( NULL );
+    }
 
-	if( !mHorzSplit )
-	{
-		mHorzSplit = new Heaven::MiniSplitter( Qt::Horizontal );
-	}
-	else
-	{
-		mHorzSplit->hide();
-		mHorzSplit->setParent( NULL );
-	}
+    if( !mHorzSplit )
+    {
+        mHorzSplit = new Heaven::MiniSplitter( Qt::Horizontal );
+    }
+    else
+    {
+        mHorzSplit->hide();
+        mHorzSplit->setParent( NULL );
+    }
 
-	mDiff->hide();
-	mDiff->setParent( NULL );
+    mDiff->hide();
+    mDiff->setParent( NULL );
 
-	mList->hide();
-	mList->setParent( NULL );
+    mList->hide();
+    mList->setParent( NULL );
 
-	mDetails->hide();
-	mDetails->setParent( NULL );
+    mDetails->hide();
+    mDetails->setParent( NULL );
 
-	int i = configGet( "SplitLayout", 0 );
-	switch( i )
-	{
-	default:
-	case 0:
-		mHorzSplit->addWidget( mDetails );
-		mHorzSplit->addWidget( mDiff );
-		mVertSplit->addWidget( mList );
-		mVertSplit->addWidget( mHorzSplit );
-		layout()->addWidget( mVertSplit );
-		break;
-	case 1:
-		mVertSplit->addWidget( mDetails );
-		mVertSplit->addWidget( mDiff );
-		mHorzSplit->addWidget( mList );
-		mHorzSplit->addWidget( mVertSplit );
-		layout()->addWidget( mHorzSplit );
-		break;
-	case 2:
-		mVertSplit->addWidget( mList );
-		mVertSplit->addWidget( mDetails );
-		mHorzSplit->addWidget( mVertSplit );
-		mHorzSplit->addWidget( mDiff );
-		layout()->addWidget( mHorzSplit );
-		break;
-	}
+    int i = configGet( "SplitLayout", 0 );
+    switch( i )
+    {
+    default:
+    case 0:
+        mHorzSplit->addWidget( mDetails );
+        mHorzSplit->addWidget( mDiff );
+        mVertSplit->addWidget( mList );
+        mVertSplit->addWidget( mHorzSplit );
+        layout()->addWidget( mVertSplit );
+        break;
+    case 1:
+        mVertSplit->addWidget( mDetails );
+        mVertSplit->addWidget( mDiff );
+        mHorzSplit->addWidget( mList );
+        mHorzSplit->addWidget( mVertSplit );
+        layout()->addWidget( mHorzSplit );
+        break;
+    case 2:
+        mVertSplit->addWidget( mList );
+        mVertSplit->addWidget( mDetails );
+        mHorzSplit->addWidget( mVertSplit );
+        mHorzSplit->addWidget( mDiff );
+        layout()->addWidget( mHorzSplit );
+        break;
+    }
 
-	mVertSplit->show();
-	mHorzSplit->show();
-	mDiff->show();
-	mList->show();
-	mDetails->show();
+    mVertSplit->show();
+    mHorzSplit->show();
+    mDiff->show();
+    mList->show();
+    mDetails->show();
 }

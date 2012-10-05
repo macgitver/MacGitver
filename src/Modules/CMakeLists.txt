@@ -1,36 +1,36 @@
 
 MACRO(ADD_MGV_MODULE _Name )
 
-	SET( _Target Mod${_Name} )
+    SET( _Target Mod${_Name} )
 
-	ADD_QT_LIBRARY( ${_Target} MODULE ${ARGN} )
+    ADD_QT_LIBRARY( ${_Target} MODULE ${ARGN} )
 
-	SET_TARGET_PROPERTIES(
-		${_Target}
-		PROPERTIES  OUTPUT_NAME     "${_Name}"
-					PREFIX          "Mod"
-					SUFFIX          ".mgv"
-	)
+    SET_TARGET_PROPERTIES(
+        ${_Target}
+        PROPERTIES  OUTPUT_NAME     "${_Name}"
+                    PREFIX          "Mod"
+                    SUFFIX          ".mgv"
+    )
 
-	TARGET_LINK_LIBRARIES(
-		${_Target}
+    TARGET_LINK_LIBRARIES(
+        ${_Target}
 
-		GitWrap Interfaces Heaven MacGitverCore Widgets
-	)
+        GitWrap Interfaces Heaven MacGitverCore Widgets
+    )
 
-	IF( UNIX )
+    IF( UNIX )
 
-		SET_TARGET_PROPERTIES(	${_Target}
-			PROPERTIES			INSTALL_RPATH "\$ORIGIN/../lib:\$ORIGIN/"
-		)
+        SET_TARGET_PROPERTIES(	${_Target}
+            PROPERTIES  INSTALL_RPATH "\$ORIGIN/../lib:\$ORIGIN/"
+        )
 
-		INSTALL(
-			TARGETS		${_Target}
-			RUNTIME		DESTINATION bin/macgitver/modules
-			LIBRARY		DESTINATION bin/macgitver/modules
-		)
+        INSTALL(
+            TARGETS     ${_Target}
+            RUNTIME     DESTINATION bin/macgitver/modules
+            LIBRARY     DESTINATION bin/macgitver/modules
+        )
 
-	ENDIF()
+    ENDIF()
 
 ENDMACRO(ADD_MGV_MODULE)
 

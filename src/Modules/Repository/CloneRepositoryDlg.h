@@ -21,20 +21,20 @@
 
 class CloneRepositoryDlg : public QDialog, Ui::CloneRepositoryDlg
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	CloneRepositoryDlg();
+    CloneRepositoryDlg();
 
 protected:
-	void accept();
+    void accept();
 
 private slots:
-	void onBrowse();
-	void onBrowseHelper( const QString& directory );
-	void onCheckout( bool value );
-	void onInitSubmodules( bool value );
-	void onCheckoutBranch( const QString& branch );
-	void checkValid();
+    void onBrowse();
+    void onBrowseHelper( const QString& directory );
+    void onCheckout( bool value );
+    void onInitSubmodules( bool value );
+    void onCheckoutBranch( const QString& branch );
+    void checkValid();
 };
 
 #endif

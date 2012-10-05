@@ -27,47 +27,47 @@ class QFileSystemWatcher;
 
 class GitConfigWidget : public QWidget, private Ui::GitConfigWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	enum KeyType
-	{
-		KeySection,
-		KeyValue,
-		KeyMultiVarHead,
-		KeyMultiVarValue
-	};
+    enum KeyType
+    {
+        KeySection,
+        KeyValue,
+        KeyMultiVarHead,
+        KeyMultiVarValue
+    };
 
-	struct EntryData
-	{
-		KeyType				type;
-		QTreeWidgetItem*	treeItem;
-		QString				fullKey;
-		QString				value;
-	};
-
-public:
-	GitConfigWidget();
+    struct EntryData
+    {
+        KeyType             type;
+        QTreeWidgetItem*    treeItem;
+        QString             fullKey;
+        QString             value;
+    };
 
 public:
-	void setConfig( const QString& fileName );
-	void setConfigs( const QStringList& fileNames );
+    GitConfigWidget();
+
+public:
+    void setConfig( const QString& fileName );
+    void setConfigs( const QStringList& fileNames );
 
 private:
-	void setConfig( const Git::Config& config );
-	void syncConfig();
-	void allItems( QSet< QTreeWidgetItem* >& result, QTreeWidgetItem* parent );
+    void setConfig( const Git::Config& config );
+    void syncConfig();
+    void allItems( QSet< QTreeWidgetItem* >& result, QTreeWidgetItem* parent );
 
 private slots:
-	void configChanged();
+    void configChanged();
 
 private:
-	bool				mEditable;
-	QStringList			mConfigFiles;
-	Git::Config			mConfig;
-	QFileSystemWatcher*	mWatcher;
-	QHash< QTreeWidgetItem*, EntryData* >	mEntries;
-	QHash< QString, EntryData* >			mSectionEntries;
-	QHash< QString, EntryData* >			mValueEntries;
+    bool                                    mEditable;
+    QStringList                             mConfigFiles;
+    Git::Config                             mConfig;
+    QFileSystemWatcher*                     mWatcher;
+    QHash< QTreeWidgetItem*, EntryData* >   mEntries;
+    QHash< QString, EntryData* >            mSectionEntries;
+    QHash< QString, EntryData* >            mValueEntries;
 };
 
 #endif

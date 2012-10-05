@@ -20,22 +20,22 @@
 #include "LoggingView.h"
 
 LoggingView::LoggingView()
-	: GlobalView( QLatin1String( "Log" ) )
+    : GlobalView( QLatin1String( "Log" ) )
 {
-	setViewName( trUtf8( "Log" ) );
+    setViewName( trUtf8( "Log" ) );
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
-	setLayout( l );
+    QVBoxLayout* l = new QVBoxLayout;
+    l->setSpacing( 0 );
+    l->setMargin( 0 );
+    setLayout( l );
 
-	mBrowser = new QTextBrowser;
-	mBrowser->setFrameShape( QFrame::NoFrame );
+    mBrowser = new QTextBrowser;
+    mBrowser->setFrameShape( QFrame::NoFrame );
 
-	l->addWidget( mBrowser );
+    l->addWidget( mBrowser );
 }
 
 QSize LoggingView::sizeHint() const
 {
-	return QSize( 300, 110 );
+    return QSize( 300, 110 );
 }

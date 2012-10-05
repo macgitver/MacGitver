@@ -21,24 +21,24 @@
 
 class RefsViewsModule : public Module
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
-	Q_INTERFACES( IModule )
+    Q_OBJECT
+    Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.IModule/0.1" FILE "Module.json" )
+    Q_INTERFACES( IModule )
 
 public:
-	RefsViewsModule();
+    RefsViewsModule();
 
 public:
-	void setupConfigPages( IConfigDialog* dlg );
-	Types providesModuleTypes() const;
+    void setupConfigPages( IConfigDialog* dlg );
+    Types providesModuleTypes() const;
 
-	void initialize();
-	void deinitialize();
+    void initialize();
+    void deinitialize();
 
 private:
-	static Heaven::View* createBranchesView();
-	static Heaven::View* createTagsView();
-	static Heaven::View* createRefsView();
+    static Heaven::View* createBranchesView();
+    static Heaven::View* createTagsView();
+    static Heaven::View* createRefsView();
 };
 
 #endif

@@ -23,49 +23,49 @@
 #include "RefsView.h"
 
 RefsView::RefsView()
-	: View( QLatin1String( "Refs" ) )
+    : View( QLatin1String( "Refs" ) )
 {
-	mListView = new QListView();
-	mListView->setFrameStyle( QFrame::NoFrame );
+    mListView = new QListView();
+    mListView->setFrameStyle( QFrame::NoFrame );
 
-	QVBoxLayout* l = new QVBoxLayout;
-	l->setSpacing( 0 );
-	l->setMargin( 0 );
-	l->addWidget( mListView );
+    QVBoxLayout* l = new QVBoxLayout;
+    l->setSpacing( 0 );
+    l->setMargin( 0 );
+    l->addWidget( mListView );
 
-	setLayout( l );
+    setLayout( l );
 
-	setViewName( trUtf8( "Refs" ) );
+    setViewName( trUtf8( "Refs" ) );
 
-	mModel = new RefsListModel( this );
-	mListView->setModel( mModel );
+    mModel = new RefsListModel( this );
+    mListView->setModel( mModel );
 
-	connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-			 this, SLOT(repositoryChanged(Git::Repository)) );
+    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
+             this, SLOT(repositoryChanged(Git::Repository)) );
 
-	Git::Repository repo = MacGitver::self().repository();
-	if( repo.isValid() )
-	{
-		repositoryChanged( repo );
-	}
+    Git::Repository repo = MacGitver::self().repository();
+    if( repo.isValid() )
+    {
+        repositoryChanged( repo );
+    }
 }
 
 void RefsView::repositoryChanged( Git::Repository repo )
 {
-	mRepo = repo;
+    mRepo = repo;
 
-	if( mRepo.isValid() )
-	{
-		Git::Result r;
-		mModel->syncTo( mRepo.allReferences( r ) );
-	}
-	else
-	{
-		mModel->clear();
-	}
+    if( mRepo.isValid() )
+    {
+        Git::Result r;
+        mModel->syncTo( mRepo.allReferences( r ) );
+    }
+    else
+    {
+        mModel->clear();
+    }
 }
 
 QSize RefsView::sizeHint() const
 {
-	return QSize( 100, 100 );
+    return QSize( 100, 100 );
 }

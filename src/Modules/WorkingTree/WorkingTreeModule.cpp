@@ -31,24 +31,24 @@ void WorkingTreeModule::setupConfigPages( IConfigDialog* dialog )
 
 Module::Types WorkingTreeModule::providesModuleTypes() const
 {
-	return View;
+    return View;
 }
 
 Heaven::View* WorkingTreeModule::createWorkTreeView()
 {
-	return new IndexWidget();
+    return new IndexWidget();
 }
 
 void WorkingTreeModule::initialize()
 {
-	registerView( QLatin1String( "WorkTree" ),
-				  Heaven::SingleViewType,
-				  &WorkingTreeModule::createWorkTreeView );
+    registerView( QLatin1String( "WorkTree" ),
+                  Heaven::SingleViewType,
+                  &WorkingTreeModule::createWorkTreeView );
 }
 
 void WorkingTreeModule::deinitialize()
 {
-	unregisterView( QLatin1String( "WorkTree" ) );
+    unregisterView( QLatin1String( "WorkTree" ) );
 }
 
 #if QT_VERSION < 0x050000

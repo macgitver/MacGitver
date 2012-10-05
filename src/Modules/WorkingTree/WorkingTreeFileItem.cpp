@@ -20,7 +20,7 @@
 #include "WorkingTreeFileItem.h"
 
 WorkingTreeFileItem::WorkingTreeFileItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent )
-	: WorkingTreeAbstractItem( model, parent )
+    : WorkingTreeAbstractItem( model, parent )
 {
 }
 
@@ -30,117 +30,117 @@ WorkingTreeFileItem::~WorkingTreeFileItem()
 
 int WorkingTreeFileItem::visibleChildren() const
 {
-	return 0;
+    return 0;
 }
 
 WorkingTreeAbstractItem* WorkingTreeFileItem::visibleChildAt( int index )
 {
-	Q_UNUSED( index );
-	return NULL;
+    Q_UNUSED( index );
+    return NULL;
 }
 
 QVariant WorkingTreeFileItem::data( int column, int role ) const
 {
-	switch( role )
-	{
-	case Qt::DisplayRole:
-		switch( column )
-		{
-		case 0:		return mName;
-		case 1:		return mSize;
-		case 2:		return mLastMod;
-		case 3:		return mOwner;
-		}
-		break;
+    switch( role )
+    {
+    case Qt::DisplayRole:
+        switch( column )
+        {
+        case 0:     return mName;
+        case 1:     return mSize;
+        case 2:     return mLastMod;
+        case 3:     return mOwner;
+        }
+        break;
 
-	case Qt::DecorationRole:
-		if( column == 0 )
-			return mIcon;
-		break;
+    case Qt::DecorationRole:
+        if( column == 0 )
+            return mIcon;
+        break;
 
-	case Qt::ForegroundRole:
-		if( mState & WTF_Unchanged )		return Qt::black;
-		else if( mState & WTF_Changed )		return Qt::blue;
-		else if( mState & WTF_Untracked )	return Qt::darkGreen;
-		else if( mState & WTF_Missing )		return Qt::red;
-		else if( mState & WTF_Ignored )		return Qt::gray;
-		else								return QColor( 0xFFCCFF );
+    case Qt::ForegroundRole:
+        if( mState & WTF_Unchanged )        return Qt::black;
+        else if( mState & WTF_Changed )     return Qt::blue;
+        else if( mState & WTF_Untracked )   return Qt::darkGreen;
+        else if( mState & WTF_Missing )     return Qt::red;
+        else if( mState & WTF_Ignored )     return Qt::gray;
+        else                                return QColor( 0xFFCCFF );
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 
-	return QVariant();
+    return QVariant();
 }
 
 WorkingTreeAbstractItem* WorkingTreeFileItem::parent()
 {
-	return mParent;
+    return mParent;
 }
 
 int WorkingTreeFileItem::visibleIndex() const
 {
-	return 0;
+    return 0;
 }
 
 WorkingTreeAbstractItem* WorkingTreeFileItem::childByName( const QString& name )
 {
-	return NULL;
+    return NULL;
 }
 
 bool WorkingTreeFileItem::isDirectory() const
 {
-	return false;
+    return false;
 }
 
 void WorkingTreeFileItem::setName( const QString& name )
 {
-	mName = name;
+    mName = name;
 }
 
 void WorkingTreeFileItem::setState( WorkingTreeFilter state, bool shouldBeVisible )
 {
-	mState = state;
+    mState = state;
 
-	if( shouldBeVisible != isVisible() )
-	{
-		if( isVisible() )
-		{
-			makeInvisible();
-		}
-		else
-		{
-			makeVisible();
-		}
-	}
+    if( shouldBeVisible != isVisible() )
+    {
+        if( isVisible() )
+        {
+            makeInvisible();
+        }
+        else
+        {
+            makeVisible();
+        }
+    }
 }
 
 void WorkingTreeFileItem::setIcon( const QIcon& icon )
 {
-	mIcon = icon;
+    mIcon = icon;
 }
 
 void WorkingTreeFileItem::setSize( qint64 size )
 {
-	mSize = size;
+    mSize = size;
 }
 
 void WorkingTreeFileItem::setOwner( const QString& owner )
 {
-	mOwner = owner;
+    mOwner = owner;
 }
 
 void WorkingTreeFileItem::setLastModified( const QDateTime& lastMod )
 {
-	mLastMod = lastMod;
+    mLastMod = lastMod;
 }
 
 QString WorkingTreeFileItem::name() const
 {
-	return mName;
+    return mName;
 }
 
 void WorkingTreeFileItem::removeChild( WorkingTreeAbstractItem* child )
 {
-	Q_UNUSED( child );
+    Q_UNUSED( child );
 }

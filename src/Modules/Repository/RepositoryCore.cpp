@@ -31,29 +31,29 @@ RepositoryCore::~RepositoryCore()
 
 void RepositoryCore::setRepository( Git::Repository repo )
 {
-	mRepo = repo;
+    mRepo = repo;
 }
 
 bool RepositoryCore::createBranch( const Git::ObjectId& baseOID, const QString& branchName,
-								   bool force )
+                                   bool force )
 {
-	Git::Result r;
-	Git::Object obj = mRepo.lookup( baseOID, Git::otAny, r );
+    Git::Result r;
+    Git::Object obj = mRepo.lookup( baseOID, Git::otAny, r );
 
-	if( !r || !obj.isValid() )
-	{
-		return false;
-	}
-	else if( obj.type( r ) == Git::otCommit )
-	{
-		obj.asCommit( r ).createBranch( branchName, force, r );
-		return r;
-	}
-	else if( obj.type( r ) == Git::otTag )
-	{
-		//obj.asTag().createBranch( branchName, force );
-		//return true;
-	}
+    if( !r || !obj.isValid() )
+    {
+        return false;
+    }
+    else if( obj.type( r ) == Git::otCommit )
+    {
+        obj.asCommit( r ).createBranch( branchName, force, r );
+        return r;
+    }
+    else if( obj.type( r ) == Git::otTag )
+    {
+        //obj.asTag().createBranch( branchName, force );
+        //return true;
+    }
 
-	return false;
+    return false;
 }

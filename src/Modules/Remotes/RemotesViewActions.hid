@@ -16,13 +16,13 @@
 
 Ui RemotesViewActions {
 
-	ToolBar RemotesTB {
+    ToolBar RemotesTB {
 
-		Action			AddRemote {
-			Text		"Add";
-			_ConnectTo	onAddRemote();
-		};
+        Action          AddRemote {
+            Text        "Add";
+            _ConnectTo  onAddRemote();
+        };
 
-	};
+    };
 
 };

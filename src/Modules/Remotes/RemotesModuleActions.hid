@@ -16,27 +16,27 @@
 
 Ui RemotesModuleActions {
 
-	Container RemotesAC {
+    Container RemotesAC {
 
-		Menu Remotes {
+        Menu Remotes {
 
-			Text	"R&emotes";
+            Text    "R&emotes";
 
-			Action RemotesCreate {
-				Text		"&Create...";
-				_ConnectTo	onRemoteCreate();
-			};
+            Action RemotesCreate {
+                Text        "&Create...";
+                _ConnectTo  onRemoteCreate();
+            };
 
-			Action RemotesFetch {
-				Text		"&Fetch";
-			};
+            Action RemotesFetch {
+                Text        "&Fetch";
+            };
 
-			Action RemotesPush {
-				Text		"P&ush...";
-			};
+            Action RemotesPush {
+                Text        "P&ush...";
+            };
 
-		};
+        };
 
-	};
+    };
 
 };

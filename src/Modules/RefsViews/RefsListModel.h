@@ -21,31 +21,31 @@
 
 class RefsListModel : public QAbstractListModel
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	struct RefInfo
-	{
-		QString				mRefName;
-	};
-
-public:
-	RefsListModel( QObject* parent = 0 );
-	~RefsListModel();
+    struct RefInfo
+    {
+        QString mRefName;
+    };
 
 public:
-	int rowCount( const QModelIndex& parent ) const;
-	QVariant data( const QModelIndex& index, int role ) const;
+    RefsListModel( QObject* parent = 0 );
+    ~RefsListModel();
 
 public:
-	void clear();
-	void updateRef( const QString& refName );
-	void addRef( const QString& refName );
-	void removeRef( const QString& refName );
-	void syncTo( const QStringList& refs );
+    int rowCount( const QModelIndex& parent ) const;
+    QVariant data( const QModelIndex& index, int role ) const;
+
+public:
+    void clear();
+    void updateRef( const QString& refName );
+    void addRef( const QString& refName );
+    void removeRef( const QString& refName );
+    void syncTo( const QStringList& refs );
 
 private:
-	QList< RefInfo* >			mOrderedData;
-	QHash< QString, RefInfo* >	mData;
+    QList< RefInfo* >           mOrderedData;
+    QHash< QString, RefInfo* >  mData;
 };
 
 #endif

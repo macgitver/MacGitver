@@ -17,34 +17,34 @@
 #include "GitConfigDialog.h"
 
 GitConfigDialog::GitConfigDialog( QWidget* parent, Git::Repository& repo )
-	: QDialog( parent )
-	, mRepo( repo )
+    : QDialog( parent )
+    , mRepo( repo )
 {
-	setupUi( this );
+    setupUi( this );
 
-	QStringList cfgs;
+    QStringList cfgs;
 
-	QString fnGlobal = Git::Config::globalFilePath();
-	QString fnUser = Git::Config::userFilePath();
-	QString fnRepo;
+    QString fnGlobal = Git::Config::globalFilePath();
+    QString fnUser = Git::Config::userFilePath();
+    QString fnRepo;
 
-	cfgSystem->setConfig( fnGlobal );
-	cfgUser->setConfig( fnUser );
+    cfgSystem->setConfig( fnGlobal );
+    cfgUser->setConfig( fnUser );
 
-	if( mRepo.isValid() )
-	{
-		fnRepo = mRepo.gitPath() + QLatin1String( "/config" );
-		cfgRepository->setConfig( fnRepo );
-		cfgs << fnRepo;
-	}
-	else
-	{
-		tabWidget->setTabEnabled( tabWidget->indexOf( cfgRepository ), false );
-	}
+    if( mRepo.isValid() )
+    {
+        fnRepo = mRepo.gitPath() + QLatin1String( "/config" );
+        cfgRepository->setConfig( fnRepo );
+        cfgs << fnRepo;
+    }
+    else
+    {
+        tabWidget->setTabEnabled( tabWidget->indexOf( cfgRepository ), false );
+    }
 
-	tabWidget->setCurrentWidget( cfgCombined );
+    tabWidget->setCurrentWidget( cfgCombined );
 
-	cfgs << fnUser << fnGlobal;
+    cfgs << fnUser << fnGlobal;
 
-	cfgCombined->setConfigs( cfgs );
+    cfgCombined->setConfigs( cfgs );
 }

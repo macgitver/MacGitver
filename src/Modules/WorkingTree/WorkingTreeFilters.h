@@ -21,14 +21,14 @@
 
 enum WorkingTreeFilter
 {
-	WTF_Untracked		= 1 << 0,
-	WTF_Missing			= 1 << 1,
-	WTF_Changed			= 1 << 2,
-	WTF_Unchanged		= 1 << 3,
-	WTF_Ignored			= 1 << 4,
+    WTF_Untracked   = 1 << 0,
+    WTF_Missing     = 1 << 1,
+    WTF_Changed     = 1 << 2,
+    WTF_Unchanged   = 1 << 3,
+    WTF_Ignored     = 1 << 4,
 
-	WTF_None			= 0,
-	WTF_All				= WTF_Unchanged | WTF_Untracked | WTF_Missing | WTF_Ignored | WTF_Changed
+    WTF_None        = 0,
+    WTF_All         = WTF_Unchanged | WTF_Untracked | WTF_Missing | WTF_Ignored | WTF_Changed
 };
 
 typedef QFlags< WorkingTreeFilter > WorkingTreeFilters;

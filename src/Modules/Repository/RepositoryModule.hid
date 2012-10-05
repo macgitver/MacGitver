@@ -16,39 +16,39 @@
 
 Ui RepositoryActions {
 
-	Container RepositoryMenuAC {
+    Container RepositoryMenuAC {
 
-		Action RepositoryOpen {
-			Text		"&Open...";
-			_ConnectTo	onRepositoryOpen();
-		};
+        Action RepositoryOpen {
+            Text        "&Open...";
+            _ConnectTo  onRepositoryOpen();
+        };
 
-		Action RepositoryClose {
-			Text		"C&lose";
-			Enabled		false;
-			_ConnectTo	onRepositoryClose();
-		};
+        Action RepositoryClose {
+            Text        "C&lose";
+            Enabled     false;
+            _ConnectTo  onRepositoryClose();
+        };
 
-		Separator;
+        Separator;
 
-		Action RepositoryClone {
-			Text		"&Clone...";
-			_ConnectTo	onRepositoryClone();
-		};
+        Action RepositoryClone {
+            Text        "&Clone...";
+            _ConnectTo	onRepositoryClone();
+        };
 
-		Action RepositoryCreate {
-			Text		"C&reate...";
-			_ConnectTo	onRepositoryCreate();
-		};
+        Action RepositoryCreate {
+            Text        "C&reate...";
+            _ConnectTo  onRepositoryCreate();
+        };
 
-	};
+    };
 
-	Container RepositoryToolBarAC {
+    Container RepositoryToolBarAC {
 
-		Action		RepositoryOpen;
-		Action		RepositoryClone;
-		Action		RepositoryClose;
+        Action      RepositoryOpen;
+        Action      RepositoryClone;
+        Action      RepositoryClose;
 
-	};
+    };
 
 };

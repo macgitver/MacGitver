@@ -24,25 +24,25 @@ class PatchFile;
 
 class DiffWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	DiffWidget();
-	~DiffWidget();
+    DiffWidget();
+    ~DiffWidget();
 
 public:
-	void setDifference( PatchFile* diff );
+    void setDifference( PatchFile* diff );
 
 protected:
-	void paintEvent( QPaintEvent* ev );
-	void resizeEvent( QResizeEvent* ev );
+    void paintEvent( QPaintEvent* ev );
+    void resizeEvent( QResizeEvent* ev );
 
 private:
-	void calculateHeights();
+    void calculateHeights();
 
 private:
-	PatchFile*			mDiff;
-	QFont				mFont;
-	int					mTotalHeight;
+    PatchFile*  mDiff;
+    QFont       mFont;
+    int         mTotalHeight;
 };
 
 #endif

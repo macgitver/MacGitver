@@ -28,29 +28,29 @@ class QTextStream;
 class DIFF_MODEL_API PatchFile : public QSharedData
 {
 public:
-	typedef QExplicitlySharedDataPointer< PatchFile > Ptr;
-	typedef QList< Ptr > List;
+    typedef QExplicitlySharedDataPointer< PatchFile > Ptr;
+    typedef QList< Ptr > List;
 
 public:
-	PatchFile( const QStringList& pathNames );
-	~PatchFile();
+    PatchFile( const QStringList& pathNames );
+    ~PatchFile();
 
 public:
-	QStringList pathNames() const;
-	DifferenceHunk::List allHunks() const;
-	void addHunk( DifferenceHunk::Ptr hunk );
-	int numHunks() const;
+    QStringList pathNames() const;
+    DifferenceHunk::List allHunks() const;
+    void addHunk( DifferenceHunk::Ptr hunk );
+    int numHunks() const;
 
-	void exportRaw( QTextStream& stream );
+    void exportRaw( QTextStream& stream );
 
-	void addOptionLine( const QString& line );
-	void addOption( const QString& option );
+    void addOptionLine( const QString& line );
+    void addOption( const QString& option );
 
 private:
-	QStringList				mPathNames;
-	QStringList				mOptions;
-	QStringList				mOptionLines;
-	DifferenceHunk::List	mHunks;
+    QStringList             mPathNames;
+    QStringList             mOptions;
+    QStringList             mOptionLines;
+    DifferenceHunk::List    mHunks;
 };
 
 #endif

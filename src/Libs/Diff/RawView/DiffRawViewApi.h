@@ -20,9 +20,9 @@
 #include <qglobal.h>
 
 #ifdef DiffRawView_EXPORTS
-#	define DIFF_RAW_VIEW_API Q_DECL_EXPORT
+#   define DIFF_RAW_VIEW_API Q_DECL_EXPORT
 #else
-#	define DIFF_RAW_VIEW_API Q_DECL_IMPORT
+#   define DIFF_RAW_VIEW_API Q_DECL_IMPORT
 #endif
 
 #endif

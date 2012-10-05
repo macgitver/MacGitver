@@ -27,28 +27,28 @@ class QTextStream;
 class DIFF_MODEL_API DifferenceHunk : public QSharedData
 {
 public:
-	typedef QExplicitlySharedDataPointer< DifferenceHunk > Ptr;
-	typedef QList< Ptr > List;
+    typedef QExplicitlySharedDataPointer< DifferenceHunk > Ptr;
+    typedef QList< Ptr > List;
 
 public:
-	DifferenceHunk();
-	~DifferenceHunk();
+    DifferenceHunk();
+    ~DifferenceHunk();
 
 public:
-	void addDifference( Difference::Ptr difference );
-	Difference::List differences() const;
+    void addDifference( Difference::Ptr difference );
+    Difference::List differences() const;
 
-	int numLines( int side ) const;
-	int firstLine( int side ) const;
+    int numLines( int side ) const;
+    int firstLine( int side ) const;
 
-	void exportRaw( QTextStream& stream );
+    void exportRaw( QTextStream& stream );
 
-	void setHunkName( const QString& name );
-	QString hunkName() const;
+    void setHunkName( const QString& name );
+    QString hunkName() const;
 
 private:
-	QString				mHunkName;
-	Difference::List	mDifferences;
+    QString             mHunkName;
+    Difference::List    mDifferences;
 };
 
 #endif

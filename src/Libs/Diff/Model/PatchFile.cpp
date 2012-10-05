@@ -21,7 +21,7 @@
 #include "Diff/Model/PatchFile.h"
 
 PatchFile::PatchFile( const QStringList& pathNames )
-	: mPathNames( pathNames )
+    : mPathNames( pathNames )
 {
 }
 
@@ -31,52 +31,52 @@ PatchFile::~PatchFile()
 
 QStringList PatchFile::pathNames() const
 {
-	return mPathNames;
+    return mPathNames;
 }
 
 DifferenceHunk::List PatchFile::allHunks() const
 {
-	return mHunks;
+    return mHunks;
 }
 
 void PatchFile::addHunk( DifferenceHunk::Ptr hunk )
 {
-	mHunks.append( hunk );
+    mHunks.append( hunk );
 }
 
 int PatchFile::numHunks() const
 {
-	return mHunks.count();
+    return mHunks.count();
 }
 
 void PatchFile::addOptionLine( const QString& line )
 {
-	mOptionLines.append( line );
+    mOptionLines.append( line );
 }
 
 void PatchFile::addOption( const QString& option )
 {
-	mOptions.append( option );
+    mOptions.append( option );
 }
 
 void PatchFile::exportRaw( QTextStream& stream )
 {
-	Q_ASSERT( mPathNames.count() == 2 );
+    Q_ASSERT( mPathNames.count() == 2 );
 
-	stream << "diff " << mOptions.join( QLatin1String( " " ) );
-	if( mOptions.count() > 0 )
-		stream << ' ';
-	stream << mPathNames.join( QLatin1String( " " ) ) << '\n';
+    stream << "diff " << mOptions.join( QLatin1String( " " ) );
+    if( mOptions.count() > 0 )
+        stream << ' ';
+    stream << mPathNames.join( QLatin1String( " " ) ) << '\n';
 
-	stream << mOptionLines.join( QLatin1String( "\n" ) );
-	if( mOptionLines.count() > 0 )
-		stream << '\n';
+    stream << mOptionLines.join( QLatin1String( "\n" ) );
+    if( mOptionLines.count() > 0 )
+        stream << '\n';
 
-	stream << "--- " << mPathNames[ 0 ] << '\n';
-	stream << "+++ " << mPathNames[ 1 ] << '\n';
+    stream << "--- " << mPathNames[ 0 ] << '\n';
+    stream << "+++ " << mPathNames[ 1 ] << '\n';
 
-	for( int i = 0; i < mHunks.count(); i++ )
-	{
-		mHunks[ i ]->exportRaw( stream );
-	}
+    for( int i = 0; i < mHunks.count(); i++ )
+    {
+        mHunks[ i ]->exportRaw( stream );
+    }
 }

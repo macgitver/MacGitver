@@ -19,56 +19,56 @@
 #include "Diff/RawView/DiffRawHighlighter.h"
 
 DiffRawHighlighter::DiffRawHighlighter( QTextEdit* editor )
-	: QSyntaxHighlighter( editor->document() )
+    : QSyntaxHighlighter( editor->document() )
 {
 }
 
 void DiffRawHighlighter::highlightBlock( const QString& text )
 {
-	QColor c = Qt::black;
+    QColor c = Qt::black;
 
-	if( text.startsWith( QLatin1String( "diff" ) ) ||
-		text.startsWith( QLatin1String( "---" ) ) ||
-		text.startsWith( QLatin1String( "+++" ) ) )
-	{
-		c = Qt::darkGreen;
-	}
-	else if( text.startsWith( L'-' ) )
-	{
-		c = Qt::darkRed;
-	}
-	else if( text.startsWith( L'+' ) )
-	{
-		c = Qt::darkCyan;
-	}
-	else if( text.startsWith( L' ' ) )
-	{
-		c = Qt::gray;
-	}
-	else if( text.startsWith( QLatin1String( "@@" ) ) )
-	{
-		int i = text.indexOf( QLatin1String( "@@" ), 2 );
-		i += 2;
-		setFormat( 0, i, Qt::darkYellow );
-		setFormat( i, text.length() - i, Qt::blue );
-		return;
-	}
+    if( text.startsWith( QLatin1String( "diff" ) ) ||
+        text.startsWith( QLatin1String( "---" ) ) ||
+        text.startsWith( QLatin1String( "+++" ) ) )
+    {
+        c = Qt::darkGreen;
+    }
+    else if( text.startsWith( L'-' ) )
+    {
+        c = Qt::darkRed;
+    }
+    else if( text.startsWith( L'+' ) )
+    {
+        c = Qt::darkCyan;
+    }
+    else if( text.startsWith( L' ' ) )
+    {
+        c = Qt::gray;
+    }
+    else if( text.startsWith( QLatin1String( "@@" ) ) )
+    {
+        int i = text.indexOf( QLatin1String( "@@" ), 2 );
+        i += 2;
+        setFormat( 0, i, Qt::darkYellow );
+        setFormat( i, text.length() - i, Qt::blue );
+        return;
+    }
 
-	int i = text.length();
-	while( i && text[ --i ].isSpace() )
-		/* */ ;
+    int i = text.length();
+    while( i && text[ --i ].isSpace() )
+        /* */ ;
 
-	i++;
-	if( i != text.length() )
-	{
-		setFormat( 0, i, c );
-		QTextCharFormat tcf;
-		tcf.setBackground( Qt::red );
-		tcf.setForeground( Qt::white );
-		setFormat( i, text.length() - i, tcf );
-	}
-	else
-	{
-		setFormat( 0, text.length(), c );
-	}
+    i++;
+    if( i != text.length() )
+    {
+        setFormat( 0, i, c );
+        QTextCharFormat tcf;
+        tcf.setBackground( Qt::red );
+        tcf.setForeground( Qt::white );
+        setFormat( i, text.length() - i, tcf );
+    }
+    else
+    {
+        setFormat( 0, text.length(), c );
+    }
 }

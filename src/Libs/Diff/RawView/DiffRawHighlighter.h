@@ -24,10 +24,10 @@ class QTextEdit;
 class DiffRawHighlighter : public QSyntaxHighlighter
 {
 public:
-	DiffRawHighlighter( QTextEdit* editor );
+    DiffRawHighlighter( QTextEdit* editor );
 
 protected:
-	void highlightBlock( const QString& text );
+    void highlightBlock( const QString& text );
 };
 
 #endif

@@ -21,12 +21,12 @@
 
 class DiffSplitter : public QSplitter
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	DiffSplitter( QWidget* parent = 0 );
+    DiffSplitter( QWidget* parent = 0 );
 
 protected:
-	virtual QSplitterHandle* createHandle();
+    virtual QSplitterHandle* createHandle();
 };
 
 #endif

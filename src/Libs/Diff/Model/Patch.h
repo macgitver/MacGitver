@@ -30,31 +30,31 @@ class QTextStream;
 class DIFF_MODEL_API Patch : public QSharedData
 {
 public:
-	typedef QExplicitlySharedDataPointer< Patch > Ptr;
+    typedef QExplicitlySharedDataPointer< Patch > Ptr;
 
 public:
-	Patch();
-	~Patch();
+    Patch();
+    ~Patch();
 
 public:
-	void addPath( PatchFile::Ptr diff );
-	PatchFile::List allPaths() const;
-	int numPaths() const;
-	PatchFile::Ptr pathAt( int index );
+    void addPath( PatchFile::Ptr diff );
+    PatchFile::List allPaths() const;
+    int numPaths() const;
+    PatchFile::Ptr pathAt( int index );
 
-	void setNumSides( int sides );
-	int numSides() const;
+    void setNumSides( int sides );
+    int numSides() const;
 
-	static Patch::Ptr readPatch( const QString& fileName );
-	static Patch::Ptr readPatch( QIODevice* device );
+    static Patch::Ptr readPatch( const QString& fileName );
+    static Patch::Ptr readPatch( QIODevice* device );
 
-	void exportRaw( QTextStream& stream );
+    void exportRaw( QTextStream& stream );
 
-	QString toString();
+    QString toString();
 
 private:
-	int				mNumSides;
-	PatchFile::List	mPaths;
+    int             mNumSides;
+    PatchFile::List mPaths;
 };
 
 #endif

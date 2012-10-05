@@ -36,27 +36,27 @@ class DiffFrame;
 
 class DIFF_VIEW_API DiffView : public Heaven::View
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	DiffView();
-	~DiffView();
+    DiffView();
+    ~DiffView();
 
 public:
-	void setPatch( Patch::Ptr patch );
+    void setPatch( Patch::Ptr patch );
 
 private:
-	void clearTree();
-	void fillTree();
+    void clearTree();
+    void fillTree();
 
 private:
-	Patch::Ptr			mPatch;
-	DiffTreeFileList*	mTree;
-	QTreeWidget*		mDetails;
-	QStackedWidget*		mDiffStack;
-	QTextBrowser*		mRawDiffView;
-	DiffFrame*			mDiffFrame;
-	QScrollBar*			mScrollV;
-	QScrollBar*			mScrollH;
+    Patch::Ptr          mPatch;
+    DiffTreeFileList*   mTree;
+    QTreeWidget*        mDetails;
+    QStackedWidget*     mDiffStack;
+    QTextBrowser*       mRawDiffView;
+    DiffFrame*          mDiffFrame;
+    QScrollBar*         mScrollV;
+    QScrollBar*         mScrollH;
 };
 
 #endif

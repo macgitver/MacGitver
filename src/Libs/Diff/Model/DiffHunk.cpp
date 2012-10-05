@@ -1,4 +1,4 @@
-/*
+ /*
  * MacGitver
  * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
  *
@@ -29,56 +29,56 @@ DifferenceHunk::~DifferenceHunk()
 
 void DifferenceHunk::addDifference( Difference::Ptr difference )
 {
-	mDifferences.append( difference );
+    mDifferences.append( difference );
 }
 
 Difference::List DifferenceHunk::differences() const
 {
-	return mDifferences;
+    return mDifferences;
 }
 
 int DifferenceHunk::numLines( int side ) const
 {
-	int l = 0;
+    int l = 0;
 
-	for( int i = 0; i < mDifferences.count(); i ++ )
-	{
-		l += mDifferences[ i ]->numLines( side );
-	}
+    for( int i = 0; i < mDifferences.count(); i ++ )
+    {
+        l += mDifferences[ i ]->numLines( side );
+    }
 
-	return l;
+    return l;
 }
 
 int DifferenceHunk::firstLine( int side ) const
 {
-	Q_ASSERT( mDifferences.count() > 0 );
-	return mDifferences[ 0 ]->firstLine( side );
+    Q_ASSERT( mDifferences.count() > 0 );
+    return mDifferences[ 0 ]->firstLine( side );
 }
 
 void DifferenceHunk::exportRaw( QTextStream& stream )
 {
-	stream << "@@ " << firstLine( 0 ) << "," << numLines( 0 ) << " "
-		   << firstLine( 1 ) << "," << numLines( 1 ) << " @@";
+    stream << "@@ " << firstLine( 0 ) << "," << numLines( 0 ) << " "
+           << firstLine( 1 ) << "," << numLines( 1 ) << " @@";
 
-	if( !mHunkName.isEmpty() )
-	{
-		stream << " " << mHunkName;
-	}
+    if( !mHunkName.isEmpty() )
+    {
+        stream << " " << mHunkName;
+    }
 
-	stream << "\n";
+    stream << "\n";
 
-	for( int i = 0; i < mDifferences.count(); i++ )
-	{
-		mDifferences[ i ]->exportRaw( stream );
-	}
+    for( int i = 0; i < mDifferences.count(); i++ )
+    {
+        mDifferences[ i ]->exportRaw( stream );
+    }
 }
 
 void DifferenceHunk::setHunkName( const QString& name )
 {
-	mHunkName = name;
+    mHunkName = name;
 }
 
 QString DifferenceHunk::hunkName() const
 {
-	return mHunkName;
+    return mHunkName;
 }

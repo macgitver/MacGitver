@@ -20,24 +20,24 @@
 
 static inline QString untabbify( const QString& input )
 {
-	QString output;
-	output.reserve( input.length() );
-	for( int i = 0; i < input.length(); i++ )
-	{
-		if( input[ i ] == L'\t' )
-		{
-			do
-			{
-				output += L' ';
-			} while( output.length() % 4 );
-		}
-		else
-		{
-			output += input[ i ];
-		}
-	}
+    QString output;
+    output.reserve( input.length() );
+    for( int i = 0; i < input.length(); i++ )
+    {
+        if( input[ i ] == L'\t' )
+        {
+            do
+            {
+                output += L' ';
+            } while( output.length() % 4 );
+        }
+        else
+        {
+            output += input[ i ];
+        }
+    }
 
-	return output;
+    return output;
 }
 
 DiffLines::DiffLines()
@@ -46,49 +46,49 @@ DiffLines::DiffLines()
 
 int DiffLines::numLines() const
 {
-	return mLines.count();
+    return mLines.count();
 }
 
 QString DiffLines::lineAt( int i ) const
 {
-	return mLines[ i ];
+    return mLines[ i ];
 }
 
 void DiffLines::addLine( const QString& line )
 {
-	mLines.append( line );
+    mLines.append( line );
 }
 
 int DiffLines::firstLine() const
 {
-	return mFirstLine;
+    return mFirstLine;
 }
 
 int DiffLines::lastLine() const
 {
-	return mFirstLine + mLines.count() - 1;
+    return mFirstLine + mLines.count() - 1;
 }
 
 void DiffLines::setFirstLine( int i )
 {
-	mFirstLine = i;
+    mFirstLine = i;
 }
 
 void DiffLines::exportRaw( QTextStream& stream, char prefix )
 {
-	for( int i = 0; i < mLines.count(); i++ )
-	{
-		stream << prefix << untabbify( mLines[ i ] ) << "\n";
-	}
+    for( int i = 0; i < mLines.count(); i++ )
+    {
+        stream << prefix << untabbify( mLines[ i ] ) << "\n";
+    }
 }
 
 Difference::Difference( int numSides, Type t )
-	: mType( t )
+    : mType( t )
 {
-	while( numSides-- )
-	{
-		mSides.append( new DiffLines() );
-	}
+    while( numSides-- )
+    {
+        mSides.append( new DiffLines() );
+    }
 }
 
 Difference::~Difference()
@@ -97,45 +97,45 @@ Difference::~Difference()
 
 Difference::Type Difference::type() const
 {
-	return mType;
+    return mType;
 }
 
 DiffLines* Difference::sideLines( int side )
 {
-	return mSides[ side ];
+    return mSides[ side ];
 }
 
 void Difference::setType( Type t )
 {
-	mType = t;
+    mType = t;
 }
 
 int Difference::numLines( int side ) const
 {
-	DiffLines* s = mSides[ side ];
-	Q_ASSERT( s );
-	return s->numLines();
+    DiffLines* s = mSides[ side ];
+    Q_ASSERT( s );
+    return s->numLines();
 }
 
 int Difference::firstLine( int side ) const
 {
-	DiffLines* s = mSides[ side ];
-	Q_ASSERT( s );
-	return s->firstLine();
+    DiffLines* s = mSides[ side ];
+    Q_ASSERT( s );
+    return s->firstLine();
 }
 
 void Difference::exportRaw( QTextStream& stream )
 {
-	Q_ASSERT( mSides.count() == 2 );
+    Q_ASSERT( mSides.count() == 2 );
 
-	if( mType == Context )
-	{
-		mSides[ 0 ]->exportRaw( stream, ' ' );
-	}
-	else
-	{
-		mSides[ 0 ]->exportRaw( stream, '-' );
-		mSides[ 1 ]->exportRaw( stream, '+' );
-	}
+    if( mType == Context )
+    {
+        mSides[ 0 ]->exportRaw( stream, ' ' );
+    }
+    else
+    {
+        mSides[ 0 ]->exportRaw( stream, '-' );
+        mSides[ 1 ]->exportRaw( stream, '+' );
+    }
 }
 

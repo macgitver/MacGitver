@@ -24,17 +24,17 @@
 class WIDGETS_API SHA1Input : public LineEdit
 {
 public:
-	explicit SHA1Input( QWidget* parent = NULL );
+    explicit SHA1Input( QWidget* parent = NULL );
 
 public:
-	bool isValid() const;
+    bool isValid() const;
 
-	Git::ObjectId objectId() const;
-	void setObjectId( const Git::ObjectId& sha1 );
+    Git::ObjectId objectId() const;
+    void setObjectId( const Git::ObjectId& sha1 );
 
 private:
-	using QLineEdit::text;
-	using QLineEdit::setText;
+    using QLineEdit::text;
+    using QLineEdit::setText;
 };
 
 #endif

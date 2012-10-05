@@ -25,26 +25,26 @@
 
 class WIDGETS_API ShortCommitModel : public QAbstractTableModel
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit ShortCommitModel( QObject* parent = 0 );
-	~ShortCommitModel();
+    explicit ShortCommitModel( QObject* parent = 0 );
+    ~ShortCommitModel();
 
 public:
-	void clear();
-	void setCommitList( const QList< Git::ObjectCommit >& list );
-	bool setCommitList( Git::Repository repo, const QList< Git::ObjectId >& list );
+    void clear();
+    void setCommitList( const QList< Git::ObjectCommit >& list );
+    bool setCommitList( Git::Repository repo, const QList< Git::ObjectId >& list );
 
 public:
-	Git::ObjectCommit indexToCommit( const QModelIndex& index ) const;
+    Git::ObjectCommit indexToCommit( const QModelIndex& index ) const;
 
 public:
-	int rowCount( const QModelIndex& parent ) const;
-	int columnCount( const QModelIndex& parent ) const;
-	QVariant data( const QModelIndex& index, int role ) const;
+    int rowCount( const QModelIndex& parent ) const;
+    int columnCount( const QModelIndex& parent ) const;
+    QVariant data( const QModelIndex& index, int role ) const;
 
 private:
-	QList< Git::ObjectCommit >	mCommitList;
+    QList< Git::ObjectCommit > mCommitList;
 };
 
 #endif

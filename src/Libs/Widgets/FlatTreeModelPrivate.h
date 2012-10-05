@@ -24,43 +24,43 @@
 
 struct FlatTreeModelEntry
 {
-	QIcon				mIcon;
-	QString				mText;
-	QString				mPath;
-	QVariant			mUserData;
-	bool				mIsHeader;
-	int					mIndex;
-	int					mLevel;
-	FlatTreeModelEntry*	mParent;
-	FlatTreeModelEntry*	mFirstChild;
-	FlatTreeModelEntry*	mNextSibling;
+    QIcon               mIcon;
+    QString             mText;
+    QString             mPath;
+    QVariant            mUserData;
+    bool                mIsHeader;
+    int                 mIndex;
+    int                 mLevel;
+    FlatTreeModelEntry* mParent;
+    FlatTreeModelEntry* mFirstChild;
+    FlatTreeModelEntry* mNextSibling;
 };
 
 class FlatTreeModelPrivate
 {
 public:
-	FlatTreeModelPrivate( FlatTreeModel* owner );
-	~FlatTreeModelPrivate();
+    FlatTreeModelPrivate( FlatTreeModel* owner );
+    ~FlatTreeModelPrivate();
 
 public:
-	FlatTreeModelEntry* entryByPath( const QString& path );
-	FlatTreeModelEntry* entryByPath( const QString& path, QStringList& remainder );
-	FlatTreeModelEntry* subEntry( FlatTreeModelEntry* parent, QStringList& remainder );
-	int updateIndicies( FlatTreeModelEntry* cur, int& currentIndex,
-						int level, FlatTreeModelEntry* search );
+    FlatTreeModelEntry* entryByPath( const QString& path );
+    FlatTreeModelEntry* entryByPath( const QString& path, QStringList& remainder );
+    FlatTreeModelEntry* subEntry( FlatTreeModelEntry* parent, QStringList& remainder );
+    int updateIndicies( FlatTreeModelEntry* cur, int& currentIndex,
+                        int level, FlatTreeModelEntry* search );
 
-	bool addEntry( const QString& path );
-	bool removeEntry( const QString& path );
+    bool addEntry( const QString& path );
+    bool removeEntry( const QString& path );
 
-	bool rawRemove( FlatTreeModelEntry* entry );
+    bool rawRemove( FlatTreeModelEntry* entry );
 
 public:
-	FlatTreeModel*					mOwner;
-	QChar							mSeparator;
-	QIcon							mDefaultHeaderIcon;
-	QIcon							mDefaultEntryIcon;
-	QList< FlatTreeModelEntry* >	mEntries;
-	FlatTreeModelEntry				mRoot;
+    FlatTreeModel*                  mOwner;
+    QChar                           mSeparator;
+    QIcon                           mDefaultHeaderIcon;
+    QIcon                           mDefaultEntryIcon;
+    QList< FlatTreeModelEntry* >    mEntries;
+    FlatTreeModelEntry              mRoot;
 };
 
 #endif

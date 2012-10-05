@@ -19,35 +19,35 @@
 #include "HeaderView.h"
 
 HeaderView::HeaderView( Qt::Orientation orientation, QWidget* parent )
-	: QHeaderView( orientation, parent )
+    : QHeaderView( orientation, parent )
 {
-	connect( this, SIGNAL(sectionResized(int,int,int)),
-			 this, SLOT(saveSizes()) );
+    connect( this, SIGNAL(sectionResized(int,int,int)),
+             this, SLOT(saveSizes()) );
 }
 
 void HeaderView::setConfigName( const QString& name )
 {
-	mConfigName = name;
-	loadSizes();
+    mConfigName = name;
+    loadSizes();
 }
 
 QString HeaderView::configName() const
 {
-	return mConfigName;
+    return mConfigName;
 }
 
 void HeaderView::loadSizes()
 {
-	if( mConfigName.isEmpty() )
-		return;
+    if( mConfigName.isEmpty() )
+        return;
 
-	restoreState( Config::self().get( mConfigName ).toByteArray() );
+    restoreState( Config::self().get( mConfigName ).toByteArray() );
 }
 
 void HeaderView::saveSizes()
 {
-	if( mConfigName.isEmpty() )
-		return;
+    if( mConfigName.isEmpty() )
+        return;
 
-	Config::self().set( mConfigName, saveState() );
+    Config::self().set( mConfigName, saveState() );
 }

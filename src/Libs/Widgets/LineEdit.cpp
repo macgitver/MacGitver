@@ -20,49 +20,49 @@
 #include "Widgets/LineEdit.h"
 
 LineEdit::LineEdit( QWidget* parent )
-	: QLineEdit( parent )
-	, mMandatory( false )
+    : QLineEdit( parent )
+    , mMandatory( false )
 {
-	init();
+    init();
 }
 
 LineEdit::LineEdit( const QString& text, QWidget* parent )
-	: QLineEdit( text, parent )
-	, mMandatory( false )
+    : QLineEdit( text, parent )
+    , mMandatory( false )
 {
-	init();
+    init();
 }
 
 void LineEdit::init()
 {
-	connect( this, SIGNAL(textChanged(QString)),
-			 this, SLOT(updatePalette()) );
+    connect( this, SIGNAL(textChanged(QString)),
+             this, SLOT(updatePalette()) );
 }
 
 void LineEdit::setMandatory( bool mandatory )
 {
-	if( mMandatory != mandatory )
-	{
-		mMandatory = mandatory;
-		updatePalette();
-	}
+    if( mMandatory != mandatory )
+    {
+        mMandatory = mandatory;
+        updatePalette();
+    }
 }
 
 bool LineEdit::isMandatory() const
 {
-	return mMandatory;
+    return mMandatory;
 }
 
 void LineEdit::updatePalette()
 {
-	QPalette p;
+    QPalette p;
 
-	if( mMandatory && text().isEmpty() )
-	{
-		p = QApplication::palette();
-		QColor c = p.color( QPalette::Active, QPalette::Highlight );
-		p.setColor( QPalette::Active, QPalette::Base, c.lighter( 130 ) );
-	}
+    if( mMandatory && text().isEmpty() )
+    {
+        p = QApplication::palette();
+        QColor c = p.color( QPalette::Active, QPalette::Highlight );
+        p.setColor( QPalette::Active, QPalette::Base, c.lighter( 130 ) );
+    }
 
-	setPalette( p );
+    setPalette( p );
 }

@@ -28,56 +28,56 @@ class QPushButton;
 
 struct StringSelectorWidgetEntry
 {
-	QString				mDisplay;
-	QIcon				mIcon;
-	QVariant			mValue;
-	QTreeWidgetItem*	mItem;
-	bool				mIsSelected;
-	int					mPosition;
+    QString             mDisplay;
+    QIcon               mIcon;
+    QVariant            mValue;
+    QTreeWidgetItem*    mItem;
+    bool                mIsSelected;
+    int                 mPosition;
 };
 
 class StringSelectorWidgetPrivate
 {
 public:
-	typedef QList< StringSelectorWidgetEntry* > Entries;
-	typedef QHash< StringSelectorWidget::Button, QPushButton* > ButtonWidgets;
+    typedef QList< StringSelectorWidgetEntry* > Entries;
+    typedef QHash< StringSelectorWidget::Button, QPushButton* > ButtonWidgets;
 
 public:
-	StringSelectorWidgetPrivate( StringSelectorWidget* owner );
-	~StringSelectorWidgetPrivate();
+    StringSelectorWidgetPrivate( StringSelectorWidget* owner );
+    ~StringSelectorWidgetPrivate();
 
 private:
-	void setupUi();
+    void setupUi();
 
 public:
-	void clear();
-	void updateButtons();
-	void updateButtonStates();
-	void moveAll( bool select );
-	Entries all( bool selected ) const;
-	void setEntrySelected( StringSelectorWidgetEntry* entry, bool selected );
-	StringSelectorWidgetEntry* entryFromValue( const QVariant& value ) const;
-	StringSelectorWidgetEntry* entryFromDisplay( const QString& display ) const;
-	void clickedButton( QTreeWidget* widgetFrom, bool newSelection );
+    void clear();
+    void updateButtons();
+    void updateButtonStates();
+    void moveAll( bool select );
+    Entries all( bool selected ) const;
+    void setEntrySelected( StringSelectorWidgetEntry* entry, bool selected );
+    StringSelectorWidgetEntry* entryFromValue( const QVariant& value ) const;
+    StringSelectorWidgetEntry* entryFromDisplay( const QString& display ) const;
+    void clickedButton( QTreeWidget* widgetFrom, bool newSelection );
 
 public:
-	StringSelectorWidget*			mOwner;
-	StringSelectorWidget::Buttons	mButtons;
-	ButtonWidgets					mButtonWidgets;
-	QVBoxLayout*					mButtonLayout;
-	Entries							mAllEntries;
-	QTreeWidget*					mSelected;
-	QTreeWidget*					mUnselected;
+    StringSelectorWidget*           mOwner;
+    StringSelectorWidget::Buttons   mButtons;
+    ButtonWidgets                   mButtonWidgets;
+    QVBoxLayout*                    mButtonLayout;
+    Entries                         mAllEntries;
+    QTreeWidget*                    mSelected;
+    QTreeWidget*                    mUnselected;
 };
 
 class StringSelectorWidgetTree : public QTreeWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	StringSelectorWidgetTree( QWidget* parent = 0 );
+    StringSelectorWidgetTree( QWidget* parent = 0 );
 
 public:
-	QSize sizeHint() const;
+    QSize sizeHint() const;
 };
 
 #endif

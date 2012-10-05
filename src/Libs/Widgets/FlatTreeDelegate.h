@@ -23,12 +23,12 @@
 
 class WIDGETS_API FlatTreeDelegate : public QItemDelegate
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	FlatTreeDelegate( QObject* parent );
+    FlatTreeDelegate( QObject* parent );
 public:
-	void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-	QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-}; 
+    void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+};
 
 #endif

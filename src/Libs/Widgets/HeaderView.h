@@ -23,21 +23,21 @@
 
 class WIDGETS_API HeaderView : public QHeaderView
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	HeaderView( Qt::Orientation orientation, QWidget* parent = 0 );
+    HeaderView( Qt::Orientation orientation, QWidget* parent = 0 );
 
 public:
-	void setConfigName( const QString& name );
-	QString configName() const;
+    void setConfigName( const QString& name );
+    QString configName() const;
 
-	void loadSizes();
+    void loadSizes();
 
 public slots:
-	void saveSizes();
+    void saveSizes();
 
 private:
-	QString		mConfigName;
+    QString mConfigName;
 };
 
 #endif

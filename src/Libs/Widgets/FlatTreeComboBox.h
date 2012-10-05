@@ -25,20 +25,20 @@ class FlatTreeModel;
 
 class WIDGETS_API FlatTreeComboBox : public QComboBox
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	FlatTreeComboBox( QWidget* parent = 0 );
+    FlatTreeComboBox( QWidget* parent = 0 );
 
 public:
-	void clear();
+    void clear();
 
-	void setModel( FlatTreeModel* model );
+    void setModel( FlatTreeModel* model );
 
-	void add( const QString& entry );
-	void add( const QStringList& entries );
+    void add( const QString& entry );
+    void add( const QStringList& entries );
 
-	void remove( const QString& entry );
-	void remove( const QStringList& entries );
+    void remove( const QString& entry );
+    void remove( const QStringList& entries );
 };
 
 #endif

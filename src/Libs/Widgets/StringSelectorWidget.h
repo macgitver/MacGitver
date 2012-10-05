@@ -31,65 +31,65 @@ class StringSelectorWidgetPrivate;
 
 class WIDGETS_API StringSelectorWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	enum Button
-	{
-		btnNone			= 0,
+    enum Button
+    {
+        btnNone         = 0,
 
-		btnSelectOne	= 1 << 0,
-		btnUnselectOne	= 1 << 1,
+        btnSelectOne    = 1 << 0,
+        btnUnselectOne  = 1 << 1,
 
-		btnSelectAll	= 1 << 2,
-		btnSelectNone	= 1 << 3,
+        btnSelectAll    = 1 << 2,
+        btnSelectNone   = 1 << 3,
 
-		btnMoveUp		= 1 << 4,
-		btnMoveDown		= 1 << 5,
+        btnMoveUp       = 1 << 4,
+        btnMoveDown     = 1 << 5,
 
-		btnRemove		= 1 << 6,
-		btnCreate		= 1 << 7
-	};
-	typedef QFlags< Button > Buttons;
-
-public:
-	StringSelectorWidget( QWidget* parent = 0 );
-	~StringSelectorWidget();
+        btnRemove       = 1 << 6,
+        btnCreate       = 1 << 7
+    };
+    typedef QFlags< Button > Buttons;
 
 public:
-	void clear();
-	void addEntry( const QString& display, bool isSelected, const QVariant& value = QVariant() );
-	int countEntries() const;
+    StringSelectorWidget( QWidget* parent = 0 );
+    ~StringSelectorWidget();
 
-	int countSelected() const;
-	QList< QVariant > selectedValues() const;
-	QStringList selectedStrings() const;
+public:
+    void clear();
+    void addEntry( const QString& display, bool isSelected, const QVariant& value = QVariant() );
+    int countEntries() const;
 
-	bool isStringSelected( const QString& display ) const;
-	bool isValueSelected( const QVariant& value ) const;
+    int countSelected() const;
+    QList< QVariant > selectedValues() const;
+    QStringList selectedStrings() const;
 
-	void setButtons( Buttons buttons );
-	Buttons buttons() const;
+    bool isStringSelected( const QString& display ) const;
+    bool isValueSelected( const QVariant& value ) const;
+
+    void setButtons( Buttons buttons );
+    Buttons buttons() const;
 
 public slots:
-	void setValueSelected( const QVariant& value, bool selected = true );
-	void setStringSelected( const QString& display, bool selected = true );
+    void setValueSelected( const QVariant& value, bool selected = true );
+    void setStringSelected( const QString& display, bool selected = true );
 
-	void selectNone();
-	void selectAll();
+    void selectNone();
+    void selectAll();
 
 signals:
-	void valueSelected( const QVariant& value );
-	void stringSelected( const QString& display );
+    void valueSelected( const QVariant& value );
+    void stringSelected( const QString& display );
 
 private slots:
-	void selItemDblClcked( QTreeWidgetItem* it );
-	void unselItemDblClcked( QTreeWidgetItem* it );
-	void selectionChanged();
-	void clickedSelect();
-	void clickedUnselect();
+    void selItemDblClcked( QTreeWidgetItem* it );
+    void unselItemDblClcked( QTreeWidgetItem* it );
+    void selectionChanged();
+    void clickedSelect();
+    void clickedUnselect();
 
 private:
-	StringSelectorWidgetPrivate* d;
+    StringSelectorWidgetPrivate* d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( StringSelectorWidget::Buttons )

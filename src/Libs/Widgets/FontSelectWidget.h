@@ -27,40 +27,40 @@ class QComboBox;
 
 class WIDGETS_API FontSelectWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	FontSelectWidget( QWidget* parent = NULL );
-	~FontSelectWidget();
+    FontSelectWidget( QWidget* parent = NULL );
+    ~FontSelectWidget();
 
 public:
-	void setSelectedFont( const QFont& font );
-	QFont selectedFont();
+    void setSelectedFont( const QFont& font );
+    QFont selectedFont();
 
-	void setFontName( const QString& fontName );
-	void setFontSize( int size );
-	void setBold( bool v );
-	void setItalic( bool v );
+    void setFontName( const QString& fontName );
+    void setFontSize( int size );
+    void setBold( bool v );
+    void setItalic( bool v );
 
-	bool bold() const;
-	bool italic() const;
-	QString fontName() const;
-	int fontSize() const;
+    bool bold() const;
+    bool italic() const;
+    QString fontName() const;
+    int fontSize() const;
 
-	void setFontFilters( QFontComboBox::FontFilters filters );
-	QFontComboBox::FontFilters fontFilters() const;
+    void setFontFilters( QFontComboBox::FontFilters filters );
+    QFontComboBox::FontFilters fontFilters() const;
 
 signals:
-	void currentFontChanged( const QFont& font );
+    void currentFontChanged( const QFont& font );
 
 private slots:
-	void onSizeChanged();
-	void onCurrentFontChanged( QFont font );
+    void onSizeChanged();
+    void onCurrentFontChanged( QFont font );
 
 private:
-	QFontComboBox*		mcboFontName;
-	QCheckBox*			mchkBold;
-	QCheckBox*			mchkItalic;
-	QComboBox*			mcboSize;
+    QFontComboBox*  mcboFontName;
+    QCheckBox*      mchkBold;
+    QCheckBox*      mchkItalic;
+    QComboBox*      mcboSize;
 };
 
 #endif

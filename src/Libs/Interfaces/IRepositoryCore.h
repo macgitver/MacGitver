@@ -23,19 +23,19 @@ class QString;
 
 namespace Git
 {
-	class ObjectId;
+    class ObjectId;
 }
 
 class INTERFACES_API IRepository
 {
 public:
-	IRepository();
-	virtual ~IRepository();
+    IRepository();
+    virtual ~IRepository();
 
 public:
-	virtual bool createBranch( const Git::ObjectId& baseOID,
-							   const QString& branchName,
-							   bool force ) = 0;
+    virtual bool createBranch( const Git::ObjectId& baseOID,
+                               const QString& branchName,
+                               bool force ) = 0;
 };
 
 #endif

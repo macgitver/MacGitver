@@ -18,9 +18,9 @@
 #include "Interfaces/IConfigDialog.h"
 
 IConfigPage::IConfigPage( IConfigDialog* dlg )
-	: mDialog( dlg )
+    : mDialog( dlg )
 {
-	Q_ASSERT( dlg );
+    Q_ASSERT( dlg );
 }
 
 IConfigPage::~IConfigPage()
@@ -29,6 +29,6 @@ IConfigPage::~IConfigPage()
 
 void IConfigPage::setModified( bool value )
 {
-	mDialog->setModified( this, value );
+    mDialog->setModified( this, value );
 }
 

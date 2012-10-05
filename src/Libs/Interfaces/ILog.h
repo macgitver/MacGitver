@@ -23,20 +23,20 @@
 
 enum LogType
 {
-	ltInformation,
-	ltNormal,
-	ltWarning,
-	ltError
+    ltInformation,
+    ltNormal,
+    ltWarning,
+    ltError
 };
 
 class INTERFACES_API ILog
 {
 public:
-	ILog();
-	virtual ~ILog();
+    ILog();
+    virtual ~ILog();
 
 public:
-	virtual void addMessage( LogType type, const QString& message ) = 0;
+    virtual void addMessage( LogType type, const QString& message ) = 0;
 };
 
 #endif

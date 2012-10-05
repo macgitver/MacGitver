@@ -20,9 +20,9 @@
 #include <qglobal.h>
 
 #ifdef Interfaces_EXPORTS
-#	define INTERFACES_API Q_DECL_EXPORT
+#   define INTERFACES_API Q_DECL_EXPORT
 #else
-#	define INTERFACES_API Q_DECL_IMPORT
+#   define INTERFACES_API Q_DECL_IMPORT
 #endif
 
 #endif

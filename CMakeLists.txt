@@ -5,7 +5,6 @@ CMAKE_MINIMUM_REQUIRED( VERSION 2.8.9 )
 INCLUDE( cmake/Utils.cmake )		# Tools for cmake
 SET_OUTPUT_PATHS()
 INCLUDE( cmake/QtMacros.cmake )		# Our own set of Qt Macros
-INCLUDE( cmake/hic.cmake )			# Our HI-Compiler
 INCLUDE( cmake/CfgComp.cmake )		# Out CfgComp tool
 
 IF( UNIX )

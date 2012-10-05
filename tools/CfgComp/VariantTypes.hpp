@@ -24,50 +24,50 @@
 class VariantType
 {
 public:
-	VariantType();
+    VariantType();
 
-	VariantType( const QString& typeName,
-				 QVariant::Type typeId,
-				 const QString& cppType,
-				 bool templated = false );
+    VariantType( const QString& typeName,
+                 QVariant::Type typeId,
+                 const QString& cppType,
+                 bool templated = false );
 
-	VariantType( const QString& typeName,
-				 const QString& subType,
-				 QVariant::Type typeId,
-				 const QString& cppType,
-				 bool templated = false );
+    VariantType( const QString& typeName,
+                 const QString& subType,
+                 QVariant::Type typeId,
+                 const QString& cppType,
+                 bool templated = false );
 
 public:
-	bool isUserType() const;
-	bool requiresTemplateMagic() const;
+    bool isUserType() const;
+    bool requiresTemplateMagic() const;
 
-	QString cppType() const;
-	QString type() const;
-	QString subType() const;
-	QVariant::Type typeId() const;
-	QString typeIdName() const;
+    QString cppType() const;
+    QString type() const;
+    QString subType() const;
+    QVariant::Type typeId() const;
+    QString typeIdName() const;
 
-	QString defaultCTored() const;
+    QString defaultCTored() const;
 
 private:
-	QString			mType;
-	QString			mSubType;
-	QString			mCppType;
-	QVariant::Type	mTypeId;
-	bool			mTemplated;
+    QString         mType;
+    QString         mSubType;
+    QString         mCppType;
+    QVariant::Type  mTypeId;
+    bool            mTemplated;
 };
 
 class VariantTypes
 {
 public:
-	static VariantTypes& self();
+    static VariantTypes& self();
 
-	VariantType typeFor( const QString& type, const QString& subType = QString() );
+    VariantType typeFor( const QString& type, const QString& subType = QString() );
 
 private:
-	VariantTypes();
-	static VariantTypes* sSelf;
-	QList< VariantType > mTypes;
+    VariantTypes();
+    static VariantTypes* sSelf;
+    QList< VariantType > mTypes;
 };
 
 #endif

@@ -123,8 +123,9 @@ void RepositoryModule::onRepositoryOpenHelper()
         return;
 
     // If we successfully loaded the repository at that directory,
-    // we store it as "lastUsedDir"
-    configSet( "lastUsedDir", repoDir );
+    // we store the repository's work dir as "lastUsedDir".
+    // If it is a bare repository, we store the repository's directory.
+    configSet( "lastUsedDir", repo.isBare() ? repoDir : repo.basePath() );
 
     MacGitver::self().setRepository( repo );
 }

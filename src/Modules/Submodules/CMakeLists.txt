@@ -14,6 +14,7 @@ SET( SRC_FILES
     SubmodulesCreateEditDlg.cpp
     SubmodulesModule.cpp
     SubmodulesView.cpp
+    SubmodulesDelegate.cpp
 )
 
 SET( HDR_FILES
@@ -21,6 +22,7 @@ SET( HDR_FILES
     SubmodulesCreateEditDlg.h
     SubmodulesModule.h
     SubmodulesView.h
+    SubmodulesDelegate.h
 )
 
 SET( UI_FILES

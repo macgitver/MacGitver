@@ -14,11 +14,7 @@
  *
  */
 
-#include <QStringBuilder>
-#include <QFontMetrics>
-#include <QPainter>
 #include <QVBoxLayout>
-#include <QItemDelegate>
 #include <QStandardItemModel>
 #include <QToolBar>
 #include <QTreeView>
@@ -29,62 +25,9 @@
 #include "MacGitver/FSWatcher.h"
 
 #include "SubmodulesView.h"
+#include "SubmodulesDelegate.h"
 #include "SubmodulesCreateEditDlg.h"
 
-
-class SubmodulesViewDelegate : public QItemDelegate
-{
-public:
-    SubmodulesViewDelegate( QObject* parent );
-public:
-    void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-
-};
-
-
-SubmodulesViewDelegate::SubmodulesViewDelegate( QObject* parent )
-    : QItemDelegate( parent )
-{
-}
-
-void SubmodulesViewDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
-                                    const QModelIndex& index ) const
-{
-    const QFontMetrics& fm = option.fontMetrics;
-    if( index.column() != 0 )
-    {
-        QItemDelegate::paint( painter, option, index );
-        return;
-    }
-
-    drawBackground( painter, option, index );
-
-    QRect textRect = option.rect.adjusted( 1, 1, -1, -1 );
-
-    textRect.setBottom( textRect.top() + fm.lineSpacing() );
-    QFont f( option.font );
-    f.setBold( true );
-    painter->setFont( f );
-    painter->drawText( textRect, index.data().toString() );
-
-    textRect.moveTop( textRect.top() + fm.lineSpacing() );
-    painter->setFont( option.font );
-    painter->drawText( textRect,
-                       index.data( Qt::UserRole + 2 ).toString() %
-                       QLatin1String( " - " ) %
-                       index.data( Qt::UserRole + 1 ).toString() );
-
-    drawFocus( painter, option, option.rect );
-}
-
-QSize SubmodulesViewDelegate::sizeHint( const QStyleOptionViewItem& option,
-                                        const QModelIndex& index ) const
-{
-    const QFontMetrics& fm = option.fontMetrics;
-
-    return QSize( 200, 2 + 2 * fm.lineSpacing() );
-}
 
 SubmodulesView::SubmodulesView()
     : GlobalView( QLatin1String( "Submodules" ) )

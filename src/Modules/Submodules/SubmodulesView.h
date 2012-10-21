@@ -29,6 +29,7 @@ class QStandardItem;
 class QStandardItemModel;
 class QTreeView;
 
+
 class SubmodulesView : public Heaven::GlobalView, private SubmodulesViewActions
 {
     Q_OBJECT
@@ -45,7 +46,6 @@ private:
     Git::Repository                     mRepo;
     QTreeView*                          mTree;
     QStandardItemModel*                 mModel;
-    QHash< QString, QStandardItem* >    mNameToItem;
 };
 
 #endif

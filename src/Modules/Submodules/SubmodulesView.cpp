@@ -18,6 +18,7 @@
 #include <QStandardItemModel>
 #include <QToolBar>
 #include <QTreeView>
+#include <QMessageBox>
 
 #include "libGitWrap/ObjectId.h"
 
@@ -76,57 +77,29 @@ void SubmodulesView::repositoryChanged( Git::Repository repo )
 
 void SubmodulesView::readSubmodules()
 {
-    QList< Git::Submodule > submodules;
+    if( !mRepo.isValid() )
+        return;
 
-    if( mRepo.isValid() )
+    Git::Result r;
+    QList<Git::Submodule> submodules( mRepo.submodules(r) );
+    if (!r)
     {
-        #ifdef LIBGIT_IMPROVED
-        submodules = mRepo.submodules();
-        #else
-        Git::Result r;
-        Git::Repository repo = Git::Repository::open( mRepo.basePath(), r );
-        submodules = repo.submodules( r );
-        #endif
+        QMessageBox::critical( 0, trUtf8("Error while reading submodules")
+                               , trUtf8("Error while reading submodules:\n%1").arg(r.errorText()) );
     }
 
-    QStringList toVisit = mNameToItem.keys();
+    // TODO: use IconProvider
+    QIcon decoration; // ( IconProvider::self().icon(QLatin1String("subrepo")) );
 
     foreach( Git::Submodule module, submodules )
     {
-        if( !module.isValid() )
-            continue;
+        QStandardItem * it = new QStandardItem( decoration, trUtf8("<INVALID>") );
+        it->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
 
-        QString name = module.name();
-        QStandardItem* it = mNameToItem.value( name, NULL );
+        if( module.isValid() )
+            it->setData( QVariant::fromValue(module), Qt::UserRole + 1 );
 
-        if( it )
-        {
-            int i = toVisit.indexOf( name );
-            if( i != -1 )	// It should really be in, shouldn't it? :)
-            {
-                toVisit.removeAt( i );
-            }
-        }
-        else
-        {
-            it = new QStandardItem( name );
-            it->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
-            mModel->appendRow( it );
-            mNameToItem.insert( name, it );
-        }
-
-        it->setData( module.path(), Qt::UserRole + 1 );
-        it->setData( module.url(), Qt::UserRole + 2 );
-        it->setData( module.fetchRecursive(), Qt::UserRole + 3 );
-        it->setData( module.updateStrategy(), Qt::UserRole + 4 );
-        it->setData( module.ignoreStrategy(), Qt::UserRole + 5 );
-        it->setData( module.currentSHA1().toString(), Qt::UserRole + 6 );
-    }
-
-    foreach( QString module, toVisit )
-    {
-        QStandardItem* it = mNameToItem.take( module );
-        delete it;
+        mModel->appendRow( it );
     }
 }
 

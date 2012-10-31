@@ -59,11 +59,11 @@ QVariant WorkingTreeFileItem::data( int column, int role ) const
         break;
 
     case Qt::ForegroundRole:
-        if( mState & WTF_Unchanged )        return Qt::black;
-        else if( mState & WTF_Changed )     return Qt::blue;
-        else if( mState & WTF_Untracked )   return Qt::darkGreen;
-        else if( mState & WTF_Missing )     return Qt::red;
-        else if( mState & WTF_Ignored )     return Qt::gray;
+        if( mState & WTF_Unchanged )        return QColor( Qt::black );
+        else if( mState & WTF_Changed )     return QColor( Qt::blue );
+        else if( mState & WTF_Untracked )   return QColor( Qt::darkGreen );
+        else if( mState & WTF_Missing )     return QColor( Qt::red );
+        else if( mState & WTF_Ignored )     return QColor( Qt::gray );
         else                                return QColor( 0xFFCCFF );
 
     default:

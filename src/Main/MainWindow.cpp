@@ -81,20 +81,14 @@ void MainWindow::setupUi()
     setStyleSheet( QString::fromUtf8( styleFile.readAll().constData() ) );
 
     setupActions( this );
-    setMenuBar( mbMainMenuBar->menuBarFor( this ) );
-
-    mModes = new Heaven::ModeSwitchWidget();
-    menuBar()->setCornerWidget( mModes );
+    setMenuBar( mbMainMenuBar );
 
     setWindowTitle( trUtf8( "MacGitver" ) );
 
     statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
     setHeadLabel();
 
-    mTop = new Heaven::TopLevelWidget();
-    setCentralWidget( mTop );
-
-    addToolBar( tbMainBar->toolBarFor( this ) );
+//  addToolBar( tbMainBar->toolBarFor( this ) );
 
     moveToCenter();
 }
@@ -222,16 +216,13 @@ void MainWindow::activateMode( const QString& modeName )
 {
     qDebug( "Going to %s mode", qPrintable( modeName ) );
 
-    mTop->clear();
+    topLevelContainer()->clear();
 
     UserLevelMode::Ptr mode = mCurrentLevel->mode( modeName );
 
     UserLevelDefaultLayout::Ptr layout = mode->defaultLayout();
 
-    createPartialLayout( mTop->rootContainer(), layout->root() );
-
-//	mModes->setEnabled( mode->isLockingMode() );
-//	mModes->setCurrentMode( modeName );
+    createPartialLayout( topLevelContainer()->rootContainer(), layout->root() );
 }
 
 void MainWindow::repositoryChanged( const Git::Repository& repo )
@@ -277,7 +268,7 @@ void MainWindow::setHeadLabel()
 
 void MainWindow::integrateView( Heaven::View* view, Heaven::Positions position )
 {
-    mTop->addView( view, position );
+    topLevelContainer()->addView( view, position );
 }
 
 QWidget* MainWindow::widget()

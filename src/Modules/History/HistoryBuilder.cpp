@@ -121,6 +121,11 @@ void HistoryBuilder::updateReferences()
 
         if( ref.startsWith( QLatin1String( "refs/heads/" ) ) )
         {
+            if( ref.endsWith( QLatin1String( "HEAD" ) ) )
+            {
+                // Skip "HEAD"
+                continue;
+            }
             inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
             inlRef.mIsBranch = true;
             inlRef.mIsRemote = false;
@@ -139,6 +144,11 @@ void HistoryBuilder::updateReferences()
         }
         else if( ref.startsWith( QLatin1String( "refs/remotes/" ) ) )
         {
+            if( ref.endsWith( QLatin1String( "HEAD" ) ) )
+            {
+                // Skip "HEAD"
+                continue;
+            }
             inlRef.mRefName = ref.mid( strlen( "refs/remotes/" ) );
             inlRef.mIsBranch = true;
             inlRef.mIsRemote = true;

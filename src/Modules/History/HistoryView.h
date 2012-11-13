@@ -24,7 +24,7 @@ class QToolBar;
 
 #include "Config/ConfigUser.h"
 
-#include "libHeaven/Views/GlobalView.h"
+#include "libHeaven/Views/GlobalView.hpp"
 #include "libHeaven/Widgets/MiniSplitter.h"
 
 #include "hic_HistoryViewActions.h"

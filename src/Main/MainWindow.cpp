@@ -30,6 +30,8 @@
 #include "libGitWrap/ObjectId.h"
 #include "libGitWrap/Reference.h"
 
+#include "libHeaven/Views/Mode.h"
+
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"
 
@@ -115,12 +117,12 @@ void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )
 {
     QStringList modeNames;
 
-    foreach( UserLevelMode::Ptr mode, uld->userModes() )
+    foreach( UserLevelMode::Ptr mode, uld->allModes() )
     {
+        Heaven::Mode* heavenMode = new Heaven::Mode( this, mode->name(), NULL );
+        addMode( heavenMode );
         modeNames.append( mode->name() );
     }
-
-//	mModes->setModes( modeNames, QString() );
 
     mCurrentLevel = uld;
 
@@ -215,6 +217,8 @@ void MainWindow::createPartialLayout( Heaven::ViewContainer* parent,
 void MainWindow::activateMode( const QString& modeName )
 {
     qDebug( "Going to %s mode", qPrintable( modeName ) );
+
+    setCurrentMode( findMode( modeName ) ); // Will just update the display for now
 
     topLevelContainer()->clear();
 

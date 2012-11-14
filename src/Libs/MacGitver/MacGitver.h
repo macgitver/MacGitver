@@ -32,6 +32,7 @@ class Module;
 class Modules;
 class FSWatcher;
 class UserLevelDefinition;
+class RepoManager;
 
 class IMainWindow;
 
@@ -75,6 +76,8 @@ public:
     void log( LogType type, const char* logMessage );
     void log( LogType type, const Git::Result& r, const char* logMessage = NULL );
 
+    RepoManager* repoMan();
+
 signals:
     void repositoryChanged( const Git::Repository& repo );
 
@@ -91,6 +94,7 @@ private:
     Git::GitWrap                mGitWrap;
     Git::Repository             mRepository;
     QHash< QString, ViewInfo >  mViews;
+    RepoManager*                mRepoMan;
 };
 
 #endif

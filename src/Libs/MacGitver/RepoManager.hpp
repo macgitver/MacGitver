@@ -27,7 +27,7 @@ class RepoManager : public QObject
 {
     Q_OBJECT
 public:
-    RepoManager();
+    RepoManager( QObject* parent );
     ~RepoManager();
 
 public:

@@ -16,7 +16,8 @@
 
 #include "RepoManager.hpp"
 
-RepoManager::RepoManager()
+RepoManager::RepoManager( QObject* parent )
+    : QObject( parent )
 {
 }
 

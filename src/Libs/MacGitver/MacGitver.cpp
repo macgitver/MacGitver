@@ -19,6 +19,7 @@
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"
 #include "MacGitver/FSWatcher.h"
+#include "MacGitver/RepoManager.hpp"
 
 #include "Interfaces/IMainWindow.h"
 
@@ -26,6 +27,7 @@ MacGitver::MacGitver( int argc, char** argv )
     : QApplication( argc, argv )
     , mMainWindow( NULL )
     , mLog( NULL )
+    , mRepoMan( NULL )
 {
     setOrganizationName( QLatin1String( "SaCu" ) );
     setApplicationName( QLatin1String( "MacGitver" ) );
@@ -33,6 +35,8 @@ MacGitver::MacGitver( int argc, char** argv )
     mWatcher = new FSWatcher( this );
 
     mModules = new Modules( this );
+
+    mRepoMan = new RepoManager( this );
 
     Q_ASSERT( sSelf == NULL );
     sSelf = this;
@@ -160,4 +164,9 @@ void MacGitver::log( LogType type, const Git::Result& r, const char* logMessage 
                               .arg( r.errorText() ) );
         }
         }
+}
+
+RepoManager* MacGitver::repoMan()
+{
+    return mRepoMan;
 }

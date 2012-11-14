@@ -54,6 +54,9 @@ private slots:
     void onRepositoryClose();
 
 private:
+    static Heaven::View* createRepoTreeView();
+
+private:
     Git::Repository mRepo;
     RepositoryCore* mCore;
 };

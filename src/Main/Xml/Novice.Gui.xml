@@ -22,14 +22,20 @@
 		<Views>
 			<Disable Match="*"/>
 			<Enable  Match="History"/>
-			<Enable  Match="WorkTree"/>
+            <Enable  Match="WorkTree"/>
+            <Enable  Match="RepoTree"/>
 		</Views>
 
 		<DefaultLayout>
-			<Tab Caption="Top">
-				<View Name="History"/>
-				<View Name="WorkTree"/>
-			</Tab>
+            <Split Orient="Horz">
+                <Tab Caption="Left">
+                    <View Name="RepoTree"/>
+                </Tab>
+                <Tab Caption="Top" Stretch="3">
+                    <View Name="History"/>
+                    <View Name="WorkTree"/>
+                </Tab>
+            </Split>
 		</DefaultLayout>
 
 	<!--

@@ -14,6 +14,9 @@ SET( SRC_FILES
     RepositoryModule.cpp
 
     RepositoryCore.cpp
+    
+    RepoInfoModel.cpp
+    RepoTreeView.cpp
 
     CreateRepositoryDlg.cpp
     CloneRepositoryDlg.cpp
@@ -24,6 +27,9 @@ SET( HDR_FILES
     RepositoryModule.h
 
     RepositoryCore.h
+    
+    RepoInfoModel.hpp
+    RepoTreeView.hpp
 
     CreateRepositoryDlg.h
     CloneRepositoryDlg.h

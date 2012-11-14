@@ -21,6 +21,7 @@
 
 #include "RepositoryModule.h"
 #include "RepositoryCore.h"
+#include "RepoTreeView.hpp"
 #include "CloneRepositoryDlg.h"
 #include "CreateRepositoryDlg.h"
 
@@ -51,15 +52,25 @@ void RepositoryModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
+Heaven::View* RepositoryModule::createRepoTreeView()
+{
+    return new RepoTreeView;
+}
+
 void RepositoryModule::initialize()
 {
     setupActions( this );
     acRepositoryMenuAC->mergeInto( "RepositoryMenuMP" );
     acRepositoryToolBarAC->mergeInto( "RepositoryToolBarMP" );
+
+    MacGitver::self().registerView( QLatin1String( "RepoTree" ),
+                                    Heaven::GlobalViewType,
+                                    &RepositoryModule::createRepoTreeView );
 }
 
 void RepositoryModule::deinitialize()
 {
+    MacGitver::self().unregisterView( QLatin1String( "RepoTree" ) );
 }
 
 void RepositoryModule::onRepositoryClose()

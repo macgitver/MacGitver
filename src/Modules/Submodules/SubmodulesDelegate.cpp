@@ -48,10 +48,10 @@ void SubmodulesViewDelegate::drawDisplay(QPainter *painter, const QStyleOptionVi
     textRect.moveLeft( option.decorationSize.width() );
     textRect.setBottom( textRect.top() + fm.lineSpacing() );
 
-    const QVariant &submoduleData = index.data(Qt::UserRole + 1);
+    QVariant submoduleData = index.data(Qt::UserRole + 1);
     if ( submoduleData.canConvert<Git::Submodule>() )
     {
-        const Git::Submodule &submodule = index.data(Qt::UserRole + 1).value<Git::Submodule>();
+        Git::Submodule submodule = index.data(Qt::UserRole + 1).value<Git::Submodule>();
 
         QFont f( option.font );
         f.setBold( true );
@@ -70,11 +70,11 @@ bool SubmodulesViewDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *vie
     if ( !event || !view )
         return false;
 
-    const QVariant &submoduleData = index.data(Qt::UserRole + 1);
+    QVariant submoduleData = index.data(Qt::UserRole + 1);
     if ( !submoduleData.canConvert<Git::Submodule>() )
         return false;
 
-    const Git::Submodule &submodule = index.data(Qt::UserRole + 1).value<Git::Submodule>();
+    Git::Submodule submodule = index.data(Qt::UserRole + 1).value<Git::Submodule>();
 
     if ( event->type() == QEvent::ToolTip )
     {

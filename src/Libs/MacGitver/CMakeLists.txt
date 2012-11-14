@@ -16,6 +16,8 @@ SET( SRC_FILES
     Modules.cpp
     FSWatcher.cpp
     GitPatchConsumer.cpp
+    RepositoryInfo.cpp
+    RepoManager.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -26,6 +28,8 @@ SET( PUB_HDR_FILES
     Modules.h
     FSWatcher.h
     GitPatchConsumer.hpp
+    RepositoryInfo.hpp
+    RepoManager.hpp
 )
 
 SET( PRI_HDR_FILES

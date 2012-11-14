@@ -14,7 +14,6 @@ SET( SRC_FILES
     IConfigDialog.cpp
     IConfigPage.cpp
     IMainWindow.cpp
-    IModule.cpp
     IRepositoryCore.cpp
     ILog.cpp
 )
@@ -26,7 +25,6 @@ SET( PUB_HDR_FILES
     IConfigDialog.h
     IConfigPage.h
     IMainWindow.h
-    IModule.h
     IRepositoryCore.h
     ILog.h
 )

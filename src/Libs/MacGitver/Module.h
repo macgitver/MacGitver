@@ -21,7 +21,6 @@
 
 #include "libGitWrap/Repository.h"
 
-#include "Interfaces/IModule.h"
 #include "Interfaces/IMainWindow.h"
 
 #include "MacGitver/MacGitverApi.h"
@@ -31,13 +30,14 @@
 #define Q_PLUGIN_METADATA(x)
 #endif
 
+class IConfigDialog;
+
 /**
  * @brief The Module class provides an abstract implementation for application plugins.
  * Use this, when implementing new plugins.
  */
-class MGV_CORE_API Module : public QObject, public IModule
+class MGV_CORE_API Module : public QObject
 {
-    Q_INTERFACES( IModule )
     Q_OBJECT
 public:
     Module();
@@ -46,7 +46,27 @@ public:
     IMainWindow* mainWindow();
 
 public:
-    void repositoryChanged( Git::Repository newRepository );
+    /**
+     * @brief Informs a module about the currently referenced repository has changed.
+     * @param newRepository
+     */
+    virtual void repositoryChanged( Git::Repository newRepository );
+
+    /**
+     * @brief Setup a configuration dialog for a module, which is used in the settings.
+     * @param dialog
+     */
+    virtual void setupConfigPages( IConfigDialog* dialog ) = 0;
+
+    /**
+     * @brief Tells the module to initialize itself, after it was loaded and instantiated.
+     */
+    virtual void initialize() = 0;
+
+    /**
+     * @brief Called before a module is unloaded, telling it to clean up itself.
+     */
+    virtual void deinitialize() = 0;
 
 protected:
     /**
@@ -63,5 +83,8 @@ protected:
      */
     void unregisterView( const QString& identifier );
 };
+
+Q_DECLARE_INTERFACE( Module,
+                     "org.babbelbox.sacu.macgitver.Module/0.1" )
 
 #endif

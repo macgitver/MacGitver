@@ -15,6 +15,7 @@ SET( SRC_FILES
     Module.cpp
     Modules.cpp
     FSWatcher.cpp
+    GitPatchConsumer.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -24,6 +25,7 @@ SET( PUB_HDR_FILES
     Module.h
     Modules.h
     FSWatcher.h
+    GitPatchConsumer.hpp
 )
 
 SET( PRI_HDR_FILES
@@ -48,6 +50,7 @@ TARGET_LINK_LIBRARIES(
     LINK_PRIVATE
     Heaven
     GitWrap
+    DiffViews
 )
 
 TARGET_LINK_LIBRARIES(

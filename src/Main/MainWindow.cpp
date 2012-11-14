@@ -39,8 +39,6 @@
 #include "ConfigDialog.h"
 #include "GeneralConfigPage.h"
 
-#include "Diff/View/DiffView.h"
-
 #include "ui_AboutDlg.h"
 
 MainWindow::MainWindow()

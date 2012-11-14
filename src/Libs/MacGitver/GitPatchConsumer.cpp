@@ -14,17 +14,14 @@
  *
  */
 
-#include "GitPatchConsumer.h"
+#include "GitPatchConsumer.hpp"
 
-#include "Patch.h"
-#include "PatchFile.h"
-#include "DiffHunk.h"
-#include "Diff.h"
+#include "libDiffViews/Model/TextFilePatch.hpp"
 
 #define DBG 0
 
 GitPatchConsumer::GitPatchConsumer()
-    : mPatch( new Patch )
+    : mPatch( new DiffViews::Patch() )
 {
 }
 
@@ -44,7 +41,7 @@ bool GitPatchConsumer::startFile( const QString& oldPath, const QString& newPath
             isBinary ? "Bin" : "Txt" );
     #endif
 
-    mCurFile = new PatchFile( QStringList() << oldPath << newPath );
+    mCurFile = new DiffViews::TextFilePatch( QStringList() << oldPath << newPath );
     mPatch->addPath( mCurFile );
 
     return false;
@@ -67,8 +64,8 @@ bool GitPatchConsumer::startHunk( int newStart, int newLines, int oldStart, int 
     mCurOld = oldStart;
 
     mCurType = None;
-    mCurHunk = new DifferenceHunk();
-    mCurFile->addHunk( mCurHunk );
+    mCurHunk = new DiffViews::Hunk();
+    mCurFile->asTextFilePatch()->addHunk( mCurHunk );
 
     return false;
 }
@@ -82,8 +79,8 @@ bool GitPatchConsumer::appendContext( const QString& content )
 
     if( mCurType != Context )
     {
-        mCurDiff = new Difference( 2, Difference::Context );
-        mCurHunk->addDifference( mCurDiff );
+        mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Context );
+        mCurHunk->addPart( mCurDiff );
         mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
         mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
         mCurType = Context;
@@ -109,8 +106,8 @@ bool GitPatchConsumer::appendAddition( const QString& content )
 
     if( mCurType == None || mCurType == Context || mCurType == Change || mCurType == Del )
     {
-        mCurDiff = new Difference( 2, Difference::Delete );
-        mCurHunk->addDifference( mCurDiff );
+        mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Delete );
+        mCurHunk->addPart( mCurDiff );
         mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
         mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
         mCurType = Del;
@@ -133,8 +130,8 @@ bool GitPatchConsumer::appendDeletion( const QString& content )
 
     if( mCurType == None || mCurType == Context )
     {
-        mCurDiff = new Difference( 2, Difference::Delete );
-        mCurHunk->addDifference( mCurDiff );
+        mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Delete );
+        mCurHunk->addPart( mCurDiff );
         mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
         mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
         mCurType = Del;
@@ -142,7 +139,7 @@ bool GitPatchConsumer::appendDeletion( const QString& content )
     else if( mCurType == Add )
     {
         mCurType = Change;
-        mCurDiff->setType( Difference::Change );
+        mCurDiff->setType( DiffViews::HunkPart::Change );
     }
     // Else we're 'Change' or 'Del', and can just append
 
@@ -153,7 +150,7 @@ bool GitPatchConsumer::appendDeletion( const QString& content )
     return false;
 }
 
-Patch::Ptr GitPatchConsumer::patch() const
+DiffViews::Patch::Ptr GitPatchConsumer::patch() const
 {
     return mPatch;
 }

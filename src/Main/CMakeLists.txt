@@ -68,9 +68,6 @@ TARGET_LINK_LIBRARIES(
     GitWrap
     Config
     Heaven
-    DiffModel
-    DiffRawView
-    DiffView
     Interfaces
     Widgets
     MacGitverCore

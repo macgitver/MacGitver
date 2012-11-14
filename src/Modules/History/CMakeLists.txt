@@ -63,4 +63,4 @@ ADD_MGV_MODULE(
     ${CFG_FILES}
 )
 
-TARGET_LINK_LIBRARIES( ModHistory DiffRawView )
+TARGET_LINK_LIBRARIES( ModHistory DiffViews )

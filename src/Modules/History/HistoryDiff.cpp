@@ -29,20 +29,21 @@
 #include "libGitWrap/ObjectTree.h"
 #include "libGitWrap/DiffList.h"
 
-#include "Diff/Model/GitPatchConsumer.h"
-#include "Diff/RawView/DiffRawView.h"
+#include "libDiffViews/RawView/RawView.hpp"
+
 
 #include "Widgets/SHA1Input.h"
 #include "Widgets/ShortCommitModel.h"
 #include "Widgets/FlatTreeComboBox.h"
 
 #include "MacGitver/MacGitver.h"
+#include "MacGitver/GitPatchConsumer.hpp"
 
 #include "HistoryDiff.h"
 
 HistoryDiff::HistoryDiff()
 {
-    mRawView = new DiffRawView();
+    mDiffView = new DiffViews::RawView();
 
     QVBoxLayout* l = new QVBoxLayout;
     l->setMargin( 0 );
@@ -110,7 +111,7 @@ HistoryDiff::HistoryDiff()
              this, SLOT(createPatch()) );
 
     l->addWidget( mToolbar );
-    l->addWidget( mRawView );
+    l->addWidget( mDiffView );
     setLayout( l );
 }
 
@@ -151,7 +152,7 @@ void HistoryDiff::setRepository( Git::Repository repo )
 
 void HistoryDiff::setCommitId( const Git::ObjectId& sha1 )
 {
-    setPatch( Patch::Ptr() );
+    setPatch( DiffViews::Patch::Ptr() );
 
     if( sha1.isNull() )
     {
@@ -178,7 +179,7 @@ void HistoryDiff::onDiffToChanged( int index )
 {
     if( index == -1 )
     {
-        setPatch( Patch::Ptr() );
+        setPatch( DiffViews::Patch::Ptr() );
         return;
     }
 
@@ -271,11 +272,11 @@ void HistoryDiff::createPatch()
     }
     else
     {
-        setPatch( Patch::Ptr() );
+        setPatch( DiffViews::Patch::Ptr() );
     }
 }
 
-void HistoryDiff::setPatch( Patch::Ptr patch )
+void HistoryDiff::setPatch( DiffViews::Patch::Ptr patch )
 {
-    mRawView->setPatch( patch );
+    mDiffView->setPatch( patch );
 }

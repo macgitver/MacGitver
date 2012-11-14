@@ -17,16 +17,14 @@
 #ifndef MGV_DIFF_GIT_PATCH_CONSUMER_H
 #define MGV_DIFF_GIT_PATCH_CONSUMER_H
 
-#include "Diff/Model/DiffModelApi.h"
+#include "MacGitverApi.h"
 
 #include "libGitWrap/PatchConsumer.h"
 
-#include "Diff/Model/Patch.h"
-#include "Diff/Model/PatchFile.h"
-class DifferenceHunk;
-class Difference;
+#include "libDiffViews//Model/Patch.hpp"
+#include "libDiffViews//Model/TextFilePatch.hpp"
 
-class DIFF_MODEL_API GitPatchConsumer : public Git::PatchConsumer
+class MGV_CORE_API GitPatchConsumer : public Git::PatchConsumer
 {
 public:
     GitPatchConsumer();
@@ -44,13 +42,13 @@ private:
     virtual bool appendDeletion( const QString& content );
 
 public:
-    Patch::Ptr patch() const;
+    DiffViews::Patch::Ptr patch() const;
 
 private:
-    Patch::Ptr          mPatch;
-    PatchFile::Ptr      mCurFile;
-    DifferenceHunk::Ptr mCurHunk;
-    Difference::Ptr     mCurDiff;
+    DiffViews::Patch::Ptr       mPatch;
+    DiffViews::FilePatch::Ptr   mCurFile;
+    DiffViews::Hunk::Ptr        mCurHunk;
+    DiffViews::HunkPart::Ptr    mCurDiff;
 
     int                 mRemainsOld, mCurOld;
     int                 mRemainsNew, mCurNew;

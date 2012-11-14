@@ -27,7 +27,10 @@ class QSplitter;
 #include "libHeaven/Views/View.h"
 #include "libHeaven/Widgets/MiniSplitter.h"
 
-class DiffRawView;
+namespace DiffViews
+{
+    class RawView;
+}
 
 class WorkingTreeModel;
 class WorkingTreeItemView;
@@ -38,33 +41,33 @@ class WorkingTreeItemView;
 
 class IndexWidget : public Heaven::View, private WorkingTreeActions
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	IndexWidget();
+    IndexWidget();
 
 public slots:
-	void repositoryChanged( Git::Repository repo );
+    void repositoryChanged( Git::Repository repo );
 
 private slots:
-	void onShowAll( bool enabled );
-	void onShowModified( bool enabled );
-	void onShowMissing( bool enabled );
-	void onShowIgnored( bool enabled );
-	void onShowUntracked( bool enabled );
-	void onShowUnchanged( bool enabled );
-	void workingTreeChanged();
+    void onShowAll( bool enabled );
+    void onShowModified( bool enabled );
+    void onShowMissing( bool enabled );
+    void onShowIgnored( bool enabled );
+    void onShowUntracked( bool enabled );
+    void onShowUnchanged( bool enabled );
+    void workingTreeChanged();
 
 private:
-	void updateDiff();
-	void setTreeFilter( WorkingTreeFilters filters );
+    void updateDiff();
+    void setTreeFilter( WorkingTreeFilters filters );
 
 private:
-	Heaven::MiniSplitter*	mSplitter;
-	WorkingTreeItemView*	mTreeView;
-	WorkingTreeModel*		mModel;
-	DiffRawView*			mRawDiff;
-	Git::Repository			mRepo;
-	bool					mFilterRecursion;
+    Heaven::MiniSplitter*	mSplitter;
+    WorkingTreeItemView*	mTreeView;
+    WorkingTreeModel*		mModel;
+    DiffViews::RawView*		mDiffView;
+    Git::Repository			mRepo;
+    bool					mFilterRecursion;
 };
 
 #endif

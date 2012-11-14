@@ -23,13 +23,16 @@
 #include "libGitWrap/ObjectCommit.h"
 #include "libGitWrap/Repository.h"
 
-#include "Diff/Model/Patch.h"
+#include "libDiffViews/Model/Patch.hpp"
 
 class QToolBar;
 class QTreeView;
 class QComboBox;
 
-class DiffRawView;
+namespace DiffViews
+{
+    class RawView;
+}
 
     //Libs/Widgets
 class SHA1Input;
@@ -54,7 +57,7 @@ private slots:
 
 private:
     Git::DiffList makePatchTo( const QString& ref );
-    void setPatch( Patch::Ptr patchFile );
+    void setPatch( DiffViews::Patch::Ptr patchFile );
 
 private:
     enum DiffToTypes
@@ -70,7 +73,7 @@ private:
         DTT_Tag = -9
     };
 
-    DiffRawView*        mRawView;
+    DiffViews::RawView* mDiffView;
     QToolBar*           mToolbar;
     QComboBox*          mDiffTo;
     FlatTreeComboBox*   mDiffToBranch;

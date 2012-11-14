@@ -23,7 +23,7 @@
 #include "libGitWrap/Reference.h"
 #include "libGitWrap/ObjectCommit.h"
 
-#include "Diff/RawView/DiffRawView.h"
+#include "libDiffViews/RawView/RawView.hpp"
 
 #include "libHeaven/Widgets/MiniSplitter.h"
 

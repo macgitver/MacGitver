@@ -20,3 +20,37 @@ RepoManager::RepoManager()
 {
 }
 
+RepoManager::~RepoManager()
+{
+    closeAll();
+}
+
+void RepoManager::open()
+{
+}
+
+void RepoManager::open( const QString& path )
+{
+}
+
+void RepoManager::closeAll()
+{
+    foreach( RepositoryInfo* repo, mRepos )
+    {
+        repo->close();
+    }
+}
+
+void RepoManager::activate( RepositoryInfo* repository )
+{
+    if( repository == mActiveRepo )
+    {
+        return;
+    }
+
+}
+
+RepositoryInfo* RepoManager::activeRepository()
+{
+    return mActiveRepo;
+}

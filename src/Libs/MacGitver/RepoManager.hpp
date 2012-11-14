@@ -28,6 +28,15 @@ class RepoManager : public QObject
     Q_OBJECT
 public:
     RepoManager();
+    ~RepoManager();
+
+public:
+    void open();
+    void open( const QString& path );
+    void closeAll();
+
+    RepositoryInfo* activeRepository();
+    void activate( RepositoryInfo* repository );
 
 signals:
     void repositoryOpened( RepositoryInfo* repo );
@@ -36,6 +45,7 @@ signals:
 
 private:
     RepositoryInfo::List    mRepos;
+    RepositoryInfo*         mActiveRepo;
 };
 
 #endif

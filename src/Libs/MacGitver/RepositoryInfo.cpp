@@ -25,12 +25,12 @@ RepositoryInfo::RepositoryInfo()
 
 RepositoryInfo::~RepositoryInfo()
 {
+    qDeleteAll( mChildren );
+
     if( mIsLoaded )
     {
         unload();
     }
-
-    qDeleteAll( mChildren );
 
     if( mParent )
     {
@@ -142,8 +142,12 @@ void RepositoryInfo::unload()
     Q_ASSERT( mUnloadTimer == NULL );
     Q_ASSERT( !mIsActive );
 
+    emit aboutToUnload( this );
+
     mIsLoaded = false;
     mRepo = Git::Repository();
+
+    emit unloaded( this );
 }
 
 bool RepositoryInfo::ensureIsLoaded()
@@ -184,4 +188,16 @@ void RepositoryInfo::removeChild( RepositoryInfo* child )
             return;
         }
     }
+}
+
+void RepositoryInfo::close()
+{
+    emit aboutToClose( this );
+
+    foreach( RepositoryInfo* child, mChildren )
+    {
+        child->close();
+    }
+
+    delete this;
 }

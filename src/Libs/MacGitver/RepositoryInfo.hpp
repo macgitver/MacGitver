@@ -50,6 +50,8 @@ public:
     QString displayAlias() const;
     void setDisplayAlias( const QString& alias );
 
+    void close();
+
 private:
     void load();
     void unload();
@@ -60,6 +62,10 @@ private slots:
     void unloadTimer();
 
 signals:
+    void aboutToClose( RepositoryInfo* repo );
+    void aboutToUnload( RepositoryInfo* repo );
+    void unloaded( RepositoryInfo* repo );
+    void loaded( RepositoryInfo* repo );
     void childRemoved( RepositoryInfo* parent, RepositoryInfo* child );
     void childAdded( RepositoryInfo* parent, RepositoryInfo* child );
     void aliasChanged( const QString& newAlias );

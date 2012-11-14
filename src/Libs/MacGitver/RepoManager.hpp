@@ -38,6 +38,8 @@ public:
     RepositoryInfo* activeRepository();
     void activate( RepositoryInfo* repository );
 
+    RepositoryInfo::List repositories() const;
+
 signals:
     void repositoryOpened( RepositoryInfo* repo );
     void repositoryClosed( RepositoryInfo* repo );

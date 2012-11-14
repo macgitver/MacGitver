@@ -55,3 +55,8 @@ RepositoryInfo* RepoManager::activeRepository()
 {
     return mActiveRepo;
 }
+
+RepositoryInfo::List RepoManager::repositories() const
+{
+    return mRepos;
+}

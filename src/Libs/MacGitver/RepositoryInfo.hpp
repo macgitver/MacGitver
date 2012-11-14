@@ -23,7 +23,9 @@ class QTimer;
 
 #include "libGitWrap/Repository.h"
 
-class RepositoryInfo : public QObject
+#include "MacGitver/MacGitverApi.h"
+
+class MGV_CORE_API RepositoryInfo : public QObject
 {
     Q_OBJECT
 public:

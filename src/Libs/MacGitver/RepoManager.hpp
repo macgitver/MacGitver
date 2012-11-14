@@ -21,9 +21,9 @@
 
 #include "libGitWrap/Repository.h"
 
-#include "RepositoryInfo.hpp"
+#include "MacGitver/RepositoryInfo.hpp"
 
-class RepoManager : public QObject
+class MGV_CORE_API RepoManager : public QObject
 {
     Q_OBJECT
 public:

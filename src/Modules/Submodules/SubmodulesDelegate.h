@@ -23,7 +23,8 @@ public:
      * @param rect
      * @param index
      */
-    inline void drawDisplay(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect, const QModelIndex &index) const;
+    void doDrawDisplay( QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect,
+                        const QModelIndex& index ) const;
 
 public slots:
     bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);

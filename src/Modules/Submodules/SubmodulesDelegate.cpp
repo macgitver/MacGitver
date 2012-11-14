@@ -25,7 +25,7 @@ void SubmodulesViewDelegate::paint( QPainter* painter, const QStyleOptionViewIte
 
     drawBackground( painter, option, index );
 
-    drawDisplay( painter, option, option.rect.adjusted( 1, 1, -1, -1 ), index );
+    doDrawDisplay( painter, option, option.rect.adjusted( 1, 1, -1, -1 ), index );
 
     QIcon theDecoration( index.data(Qt::DecorationRole).value<QIcon>() );
     QRect decorationRect(QPoint(0, 0), option.decorationSize);
@@ -34,13 +34,13 @@ void SubmodulesViewDelegate::paint( QPainter* painter, const QStyleOptionViewIte
         QPoint newCenter( decorationRect.center().x(), option.rect.center().y() );
         decorationRect.moveCenter( newCenter );
     }
-    QItemDelegate::drawDecoration( painter, option, decorationRect, theDecoration.pixmap(decorationRect.size()) );
+    drawDecoration( painter, option, decorationRect, theDecoration.pixmap(decorationRect.size()) );
 
     drawFocus( painter, option, option.rect );
 }
 
-void SubmodulesViewDelegate::drawDisplay(QPainter *painter, const QStyleOptionViewItem &option,
-                                         const QRect &rect, const QModelIndex &index) const
+void SubmodulesViewDelegate::doDrawDisplay(QPainter *painter, const QStyleOptionViewItem &option,
+                                           const QRect &rect, const QModelIndex &index) const
 {
     const QFontMetrics& fm = option.fontMetrics;
 

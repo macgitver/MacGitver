@@ -71,8 +71,6 @@ private:
 
 private:
     QLabel*                     mLblCurrentBranch;
-    Heaven::TopLevelWidget*     mTop;
-    Heaven::ModeSwitchWidget*   mModes;
     UserLevelDefinition::Ptr    mCurrentLevel;
     Git::Repository             mRepo;
 };

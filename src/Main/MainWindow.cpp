@@ -30,6 +30,8 @@
 #include "libGitWrap/ObjectId.h"
 #include "libGitWrap/Reference.h"
 
+#include "libHeaven/Views/Mode.h"
+
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"
 
@@ -81,20 +83,14 @@ void MainWindow::setupUi()
     setStyleSheet( QString::fromUtf8( styleFile.readAll().constData() ) );
 
     setupActions( this );
-    setMenuBar( mbMainMenuBar->menuBarFor( this ) );
-
-    mModes = new Heaven::ModeSwitchWidget();
-    menuBar()->setCornerWidget( mModes );
+    setMenuBar( mbMainMenuBar );
 
     setWindowTitle( trUtf8( "MacGitver" ) );
 
     statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
     setHeadLabel();
 
-    mTop = new Heaven::TopLevelWidget();
-    setCentralWidget( mTop );
-
-    addToolBar( tbMainBar->toolBarFor( this ) );
+//  addToolBar( tbMainBar->toolBarFor( this ) );
 
     moveToCenter();
 }
@@ -121,12 +117,12 @@ void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )
 {
     QStringList modeNames;
 
-    foreach( UserLevelMode::Ptr mode, uld->userModes() )
+    foreach( UserLevelMode::Ptr mode, uld->allModes() )
     {
+        Heaven::Mode* heavenMode = new Heaven::Mode( this, mode->name(), NULL );
+        addMode( heavenMode );
         modeNames.append( mode->name() );
     }
-
-//	mModes->setModes( modeNames, QString() );
 
     mCurrentLevel = uld;
 
@@ -222,16 +218,15 @@ void MainWindow::activateMode( const QString& modeName )
 {
     qDebug( "Going to %s mode", qPrintable( modeName ) );
 
-    mTop->clear();
+    setCurrentMode( findMode( modeName ) ); // Will just update the display for now
+
+    topLevelContainer()->clear();
 
     UserLevelMode::Ptr mode = mCurrentLevel->mode( modeName );
 
     UserLevelDefaultLayout::Ptr layout = mode->defaultLayout();
 
-    createPartialLayout( mTop->rootContainer(), layout->root() );
-
-//	mModes->setEnabled( mode->isLockingMode() );
-//	mModes->setCurrentMode( modeName );
+    createPartialLayout( topLevelContainer()->rootContainer(), layout->root() );
 }
 
 void MainWindow::repositoryChanged( const Git::Repository& repo )
@@ -277,7 +272,7 @@ void MainWindow::setHeadLabel()
 
 void MainWindow::integrateView( Heaven::View* view, Heaven::Positions position )
 {
-    mTop->addView( view, position );
+    topLevelContainer()->addView( view, position );
 }
 
 QWidget* MainWindow::widget()

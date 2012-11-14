@@ -30,11 +30,6 @@ void SubmodulesModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
-Module::Types SubmodulesModule::providesModuleTypes() const
-{
-    return View;
-}
-
 Heaven::View* SubmodulesModule::createSubmodulesView()
 {
     return new SubmodulesView;

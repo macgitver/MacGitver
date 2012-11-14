@@ -35,11 +35,6 @@ void GitConfigModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
-Module::Types GitConfigModule::providesModuleTypes() const
-{
-    return View;
-}
-
 void GitConfigModule::initialize()
 {
     setupActions( this );

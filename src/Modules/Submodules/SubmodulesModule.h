@@ -30,7 +30,6 @@ public:
 
 public:
     void setupConfigPages( IConfigDialog* dlg );
-    Types providesModuleTypes() const;
 
     void initialize();
     void deinitialize();

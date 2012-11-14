@@ -31,12 +31,6 @@ void RefsViewsModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
-Module::Types RefsViewsModule::providesModuleTypes() const
-{
-    return View;
-}
-
-
 Heaven::View* RefsViewsModule::createBranchesView()
 {
     return new BranchesView();

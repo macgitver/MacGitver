@@ -29,11 +29,6 @@ void LoggingModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
-Module::Types LoggingModule::providesModuleTypes() const
-{
-    return View;
-}
-
 Heaven::View* LoggingModule::createLoggingView()
 {
     return new LoggingView();

@@ -30,11 +30,6 @@ void WelcomeModule::setupConfigPages( IConfigDialog* dialog )
     Q_UNUSED( dialog );
 }
 
-Module::Types WelcomeModule::providesModuleTypes() const
-{
-    return View;
-}
-
 Heaven::View* WelcomeModule::createWelcomeView()
 {
     return new WelcomeView();

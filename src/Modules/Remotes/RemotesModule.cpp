@@ -31,11 +31,6 @@ void RemotesModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
-Module::Types RemotesModule::providesModuleTypes() const
-{
-    return View;
-}
-
 Heaven::View* RemotesModule::createRemotesView()
 {
     return new RemotesView;

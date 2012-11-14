@@ -29,11 +29,6 @@ void WorkingTreeModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
-Module::Types WorkingTreeModule::providesModuleTypes() const
-{
-    return View;
-}
-
 Heaven::View* WorkingTreeModule::createWorkTreeView()
 {
     return new IndexWidget();

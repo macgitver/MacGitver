@@ -51,11 +51,6 @@ void RepositoryModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 
-Module::Types RepositoryModule::providesModuleTypes() const
-{
-    return Repository;
-}
-
 void RepositoryModule::initialize()
 {
     setupActions( this );

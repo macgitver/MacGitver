@@ -32,11 +32,6 @@ void HistoryModule::setupConfigPages( IConfigDialog* dialog )
     dialog->addPage( new HistoryConfigPage( dialog ) );
 }
 
-Module::Types HistoryModule::providesModuleTypes() const
-{
-    return View;
-}
-
 Heaven::View* HistoryModule::createHistoryView()
 {
     return new HistoryView();

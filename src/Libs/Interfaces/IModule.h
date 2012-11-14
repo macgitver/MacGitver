@@ -36,20 +36,6 @@ namespace Git
 class INTERFACES_API IModule
 {
 public:
-    enum Type
-    {
-        ConfigDialog    = 1 << 0,
-        Repository      = 1 << 1,
-
-        View            = 1 << 16,
-
-
-        None            = 0	// Silly :)
-    };
-    typedef QFlags< Type > Types;
-
-public:
-    // @todo Interfaces don't have constructors. Causes compiler error on call. The destructor should have an empty default implementation though.
     IModule();
     virtual ~IModule();
 
@@ -65,12 +51,6 @@ public:
      * @param dialog
      */
     virtual void setupConfigPages( IConfigDialog* dialog ) = 0;
-
-    /**
-     * @brief Modules can define a type to specify their functionality roughly.
-     * @return the @see Types flags defined by the module.
-     */
-    virtual Types providesModuleTypes() const = 0;
 
     /**
      * @brief Tells the module to initialize itself, after it was loaded and instantiated.

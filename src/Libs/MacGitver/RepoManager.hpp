@@ -42,6 +42,8 @@ public:
 
     RepositoryInfo* repoByPath( const QString& basePath, bool searchSubmodules );
 
+    void internalActivate( RepositoryInfo* repository );
+
 signals:
     void repositoryOpened( RepositoryInfo* repo );
     void repositoryClosed( RepositoryInfo* repo );

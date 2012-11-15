@@ -17,7 +17,9 @@
 #include <QDebug>
 #include <QTimer>
 
+#include "MacGitver.h"
 #include "RepositoryInfo.hpp"
+#include "RepoManager.hpp"
 
 RepositoryInfo::RepositoryInfo()
 {
@@ -117,6 +119,8 @@ void RepositoryInfo::setActive( bool active )
         mUnloadTimer->start();
 
         mIsActive = false;
+
+        MacGitver::self().repoMan()->internalActivate( NULL );
     }
     else
     {
@@ -127,6 +131,8 @@ void RepositoryInfo::setActive( bool active )
             mUnloadTimer = NULL;
         }
         mIsActive = true;
+
+        MacGitver::self().repoMan()->internalActivate( this );
     }
 }
 

@@ -145,16 +145,32 @@ void RepoManager::activate( RepositoryInfo* repository )
         return;
     }
 
+    if( mActiveRepo )
+    {
+        mActiveRepo->setActive( false );
+    }
+
     if( repository )
     {
         // For compatibility
         MacGitver::self().setRepository( repository->gitRepo() );
+
+        repository->setActive( true );
     }
     else
     {
         MacGitver::self().setRepository( Git::Repository() );
     }
+}
 
+void RepoManager::internalActivate( RepositoryInfo* repository )
+{
+    if( repository == mActiveRepo )
+    {
+        return;
+    }
+
+    mActiveRepo = repository;
     emit repositoryActivated( repository );
 }
 

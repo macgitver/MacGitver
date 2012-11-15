@@ -50,10 +50,15 @@ public:
 
     void setActive( bool active );
 
+    QString path() const;
+
     QString displayAlias() const;
     void setDisplayAlias( const QString& alias );
 
     void close();
+
+    RepositoryInfo* repoByPath( const QString& basePath, bool searchSubmodules );
+    void scanSubmodules();
 
 private:
     void load();

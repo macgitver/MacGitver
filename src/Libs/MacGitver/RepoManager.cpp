@@ -94,8 +94,40 @@ void RepoManager::open( const QString& path )
 
 void RepoManager::open( const Git::Repository& repo )
 {
-    RepositoryInfo* info = new RepositoryInfo( repo );
-    MacGitver::self().setRepository( repo );
+    RepositoryInfo* info = repoByPath( repo.basePath(), false );
+
+    if( !info )
+    {
+        info = new RepositoryInfo( repo );
+        mRepos.append( info );
+        emit repositoryOpened( info );
+
+        // we need to scan for submodules explicitly, since we didn't call load() on the RepoInfo
+        info->scanSubmodules();
+    }
+
+    activate( info );
+}
+
+RepositoryInfo* RepoManager::repoByPath( const QString& basePath, bool searchSubmodules )
+{
+    foreach( RepositoryInfo* info, mRepos )
+    {
+        if( info->path() == basePath )
+        {
+            return info;
+        }
+
+        if( searchSubmodules )
+        {
+            if( RepositoryInfo* sub = info->repoByPath( basePath, true ) )
+            {
+                return sub;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 void RepoManager::closeAll()
@@ -113,6 +145,17 @@ void RepoManager::activate( RepositoryInfo* repository )
         return;
     }
 
+    if( repository )
+    {
+        // For compatibility
+        MacGitver::self().setRepository( repository->gitRepo() );
+    }
+    else
+    {
+        MacGitver::self().setRepository( Git::Repository() );
+    }
+
+    emit repositoryActivated( repository );
 }
 
 RepositoryInfo* RepoManager::activeRepository()

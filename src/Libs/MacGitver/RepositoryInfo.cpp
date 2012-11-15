@@ -61,6 +61,11 @@ Git::Repository RepositoryInfo::gitRepo()
     return Git::Repository();
 }
 
+QString RepositoryInfo::path() const
+{
+    return mPath;
+}
+
 bool RepositoryInfo::isSubModule() const
 {
     return mIsSubModule;
@@ -213,4 +218,30 @@ void RepositoryInfo::close()
     }
 
     delete this;
+}
+
+RepositoryInfo* RepositoryInfo::repoByPath( const QString& basePath, bool searchSubmodules )
+{
+    foreach( RepositoryInfo* info, mChildren )
+    {
+        if( info->path() == basePath )
+        {
+            return info;
+        }
+
+        if( searchSubmodules )
+        {
+            if( RepositoryInfo* sub = info->repoByPath( basePath, true ) )
+            {
+                return sub;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+void RepositoryInfo::scanSubmodules()
+{
+    // TBD
 }

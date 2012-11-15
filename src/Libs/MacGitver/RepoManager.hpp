@@ -40,6 +40,8 @@ public:
 
     RepositoryInfo::List repositories() const;
 
+    RepositoryInfo* repoByPath( const QString& basePath, bool searchSubmodules );
+
 signals:
     void repositoryOpened( RepositoryInfo* repo );
     void repositoryClosed( RepositoryInfo* repo );

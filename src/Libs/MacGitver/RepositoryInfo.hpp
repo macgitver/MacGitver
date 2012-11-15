@@ -33,6 +33,7 @@ public:
 
 public:
     RepositoryInfo();
+    RepositoryInfo( const Git::Repository& repo );
     ~RepositoryInfo();
 
 public:

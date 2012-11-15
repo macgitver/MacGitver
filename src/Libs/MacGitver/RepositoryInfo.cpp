@@ -23,6 +23,19 @@ RepositoryInfo::RepositoryInfo()
 {
 }
 
+RepositoryInfo::RepositoryInfo( const Git::Repository& repo )
+{
+    mRepo = repo;
+    mIsLoaded = mRepo.isValid();
+    mIsActive = false;
+    mIsDisabled = false;
+    mIsBare = mRepo.isValid() && mRepo.isBare();
+    mIsSubModule = false;
+    mDisplayAlias = QString();
+    mParent = NULL;
+    mUnloadTimer = NULL;
+}
+
 RepositoryInfo::~RepositoryInfo()
 {
     qDeleteAll( mChildren );

@@ -46,6 +46,12 @@ signals:
     void repositoryActivated( RepositoryInfo* repo);
 
 private:
+    void open( const Git::Repository& repo );
+
+private slots:
+    void onRepositoryOpenHelper();
+
+private:
     RepositoryInfo::List    mRepos;
     RepositoryInfo*         mActiveRepo;
 };

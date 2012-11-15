@@ -15,9 +15,9 @@
  */
 
 #include <QtPlugin>
-#include <QFileDialog>
 
 #include "MacGitver/MacGitver.h"
+#include "MacGitver/RepoManager.hpp"
 
 #include "RepositoryModule.h"
 #include "RepositoryCore.h"
@@ -88,52 +88,7 @@ void RepositoryModule::onRepositoryCreate()
 
 void RepositoryModule::onRepositoryOpen()
 {
-    QWidget* main = MacGitver::self().mainWindow()->widget();
-
-    QFileDialog *fd = new QFileDialog(main);
-#ifdef Q_OS_MAC
-    fd->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
-#else
-    fd->setFileMode(QFileDialog::Directory);
-#endif
-
-    QString lastUsedDir = configGet( "lastUsedDir", "#" );
-    if( lastUsedDir != QLatin1String( "#" ) )
-    {
-        fd->setDirectory( lastUsedDir );
-    }
-
-    fd->setWindowTitle( trUtf8("Open a Git repository") );
-
-    fd->open(this, SLOT(onRepositoryOpenHelper()));
-}
-
-void RepositoryModule::onRepositoryOpenHelper()
-{
-    QFileDialog *fd = qobject_cast<QFileDialog *>(sender());
-    Q_ASSERT(fd != 0);
-
-    if ( fd->selectedFiles().isEmpty() )
-        return;
-
-    //! @todo error handling
-    Git::Result r;
-    QString repoDir = Git::Repository::discover( fd->selectedFiles().first(), false,
-                                                 QStringList(), r );
-    if ( repoDir.isEmpty() )
-        return;
-
-    //! @todo error handling
-    Git::Repository repo = Git::Repository::open( repoDir, r );
-    if( !repo.isValid() )
-        return;
-
-    // If we successfully loaded the repository at that directory,
-    // we store the repository's work dir as "lastUsedDir".
-    // If it is a bare repository, we store the repository's directory.
-    configSet( "lastUsedDir", repo.isBare() ? repoDir : repo.basePath() );
-
-    MacGitver::self().setRepository( repo );
+    MacGitver::self().repoMan()->open();
 }
 
 void RepositoryModule::onRepositoryClone()

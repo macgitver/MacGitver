@@ -14,9 +14,31 @@
  *
  */
 
+#include <QTreeView>
+#include <QTextBrowser>
+#include <QVBoxLayout>
+
 #include "RepoTreeView.hpp"
+#include "RepoInfoModel.hpp"
 
 RepoTreeView::RepoTreeView()
     : GlobalView( QLatin1String( "RepoTree" ) )
 {
+    setViewName( trUtf8( "Repositories" ) );
+
+    mSplitter = new Heaven::MiniSplitter( Qt::Vertical );
+
+    mRepos = new QTreeView;
+    mRepos->setFrameShape( QFrame::NoFrame );
+    mRepos->setModel( new RepositoryInfoModel() );
+    mSplitter->addWidget( mRepos );
+
+    mDetails = new QTextBrowser;
+    mDetails->setFrameShape( QFrame::NoFrame );
+    mSplitter->addWidget( mDetails );
+
+    QVBoxLayout* l = new QVBoxLayout;
+    l->setMargin( 0 );
+    l->addWidget( mSplitter );
+    setLayout( l );
 }

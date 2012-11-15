@@ -18,12 +18,24 @@
 #define MGV_REPO_TREE_VIEW_HPP
 
 #include "libHeaven/Views/GlobalView.hpp"
+#include "libHeaven/Widgets/MiniSplitter.h"
+
+class QTreeView;
+class QTextBrowser;
 
 class RepoTreeView : public Heaven::GlobalView
 {
     Q_OBJECT
 public:
     RepoTreeView();
+
+private:
+    void setupUi();
+
+private:
+    Heaven::MiniSplitter*   mSplitter;
+    QTreeView*              mRepos;
+    QTextBrowser*           mDetails;
 };
 
 #endif

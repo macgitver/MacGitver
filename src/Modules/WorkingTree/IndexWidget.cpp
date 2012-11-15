@@ -46,7 +46,7 @@ IndexWidget::IndexWidget()
 
     setupActions( this );
 
-    l->addWidget( tbWorkingTree->toolBarFor( this ) );
+//  l->addWidget( tbWorkingTree->toolBarFor( this ) );
 
     mDiffView = new DiffViews::RawView;
 

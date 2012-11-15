@@ -68,7 +68,7 @@ HistoryView::HistoryView()
     QVBoxLayout* l = new QVBoxLayout;
     l->setSpacing( 0 );
     l->setMargin( 0 );
-    l->addWidget( tbHistoryViewToolBar->toolBarFor( this ) );
+//    l->addWidget( tbHistoryViewToolBar->toolBarFor( this ) );
     setLayout( l );
     initSplitters();
 

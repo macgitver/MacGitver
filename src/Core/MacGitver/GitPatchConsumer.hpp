@@ -17,12 +17,12 @@
 #ifndef MGV_DIFF_GIT_PATCH_CONSUMER_H
 #define MGV_DIFF_GIT_PATCH_CONSUMER_H
 
-#include "MacGitverApi.h"
+#include "MacGitverApi.hpp"
 
 #include "libGitWrap/PatchConsumer.h"
 
-#include "libDiffViews//Model/Patch.hpp"
-#include "libDiffViews//Model/TextFilePatch.hpp"
+#include "libDiffViews/Model/Patch.hpp"
+#include "libDiffViews/Model/TextFilePatch.hpp"
 
 class MGV_CORE_API GitPatchConsumer : public Git::PatchConsumer
 {

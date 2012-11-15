@@ -17,11 +17,11 @@
 #ifndef MGV_FLAT_TREE_DELEGATE_H
 #define MGV_FLAT_TREE_DELEGATE_H
 
-#include "Widgets/WidgetsApi.h"
+#include "MacGitverApi.hpp"
 
 #include <QItemDelegate>
 
-class WIDGETS_API FlatTreeDelegate : public QItemDelegate
+class MGV_CORE_API FlatTreeDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:

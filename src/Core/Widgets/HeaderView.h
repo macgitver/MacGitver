@@ -17,11 +17,11 @@
 #ifndef MGV_HEADER_VIEW_H
 #define MGV_HEADER_VIEW_H
 
-#include "Widgets/WidgetsApi.h"
+#include "MacGitverApi.hpp"
 
 #include <QHeaderView>
 
-class WIDGETS_API HeaderView : public QHeaderView
+class MGV_CORE_API HeaderView : public QHeaderView
 {
     Q_OBJECT
 public:

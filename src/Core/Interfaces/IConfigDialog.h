@@ -17,11 +17,11 @@
 #ifndef MGV_I_CONFIG_DIALOG_H
 #define MGV_I_CONFIG_DIALOG_H
 
-#include "Interfaces/InterfaceApi.h"
+#include "MacGitverApi.hpp"
 
 class IConfigPage;
 
-class INTERFACES_API IConfigDialog
+class MGV_CORE_API IConfigDialog
 {
 public:
     IConfigDialog();

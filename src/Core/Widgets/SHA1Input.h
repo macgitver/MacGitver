@@ -21,7 +21,7 @@
 
 #include "libGitWrap/ObjectId.h"
 
-class WIDGETS_API SHA1Input : public LineEdit
+class MGV_CORE_API SHA1Input : public LineEdit
 {
 public:
     explicit SHA1Input( QWidget* parent = NULL );

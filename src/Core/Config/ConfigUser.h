@@ -19,9 +19,9 @@
 
 #include <QVariant>
 
-#include "Config/ConfigApi.h"
+#include "MacGitverApi.hpp"
 
-class CONFIG_API ConfigUser
+class MGV_CORE_API ConfigUser
 {
 protected:
     ConfigUser( const QString& configBasePath );

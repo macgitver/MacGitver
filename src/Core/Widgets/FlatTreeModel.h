@@ -17,12 +17,13 @@
 #ifndef MGV_FLAT_TREE_MODEL_H
 #define MGV_FLAT_TREE_MODEL_H
 
-#include "Widgets/WidgetsApi.h"
+#include "MacGitverApi.hpp"
 
 #include <QAbstractListModel>
 
 class FlatTreeModelPrivate;
-class WIDGETS_API FlatTreeModel : public QAbstractListModel
+
+class MGV_CORE_API FlatTreeModel : public QAbstractListModel
 {
     friend class FlatTreeModelPrivate;
     Q_OBJECT

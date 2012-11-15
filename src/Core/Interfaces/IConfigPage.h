@@ -19,13 +19,13 @@
 
 #include <QtPlugin>
 
-#include "Interfaces/InterfaceApi.h"
+#include "MacGitverApi.hpp"
 
 class QWidget;
 
 class IConfigDialog;
 
-class INTERFACES_API IConfigPage
+class MGV_CORE_API IConfigPage
 {
 public:
     IConfigPage( IConfigDialog* dlg );

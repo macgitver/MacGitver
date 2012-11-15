@@ -17,13 +17,13 @@
 #ifndef MGV_FLAT_TREE_COMBOBOX_H
 #define MGV_FLAT_TREE_COMBOBOX_H
 
-#include "Widgets/WidgetsApi.h"
+#include "MacGitverApi.hpp"
 
 #include <QComboBox>
 
 class FlatTreeModel;
 
-class WIDGETS_API FlatTreeComboBox : public QComboBox
+class MGV_CORE_API FlatTreeComboBox : public QComboBox
 {
     Q_OBJECT
 public:

@@ -29,7 +29,7 @@ class QSettings;
 
 class ConfigUser;
 
-class CONFIG_API Config : public QObject
+class MGV_CORE_API Config : public QObject
 {
     Q_OBJECT
     friend class ConfigUser;

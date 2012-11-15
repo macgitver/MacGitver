@@ -17,7 +17,7 @@
 #ifndef MGV_REPOSITORY_CORE_IFACE_H
 #define MGV_REPOSITORY_CORE_IFACE_H
 
-#include "Interfaces/InterfaceApi.h"
+#include "MacGitverApi.hpp"
 
 class QString;
 
@@ -26,7 +26,7 @@ namespace Git
     class ObjectId;
 }
 
-class INTERFACES_API IRepository
+class MGV_CORE_API IRepository
 {
 public:
     IRepository();

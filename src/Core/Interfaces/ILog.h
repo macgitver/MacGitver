@@ -19,7 +19,7 @@
 
 #include <QString>
 
-#include "Interfaces/InterfaceApi.h"
+#include "MacGitverApi.hpp"
 
 enum LogType
 {
@@ -29,7 +29,7 @@ enum LogType
     ltError
 };
 
-class INTERFACES_API ILog
+class MGV_CORE_API ILog
 {
 public:
     ILog();

@@ -15,7 +15,7 @@ MACRO(ADD_MGV_MODULE _Name )
     TARGET_LINK_LIBRARIES(
         ${_Target}
 
-        GitWrap Interfaces Heaven MacGitverCore Widgets
+        GitWrap Heaven MacGitverCore
     )
 
     IF( UNIX )
@@ -33,6 +33,8 @@ MACRO(ADD_MGV_MODULE _Name )
     ENDIF()
 
 ENDMACRO(ADD_MGV_MODULE)
+
+INCLUDE_DIRECTORIES( ${MGV_CORE_SOURCE_DIR} )
 
 ADD_SUBDIRECTORY( GitConfig )
 ADD_SUBDIRECTORY( History )

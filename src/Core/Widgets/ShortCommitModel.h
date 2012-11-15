@@ -17,13 +17,13 @@
 #ifndef MGV_SHORT_COMMIT_MODEL_H
 #define MGV_SHORT_COMMIT_MODEL_H
 
-#include "Widgets/WidgetsApi.h"
+#include "MacGitverApi.hpp"
 
 #include <QAbstractItemModel>
 
 #include "libGitWrap/ObjectCommit.h"
 
-class WIDGETS_API ShortCommitModel : public QAbstractTableModel
+class MGV_CORE_API ShortCommitModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

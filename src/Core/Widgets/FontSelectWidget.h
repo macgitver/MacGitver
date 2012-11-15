@@ -17,7 +17,7 @@
 #ifndef MGV_FONT_SELECT_WIDGET_H
 #define MGV_FONT_SELECT_WIDGET_H
 
-#include "Widgets/WidgetsApi.h"
+#include "MacGitverApi.hpp"
 
 #include <QWidget>
 #include <QFontComboBox>
@@ -25,7 +25,7 @@
 class QCheckBox;
 class QComboBox;
 
-class WIDGETS_API FontSelectWidget : public QWidget
+class MGV_CORE_API FontSelectWidget : public QWidget
 {
     Q_OBJECT
 public:

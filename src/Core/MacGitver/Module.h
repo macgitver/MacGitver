@@ -23,7 +23,7 @@
 
 #include "Interfaces/IMainWindow.h"
 
-#include "MacGitver/MacGitverApi.h"
+#include "MacGitverApi.hpp"
 #include "MacGitver/MacGitver.h"
 
 #if QT_VERSION < 0x050000

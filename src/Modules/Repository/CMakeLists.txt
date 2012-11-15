@@ -4,7 +4,6 @@ PROJECT( MGV_MOD_REPOSITORY )
 QT_PREPARE( Core Gui Widgets )
 
 INCLUDE_DIRECTORIES(
-    ${MGV_LIBS_SOURCE_DIR}
     ${MGV_MOD_REPOSITORY_SOURCE_DIR}
     ${MGV_MOD_REPOSITORY_BINARY_DIR}
 )
@@ -14,7 +13,7 @@ SET( SRC_FILES
     RepositoryModule.cpp
 
     RepositoryCore.cpp
-    
+
     RepoInfoModel.cpp
     RepoTreeView.cpp
 
@@ -27,7 +26,7 @@ SET( HDR_FILES
     RepositoryModule.h
 
     RepositoryCore.h
-    
+
     RepoInfoModel.hpp
     RepoTreeView.hpp
 

@@ -17,11 +17,11 @@
 #ifndef MGV_LINE_EDIT_H
 #define MGV_LINE_EDIT_H
 
-#include "Widgets/WidgetsApi.h"
+#include "MacGitverApi.hpp"
 
 #include <QLineEdit>
 
-class WIDGETS_API LineEdit : public QLineEdit
+class MGV_CORE_API LineEdit : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY( bool mandatory READ isMandatory WRITE setMandatory )

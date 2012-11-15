@@ -23,7 +23,7 @@
 #include <QVector>
 #include <QSharedData>
 
-#include "Config/ConfigApi.h"
+#include "MacGitverApi.hpp"
 
 class QDomElement;
 
@@ -35,7 +35,7 @@ namespace Heaven
     class WindowStateBase;
 }
 
-class CONFIG_API EnableDisable
+class MGV_CORE_API EnableDisable
 {
 public:
     EnableDisable();
@@ -50,7 +50,7 @@ private:
     bool	mEnable;
 };
 
-class CONFIG_API EnableDisableList
+class MGV_CORE_API EnableDisableList
 {
 public:
     EnableDisableList();
@@ -70,7 +70,7 @@ private:
     QList< EnableDisable > mList;
 };
 
-class CONFIG_API UserLevelDefaultLayoutEntry : public QSharedData
+class MGV_CORE_API UserLevelDefaultLayoutEntry : public QSharedData
 {
 public:
     typedef QExplicitlySharedDataPointer< UserLevelDefaultLayoutEntry > Ptr;
@@ -123,7 +123,7 @@ private:
     UserLevelDefaultLayoutEntry::Vector mChildren;
 };
 
-class CONFIG_API UserLevelDefaultLayout : public QSharedData
+class MGV_CORE_API UserLevelDefaultLayout : public QSharedData
 {
 public:
     typedef QExplicitlySharedDataPointer< UserLevelDefaultLayout > Ptr;
@@ -141,7 +141,7 @@ private:
     UserLevelDefaultLayoutEntry::Ptr mRoot;
 };
 
-class CONFIG_API UserLevelMode : public QSharedData
+class MGV_CORE_API UserLevelMode : public QSharedData
 {
 public:
     typedef QExplicitlySharedDataPointer< UserLevelMode > Ptr;
@@ -173,7 +173,7 @@ private:
     bool                        mIsUserSelectable;
 };
 
-class CONFIG_API UserLevelDefinition : public QSharedData
+class MGV_CORE_API UserLevelDefinition : public QSharedData
 {
 public:
     typedef QExplicitlySharedDataPointer< UserLevelDefinition > Ptr;

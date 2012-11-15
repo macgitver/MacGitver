@@ -7,7 +7,7 @@ INCLUDE_DIRECTORIES(
     ${MACGITVER_SOURCE_DIR}
     ${MACGITVER_BINARY_DIR}
 
-    ${MGV_LIBS_SOURCE_DIR}
+    ${MGV_CORE_SOURCE_DIR}
 )
 
 SET( SRC_FILES
@@ -66,10 +66,7 @@ TARGET_LINK_LIBRARIES(
     MacGitver
 
     GitWrap
-    Config
     Heaven
-    Interfaces
-    Widgets
     MacGitverCore
 )
 

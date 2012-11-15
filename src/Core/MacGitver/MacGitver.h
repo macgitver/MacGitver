@@ -19,6 +19,7 @@
 
 #include <QApplication>
 
+#include "MacGitverApi.hpp"
 #include "Interfaces/ILog.h"
 
 #include "libGitWrap/Repository.h"
@@ -26,7 +27,6 @@
 
 #include "libHeaven/Views/View.h"
 
-#include "MacGitver/MacGitverApi.h"
 
 class Module;
 class Modules;

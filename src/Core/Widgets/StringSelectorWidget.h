@@ -25,11 +25,11 @@ class QStringList;
 class QIcon;
 class QTreeWidgetItem;
 
-#include "Widgets/WidgetsApi.h"
+#include "MacGitverApi.hpp"
 
 class StringSelectorWidgetPrivate;
 
-class WIDGETS_API StringSelectorWidget : public QWidget
+class MGV_CORE_API StringSelectorWidget : public QWidget
 {
     Q_OBJECT
 public:

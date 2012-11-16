@@ -44,17 +44,61 @@ int RepositoryInfoModel::columnCount( const QModelIndex& parent ) const
 
 QVariant RepositoryInfoModel::data( const QModelIndex& index, int role ) const
 {
+    if( role == Qt::DisplayRole )
+    {
+        if( index.isValid() )
+        {
+            RepositoryInfo* info = index2Info( index );
+            if( info )
+            {
+                return info->path();
+            }
+        }
+    }
     return QVariant();
 }
 
 QModelIndex RepositoryInfoModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    return QModelIndex();
+    RepositoryInfo::List list;
+
+    if( parent.isValid() )
+    {
+        RepositoryInfo* infoParent = index2Info( parent );
+        if( !infoParent )
+        {
+            return QModelIndex();
+        }
+
+        list = infoParent->children();
+    }
+    else
+    {
+        list = mRepoMan->repositories();
+    }
+
+    if( list.count() < row )
+    {
+        return QModelIndex();
+    }
+
+    return info2Index( list.at( row ) );
 }
 
 QModelIndex RepositoryInfoModel::parent( const QModelIndex& child ) const
 {
-    return QModelIndex();
+    if( !child.isValid() )
+    {
+        return QModelIndex();
+    }
+
+    RepositoryInfo* info = index2Info( child );
+    if( !info || !info->parent() )
+    {
+        return QModelIndex();
+    }
+
+    return info2Index( info->parentRepository() );
 }
 
 RepositoryInfo* RepositoryInfoModel::index2Info( const QModelIndex& index ) const
@@ -64,5 +108,29 @@ RepositoryInfo* RepositoryInfoModel::index2Info( const QModelIndex& index ) cons
 
 QModelIndex RepositoryInfoModel::info2Index( RepositoryInfo* info ) const
 {
-    return QModelIndex();
+    // QModelIndex parentIndex;
+    int row = 0;
+
+    if( !info )
+    {
+        return QModelIndex();
+    }
+
+    if( info->parent() )
+    {
+        row = info->parent()->children().indexOf( info );
+        if( row == -1 )
+        {
+            return QModelIndex();
+        }
+        // parentIndex = info2Index( info->parent() );
+    }
+
+    row = mRepoMan->repositories().indexOf( info );
+    if( row == -1 )
+    {
+        return QModelIndex();
+    }
+
+    return createIndex( row, 0, info );
 }

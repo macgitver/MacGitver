@@ -28,6 +28,7 @@ RepositoryInfo::RepositoryInfo()
 RepositoryInfo::RepositoryInfo( const Git::Repository& repo )
 {
     mRepo = repo;
+    mPath = repo.basePath();
     mIsLoaded = mRepo.isValid();
     mIsActive = false;
     mIsDisabled = false;

@@ -46,6 +46,7 @@ MacGitver::~MacGitver()
 {
     setRepository( Git::Repository() );
 
+    delete mRepoMan;
     delete mModules;
     sSelf = NULL;
 }

@@ -162,9 +162,14 @@ void RepositoryInfo::unload()
         qDebug() << "Unloading active RepositoryInfo. Will deactivate it first.";
         setActive( false );
     }
-
-    Q_ASSERT( mUnloadTimer == NULL );
     Q_ASSERT( !mIsActive );
+
+    if( mUnloadTimer )
+    {
+        mUnloadTimer->stop();
+        mUnloadTimer->deleteLater();
+        mUnloadTimer = NULL;
+    }
 
     emit aboutToUnload( this );
 

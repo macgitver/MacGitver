@@ -26,6 +26,7 @@
 RepoManager::RepoManager( QObject* parent )
     : QObject( parent )
 {
+    mActiveRepo = NULL;
 }
 
 RepoManager::~RepoManager()

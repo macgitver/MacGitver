@@ -31,6 +31,7 @@
 #include "libGitWrap/Reference.h"
 
 #include "libHeaven/Views/Mode.h"
+#include "libHeaven/Widgets/FooterWidget.hpp"
 
 #include "MacGitver/MacGitver.h"
 #include "MacGitver/Modules.h"
@@ -85,7 +86,8 @@ void MainWindow::setupUi()
 
     setWindowTitle( trUtf8( "MacGitver" ) );
 
-    statusBar()->addPermanentWidget( mLblCurrentBranch = new QLabel() );
+    statusBar()->addWidget( mLblCurrentBranch = new QLabel() );
+    mLblCurrentBranch->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     setHeadLabel();
 
 //  addToolBar( tbMainBar->toolBarFor( this ) );

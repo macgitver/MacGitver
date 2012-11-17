@@ -45,7 +45,7 @@ void RepoManager::open()
     fd->setFileMode(QFileDialog::Directory);
 #endif
 
-    QString lastUsedDir = Config::self().get( "Repoistory/lastUsedDir", "#" ).toString();
+    QString lastUsedDir = Config::self().get( "Repository/lastUsedDir", "#" ).toString();
     if( lastUsedDir != QLatin1String( "#" ) )
     {
         fd->setDirectory( lastUsedDir );

@@ -14,7 +14,7 @@ MACRO(QT_MOC SourcesVar )
     SET( Mocables ${ARGN} )
     SET( _Force 0 )
     SET( _mocfiles )
-    QT4_GET_MOC_FLAGS(_moc_INCS)
+    QT5_GET_MOC_FLAGS(_moc_INCS)
 
     FOREACH(_current_FILE ${Mocables})
 

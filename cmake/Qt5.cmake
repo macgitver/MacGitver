@@ -9,14 +9,14 @@ EXECUTE_PROCESS(
 
 SET( CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${QT_INSTALL_PREFIX} )
 
-MACRO( QT_MOC SourcesVar )
+MACRO(QT_MOC SourcesVar )
 
     SET( Mocables ${ARGN} )
     SET( _Force 0 )
-    QT5_GET_MOC_FLAGS(_moc_INCS)
+    SET( _mocfiles )
+    QT4_GET_MOC_FLAGS(_moc_INCS)
 
-    SET(_matching_FILES )
-    FOREACH (_current_FILE ${Mocables})
+    FOREACH(_current_FILE ${Mocables})
 
         IF( _current_FILE STREQUAL "FORCE" )
 
@@ -27,7 +27,7 @@ MACRO( QT_MOC SourcesVar )
             GET_FILENAME_COMPONENT(_abs_FILE ${_current_FILE} ABSOLUTE)
             GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
             SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
-            QT5_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
+            QT4_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
 
             LIST( APPEND ${SourcesVar} ${_moc} )
             # also, keep the generated moc from beeing scanned by auto-moc'ings
@@ -38,16 +38,9 @@ MACRO( QT_MOC SourcesVar )
         ELSE()
 
             GET_FILENAME_COMPONENT(_abs_FILE ${_current_FILE} ABSOLUTE)
-            # if "SKIP_AUTOMOC" is set to true, we will not handle this file here.
-            # This is required to make uic work correctly:
-            # we need to add generated .cpp files to the sources (to compile them),
-            # but we cannot let automoc handle them, as the .cpp files don't exist yet when
-            # cmake is run for the very first time on them -> however the .cpp files might
-            # exist at a later run. at that time we need to skip them, so that we don't add two
-            # different rules for the same moc file
             GET_SOURCE_FILE_PROPERTY(_skip ${_abs_FILE} SKIP_AUTOMOC)
 
-            IF ( NOT _skip AND EXISTS ${_abs_FILE} )
+            IF( NOT _skip AND EXISTS ${_abs_FILE} )
 
                 FILE(READ ${_abs_FILE} _contents)
 
@@ -55,23 +48,33 @@ MACRO( QT_MOC SourcesVar )
                 IF(_match)
 
                     GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
-                    SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
+                    SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp.moc)
                     QT5_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
 
-                    LIST( APPEND ${SourcesVar} ${_moc} )
+                    LIST( APPEND _mocfiles ${_moc} )
                     # also, keep the generated moc from beeing scanned by auto-moc'ings
                     SET_SOURCE_FILES_PROPERTIES(
                         ${_moc}
                         PROPERTIES  SKIP_AUTOMOC TRUE )
 
-                ENDIF(_match)
+                ENDIF()
 
-            ENDIF( NOT _skip AND EXISTS ${_abs_FILE} )
+            ENDIF()
 
         ENDIF()
 
-    ENDFOREACH(_current_FILE)
-ENDMACRO()
+    ENDFOREACH()
+
+    SET( _mocer ${CMAKE_CURRENT_BINARY_DIR}/MocFiles.cpp )
+    FILE( WRITE ${_mocer} "// MOC files for ${CMAKE_CURRENT_PROJECT_NAME}\n\n" )
+
+    FOREACH( _current_FILE ${_mocfiles} )
+        FILE( APPEND ${_mocer} "#include \"${_current_FILE}\"\n" )
+    ENDFOREACH()
+
+    LIST( APPEND ${SourcesVar} ${_mocfiles} ${_mocer} )
+
+ENDMACRO(QT_MOC)
 
 MACRO( QT_UIC out )
     QT5_WRAP_UI( ${out} ${ARGN} )

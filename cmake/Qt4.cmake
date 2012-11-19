@@ -6,9 +6,9 @@ MACRO(QT_MOC SourcesVar )
 
     SET( Mocables ${ARGN} )
     SET( _Force 0 )
+    SET( _mocfiles )
     QT4_GET_MOC_FLAGS(_moc_INCS)
 
-    SET(_matching_FILES )
     FOREACH(_current_FILE ${Mocables})
 
         IF( _current_FILE STREQUAL "FORCE" )
@@ -41,22 +41,31 @@ MACRO(QT_MOC SourcesVar )
                 IF(_match)
 
                     GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
-                    SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
+                    SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp.moc)
                     QT4_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
 
-                    LIST( APPEND ${SourcesVar} ${_moc} )
+                    LIST( APPEND _mocfiles ${_moc} )
                     # also, keep the generated moc from beeing scanned by auto-moc'ings
                     SET_SOURCE_FILES_PROPERTIES(
                         ${_moc}
                         PROPERTIES  SKIP_AUTOMOC TRUE )
 
-                ENDIF(_match)
+                ENDIF()
 
-            ENDIF( NOT _skip AND EXISTS ${_abs_FILE} )
+            ENDIF()
 
         ENDIF()
 
-    ENDFOREACH(_current_FILE)
+    ENDFOREACH()
+
+    SET( _mocer ${CMAKE_CURRENT_BINARY_DIR}/MocFiles.cpp )
+    FILE( WRITE ${_mocer} "// MOC files for ${CMAKE_CURRENT_PROJECT_NAME}\n\n" )
+
+    FOREACH( _current_FILE ${_mocfiles} )
+        FILE( APPEND ${_mocer} "#include \"${_current_FILE}\"\n" )
+    ENDFOREACH()
+
+    LIST( APPEND ${SourcesVar} ${_mocfiles} ${_mocer} )
 
 ENDMACRO(QT_MOC)
 

@@ -27,7 +27,7 @@ MACRO(QT_MOC SourcesVar )
             GET_FILENAME_COMPONENT(_abs_FILE ${_current_FILE} ABSOLUTE)
             GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
             SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
-            QT4_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
+            QT5_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
 
             LIST( APPEND ${SourcesVar} ${_moc} )
             # also, keep the generated moc from beeing scanned by auto-moc'ings

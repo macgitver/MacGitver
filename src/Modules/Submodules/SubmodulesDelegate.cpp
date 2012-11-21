@@ -60,7 +60,7 @@ void SubmodulesViewDelegate::doDrawDisplay(QPainter *painter, const QStyleOption
 
         textRect.moveTop( textRect.top() + fm.lineSpacing() );
         painter->setFont( option.font );
-        painter->drawText( textRect, trUtf8("Revision: %1").arg(submodule.currentSHA1().toString()) );
+        painter->drawText( textRect, trUtf8("Revision: %1").arg(submodule.wdOid().toString()) );
     }
 }
 

@@ -38,7 +38,7 @@ SubmodulesCreateEditDlg::SubmodulesCreateEditDlg( Git::Submodule module )
     txtName->setText( module.name() );
     txtPath->setText( module.path() );
 
-    txtSHA1->setText( module.currentSHA1().toString() );
+    txtSHA1->setText( module.wdOid().toString() );
     txtUrl->setText( module.url() );
 
     if( module.name() != module.path() )

@@ -65,6 +65,8 @@ MACRO(QT_MOC SourcesVar )
         FILE( APPEND ${_mocer} "#include \"${_current_FILE}\"\n" )
     ENDFOREACH()
 
+    SET_SOURCE_FILES_PROPERTIES( ${_mocer} PROPERTIES GENERATED TRUE )
+
     LIST( APPEND ${SourcesVar} ${_mocfiles} ${_mocer} )
 
 ENDMACRO(QT_MOC)

@@ -67,7 +67,6 @@ private:
                               UserLevelDefaultLayoutEntry::Ptr entry );
 
 private:
-    QLabel*                     mLblCurrentBranch;
     UserLevelDefinition::Ptr    mCurrentLevel;
     Git::Repository             mRepo;
 };

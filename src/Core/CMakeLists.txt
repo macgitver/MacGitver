@@ -37,6 +37,7 @@ SET( SRC_FILES
     Widgets/FlatTreeDelegate.cpp
     Widgets/SHA1Input.cpp
     Widgets/ShortCommitModel.cpp
+    Widgets/RepoStateWidget.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -70,13 +71,13 @@ SET( PUB_HDR_FILES
     Widgets/FlatTreeDelegate.h
     Widgets/SHA1Input.h
     Widgets/ShortCommitModel.h
-
 )
 
 SET( PRI_HDR_FILES
 
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h
+    Widgets/RepoStateWidget.hpp
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

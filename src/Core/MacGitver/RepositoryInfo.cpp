@@ -17,6 +17,9 @@
 #include <QDebug>
 #include <QTimer>
 
+#include "libGitWrap/Reference.h"
+#include "libGitWrap/ObjectId.h"
+
 #include "MacGitver.h"
 #include "RepositoryInfo.hpp"
 #include "RepoManager.hpp"
@@ -256,4 +259,30 @@ RepositoryInfo* RepositoryInfo::repoByPath( const QString& basePath, bool search
 void RepositoryInfo::scanSubmodules()
 {
     // TBD
+}
+
+QString RepositoryInfo::branchDisplay() const
+{
+    if( mIsLoaded )
+    {
+        Git::Result r;
+        Git::Reference HEAD = mRepo.HEAD( r );
+
+        if( HEAD.isValid() )
+        {
+            if( HEAD.name() != QLatin1String( "HEAD" ) )
+            {
+                return trUtf8( "<b>%1</b>" ).arg( HEAD.name().mid( 11 ) );
+            }
+            else
+            {
+                return trUtf8( "detached at <b>%1</b>" ).arg( HEAD.objectId( r ).toString() );
+            }
+        }
+        else
+        {
+            return trUtf8( "<b style=\"color: red;\">Branch yet to be born</b>" );
+        }
+    }
+    return tr( "&lt;unknown&gt;" );
 }

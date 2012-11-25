@@ -45,9 +45,6 @@ public:
 private:
     void setupUi();
 
-public:
-    void setHeadLabel();
-
 public slots:
     void repositoryChanged( const Git::Repository& repo );
 

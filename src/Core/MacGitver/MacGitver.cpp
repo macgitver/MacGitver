@@ -171,3 +171,12 @@ RepoManager* MacGitver::repoMan()
 {
     return mRepoMan;
 }
+
+// Because it's internal; this method will go as soon as it's user is also
+// internal to libMacGitverCore
+#include "Widgets/RepoStateWidget.hpp"
+
+QWidget* MacGitver::createRepoStateWidget()
+{
+    return new RepoStateWidget;
+}

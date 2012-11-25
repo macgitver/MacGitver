@@ -55,6 +55,8 @@ public:
     QString displayAlias() const;
     void setDisplayAlias( const QString& alias );
 
+    QString branchDisplay() const;
+
     void close();
 
     RepositoryInfo* repoByPath( const QString& basePath, bool searchSubmodules );

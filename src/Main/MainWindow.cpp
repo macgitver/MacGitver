@@ -87,9 +87,7 @@ void MainWindow::setupUi()
 
     setWindowTitle( trUtf8( "MacGitver" ) );
 
-    statusBar()->addWidget( mLblCurrentBranch = new QLabel() );
-    mLblCurrentBranch->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-    setHeadLabel();
+    statusBar()->addWidget( MacGitver::self().createRepoStateWidget() );
 
 //  addToolBar( tbMainBar->toolBarFor( this ) );
 
@@ -235,41 +233,6 @@ void MainWindow::repositoryChanged( const Git::Repository& repo )
 {
     mRepo = repo;
     activateModeForRepo();
-    setHeadLabel();
-}
-
-void MainWindow::setHeadLabel()
-{
-    if( mRepo.isValid() )
-    {
-        QString curBranch;
-        Git::Result r;
-        Git::Reference HEAD = mRepo.HEAD( r );
-
-        if( HEAD.isValid() )
-        {
-            if( HEAD.name() != QLatin1String( "HEAD" ) )
-            {
-                curBranch = trUtf8( "on branch <b>%1</b>" )
-                            .arg( HEAD.name().mid( 11 ) );
-            }
-            else
-            {
-                curBranch = trUtf8( "on detached HEAD at <b>%1</b>" )
-                            .arg( HEAD.objectId( r ).toString() );
-            }
-        }
-        else
-        {
-            curBranch = trUtf8( "<b style=\"color: red;\">Branch yet to be born</b>" );
-        }
-
-        mLblCurrentBranch->setText( curBranch );
-    }
-    else
-    {
-        mLblCurrentBranch->setText( trUtf8( "No repository loaded" ) );
-    }
 }
 
 void MainWindow::integrateView( Heaven::View* view, Heaven::Positions position )

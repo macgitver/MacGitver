@@ -84,6 +84,10 @@ signals:
 protected:
     void setMainWindow( IMainWindow* mainWindow );
 
+
+public:
+    QWidget* createRepoStateWidget();   // REMOVE again
+
 private:
     static MacGitver*           sSelf;
 

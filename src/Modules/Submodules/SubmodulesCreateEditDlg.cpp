@@ -15,6 +15,7 @@
  */
 
 #include "libGitWrap/ObjectId.h"
+#include "libGitWrap/Result.h"
 
 #include "SubmodulesCreateEditDlg.h"
 
@@ -30,18 +31,20 @@ SubmodulesCreateEditDlg::SubmodulesCreateEditDlg()
 SubmodulesCreateEditDlg::SubmodulesCreateEditDlg( Git::Submodule module )
     : mSubmodule( module )
 {
+    Git::Result r;
+
     setupUi( this );
     setupComboboxes();
 
     mSubmodule = module;
 
     txtName->setText( module.name() );
-    txtPath->setText( module.path() );
+    txtPath->setText( module.path( r ) );
 
     txtSHA1->setText( module.wdOid().toString() );
-    txtUrl->setText( module.url() );
+    txtUrl->setText( module.url( r ) );
 
-    if( module.name() != module.path() )
+    if( module.name() != module.path( r ) )
     {
         chkHasPath->setChecked( true );
     }
@@ -65,7 +68,7 @@ void SubmodulesCreateEditDlg::setupComboboxes()
     cboUpdateStrategy->addItem( trUtf8( "Checkout (Default)" ), Git::Submodule::Checkout );
     cboUpdateStrategy->addItem( trUtf8( "Rebase" ), Git::Submodule::Rebase );
     cboUpdateStrategy->addItem( trUtf8( "Merge" ), Git::Submodule::Merge );
-    cboUpdateStrategy->addItem( trUtf8( "None" ), -1 );
+    cboUpdateStrategy->addItem( trUtf8( "None" ), Git::Submodule::Ignore );
 }
 
 void SubmodulesCreateEditDlg::init()

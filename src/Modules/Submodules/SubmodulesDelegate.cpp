@@ -7,7 +7,7 @@
 
 #include "libGitWrap/ObjectId.h"
 #include "libGitWrap/Submodule.h"
-
+#include "libGitWrap/Result.h"
 
 SubmodulesViewDelegate::SubmodulesViewDelegate( QObject* parent )
     : QItemDelegate( parent )
@@ -78,10 +78,11 @@ bool SubmodulesViewDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *vie
 
     if ( event->type() == QEvent::ToolTip )
     {
+        Git::Result r;
         QString tooltip =
                 trUtf8("URL: %1\nPath: %2")
-                .arg(submodule.url())
-                .arg(submodule.path());
+                .arg(submodule.url(r))
+                .arg(submodule.path(r));
 
         QToolTip::showText( event->globalPos(), tooltip, view );
 

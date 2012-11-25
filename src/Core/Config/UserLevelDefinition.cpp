@@ -345,11 +345,11 @@ bool UserLevelMode::isUserSelectable() const
     return mIsUserSelectable;
 }
 
-Heaven::Mode* UserLevelMode::createHeavenMode( Heaven::MainWindow* mainWindow )
+Heaven::Mode* UserLevelMode::createHeavenMode()
 {
     Heaven::WindowStateRoot* state = new Heaven::WindowStateRoot;
     mDefaultLayout->root()->addToWindowState( state );
-    return new Heaven::Mode( mainWindow, mModeName, state );
+    return new Heaven::Mode( mModeName, state );
 }
 
 UserLevelMode::Ptr UserLevelMode::read( const QDomElement& el )

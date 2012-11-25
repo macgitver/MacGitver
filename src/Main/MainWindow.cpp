@@ -30,6 +30,7 @@
 #include "libGitWrap/ObjectId.h"
 #include "libGitWrap/Reference.h"
 
+#include "libHeaven/App/Application.hpp"
 #include "libHeaven/Views/Mode.h"
 #include "libHeaven/Widgets/FooterWidget.hpp"
 
@@ -43,7 +44,7 @@
 #include "ui_AboutDlg.h"
 
 MainWindow::MainWindow()
-    : Heaven::MainWindow()
+    : Heaven::PrimaryWindow()
     , mRepo()
 {
     setupUi();
@@ -119,8 +120,8 @@ void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )
 
     foreach( UserLevelMode::Ptr mode, uld->allModes() )
     {
-        Heaven::Mode* heavenMode = new Heaven::Mode( this, mode->name(), NULL );
-        addMode( heavenMode );
+        Heaven::Mode* heavenMode = new Heaven::Mode( mode->name(), NULL );
+        Heaven::app()->addMode( heavenMode );
         modeNames.append( mode->name() );
     }
 
@@ -167,7 +168,7 @@ void MainWindow::createPartialLayout( Heaven::ViewContainer* parent,
             }
 
             Heaven::ViewContainer* child = new Heaven::ViewContainer(
-                                               Heaven::ViewContainer::Tab,
+                                               Heaven::ViewContainer::MultiBar,
                                                subType,
                                                parent );
 
@@ -218,7 +219,8 @@ void MainWindow::activateMode( const QString& modeName )
 {
     qDebug( "Going to %s mode", qPrintable( modeName ) );
 
-    setCurrentMode( findMode( modeName ) ); // Will just update the display for now
+    // Will just update the display for now
+    Heaven::app()->setCurrentMode( Heaven::app()->findMode( modeName ) );
 
     topLevelContainer()->clear();
 

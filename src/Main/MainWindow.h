@@ -26,8 +26,9 @@ class QLabel;
 
 #include "Config/UserLevelDefinition.h"
 
+#include "libHeaven/App/PrimaryWindow.hpp"
+
 #include "libHeaven/Views/TopLevelWidget.h"
-#include "libHeaven/Views/MainWindow.h"
 
 #include "libHeaven/Widgets/ModeSwitchWidget.h"
 
@@ -35,7 +36,7 @@ class QLabel;
 
 #include "hic_MainWindowActions.h"
 
-class MainWindow : public Heaven::MainWindow, public IMainWindow, private MainWindowActions
+class MainWindow : public Heaven::PrimaryWindow, public IMainWindow, private MainWindowActions
 {
     Q_OBJECT
 public:

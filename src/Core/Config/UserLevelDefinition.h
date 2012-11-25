@@ -30,7 +30,6 @@ class QDomElement;
 
 namespace Heaven
 {
-    class MainWindow;
     class Mode;
     class WindowStateBase;
 }
@@ -160,7 +159,7 @@ public:
     bool isLockingMode() const;
     bool isUserSelectable() const;
 
-    Heaven::Mode* createHeavenMode( Heaven::MainWindow* mainWindow );
+    Heaven::Mode* createHeavenMode();
 
 public:
     static UserLevelMode::Ptr read( const QDomElement& el );

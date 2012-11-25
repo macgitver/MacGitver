@@ -21,7 +21,6 @@
 
 class QLabel;
 
-#include "libGitWrap/GitWrap.h"
 #include "libGitWrap/Repository.h"
 
 #include "Config/UserLevelDefinition.h"

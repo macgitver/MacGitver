@@ -20,8 +20,6 @@
 
 #include "Config/Config.h"
 
-#include "libGitWrap/GitWrap.h"
-
 #include "CreateRepositoryDlg.h"
 
 #include "MacGitver/MacGitver.h"

@@ -258,7 +258,62 @@ RepositoryInfo* RepositoryInfo::repoByPath( const QString& basePath, bool search
 
 void RepositoryInfo::scanSubmodules()
 {
-    // TBD
+    if( !ensureIsLoaded() )
+    {
+        return;
+    }
+
+    Git::Result r;
+    Git::SubmoduleList subs = mRepo.submodules( r );
+    if( !r )
+    {
+        return;
+    }
+
+    List oldChildren = mChildren;
+
+    foreach( Git::Submodule sub, subs )
+    {
+        if( !sub.isOpened() )
+        {
+            Git::Result r;
+            if( !sub.open( r ) || !r )
+            {
+                continue;
+            }
+        }
+        Q_ASSERT( sub.isOpened() );
+
+        Git::Repository subRepo = sub.repository();
+        RepositoryInfo* subInfo = NULL;
+        QString path = subRepo.basePath();
+
+        subInfo = repoByPath( path, true );
+        if( !subInfo )
+        {
+            subInfo = new RepositoryInfo( subRepo );
+            subInfo->mIsSubModule = true;
+            subInfo->setDisplayAlias( subRepo.name() );
+            subInfo->mParent = this;
+            mChildren.append( subInfo );
+
+            emit childAdded( this, subInfo );
+
+            if( !subInfo->isBare() )
+            {
+                subInfo->scanSubmodules();
+            }
+        }
+        else
+        {
+            oldChildren.removeOne( subInfo );
+        }
+    }
+
+    foreach( RepositoryInfo* info, oldChildren )
+    {
+        removeChild( info );
+    }
 }
 
 QString RepositoryInfo::branchDisplay() const

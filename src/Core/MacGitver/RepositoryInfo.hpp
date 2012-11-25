@@ -65,6 +65,7 @@ public:
 private:
     void load();
     void unload();
+    void findAlias();
     bool ensureIsLoaded();
     void removeChild( RepositoryInfo* child );
 

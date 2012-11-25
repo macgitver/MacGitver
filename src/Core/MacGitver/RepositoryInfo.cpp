@@ -40,6 +40,14 @@ RepositoryInfo::RepositoryInfo( const Git::Repository& repo )
     mDisplayAlias = QString();
     mParent = NULL;
     mUnloadTimer = NULL;
+
+    findAlias();
+
+    if( mDisplayAlias.isEmpty() )
+    {
+        QStringList sl = mPath.split( QChar( L'/' ), QString::SkipEmptyParts );
+        mDisplayAlias = sl.last();
+    }
 }
 
 RepositoryInfo::~RepositoryInfo()
@@ -340,4 +348,8 @@ QString RepositoryInfo::branchDisplay() const
         }
     }
     return tr( "&lt;unknown&gt;" );
+}
+
+void RepositoryInfo::findAlias()
+{
 }

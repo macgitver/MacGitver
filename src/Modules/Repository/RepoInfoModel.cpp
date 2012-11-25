@@ -51,7 +51,7 @@ QVariant RepositoryInfoModel::data( const QModelIndex& index, int role ) const
             RepositoryInfo* info = index2Info( index );
             if( info )
             {
-                return info->path();
+                return info->displayAlias();
             }
         }
     }
@@ -77,7 +77,7 @@ QModelIndex RepositoryInfoModel::index( int row, int column, const QModelIndex& 
         list = mRepoMan->repositories();
     }
 
-    if( list.count() < row )
+    if( row >= list.count() || row < 0 )
     {
         return QModelIndex();
     }
@@ -93,7 +93,7 @@ QModelIndex RepositoryInfoModel::parent( const QModelIndex& child ) const
     }
 
     RepositoryInfo* info = index2Info( child );
-    if( !info || !info->parent() )
+    if( !info || !info->parentRepository() )
     {
         return QModelIndex();
     }
@@ -116,17 +116,15 @@ QModelIndex RepositoryInfoModel::info2Index( RepositoryInfo* info ) const
         return QModelIndex();
     }
 
-    if( info->parent() )
+    if( info->parentRepository() )
     {
-        row = info->parent()->children().indexOf( info );
-        if( row == -1 )
-        {
-            return QModelIndex();
-        }
-        // parentIndex = info2Index( info->parent() );
+        row = info->parentRepository()->children().indexOf( info );
+    }
+    else
+    {
+        row = mRepoMan->repositories().indexOf( info );
     }
 
-    row = mRepoMan->repositories().indexOf( info );
     if( row == -1 )
     {
         return QModelIndex();

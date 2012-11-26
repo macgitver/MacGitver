@@ -13,3 +13,44 @@
  * not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+#ifndef MGV_GENERAL_CONFIG_PAGE_H
+#define MGV_GENERAL_CONFIG_PAGE_H
+
+#include <QWidget>
+
+#include "Config/Ui/ConfigPage.hpp"
+
+namespace Ui
+{
+    class GeneralConfigPage;
+}
+
+class GeneralConfigPage : public ConfigPage
+{
+    Q_OBJECT
+public:
+    GeneralConfigPage( ConfigDialog* dlg );
+    ~GeneralConfigPage();
+
+public:
+    void apply();
+    void init();
+
+    QByteArray pageId() const;
+    QByteArray groupId() const;
+
+    QString pageName() const;
+    QString groupName() const;
+
+    QWidget* widget();
+
+private slots:
+    void onFontChanged();
+    void onUserLevelChanged( int index );
+
+private:
+    Ui::GeneralConfigPage* ui;
+};
+
+#endif

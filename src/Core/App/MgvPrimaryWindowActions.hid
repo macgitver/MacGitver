@@ -14,9 +14,9 @@
  *
  */
 
-Ui MainWindowActions {
+Ui MgvPrimaryWindowActions {
 
-    TrContext MainWindowActions;
+    TrContext MgvPrimaryWindowActions;
 
     MenuBar MainMenuBar {
 

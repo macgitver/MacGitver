@@ -17,7 +17,7 @@
 #include <QtPlugin>
 #include <QFileDialog>
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 #include "GitConfigModule.h"
 #include "GitConfigDialog.h"
@@ -29,10 +29,6 @@ GitConfigModule::GitConfigModule()
 void GitConfigModule::repositoryChanged( Git::Repository newRepository )
 {
     mRepo = newRepository;
-}
-
-void GitConfigModule::setupConfigPages( IConfigDialog* dialog )
-{
 }
 
 void GitConfigModule::initialize()
@@ -47,7 +43,7 @@ void GitConfigModule::deinitialize()
 
 void GitConfigModule::onToolsGitConfig()
 {
-    GitConfigDialog( mainWindow()->widget(), mRepo ).exec();
+    GitConfigDialog( mRepo ).exec();
 }
 
 #if QT_VERSION < 0x050000

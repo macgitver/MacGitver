@@ -10,17 +10,20 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
+    App/MacGitver.cpp
+    App/MgvPrimaryWindow.cpp
+
     Config/Config.cpp
     Config/ConfigUser.cpp
     Config/UserLevelDefinition.cpp
 
-    Interfaces/IConfigDialog.cpp
-    Interfaces/IConfigPage.cpp
-    Interfaces/IMainWindow.cpp
+    Config/Ui/ConfigDialog.cpp
+    Config/Ui/ConfigPage.cpp
+    Config/Ui/GeneralConfigPage.cpp
+
     Interfaces/IRepositoryCore.cpp
     Interfaces/ILog.cpp
 
-    MacGitver/MacGitver.cpp
     MacGitver/Module.cpp
     MacGitver/Modules.cpp
     MacGitver/FSWatcher.cpp
@@ -44,17 +47,17 @@ SET( PUB_HDR_FILES
 
     MacGitverApi.hpp
 
+    App/MacGitver.hpp
+    App/MgvPrimaryWindow.hpp
+
     Config/Config.h
     Config/ConfigUser.h
     Config/UserLevelDefinition.h
+    Config/Ui/ConfigPage.hpp
 
-    Interfaces/IConfigDialog.h
-    Interfaces/IConfigPage.h
-    Interfaces/IMainWindow.h
     Interfaces/IRepositoryCore.h
     Interfaces/ILog.h
 
-    MacGitver/MacGitver.h
     MacGitver/Module.h
     MacGitver/Modules.h
     MacGitver/FSWatcher.h
@@ -75,14 +78,35 @@ SET( PUB_HDR_FILES
 
 SET( PRI_HDR_FILES
 
+    App/MgvPrimaryWindowPrivate.hpp
+
+    Config/Ui/ConfigDialog.hpp
+    Config/Ui/GeneralConfigPage.hpp
+
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h
     Widgets/RepoStateWidget.hpp
 )
 
+SET( UI_FILES
+
+    Config/Ui/ConfigDialog.ui
+    Config/Ui/GeneralConfigPage.ui
+
+    App/AboutDlg.ui
+)
+
+SET( HID_FILES
+
+    App/MgvPrimaryWindowActions.hid
+
+)
+
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
+QT_UIC( UIC_FILES ${UI_FILES} )
 QT_MOC( MOC_FILES ${HDR_FILES} )
+HIC( HIC_FILES ${HID_FILES} )
 
 ADD_QT_LIBRARY(
     MacGitverCore SHARED
@@ -90,6 +114,8 @@ ADD_QT_LIBRARY(
     ${SRC_FILES}
     ${HDR_FILES}
     ${MOC_FILES}
+    ${UIC_FILES}
+    ${HIC_FILES}
 )
 
 TARGET_LINK_LIBRARIES(

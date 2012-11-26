@@ -31,7 +31,7 @@ public:
     HistoryModule();
 
 public:
-    void setupConfigPages( IConfigDialog* dlg );
+    void setupConfigPages( ConfigDialog* dlg );
 
     void initialize();
     void deinitialize();

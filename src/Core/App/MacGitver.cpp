@@ -14,18 +14,27 @@
  *
  */
 
+#include <QDebug>
+#include <QFileInfo>
+#include <QDir>
+#include <QPluginLoader>
+#include <QTextStream>
+#include <QDomDocument>
+
 #include "libGitWrap/GitWrap.hpp"
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
+#include "App/MgvPrimaryWindow.hpp"
+
+#include "Config/Config.h"
+
 #include "MacGitver/Modules.h"
 #include "MacGitver/FSWatcher.h"
 #include "MacGitver/RepoManager.hpp"
 
-#include "Interfaces/IMainWindow.h"
 
 MacGitver::MacGitver( int argc, char** argv )
     : QApplication( argc, argv )
-    , mMainWindow( NULL )
     , mLog( NULL )
     , mRepoMan( NULL )
 {
@@ -74,18 +83,6 @@ void MacGitver::setRepository( const Git::Repository& repo )
     mModules->repositoryChanged( repo );
 
     emit repositoryChanged( mRepository );
-}
-
-IMainWindow* MacGitver::mainWindow()
-{
-    Q_ASSERT( mMainWindow );
-    return mMainWindow;
-}
-
-void MacGitver::setMainWindow( IMainWindow* mainWindow )
-{
-    Q_ASSERT( !mMainWindow );
-    mMainWindow = mainWindow;
 }
 
 MacGitver* MacGitver::sSelf = NULL;
@@ -172,11 +169,49 @@ RepoManager* MacGitver::repoMan()
     return mRepoMan;
 }
 
-// Because it's internal; this method will go as soon as it's user is also
-// internal to libMacGitverCore
-#include "Widgets/RepoStateWidget.hpp"
-
-QWidget* MacGitver::createRepoStateWidget()
+void MacGitver::loadModules()
 {
-    return new RepoStateWidget;
+    QDir binDir( applicationDirPath() );
+
+    QStringList modFiles;
+    modFiles << QLatin1String( "Mod*.mgv" );
+    foreach( QString modName, binDir.entryList( modFiles ) )
+    {
+        QPluginLoader* loader = new QPluginLoader( binDir.filePath( modName ), this );
+        QObject* o = loader->instance();
+        if( !o )
+            qDebug( "%s: %s", qPrintable( modName ), qPrintable( loader->errorString() ) );
+
+        Module* mod = qobject_cast< Module* >( o );
+        if( mod )
+        {
+            modules()->addModule( mod );
+        }
+        else
+        {
+            delete loader;
+        }
+    }
+
+    mModules->initialize();
+}
+
+void MacGitver::loadLevels()
+{
+    Config::self().loadLevels( QLatin1String( ":/Xml/Levels.xml" ) );
+}
+
+void MacGitver::boot()
+{
+    loadLevels();
+    loadModules();
+
+    MgvPrimaryWindow* pw = new MgvPrimaryWindow;
+    pw->show();
+}
+
+int MacGitver::exec()
+{
+    QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
+    return QApplication::exec();
 }

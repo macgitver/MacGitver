@@ -87,7 +87,7 @@ void Modules::delModule( Module *mod )
     mModules.remove( mod );
 }
 
-void Modules::setupConfigPages( IConfigDialog* dlg )
+void Modules::setupConfigPages( ConfigDialog* dlg )
 {
     foreach( Module* m, mModules )
     {

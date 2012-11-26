@@ -29,8 +29,6 @@ public:
     RefsViewsModule();
 
 public:
-    void setupConfigPages( IConfigDialog* dlg );
-
     void initialize();
     void deinitialize();
 

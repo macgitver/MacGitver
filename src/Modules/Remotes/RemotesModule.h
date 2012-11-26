@@ -31,8 +31,6 @@ public:
     RemotesModule();
 
 public:
-    void setupConfigPages( IConfigDialog* dlg );
-
     void initialize();
     void deinitialize();
 

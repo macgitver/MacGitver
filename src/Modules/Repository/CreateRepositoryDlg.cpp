@@ -22,7 +22,7 @@
 
 #include "CreateRepositoryDlg.h"
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 CreateRepositoryDlg::CreateRepositoryDlg()
 {

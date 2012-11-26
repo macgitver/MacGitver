@@ -21,16 +21,15 @@
 
 #include "libGitWrap/Repository.h"
 
-#include "Interfaces/IMainWindow.h"
-
 #include "MacGitverApi.hpp"
-#include "MacGitver/MacGitver.h"
+
+#include "App/MacGitver.hpp"
 
 #if QT_VERSION < 0x050000
 #define Q_PLUGIN_METADATA(x)
 #endif
 
-class IConfigDialog;
+class ConfigDialog;
 
 /**
  * @brief The Module class provides an abstract implementation for application plugins.
@@ -43,9 +42,6 @@ public:
     Module();
 
 public:
-    IMainWindow* mainWindow();
-
-public:
     /**
      * @brief Informs a module about the currently referenced repository has changed.
      * @param newRepository
@@ -56,7 +52,7 @@ public:
      * @brief Setup a configuration dialog for a module, which is used in the settings.
      * @param dialog
      */
-    virtual void setupConfigPages( IConfigDialog* dialog ) = 0;
+    virtual void setupConfigPages( ConfigDialog* dialog );
 
     /**
      * @brief Tells the module to initialize itself, after it was loaded and instantiated.

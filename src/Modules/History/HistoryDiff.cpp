@@ -36,7 +36,7 @@
 #include "Widgets/ShortCommitModel.h"
 #include "Widgets/FlatTreeComboBox.h"
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 #include "MacGitver/GitPatchConsumer.hpp"
 
 #include "HistoryDiff.h"

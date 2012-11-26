@@ -25,7 +25,6 @@
 #include <QDesktopWidget>
 #include <QApplication>
 
-#include "Config/Config.h"
 
 #include "libGitWrap/ObjectId.h"
 #include "libGitWrap/Reference.h"
@@ -34,16 +33,17 @@
 #include "libHeaven/Views/Mode.h"
 #include "libHeaven/Widgets/FooterWidget.hpp"
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
+#include "App/MgvPrimaryWindow.hpp"
 #include "MacGitver/Modules.h"
-
-#include "MainWindow.h"
-#include "ConfigDialog.h"
-#include "GeneralConfigPage.h"
+#include "Config/Config.h"
+#include "Config/Ui/ConfigDialog.hpp"
+#include "Config/Ui/GeneralConfigPage.hpp"
+#include "Widgets/RepoStateWidget.hpp"
 
 #include "ui_AboutDlg.h"
 
-MainWindow::MainWindow()
+MgvPrimaryWindow::MgvPrimaryWindow()
     : Heaven::PrimaryWindow()
     , mRepo()
 {
@@ -69,32 +69,26 @@ MainWindow::MainWindow()
              this, SLOT(setupFonts()) );
 }
 
-MainWindow::~MainWindow()
+MgvPrimaryWindow::~MgvPrimaryWindow()
 {
 }
 
-void MainWindow::setupUi()
+void MgvPrimaryWindow::setupUi()
 {
     QIcon icon( QLatin1String( ":/mgv_sak32.png" ) );
     setWindowIcon( icon );
-
-    QFile styleFile( QLatin1String( ":/MacGitver.qss" ) );
-    styleFile.open( QFile::ReadOnly );
-    setStyleSheet( QString::fromUtf8( styleFile.readAll().constData() ) );
 
     setupActions( this );
     setMenuBar( mbMainMenuBar );
 
     setWindowTitle( trUtf8( "MacGitver" ) );
 
-    statusBar()->addWidget( MacGitver::self().createRepoStateWidget() );
-
-//  addToolBar( tbMainBar->toolBarFor( this ) );
+    statusBar()->addWidget( new RepoStateWidget );
 
     moveToCenter();
 }
 
-void MainWindow::setupFonts()
+void MgvPrimaryWindow::setupFonts()
 {
     QFont font = Config::defaultFont();
     setFont( font );
@@ -102,7 +96,7 @@ void MainWindow::setupFonts()
     QApplication::setFont( Config::defaultDialogFont(), "QDialog" );
 }
 
-void MainWindow::moveToCenter()
+void MgvPrimaryWindow::moveToCenter()
 {
     QRect desk = QApplication::desktop()->availableGeometry();
 
@@ -112,7 +106,7 @@ void MainWindow::moveToCenter()
     setGeometry( center );
 }
 
-void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )
+void MgvPrimaryWindow::activateLevel( UserLevelDefinition::Ptr uld )
 {
     QStringList modeNames;
 
@@ -128,7 +122,7 @@ void MainWindow::activateLevel( UserLevelDefinition::Ptr uld )
     activateModeForRepo();
 }
 
-void MainWindow::activateModeForRepo()
+void MgvPrimaryWindow::activateModeForRepo()
 {
     QString preset = QLatin1String( mRepo.isValid() ? "Normal" : "Welcome" );
 
@@ -138,7 +132,7 @@ void MainWindow::activateModeForRepo()
     activateMode( modeName );
 }
 
-void MainWindow::createPartialLayout( Heaven::ViewContainer* parent,
+void MgvPrimaryWindow::createPartialLayout( Heaven::ViewContainer* parent,
                                       UserLevelDefaultLayoutEntry::Ptr entry )
 {
     switch( entry->type() )
@@ -213,7 +207,7 @@ void MainWindow::createPartialLayout( Heaven::ViewContainer* parent,
     }
 }
 
-void MainWindow::activateMode( const QString& modeName )
+void MgvPrimaryWindow::activateMode( const QString& modeName )
 {
     qDebug( "Going to %s mode", qPrintable( modeName ) );
 
@@ -229,23 +223,18 @@ void MainWindow::activateMode( const QString& modeName )
     createPartialLayout( topLevelContainer()->rootContainer(), layout->root() );
 }
 
-void MainWindow::repositoryChanged( const Git::Repository& repo )
+void MgvPrimaryWindow::repositoryChanged( const Git::Repository& repo )
 {
     mRepo = repo;
     activateModeForRepo();
 }
 
-void MainWindow::integrateView( Heaven::View* view, Heaven::Positions position )
+void MgvPrimaryWindow::integrateView( Heaven::View* view, Heaven::Positions position )
 {
     topLevelContainer()->addView( view, position );
 }
 
-QWidget* MainWindow::widget()
-{
-    return this;
-}
-
-void MainWindow::onHelpAbout()
+void MgvPrimaryWindow::onHelpAbout()
 {
     QDialog d;
     Ui::AboutDlg u;
@@ -253,7 +242,7 @@ void MainWindow::onHelpAbout()
     d.exec();
 }
 
-void MainWindow::onToolsPreferences()
+void MgvPrimaryWindow::onToolsPreferences()
 {
     ConfigDialog d;
     d.addPage( new GeneralConfigPage( &d ) );

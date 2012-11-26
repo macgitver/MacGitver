@@ -14,18 +14,13 @@
  *
  */
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
+
 #include "MacGitver/Module.h"
 
 Module::Module()
 {
 }
-
-IMainWindow* Module::mainWindow()
-{
-    return MacGitver::self().mainWindow();
-}
-
 
 void Module::repositoryChanged( Git::Repository newRepository )
 {
@@ -40,4 +35,9 @@ void Module::registerView( const QString& identifier, Heaven::ViewTypes type, Vi
 void Module::unregisterView( const QString& identifier )
 {
     MacGitver::self().unregisterView( identifier );
+}
+
+void Module::setupConfigPages( ConfigDialog* dialog )
+{
+    Q_UNUSED( dialog );
 }

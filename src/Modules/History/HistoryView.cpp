@@ -27,7 +27,7 @@
 
 #include "libHeaven/Widgets/MiniSplitter.h"
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 #include "HistoryView.h"
 #include "HistoryEntry.h"

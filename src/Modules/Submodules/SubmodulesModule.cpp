@@ -17,16 +17,12 @@
 #include <QtPlugin>
 #include <QFileDialog>
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 #include "SubmodulesModule.h"
 #include "SubmodulesView.h"
 
 SubmodulesModule::SubmodulesModule()
-{
-}
-
-void SubmodulesModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 

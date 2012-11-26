@@ -16,16 +16,10 @@
 
 #include <QtPlugin>
 
-#include "Interfaces/IMainWindow.h"
-
 #include "LoggingModule.h"
 #include "LoggingView.h"
 
 LoggingModule::LoggingModule()
-{
-}
-
-void LoggingModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 

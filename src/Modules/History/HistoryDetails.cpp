@@ -21,7 +21,7 @@
 #include "libGitWrap/ObjectCommit.h"
 #include "libGitWrap/Result.h"
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 #include "HistoryDetails.h"
 

@@ -34,8 +34,6 @@ class FSWatcher;
 class UserLevelDefinition;
 class RepoManager;
 
-class IMainWindow;
-
 typedef Heaven::View* (ViewCreator)( );
 
 class MGV_CORE_API MacGitver : public QApplication
@@ -62,8 +60,6 @@ public:
     Modules* modules();
     FSWatcher* watcher();
 
-    IMainWindow* mainWindow();
-
     void integrateView( Heaven::View* view, Heaven::Positions place );
 
     void registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator );
@@ -77,22 +73,22 @@ public:
     void log( LogType type, const Git::Result& r, const char* logMessage = NULL );
 
     RepoManager* repoMan();
+    int exec();
 
 signals:
     void repositoryChanged( const Git::Repository& repo );
 
-protected:
-    void setMainWindow( IMainWindow* mainWindow );
+private:
+    void loadModules();
+    void loadLevels();
 
-
-public:
-    QWidget* createRepoStateWidget();   // REMOVE again
+private slots:
+    void boot();
 
 private:
     static MacGitver*           sSelf;
 
     Modules*                    mModules;
-    IMainWindow*                mMainWindow;
     ILog*                       mLog;
     FSWatcher*                  mWatcher;
     Git::GitWrap                mGitWrap;

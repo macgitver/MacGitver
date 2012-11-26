@@ -31,8 +31,6 @@ public:
     WorkingTreeModule();
 
 public:
-    void setupConfigPages( IConfigDialog* dlg );
-
     void initialize();
     void deinitialize();
 

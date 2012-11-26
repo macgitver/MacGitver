@@ -14,45 +14,45 @@
  *
  */
 
-#ifndef MGV_GENERAL_CONFIG_PAGE_H
-#define MGV_GENERAL_CONFIG_PAGE_H
+#ifndef MGV_CONFIG_WIDGET_H
+#define MGV_CONFIG_WIDGET_H
 
-#include <QWidget>
+#include <QDialog>
+#include <QHash>
+#include <QByteArray>
 
-#include "Interfaces/IConfigPage.h"
-#include "Interfaces/IConfigDialog.h"
+class QTreeWidgetItem;
+
+#include "Config/Ui/ConfigPage.hpp"
 
 namespace Ui
 {
-    class GeneralConfigPage;
+    class ConfigDialog;
 }
 
-class GeneralConfigPage : public QWidget, public IConfigPage
+class ConfigDialog : public QDialog
 {
     Q_OBJECT
-    Q_INTERFACES( IConfigPage )
 public:
-    GeneralConfigPage( IConfigDialog* dlg );
-    ~GeneralConfigPage();
+    ConfigDialog();
+    ~ConfigDialog();
 
 public:
-    void apply();
-    void init();
+    int exec();
 
-    QByteArray pageId() const;
-    QByteArray groupId() const;
-
-    QString pageName() const;
-    QString groupName() const;
-
-    QWidget* widget();
+public:
+    virtual void setModified( ConfigPage* page, bool value );
+    virtual void addPage( ConfigPage* page );
 
 private slots:
-    void onFontChanged();
-    void onUserLevelChanged( int index );
+    void onApply();
+    void onWidgetChange( QTreeWidgetItem* newCurrent );
 
 private:
-    Ui::GeneralConfigPage* ui;
+    Ui::ConfigDialog*                       ui;
+    QHash< QByteArray, QTreeWidgetItem* >   mGroupsById;
+    QHash< QByteArray, ConfigPage* >       mPagesById;
+    QHash< QTreeWidgetItem*, QByteArray >   mPageIdsByTree;
 };
 
 #endif

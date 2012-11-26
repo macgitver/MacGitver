@@ -29,8 +29,6 @@ public:
     SubmodulesModule();
 
 public:
-    void setupConfigPages( IConfigDialog* dlg );
-
     void initialize();
     void deinitialize();
 

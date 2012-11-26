@@ -20,7 +20,8 @@
 #include "libGitWrap/Reference.h"
 #include "libGitWrap/ObjectId.h"
 
-#include "MacGitver.h"
+#include "App/MacGitver.hpp"
+
 #include "RepositoryInfo.hpp"
 #include "RepoManager.hpp"
 

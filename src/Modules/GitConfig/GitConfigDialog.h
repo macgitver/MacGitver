@@ -17,17 +17,17 @@
 #ifndef MGV_GITCONFIGDIALOG_H
 #define MGV_GITCONFIGDIALOG_H
 
-#include <QDialog>
+#include "libHeaven/App/Dialog.hpp"
 
 #include "libGitWrap/Repository.h"
 
 #include "ui_GitConfigDialog.h"
 
-class GitConfigDialog : public QDialog, private Ui::GitConfigDialog
+class GitConfigDialog : public Heaven::Dialog, private Ui::GitConfigDialog
 {
     Q_OBJECT
 public:
-    GitConfigDialog( QWidget* parent, Git::Repository& repo );
+    GitConfigDialog( Git::Repository& repo );
 
 private:
     Git::Repository mRepo;

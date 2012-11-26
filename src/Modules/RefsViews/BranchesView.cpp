@@ -19,7 +19,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 #include "BranchesView.h"
 

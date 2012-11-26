@@ -16,18 +16,12 @@
 
 #include <QtPlugin>
 
-#include "Interfaces/IMainWindow.h"
-
 #include "RefsViewsModule.h"
 #include "TagsView.h"
 #include "BranchesView.h"
 #include "RefsView.h"
 
 RefsViewsModule::RefsViewsModule()
-{
-}
-
-void RefsViewsModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 

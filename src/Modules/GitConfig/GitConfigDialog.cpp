@@ -16,8 +16,8 @@
 
 #include "GitConfigDialog.h"
 
-GitConfigDialog::GitConfigDialog( QWidget* parent, Git::Repository& repo )
-    : QDialog( parent )
+GitConfigDialog::GitConfigDialog( Git::Repository& repo )
+    : Heaven::Dialog()
     , mRepo( repo )
 {
     setupUi( this );

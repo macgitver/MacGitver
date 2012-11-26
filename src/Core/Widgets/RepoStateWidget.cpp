@@ -17,7 +17,8 @@
 #include <QGridLayout>
 #include <QLabel>
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
+
 #include "MacGitver/RepoManager.hpp"
 #include "MacGitver/RepositoryInfo.hpp"
 

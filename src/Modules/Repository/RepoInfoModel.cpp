@@ -14,7 +14,7 @@
  *
  */
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 #include "MacGitver/RepoManager.hpp"
 
 #include "RepoInfoModel.hpp"

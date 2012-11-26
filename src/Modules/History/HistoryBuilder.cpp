@@ -16,7 +16,7 @@
 
 #include <QElapsedTimer>
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 #include "libGitWrap/ObjectId.h"
 #include "libGitWrap/Reference.h"

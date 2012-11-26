@@ -31,8 +31,6 @@ public:
     WelcomeModule();
 
 public:
-    void setupConfigPages( IConfigDialog* dlg );
-
     void initialize();
     void deinitialize();
 

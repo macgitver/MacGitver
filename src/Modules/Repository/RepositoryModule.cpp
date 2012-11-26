@@ -16,7 +16,7 @@
 
 #include <QtPlugin>
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 #include "MacGitver/RepoManager.hpp"
 
 #include "RepositoryModule.h"
@@ -48,7 +48,7 @@ void RepositoryModule::repositoryChanged( Git::Repository newRepository )
     actRepositoryClose->setEnabled( isValid );
 }
 
-void RepositoryModule::setupConfigPages( IConfigDialog* dialog )
+void RepositoryModule::setupConfigPages( ConfigDialog* dialog )
 {
 }
 

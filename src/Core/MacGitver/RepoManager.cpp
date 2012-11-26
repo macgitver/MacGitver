@@ -16,11 +16,13 @@
 
 #include <QFileDialog>
 
+#include "libHeaven/Heaven.hpp"
+#include "libHeaven/App/PrimaryWindow.hpp"
+
 #include "Config/Config.h"
 
-#include "Interfaces/IMainWindow.h"
+#include "App/MacGitver.hpp"
 
-#include "MacGitver.h"
 #include "RepoManager.hpp"
 
 RepoManager::RepoManager( QObject* parent )
@@ -36,9 +38,7 @@ RepoManager::~RepoManager()
 
 void RepoManager::open()
 {
-    QWidget* main = MacGitver::self().mainWindow()->widget();
-
-    QFileDialog *fd = new QFileDialog(main);
+    QFileDialog *fd = new QFileDialog( Heaven::primaryWindow() );
 #ifdef Q_OS_MAC
     fd->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
 #else

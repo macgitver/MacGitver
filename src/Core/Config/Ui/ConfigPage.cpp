@@ -14,12 +14,20 @@
  *
  */
 
-#include "Interfaces/IConfigDialog.h"
+#include "Config/Ui/ConfigDialog.hpp"
 
-IConfigDialog::IConfigDialog()
+ConfigPage::ConfigPage( ConfigDialog* dlg )
+    : mDialog( dlg )
+{
+    Q_ASSERT( dlg );
+}
+
+ConfigPage::~ConfigPage()
 {
 }
 
-IConfigDialog::~IConfigDialog()
+void ConfigPage::setModified( bool value )
 {
+    mDialog->setModified( this, value );
 }
+

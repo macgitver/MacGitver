@@ -16,18 +16,11 @@
 
 #include <QtPlugin>
 
-#include "Interfaces/IMainWindow.h"
-
 #include "WelcomeModule.h"
 #include "WelcomeView.h"
 
 WelcomeModule::WelcomeModule()
 {
-}
-
-void WelcomeModule::setupConfigPages( IConfigDialog* dialog )
-{
-    Q_UNUSED( dialog );
 }
 
 Heaven::View* WelcomeModule::createWelcomeView()

@@ -14,33 +14,25 @@
  *
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
-#include <QMainWindow>
-
-class QLabel;
+#ifndef MGV_PRIMARY_WINDOW_HPP
+#define MGV_PRIMARY_WINDOW_HPP
 
 #include "libGitWrap/Repository.h"
 
-#include "Config/UserLevelDefinition.h"
-
 #include "libHeaven/App/PrimaryWindow.hpp"
-
 #include "libHeaven/Views/TopLevelWidget.h"
-
 #include "libHeaven/Widgets/ModeSwitchWidget.h"
 
-#include "Interfaces/IMainWindow.h"
+#include "Config/UserLevelDefinition.h"
 
-#include "hic_MainWindowActions.h"
+#include "hic_MgvPrimaryWindowActions.h"
 
-class MainWindow : public Heaven::PrimaryWindow, public IMainWindow, private MainWindowActions
+class MgvPrimaryWindow : public Heaven::PrimaryWindow, private MgvPrimaryWindowActions
 {
     Q_OBJECT
 public:
-    MainWindow();
-    ~MainWindow();
+    MgvPrimaryWindow();
+    ~MgvPrimaryWindow();
 
 private:
     void setupUi();
@@ -57,7 +49,6 @@ public:
     void integrateView( Heaven::View* view, Heaven::Positions position );
     void activateMode( const QString& modeName );
     void activateLevel( UserLevelDefinition::Ptr uld );
-    QWidget* widget();
     void addError( const QString& err );
 
 private:

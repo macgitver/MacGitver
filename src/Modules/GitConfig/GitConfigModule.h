@@ -33,8 +33,6 @@ public:
 public:
     void repositoryChanged( Git::Repository newRepository );
 
-    void setupConfigPages( IConfigDialog* dlg );
-
     void initialize();
     void deinitialize();
 

@@ -17,17 +17,13 @@
 #include <QtPlugin>
 #include <QFileDialog>
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 #include "RemoteCreateEditDlg.h"
 #include "RemotesModule.h"
 #include "RemotesView.h"
 
 RemotesModule::RemotesModule()
-{
-}
-
-void RemotesModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 

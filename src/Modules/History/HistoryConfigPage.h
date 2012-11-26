@@ -19,18 +19,16 @@
 
 #include <QWidget>
 
-#include "Interfaces/IConfigPage.h"
-#include "Interfaces/IConfigDialog.h"
+#include "Config/Ui/ConfigDialog.hpp"
 
 #include "ui_HistoryConfigPage.h"
 
-class HistoryConfigPage : public QWidget, public IConfigPage, Ui::HistoryConfigPage
+class HistoryConfigPage : public ConfigPage, Ui::HistoryConfigPage
 {
     Q_OBJECT
-    Q_INTERFACES( IConfigPage )
 
 public:
-    HistoryConfigPage( IConfigDialog* dlg );
+    HistoryConfigPage( ConfigDialog* dlg );
     ~HistoryConfigPage();
 
 public:
@@ -42,8 +40,6 @@ public:
 
     QString pageName() const;
     QString groupName() const;
-
-    QWidget* widget();
 
 private slots:
     void onDiffPosChanged( int newPos );

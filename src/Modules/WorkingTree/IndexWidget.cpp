@@ -25,7 +25,7 @@
 #include "libDiffViews/Model/FilePatch.hpp"
 #include "libDiffViews/RawView/RawView.hpp"
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 #include "MacGitver/FSWatcher.h"
 #include "MacGitver/GitPatchConsumer.hpp"
 

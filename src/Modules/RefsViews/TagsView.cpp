@@ -17,7 +17,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 #include "TagsView.h"
 

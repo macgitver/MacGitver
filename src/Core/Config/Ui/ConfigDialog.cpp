@@ -16,33 +16,35 @@
 
 #include <QPushButton>
 
-#include "Interfaces/IConfigPage.h"
+#include "ConfigDialog.hpp"
 
-#include "ConfigDialog.h"
+#include "ui_ConfigDialog.h"
 
 ConfigDialog::ConfigDialog()
 {
-    setupUi( this );
+    ui = new Ui::ConfigDialog;
+    ui->setupUi( this );
 
-    connect( widgetTree, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+    connect( ui->widgetTree, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
              this, SLOT(onWidgetChange(QTreeWidgetItem*)) );
 
-    connect( buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()),
+    connect( ui->buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()),
              this, SLOT(onApply()) );
 }
 
 ConfigDialog::~ConfigDialog()
 {
+    delete ui;
 }
 
-void ConfigDialog::addPage( IConfigPage* page )
+void ConfigDialog::addPage( ConfigPage* page )
 {
-    widgets->addWidget( page->widget() );
+    ui->widgets->addWidget( page );
 
     QTreeWidgetItem* groupItem = mGroupsById.value( page->groupId(), NULL );
     if( !groupItem )
     {
-        groupItem = new QTreeWidgetItem( widgetTree, QStringList( page->groupName() ) );
+        groupItem = new QTreeWidgetItem( ui->widgetTree, QStringList( page->groupName() ) );
         mGroupsById.insert( page->groupId(), groupItem );
         QFont f = font();
         f.setBold( true );
@@ -58,17 +60,17 @@ void ConfigDialog::addPage( IConfigPage* page )
     mPageIdsByTree.insert( pageItem, fullPageId );
 }
 
-void ConfigDialog::setModified( IConfigPage* page, bool value )
+void ConfigDialog::setModified( ConfigPage* page, bool value )
 {
     Q_ASSERT( page );
-    buttonBox->button( QDialogButtonBox::Apply )->setEnabled( value );
-    buttonBox->button( QDialogButtonBox::Ok )->setEnabled( value );
+    ui->buttonBox->button( QDialogButtonBox::Apply )->setEnabled( value );
+    ui->buttonBox->button( QDialogButtonBox::Ok )->setEnabled( value );
 }
 
 void ConfigDialog::onApply()
 {
-    QWidget* w = widgets->currentWidget();
-    IConfigPage* page = qobject_cast< IConfigPage* >( w );
+    QWidget* w = ui->widgets->currentWidget();
+    ConfigPage* page = qobject_cast< ConfigPage* >( w );
     if( !page )
     {
         return;
@@ -79,8 +81,8 @@ void ConfigDialog::onApply()
 
 int ConfigDialog::exec()
 {
-    buttonBox->button( QDialogButtonBox::Apply )->setEnabled( false );
-    buttonBox->button( QDialogButtonBox::Ok )->setEnabled( false );
+    ui->buttonBox->button( QDialogButtonBox::Apply )->setEnabled( false );
+    ui->buttonBox->button( QDialogButtonBox::Ok )->setEnabled( false );
 
     return QDialog::exec();
 }
@@ -98,11 +100,11 @@ void ConfigDialog::onWidgetChange( QTreeWidgetItem* newCurrent )
         return;
     }
 
-    IConfigPage* page = mPagesById.value( pageId, NULL );
+    ConfigPage* page = mPagesById.value( pageId, NULL );
     if( !page )
     {
         return;
     }
 
-    widgets->setCurrentWidget( page->widget() );
+    ui->widgets->setCurrentWidget( page );
 }

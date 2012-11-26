@@ -22,7 +22,7 @@
 
 #include "libGitWrap/ObjectId.h"
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 #include "MacGitver/FSWatcher.h"
 
 #include "SubmodulesView.h"

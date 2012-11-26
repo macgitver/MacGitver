@@ -21,8 +21,8 @@
 #include "HistoryConfigPage.h"
 #include "HistoryDetails.h"
 
-HistoryConfigPage::HistoryConfigPage( IConfigDialog* dlg )
-    : IConfigPage( dlg )
+HistoryConfigPage::HistoryConfigPage( ConfigDialog* dlg )
+    : ConfigPage( dlg )
 {
     setupUi( this );
     init();
@@ -92,11 +92,6 @@ QString HistoryConfigPage::pageName() const
 QString HistoryConfigPage::groupName() const
 {
     return trUtf8( "Views" );
-}
-
-QWidget* HistoryConfigPage::widget()
-{
-    return this;
 }
 
 void HistoryConfigPage::onDiffPosChanged( int newPos )

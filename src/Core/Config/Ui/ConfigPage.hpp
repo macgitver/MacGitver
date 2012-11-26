@@ -14,18 +14,36 @@
  *
  */
 
-#ifndef MGV_I_MAINWINDOW_H
-#define MGV_I_MAINWINDOW_H
+#ifndef MGV_I_CONFIG_PAGE_H
+#define MGV_I_CONFIG_PAGE_H
 
-#include "libHeaven/Views/View.h"
+#include <QWidget>
 
-class IMainWindow
+#include "MacGitverApi.hpp"
+
+class ConfigDialog;
+
+class MGV_CORE_API ConfigPage : public QWidget
 {
-public:
-    virtual void integrateView( Heaven::View* view, Heaven::Positions position ) = 0;
-    virtual QWidget* widget() = 0;
+    Q_OBJECT
 
-    virtual void activateMode( const QString& modeName ) = 0;
+public:
+    ConfigPage( ConfigDialog* dlg );
+    virtual ~ConfigPage();
+
+public:
+    virtual QByteArray pageId() const = 0;
+    virtual QString pageName() const = 0;
+    virtual QByteArray groupId() const = 0;
+    virtual QString groupName() const = 0;
+
+    virtual void apply() = 0;
+
+protected:
+    void setModified( bool value = true );
+
+private:
+    ConfigDialog*   mDialog;
 };
 
 #endif

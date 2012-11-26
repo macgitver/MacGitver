@@ -14,18 +14,17 @@
  *
  */
 
-#include "MacGitver/MacGitver.h"
+#include "App/MacGitver.hpp"
 
 #include "Config/Config.h"
 #include "Config/UserLevelDefinition.h"
 
-#include "GeneralConfigPage.h"
+#include "GeneralConfigPage.hpp"
 
 #include "ui_GeneralConfigPage.h"
 
-GeneralConfigPage::GeneralConfigPage( IConfigDialog* dlg )
-    : QWidget()
-    , IConfigPage( dlg )
+GeneralConfigPage::GeneralConfigPage( ConfigDialog* dlg )
+    : ConfigPage( dlg )
     , ui( new Ui::GeneralConfigPage )
 {
     ui->setupUi( this );

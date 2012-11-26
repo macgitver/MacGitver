@@ -16,16 +16,10 @@
 
 #include <QtPlugin>
 
-#include "Interfaces/IMainWindow.h"
-
 #include "WorkingTreeModule.h"
 #include "IndexWidget.h"
 
 WorkingTreeModule::WorkingTreeModule()
-{
-}
-
-void WorkingTreeModule::setupConfigPages( IConfigDialog* dialog )
 {
 }
 

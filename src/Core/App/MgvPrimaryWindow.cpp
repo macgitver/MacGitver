@@ -31,10 +31,12 @@
 
 #include "libHeaven/App/Application.hpp"
 #include "libHeaven/Views/Mode.h"
+#include "libHeaven/Views/TopLevelWidget.h"
 #include "libHeaven/Widgets/FooterWidget.hpp"
 
 #include "App/MacGitver.hpp"
 #include "App/MgvPrimaryWindow.hpp"
+#include "App/MgvPrimaryWindowPrivate.hpp"
 #include "MacGitver/Modules.h"
 #include "Config/Config.h"
 #include "Config/Ui/ConfigDialog.hpp"
@@ -43,10 +45,16 @@
 
 #include "ui_AboutDlg.h"
 
+MgvPrimaryWindowPrivate::MgvPrimaryWindowPrivate()
+    : currentLevel()
+    , repo()
+{
+}
+
 MgvPrimaryWindow::MgvPrimaryWindow()
     : Heaven::PrimaryWindow()
-    , mRepo()
 {
+    d = new MgvPrimaryWindowPrivate;
     setupUi();
 
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
@@ -71,6 +79,7 @@ MgvPrimaryWindow::MgvPrimaryWindow()
 
 MgvPrimaryWindow::~MgvPrimaryWindow()
 {
+    delete d;
 }
 
 void MgvPrimaryWindow::setupUi()
@@ -117,17 +126,17 @@ void MgvPrimaryWindow::activateLevel( UserLevelDefinition::Ptr uld )
         modeNames.append( mode->name() );
     }
 
-    mCurrentLevel = uld;
+    d->currentLevel = uld;
 
     activateModeForRepo();
 }
 
 void MgvPrimaryWindow::activateModeForRepo()
 {
-    QString preset = QLatin1String( mRepo.isValid() ? "Normal" : "Welcome" );
+    QString preset = QLatin1String( d->repo.isValid() ? "Normal" : "Welcome" );
 
-    QString configPath = mCurrentLevel->id() % QChar( L'/' ) % preset;
-    QString modeName = Config::self().get( configPath, mCurrentLevel->preset( preset ) ).toString();
+    QString configPath = d->currentLevel->id() % QChar( L'/' ) % preset;
+    QString modeName = Config::self().get( configPath, d->currentLevel->preset( preset ) ).toString();
 
     activateMode( modeName );
 }
@@ -216,7 +225,7 @@ void MgvPrimaryWindow::activateMode( const QString& modeName )
 
     topLevelContainer()->clear();
 
-    UserLevelMode::Ptr mode = mCurrentLevel->mode( modeName );
+    UserLevelMode::Ptr mode = d->currentLevel->mode( modeName );
 
     UserLevelDefaultLayout::Ptr layout = mode->defaultLayout();
 
@@ -225,7 +234,7 @@ void MgvPrimaryWindow::activateMode( const QString& modeName )
 
 void MgvPrimaryWindow::repositoryChanged( const Git::Repository& repo )
 {
-    mRepo = repo;
+    d->repo = repo;
     activateModeForRepo();
 }
 

@@ -20,12 +20,12 @@
 #include "libGitWrap/Repository.h"
 
 #include "libHeaven/App/PrimaryWindow.hpp"
-#include "libHeaven/Views/TopLevelWidget.h"
-#include "libHeaven/Widgets/ModeSwitchWidget.h"
 
 #include "Config/UserLevelDefinition.h"
 
 #include "hic_MgvPrimaryWindowActions.h"
+
+class MgvPrimaryWindowPrivate;
 
 class MgvPrimaryWindow : public Heaven::PrimaryWindow, private MgvPrimaryWindowActions
 {
@@ -58,8 +58,7 @@ private:
                               UserLevelDefaultLayoutEntry::Ptr entry );
 
 private:
-    UserLevelDefinition::Ptr    mCurrentLevel;
-    Git::Repository             mRepo;
+    MgvPrimaryWindowPrivate* d;
 };
 
 #endif

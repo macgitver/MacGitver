@@ -67,6 +67,7 @@ MACRO(QT_MOC SourcesVar )
 
     SET( _mocer ${CMAKE_CURRENT_BINARY_DIR}/MocFiles.cpp )
     FILE( WRITE ${_mocer} "// MOC files for ${CMAKE_CURRENT_PROJECT_NAME}\n\n" )
+    SET_SOURCE_FILES_PROPERTIES( ${_mocer} PROPERTIES GENERATED TRUE )
 
     FOREACH( _current_FILE ${_mocfiles} )
         FILE( APPEND ${_mocer} "#include \"${_current_FILE}\"\n" )

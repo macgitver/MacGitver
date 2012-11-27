@@ -25,12 +25,14 @@ class QTreeWidgetItem;
 
 #include "Config/Ui/ConfigPage.hpp"
 
+#include "libHeaven/App/Dialog.hpp"
+
 namespace Ui
 {
     class ConfigDialog;
 }
 
-class ConfigDialog : public QDialog
+class ConfigDialog : public Heaven::Dialog
 {
     Q_OBJECT
 public:

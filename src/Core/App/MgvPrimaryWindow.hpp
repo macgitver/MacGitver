@@ -19,6 +19,7 @@
 
 #include "libGitWrap/Repository.h"
 
+#include "libHeaven/Views/View.h"       // Remove this along with the method that requires it!
 #include "libHeaven/App/PrimaryWindow.hpp"
 
 #include "Config/UserLevelDefinition.h"

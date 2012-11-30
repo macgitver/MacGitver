@@ -48,7 +48,7 @@ MACRO(QT_MOC SourcesVar )
                 IF(_match)
 
                     GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
-                    SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp.moc)
+                    SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
                     QT5_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
 
                     LIST( APPEND _mocfiles ${_moc} )
@@ -65,15 +65,7 @@ MACRO(QT_MOC SourcesVar )
 
     ENDFOREACH()
 
-    SET( _mocer ${CMAKE_CURRENT_BINARY_DIR}/MocFiles.cpp )
-    FILE( WRITE ${_mocer} "// MOC files for ${CMAKE_CURRENT_PROJECT_NAME}\n\n" )
-    SET_SOURCE_FILES_PROPERTIES( ${_mocer} PROPERTIES GENERATED TRUE )
-
-    FOREACH( _current_FILE ${_mocfiles} )
-        FILE( APPEND ${_mocer} "#include \"${_current_FILE}\"\n" )
-    ENDFOREACH()
-
-    LIST( APPEND ${SourcesVar} ${_mocfiles} ${_mocer} )
+    LIST( APPEND ${SourcesVar} ${_mocfiles} )
 
 ENDMACRO(QT_MOC)
 

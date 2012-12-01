@@ -46,7 +46,8 @@ IndexWidget::IndexWidget()
 
     setupActions( this );
 
-//  l->addWidget( tbWorkingTree->toolBarFor( this ) );
+    setToolBar( tbWorkingTree );
+    setViewName( trUtf8( "Working tree" ) );
 
     mDiffView = new DiffViews::RawView;
 
@@ -56,8 +57,6 @@ IndexWidget::IndexWidget()
 
     l->addWidget( mSplitter );
     setLayout( l );
-
-    setViewName( trUtf8( "Working tree" ) );
 
     mFilterRecursion = true;
     WorkingTreeFilters filters = mTreeView->filters();

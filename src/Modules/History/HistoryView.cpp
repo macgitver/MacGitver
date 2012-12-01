@@ -47,6 +47,8 @@ HistoryView::HistoryView()
     mVertSplit = mHorzSplit = NULL;
 
     setViewName( trUtf8( "History" ) );
+    setToolBar( tbHistoryViewToolBar );
+
     setSizePolicy( QSizePolicy::MinimumExpanding,
                    QSizePolicy::MinimumExpanding );
 
@@ -68,7 +70,6 @@ HistoryView::HistoryView()
     QVBoxLayout* l = new QVBoxLayout;
     l->setSpacing( 0 );
     l->setMargin( 0 );
-//    l->addWidget( tbHistoryViewToolBar->toolBarFor( this ) );
     setLayout( l );
     initSplitters();
 

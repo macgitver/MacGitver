@@ -38,7 +38,8 @@ RepoManager::~RepoManager()
 
 void RepoManager::open()
 {
-    QFileDialog *fd = new QFileDialog( Heaven::primaryWindow() );
+    QWidget* parent = Heaven::primaryWindow();
+    QFileDialog *fd = new QFileDialog( parent );
 #ifdef Q_OS_MAC
     fd->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
 #else
@@ -53,9 +54,14 @@ void RepoManager::open()
 
     fd->setWindowTitle( trUtf8("Open a git repository") );
 
-    fd->open(this, SLOT(onRepositoryOpenHelper()));
-}
+    fd->open( this, SLOT(onRepositoryOpenHelper()) );
 
+#ifdef Q_OS_MAC
+    // workaround for osx sheets without a parent
+    if (parent == 0)
+        fd->exec();
+#endif
+}
 
 void RepoManager::onRepositoryOpenHelper()
 {

@@ -23,7 +23,10 @@ SET( RCC_FILES
 QT_RCC( RCC_DATA QRC_FILES ${RCC_FILES} )
 
 ADD_QT_EXECUTABLE(
-    MacGitver WIN32
+    MacGitver
+
+    MACOSX_BUNDLE
+    WIN32
 
     ${SRC_FILES}
 #   ${HDR_FILES}
@@ -43,13 +46,15 @@ TARGET_LINK_LIBRARIES(
 IF( UNIX )
 
     INSTALL(
-        TARGETS		MacGitver
-        RUNTIME		DESTINATION bin
-        LIBRARY		DESTINATION bin
+        TARGETS     MacGitver
+        BUNDLE      DESTINATION bin
+        RUNTIME     DESTINATION bin
+        LIBRARY     DESTINATION bin
     )
 
-    SET_TARGET_PROPERTIES(	MacGitver
-        PROPERTIES			INSTALL_RPATH "\$ORIGIN/macgitver/lib:\$ORIGIN/macgitver/modules:\$ORIGIN/"
+    SET_TARGET_PROPERTIES(  MacGitver
+        PROPERTIES          INSTALL_RPATH "\$ORIGIN/macgitver/lib:\$ORIGIN/macgitver/modules:\$ORIGIN/"
     )
 
 ENDIF()
+

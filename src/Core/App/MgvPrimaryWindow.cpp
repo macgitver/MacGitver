@@ -94,7 +94,47 @@ void MgvPrimaryWindow::setupUi()
 
     statusBar()->addWidget( new RepoStateWidget );
 
-    moveToCenter();
+    if( Config::self().get( "FullScreen" ).toBool() )
+    {
+        // Useless on MacOSX with Qt < 5.0
+        // should add a .mm file to enable the full-screen feature
+        // Since: showFullScreen() at least _looks_ like clicking the full-screen icon. Maybe it's
+        //        even working the same way.
+        showFullScreen();
+    }
+    else
+    {
+        QRect r = Config::self().get( "Geometry" ).toRect();
+        if( r.isEmpty() )
+        {
+            moveToCenter();
+        }
+        else
+        {
+            resize( r.size() );
+            move( r.topLeft() );
+        }
+    }
+}
+
+void MgvPrimaryWindow::savePosition()
+{
+    Config& c = Config::self();
+    c.set( "FullScreen", isFullScreen() );
+    c.set( "Geometry", geometry() );
+    c.saveSettings();
+}
+
+void MgvPrimaryWindow::closeEvent( QCloseEvent* ev )
+{
+    savePosition();
+    Heaven::PrimaryWindow::closeEvent( ev );
+}
+
+void MgvPrimaryWindow::onQuit()
+{
+    savePosition();
+    qApp->quit();
 }
 
 void MgvPrimaryWindow::setupFonts()

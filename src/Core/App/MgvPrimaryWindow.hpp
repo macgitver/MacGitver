@@ -42,6 +42,7 @@ public slots:
     void repositoryChanged( const Git::Repository& repo );
 
 private slots:
+    void onQuit();
     void onHelpAbout();
     void onToolsPreferences();
     void setupFonts();
@@ -53,10 +54,14 @@ public:
     void addError( const QString& err );
 
 private:
+    void savePosition();
     void moveToCenter();
     void activateModeForRepo();
     void createPartialLayout( Heaven::ViewContainer* parent,
                               UserLevelDefaultLayoutEntry::Ptr entry );
+
+protected:
+    void closeEvent( QCloseEvent* ev );
 
 private:
     MgvPrimaryWindowPrivate* d;

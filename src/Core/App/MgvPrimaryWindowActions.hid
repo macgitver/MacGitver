@@ -33,8 +33,7 @@ Ui MgvPrimaryWindowActions {
                 Text            "&Quit";
                 StatusToolTip   "Terminate MacGitver.";
 
-                _ConnectContext qApp;
-                _ConnectTo      quit();
+                _ConnectTo      onQuit();
             };
 
         };

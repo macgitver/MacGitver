@@ -29,7 +29,7 @@
 #include "libGitWrap/ObjectTree.h"
 #include "libGitWrap/DiffList.h"
 
-#include "libDiffViews/RawView/RawView.hpp"
+#include "libDiffViews/Views/Raw/RawView.hpp"
 
 
 #include "Widgets/SHA1Input.h"

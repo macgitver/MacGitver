@@ -23,7 +23,7 @@
 #include "libGitWrap/DiffList.h"
 
 #include "libDiffViews/Model/FilePatch.hpp"
-#include "libDiffViews/RawView/RawView.hpp"
+#include "libDiffViews/Views/Raw/RawView.hpp"
 
 #include "App/MacGitver.hpp"
 #include "MacGitver/FSWatcher.h"

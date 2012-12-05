@@ -31,7 +31,7 @@ class QComboBox;
 
 namespace DiffViews
 {
-    class RawView;
+    class DiffView;
 }
 
     //Libs/Widgets
@@ -73,21 +73,21 @@ private:
         DTT_Tag = -9
     };
 
-    DiffViews::RawView* mDiffView;
-    QToolBar*           mToolbar;
-    QComboBox*          mDiffTo;
-    FlatTreeComboBox*   mDiffToBranch;
-    FlatTreeComboBox*   mDiffToTag;
-    QComboBox*          mDiffToParent;
-    SHA1Input*          mDiffToSha1;
-    ShortCommitModel*   mParentsModel;
-    QTreeView*          mParentsList;
+    DiffViews::DiffView*    mDiffView;
+    QToolBar*               mToolbar;
+    QComboBox*              mDiffTo;
+    FlatTreeComboBox*       mDiffToBranch;
+    FlatTreeComboBox*       mDiffToTag;
+    QComboBox*              mDiffToParent;
+    SHA1Input*              mDiffToSha1;
+    ShortCommitModel*       mParentsModel;
+    QTreeView*              mParentsList;
 
     QHash< DiffToTypes,
-        QAction* >      mDiffToActions;
+        QAction* >          mDiffToActions;
 
-    Git::Repository     mRepo;
-    Git::ObjectCommit   mCommit;
+    Git::Repository         mRepo;
+    Git::ObjectCommit       mCommit;
 };
 
 #endif

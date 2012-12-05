@@ -29,8 +29,8 @@
 #include "libGitWrap/ObjectTree.h"
 #include "libGitWrap/DiffList.h"
 
-#include "libDiffViews/Views/Raw/RawView.hpp"
-
+#include "libDiffViews/Views/Interfaces/DiffViews.hpp"
+#include "libDiffViews/Views/Interfaces/DiffView.hpp"
 
 #include "Widgets/SHA1Input.h"
 #include "Widgets/ShortCommitModel.h"
@@ -43,7 +43,7 @@
 
 HistoryDiff::HistoryDiff()
 {
-    mDiffView = new DiffViews::RawView();
+    mDiffView = DiffViews::DiffViews::self().defaultCreator()->create( this );
 
     QVBoxLayout* l = new QVBoxLayout;
     l->setMargin( 0 );
@@ -52,7 +52,7 @@ HistoryDiff::HistoryDiff()
 
     mToolbar = new QToolBar;
 
-    mDiffTo = new QComboBox();
+    mDiffTo = new QComboBox;
     mDiffTo->addItem( trUtf8( "Workingtree" ), DTT_WT );
     mDiffTo->addItem( trUtf8( "Index" ), DTT_Index );
     mDiffTo->addItem( trUtf8( "Workingtree + Index" ), DTT_WT_and_Index );

@@ -28,7 +28,7 @@ class QSplitter;
 
 namespace DiffViews
 {
-    class RawView;
+    class DiffView;
 }
 
 class WorkingTreeModel;
@@ -61,12 +61,12 @@ private:
     void setTreeFilter( WorkingTreeFilters filters );
 
 private:
-    Heaven::MiniSplitter*	mSplitter;
-    WorkingTreeItemView*	mTreeView;
-    WorkingTreeModel*		mModel;
-    DiffViews::RawView*		mDiffView;
-    Git::Repository			mRepo;
-    bool					mFilterRecursion;
+    Heaven::MiniSplitter*   mSplitter;
+    WorkingTreeItemView*    mTreeView;
+    WorkingTreeModel*       mModel;
+    DiffViews::DiffView*    mDiffView;
+    Git::Repository         mRepo;
+    bool                    mFilterRecursion;
 };
 
 #endif

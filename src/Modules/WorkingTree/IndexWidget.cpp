@@ -23,7 +23,8 @@
 #include "libGitWrap/DiffList.h"
 
 #include "libDiffViews/Model/FilePatch.hpp"
-#include "libDiffViews/Views/Raw/RawView.hpp"
+#include "libDiffViews/Views/Interfaces/DiffView.hpp"
+#include "libDiffViews/Views/Interfaces/DiffViews.hpp"
 
 #include "App/MacGitver.hpp"
 #include "MacGitver/FSWatcher.h"
@@ -49,7 +50,7 @@ IndexWidget::IndexWidget()
     setToolBar( tbWorkingTree );
     setViewName( trUtf8( "Working tree" ) );
 
-    mDiffView = new DiffViews::RawView;
+    mDiffView = DiffViews::DiffViews::self().defaultCreator()->create( this );
 
     mSplitter = new Heaven::MiniSplitter( Qt::Horizontal );
     mSplitter->addWidget( mTreeView );

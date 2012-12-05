@@ -32,6 +32,14 @@ MACRO(ADD_MGV_MODULE _Name )
 
     ENDIF()
 
+    IF( APPLE )
+        # This is probably bad...
+        SET_TARGET_PROPERTIES(
+            ${_Target}
+            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY    "${CMAKE_BINARY_DIR}/bin/MacGitver.app/Contents/MacOS"
+        )
+    ENDIF()
+
 ENDMACRO(ADD_MGV_MODULE)
 
 INCLUDE_DIRECTORIES( ${MGV_CORE_SOURCE_DIR} )

@@ -28,6 +28,10 @@ WorkingTreeItemView::WorkingTreeItemView()
     QVariant v = Config::self().get( QLatin1String( "Worktree/Filters" ),
                                      int( WTF_All ) );
     mFilters = WorkingTreeFilters( v.toInt() );
+
+    #ifdef Q_OS_MACX
+    setAttribute( Qt::WA_MacShowFocusRect, false );
+    #endif
 }
 
 void WorkingTreeItemView::setRepository( const Git::Repository& repo )

@@ -26,6 +26,10 @@ HistoryList::HistoryList()
     : ConfigUser( "History" )
 {
     setRootIsDecorated( false );
+
+    #ifdef Q_OS_MACX
+    setAttribute( Qt::WA_MacShowFocusRect, false );
+    #endif
 }
 
 void HistoryList::onCurrentChanged()

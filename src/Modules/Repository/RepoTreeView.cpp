@@ -30,6 +30,9 @@ RepoTreeView::RepoTreeView()
 
     mRepos = new QTreeView;
     mRepos->setFrameShape( QFrame::NoFrame );
+    #ifdef Q_OS_MACX
+    mRepos->setAttribute( Qt::WA_MacShowFocusRect, false );
+    #endif
     mRepos->setModel( new RepositoryInfoModel() );
     mSplitter->addWidget( mRepos );
 

@@ -123,13 +123,18 @@ bool GitPatchConsumer::appendAddition( const QString& content )
                 qPrintable( content ) );
         #endif
 
-        if( mCurType == None || mCurType == Context || mCurType == Change || mCurType == Del )
+        if( mCurType == None || mCurType == Context || mCurType == Change )
         {
-            mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Delete );
+            mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Insert );
             mCurHunk->addPart( mCurDiff );
             mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
             mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
-            mCurType = Del;
+            mCurType = Add;
+        }
+        else if( mCurType == Del )
+        {
+            mCurType = Change;
+            mCurDiff->setType( DiffViews::HunkPart::Change );
         }
         //else mCurType == Add
 
@@ -150,18 +155,13 @@ bool GitPatchConsumer::appendDeletion( const QString& content )
                 qPrintable( content ) );
         #endif
 
-        if( mCurType == None || mCurType == Context )
+        if( mCurType == None || mCurType == Context || mCurType == Add )
         {
             mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Delete );
             mCurHunk->addPart( mCurDiff );
             mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
             mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
             mCurType = Del;
-        }
-        else if( mCurType == Add )
-        {
-            mCurType = Change;
-            mCurDiff->setType( DiffViews::HunkPart::Change );
         }
         // Else we're 'Change' or 'Del', and can just append
 

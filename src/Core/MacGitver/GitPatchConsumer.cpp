@@ -16,6 +16,7 @@
 
 #include "GitPatchConsumer.hpp"
 
+#include "libDiffViews/Model/BinaryFilePatch.hpp"
 #include "libDiffViews/Model/TextFilePatch.hpp"
 
 #define DBG 0
@@ -41,8 +42,18 @@ bool GitPatchConsumer::startFile( const QString& oldPath, const QString& newPath
             isBinary ? "Bin" : "Txt" );
     #endif
 
-    mCurFile = new DiffViews::TextFilePatch( QStringList() << oldPath << newPath );
-    mPatch->addPath( mCurFile );
+    if( isBinary )
+    {
+        mCurFile = NULL;
+        DiffViews::FilePatch::Ptr bfp;
+        bfp = new DiffViews::BinaryFilePatch( QStringList() << oldPath << newPath );
+        mPatch->addPath( bfp );
+    }
+    else
+    {
+        mCurFile = new DiffViews::TextFilePatch( QStringList() << oldPath << newPath );
+        mPatch->addPath( mCurFile );
+    }
 
     return false;
 }
@@ -50,102 +61,114 @@ bool GitPatchConsumer::startFile( const QString& oldPath, const QString& newPath
 bool GitPatchConsumer::startHunk( int newStart, int newLines, int oldStart, int oldLines,
                                   const QString& header )
 {
-    #if DBG
-    qDebug( "    Hunk: %i,%i %i,%i (%s)",
-            newStart, newLines,
-            oldStart, oldLines,
-            qPrintable( header ) );
-    #endif
+    if( mCurFile )
+    {
+        #if DBG
+        qDebug( "    Hunk: %i,%i %i,%i (%s)",
+                newStart, newLines,
+                oldStart, oldLines,
+                qPrintable( header ) );
+        #endif
 
-    mRemainsNew = newLines;
-    mRemainsOld = oldLines;
+        mRemainsNew = newLines;
+        mRemainsOld = oldLines;
 
-    mCurNew = newStart;
-    mCurOld = oldStart;
+        mCurNew = newStart;
+        mCurOld = oldStart;
 
-    mCurType = None;
-    mCurHunk = new DiffViews::Hunk();
-    mCurFile->asTextFilePatch()->addHunk( mCurHunk );
+        mCurType = None;
+        mCurHunk = new DiffViews::Hunk();
+        mCurFile->asTextFilePatch()->addHunk( mCurHunk );
+    }
 
     return false;
 }
 
 bool GitPatchConsumer::appendContext( const QString& content )
 {
-    #if DBG
-    qDebug( "        Ctx:'%s'",
-            qPrintable( content ) );
-    #endif
-
-    if( mCurType != Context )
+    if( mCurFile )
     {
-        mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Context );
-        mCurHunk->addPart( mCurDiff );
-        mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
-        mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
-        mCurType = Context;
+        #if DBG
+        qDebug( "        Ctx:'%s'",
+                qPrintable( content ) );
+        #endif
+
+        if( mCurType != Context )
+        {
+            mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Context );
+            mCurHunk->addPart( mCurDiff );
+            mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
+            mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
+            mCurType = Context;
+        }
+
+        mCurDiff->sideLines( 0 )->addLine( content );
+        mCurDiff->sideLines( 1 )->addLine( content );
+
+        ++mCurNew;
+        ++mCurOld;
+        --mRemainsNew;
+        --mRemainsOld;
     }
-
-    mCurDiff->sideLines( 0 )->addLine( content );
-    mCurDiff->sideLines( 1 )->addLine( content );
-
-    ++mCurNew;
-    ++mCurOld;
-    --mRemainsNew;
-    --mRemainsOld;
 
     return false;
 }
 
 bool GitPatchConsumer::appendAddition( const QString& content )
 {
-    #if DBG
-    qDebug( "        Add:'%s'",
-            qPrintable( content ) );
-    #endif
-
-    if( mCurType == None || mCurType == Context || mCurType == Change || mCurType == Del )
+    if( mCurFile )
     {
-        mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Delete );
-        mCurHunk->addPart( mCurDiff );
-        mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
-        mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
-        mCurType = Del;
-    }
-    //else mCurType == Add
+        #if DBG
+        qDebug( "        Add:'%s'",
+                qPrintable( content ) );
+        #endif
 
-    ++mCurNew;
-    --mRemainsNew;
-    mCurDiff->sideLines( 1 )->addLine( content );
+        if( mCurType == None || mCurType == Context || mCurType == Change || mCurType == Del )
+        {
+            mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Delete );
+            mCurHunk->addPart( mCurDiff );
+            mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
+            mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
+            mCurType = Del;
+        }
+        //else mCurType == Add
+
+        ++mCurNew;
+        --mRemainsNew;
+        mCurDiff->sideLines( 1 )->addLine( content );
+    }
 
     return false;
 }
 
 bool GitPatchConsumer::appendDeletion( const QString& content )
 {
-    #if DBG
-    qDebug( "        Del:'%s'",
-            qPrintable( content ) );
-    #endif
-
-    if( mCurType == None || mCurType == Context )
+    if( mCurFile )
     {
-        mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Delete );
-        mCurHunk->addPart( mCurDiff );
-        mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
-        mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
-        mCurType = Del;
-    }
-    else if( mCurType == Add )
-    {
-        mCurType = Change;
-        mCurDiff->setType( DiffViews::HunkPart::Change );
-    }
-    // Else we're 'Change' or 'Del', and can just append
+        #if DBG
+        qDebug( "        Del:'%s'",
+                qPrintable( content ) );
+        #endif
 
-    ++mCurOld;
-    --mRemainsOld;
-    mCurDiff->sideLines( 0 )->addLine( content );
+        if( mCurType == None || mCurType == Context )
+        {
+            mCurDiff = new DiffViews::HunkPart( 2, DiffViews::HunkPart::Delete );
+            mCurHunk->addPart( mCurDiff );
+            mCurDiff->sideLines( 0 )->setFirstLine( mCurOld );
+            mCurDiff->sideLines( 1 )->setFirstLine( mCurNew );
+            mCurType = Del;
+        }
+        else if( mCurType == Add )
+        {
+            mCurType = Change;
+            mCurDiff->setType( DiffViews::HunkPart::Change );
+        }
+        // Else we're 'Change' or 'Del', and can just append
+
+        ++mCurOld;
+        --mRemainsOld;
+        mCurDiff->sideLines( 0 )->addLine( content );
+    }
 
     return false;
 }

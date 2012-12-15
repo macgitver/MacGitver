@@ -18,7 +18,16 @@ MACRO(ADD_MGV_MODULE _Name )
         GitWrap Heaven MacGitverCore
     )
 
-    IF( UNIX )
+    IF( APPLE )
+
+        # This is probably bad...
+        SET_TARGET_PROPERTIES(
+            ${_Target}
+            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY
+                        "${CMAKE_BINARY_DIR}/bin/MacGitver.app/Contents/MacOS"
+        )
+
+    ELSEIF( UNIX )
 
         SET_TARGET_PROPERTIES(	${_Target}
             PROPERTIES  INSTALL_RPATH "\$ORIGIN/../lib:\$ORIGIN/"
@@ -30,14 +39,6 @@ MACRO(ADD_MGV_MODULE _Name )
             LIBRARY     DESTINATION bin/macgitver/modules
         )
 
-    ENDIF()
-
-    IF( APPLE )
-        # This is probably bad...
-        SET_TARGET_PROPERTIES(
-            ${_Target}
-            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY    "${CMAKE_BINARY_DIR}/bin/MacGitver.app/Contents/MacOS"
-        )
     ENDIF()
 
 ENDMACRO(ADD_MGV_MODULE)

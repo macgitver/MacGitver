@@ -19,7 +19,9 @@ Ui RepositoryActions {
     Container RepositoryMenuAC {
 
         Action RepositoryOpen {
-            Text        "&Open...";
+            Text                "Open...";
+            Shortcut            "Ctrl+O";
+            //ShortcutContext     Qt::ApplicationShortcut;
             _ConnectTo  onRepositoryOpen();
         };
 

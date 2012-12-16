@@ -21,8 +21,8 @@ Ui RepositoryActions {
         Action RepositoryOpen {
             Text                "Open...";
             Shortcut            "Ctrl+O";
-            //ShortcutContext     Qt::ApplicationShortcut;
-            _ConnectTo  onRepositoryOpen();
+            ShortcutContext     ApplicationShortcut;
+            _ConnectTo          onRepositoryOpen();
         };
 
         Action RepositoryClose {

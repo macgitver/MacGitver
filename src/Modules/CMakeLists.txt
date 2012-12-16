@@ -24,19 +24,25 @@ MACRO(ADD_MGV_MODULE _Name )
         SET_TARGET_PROPERTIES(
             ${_Target}
             PROPERTIES  LIBRARY_OUTPUT_DIRECTORY
-                        "${CMAKE_BINARY_DIR}/bin/MacGitver.app/Contents/MacOS"
+                        "${CMAKE_BINARY_DIR}/${UTILS_APP_NAME}.app/Contents/MacOS/modules"
         )
 
     ELSEIF( UNIX )
 
-        SET_TARGET_PROPERTIES(	${_Target}
-            PROPERTIES  INSTALL_RPATH "\$ORIGIN/../lib:\$ORIGIN/"
+        SET_TARGET_PROPERTIES(
+            ${_Target}
+            PROPERTIES  INSTALL_RPATH
+                        "\$ORIGIN/../lib:\$ORIGIN/"
+                        LIBRARY_OUTPUT_DIRECTORY
+                        "${CMAKE_BINARY_DIR}/bin/mgv/modules"
         )
+
+    ELSEIF( WIN32 )
 
         INSTALL(
             TARGETS     ${_Target}
-            RUNTIME     DESTINATION bin/macgitver/modules
-            LIBRARY     DESTINATION bin/macgitver/modules
+            RUNTIME     DESTINATION bin/modules
+            LIBRARY     DESTINATION bin/modules
         )
 
     ENDIF()

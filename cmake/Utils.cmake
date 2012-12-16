@@ -16,17 +16,58 @@ IF( UNIX )
 ENDIF()
 
 MACRO( SET_OUTPUT_PATHS )
-    SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin )
-    SET( LIBRARY_OUTPUT_PATH    ${CMAKE_BINARY_DIR}/bin )
+
+    IF( APPLE )
+        MESSAGE( STATUS "Build strategy for Mac OS X" )
+        # For MacOSX:
+        # Don't set EXECUTEABLE_OUTPUT_PATH
+        # But point LIBRARY_OUTPUT_PATH into the App-Bundle
+        SET( LIBRARY_OUTPUT_DIRECTORY
+             ${CMAKE_BINARY_DIR}/${UTILS_APP_NAME}.app/Contents/MacOSX
+        )
+
+    ELSEIF( WIN32 )
+        MESSAGE( STATUS "Build strategy for Windows" )
+        # For Windows:
+        # If we're an MSVC IDE Build, do nothing - otherwise treat same as unicies:
+        IF( NOT MSVC_IDE )
+            SET( EXECUTABLE_OUTPUT_DIRECTORY    ${CMAKE_BINARY_DIR}/bin )
+            SET( LIBRARY_OUTPUT_DIRECTORY       ${CMAKE_BINARY_DIR}/bin )
+        ENDIF()
+
+    ELSEIF( UNIX )
+        MESSAGE( STATUS "Build strategy for Linux/Unicies" )
+        # For linux and other unicies but not macosx, output binaries and libraries to
+        # $BUILD_DIR/bin
+
+        SET( EXECUTABLE_OUTPUT_DIRECTORY    ${CMAKE_BINARY_DIR}/bin )
+        SET( LIBRARY_OUTPUT_DIRECTORY       ${CMAKE_BINARY_DIR}/bin )
+
+    ELSE()
+
+        MESSAGE( FATAL_ERROR "Only MacOSX, Windows and linux is supported" )
+
+    ENDIF()
 ENDMACRO()
 
 # Turn the target ${_target} into a framework.
 #
 FUNCTION( SET_FRAMEWORK _target )
 
-    SET_TARGET_PROPERTIES( ${_target}
+    SET_TARGET_PROPERTIES(
+        ${_target}
         PROPERTIES  FRAMEWORK TRUE
     )
+
+    IF( APPLE )
+        # If we're actually on MacOSX, we set the lib-output-dir to Contetns/Frameworks instead
+        # Contets/MacOSX now
+        SET_TARGET_PROPERTIES(
+            ${_target}
+            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY
+                        ${CMAKE_BINARY_DIR}/${UTILS_APP_NAME}.app/Contents/Frameworks
+        )
+    ENDIF()
 
 ENDFUNCTION()
 
@@ -39,12 +80,35 @@ FUNCTION( INSTALL_FRAMEWORK _target _component )
 
     SET_FRAMEWORK( ${_target} )
 
-    IF( NOT APPLE )
+    IF( APPLE )
+        IF( UTILS_USE_PRIVATE_LIBS )
+
+            SET( dest "${UTILS_APP_NAME}.app/Contents/Frameworks" )
+
+            INSTALL(
+                TARGETS     ${_target}
+                FRAMEWORK   DESTINATION ${dest} COMPONENT ${_component}
+                BUNDLE      DESTINATION ${dest} COMPONENT ${_component}
+                RUNTIME     DESTINATION ${dest} COMPONENT ${_component}
+                LIBRARY     DESTINATION ${dest} COMPONENT ${_component}
+            )
+
+        ELSE()
+
+            MESSAGE( FATAL_ERROR
+                     "Erm, what shall we do if we're installing FWs and not using them privately?" )
+
+        ENDIF()
+
+    ELSE()
+
         INSTALL(
             TARGETS     ${_target}
             RUNTIME     DESTINATION bin COMPONENT ${_component}
             LIBRARY     DESTINATION lib COMPONENT ${_component}
         )
+
     ENDIF()
 
 ENDFUNCTION()
+

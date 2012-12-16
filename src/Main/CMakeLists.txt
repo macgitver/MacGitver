@@ -60,11 +60,6 @@ ENDIF()
 #--------------------------------------------------------------------------------
 # installation stuff below
 #--------------------------------------------------------------------------------
-set(CPACK_PACKAGE_NAME                  "MacGitver" )
-set(CPACK_PACKAGE_FILE_NAME             "MacGitver-v0.1.0" )
-set(CPACK_PACKAGE_VERSION               "0.1.0" )
-set(CPACK_PACKAGE_CONTACT               "MacGitver-Developers <macgitver@babbelbox.org>" )
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY   "A platform independent Git user interface based on Qt." )
 
 SET(plugin_dest_dir bin)
 SET(qtconf_dest_dir bin)
@@ -83,7 +78,23 @@ ENDIF(WIN32)
 # Install needed Qt plugins by copying directories from the qt installation
 # One can cull what gets copied by using 'REGEX "..." EXCLUDE'
 #INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${plugin_dest_dir}/plugins COMPONENT Runtime)
-INSTALL(DIRECTORY "${QT_PLUGINS_DIR}" DESTINATION ${plugin_dest_dir}/plugins COMPONENT Runtime)
+INSTALL(
+    DIRECTORY   ${QT_PLUGINS_DIR}/imageformats
+    DESTINATION ${plugin_dest_dir}/plugins/imageformats
+    COMPONENT   Runtime
+)
+
+INSTALL(
+    DIRECTORY   ${QT_PLUGINS_DIR}/codecs
+    DESTINATION ${plugin_dest_dir}/plugins/codecs
+    COMPONENT   Runtime
+)
+
+INSTALL(
+    DIRECTORY   ${QT_PLUGINS_DIR}/iconengines
+    DESTINATION ${plugin_dest_dir}/plugins/iconengines
+    COMPONENT   Runtime
+)
 
 #--------------------------------------------------------------------------------
 # install a qt.conf file
@@ -99,16 +110,29 @@ INSTALL(CODE "
 # for dependencies.  If they are not system dependencies, they are copied.
 
 # directories to look for dependencies
-SET( DIRS ${QT_LIBRARY_DIRS} ${EXECUTABLE_OUTPUT_PATH} )
-IF(1)
-INSTALL( CODE "
-    file(GLOB_RECURSE QTPLUGINS
-      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-    file(GLOB_RECURSE MGVPLUGINS
-      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/*.mgv\")
-    include(BundleUtilities)
-    fixup_bundle(\"${APPS}\" \"\${QTPLUGINS};\${MGVPLUGINS}\" \"${DIRS}\")
-    " COMPONENT Runtime
-)
+SET( DIRS ${QT_LIBRARY_DIR} )
+
+IF( APPLE )
+
+    LIST( APPEND DIRS "${CMAKE_BINARY_DIR}/MacGitver.app/Contents/Frameworks" )
+
+ELSEIF( UNIX )
+
+    LIST( APPEND DIRS "${CMAKE_BINARY_DIR}/bin" )
+
+ELSEIF( WIN32 )
+
+    LIST( APPEND DIRS "${CMAKE_BINARY_DIR}/bin" )
 
 ENDIF()
+
+INSTALL( CODE "
+    CMAKE_POLICY( SET CMP0011 NEW )
+    CMAKE_POLICY( SET CMP0009 NEW )
+    file(GLOB_RECURSE PLUGINS
+      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\"
+      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/*.mgv\")
+    include(BundleUtilities)
+    fixup_bundle(\"${APPS}\" \"\${PLUGINS}\" \"${DIRS}\")
+    " COMPONENT Runtime
+)

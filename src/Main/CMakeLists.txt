@@ -43,16 +43,21 @@ TARGET_LINK_LIBRARIES(
     MacGitverCore
 )
 
+SET_TARGET_PROPERTIES(
+    MacGitver
+    PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+#--------------------------------------------------------------------------------
+# installation stuff below
+#--------------------------------------------------------------------------------
+
 INSTALL(
     TARGETS     MacGitver
     BUNDLE      DESTINATION .   COMPONENT Runtime
     RUNTIME     DESTINATION bin COMPONENT Runtime
     LIBRARY     DESTINATION lib COMPONENT Runtime
 )
-
-#--------------------------------------------------------------------------------
-# installation stuff below
-#--------------------------------------------------------------------------------
 
 IF( APPLE OR WIN32 )
     # directories to look for dependencies

@@ -112,7 +112,8 @@ FUNCTION( INSTALL_FRAMEWORK _target _component )
 
         SET_TARGET_PROPERTIES(
             ${_target}
-            PROPERTIES          INSTALL_RPATH "\$ORIGIN/../../lib:\$ORIGIN"
+            PROPERTIES  INSTALL_RPATH "\$ORIGIN/../../lib:\$ORIGIN"
+                        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${dest}
         )
 
         INSTALL(

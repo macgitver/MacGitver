@@ -31,6 +31,7 @@ Ui MgvPrimaryWindowActions {
 
             Action RepositoryQuit {
                 Text            "&Quit";
+                MenuRole        QuitRole;
                 StatusToolTip   "Terminate MacGitver.";
 
                 _ConnectTo      onQuit();

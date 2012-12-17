@@ -27,6 +27,11 @@ MACRO(ADD_MGV_MODULE _Name )
                         "${CMAKE_BINARY_DIR}/${UTILS_APP_NAME}.app/Contents/MacOS/modules"
         )
 
+        INSTALL(
+            TARGETS     ${_Target}
+            LIBRARY     DESTINATION ${UTILS_APP_NAME}.app/Contents/MacOS/modules
+        )
+
     ELSEIF( UNIX )
 
         SET_TARGET_PROPERTIES(

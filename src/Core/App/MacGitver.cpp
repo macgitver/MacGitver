@@ -20,6 +20,7 @@
 #include <QPluginLoader>
 #include <QTextStream>
 #include <QDomDocument>
+#include <QStringBuilder>
 
 #include "libGitWrap/GitWrap.hpp"
 
@@ -169,12 +170,13 @@ RepoManager* MacGitver::repoMan()
     return mRepoMan;
 }
 
-void MacGitver::loadModules()
+void MacGitver::searchModules( const QDir& binDir )
 {
-    QDir binDir( applicationDirPath() );
-
     QStringList modFiles;
     modFiles << QLatin1String( "Mod*.mgv" );
+
+    qDebug( "Searching for Modules in %s", qPrintable( binDir.absolutePath() ) );
+
     foreach( QString modName, binDir.entryList( modFiles ) )
     {
         QPluginLoader* loader = new QPluginLoader( binDir.filePath( modName ), this );
@@ -192,6 +194,22 @@ void MacGitver::loadModules()
             delete loader;
         }
     }
+
+}
+
+void MacGitver::loadModules()
+{
+    QDir binDir( applicationDirPath() );
+    searchModules( binDir );
+
+    binDir = QDir( applicationDirPath() % QLatin1String( "/modules" ) );
+    searchModules( binDir );
+    binDir.cdUp();
+
+    #ifdef Q_OS_UNIX
+    binDir = QDir( applicationDirPath() % QLatin1String( "/../libexec/MacGitver/modules" ) );
+    searchModules( binDir );
+    #endif
 
     mModules->initialize();
 }

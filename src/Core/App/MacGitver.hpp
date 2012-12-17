@@ -19,6 +19,8 @@
 
 #include <QApplication>
 
+class QDir;
+
 #include "MacGitverApi.hpp"
 #include "Interfaces/ILog.h"
 
@@ -81,6 +83,7 @@ signals:
 private:
     void loadModules();
     void loadLevels();
+    void searchModules( const QDir& binDir );
 
 private slots:
     void boot();

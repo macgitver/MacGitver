@@ -32,9 +32,14 @@ MACRO(ADD_MGV_MODULE _Name )
         SET_TARGET_PROPERTIES(
             ${_Target}
             PROPERTIES  INSTALL_RPATH
-                        "\$ORIGIN/../lib:\$ORIGIN/"
+                        "\$ORIGIN/..:\$ORIGIN/../../lib"
                         LIBRARY_OUTPUT_DIRECTORY
-                        "${CMAKE_BINARY_DIR}/bin/mgv/modules"
+                        "${CMAKE_BINARY_DIR}/libexec/${UTILS_APP_NAME}/modules"
+        )
+
+        INSTALL(
+            TARGETS     ${_Target}
+            LIBRARY     DESTINATION libexec/${UTILS_APP_NAME}/modules
         )
 
     ELSEIF( WIN32 )

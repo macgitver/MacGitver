@@ -100,6 +100,26 @@ FUNCTION( INSTALL_FRAMEWORK _target _component )
 
         ENDIF()
 
+    ELSEIF( UNIX )
+        # On unix we insall libraries to libexec/macgitver and executables to bin.
+        # That means, each library needs the "$ORIGIN" r-path.
+
+        IF( UTILS_USE_PRIVATE_LIBS )
+            SET( dest "libexec/${UTILS_APP_NAME}" )
+        ELSE()
+            SET( dest "lib" )
+        ENDIF()
+
+        SET_TARGET_PROPERTIES(
+            ${_target}
+            PROPERTIES          INSTALL_RPATH "\$ORIGIN/../../lib:\$ORIGIN"
+        )
+
+        INSTALL(
+            TARGETS     ${_target}
+            LIBRARY     DESTINATION ${dest} COMPONENT ${_component}
+        )
+
     ELSE()
 
         INSTALL(

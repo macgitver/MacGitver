@@ -73,7 +73,13 @@ IF( APPLE OR WIN32 )
 
         LIST( APPEND DIRS "${CMAKE_BINARY_DIR}/bin" )
 
+        SET(plugin_dest_dir . )
+        SET(qtconf_dest_dir . )
         SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/MacGitver.exe")
+
+        SET_TARGET_PROPERTIES(  MacGitver
+            PROPERTIES          RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+        )
 
     ENDIF()
 
@@ -81,18 +87,27 @@ IF( APPLE OR WIN32 )
         DIRECTORY   ${QT_PLUGINS_DIR}/imageformats
         DESTINATION ${plugin_dest_dir}/plugins/imageformats
         COMPONENT   Runtime
+        FILES_MATCHING
+        PATTERN     "*${CMAKE_SHARED_LIBRARY_SUFFIX}"
+        PATTERN     "*d4${CMAKE_SHARED_LIBRARY_SUFFIX}" EXCLUDE
     )
 
     INSTALL(
         DIRECTORY   ${QT_PLUGINS_DIR}/codecs
         DESTINATION ${plugin_dest_dir}/plugins/codecs
         COMPONENT   Runtime
+        FILES_MATCHING
+        PATTERN     "*${CMAKE_SHARED_LIBRARY_SUFFIX}"
+        PATTERN     "*d4${CMAKE_SHARED_LIBRARY_SUFFIX}" EXCLUDE
     )
 
     INSTALL(
         DIRECTORY   ${QT_PLUGINS_DIR}/iconengines
         DESTINATION ${plugin_dest_dir}/plugins/iconengines
         COMPONENT   Runtime
+        FILES_MATCHING
+        PATTERN     "*${CMAKE_SHARED_LIBRARY_SUFFIX}"
+        PATTERN     "*d4${CMAKE_SHARED_LIBRARY_SUFFIX}" EXCLUDE
     )
 
     INSTALL(CODE "

@@ -49,6 +49,18 @@ MACRO(ADD_MGV_MODULE _Name )
 
     ELSEIF( WIN32 )
 
+        SET_TARGET_PROPERTIES(
+            ${_Target}
+            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY_DEBUG
+                        "${CMAKE_BINARY_DIR}/bin/Debug/modules"
+                        LIBRARY_OUTPUT_DIRECTORY_RELEASE
+                        "${CMAKE_BINARY_DIR}/bin/Release/modules"
+                        LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL
+                        "${CMAKE_BINARY_DIR}/bin/MinSizeRel/modules"
+                        LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO
+                        "${CMAKE_BINARY_DIR}/bin/RelWithDebInfo/modules"
+        )
+
         INSTALL(
             TARGETS     ${_Target}
             RUNTIME     DESTINATION bin/modules

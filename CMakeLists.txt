@@ -32,7 +32,12 @@ SET( CPACK_PACKAGE_FILE_NAME             "MacGitver-v0.1.0" )
 SET( CPACK_PACKAGE_VERSION               "0.1.0" )
 SET( CPACK_PACKAGE_CONTACT               "MacGitver-Developers <macgitver@babbelbox.org>" )
 SET( CPACK_PACKAGE_DESCRIPTION_SUMMARY   "A platform independent Git user interface based on Qt." )
-SET( CPACK_BINARY_DRAGNDROP              ON )
+
+IF( APPLE )
+    SET( CPACK_BINARY_DRAGNDROP          ON )
+ELSEIF( WIN32 )
+    SET( CPACK_BINARY_NSIS               ON )
+ENDIF()
 
 INCLUDE( InstallRequiredSystemLibraries )
 INCLUDE( CPack )

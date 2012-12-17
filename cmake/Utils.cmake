@@ -30,10 +30,10 @@ MACRO( SET_OUTPUT_PATHS )
         MESSAGE( STATUS "Build strategy for Windows" )
         # For Windows:
         # If we're an MSVC IDE Build, do nothing - otherwise treat same as unicies:
-        IF( NOT MSVC_IDE )
+        #IF( NOT MSVC_IDE )
             SET( EXECUTABLE_OUTPUT_DIRECTORY    ${CMAKE_BINARY_DIR}/bin )
             SET( LIBRARY_OUTPUT_DIRECTORY       ${CMAKE_BINARY_DIR}/bin )
-        ENDIF()
+        #ENDIF()
 
     ELSEIF( UNIX )
         MESSAGE( STATUS "Build strategy for Linux/Unicies" )
@@ -121,7 +121,15 @@ FUNCTION( INSTALL_FRAMEWORK _target _component )
             LIBRARY     DESTINATION ${dest} COMPONENT ${_component}
         )
 
-    ELSE()
+    ELSEIF( WIN32 )
+
+        SET_TARGET_PROPERTIES(
+            ${_target}
+            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY
+                        "${CMAKE_BINARY_DIR}/bin"
+                        RUNTIME_OUTPUT_DIRECTORY
+                        "${CMAKE_BINARY_DIR}/bin"
+        )
 
         INSTALL(
             TARGETS     ${_target}

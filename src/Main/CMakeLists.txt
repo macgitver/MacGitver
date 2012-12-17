@@ -29,8 +29,6 @@ ADD_QT_EXECUTABLE(
     WIN32
 
     ${SRC_FILES}
-#   ${HDR_FILES}
-#   ${MOC_FILES}
     ${QRC_FILES}
     ${RCC_DATA}
 )
@@ -41,11 +39,6 @@ TARGET_LINK_LIBRARIES(
     GitWrap
     Heaven
     MacGitverCore
-)
-
-SET_TARGET_PROPERTIES(
-    MacGitver
-    PROPERTIES  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 
 #--------------------------------------------------------------------------------
@@ -71,6 +64,10 @@ IF( APPLE OR WIN32 )
         SET(plugin_dest_dir MacGitver.app/Contents/MacOS)
         SET(qtconf_dest_dir MacGitver.app/Contents/Resources)
         SET(APPS "\${CMAKE_INSTALL_PREFIX}/MacGitver.app")
+
+        SET_TARGET_PROPERTIES(  MacGitver
+            PROPERTIES          RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
 
     ELSEIF( WIN32 )
 
@@ -125,6 +122,8 @@ ELSEIF( UNIX )
 
     SET_TARGET_PROPERTIES(  MacGitver
         PROPERTIES          INSTALL_RPATH "\$ORIGIN/../libexec/${UTILS_APP_NAME}"
-    )
+                            RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
 
 ENDIF()

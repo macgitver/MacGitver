@@ -19,7 +19,7 @@
 
 #include "ui_RemoteCreateEditDlg.h"
 
-#include "libGitWrap/Remote.h"
+#include "libGitWrap/Remote.hpp"
 
 class RemoteCreateEditDlg : public QDialog, private Ui::RemoteCreateEditDlg
 {

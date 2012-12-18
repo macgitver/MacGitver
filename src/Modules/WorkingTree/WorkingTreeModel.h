@@ -19,7 +19,7 @@
 
 #include <QAbstractItemModel>
 
-#include "libGitWrap/Repository.h"
+#include "libGitWrap/Repository.hpp"
 
 #include "WorkingTreeFilters.h"
 

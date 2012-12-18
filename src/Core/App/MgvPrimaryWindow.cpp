@@ -26,8 +26,8 @@
 #include <QApplication>
 
 
-#include "libGitWrap/ObjectId.h"
-#include "libGitWrap/Reference.h"
+#include "libGitWrap/ObjectId.hpp"
+#include "libGitWrap/Reference.hpp"
 
 #include "libHeaven/App/Application.hpp"
 #include "libHeaven/Views/Mode.h"

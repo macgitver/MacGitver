@@ -19,7 +19,7 @@
 
 #include "MacGitverApi.hpp"
 
-#include "libGitWrap/PatchConsumer.h"
+#include "libGitWrap/PatchConsumer.hpp"
 
 #include "libDiffViews/Model/Patch.hpp"
 #include "libDiffViews/Model/TextFilePatch.hpp"

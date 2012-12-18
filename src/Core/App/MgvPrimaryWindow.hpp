@@ -17,7 +17,7 @@
 #ifndef MGV_PRIMARY_WINDOW_HPP
 #define MGV_PRIMARY_WINDOW_HPP
 
-#include "libGitWrap/Repository.h"
+#include "libGitWrap/Repository.hpp"
 
 #include "libHeaven/Views/View.h"       // Remove this along with the method that requires it!
 #include "libHeaven/App/PrimaryWindow.hpp"

@@ -19,7 +19,7 @@
 
 #include "libHeaven/Views/View.h"
 
-#include "libGitWrap/Repository.h"
+#include "libGitWrap/Repository.hpp"
 
 class QListWidget;
 

@@ -17,8 +17,8 @@
 #include <QDebug>
 #include <QTimer>
 
-#include "libGitWrap/Reference.h"
-#include "libGitWrap/ObjectId.h"
+#include "libGitWrap/Reference.hpp"
+#include "libGitWrap/ObjectId.hpp"
 
 #include "App/MacGitver.hpp"
 

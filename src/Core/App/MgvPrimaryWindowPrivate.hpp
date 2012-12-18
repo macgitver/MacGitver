@@ -17,7 +17,7 @@
 #ifndef MGV_PRIMARY_WINDOW_PRIVATE_HPP
 #define MGV_PRIMARY_WINDOW_PRIVATE_HPP
 
-#include "libGitWrap/Repository.h"
+#include "libGitWrap/Repository.hpp"
 
 #include "Config/UserLevelDefinition.h"
 

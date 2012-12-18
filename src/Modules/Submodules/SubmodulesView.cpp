@@ -20,7 +20,7 @@
 #include <QTreeView>
 #include <QMessageBox>
 
-#include "libGitWrap/ObjectId.h"
+#include "libGitWrap/ObjectId.hpp"
 
 #include "App/MacGitver.hpp"
 #include "MacGitver/FSWatcher.h"

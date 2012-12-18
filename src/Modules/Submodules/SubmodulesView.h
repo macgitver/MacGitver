@@ -21,7 +21,7 @@
 
 #include "libHeaven/Views/GlobalView.hpp"
 
-#include "libGitWrap/Repository.h"
+#include "libGitWrap/Repository.hpp"
 
 #include "hic_SubmodulesViewActions.h"
 

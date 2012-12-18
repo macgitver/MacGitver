@@ -21,7 +21,7 @@
 
 class QTimer;
 
-#include "libGitWrap/Repository.h"
+#include "libGitWrap/Repository.hpp"
 
 #include "MacGitverApi.hpp"
 

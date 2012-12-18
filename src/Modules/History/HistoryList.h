@@ -19,7 +19,7 @@
 
 #include "Config/ConfigUser.h"
 
-#include "libGitWrap/ObjectId.h"
+#include "libGitWrap/ObjectId.hpp"
 
 #include <QTreeView>
 

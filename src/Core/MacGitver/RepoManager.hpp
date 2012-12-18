@@ -19,7 +19,7 @@
 
 #include <QObject>
 
-#include "libGitWrap/Repository.h"
+#include "libGitWrap/Repository.hpp"
 
 #include "MacGitver/RepositoryInfo.hpp"
 

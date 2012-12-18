@@ -14,8 +14,8 @@
  *
  */
 
-#include "libGitWrap/Repository.h"
-#include "libGitWrap/Result.h"
+#include "libGitWrap/Repository.hpp"
+#include "libGitWrap/Result.hpp"
 
 #include "ShortCommitModel.h"
 

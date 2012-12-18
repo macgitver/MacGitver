@@ -14,8 +14,8 @@
  *
  */
 
-#include "libGitWrap/ObjectId.h"
-#include "libGitWrap/Result.h"
+#include "libGitWrap/ObjectId.hpp"
+#include "libGitWrap/Result.hpp"
 
 #include "SubmodulesCreateEditDlg.h"
 

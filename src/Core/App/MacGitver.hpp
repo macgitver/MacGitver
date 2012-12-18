@@ -22,8 +22,8 @@
 #include "MacGitverApi.hpp"
 #include "Interfaces/ILog.h"
 
-#include "libGitWrap/Repository.h"
-#include "libGitWrap/Result.h"
+#include "libGitWrap/Repository.hpp"
+#include "libGitWrap/Result.hpp"
 
 #include "libHeaven/Views/View.h"
 

@@ -5,9 +5,9 @@
 #include <QToolTip>
 #include <QHelpEvent>
 
-#include "libGitWrap/ObjectId.h"
-#include "libGitWrap/Submodule.h"
-#include "libGitWrap/Result.h"
+#include "libGitWrap/ObjectId.hpp"
+#include "libGitWrap/Submodule.hpp"
+#include "libGitWrap/Result.hpp"
 
 SubmodulesViewDelegate::SubmodulesViewDelegate( QObject* parent )
     : QItemDelegate( parent )

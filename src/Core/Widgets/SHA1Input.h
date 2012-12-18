@@ -19,7 +19,7 @@
 
 #include "Widgets/LineEdit.h"
 
-#include "libGitWrap/ObjectId.h"
+#include "libGitWrap/ObjectId.hpp"
 
 class MGV_CORE_API SHA1Input : public LineEdit
 {

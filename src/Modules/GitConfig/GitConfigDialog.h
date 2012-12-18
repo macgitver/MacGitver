@@ -19,7 +19,7 @@
 
 #include "libHeaven/App/Dialog.hpp"
 
-#include "libGitWrap/Repository.h"
+#include "libGitWrap/Repository.hpp"
 
 #include "ui_GitConfigDialog.h"
 

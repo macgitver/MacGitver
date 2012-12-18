@@ -14,10 +14,10 @@
  *
  */
 
-#include "libGitWrap/Object.h"
-#include "libGitWrap/ObjectCommit.h"
-#include "libGitWrap/ObjectTag.h"
-#include "libGitWrap/Reference.h"
+#include "libGitWrap/Object.hpp"
+#include "libGitWrap/ObjectCommit.hpp"
+#include "libGitWrap/ObjectTag.hpp"
+#include "libGitWrap/Reference.hpp"
 
 #include "RepositoryCore.h"
 

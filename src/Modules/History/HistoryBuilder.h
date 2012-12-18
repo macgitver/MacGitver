@@ -20,9 +20,9 @@
 #include <QObject>
 #include <QMap>
 
-#include "libGitWrap/ObjectCommit.h"
-#include "libGitWrap/Repository.h"
-#include "libGitWrap/RevisionWalker.h"
+#include "libGitWrap/ObjectCommit.hpp"
+#include "libGitWrap/Repository.hpp"
+#include "libGitWrap/RevisionWalker.hpp"
 
 #include "HistoryEntry.h"
 #include "HistoryModel.h"

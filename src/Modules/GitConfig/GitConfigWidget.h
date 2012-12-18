@@ -21,7 +21,7 @@
 
 class QFileSystemWatcher;
 
-#include "libGitWrap/Config.h"
+#include "libGitWrap/Config.hpp"
 
 #include "ui_GitConfigWidget.h"
 

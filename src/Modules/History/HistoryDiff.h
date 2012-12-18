@@ -19,9 +19,9 @@
 
 #include <QWidget>
 
-#include "libGitWrap/ObjectId.h"
-#include "libGitWrap/ObjectCommit.h"
-#include "libGitWrap/Repository.h"
+#include "libGitWrap/ObjectId.hpp"
+#include "libGitWrap/ObjectCommit.hpp"
+#include "libGitWrap/Repository.hpp"
 
 #include "libDiffViews/Model/Patch.hpp"
 

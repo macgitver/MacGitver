@@ -19,8 +19,10 @@ Ui RepositoryActions {
     Container RepositoryMenuAC {
 
         Action RepositoryOpen {
-            Text        "&Open...";
-            _ConnectTo  onRepositoryOpen();
+            Text                "Open...";
+            Shortcut            "Ctrl+O";
+            ShortcutContext     ApplicationShortcut;
+            _ConnectTo          onRepositoryOpen();
         };
 
         Action RepositoryClose {

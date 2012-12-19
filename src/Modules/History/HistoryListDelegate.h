@@ -32,8 +32,9 @@ public:
                     const QModelIndex& index) const;
 
 private:
-    void paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2, int height,
-                         const QColor& col, const QColor& activeCol, const QBrush& back ) const;
+    void paintGraphLane( QPainter* p, GraphGlyphs glyph, GraphGlyphs lastGlyph, int x1, int x2,
+                         int height, const QColor& col, const QColor& activeCol,
+                         const QBrush& back ) const;
 
     void paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
                      const QModelIndex& i ) const;

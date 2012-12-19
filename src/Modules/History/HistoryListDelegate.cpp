@@ -19,9 +19,9 @@
 #include "HistoryModel.h"
 #include "HistoryListDelegate.h"
 
-void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1, int x2,
-                                          int height, const QColor& col, const QColor& activeCol,
-                                          const QBrush& back ) const
+void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, GraphGlyphs lastGlyph,
+                                          int x1, int x2, int height, const QColor& col,
+                                          const QColor& activeCol, const QBrush& back ) const
 {
     const int padding = 2;
     x1 += padding;
@@ -140,7 +140,32 @@ void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, int x1
     case ggHeadLeft:
     case ggTailLeft:
         p->drawLine(P_CENTER, P_0);
+    default:
         break;
+    }
+
+    // horizontal line, if continued
+    switch( glyph )
+    {
+    case ggJoin:
+    case ggJoinRight:
+    case ggHead:
+    case ggHeadRight:
+        switch( lastGlyph )
+        {
+        case ggMergeFork:
+        case ggJoin:
+        case ggHead:
+        case ggTail:
+        case ggCross:
+        case ggCrossUnused:
+        case ggMergeForkRight:
+        case ggHeadRight:
+        case ggTailRight:
+            p->drawLine(P_180, P_0);
+        default:
+            break;
+        }
     default:
         break;
     }
@@ -228,11 +253,12 @@ void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
         x2 += lw;
 
         GraphGlyphs ln = lanes[i];
-        if (ln == ggUnused)
-            continue;
-
-        QColor color = i == activeLane ? activeColor : colors[i % 4];
-        paintGraphLane(p, ln, x1, x2, height, color, activeColor, back);
+        if( ln != ggUnused )
+        {
+            QColor color = i == activeLane ? activeColor : colors[i % 4];
+            GraphGlyphs nextGlyph = ( i < laneNum - 1 ) ? lanes[ i + 1 ] : ggUnused;
+            paintGraphLane(p, ln, nextGlyph, x1, x2, height, color, activeColor, back);
+        }
     }
     p->restore();
 }

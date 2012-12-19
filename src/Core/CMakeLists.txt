@@ -127,4 +127,5 @@ TARGET_LINK_LIBRARIES(
     DiffViews
 )
 
-#INSTALL_MGV_LIB( MacGitverCore )
+INSTALL_FRAMEWORK( MacGitverCore Runtime )
+

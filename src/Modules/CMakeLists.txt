@@ -18,26 +18,55 @@ MACRO(ADD_MGV_MODULE _Name )
         GitWrap Heaven MacGitverCore
     )
 
-    IF( UNIX )
+    IF( APPLE )
 
-        SET_TARGET_PROPERTIES(	${_Target}
-            PROPERTIES  INSTALL_RPATH "\$ORIGIN/../lib:\$ORIGIN/"
+        # This is probably bad...
+        SET_TARGET_PROPERTIES(
+            ${_Target}
+            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY
+                        "${CMAKE_BINARY_DIR}/${UTILS_APP_NAME}.app/Contents/MacOS/modules"
         )
 
         INSTALL(
             TARGETS     ${_Target}
-            RUNTIME     DESTINATION bin/macgitver/modules
-            LIBRARY     DESTINATION bin/macgitver/modules
+            LIBRARY     DESTINATION ${UTILS_APP_NAME}.app/Contents/MacOS/modules
         )
 
-    ENDIF()
+    ELSEIF( UNIX )
 
-    IF( APPLE )
-        # This is probably bad...
         SET_TARGET_PROPERTIES(
             ${_Target}
-            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY    "${CMAKE_BINARY_DIR}/bin/MacGitver.app/Contents/MacOS"
+            PROPERTIES  INSTALL_RPATH
+                        "\$ORIGIN/..:\$ORIGIN/../../lib"
+                        LIBRARY_OUTPUT_DIRECTORY
+                        "${CMAKE_BINARY_DIR}/libexec/${UTILS_APP_NAME}/modules"
         )
+
+        INSTALL(
+            TARGETS     ${_Target}
+            LIBRARY     DESTINATION libexec/${UTILS_APP_NAME}/modules
+        )
+
+    ELSEIF( WIN32 )
+
+        SET_TARGET_PROPERTIES(
+            ${_Target}
+            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY_DEBUG
+                        "${CMAKE_BINARY_DIR}/bin/Debug/modules"
+                        LIBRARY_OUTPUT_DIRECTORY_RELEASE
+                        "${CMAKE_BINARY_DIR}/bin/Release/modules"
+                        LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL
+                        "${CMAKE_BINARY_DIR}/bin/MinSizeRel/modules"
+                        LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO
+                        "${CMAKE_BINARY_DIR}/bin/RelWithDebInfo/modules"
+        )
+
+        INSTALL(
+            TARGETS     ${_Target}
+            RUNTIME     DESTINATION bin/modules
+            LIBRARY     DESTINATION bin/modules
+        )
+
     ENDIF()
 
 ENDMACRO(ADD_MGV_MODULE)

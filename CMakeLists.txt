@@ -1,21 +1,43 @@
 
 PROJECT( MacGitver )
+
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8.9 )
+CMAKE_POLICY( SET CMP0009 NEW )
 
-INCLUDE( cmake/Utils.cmake )		# Tools for cmake
+SET( UTILS_APP_NAME         MacGitver   CACHE INTERNAL "Foo" )
+SET( UTILS_USE_PRIVATE_LIBS 1           CACHE INTERNAL "Foo" )
+
+INCLUDE( cmake/Utils.cmake )
 SET_OUTPUT_PATHS()
-INCLUDE( cmake/QtMacros.cmake )		# Our own set of Qt Macros
-INCLUDE( cmake/CfgComp.cmake )		# Out CfgComp tool
+INCLUDE( cmake/QtMacros.cmake )
 
-IF( UNIX )
-	GCC_ADD_FLAG( "-Wall" )
-	GCC_ADD_FLAG( "-fvisibility=hidden" )
+IF( UNIX OR APPLE )
+    GCC_ADD_FLAG( "-Wall" )
+    GCC_ADD_FLAG( "-fvisibility=hidden" )
 ENDIF()
-
-# Tools required to build MacGitver
-ADD_SUBDIRECTORY( tools )
 
 ADD_SUBDIRECTORY( 3rd )
 
 # MacGitver itself
+ADD_SUBDIRECTORY( tools )
+INCLUDE( cmake/CfgComp.cmake )
 ADD_SUBDIRECTORY( src )
+
+# To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
+# where CPackConfig.cmake is created by including CPack
+# And then there's ways to customize this as well
+
+SET( CPACK_PACKAGE_NAME                  "MacGitver" )
+SET( CPACK_PACKAGE_FILE_NAME             "MacGitver-v0.1.0" )
+SET( CPACK_PACKAGE_VERSION               "0.1.0" )
+SET( CPACK_PACKAGE_CONTACT               "MacGitver-Developers <macgitver@babbelbox.org>" )
+SET( CPACK_PACKAGE_DESCRIPTION_SUMMARY   "A platform independent Git user interface based on Qt." )
+
+IF( APPLE )
+    SET( CPACK_BINARY_DRAGNDROP          ON )
+ELSEIF( WIN32 )
+    SET( CPACK_BINARY_NSIS               ON )
+ENDIF()
+
+INCLUDE( InstallRequiredSystemLibraries )
+INCLUDE( CPack )

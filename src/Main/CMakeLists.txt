@@ -73,8 +73,8 @@ IF( APPLE OR WIN32 )
 
         LIST( APPEND DIRS "${CMAKE_BINARY_DIR}/bin" )
 
-        SET(plugin_dest_dir . )
-        SET(qtconf_dest_dir . )
+        SET(plugin_dest_dir bin )
+        SET(qtconf_dest_dir bin )
         SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/MacGitver.exe")
 
         SET_TARGET_PROPERTIES(  MacGitver

@@ -17,7 +17,7 @@
 #ifndef MGV_MODULE_HISTORY_H
 #define MGV_MODULE_HISTORY_H
 
-#include "MacGitver/Module.h"
+#include "libMacGitverCore/MacGitver/Module.h"
 
 class HistoryView;
 

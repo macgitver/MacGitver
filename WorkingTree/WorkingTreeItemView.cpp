@@ -14,9 +14,8 @@
  *
  */
 
-#include "Config/Config.h"
-
-#include "Widgets/HeaderView.h"
+#include "libMacGitverCore/Config/Config.h"
+#include "libMacGitverCore/Widgets/HeaderView.h"
 
 #include "WorkingTreeItemView.h"
 #include "WorkingTreeModel.h"

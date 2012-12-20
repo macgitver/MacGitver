@@ -17,7 +17,7 @@
 #include <QListView>
 #include <QVBoxLayout>
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "RefsListModel.h"
 #include "RefsView.h"

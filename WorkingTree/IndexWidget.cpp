@@ -26,9 +26,9 @@
 #include "libDiffViews/Views/Interfaces/DiffView.hpp"
 #include "libDiffViews/Views/Interfaces/DiffViews.hpp"
 
-#include "App/MacGitver.hpp"
-#include "MacGitver/FSWatcher.h"
-#include "MacGitver/GitPatchConsumer.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/MacGitver/FSWatcher.h"
+#include "libMacGitverCore/MacGitver/GitPatchConsumer.hpp"
 
 #include "IndexWidget.h"
 

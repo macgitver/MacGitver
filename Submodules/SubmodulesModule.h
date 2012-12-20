@@ -17,7 +17,7 @@
 #ifndef MGV_MODULE_SUBMODULES_H
 #define MGV_MODULE_SUBMODULES_H
 
-#include "MacGitver/Module.h"
+#include "libMacGitverCore/MacGitver/Module.h"
 
 class SubmodulesModule : public Module
 {

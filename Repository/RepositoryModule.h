@@ -17,9 +17,9 @@
 #ifndef MGV_MODULE_REPOSITORY_H
 #define MGV_MODULE_REPOSITORY_H
 
-#include "MacGitver/Module.h"
+#include "libMacGitverCore/MacGitver/Module.h"
 
-#include "Config/ConfigUser.h"
+#include "libMacGitverCore/Config/ConfigUser.h"
 
 #include "hic_RepositoryModule.h"
 

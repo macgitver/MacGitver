@@ -22,8 +22,8 @@
 
 #include "libGitWrap/ObjectId.hpp"
 
-#include "App/MacGitver.hpp"
-#include "MacGitver/FSWatcher.h"
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/MacGitver/FSWatcher.h"
 
 #include "SubmodulesView.h"
 #include "SubmodulesDelegate.h"

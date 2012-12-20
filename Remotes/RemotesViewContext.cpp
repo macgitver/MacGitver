@@ -16,7 +16,7 @@
 
 #include <QStandardItemModel>
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "RemotesViewContext.h"
 

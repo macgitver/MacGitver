@@ -1,77 +1,82 @@
 
 MACRO(ADD_MGV_MODULE _Name )
 
-SET( _Target Mod${_Name} )
+    SET( _Target Mod${_Name} )
 
-ADD_QT_LIBRARY( ${_Target} MODULE ${ARGN} )
+    ADD_QT_LIBRARY( ${_Target} MODULE ${ARGN} )
 
-SET_TARGET_PROPERTIES(
-	${_Target}
-	PROPERTIES  OUTPUT_NAME     "${_Name}"
-	PREFIX          "Mod"
-	SUFFIX          ".mgv"
-)
+    SET_TARGET_PROPERTIES(
+        ${_Target}
+        PROPERTIES  OUTPUT_NAME     "${_Name}"
+        PREFIX          "Mod"
+        SUFFIX          ".mgv"
+    )
 
-TARGET_LINK_LIBRARIES(
-	${_Target}
-	
-	GitWrap Heaven MacGitverCore
-)
+    TARGET_LINK_LIBRARIES(
+        ${_Target}
 
-IF( APPLE )
+        GitWrap Heaven MacGitverCore
+    )
 
-# This is probably bad...
-SET_TARGET_PROPERTIES(
-	${_Target}
-	PROPERTIES  LIBRARY_OUTPUT_DIRECTORY
-	"${CMAKE_BINARY_DIR}/${UTILS_APP_NAME}.app/Contents/MacOS/modules"
-)
+    IF( APPLE )
 
-INSTALL(
-	TARGETS     ${_Target}
-	LIBRARY     DESTINATION ${UTILS_APP_NAME}.app/Contents/MacOS/modules
-)
+        # This is probably bad...
+        SET_TARGET_PROPERTIES(
+            ${_Target}
+            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY
+            "${CMAKE_BINARY_DIR}/${UTILS_APP_NAME}.app/Contents/MacOS/modules"
+        )
 
-ELSEIF( UNIX )
+        INSTALL(
+            TARGETS     ${_Target}
+            LIBRARY     DESTINATION ${UTILS_APP_NAME}.app/Contents/MacOS/modules
+        )
 
-SET_TARGET_PROPERTIES(
-	${_Target}
-	PROPERTIES  INSTALL_RPATH
-	"\$ORIGIN/..:\$ORIGIN/../../lib"
-	LIBRARY_OUTPUT_DIRECTORY
-	"${CMAKE_BINARY_DIR}/libexec/${UTILS_APP_NAME}/modules"
-)
+    ELSEIF( UNIX )
 
-INSTALL(
-	TARGETS     ${_Target}
-	LIBRARY     DESTINATION libexec/${UTILS_APP_NAME}/modules
-)
+        SET_TARGET_PROPERTIES(
+            ${_Target}
+            PROPERTIES  INSTALL_RPATH
+            "\$ORIGIN/..:\$ORIGIN/../../lib"
+            LIBRARY_OUTPUT_DIRECTORY
+            "${CMAKE_BINARY_DIR}/libexec/${UTILS_APP_NAME}/modules"
+        )
 
-ELSEIF( WIN32 )
+        INSTALL(
+            TARGETS     ${_Target}
+            LIBRARY     DESTINATION libexec/${UTILS_APP_NAME}/modules
+        )
 
-SET_TARGET_PROPERTIES(
-	${_Target}
-	PROPERTIES  LIBRARY_OUTPUT_DIRECTORY_DEBUG
-	"${CMAKE_BINARY_DIR}/bin/Debug/modules"
-	LIBRARY_OUTPUT_DIRECTORY_RELEASE
-	"${CMAKE_BINARY_DIR}/bin/Release/modules"
-	LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL
-	"${CMAKE_BINARY_DIR}/bin/MinSizeRel/modules"
-	LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO
-	"${CMAKE_BINARY_DIR}/bin/RelWithDebInfo/modules"
-)
+    ELSEIF( WIN32 )
 
-INSTALL(
-	TARGETS     ${_Target}
-	RUNTIME     DESTINATION bin/modules
-	LIBRARY     DESTINATION bin/modules
-)
+        SET_TARGET_PROPERTIES(
+            ${_Target}
+            PROPERTIES  LIBRARY_OUTPUT_DIRECTORY_DEBUG
+            "${CMAKE_BINARY_DIR}/bin/Debug/modules"
+            LIBRARY_OUTPUT_DIRECTORY_RELEASE
+            "${CMAKE_BINARY_DIR}/bin/Release/modules"
+            LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL
+            "${CMAKE_BINARY_DIR}/bin/MinSizeRel/modules"
+            LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO
+            "${CMAKE_BINARY_DIR}/bin/RelWithDebInfo/modules"
+        )
 
-ENDIF()
+        INSTALL(
+            TARGETS     ${_Target}
+            RUNTIME     DESTINATION bin/modules
+            LIBRARY     DESTINATION bin/modules
+        )
+
+    ENDIF()
 
 ENDMACRO(ADD_MGV_MODULE)
 
-INCLUDE_DIRECTORIES( ${MGV_CORE_SOURCE_DIR} )
+INCLUDE_DIRECTORIES(
+    ${libGitWrap_includes}
+    ${libHeaven_includes}
+    ${libDiffViews_includes}
+    ${libMacGitverCore_includes}
+)
 
 ADD_SUBDIRECTORY( History )
 ADD_SUBDIRECTORY( GitConfig )

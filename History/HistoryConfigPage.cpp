@@ -16,7 +16,7 @@
 
 #include <QSignalMapper>
 
-#include "Config/Config.h"
+#include "libMacGitverCore/Config/Config.h"
 
 #include "HistoryConfigPage.h"
 #include "HistoryDetails.h"

@@ -32,12 +32,11 @@
 #include "libDiffViews/Views/Interfaces/DiffViews.hpp"
 #include "libDiffViews/Views/Interfaces/DiffView.hpp"
 
-#include "Widgets/SHA1Input.h"
-#include "Widgets/ShortCommitModel.h"
-#include "Widgets/FlatTreeComboBox.h"
-
-#include "App/MacGitver.hpp"
-#include "MacGitver/GitPatchConsumer.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/Widgets/SHA1Input.h"
+#include "libMacGitverCore/Widgets/ShortCommitModel.h"
+#include "libMacGitverCore/Widgets/FlatTreeComboBox.h"
+#include "libMacGitverCore/MacGitver/GitPatchConsumer.hpp"
 
 #include "HistoryDiff.h"
 

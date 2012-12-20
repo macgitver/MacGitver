@@ -17,7 +17,7 @@
 #ifndef MGV_MODULE_REMOTES_H
 #define MGV_MODULE_REMOTES_H
 
-#include "MacGitver/Module.h"
+#include "libMacGitverCore/MacGitver/Module.h"
 
 #include "hic_RemotesModuleActions.h"
 

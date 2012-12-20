@@ -16,12 +16,12 @@
 
 #include <QPainter>
 
-#include "Config/Config.h"
+#include "libMacGitverCore/Config/Config.h"
 
 #include "libGitWrap/ObjectCommit.hpp"
 #include "libGitWrap/Result.hpp"
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "HistoryDetails.h"
 

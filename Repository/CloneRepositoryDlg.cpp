@@ -18,13 +18,13 @@
 #include <QDir>
 #include <QFileDialog>
 
-#include "Config/Config.h"
+#include "libMacGitverCore/Config/Config.h"
 
 #include "libGitWrap/BackgroundClone.hpp"
 
 #include "CloneRepositoryDlg.h"
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 CloneRepositoryDlg::CloneRepositoryDlg()
 {

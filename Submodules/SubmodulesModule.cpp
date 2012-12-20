@@ -17,7 +17,7 @@
 #include <QtPlugin>
 #include <QFileDialog>
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "SubmodulesModule.h"
 #include "SubmodulesView.h"

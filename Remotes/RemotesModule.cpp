@@ -17,7 +17,7 @@
 #include <QtPlugin>
 #include <QFileDialog>
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "RemoteCreateEditDlg.h"
 #include "RemotesModule.h"

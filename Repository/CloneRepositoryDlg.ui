@@ -201,7 +201,7 @@
   <customwidget>
    <class>LineEdit</class>
    <extends>QLineEdit</extends>
-   <header>Widgets/LineEdit.h</header>
+   <header>libMacGitverCore/Widgets/LineEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

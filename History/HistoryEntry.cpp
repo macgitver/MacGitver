@@ -16,7 +16,7 @@
 
 #include "libGitWrap/Result.hpp"
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "HistoryEntry.h"
 

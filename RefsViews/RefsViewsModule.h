@@ -17,7 +17,7 @@
 #ifndef MGV_MODULE_REFSVIEWS_H
 #define MGV_MODULE_REFSVIEWS_H
 
-#include "MacGitver/Module.h"
+#include "libMacGitverCore/MacGitver/Module.h"
 
 class RefsViewsModule : public Module
 {

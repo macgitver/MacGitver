@@ -17,7 +17,7 @@
 #ifndef MGV_REPOSITORY_CORE_H
 #define MGV_REPOSITORY_CORE_H
 
-#include "Interfaces/IRepositoryCore.h"
+#include "libMacGitverCore/Interfaces/IRepositoryCore.h"
 
 #include "libGitWrap/Repository.hpp"
 

@@ -17,7 +17,7 @@
 #ifndef MGV_MODULE_LOGGING_H
 #define MGV_MODULE_LOGGING_H
 
-#include "MacGitver/Module.h"
+#include "libMacGitverCore/MacGitver/Module.h"
 
 class LoggingView;
 

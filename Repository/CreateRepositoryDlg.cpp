@@ -18,11 +18,10 @@
 #include <QDir>
 #include <QFileDialog>
 
-#include "Config/Config.h"
+#include "libMacGitverCore/Config/Config.h"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "CreateRepositoryDlg.h"
-
-#include "App/MacGitver.hpp"
 
 CreateRepositoryDlg::CreateRepositoryDlg()
 {

@@ -17,7 +17,7 @@
 #ifndef MGV_MODULE_GITCONFIG_H
 #define MGV_MODULE_GITCONFIG_H
 
-#include "MacGitver/Module.h"
+#include "libMacGitverCore/MacGitver/Module.h"
 
 #include "hic_GitConfigModuleActions.h"
 

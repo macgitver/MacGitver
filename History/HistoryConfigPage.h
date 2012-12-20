@@ -19,7 +19,7 @@
 
 #include <QWidget>
 
-#include "Config/Ui/ConfigDialog.hpp"
+#include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
 
 #include "ui_HistoryConfigPage.h"
 

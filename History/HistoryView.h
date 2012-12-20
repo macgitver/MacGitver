@@ -21,7 +21,7 @@ class QToolBar;
 
 #include "libGitWrap/Repository.hpp"
 
-#include "Config/ConfigUser.h"
+#include "libMacGitverCore/Config/ConfigUser.h"
 
 #include "libHeaven/Views/GlobalView.hpp"
 #include "libHeaven/Widgets/MiniSplitter.h"

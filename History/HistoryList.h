@@ -17,7 +17,7 @@
 #ifndef HISTORY_LIST_H
 #define HISTORY_LIST_H
 
-#include "Config/ConfigUser.h"
+#include "libMacGitverCore/Config/ConfigUser.h"
 
 #include "libGitWrap/ObjectId.hpp"
 

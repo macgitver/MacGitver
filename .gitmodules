@@ -1,0 +1,18 @@
+[submodule "libGitWrap"]
+	path = libGitWrap
+	url = git@github.com:/macgitver/libGitWrap.git
+[submodule "libHeaven"]
+	path = libHeaven
+	url = git@github.com:/macgitver/libHeaven.git
+[submodule "libDiffViews"]
+	path = libDiffViews
+	url = git@github.com:/macgitver/libDiffViews.git
+[submodule "libMacGitverCore"]
+	path = libMacGitverCore
+	url = git@github.com:/macgitver/libMacGitverCore.git
+[submodule "MacGitverModules"]
+	path = MacGitverModules
+	url = git@github.com:/macgitver/MacGitverModules.git
+[submodule "MacGitverMain"]
+	path = MacGitverMain
+	url = git@github.com:/macgitver/MacGitverMain.git

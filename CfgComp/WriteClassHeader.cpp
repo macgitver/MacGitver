@@ -41,7 +41,7 @@ void WriteClassHeader::generate()
                   "#include <QVariant>\n"
                   "#include <QObject>\n"
                   "\n"
-                  "#include \"Config/ConfigUser.h\"\n"
+                  "#include \"libMacGitverCore/Config/ConfigUser.h\"\n"
                   "\n"
                   "class " << mSection.className() << " : public QObject, private ConfigUser\n"
                   "{\n"

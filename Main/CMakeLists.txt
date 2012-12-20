@@ -4,10 +4,12 @@ PROJECT( MACGITVER )
 QT_PREPARE( Core Gui Widgets Xml Main )
 
 INCLUDE_DIRECTORIES(
+    ${libGitWrap_includes}
+    ${libHeaven_includes}
+    ${libMacGitverCore_includes}
+
     ${MACGITVER_SOURCE_DIR}
     ${MACGITVER_BINARY_DIR}
-
-    ${MGV_CORE_SOURCE_DIR}
 )
 
 SET( SRC_FILES

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<levels>
+
+	<level id="Novice" name="Novice" precedence="1" applevel="0">
+		<desc>The <em>Novice</em>-Level will present you with the most basic operations. It will
+			not bother you with some gory details; nor will any advanced features be enabled.
+		</desc>
+		<gui file=":/Xml/Novice.Gui.xml"/>
+	</level>
+
+	<level id="BlackMagican" name="Black Magican" precedence="20" applevel="100">
+		<desc>The <em>Black Magican</em>-Level will enable all of MacGitver's features; it will
+			use different view sets for different tasks; allow you to define your own view sets
+			or customize the preexisting ones. It will enable options to view the very internals
+			of your git repository; including troubleshooting views and all the gory details.
+		</desc>
+	</level>
+
+</levels>

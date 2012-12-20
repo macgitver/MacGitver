@@ -25,7 +25,7 @@
 
 class QSettings;
 
-#include "Config/UserLevelDefinition.h"
+#include "libMacGitverCore/Config/UserLevelDefinition.h"
 
 class ConfigUser;
 

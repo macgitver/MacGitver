@@ -19,7 +19,7 @@
 
 #include <QVariant>
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 class MGV_CORE_API ConfigUser
 {

@@ -17,7 +17,7 @@
 #ifndef MGV_HEADER_VIEW_H
 #define MGV_HEADER_VIEW_H
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 #include <QHeaderView>
 

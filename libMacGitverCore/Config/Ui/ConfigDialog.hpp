@@ -23,7 +23,7 @@
 
 class QTreeWidgetItem;
 
-#include "Config/Ui/ConfigPage.hpp"
+#include "libMacGitverCore/Config/Ui/ConfigPage.hpp"
 
 #include "libHeaven/App/Dialog.hpp"
 

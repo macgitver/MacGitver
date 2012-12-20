@@ -4,6 +4,11 @@ PROJECT( MGV_CORE )
 QT_PREPARE( Core Gui Widgets Xml )
 
 INCLUDE_DIRECTORIES(
+    ${libDiffViews_includes}
+    ${libHeaven_includes}
+    ${libGitWrap_includes}
+    ${libMacGitverCore_includes}
+    # And our own source + binary directory
     ${MGV_CORE_SOURCE_DIR}
     ${MGV_CORE_BINARY_DIR}
 )

@@ -21,9 +21,8 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "MacGitverApi.hpp"
-
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #if QT_VERSION < 0x050000
 #define Q_PLUGIN_METADATA(x)

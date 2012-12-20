@@ -14,9 +14,9 @@
  *
  */
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "Config/Config.h"
+#include "libMacGitverCore/Config/Config.h"
 #include "Config/UserLevelDefinition.h"
 
 #include "GeneralConfigPage.hpp"

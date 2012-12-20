@@ -17,7 +17,7 @@
 #ifndef MGV_LINE_EDIT_H
 #define MGV_LINE_EDIT_H
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 #include <QLineEdit>
 

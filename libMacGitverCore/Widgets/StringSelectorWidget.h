@@ -25,7 +25,7 @@ class QStringList;
 class QIcon;
 class QTreeWidgetItem;
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 class StringSelectorWidgetPrivate;
 

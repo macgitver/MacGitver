@@ -19,7 +19,7 @@
 
 #include <QWidget>
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 class ConfigDialog;
 

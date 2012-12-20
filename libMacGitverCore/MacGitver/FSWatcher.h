@@ -21,7 +21,7 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 class QFileSystemWatcher;
 

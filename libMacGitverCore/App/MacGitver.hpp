@@ -21,8 +21,8 @@
 
 class QDir;
 
-#include "MacGitverApi.hpp"
-#include "Interfaces/ILog.h"
+#include "libMacGitverCore/MacGitverApi.hpp"
+#include "libMacGitverCore/Interfaces/ILog.h"
 
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Result.hpp"

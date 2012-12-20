@@ -17,7 +17,7 @@
 #ifndef MGV_REPOSITORY_CORE_IFACE_H
 #define MGV_REPOSITORY_CORE_IFACE_H
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 class QString;
 

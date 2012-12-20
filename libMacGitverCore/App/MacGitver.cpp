@@ -24,10 +24,10 @@
 
 #include "libGitWrap/GitWrap.hpp"
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 #include "App/MgvPrimaryWindow.hpp"
 
-#include "Config/Config.h"
+#include "libMacGitverCore/Config/Config.h"
 
 #include "MacGitver/Modules.h"
 #include "MacGitver/FSWatcher.h"

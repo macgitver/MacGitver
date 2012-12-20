@@ -19,7 +19,7 @@
 
 #include <QString>
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 enum LogType
 {

@@ -17,7 +17,7 @@
 #ifndef MGV_FLAT_TREE_DELEGATE_H
 #define MGV_FLAT_TREE_DELEGATE_H
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 #include <QItemDelegate>
 

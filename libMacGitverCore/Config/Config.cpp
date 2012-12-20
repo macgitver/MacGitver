@@ -20,8 +20,8 @@
 #include <QSettings>
 #include <QApplication>
 
-#include "Config/Config.h"
-#include "Config/ConfigUser.h"
+#include "libMacGitverCore/Config/Config.h"
+#include "libMacGitverCore/Config/ConfigUser.h"
 
 Config::Config()
     : mSettings( NULL )

@@ -19,9 +19,9 @@
 #include "libHeaven/Heaven.hpp"
 #include "libHeaven/App/PrimaryWindow.hpp"
 
-#include "Config/Config.h"
+#include "libMacGitverCore/Config/Config.h"
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "RepoManager.hpp"
 

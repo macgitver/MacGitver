@@ -17,7 +17,7 @@
 #ifndef MGV_FONT_SELECT_WIDGET_H
 #define MGV_FONT_SELECT_WIDGET_H
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 #include <QWidget>
 #include <QFontComboBox>

@@ -17,7 +17,7 @@
 #ifndef MGV_SHA1_INPUT_H
 #define MGV_SHA1_INPUT_H
 
-#include "Widgets/LineEdit.h"
+#include "libMacGitverCore/Widgets/LineEdit.h"
 
 #include "libGitWrap/ObjectId.hpp"
 

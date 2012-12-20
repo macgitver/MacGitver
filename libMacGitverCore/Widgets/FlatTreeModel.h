@@ -17,7 +17,7 @@
 #ifndef MGV_FLAT_TREE_MODEL_H
 #define MGV_FLAT_TREE_MODEL_H
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 #include <QAbstractListModel>
 

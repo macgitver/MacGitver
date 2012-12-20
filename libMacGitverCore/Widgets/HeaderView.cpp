@@ -14,7 +14,7 @@
  *
  */
 
-#include "Config/Config.h"
+#include "libMacGitverCore/Config/Config.h"
 
 #include "HeaderView.h"
 

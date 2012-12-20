@@ -17,7 +17,7 @@
 #ifndef MGV_SHORT_COMMIT_MODEL_H
 #define MGV_SHORT_COMMIT_MODEL_H
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 #include <QAbstractItemModel>
 

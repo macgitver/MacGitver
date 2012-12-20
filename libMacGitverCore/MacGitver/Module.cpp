@@ -14,7 +14,7 @@
  *
  */
 
-#include "App/MacGitver.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "MacGitver/Module.h"
 

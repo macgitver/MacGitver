@@ -23,7 +23,7 @@
 #include <QVector>
 #include <QSharedData>
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 class QDomElement;
 

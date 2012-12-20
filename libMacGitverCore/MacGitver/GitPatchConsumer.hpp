@@ -17,7 +17,7 @@
 #ifndef MGV_DIFF_GIT_PATCH_CONSUMER_H
 #define MGV_DIFF_GIT_PATCH_CONSUMER_H
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 #include "libGitWrap/PatchConsumer.hpp"
 

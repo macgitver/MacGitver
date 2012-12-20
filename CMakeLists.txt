@@ -1,0 +1,2 @@
+ADD_SUBDIRECTORY( CfgComp )
+ADD_SUBDIRECTORY( libMacGitverCore )

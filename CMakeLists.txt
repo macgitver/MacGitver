@@ -1,43 +1,84 @@
 
-PROJECT( MacGitver )
+MACRO(ADD_MGV_MODULE _Name )
 
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8.9 )
-CMAKE_POLICY( SET CMP0009 NEW )
+SET( _Target Mod${_Name} )
 
-SET( UTILS_APP_NAME         MacGitver   CACHE INTERNAL "Foo" )
-SET( UTILS_USE_PRIVATE_LIBS 1           CACHE INTERNAL "Foo" )
+ADD_QT_LIBRARY( ${_Target} MODULE ${ARGN} )
 
-INCLUDE( cmake/Utils.cmake )
-SET_OUTPUT_PATHS()
-INCLUDE( cmake/QtMacros.cmake )
+SET_TARGET_PROPERTIES(
+	${_Target}
+	PROPERTIES  OUTPUT_NAME     "${_Name}"
+	PREFIX          "Mod"
+	SUFFIX          ".mgv"
+)
 
-IF( UNIX OR APPLE )
-    GCC_ADD_FLAG( "-Wall" )
-    GCC_ADD_FLAG( "-fvisibility=hidden" )
-ENDIF()
-
-ADD_SUBDIRECTORY( 3rd )
-
-# MacGitver itself
-ADD_SUBDIRECTORY( tools )
-INCLUDE( cmake/CfgComp.cmake )
-ADD_SUBDIRECTORY( src )
-
-# To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
-# where CPackConfig.cmake is created by including CPack
-# And then there's ways to customize this as well
-
-SET( CPACK_PACKAGE_NAME                  "MacGitver" )
-SET( CPACK_PACKAGE_FILE_NAME             "MacGitver-v0.1.0" )
-SET( CPACK_PACKAGE_VERSION               "0.1.0" )
-SET( CPACK_PACKAGE_CONTACT               "MacGitver-Developers <macgitver@babbelbox.org>" )
-SET( CPACK_PACKAGE_DESCRIPTION_SUMMARY   "A platform independent Git user interface based on Qt." )
+TARGET_LINK_LIBRARIES(
+	${_Target}
+	
+	GitWrap Heaven MacGitverCore
+)
 
 IF( APPLE )
-    SET( CPACK_BINARY_DRAGNDROP          ON )
+
+# This is probably bad...
+SET_TARGET_PROPERTIES(
+	${_Target}
+	PROPERTIES  LIBRARY_OUTPUT_DIRECTORY
+	"${CMAKE_BINARY_DIR}/${UTILS_APP_NAME}.app/Contents/MacOS/modules"
+)
+
+INSTALL(
+	TARGETS     ${_Target}
+	LIBRARY     DESTINATION ${UTILS_APP_NAME}.app/Contents/MacOS/modules
+)
+
+ELSEIF( UNIX )
+
+SET_TARGET_PROPERTIES(
+	${_Target}
+	PROPERTIES  INSTALL_RPATH
+	"\$ORIGIN/..:\$ORIGIN/../../lib"
+	LIBRARY_OUTPUT_DIRECTORY
+	"${CMAKE_BINARY_DIR}/libexec/${UTILS_APP_NAME}/modules"
+)
+
+INSTALL(
+	TARGETS     ${_Target}
+	LIBRARY     DESTINATION libexec/${UTILS_APP_NAME}/modules
+)
+
 ELSEIF( WIN32 )
-    SET( CPACK_BINARY_NSIS               ON )
+
+SET_TARGET_PROPERTIES(
+	${_Target}
+	PROPERTIES  LIBRARY_OUTPUT_DIRECTORY_DEBUG
+	"${CMAKE_BINARY_DIR}/bin/Debug/modules"
+	LIBRARY_OUTPUT_DIRECTORY_RELEASE
+	"${CMAKE_BINARY_DIR}/bin/Release/modules"
+	LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL
+	"${CMAKE_BINARY_DIR}/bin/MinSizeRel/modules"
+	LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO
+	"${CMAKE_BINARY_DIR}/bin/RelWithDebInfo/modules"
+)
+
+INSTALL(
+	TARGETS     ${_Target}
+	RUNTIME     DESTINATION bin/modules
+	LIBRARY     DESTINATION bin/modules
+)
+
 ENDIF()
 
-INCLUDE( InstallRequiredSystemLibraries )
-INCLUDE( CPack )
+ENDMACRO(ADD_MGV_MODULE)
+
+INCLUDE_DIRECTORIES( ${MGV_CORE_SOURCE_DIR} )
+
+ADD_SUBMODULE( History )
+ADD_SUBMODULE( GitConfig )
+ADD_SUBMODULE( Submodules )
+ADD_SUBMODULE( RefsViews )
+ADD_SUBMODULE( Repository )
+ADD_SUBMODULE( Remotes )
+ADD_SUBMODULE( Welcome )
+ADD_SUBMODULE( WorkingTree )
+ADD_SUBMODULE( Logging )

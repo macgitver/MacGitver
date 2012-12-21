@@ -30,8 +30,6 @@ Heaven::View* LoggingModule::createLoggingView()
 
 void LoggingModule::initialize()
 {
-    MacGitver::self().setLog( this );
-
     registerView( QLatin1String( "Log" ),
                   Heaven::GlobalViewType,
                   &LoggingModule::createLoggingView );
@@ -39,13 +37,7 @@ void LoggingModule::initialize()
 
 void LoggingModule::deinitialize()
 {
-    MacGitver::self().setLog( NULL );
     unregisterView( QLatin1String( "Log" ) );
-}
-
-void LoggingModule::addMessage( LogType type, const QString& message )
-{
-    qDebug( "%i: %s", int(type), qPrintable( message ) );
 }
 
 #if QT_VERSION < 0x050000

@@ -21,7 +21,7 @@
 
 class LoggingView;
 
-class LoggingModule : public Module, private ILog
+class LoggingModule : public Module
 {
     Q_OBJECT
     Q_PLUGIN_METADATA( IID "org.macgitver.Module/0.1" FILE "Module.json" )
@@ -33,9 +33,6 @@ public:
 public:
     void initialize();
     void deinitialize();
-
-private:
-    void addMessage( LogType type, const QString& message );
 
 private:
     static Heaven::View* createLoggingView();

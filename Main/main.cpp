@@ -14,10 +14,13 @@
  *
  */
 
+#include <QApplication>
+
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 int main( int c, char** v )
 {
-    MacGitver mgv( c, v );
-    return mgv.exec();
+    QApplication app( c, v );
+    MacGitver mgv;
+    return app.exec();
 }

@@ -24,7 +24,7 @@ class WelcomeView;
 class WelcomeModule : public Module
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA( IID "org.babbelbox.sacu.macgitver.Module/0.1" FILE "Module.json" )
+    Q_PLUGIN_METADATA( IID "org.macgitver.Module/0.1" FILE "Module.json" )
     Q_INTERFACES( Module )
 
 public:

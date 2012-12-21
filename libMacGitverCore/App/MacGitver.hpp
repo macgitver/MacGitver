@@ -17,7 +17,7 @@
 #ifndef MGV_MACGITVER_H
 #define MGV_MACGITVER_H
 
-#include <QApplication>
+#include <QObject>
 
 class QDir;
 
@@ -29,7 +29,6 @@ class QDir;
 
 #include "libHeaven/Views/View.h"
 
-
 class Module;
 class Modules;
 class FSWatcher;
@@ -38,7 +37,7 @@ class RepoManager;
 
 typedef Heaven::View* (ViewCreator)( );
 
-class MGV_CORE_API MacGitver : public QApplication
+class MGV_CORE_API MacGitver : public QObject
 {
     Q_OBJECT
 private:
@@ -50,7 +49,7 @@ private:
     };
 
 public:
-    MacGitver( int argc, char **argv );
+    MacGitver();
     ~MacGitver();
 
 public:
@@ -75,7 +74,6 @@ public:
     void log( LogType type, const Git::Result& r, const char* logMessage = NULL );
 
     RepoManager* repoMan();
-    int exec();
 
 signals:
     void repositoryChanged( const Git::Repository& repo );

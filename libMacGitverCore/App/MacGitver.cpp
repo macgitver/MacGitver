@@ -21,6 +21,7 @@
 #include <QTextStream>
 #include <QDomDocument>
 #include <QStringBuilder>
+#include <QApplication>
 
 #include "libGitWrap/GitWrap.hpp"
 
@@ -34,13 +35,12 @@
 #include "MacGitver/RepoManager.hpp"
 
 
-MacGitver::MacGitver( int argc, char** argv )
-    : QApplication( argc, argv )
-    , mLog( NULL )
+MacGitver::MacGitver()
+    : mLog( NULL )
     , mRepoMan( NULL )
 {
-    setOrganizationName( QLatin1String( "SaCu" ) );
-    setApplicationName( QLatin1String( "MacGitver" ) );
+    QApplication::setOrganizationName( QLatin1String( "SaCu" ) );
+    QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
 
     mWatcher = new FSWatcher( this );
 
@@ -50,6 +50,8 @@ MacGitver::MacGitver( int argc, char** argv )
 
     Q_ASSERT( sSelf == NULL );
     sSelf = this;
+
+    QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
 }
 
 MacGitver::~MacGitver()
@@ -80,7 +82,6 @@ void MacGitver::setRepository( const Git::Repository& repo )
 {
     mRepository = repo;
 
-    mWatcher->setRepository( repo );
     mModules->repositoryChanged( repo );
 
     emit repositoryChanged( mRepository );
@@ -199,15 +200,15 @@ void MacGitver::searchModules( const QDir& binDir )
 
 void MacGitver::loadModules()
 {
-    QDir binDir( applicationDirPath() );
+    QDir binDir( qApp->applicationDirPath() );
     searchModules( binDir );
 
-    binDir = QDir( applicationDirPath() % QLatin1String( "/modules" ) );
+    binDir = QDir( qApp->applicationDirPath() % QLatin1String( "/modules" ) );
     searchModules( binDir );
     binDir.cdUp();
 
     #ifdef Q_OS_UNIX
-    binDir = QDir( applicationDirPath() % QLatin1String( "/../libexec/MacGitver/modules" ) );
+    binDir = QDir( qApp->applicationDirPath() % QLatin1String( "/../libexec/MacGitver/modules" ) );
     searchModules( binDir );
     #endif
 
@@ -226,10 +227,4 @@ void MacGitver::boot()
 
     MgvPrimaryWindow* pw = new MgvPrimaryWindow;
     pw->show();
-}
-
-int MacGitver::exec()
-{
-    QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
-    return QApplication::exec();
 }

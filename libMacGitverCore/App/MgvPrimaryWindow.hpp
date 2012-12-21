@@ -45,6 +45,7 @@ private slots:
     void onQuit();
     void onHelpAbout();
     void onToolsPreferences();
+    void onViewRefresh();
     void setupFonts();
 
 public:

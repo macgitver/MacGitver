@@ -36,7 +36,9 @@
 
 
 MacGitver::MacGitver()
-    : mLog( NULL )
+    : mModules( NULL )
+    , mLog( NULL )
+    , mWatcher( NULL )
     , mRepoMan( NULL )
 {
     QApplication::setOrganizationName( QLatin1String( "SaCu" ) );
@@ -51,7 +53,17 @@ MacGitver::MacGitver()
     Q_ASSERT( sSelf == NULL );
     sSelf = this;
 
+    // Continue with the rest of the init-process after QApplication::exec() has started to run.
     QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
+}
+
+void MacGitver::boot()
+{
+    loadLevels();
+    loadModules();
+
+    MgvPrimaryWindow* pw = new MgvPrimaryWindow;
+    pw->show();
 }
 
 MacGitver::~MacGitver()
@@ -60,17 +72,8 @@ MacGitver::~MacGitver()
 
     delete mRepoMan;
     delete mModules;
+    delete mLog;
     sSelf = NULL;
-}
-
-Modules* MacGitver::modules()
-{
-    return mModules;
-}
-
-FSWatcher* MacGitver::watcher()
-{
-    return mWatcher;
 }
 
 Git::Repository MacGitver::repository() const
@@ -123,14 +126,28 @@ Heaven::View* MacGitver::createView( const QString& identifier )
     return NULL;
 }
 
-ILog* MacGitver::log()
+Modules* MacGitver::modules()
 {
-    return mLog;
+    return mModules;
 }
 
-void MacGitver::setLog( ILog* log )
+RepoManager* MacGitver::repoMan()
 {
-    mLog = log;
+    return mRepoMan;
+}
+
+FSWatcher* MacGitver::watcher()
+{
+    return mWatcher;
+}
+
+CoreLog* MacGitver::log()
+{
+    if( !mLog )
+    {
+        mLog = new CoreLog();
+    }
+    return mLog;
 }
 
 void MacGitver::log( LogType type, const QString& logMessage )
@@ -163,12 +180,7 @@ void MacGitver::log( LogType type, const Git::Result& r, const char* logMessage 
             mLog->addMessage( type, QString::fromUtf8( "GitWrap-Error: %1" )
                               .arg( r.errorText() ) );
         }
-        }
-}
-
-RepoManager* MacGitver::repoMan()
-{
-    return mRepoMan;
+    }
 }
 
 void MacGitver::searchModules( const QDir& binDir )
@@ -218,13 +230,4 @@ void MacGitver::loadModules()
 void MacGitver::loadLevels()
 {
     Config::self().loadLevels( QLatin1String( ":/Xml/Levels.xml" ) );
-}
-
-void MacGitver::boot()
-{
-    loadLevels();
-    loadModules();
-
-    MgvPrimaryWindow* pw = new MgvPrimaryWindow;
-    pw->show();
 }

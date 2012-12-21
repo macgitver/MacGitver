@@ -14,10 +14,12 @@
  *
  */
 
-#ifndef MGV_I_LOG_H
-#define MGV_I_LOG_H
+#ifndef MGV_CORE_LOG_HPP
+#define MGV_CORE_LOG_HPP
 
+#include <QDateTime>
 #include <QString>
+#include <QList>
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -29,14 +31,41 @@ enum LogType
     ltError
 };
 
-class MGV_CORE_API ILog
+class MGV_CORE_API LogEntry
 {
 public:
-    ILog();
-    virtual ~ILog();
+    LogEntry( LogType type, const QString& text );
 
 public:
-    virtual void addMessage( LogType type, const QString& message ) = 0;
+    QDateTime timeStamp() const;
+    LogType type() const;
+    QString text() const;
+
+private:
+    QDateTime   mTimeStamp;
+    LogType     mType;
+    QString     mText;
+};
+
+class MGV_CORE_API CoreLog : public QObject
+{
+    Q_OBJECT
+public:
+    CoreLog();
+    virtual ~CoreLog();
+
+public:
+    void clear();
+    void addMessage( LogType type, const QString& text );
+    void addMessage( LogEntry* logEntry );
+
+signals:
+    void cleared();
+    void aboutToRemove( LogEntry* entry );
+    void entryAdded( LogEntry* entry );
+
+private:
+    QList< LogEntry* > mEntries;
 };
 
 #endif

@@ -22,7 +22,7 @@
 class QDir;
 
 #include "libMacGitverCore/MacGitverApi.hpp"
-#include "libMacGitverCore/Interfaces/ILog.h"
+#include "libMacGitverCore/App/CoreLog.hpp"
 
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Result.hpp"
@@ -67,8 +67,7 @@ public:
     void unregisterView( const QString& identifier );
     Heaven::View* createView( const QString& identifier );
 
-    ILog* log();
-    void setLog( ILog* log );
+    CoreLog* log();
     void log( LogType type, const QString& logMessage );
     void log( LogType type, const char* logMessage );
     void log( LogType type, const Git::Result& r, const char* logMessage = NULL );
@@ -90,12 +89,12 @@ private:
     static MacGitver*           sSelf;
 
     Modules*                    mModules;
-    ILog*                       mLog;
+    CoreLog*                    mLog;
     FSWatcher*                  mWatcher;
+    RepoManager*                mRepoMan;
     Git::GitWrap                mGitWrap;
     Git::Repository             mRepository;
     QHash< QString, ViewInfo >  mViews;
-    RepoManager*                mRepoMan;
 };
 
 #endif

@@ -298,3 +298,7 @@ void MgvPrimaryWindow::onToolsPreferences()
     MacGitver::self().modules()->setupConfigPages( &d );
     d.exec();
 }
+
+void MgvPrimaryWindow::onViewRefresh()
+{
+}

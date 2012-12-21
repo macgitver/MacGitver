@@ -15,6 +15,7 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
+    App/CoreLog.cpp
     App/MacGitver.cpp
     App/MgvPrimaryWindow.cpp
 
@@ -27,7 +28,6 @@ SET( SRC_FILES
     Config/Ui/GeneralConfigPage.cpp
 
     Interfaces/IRepositoryCore.cpp
-    Interfaces/ILog.cpp
 
     MacGitver/Module.cpp
     MacGitver/Modules.cpp
@@ -52,6 +52,7 @@ SET( PUB_HDR_FILES
 
     MacGitverApi.hpp
 
+    App/CoreLog.hpp
     App/MacGitver.hpp
     App/MgvPrimaryWindow.hpp
 
@@ -61,7 +62,6 @@ SET( PUB_HDR_FILES
     Config/Ui/ConfigPage.hpp
 
     Interfaces/IRepositoryCore.h
-    Interfaces/ILog.h
 
     MacGitver/Module.h
     MacGitver/Modules.h

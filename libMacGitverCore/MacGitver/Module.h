@@ -80,6 +80,6 @@ protected:
 };
 
 Q_DECLARE_INTERFACE( Module,
-                     "org.babbelbox.sacu.macgitver.Module/0.1" )
+                     "org.macgitver.Module/0.1" )
 
 #endif

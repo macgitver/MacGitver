@@ -21,7 +21,6 @@
 #include "libHeaven/Widgets/MiniSplitter.h"
 
 class QTreeView;
-class QTextBrowser;
 
 class RepoTreeView : public Heaven::GlobalView
 {
@@ -35,7 +34,6 @@ private:
 private:
     Heaven::MiniSplitter*   mSplitter;
     QTreeView*              mRepos;
-    QTextBrowser*           mDetails;
 };
 
 #endif

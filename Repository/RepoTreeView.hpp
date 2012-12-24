@@ -22,7 +22,9 @@
 
 #include "hic_RepoTreeViewCtxMenu.h"
 
-class QTreeView;
+class QModelIndex;
+
+class TreeViewCtxMenu;
 
 class RepoTreeView : public Heaven::GlobalView, private RepoTreeViewCtxMenu
 {
@@ -37,9 +39,12 @@ private slots:
     void onCtxActivate();
     void onCtxClose();
 
+private slots:
+    void contextMenu( const QModelIndex& index, const QPoint& globalPos );
+
 private:
     Heaven::MiniSplitter*   mSplitter;
-    QTreeView*              mRepos;
+    TreeViewCtxMenu*        mRepos;
 };
 
 #endif

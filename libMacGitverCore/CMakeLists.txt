@@ -46,6 +46,7 @@ SET( SRC_FILES
     Widgets/SHA1Input.cpp
     Widgets/ShortCommitModel.cpp
     Widgets/RepoStateWidget.cpp
+    Widgets/TreeViewCtxMenu.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -79,6 +80,7 @@ SET( PUB_HDR_FILES
     Widgets/FlatTreeDelegate.h
     Widgets/SHA1Input.h
     Widgets/ShortCommitModel.h
+    Widgets/TreeViewCtxMenu.hpp
 )
 
 SET( PRI_HDR_FILES

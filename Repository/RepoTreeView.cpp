@@ -36,4 +36,6 @@ RepoTreeView::RepoTreeView()
     l->setMargin( 0 );
     l->addWidget( mRepos );
     setLayout( l );
+
+    setupActions( this );
 }

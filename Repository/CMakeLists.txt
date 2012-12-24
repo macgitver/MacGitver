@@ -43,6 +43,7 @@ SET( UI_FILES
 SET( HID_FILES
 
     RepositoryModule.hid
+    RepoTreeViewCtxMenu.hid
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )

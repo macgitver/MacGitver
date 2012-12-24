@@ -14,32 +14,34 @@
  *
  */
 
-#ifndef MGV_REPO_TREE_VIEW_HPP
-#define MGV_REPO_TREE_VIEW_HPP
+Ui RepoTreeViewCtxMenu {
 
-#include "libHeaven/Views/GlobalView.hpp"
-#include "libHeaven/Widgets/MiniSplitter.h"
 
-#include "hic_RepoTreeViewCtxMenu.h"
 
-class QTreeView;
+    Action Activate {
+        Text            "&Active";
+        StatusToolTip   "Toggle active state of this repository.";
+        _ConnectTo      onCtxActivate();
+    };
 
-class RepoTreeView : public Heaven::GlobalView, private RepoTreeViewCtxMenu
-{
-    Q_OBJECT
-public:
-    RepoTreeView();
+    Action Close {
+        Text            "&Close";
+        StatusToolTip   "Close this repository";
+        _ConnectTo      onCtxClose();
+    };
 
-private:
-    void setupUi();
+    Menu CtxMenuRepo {
 
-private slots:
-    void onCtxActivate();
-    void onCtxClose();
+        Action      Activate;
+        Separator;
+        Action      Close;
 
-private:
-    Heaven::MiniSplitter*   mSplitter;
-    QTreeView*              mRepos;
+    };
+
+    Menu CtxMenuSMRepo {
+
+        Action      Activate;
+
+    };
+
 };
-
-#endif

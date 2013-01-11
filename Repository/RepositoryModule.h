@@ -23,8 +23,6 @@
 
 #include "hic_RepositoryModule.h"
 
-class RepositoryCore;
-
 class RepositoryModule : public Module, public RepositoryActions, private ConfigUser
 {
     Q_OBJECT
@@ -54,7 +52,6 @@ private:
 
 private:
     Git::Repository mRepo;
-    RepositoryCore* mCore;
 };
 
 #endif

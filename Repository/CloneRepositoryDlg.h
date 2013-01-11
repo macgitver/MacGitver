@@ -19,6 +19,8 @@
 
 #include "ui_CloneRepositoryDlg.h"
 
+class ProgressDlg;
+
 class CloneRepositoryDlg : public QDialog, Ui::CloneRepositoryDlg
 {
     Q_OBJECT
@@ -35,6 +37,22 @@ private slots:
     void onInitSubmodules( bool value );
     void onCheckoutBranch( const QString& branch );
     void checkValid();
+
+    void doneIndexing();
+    void doneCheckout();
+    void doneDownload();
+    void beginDownloading();
+    void rootCloneFinished();
+
+private:
+    void updateAction();
+
+private:
+    ProgressDlg* mProgress;
+    QString mAction;
+    enum State { Unused, Open, Done, Current };
+    enum Tasks { Prepare, Download, Index, Checkout };
+    QHash< Tasks, State > mStates;
 };
 
 #endif

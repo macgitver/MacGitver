@@ -27,8 +27,6 @@ SET( SRC_FILES
     Config/Ui/ConfigPage.cpp
     Config/Ui/GeneralConfigPage.cpp
 
-    Interfaces/IRepositoryCore.cpp
-
     MacGitver/Module.cpp
     MacGitver/Modules.cpp
     MacGitver/FSWatcher.cpp
@@ -61,8 +59,6 @@ SET( PUB_HDR_FILES
     Config/ConfigUser.h
     Config/UserLevelDefinition.h
     Config/Ui/ConfigPage.hpp
-
-    Interfaces/IRepositoryCore.h
 
     MacGitver/Module.h
     MacGitver/Modules.h

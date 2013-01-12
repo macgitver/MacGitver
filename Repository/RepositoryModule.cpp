@@ -82,7 +82,7 @@ void RepositoryModule::onRepositoryCreate()
 
 void RepositoryModule::onRepositoryOpen()
 {
-    MacGitver::self().repoMan()->open();
+    MacGitver::repoMan().open();
 }
 
 void RepositoryModule::onRepositoryClone()

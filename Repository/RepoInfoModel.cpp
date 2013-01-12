@@ -21,7 +21,7 @@
 
 RepositoryInfoModel::RepositoryInfoModel()
 {
-    mRepoMan = MacGitver::self().repoMan();
+    mRepoMan = &MacGitver::repoMan();
 }
 
 int RepositoryInfoModel::rowCount( const QModelIndex& parent ) const

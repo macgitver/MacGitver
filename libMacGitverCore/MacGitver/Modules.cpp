@@ -14,7 +14,10 @@
  *
  */
 
+#include <QApplication>
 #include <QPluginLoader>
+#include <QStringBuilder>
+#include <QDir>
 
 #include "MacGitver/Modules.h"
 
@@ -31,8 +34,54 @@ Modules::~Modules()
     }
 }
 
+void Modules::search( const QDir& binDir )
+{
+    QStringList modFiles;
+    modFiles << QLatin1String( "Mod*.mgv" );
+
+    // qDebug( "Searching for Modules in %s", qPrintable( binDir.absolutePath() ) );
+
+    foreach( QString modName, binDir.entryList( modFiles ) )
+    {
+        QPluginLoader* loader = new QPluginLoader( binDir.filePath( modName ), this );
+
+        QObject* o = loader->instance();
+        if( !o )
+        {
+            qDebug( "Failed to load a module\n%s: %s",
+                    qPrintable( modName ),
+                    qPrintable( loader->errorString() ) );
+        }
+
+        Module* mod = qobject_cast< Module* >( o );
+        if( mod )
+        {
+            addModule( mod );
+        }
+        else
+        {
+            qDebug( "The plugin '%s' does not implment the Module interface",
+                    qPrintable( modName ) );
+
+            delete loader;
+        }
+    }
+}
+
 void Modules::initialize()
 {
+    QDir binDir( qApp->applicationDirPath() );
+    search( binDir );
+
+    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/modules" ) );
+    search( binDir );
+    binDir.cdUp();
+
+    #ifdef Q_OS_UNIX
+    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/../libexec/MacGitver/modules" ) );
+    search( binDir );
+    #endif
+
     setupInternals();
 
     foreach( Module* module, mModules )
@@ -53,19 +102,6 @@ void Modules::setupInternals()
             addModule( mod );
         }
     }
-
-#if 0
-    int i = 0;
-    while( sInternals[ i ].szName )
-    {
-        qDebug( "Setting up module %s.", sInternals[ i ].szName );
-
-        Module* m = sInternals[ i ].creator();
-        addModule( m );
-
-        i++;
-    }
-#endif
 }
 
 void Modules::repositoryChanged( Git::Repository newRepository )

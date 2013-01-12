@@ -15,9 +15,6 @@
  */
 
 #include <QDebug>
-#include <QFileInfo>
-#include <QDir>
-#include <QPluginLoader>
 #include <QTextStream>
 #include <QDomDocument>
 #include <QStringBuilder>
@@ -58,7 +55,7 @@ MacGitverPrivate::~MacGitverPrivate()
 void MacGitverPrivate::boot()
 {
     loadLevels();
-    loadModules();
+    sModules->initialize();
 
     MgvPrimaryWindow* pw = new MgvPrimaryWindow;
     pw->show();
@@ -161,50 +158,6 @@ void MacGitver::log( LogType type, const Git::Result& r, const char* logMessage 
         log().addMessage( type, QString::fromUtf8( "GitWrap-Error: %1" )
                           .arg( r.errorText() ) );
     }
-}
-
-void MacGitverPrivate::searchModules( const QDir& binDir )
-{
-    QStringList modFiles;
-    modFiles << QLatin1String( "Mod*.mgv" );
-
-    qDebug( "Searching for Modules in %s", qPrintable( binDir.absolutePath() ) );
-
-    foreach( QString modName, binDir.entryList( modFiles ) )
-    {
-        QPluginLoader* loader = new QPluginLoader( binDir.filePath( modName ), this );
-        QObject* o = loader->instance();
-        if( !o )
-            qDebug( "%s: %s", qPrintable( modName ), qPrintable( loader->errorString() ) );
-
-        Module* mod = qobject_cast< Module* >( o );
-        if( mod )
-        {
-            sModules->addModule( mod );
-        }
-        else
-        {
-            delete loader;
-        }
-    }
-
-}
-
-void MacGitverPrivate::loadModules()
-{
-    QDir binDir( qApp->applicationDirPath() );
-    searchModules( binDir );
-
-    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/modules" ) );
-    searchModules( binDir );
-    binDir.cdUp();
-
-    #ifdef Q_OS_UNIX
-    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/../libexec/MacGitver/modules" ) );
-    searchModules( binDir );
-    #endif
-
-    sModules->initialize();
 }
 
 void MacGitverPrivate::loadLevels()

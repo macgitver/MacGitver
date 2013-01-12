@@ -27,10 +27,6 @@
 
 #include "libHeaven/Views/View.h"
 
-class Module;
-class Modules;
-class FSWatcher;
-class UserLevelDefinition;
 class RepoManager;
 
 typedef Heaven::View* (MgvViewCreator)();

@@ -19,9 +19,11 @@
 
 #include <QSet>
 
+class QDir;
+
 #include "MacGitver/Module.h"
 
-class MGV_CORE_API Modules : public QObject
+class Modules : public QObject
 {
     Q_OBJECT
 public:
@@ -41,6 +43,7 @@ public:
 
 private:
     void setupInternals();
+    void search( const QDir& binDir );
 
 private:
     QSet< Module* >     mModules;

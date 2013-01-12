@@ -21,6 +21,8 @@
 
 class QDir;
 
+class Modules;
+
 struct MgvViewInfo
 {
     QString             mIdentifier;
@@ -38,7 +40,6 @@ public:
     ~MacGitverPrivate();
 
 public:
-    void loadModules();
     void loadLevels();
     void searchModules( const QDir& binDir );
 

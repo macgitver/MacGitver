@@ -29,6 +29,23 @@
 #include "libMacGitverCore/MacGitver/FSWatcher.h"
 #include "libMacGitverCore/MacGitver/RepoManager.hpp"
 
+/**
+ * @class   MacGitver
+ * @brief   Central core of the MacGitver application
+ *
+ * The singleton MacGitver is the central core of the application. It's main purpose is to provide
+ * access to various singleton classes that manage the system. These are:
+ *
+ * - RepoManager \n
+ *   The repository manager can be obtained via a call to MacGitver::repoMan(). It is responsible
+ *   for managing the currently open repositories and which one of them is active.
+ *
+ * - CoreLog \n
+ *   The core log can be accessed via MacGitver::log(). It keeps track of debugging information and
+ *   provides the ability to inform the user of what actions have happened.
+ *
+ */
+
 MacGitverPrivate::MacGitverPrivate( MacGitver* owner )
 {
     QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );

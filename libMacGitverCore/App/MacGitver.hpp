@@ -54,6 +54,7 @@ public:
 
 public:
     static MacGitver& self();
+    static RepoManager& repoMan();
 
 public:
     void setRepository( const Git::Repository &repo );
@@ -71,8 +72,6 @@ public:
     void log( LogType type, const QString& logMessage );
     void log( LogType type, const char* logMessage );
     void log( LogType type, const Git::Result& r, const char* logMessage = NULL );
-
-    RepoManager* repoMan();
 
 signals:
     void repositoryChanged( const Git::Repository& repo );

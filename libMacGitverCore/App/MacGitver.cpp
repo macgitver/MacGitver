@@ -131,9 +131,9 @@ Modules* MacGitver::modules()
     return mModules;
 }
 
-RepoManager* MacGitver::repoMan()
+RepoManager& MacGitver::repoMan()
 {
-    return mRepoMan;
+    return *self().mRepoMan;
 }
 
 FSWatcher* MacGitver::watcher()

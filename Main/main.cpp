@@ -21,6 +21,5 @@
 int main( int c, char** v )
 {
     QApplication app( c, v );
-    MacGitver mgv;
-    return app.exec();
+    return MacGitver::exec();
 }

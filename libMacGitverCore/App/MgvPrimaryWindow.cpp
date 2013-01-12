@@ -34,14 +34,14 @@
 #include "libHeaven/Views/TopLevelWidget.h"
 #include "libHeaven/Widgets/FooterWidget.hpp"
 
-#include "libMacGitverCore/App/MacGitver.hpp"
-#include "App/MgvPrimaryWindow.hpp"
-#include "App/MgvPrimaryWindowPrivate.hpp"
-#include "MacGitver/Modules.h"
+#include "libMacGitverCore/App/MacGitverPrivate.hpp"
+#include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
+#include "libMacGitverCore/App/MgvPrimaryWindowPrivate.hpp"
+#include "libMacGitverCore/MacGitver/Modules.h"
 #include "libMacGitverCore/Config/Config.h"
-#include "Config/Ui/ConfigDialog.hpp"
-#include "Config/Ui/GeneralConfigPage.hpp"
-#include "Widgets/RepoStateWidget.hpp"
+#include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
+#include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
+#include "libMacGitverCore/Widgets/RepoStateWidget.hpp"
 
 #include "ui_AboutDlg.h"
 
@@ -295,7 +295,7 @@ void MgvPrimaryWindow::onToolsPreferences()
 {
     ConfigDialog d;
     d.addPage( new GeneralConfigPage( &d ) );
-//TODO    MacGitver::self().modules()->setupConfigPages( &d );
+    MacGitverPrivate::sModules->setupConfigPages( &d );
     d.exec();
 }
 

@@ -65,8 +65,8 @@ SubmodulesView::SubmodulesView()
         repositoryChanged( repo );
     }
 
-    connect( MacGitver::self().watcher(), SIGNAL(repoGitFileChanged()),
-             this, SLOT(readSubmodules()) );
+//  connect( MacGitver::self().watcher(), SIGNAL(repoGitFileChanged()),
+//           this, SLOT(readSubmodules()) );
 }
 
 void SubmodulesView::repositoryChanged( Git::Repository repo )

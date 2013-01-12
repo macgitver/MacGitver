@@ -74,8 +74,8 @@ IndexWidget::IndexWidget()
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
              this, SLOT(repositoryChanged(Git::Repository)) );
 
-    connect( MacGitver::self().watcher(), SIGNAL(workingTreeChanged()),
-             this, SLOT(workingTreeChanged()) );
+//  connect( MacGitver::self().watcher(), SIGNAL(workingTreeChanged()),
+//           this, SLOT(workingTreeChanged()) );
 
     Git::Repository repo = MacGitver::self().repository();
     if( repo.isValid() )

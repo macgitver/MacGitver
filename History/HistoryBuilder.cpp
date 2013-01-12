@@ -109,7 +109,7 @@ void HistoryBuilder::updateReferences()
     curBranch = mRepo.currentBranch( r );
     if( !r )
     {
-        MacGitver::self().log( ltError, r.errorText() );
+        MacGitver::log( ltError, r.errorText() );
         return;
     }
 
@@ -224,11 +224,11 @@ void HistoryBuilder::updateReferences()
 
     dur = timer.nsecsElapsed();
     avg = double( dur ) / double( refs.count() );
-    MacGitver::self().log( ltInformation,
-                           trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
-                                .arg( refs.count() )
-                                .arg( dur )
-                                .arg( avg, 10, 'f', 2 ) );
+    MacGitver::log( ltInformation,
+                    trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
+                        .arg( refs.count() )
+                        .arg( dur )
+                        .arg( avg, 10, 'f', 2 ) );
 }
 
 void HistoryBuilder::start()
@@ -246,11 +246,11 @@ void HistoryBuilder::start()
 
     dur = timer.nsecsElapsed();
     avg = double( dur ) / double( commits.count() );
-    MacGitver::self().log( ltInformation,
-                           trUtf8( "Walked %1 commits in %2 ns = %3 ns per commit." )
-                                .arg( commits.count() )
-                                .arg( dur )
-                                .arg( avg, 10, 'f', 2 ) );
+    MacGitver::log( ltInformation,
+                    trUtf8( "Walked %1 commits in %2 ns = %3 ns per commit." )
+                        .arg( commits.count() )
+                        .arg( dur )
+                        .arg( avg, 10, 'f', 2 ) );
 
     timer.restart();
 
@@ -278,7 +278,7 @@ void HistoryBuilder::start()
         curCommit = mRepo.lookupCommit( currentSHA1, r );
         if( !r )
         {
-            MacGitver::self().log( ltError, r, "Could not find a commit the RevWalker gave us." );
+            MacGitver::log( ltError, r, "Could not find a commit the RevWalker gave us." );
             break;
         }
 
@@ -482,9 +482,9 @@ void HistoryBuilder::start()
     dur = timer.nsecsElapsed();
     avg = double(dur) / double(mModel->rowCount());
 
-    MacGitver::self().log( ltInformation,
-                           trUtf8( "Glyphed %1 commits in %2 ns = %3 ns per Commit" )
-                                .arg( mModel->rowCount() )
-                                .arg( dur )
-                                .arg( avg, 10, 'f', 2 ) );
+    MacGitver::log( ltInformation,
+                    trUtf8( "Glyphed %1 commits in %2 ns = %3 ns per Commit" )
+                        .arg( mModel->rowCount() )
+                        .arg( dur )
+                        .arg( avg, 10, 'f', 2 ) );
 }

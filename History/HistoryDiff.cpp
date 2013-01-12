@@ -167,7 +167,7 @@ void HistoryDiff::setCommitId( const Git::ObjectId& sha1 )
 
     if( !r )
     {
-        MacGitver::self().log( ltError, r );
+        MacGitver::log( ltError, r );
         return;
     }
 

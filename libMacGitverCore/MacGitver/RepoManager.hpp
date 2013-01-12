@@ -32,7 +32,9 @@ public:
 
 public:
     void open();
-    void open( const QString& path );
+    bool open( const QString& path );
+    bool open( const Git::Repository& repo );
+
     void closeAll();
 
     RepositoryInfo* activeRepository();
@@ -48,9 +50,6 @@ signals:
     void repositoryOpened( RepositoryInfo* repo );
     void repositoryClosed( RepositoryInfo* repo );
     void repositoryActivated( RepositoryInfo* repo);
-
-private:
-    void open( const Git::Repository& repo );
 
 private slots:
     void onRepositoryOpenHelper();

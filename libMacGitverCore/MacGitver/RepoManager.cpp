@@ -99,11 +99,19 @@ void RepoManager::onRepositoryOpenHelper()
     open( repo );
 }
 
-void RepoManager::open( const QString& path )
+bool RepoManager::open( const QString& path )
 {
+    Git::Result result;
+    Git::Repository repo = Git::Repository::open( path, result );
+    if( !result || !repo.isValid() )
+    {
+        return false;
+    }
+
+    return open( repo );
 }
 
-void RepoManager::open( const Git::Repository& repo )
+bool RepoManager::open( const Git::Repository& repo )
 {
     RepositoryInfo* info = repoByPath( repo.basePath(), false );
 
@@ -118,6 +126,8 @@ void RepoManager::open( const Git::Repository& repo )
     }
 
     activate( info );
+
+    return true;
 }
 
 RepositoryInfo* RepoManager::repoByPath( const QString& basePath, bool searchSubmodules )

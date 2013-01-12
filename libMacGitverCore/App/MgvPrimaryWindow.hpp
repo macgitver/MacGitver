@@ -52,7 +52,6 @@ public:
     void integrateView( Heaven::View* view, Heaven::Positions position );
     void activateMode( const QString& modeName );
     void activateLevel( UserLevelDefinition::Ptr uld );
-    void addError( const QString& err );
 
 private:
     void savePosition();

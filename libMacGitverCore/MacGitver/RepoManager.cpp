@@ -25,8 +25,12 @@
 
 #include "RepoManager.hpp"
 
-RepoManager::RepoManager( QObject* parent )
-    : QObject( parent )
+/**
+ * @class       RepoManager
+ * @brief       Manages the open / active repositories
+ */
+
+RepoManager::RepoManager()
 {
     mActiveRepo = NULL;
 }

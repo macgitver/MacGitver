@@ -25,39 +25,37 @@
 
 #include "libGitWrap/GitWrap.hpp"
 
-#include "libMacGitverCore/App/MacGitver.hpp"
-#include "App/MgvPrimaryWindow.hpp"
-
+#include "libMacGitverCore/App/MacGitverPrivate.hpp"
+#include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
 #include "libMacGitverCore/Config/Config.h"
+#include "libMacGitverCore/MacGitver/Modules.h"
+#include "libMacGitverCore/MacGitver/FSWatcher.h"
+#include "libMacGitverCore/MacGitver/RepoManager.hpp"
 
-#include "MacGitver/Modules.h"
-#include "MacGitver/FSWatcher.h"
-#include "MacGitver/RepoManager.hpp"
-
-
-MacGitver::MacGitver()
-    : mModules( NULL )
-    , mLog( NULL )
-    , mWatcher( NULL )
-    , mRepoMan( NULL )
+MacGitverPrivate::MacGitverPrivate( MacGitver* owner )
 {
-    QApplication::setOrganizationName( QLatin1String( "SaCu" ) );
+    QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
     QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
 
-    mWatcher = new FSWatcher( this );
-
-    mModules = new Modules( this );
-
-    mRepoMan = new RepoManager( this );
-
-    Q_ASSERT( sSelf == NULL );
-    sSelf = this;
+    sSelf       = owner;
+    sLog        = new CoreLog;
+    sRepoMan    = new RepoManager;
+    sModules    = new Modules;
 
     // Continue with the rest of the init-process after QApplication::exec() has started to run.
     QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
 }
 
-void MacGitver::boot()
+MacGitverPrivate::~MacGitverPrivate()
+{
+    delete sModules;    sModules    = NULL;
+    delete sRepoMan;    sRepoMan    = NULL;
+    delete sLog;        sLog        = NULL;
+
+    sSelf = NULL;
+}
+
+void MacGitverPrivate::boot()
 {
     loadLevels();
     loadModules();
@@ -66,124 +64,106 @@ void MacGitver::boot()
     pw->show();
 }
 
+MacGitver*      MacGitverPrivate::sSelf         = NULL;
+RepoManager*    MacGitverPrivate::sRepoMan      = NULL;
+CoreLog*        MacGitverPrivate::sLog          = NULL;
+Modules*        MacGitverPrivate::sModules      = NULL;
+
+MacGitver& MacGitver::self()
+{
+    Q_ASSERT( MacGitverPrivate::sSelf );  /* exec() must have been called */
+    return *MacGitverPrivate::sSelf;
+}
+
+RepoManager& MacGitver::repoMan()
+{
+    return *MacGitverPrivate::sRepoMan;
+}
+
+CoreLog& MacGitver::log()
+{
+    return *MacGitverPrivate::sLog;
+}
+
+MacGitver::MacGitver()
+    : d( new MacGitverPrivate( this ) )
+{
+    Q_ASSERT( MacGitverPrivate::sSelf == this );
+}
+
 MacGitver::~MacGitver()
 {
     setRepository( Git::Repository() );
-
-    delete mRepoMan;
-    delete mModules;
-    delete mLog;
-    sSelf = NULL;
+    delete d;
 }
 
 Git::Repository MacGitver::repository() const
 {
-    return mRepository;
+    return d->mRepository;
 }
 
 void MacGitver::setRepository( const Git::Repository& repo )
 {
-    mRepository = repo;
+    d->mRepository = repo;
 
-    mModules->repositoryChanged( repo );
+    MacGitverPrivate::sModules->repositoryChanged( repo );
 
-    emit repositoryChanged( mRepository );
-}
-
-MacGitver* MacGitver::sSelf = NULL;
-
-MacGitver& MacGitver::self()
-{
-    Q_ASSERT( sSelf );
-    return *sSelf;
+    emit repositoryChanged( repo );
 }
 
 void MacGitver::registerView( const QString& identifier, Heaven::ViewTypes type,
-                              ViewCreator* creator )
+                              MgvViewCreator* creator )
 {
-    Q_ASSERT( !mViews.contains( identifier ) );
+    Q_ASSERT( !d->mViews.contains( identifier ) );
 
-    ViewInfo vi;
+    MgvViewInfo vi;
     vi.mIdentifier = identifier;
     vi.mType = type;
     vi.mCreator = creator;
-    mViews.insert( identifier, vi );
+    d->mViews.insert( identifier, vi );
 }
 
 void MacGitver::unregisterView( const QString& identifier )
 {
-    mViews.remove( identifier );
+    d->mViews.remove( identifier );
 }
 
 Heaven::View* MacGitver::createView( const QString& identifier )
 {
-    if( mViews.contains( identifier ) )
+    if( d->mViews.contains( identifier ) )
     {
-        ViewInfo vi = mViews.value( identifier );
+        MgvViewInfo vi = d->mViews.value( identifier );
         return vi.mCreator();
     }
 
     return NULL;
 }
 
-Modules* MacGitver::modules()
-{
-    return mModules;
-}
-
-RepoManager& MacGitver::repoMan()
-{
-    return *self().mRepoMan;
-}
-
-FSWatcher* MacGitver::watcher()
-{
-    return mWatcher;
-}
-
-CoreLog* MacGitver::log()
-{
-    if( !mLog )
-    {
-        mLog = new CoreLog();
-    }
-    return mLog;
-}
-
 void MacGitver::log( LogType type, const QString& logMessage )
 {
-    if( mLog )
-    {
-        mLog->addMessage( type, logMessage );
-    }
+    log().addMessage( type, logMessage );
 }
 
 void MacGitver::log( LogType type, const char* logMessage )
 {
-    if( mLog )
-    {
-        mLog->addMessage( type, QString::fromUtf8( logMessage ) );
-    }
+    log().addMessage( type, QString::fromUtf8( logMessage ) );
 }
 
 void MacGitver::log( LogType type, const Git::Result& r, const char* logMessage )
 {
-    if( mLog )
+    if( logMessage )
     {
-        if( logMessage )
-        {
-            mLog->addMessage( type, QString::fromUtf8( "GitWrap-Error: %1\n(%2)" )
-                              .arg( r.errorText() ).arg( QLatin1String( logMessage ) ) );
-        }
-        else
-        {
-            mLog->addMessage( type, QString::fromUtf8( "GitWrap-Error: %1" )
-                              .arg( r.errorText() ) );
-        }
+        log().addMessage( type, QString::fromUtf8( "GitWrap-Error: %1\n(%2)" )
+                          .arg( r.errorText() ).arg( QLatin1String( logMessage ) ) );
+    }
+    else
+    {
+        log().addMessage( type, QString::fromUtf8( "GitWrap-Error: %1" )
+                          .arg( r.errorText() ) );
     }
 }
 
-void MacGitver::searchModules( const QDir& binDir )
+void MacGitverPrivate::searchModules( const QDir& binDir )
 {
     QStringList modFiles;
     modFiles << QLatin1String( "Mod*.mgv" );
@@ -200,7 +180,7 @@ void MacGitver::searchModules( const QDir& binDir )
         Module* mod = qobject_cast< Module* >( o );
         if( mod )
         {
-            modules()->addModule( mod );
+            sModules->addModule( mod );
         }
         else
         {
@@ -210,24 +190,30 @@ void MacGitver::searchModules( const QDir& binDir )
 
 }
 
-void MacGitver::loadModules()
+void MacGitverPrivate::loadModules()
 {
     QDir binDir( qApp->applicationDirPath() );
     searchModules( binDir );
 
-    binDir = QDir( qApp->applicationDirPath() % QLatin1String( "/modules" ) );
+    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/modules" ) );
     searchModules( binDir );
     binDir.cdUp();
 
     #ifdef Q_OS_UNIX
-    binDir = QDir( qApp->applicationDirPath() % QLatin1String( "/../libexec/MacGitver/modules" ) );
+    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/../libexec/MacGitver/modules" ) );
     searchModules( binDir );
     #endif
 
-    mModules->initialize();
+    sModules->initialize();
 }
 
-void MacGitver::loadLevels()
+void MacGitverPrivate::loadLevels()
 {
     Config::self().loadLevels( QLatin1String( ":/Xml/Levels.xml" ) );
+}
+
+int MacGitver::exec()
+{
+    MacGitver mgv;
+    return qApp->exec();
 }

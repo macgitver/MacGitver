@@ -70,7 +70,7 @@ protected:
      * @param type the view type, to specify the behaviour
      * @param creator the creator used to setup the view
      */
-    void registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator );
+    void registerView( const QString& identifier, Heaven::ViewTypes type, MgvViewCreator* creator );
 
     /**
      * @brief Unregister a previously registered module view.

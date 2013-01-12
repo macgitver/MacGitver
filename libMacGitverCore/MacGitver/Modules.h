@@ -25,7 +25,7 @@ class MGV_CORE_API Modules : public QObject
 {
     Q_OBJECT
 public:
-    Modules( QObject* parent );
+    Modules();
     ~Modules();
 
 public:

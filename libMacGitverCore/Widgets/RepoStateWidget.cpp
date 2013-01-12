@@ -29,10 +29,10 @@ RepoStateWidget::RepoStateWidget()
     repoInfo = NULL;
     setupUi();
 
-    connect( MacGitver::self().repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
              this, SLOT(repositoryActivated(RepositoryInfo*)) );
 
-    repositoryActivated( MacGitver::self().repoMan()->activeRepository() );
+    repositoryActivated( MacGitver::repoMan().activeRepository() );
 }
 
 void RepoStateWidget::repositoryActivated( RepositoryInfo* info )

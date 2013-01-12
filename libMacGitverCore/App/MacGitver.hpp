@@ -19,8 +19,6 @@
 
 #include <QObject>
 
-class QDir;
-
 #include "libMacGitverCore/MacGitverApi.hpp"
 #include "libMacGitverCore/App/CoreLog.hpp"
 
@@ -35,65 +33,42 @@ class FSWatcher;
 class UserLevelDefinition;
 class RepoManager;
 
-typedef Heaven::View* (ViewCreator)( );
+typedef Heaven::View* (MgvViewCreator)();
+
+class MacGitverPrivate;
 
 class MGV_CORE_API MacGitver : public QObject
 {
     Q_OBJECT
-private:
-    struct ViewInfo
-    {
-        QString             mIdentifier;
-        ViewCreator*        mCreator;
-        Heaven::ViewTypes   mType;
-    };
-
 public:
-    MacGitver();
-    ~MacGitver();
-
-public:
-    static MacGitver& self();
+    static MacGitver&   self();
     static RepoManager& repoMan();
+    static CoreLog&     log();
 
 public:
-    void setRepository( const Git::Repository &repo );
-    Git::Repository repository() const;
-    Modules* modules();
-    FSWatcher* watcher();
+    static int exec();
+
+public:
+    void setRepository( const Git::Repository &repo );  /* deprecated */
+    Git::Repository repository() const; /* deprecated */
 
     void integrateView( Heaven::View* view, Heaven::Positions place );
 
-    void registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator );
+    void registerView( const QString& identifier, Heaven::ViewTypes type, MgvViewCreator* creator );
     void unregisterView( const QString& identifier );
     Heaven::View* createView( const QString& identifier );
 
-    CoreLog* log();
     void log( LogType type, const QString& logMessage );
     void log( LogType type, const char* logMessage );
     void log( LogType type, const Git::Result& r, const char* logMessage = NULL );
 
 signals:
-    void repositoryChanged( const Git::Repository& repo );
+    void repositoryChanged( const Git::Repository& repo ); /* deprecated */
 
 private:
-    void loadModules();
-    void loadLevels();
-    void searchModules( const QDir& binDir );
-
-private slots:
-    void boot();
-
-private:
-    static MacGitver*           sSelf;
-
-    Modules*                    mModules;
-    CoreLog*                    mLog;
-    FSWatcher*                  mWatcher;
-    RepoManager*                mRepoMan;
-    Git::GitWrap                mGitWrap;
-    Git::Repository             mRepository;
-    QHash< QString, ViewInfo >  mViews;
+    MacGitver();
+    ~MacGitver();
+    MacGitverPrivate* d;
 };
 
 #endif

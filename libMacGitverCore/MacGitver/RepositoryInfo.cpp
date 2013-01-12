@@ -133,7 +133,7 @@ void RepositoryInfo::setActive( bool active )
 
         mIsActive = false;
 
-        MacGitver::self().repoMan()->internalActivate( NULL );
+        MacGitver::repoMan().internalActivate( NULL );
     }
     else
     {
@@ -145,7 +145,7 @@ void RepositoryInfo::setActive( bool active )
         }
         mIsActive = true;
 
-        MacGitver::self().repoMan()->internalActivate( this );
+        MacGitver::repoMan().internalActivate( this );
     }
 }
 

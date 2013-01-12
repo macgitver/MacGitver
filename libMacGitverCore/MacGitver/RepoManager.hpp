@@ -27,7 +27,7 @@ class MGV_CORE_API RepoManager : public QObject
 {
     Q_OBJECT
 public:
-    RepoManager( QObject* parent );
+    RepoManager();
     ~RepoManager();
 
 public:

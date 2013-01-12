@@ -27,7 +27,7 @@ void Module::repositoryChanged( Git::Repository newRepository )
     Q_UNUSED( newRepository );
 }
 
-void Module::registerView( const QString& identifier, Heaven::ViewTypes type, ViewCreator* creator )
+void Module::registerView( const QString& identifier, Heaven::ViewTypes type, MgvViewCreator* creator )
 {
     MacGitver::self().registerView( identifier, type, creator );
 }

@@ -81,6 +81,7 @@ SET( PUB_HDR_FILES
 
 SET( PRI_HDR_FILES
 
+    App/MacGitverPrivate.hpp
     App/MgvPrimaryWindowPrivate.hpp
 
     Config/Ui/ConfigDialog.hpp

@@ -18,8 +18,7 @@
 
 #include "MacGitver/Modules.h"
 
-Modules::Modules( QObject* parent )
-    : QObject( parent )
+Modules::Modules()
 {
 }
 

@@ -295,7 +295,7 @@ void MgvPrimaryWindow::onToolsPreferences()
 {
     ConfigDialog d;
     d.addPage( new GeneralConfigPage( &d ) );
-    MacGitver::self().modules()->setupConfigPages( &d );
+//TODO    MacGitver::self().modules()->setupConfigPages( &d );
     d.exec();
 }
 

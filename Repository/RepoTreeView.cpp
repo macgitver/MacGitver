@@ -19,6 +19,10 @@
 
 #include "libMacGitverCore/Widgets/TreeViewCtxMenu.hpp"
 
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
+
 #include "RepoTreeView.hpp"
 #include "RepoInfoModel.hpp"
 
@@ -32,7 +36,8 @@ RepoTreeView::RepoTreeView()
     #ifdef Q_OS_MACX
     mRepos->setAttribute( Qt::WA_MacShowFocusRect, false );
     #endif
-    mRepos->setModel( new RepositoryInfoModel() );
+    mModel = new RepoInfoModel();
+    mRepos->setModel( mModel );
 
     connect( mRepos, SIGNAL(contextMenu(QModelIndex,QPoint)),
              this, SLOT(contextMenu(QModelIndex,QPoint)) );
@@ -47,11 +52,29 @@ RepoTreeView::RepoTreeView()
 
 void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
 {
+    RepositoryInfo* info = mModel->index2Info( index );
+
+    if( info && !info->isDisabled() )
+    {
+        Heaven::Menu* menu = info->isSubModule() ? menuCtxMenuSMRepo : menuCtxMenuRepo;
+        menu->setActivationContext( info );
+        actActivate->setEnabled( !info->isActive() );
+
+        menu->showPopup( globalPos );
+    }
 }
 
 void RepoTreeView::onCtxActivate()
 {
-
+    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
+    if( action )
+    {
+        RepositoryInfo* info = qobject_cast< RepositoryInfo* >( action->activatedBy() );
+        if( info )
+        {
+            MacGitver::repoMan().activate( info );
+        }
+    }
 }
 
 void RepoTreeView::onCtxClose()

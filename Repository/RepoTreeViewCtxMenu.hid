@@ -19,15 +19,15 @@ Ui RepoTreeViewCtxMenu {
 
 
     Action Activate {
-        Text            "&Active";
-        StatusToolTip   "Toggle active state of this repository.";
-        _ConnectTo      onCtxActivate();
+        Text            "&Activate";
+        StatusToolTip   "Make this repository the active one.";
+        ConnectTo       onCtxActivate();
     };
 
     Action Close {
         Text            "&Close";
         StatusToolTip   "Close this repository";
-        _ConnectTo      onCtxClose();
+        ConnectTo       onCtxClose();
     };
 
     Menu CtxMenuRepo {

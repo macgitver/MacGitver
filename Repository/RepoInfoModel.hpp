@@ -22,11 +22,11 @@
 class RepositoryInfo;
 class RepoManager;
 
-class RepositoryInfoModel : public QAbstractItemModel
+class RepoInfoModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    RepositoryInfoModel();
+    RepoInfoModel();
 
 public:
     int rowCount( const QModelIndex& parent = QModelIndex() ) const;
@@ -35,9 +35,7 @@ public:
     QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
     QModelIndex parent( const QModelIndex& child ) const;
 
-private slots:
-
-private:
+public:
     RepositoryInfo* index2Info( const QModelIndex& index ) const;
     QModelIndex info2Index( RepositoryInfo* info ) const;
 

@@ -19,12 +19,12 @@
 
 #include "RepoInfoModel.hpp"
 
-RepositoryInfoModel::RepositoryInfoModel()
+RepoInfoModel::RepoInfoModel()
 {
     mRepoMan = &MacGitver::repoMan();
 }
 
-int RepositoryInfoModel::rowCount( const QModelIndex& parent ) const
+int RepoInfoModel::rowCount( const QModelIndex& parent ) const
 {
     if( parent.isValid() )
     {
@@ -37,12 +37,12 @@ int RepositoryInfoModel::rowCount( const QModelIndex& parent ) const
     }
 }
 
-int RepositoryInfoModel::columnCount( const QModelIndex& parent ) const
+int RepoInfoModel::columnCount( const QModelIndex& parent ) const
 {
     return 1;
 }
 
-QVariant RepositoryInfoModel::data( const QModelIndex& index, int role ) const
+QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
 {
     if( role == Qt::DisplayRole )
     {
@@ -58,7 +58,7 @@ QVariant RepositoryInfoModel::data( const QModelIndex& index, int role ) const
     return QVariant();
 }
 
-QModelIndex RepositoryInfoModel::index( int row, int column, const QModelIndex& parent ) const
+QModelIndex RepoInfoModel::index( int row, int column, const QModelIndex& parent ) const
 {
     RepositoryInfo::List list;
 
@@ -85,7 +85,7 @@ QModelIndex RepositoryInfoModel::index( int row, int column, const QModelIndex& 
     return info2Index( list.at( row ) );
 }
 
-QModelIndex RepositoryInfoModel::parent( const QModelIndex& child ) const
+QModelIndex RepoInfoModel::parent( const QModelIndex& child ) const
 {
     if( !child.isValid() )
     {
@@ -101,14 +101,13 @@ QModelIndex RepositoryInfoModel::parent( const QModelIndex& child ) const
     return info2Index( info->parentRepository() );
 }
 
-RepositoryInfo* RepositoryInfoModel::index2Info( const QModelIndex& index ) const
+RepositoryInfo* RepoInfoModel::index2Info( const QModelIndex& index ) const
 {
     return static_cast< RepositoryInfo* >( index.internalPointer() );
 }
 
-QModelIndex RepositoryInfoModel::info2Index( RepositoryInfo* info ) const
+QModelIndex RepoInfoModel::info2Index( RepositoryInfo* info ) const
 {
-    // QModelIndex parentIndex;
     int row = 0;
 
     if( !info )

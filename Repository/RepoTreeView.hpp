@@ -24,6 +24,7 @@
 
 class QModelIndex;
 
+class RepoInfoModel;
 class TreeViewCtxMenu;
 
 class RepoTreeView : public Heaven::GlobalView, private RepoTreeViewCtxMenu
@@ -44,6 +45,7 @@ private slots:
 
 private:
     Heaven::MiniSplitter*   mSplitter;
+    RepoInfoModel*          mModel;
     TreeViewCtxMenu*        mRepos;
 };
 

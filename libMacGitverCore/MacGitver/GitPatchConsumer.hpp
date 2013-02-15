@@ -31,8 +31,7 @@ public:
     virtual ~GitPatchConsumer();
 
 private:
-    virtual bool startFile( const QString& oldPath, const QString& newPath, Type type,
-                            unsigned int similarity, bool isBinary );
+    virtual bool raw( const Git::ChangeListEntry &entry );
 
     virtual bool startHunk( int newStart, int newLines, int oldStart, int oldLines,
                             const QString& header );

@@ -30,32 +30,31 @@ GitPatchConsumer::~GitPatchConsumer()
 {
 }
 
-bool GitPatchConsumer::startFile( const QString& oldPath, const QString& newPath, Type type,
-                                  unsigned int similarity, bool isBinary )
+bool GitPatchConsumer::raw( const Git::ChangeListEntry &entry )
 {
     #if DBG
     qDebug( "%s => %s; t=%i, sim=%i, %s",
-            qPrintable( oldPath ),
-            qPrintable( newPath ),
-            int(type),
-            similarity,
-            isBinary ? "Bin" : "Txt" );
+            qPrintable( entry.oldPath ),
+            qPrintable( entry.newPath ),
+            int(entry.type),
+            entry.similarity,
+            entry.isBinary ? "Bin" : "Txt" );
     #endif
 
-    if( isBinary )
+    if( entry.isBinary )
     {
         mCurFile = NULL;
         DiffViews::FilePatch::Ptr bfp;
-        bfp = new DiffViews::BinaryFilePatch( QStringList() << oldPath << newPath );
+        bfp = new DiffViews::BinaryFilePatch( QStringList() << entry.oldPath << entry.newPath );
         mPatch->addPath( bfp );
     }
     else
     {
-        mCurFile = new DiffViews::TextFilePatch( QStringList() << oldPath << newPath );
+        mCurFile = new DiffViews::TextFilePatch( QStringList() << entry.oldPath << entry.newPath );
         mPatch->addPath( mCurFile );
     }
 
-    return false;
+    return true;
 }
 
 bool GitPatchConsumer::startHunk( int newStart, int newLines, int oldStart, int oldLines,

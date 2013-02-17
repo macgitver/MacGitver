@@ -31,10 +31,10 @@ public:
     virtual ~GitPatchConsumer();
 
 private:
-    virtual bool raw( const Git::ChangeListEntry &entry );
+    virtual bool startFileChange( const Git::ChangeListEntry &entry );
 
-    virtual bool startHunk( int newStart, int newLines, int oldStart, int oldLines,
-                            const QString& header );
+    virtual bool startHunkChange( int newStart, int newLines, int oldStart, int oldLines,
+                                  const QString& header );
 
     virtual bool appendContext( const QString& content );
     virtual bool appendAddition( const QString& content );

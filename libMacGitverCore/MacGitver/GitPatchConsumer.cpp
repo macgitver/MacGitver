@@ -30,7 +30,7 @@ GitPatchConsumer::~GitPatchConsumer()
 {
 }
 
-bool GitPatchConsumer::raw( const Git::ChangeListEntry &entry )
+bool GitPatchConsumer::startFileChange( const Git::ChangeListEntry &entry )
 {
     #if DBG
     qDebug( "%s => %s; t=%i, sim=%i, %s",
@@ -57,8 +57,8 @@ bool GitPatchConsumer::raw( const Git::ChangeListEntry &entry )
     return true;
 }
 
-bool GitPatchConsumer::startHunk( int newStart, int newLines, int oldStart, int oldLines,
-                                  const QString& header )
+bool GitPatchConsumer::startHunkChange( int newStart, int newLines, int oldStart, int oldLines,
+                                        const QString& header )
 {
     if( mCurFile )
     {

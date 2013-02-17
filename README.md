@@ -9,13 +9,15 @@ Features
 ========
 
 Currently working
-- Open / Close / Create repositories
-- Showing branches / tags / all refs
-- Showing the repository's history
-- Showing the state of the working tree (support for the index is not yet fully included)
-- ...
+- Open / Create repositories
+- Show the repository's history with branch / tag labels
+- Show the state of the working tree
+- Show the submodule tree
+- Show multiple diff views for a selected commit
+- Show and edit the Git configuration (system, user and local)
 
-Not yet working
+Not yet working (In progress)
+- Commit changes
 - Clone repositories
 
 Release Plans

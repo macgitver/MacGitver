@@ -5,6 +5,12 @@ MacGitver is a cross platform, Qt-based GUI for git repositories.
 
 It's still in it's early stages, under heavy development and far from being stable.
 
+Screenshots
+========
+
+The history view of an opened repository:
+![History view of MacGitver](http://macgitver.github.com/images/screenshots/mgv_repo_history_view.png)
+
 Features
 ========
 

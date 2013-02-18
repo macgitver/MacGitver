@@ -42,6 +42,11 @@ RepositoryInfo::RepositoryInfo( const Git::Repository& repo )
     mParent = NULL;
     mUnloadTimer = NULL;
 
+    if( mPath.endsWith( L'/' ) )
+    {
+        mPath = mPath.left( mPath.length() - 1 );
+    }
+
     findAlias();
 
     if( mDisplayAlias.isEmpty() )

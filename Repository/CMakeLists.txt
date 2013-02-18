@@ -17,6 +17,7 @@ SET( SRC_FILES
 
     CreateRepositoryDlg.cpp
     CloneRepositoryDlg.cpp
+    ProgressDlg.cpp
 )
 
 SET( HDR_FILES
@@ -28,12 +29,14 @@ SET( HDR_FILES
 
     CreateRepositoryDlg.h
     CloneRepositoryDlg.h
+    ProgressDlg.hpp
 )
 
 SET( UI_FILES
 
     CreateRepositoryDlg.ui
     CloneRepositoryDlg.ui
+    ProgressDlg.ui
 )
 
 SET( HID_FILES

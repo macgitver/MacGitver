@@ -14,19 +14,22 @@
  *
  */
 
+#include <QStringBuilder>
 #include <QMessageBox>
 #include <QDir>
 #include <QFileDialog>
 
 #include "libMacGitverCore/Config/Config.h"
 
-#include "libGitWrap/BackgroundClone.hpp"
-
-#include "CloneRepositoryDlg.h"
+#include "libGitWrap/CloneOperation.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
+#include "CloneRepositoryDlg.h"
+#include "ProgressDlg.hpp"
+
 CloneRepositoryDlg::CloneRepositoryDlg()
+    : mProgress( NULL )
 {
     setupUi( this );
 
@@ -127,21 +130,106 @@ void CloneRepositoryDlg::checkValid()
 
 void CloneRepositoryDlg::accept()
 {
-    Git::BackgroundClone* clone = new Git::BackgroundClone;
-    clone->setFrom( txtUrl->text(), txtPath->text() );
-    clone->setType(
-                chkCloneBare->isChecked(),
-                chkCloneMirror->isChecked(),
-                chkCheckout->isChecked() );
-    clone->setRemoteName( txtRemoteName->text() );
-    clone->setSubmodule(
-                chkInitSubmodules->isChecked(),
-                chkSubmodulesRecursive->isChecked() );
+    Git::CloneOperation* clone = new Git::CloneOperation( this );
+    clone->setBackgroundMode( true );
+    clone->setUrl( txtUrl->text() );
+    clone->setPath( txtPath->text() );
 
-    Git::Repository repo = clone->repository();
+    mProgress = new ProgressDlg( this );
+    mProgress->show();
+    mProgress->setCurrent( clone );
 
-    Git::BackgroundThead* thread = new Git::BackgroundThead();
-    thread->queue( clone );
-    thread->start();
-    thread->wait();
+    QString repoName = txtUrl->text();
+    if( repoName.endsWith( QLatin1String( ".git" ) ) )
+        repoName = repoName.left( repoName.length() - 4 );
+
+    if( repoName.lastIndexOf( QChar( L'/' ) ) != -1 )
+        repoName.remove( 0, repoName.lastIndexOf( QChar( L'/' ) ) + 1 );
+
+    mAction = tr( "Cloning <b>%1</b>" ).arg( repoName );
+    mProgress->beginStep( mAction );
+    mStates.clear();
+    mStates[ Prepare ] = Current;
+    mStates[ Download ] = Open;
+    mStates[ Index ] = Open;
+    mStates[ Checkout ] = Open;
+    updateAction();
+
+    connect( clone, SIGNAL(finished()), this, SLOT(rootCloneFinished()) );
+    connect( clone, SIGNAL(transportProgress(quint32,quint32,quint32,quint64)),
+             this, SLOT(beginDownloading()) );
+    connect( clone, SIGNAL(doneDownloading()), this, SLOT(doneDownload()) );
+    connect( clone, SIGNAL(doneIndexing()), this, SLOT(doneIndexing()) );
+    clone->execute();
+}
+
+void CloneRepositoryDlg::beginDownloading()
+{
+    disconnect( sender(), SIGNAL(transportProgress(quint32,quint32,quint32,quint64)),
+                this, SLOT(beginDownloading()) );
+
+    mStates[ Prepare ] = Done;
+    mStates[ Download ] = Current;
+    mStates[ Index ] = Current;
+    updateAction();
+}
+
+void CloneRepositoryDlg::doneIndexing()
+{
+    mStates[ Index ] = Done;
+
+    if( mStates.contains( Checkout ) )
+        mStates[ Checkout ] = Current;
+
+    updateAction();
+}
+
+void CloneRepositoryDlg::doneCheckout()
+{
+    mStates[ Checkout ] = Done;
+    updateAction();
+}
+
+void CloneRepositoryDlg::doneDownload()
+{
+    mStates[ Download ] = Done;
+    updateAction();
+}
+
+void CloneRepositoryDlg::updateAction()
+{
+    QStringList open, current, done;
+
+    QHash< Tasks, QString > t;
+    t.insert( Prepare, tr( "Prepare" ) );
+    t.insert( Index, tr( "Indexing" ) );
+    t.insert( Download, tr( "Downloading" ) );
+    t.insert( Checkout, tr( "Check out" ) );
+
+    foreach( Tasks task, mStates.keys() )
+    {
+        QStringList* sl = NULL;
+
+        if( mStates[ task ] == Open ) sl = &open;
+        else if( mStates[ task ] == Done ) sl = &done;
+        else if( mStates[ task ] == Current ) sl = &current;
+
+        if( sl )
+            sl->append( t[ task ] );
+    }
+
+    mProgress->setAction( mAction, open, current, done );
+}
+
+void CloneRepositoryDlg::rootCloneFinished()
+{
+    if( !chkInitSubmodules->isChecked() )
+    {
+        if( mStates[ Checkout ] == Current ) doneCheckout();
+
+        mProgress->setDone();
+
+        connect( mProgress, SIGNAL(rejected()), this, SLOT(reject()) );
+        return;
+    }
 }

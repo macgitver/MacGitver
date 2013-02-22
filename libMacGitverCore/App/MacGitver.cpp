@@ -30,6 +30,32 @@
 #include "libMacGitverCore/MacGitver/RepoManager.hpp"
 
 /**
+ * @class   MgvViewFactory
+ * @brief   Heaven's Factory for MacGitver-Views
+ */
+
+/**
+ * @brief       Constructor
+ * @param[in]   _d          Pointer to MacGitver's private data
+ */
+MgvViewFactory::MgvViewFactory( MacGitverPrivate* _d )
+    : Heaven::ViewFactory( _d )
+    , d( _d )
+{
+}
+
+Heaven::View* MgvViewFactory::createView( const QString& identifier )
+{
+    if( d->mViews.contains( identifier ) )
+    {
+        MgvViewInfo vi = d->mViews.value( identifier );
+        return vi.mCreator();
+    }
+
+    return NULL;
+}
+
+/**
  * @class   MacGitver
  * @brief   Central core of the MacGitver application
  *
@@ -55,6 +81,8 @@ MacGitverPrivate::MacGitverPrivate( MacGitver* owner )
     sLog        = new CoreLog;
     sRepoMan    = new RepoManager;
     sModules    = new Modules;
+
+    mViewFactory = new MgvViewFactory( this );
 
     // Continue with the rest of the init-process after QApplication::exec() has started to run.
     QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
@@ -143,17 +171,6 @@ void MacGitver::unregisterView( const QString& identifier )
     d->mViews.remove( identifier );
 }
 
-Heaven::View* MacGitver::createView( const QString& identifier )
-{
-    if( d->mViews.contains( identifier ) )
-    {
-        MgvViewInfo vi = d->mViews.value( identifier );
-        return vi.mCreator();
-    }
-
-    return NULL;
-}
-
 void MacGitver::log( LogType type, const QString& logMessage )
 {
     log().addMessage( type, logMessage );
@@ -187,4 +204,9 @@ int MacGitver::exec()
 {
     MacGitver mgv;
     return qApp->exec();
+}
+
+Heaven::ViewFactory* MacGitver::viewFactory()
+{
+    return d->mViewFactory;
 }

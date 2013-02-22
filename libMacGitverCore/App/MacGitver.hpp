@@ -26,6 +26,7 @@
 #include "libGitWrap/Result.hpp"
 
 #include "libHeaven/Views/View.h"
+#include "libHeaven/Views/ViewFactory.hpp"
 
 class RepoManager;
 
@@ -52,7 +53,7 @@ public:
 
     void registerView( const QString& identifier, Heaven::ViewTypes type, MgvViewCreator* creator );
     void unregisterView( const QString& identifier );
-    Heaven::View* createView( const QString& identifier );
+    Heaven::ViewFactory* viewFactory();
 
     static void log( LogType type, const QString& logMessage );
     static void log( LogType type, const char* logMessage );

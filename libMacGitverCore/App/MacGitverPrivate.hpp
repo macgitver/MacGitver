@@ -32,6 +32,17 @@ struct MgvViewInfo
 
 typedef QHash< QString, MgvViewInfo > MgvViewInfos;
 
+class MgvViewFactory : public Heaven::ViewFactory
+{
+public:
+    MgvViewFactory( MacGitverPrivate* _d );
+
+    Heaven::View* createView( const QString& identifier );
+
+private:
+    MacGitverPrivate* d;
+};
+
 class MacGitverPrivate : public QObject
 {
     Q_OBJECT
@@ -50,6 +61,7 @@ public:
     Git::GitWrap        mGitWrap;
     Git::Repository     mRepository;    /* deprecated */
     MgvViewInfos        mViews;
+    MgvViewFactory*     mViewFactory;
 
 public:
     static MacGitver*   sSelf;

@@ -19,9 +19,12 @@
 #include <QRegExp>
 #include <QDebug>
 #include <QDomDocument>
+#include <QStringBuilder>
 
 #include "UserLevelDefinition.h"
 
+#include "libHeaven/Heaven.hpp"
+#include "libHeaven/App/Application.hpp"
 #include "libHeaven/Views/Mode.h"
 #include "libHeaven/Views/ViewContainer.h"
 
@@ -125,187 +128,14 @@ QStringList EnableDisableList::appliedTo( const QStringList& list ) const
     return result.toList();
 }
 
-UserLevelDefaultLayoutEntry::UserLevelDefaultLayoutEntry()
-{
-}
-
-UserLevelDefaultLayoutEntry::~UserLevelDefaultLayoutEntry()
-{
-}
-
-UserLevelDefaultLayoutEntry::Type UserLevelDefaultLayoutEntry::type() const
-{
-    return mType;
-}
-
-int UserLevelDefaultLayoutEntry::numChildren() const
-{
-    return mChildren.count();
-}
-
-UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayoutEntry::childAt( int index ) const
-{
-    return mChildren.at( index );
-}
-
-QVector< UserLevelDefaultLayoutEntry::Ptr > UserLevelDefaultLayoutEntry::children() const
-{
-    return mChildren;
-}
-
-bool UserLevelDefaultLayoutEntry::isVertical() const
-{
-    return mVertical;
-}
-
-UserLevelDefaultLayoutEntry::TabPos UserLevelDefaultLayoutEntry::tabPos() const
-{
-    return mTabPos;
-}
-
-QString UserLevelDefaultLayoutEntry::name() const
-{
-    return mName;
-}
-
-bool UserLevelDefaultLayoutEntry::parseOrient( const QString& s )
-{
-    return s == QLatin1String( "Vert" );
-}
-
-UserLevelDefaultLayoutEntry::TabPos UserLevelDefaultLayoutEntry::parseCaption( const QString& s )
-{
-    if( s == QLatin1String( "Left" ) )
-        return Left;
-    if( s == QLatin1String( "Right" ) )
-        return Right;
-    if( s == QLatin1String( "Bottom" ) )
-        return Bottom;
-
-    return Top;
-}
-
-
-void UserLevelDefaultLayoutEntry::addToWindowState( Heaven::WindowStateBase* parent )
-{
-    switch( mType )
-    {
-    case Tab:
-        {
-            Heaven::ViewContainer::Type subType = Heaven::ViewContainer::Type( 0 );
-            switch( mTabPos )
-            {
-            case Left:		subType = Heaven::ViewContainer::SubTabLeft;	break;
-            case Right:		subType = Heaven::ViewContainer::SubTabRight;	break;
-            case Top:		subType = Heaven::ViewContainer::SubTabTop;		break;
-            case Bottom:	subType = Heaven::ViewContainer::SubTabBottom;	break;
-            }
-
-            Heaven::WindowStateTab* tab = new Heaven::WindowStateTab( parent );
-            tab->setTabSubType( subType );
-
-            foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, mChildren )
-            {
-                subEntry->addToWindowState( tab );
-            }
-        }
-        break;
-
-    case Split:
-        {
-            Heaven::WindowStateSplitter* split = new Heaven::WindowStateSplitter( parent );
-            split->setVertical( mVertical );
-
-            foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, mChildren )
-            {
-                subEntry->addToWindowState( split );
-            }
-        }
-        break;
-
-    case View:
-        {
-            Heaven::WindowStateView* view = new Heaven::WindowStateView( parent );
-            view->setViewId( mName );
-        }
-        break;
-    }
-}
-
-UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayoutEntry::read( const QDomElement& el )
-{
-    UserLevelDefaultLayoutEntry::Ptr entry( new UserLevelDefaultLayoutEntry );
-
-    if( el.tagName() == QLatin1String( "Split" ) )
-    {
-        entry->mType = Split;
-        entry->mVertical = parseOrient( el.attribute( QLatin1String( "Orient" ) ) );
-        entry->mStretch = el.attribute( QLatin1String( "Stretch" ), QLatin1String( "0" ) ).toInt();
-    }
-    else if( el.tagName() == QLatin1String( "Tab" ) )
-    {
-        entry->mType = Tab;
-        entry->mTabPos = parseCaption( el.attribute( QLatin1String( "Caption" ) ) );
-        entry->mStretch = el.attribute( QLatin1String( "Stretch" ), QLatin1String( "0" ) ).toInt();
-    }
-    else if( el.tagName() == QLatin1String( "View" ) )
-    {
-        entry->mType = View;
-        entry->mName = el.attribute( QLatin1String( "Name" ) );
-        entry->mStretch = el.attribute( QLatin1String( "Stretch" ), QLatin1String( "0" ) ).toInt();
-    }
-    else
-    {
-        return UserLevelDefaultLayoutEntry::Ptr();
-    }
-
-    for( QDomElement e = el.firstChildElement(); e.isElement(); e = e.nextSiblingElement() )
-    {
-        UserLevelDefaultLayoutEntry::Ptr child = read( e );
-        if( !child )
-        {
-            return UserLevelDefaultLayoutEntry::Ptr();
-        }
-        entry->mChildren.append( child );
-    }
-
-    return entry;
-}
-
-UserLevelDefaultLayout::UserLevelDefaultLayout()
-{
-}
-
-UserLevelDefaultLayout::~UserLevelDefaultLayout()
-{
-}
-
-UserLevelDefaultLayoutEntry::Ptr UserLevelDefaultLayout::root() const
-{
-    return mRoot;
-}
-
-UserLevelDefaultLayout::Ptr UserLevelDefaultLayout::read( const QDomElement& el )
-{
-    UserLevelDefaultLayout::Ptr deflay( new UserLevelDefaultLayout );
-
-    QDomElement elDef = el.firstChildElement();
-    if( !elDef.isElement() )
-    {
-        return UserLevelDefaultLayout::Ptr();
-    }
-
-    deflay->mRoot = UserLevelDefaultLayoutEntry::read( elDef );
-
-    return deflay;
-}
-
 UserLevelMode::UserLevelMode()
 {
 }
 
-UserLevelMode::UserLevelMode( const QString& modeName )
-    : mModeName( modeName )
+UserLevelMode::UserLevelMode( UserLevelDefinition* level, const QString& modeName )
+    : mLevel( level )
+    , mModeName( modeName )
+    , mHeavenMode( NULL )
     , mIsLocking( false )
     , mIsUserSelectable( true )
 {
@@ -315,14 +145,15 @@ UserLevelMode::~UserLevelMode()
 {
 }
 
+QString UserLevelMode::heavenModeName() const
+{
+    Q_ASSERT( mLevel );
+    return mLevel->name() % QChar( L'#' ) % mModeName;
+}
+
 QString UserLevelMode::name() const
 {
     return mModeName;
-}
-
-UserLevelDefaultLayout::Ptr UserLevelMode::defaultLayout() const
-{
-    return mDefaultLayout;
 }
 
 EnableDisableList& UserLevelMode::allowedViews()
@@ -345,16 +176,9 @@ bool UserLevelMode::isUserSelectable() const
     return mIsUserSelectable;
 }
 
-Heaven::Mode* UserLevelMode::createHeavenMode()
+UserLevelMode::Ptr UserLevelMode::read( UserLevelDefinition* level, const QDomElement& el )
 {
-    Heaven::WindowStateRoot* state = new Heaven::WindowStateRoot;
-    mDefaultLayout->root()->addToWindowState( state );
-    return new Heaven::Mode( mModeName, state );
-}
-
-UserLevelMode::Ptr UserLevelMode::read( const QDomElement& el )
-{
-    UserLevelMode::Ptr mode( new UserLevelMode( el.attribute( QLatin1String( "Name" ) ) ) );
+    UserLevelMode::Ptr mode( new UserLevelMode( level, el.attribute( QLatin1String( "Name" ) ) ) );
 
     if( el.hasAttribute( QLatin1String( "Selectable" ) ) )
     {
@@ -380,7 +204,9 @@ UserLevelMode::Ptr UserLevelMode::read( const QDomElement& el )
         }
         else if( e.tagName() == QLatin1String( "DefaultLayout" ) )
         {
-            mode->mDefaultLayout = UserLevelDefaultLayout::read( e );
+            Heaven::Mode* m = new Heaven::Mode( mode->heavenModeName(), e );
+            Heaven::app()->addMode( m );
+            mode->mHeavenMode = m;
         }
     }
 
@@ -483,7 +309,7 @@ void UserLevelDefinition::readGuiDef( const QString& fileName )
     {
         if( el.tagName() == QLatin1String( "Mode" ) )
         {
-            UserLevelMode::Ptr mode = UserLevelMode::read( el );
+            UserLevelMode::Ptr mode = UserLevelMode::read( this, el );
             if( !mode )
             {
                 return;

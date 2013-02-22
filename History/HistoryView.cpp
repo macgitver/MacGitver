@@ -55,17 +55,15 @@ HistoryView::HistoryView()
     mList = new HistoryList;
     mList->setFrameShape( QFrame::NoFrame );
 
-    mModel = new HistoryModel( this );
-    mList->setModel( mModel );
-
     connect( mList, SIGNAL(currentCommitChanged(Git::ObjectId)),
              this, SLOT(currentCommitChanged(Git::ObjectId)) );
 
     mList->setItemDelegate( new HistoryListDelegate );
 
     mDetails = new HistoryDetails;
-
     mDiff = new HistoryDiff;
+
+    mModel = NULL;
 
     QVBoxLayout* l = new QVBoxLayout;
     l->setSpacing( 0 );
@@ -94,12 +92,21 @@ void HistoryView::repositoryChanged( Git::Repository repo )
     }
 
     mRepo = repo;
-    mModel->setRepository( repo );
+
+    if( mModel )
+    {
+        mList->setModel( NULL );
+        mModel->deleteLater();
+    }
+
     mDetails->setRepository( repo );
     mDiff->setRepository( repo );
 
     if( mRepo.isValid() )
     {
+        mModel = new HistoryModel( mRepo, this );
+        mList->setModel( mModel );
+
         buildHistory();
     }
 }

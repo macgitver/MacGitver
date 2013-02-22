@@ -49,7 +49,7 @@ public:
     };
 
 public:
-    HistoryModel( QObject* parent = NULL );
+    HistoryModel( const Git::Repository& repo, QObject* parent = NULL );
     ~HistoryModel();
 
 public:
@@ -67,7 +67,6 @@ public:
 public:
     void append( HistoryEntry* entry );
     void updateRow( int row );
-    void setRepository( Git::Repository repo );
 
 public slots:
     void ensurePopulated( int row );

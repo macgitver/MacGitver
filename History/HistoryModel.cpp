@@ -17,27 +17,16 @@
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
 
-HistoryModel::HistoryModel( QObject* parent )
+HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
     : QAbstractTableModel( parent )
 {
+    mRepo = repo;
     mMode = modeSimple;
 }
 
 HistoryModel::~HistoryModel()
 {
     qDeleteAll( mEntries );
-}
-
-void HistoryModel::setRepository( Git::Repository repo )
-{
-    mRepo = repo;
-
-    beginResetModel();
-
-    qDeleteAll( mEntries );
-    mEntries.clear();
-
-    endResetModel();
 }
 
 int HistoryModel::columnMap( int index ) const

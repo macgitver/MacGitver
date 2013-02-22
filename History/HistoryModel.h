@@ -23,7 +23,6 @@
 #include "libGitWrap/Repository.hpp"
 
 class HistoryEntry;
-class HistoryBuilder;
 
 class HistoryModel : public QAbstractTableModel
 {
@@ -67,6 +66,7 @@ public:
 public:
     void append( HistoryEntry* entry );
     void updateRow( int row );
+    void buildHistory();
 
 public slots:
     void ensurePopulated( int row );

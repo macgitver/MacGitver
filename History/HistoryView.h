@@ -28,7 +28,6 @@ class QToolBar;
 
 #include "hic_HistoryViewActions.h"
 
-class HistoryBuilder;
 class HistoryModel;
 class HistoryDetails;
 class HistoryList;
@@ -46,9 +45,6 @@ public:
 public slots:
     void repositoryChanged( Git::Repository repo );
 
-private:
-    void buildHistory();
-
 private slots:
     void currentCommitChanged( const Git::ObjectId& sh1 );
 
@@ -63,7 +59,6 @@ private:
     HistoryModel*           mModel;
     HistoryList*            mList;
     HistoryDetails*         mDetails;
-    HistoryBuilder*         mBuilder;
     HistoryDiff*            mDiff;
     Git::Repository         mRepo;
 };

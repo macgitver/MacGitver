@@ -16,12 +16,15 @@
 
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
+#include "HistoryBuilder.h"
 
 HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
     : QAbstractTableModel( parent )
 {
     mRepo = repo;
     mMode = modeSimple;
+
+    Q_ASSERT( mRepo.isValid() );
 }
 
 HistoryModel::~HistoryModel()
@@ -208,4 +211,11 @@ void HistoryModel::ensurePopulated( int row )
 void HistoryModel::append( HistoryEntry* entry )
 {
     mEntries.append( entry );
+}
+
+void HistoryModel::buildHistory()
+{
+    HistoryBuilder b( mRepo, this );
+    b.addHEAD();
+    b.start();
 }

@@ -32,7 +32,6 @@
 #include "HistoryView.h"
 #include "HistoryEntry.h"
 #include "HistoryModel.h"
-#include "HistoryBuilder.h"
 #include "HistoryDiff.h"
 #include "HistoryList.h"
 #include "HistoryListDelegate.h"
@@ -71,8 +70,6 @@ HistoryView::HistoryView()
     setLayout( l );
     initSplitters();
 
-    mBuilder = NULL;
-
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
              this, SLOT(repositoryChanged(Git::Repository)) );
 
@@ -85,12 +82,6 @@ HistoryView::HistoryView()
 
 void HistoryView::repositoryChanged( Git::Repository repo )
 {
-    if( mBuilder )
-    {
-        delete mBuilder;
-        mBuilder = NULL;
-    }
-
     mRepo = repo;
 
     if( mModel )
@@ -105,26 +96,9 @@ void HistoryView::repositoryChanged( Git::Repository repo )
     if( mRepo.isValid() )
     {
         mModel = new HistoryModel( mRepo, this );
+        mModel->buildHistory();
         mList->setModel( mModel );
-
-        buildHistory();
     }
-}
-
-void HistoryView::buildHistory()
-{
-    if( !mRepo.isValid() )
-    {
-        return;
-    }
-
-    if( !mBuilder )
-    {
-        mBuilder = new HistoryBuilder( mRepo, mModel );
-    }
-
-    mBuilder->addHEAD();
-    mBuilder->start();
 }
 
 void HistoryView::currentCommitChanged( const Git::ObjectId& sha1 )

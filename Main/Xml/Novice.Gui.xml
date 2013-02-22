@@ -1,71 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Heaven>
 
-	<Preset Name="Welcome" Mode="Welcome"/>
-	<Preset Name="Normal"  Mode="Novice"/>
+    <Preset Name="Welcome" Mode="Welcome"/>
+    <Preset Name="Normal"  Mode="Novice"/>
 
-	<Mode Name="Welcome" Selectable="0" Locking="1">
+    <Mode Name="Welcome" Selectable="0" Locking="1">
 
-		<Views>
-			<Disable Match="*"/>
-			<Enable  Match="Welcome"/>
-		</Views>
+        <Views>
+            <Disable Match="*"/>
+            <Enable  Match="Welcome"/>
+        </Views>
 
-		<DefaultLayout>
-			<View Name="Welcome"/>
-		</DefaultLayout>
+        <DefaultLayout>
+            <Window Id="97302003-c519-43b6-aea1-26db56e99941">
+                <Split Orient="Horz" Id="758c6df6-8153-4382-aae7-0f5603302b05">
+                    <View Id="Welcome"/>
+                </Split>
+            </Window>
+        </DefaultLayout>
 
-	</Mode>
+    </Mode>
 
-	<Mode Name="Novice" Selectable="0" Locking="1">
+    <Mode Name="Novice" Selectable="0" Locking="1">
 
-		<Views>
-			<Disable Match="*"/>
-			<Enable  Match="History"/>
+        <Views>
+            <Disable Match="*"/>
+            <Enable  Match="History"/>
             <Enable  Match="WorkTree"/>
             <Enable  Match="RepoTree"/>
-		</Views>
+        </Views>
 
-		<DefaultLayout>
-            <Split Orient="Horz">
-                <Tab Caption="Left">
-                    <View Name="RepoTree"/>
-                </Tab>
-                <Tab Caption="Top" Stretch="3">
-                    <View Name="History"/>
-                    <View Name="WorkTree"/>
+        <DefaultLayout>
+            <Window Id="97302003-c519-43b6-aea1-26db56e99941">
+                <Split Orient="Horz" Id="758c6df6-8153-4382-aae7-0f5603302b05">
+                    <Split Orient="Vert" Id="550c094d-b8e9-4761-a92e-2e715f775d6c">
+                        <Tab Pos="Left" Id="c9e000f4-9fa3-4e42-a3c7-cc77d604096f">
+                            <View Id="RepoTree"/>
+                        </Tab>
+                        <Tab Pos="Left" Id="5549d783-bc26-4838-860e-686cf60256c8">
+                            <View Id="Branches"/>
+                        </Tab>
+                    </Split>
+                    <Tab Pos="Top" Stretch="3" Id="a942b497-d7f0-42c5-a1ae-748eea9bfa0f">
+                        <View Id="History"/>
+                        <View Id="WorkTree"/>
+                    </Tab>
+                </Split>
+            </Window>
+        </DefaultLayout>
+
+    <!--
+        <Views>
+            <Disable Match="*"/>
+            <Enable  Match="History"/>
+            <Enable  Match="WorkTree"/>
+            <Enable  Match="Branches"/>
+            <Enable  Match="Tags"/>
+            <Enable  Match="Log"/>
+        </Views>
+
+        <DefaultLayout>
+            <Split Orient="Vert">
+                <Split Orient="Horz" Stretch="3">
+                    <Tab Caption="Left">
+                        <View Id="Branches"/>
+                        <View Id="Tags"/>
+                    </Tab>
+                    <Tab Caption="Top" Stretch="2">
+                        <View Id="History"/>
+                        <View Id="WorkTree"/>
+                    </Tab>
+                </Split>
+                <Tab Caption="Bottom">
+                    <View Id="Log"/>
                 </Tab>
             </Split>
-		</DefaultLayout>
-
-	<!--
-		<Views>
-			<Disable Match="*"/>
-			<Enable  Match="History"/>
-			<Enable  Match="WorkTree"/>
-			<Enable  Match="Branches"/>
-			<Enable  Match="Tags"/>
-			<Enable  Match="Log"/>
-		</Views>
-
-		<DefaultLayout>
-			<Split Orient="Vert">
-				<Split Orient="Horz" Stretch="3">
-					<Tab Caption="Left">
-						<View Name="Branches"/>
-						<View Name="Tags"/>
-					</Tab>
-					<Tab Caption="Top" Stretch="2">
-						<View Name="History"/>
-						<View Name="WorkTree"/>
-					</Tab>
-				</Split>
-				<Tab Caption="Bottom">
-					<View Name="Log"/>
-				</Tab>
-			</Split>
-		</DefaultLayout>
-	-->
-	</Mode>
+        </DefaultLayout>
+    -->
+    </Mode>
 
 </Heaven>

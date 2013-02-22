@@ -32,15 +32,12 @@ void HistoryModel::setRepository( Git::Repository repo )
 {
     mRepo = repo;
 
-    if( !mRepo.isValid() )
-    {
-        beginResetModel();
+    beginResetModel();
 
-        qDeleteAll( mEntries );
-        mEntries.clear();
+    qDeleteAll( mEntries );
+    mEntries.clear();
 
-        endResetModel();
-    }
+    endResetModel();
 }
 
 int HistoryModel::columnMap( int index ) const

@@ -64,6 +64,11 @@ MgvPrimaryWindow::MgvPrimaryWindow()
 
     QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
 
+    setupFonts();
+
+    connect( &Config::self(), SIGNAL(fontsChanged()),
+             this, SLOT(setupFonts()) );
+
     foreach( UserLevelDefinition::Ptr uld, Config::self().levels() )
     {
         if( uld->id() == levelId )
@@ -72,11 +77,6 @@ MgvPrimaryWindow::MgvPrimaryWindow()
             break;
         }
     }
-
-    setupFonts();
-
-    connect( &Config::self(), SIGNAL(fontsChanged()),
-             this, SLOT(setupFonts()) );
 }
 
 MgvPrimaryWindow::~MgvPrimaryWindow()
@@ -116,6 +116,7 @@ void MgvPrimaryWindow::setupUi()
             resize( r.size() );
             move( r.topLeft() );
         }
+        show();
     }
 }
 

@@ -102,8 +102,7 @@ void MacGitverPrivate::boot()
     loadLevels();
     sModules->initialize();
 
-    MgvPrimaryWindow* pw = new MgvPrimaryWindow;
-    pw->show();
+    new MgvPrimaryWindow;
 }
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;

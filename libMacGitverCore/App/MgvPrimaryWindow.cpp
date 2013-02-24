@@ -30,8 +30,6 @@
 #include "libGitWrap/Reference.hpp"
 
 #include "libHeaven/App/Application.hpp"
-#include "libHeaven/Views/Mode.h"
-#include "libHeaven/Views/TopLevelWidget.h"
 #include "libHeaven/Widgets/FooterWidget.hpp"
 
 #include "libMacGitverCore/App/MacGitverPrivate.hpp"

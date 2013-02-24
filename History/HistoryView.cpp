@@ -57,7 +57,9 @@ HistoryView::HistoryView()
     connect( mList, SIGNAL(currentCommitChanged(Git::ObjectId)),
              this, SLOT(currentCommitChanged(Git::ObjectId)) );
 
-    mList->setItemDelegate( new HistoryListDelegate );
+    mDelegate = new HistoryListDelegate;
+
+    mList->setItemDelegate( mDelegate );
 
     mDetails = new HistoryDetails;
     mDiff = new HistoryDiff;

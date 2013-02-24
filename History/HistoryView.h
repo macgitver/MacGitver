@@ -31,6 +31,7 @@ class QToolBar;
 class HistoryModel;
 class HistoryDetails;
 class HistoryList;
+class HistoryListDelegate;
 
 class HistoryDiff;
 
@@ -56,6 +57,7 @@ private:
 private:
     Heaven::MiniSplitter*   mVertSplit;
     Heaven::MiniSplitter*   mHorzSplit;
+    HistoryListDelegate*    mDelegate;
     HistoryModel*           mModel;
     HistoryList*            mList;
     HistoryDetails*         mDetails;

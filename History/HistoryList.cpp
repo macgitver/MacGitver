@@ -30,6 +30,10 @@ HistoryList::HistoryList()
     #ifdef Q_OS_MACX
     setAttribute( Qt::WA_MacShowFocusRect, false );
     #endif
+
+    HeaderView* hv = new HeaderView( Qt::Horizontal );
+    hv->setConfigName( configSubPath( "Columns" ) );
+    setHeader( hv );
 }
 
 void HistoryList::onCurrentChanged()
@@ -56,13 +60,9 @@ void HistoryList::setModel( QAbstractItemModel* model )
 
     connect( selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
              this, SLOT(onCurrentChanged()) );
-
-    HeaderView* hv = new HeaderView( Qt::Horizontal );
-    setHeader( hv );
-    hv->setConfigName( configSubPath( "Columns" ) );
 }
 
 void HistoryList::configChanged( const QString& subPath, const QVariant& value )
 {
-    qDebug() << "ConfigChange:" << subPath << "=>" << value;
+    //qDebug() << "ConfigChange:" << subPath << "=>" << value;
 }

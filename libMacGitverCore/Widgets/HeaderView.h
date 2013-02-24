@@ -31,9 +31,10 @@ public:
     void setConfigName( const QString& name );
     QString configName() const;
 
-    void loadSizes();
+    void setModel( QAbstractItemModel* model );
 
 public slots:
+    void loadSizes();
     void saveSizes();
 
 private:

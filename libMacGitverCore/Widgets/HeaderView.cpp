@@ -41,7 +41,8 @@ void HeaderView::loadSizes()
     if( mConfigName.isEmpty() )
         return;
 
-    restoreState( Config::self().get( mConfigName ).toByteArray() );
+    bool b = restoreState( Config::self().get( mConfigName ).toByteArray() );
+    Q_ASSERT( b );
 }
 
 void HeaderView::saveSizes()
@@ -50,4 +51,11 @@ void HeaderView::saveSizes()
         return;
 
     Config::self().set( mConfigName, saveState() );
+}
+
+void HeaderView::setModel( QAbstractItemModel* model )
+{
+    saveSizes();
+    QHeaderView::setModel( model );
+    loadSizes();
 }

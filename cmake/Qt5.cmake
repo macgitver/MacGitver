@@ -2,12 +2,18 @@
 FIND_PROGRAM( QMAKE_EXE qmake )
 
 EXECUTE_PROCESS(
-    COMMAND				${QMAKE_EXE} -query QT_INSTALL_PREFIX
-    OUTPUT_VARIABLE		QT_INSTALL_PREFIX
+    COMMAND                     ${QMAKE_EXE} -query QT_INSTALL_PREFIX
+    OUTPUT_VARIABLE             QT_INSTALL_PREFIX
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
 SET( CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${QT_INSTALL_PREFIX} )
+
+SET( _mods Core Gui Widgets Xml Network )
+
+FOREACH( _mod ${_mods} )
+    FIND_PACKAGE(Qt5${_mod})
+ENDFOREACH()
 
 MACRO(QT_MOC SourcesVar )
 
@@ -129,29 +135,14 @@ function(QT_RCC infiles outfiles )
 endfunction()
 
 MACRO( QT_PREPARE )
-
     SET( QT_USED_MODULES "" )
-
     FOREACH( mod ${ARGN} )
-
         IF( ${mod} STREQUAL "Main" )
-
             # Don't do anything
-
         ELSEIF( NOT ${mod} STREQUAL "-Gui" )
-
-            IF( "${Qt5${mod}_DIR}" STREQUAL "" )
-                FIND_PACKAGE( Qt5${mod} REQUIRED )
-            ENDIF()
-
             LIST( APPEND QT_USED_MODULES ${mod} )
-
-            INCLUDE( ${Qt5${mod}_DIR}/Qt5${mod}Config.cmake )
-
         ENDIF()
-
     ENDFOREACH()
-
 ENDMACRO()
 
 MACRO( ADD_QT_LIBRARY _target )

@@ -28,8 +28,6 @@
 #include "libHeaven/App/Application.hpp"
 #include "libHeaven/App/Mode.hpp"
 
-#include "libHeaven/Views/ViewContainer.h"
-
 EnableDisable::EnableDisable()
 {
 }

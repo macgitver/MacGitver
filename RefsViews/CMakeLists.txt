@@ -32,7 +32,13 @@ SET( HDR_FILES
     TagsView.h
 )
 
+SET( HID_FILES
+
+    BranchesViewActions.hid
+)
+
 QT_MOC( MOC_FILES ${HDR_FILES} )
+HIC( HIC_FILES ${HID_FILES} )
 
 ADD_MGV_MODULE(
     RefsViews

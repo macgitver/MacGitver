@@ -14,35 +14,24 @@
  *
  */
 
-#ifndef MGV_BRANCHES_VIEW_H
-#define MGV_BRANCHES_VIEW_H
+Ui BranchesViewActions {
 
-#include "libHeaven/Views/View.h"
+    ToolBar BranchesTB {
 
-#include "libGitWrap/Repository.hpp"
+        Action          ShowLocal {
+            Text        "Local";
+            Checkable   true;
+            Checked     true;
+            ConnectTo   rereadBranches();
+        };
 
-class QListWidget;
+        Action          ShowRemote {
+            Text        "Remote";
+            Checkable   true;
+            Checked     true;
+            ConnectTo   rereadBranches();
+        };
 
-#include "hic_BranchesViewActions.h"
+    };
 
-class BranchesView : public Heaven::View, private BranchesViewActions
-{
-    Q_OBJECT
-public:
-    BranchesView();
-
-public slots:
-    void repositoryChanged( Git::Repository repo );
-
-public:
-    virtual QSize sizeHint() const;
-
-private slots:
-    void rereadBranches();
-
-private:
-    Git::Repository mRepo;
-    QListWidget*    mListWidget;
 };
-
-#endif

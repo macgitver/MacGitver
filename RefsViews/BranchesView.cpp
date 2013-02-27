@@ -15,9 +15,6 @@
  */
 
 #include <QListWidget>
-#include <QToolBar>
-#include <QToolButton>
-#include <QVBoxLayout>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
@@ -29,33 +26,11 @@ BranchesView::BranchesView()
     mListWidget = new QListWidget();
     mListWidget->setFrameStyle( QFrame::NoFrame );
 
-    QVBoxLayout* l = new QVBoxLayout;
-    l->setSpacing( 0 );
-    l->setMargin( 0 );
-
-    mToolBar = new QToolBar;
-
-    mBtnLocals = new QToolButton;
-    mBtnLocals->setText( trUtf8( "Show local" ) );
-    mBtnLocals->setCheckable( true );
-    mBtnLocals->setChecked( true );
-    connect( mBtnLocals, SIGNAL(toggled(bool)), SLOT(rereadBranches()) );
-
-    mBtnRemotes = new QToolButton;
-    mBtnRemotes->setText( trUtf8( "Show remote" ) );
-    mBtnRemotes->setCheckable( true );
-    mBtnRemotes->setChecked( true );
-    connect( mBtnRemotes, SIGNAL(toggled(bool)), SLOT(rereadBranches()) );
-
-    mToolBar->addWidget( mBtnLocals );
-    mToolBar->addWidget( mBtnRemotes );
-
-    l->addWidget( mToolBar );
-    l->addWidget( mListWidget );
-
-    setLayout( l );
+    setupActions( this );
 
     setViewName( trUtf8( "Branches" ) );
+    setToolBar( tbBranchesTB );
+    setWidget( mListWidget );
 
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
              this, SLOT(repositoryChanged(Git::Repository)) );
@@ -81,7 +56,7 @@ void BranchesView::rereadBranches()
     {
         Git::Result r;
         QString curBranch = mRepo.currentBranch( r );
-        QStringList sl = mRepo.branches( mBtnLocals->isChecked(), mBtnRemotes->isChecked(), r );
+        QStringList sl = mRepo.branches( actShowLocal->isChecked(), actShowRemote->isChecked(), r );
 
         for( int i = 0; i < sl.count(); i++ )
         {

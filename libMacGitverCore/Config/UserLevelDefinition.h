@@ -25,7 +25,7 @@
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
-#include "libHeaven/Views/WindowState.hpp"
+#include "libHeaven/CentralUI/WindowState.hpp"
 
 class QDomElement;
 

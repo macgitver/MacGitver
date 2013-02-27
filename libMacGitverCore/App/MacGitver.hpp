@@ -25,8 +25,8 @@
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Result.hpp"
 
-#include "libHeaven/Views/View.h"
-#include "libHeaven/Views/ViewFactory.hpp"
+#include "libHeaven/CentralUI/Views/View.hpp"
+#include "libHeaven/CentralUI/ViewFactory.hpp"
 
 class RepoManager;
 

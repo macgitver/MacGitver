@@ -80,7 +80,7 @@ bool GitPatchConsumer::startHunkChange( int newStart, int newLines, int oldStart
         mCurFile->asTextFilePatch()->addHunk( mCurHunk );
     }
 
-    return false;
+    return true;
 }
 
 bool GitPatchConsumer::appendContext( const QString& content )
@@ -110,7 +110,7 @@ bool GitPatchConsumer::appendContext( const QString& content )
         --mRemainsOld;
     }
 
-    return false;
+    return true;
 }
 
 bool GitPatchConsumer::appendAddition( const QString& content )
@@ -142,7 +142,7 @@ bool GitPatchConsumer::appendAddition( const QString& content )
         mCurDiff->sideLines( 1 )->addLine( content );
     }
 
-    return false;
+    return true;
 }
 
 bool GitPatchConsumer::appendDeletion( const QString& content )
@@ -169,7 +169,7 @@ bool GitPatchConsumer::appendDeletion( const QString& content )
         mCurDiff->sideLines( 0 )->addLine( content );
     }
 
-    return false;
+    return true;
 }
 
 DiffViews::Patch::Ptr GitPatchConsumer::patch() const

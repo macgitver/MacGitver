@@ -17,7 +17,7 @@
 #ifndef MGV_REMOTES_VIEW_H
 #define MGV_REMOTES_VIEW_H
 
-#include "libHeaven/Views/GlobalView.hpp"
+#include "libHeaven/CentralUI/Views/GlobalView.hpp"
 
 #include "hic_RemotesViewActions.h"
 

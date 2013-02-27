@@ -17,7 +17,7 @@
 #ifndef MGV_MODULE_WELCOMEVIEW_H
 #define MGV_MODULE_WELCOMEVIEW_H
 
-#include "libHeaven/Views/View.h"
+#include "libHeaven/CentralUI/Views/View.hpp"
 
 class QTextBrowser;
 

@@ -17,7 +17,7 @@
 #ifndef MGV_REFERENCE_VIEW_H
 #define MGV_REFERENCE_VIEW_H
 
-#include "libHeaven/Views/View.h"
+#include "libHeaven/CentralUI/Views/View.hpp"
 
 #include "libGitWrap/Repository.hpp"
 

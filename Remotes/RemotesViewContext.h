@@ -19,7 +19,7 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "libHeaven/Views/Contexts/ViewContext.hpp"
+#include "libHeaven/CentralUI/Contexts/ViewContext.hpp"
 
 class QAbstractItemModel;
 class QStandardItem;

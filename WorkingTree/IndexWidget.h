@@ -23,7 +23,7 @@ class QSplitter;
 
 #include "libGitWrap/Repository.hpp"
 
-#include "libHeaven/Views/View.h"
+#include "libHeaven/CentralUI/Views/View.hpp"
 #include "libHeaven/Widgets/MiniSplitter.h"
 
 namespace DiffViews

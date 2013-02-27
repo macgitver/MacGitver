@@ -17,7 +17,7 @@
 #ifndef MGV_REPO_TREE_VIEW_HPP
 #define MGV_REPO_TREE_VIEW_HPP
 
-#include "libHeaven/Views/GlobalView.hpp"
+#include "libHeaven/CentralUI/Views/GlobalView.hpp"
 
 #include "hic_RepoTreeViewCtxMenu.h"
 

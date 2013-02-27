@@ -15,7 +15,6 @@
  */
 
 #include <QDebug>
-#include <QVBoxLayout>
 
 #include "libMacGitverCore/Widgets/TreeViewCtxMenu.hpp"
 
@@ -27,7 +26,7 @@
 #include "RepoInfoModel.hpp"
 
 RepoTreeView::RepoTreeView()
-    : GlobalView( QLatin1String( "RepoTree" ) )
+    : View( QLatin1String( "RepoTree" ) )
 {
     setViewName( trUtf8( "Repositories" ) );
 
@@ -45,12 +44,8 @@ RepoTreeView::RepoTreeView()
     connect( mRepos, SIGNAL(contextMenu(QModelIndex,QPoint)),
              this, SLOT(contextMenu(QModelIndex,QPoint)) );
 
-    QVBoxLayout* l = new QVBoxLayout;
-    l->setMargin( 0 );
-    l->addWidget( mRepos );
-    setLayout( l );
-
     setupActions( this );
+    setWidget( mRepos );
 }
 
 void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPos )

@@ -30,7 +30,7 @@ class QStandardItemModel;
 class QTreeView;
 
 
-class SubmodulesView : public Heaven::GlobalView, private SubmodulesViewActions
+class SubmodulesView : public Heaven::View, private SubmodulesViewActions
 {
     Q_OBJECT
 public:

@@ -41,10 +41,6 @@ IndexWidget::IndexWidget()
     mTreeView = new WorkingTreeItemView;
     mTreeView->setFrameShape( QFrame::NoFrame );
 
-    QVBoxLayout* l = new QVBoxLayout;
-    l->setSpacing( 0 );
-    l->setMargin( 0 );
-
     setupActions( this );
 
     setToolBar( tbWorkingTree );
@@ -56,8 +52,7 @@ IndexWidget::IndexWidget()
     mSplitter->addWidget( mTreeView );
     mSplitter->addWidget( mDiffView );
 
-    l->addWidget( mSplitter );
-    setLayout( l );
+    setWidget( mSplitter );
 
     mFilterRecursion = true;
     WorkingTreeFilters filters = mTreeView->filters();

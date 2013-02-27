@@ -25,7 +25,7 @@ class QTreeView;
 
 class RemotesViewContext;
 
-class RemotesView : public Heaven::GlobalView, private RemotesViewActions
+class RemotesView : public Heaven::View, private RemotesViewActions
 {
     Q_OBJECT
 public:

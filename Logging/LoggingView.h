@@ -21,7 +21,7 @@
 
 class QTextBrowser;
 
-class LoggingView : public Heaven::GlobalView
+class LoggingView : public Heaven::View
 {
     Q_OBJECT
 public:

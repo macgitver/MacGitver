@@ -14,25 +14,19 @@
  *
  */
 
-#include <QVBoxLayout>
 #include <QTextBrowser>
 
 #include "LoggingView.h"
 
 LoggingView::LoggingView()
-    : GlobalView( QLatin1String( "Log" ) )
+    : View( QLatin1String( "Log" ) )
 {
     setViewName( trUtf8( "Log" ) );
-
-    QVBoxLayout* l = new QVBoxLayout;
-    l->setSpacing( 0 );
-    l->setMargin( 0 );
-    setLayout( l );
 
     mBrowser = new QTextBrowser;
     mBrowser->setFrameShape( QFrame::NoFrame );
 
-    l->addWidget( mBrowser );
+    setWidget( mBrowser );
 }
 
 QSize LoggingView::sizeHint() const

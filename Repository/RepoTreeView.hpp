@@ -26,7 +26,7 @@ class QModelIndex;
 class RepoInfoModel;
 class TreeViewCtxMenu;
 
-class RepoTreeView : public Heaven::GlobalView, private RepoTreeViewCtxMenu
+class RepoTreeView : public Heaven::View, private RepoTreeViewCtxMenu
 {
     Q_OBJECT
 public:

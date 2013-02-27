@@ -14,30 +14,22 @@
  *
  */
 
-#include <QVBoxLayout>
-#include <QToolBar>
 #include <QTreeView>
 
 #include "RemotesView.h"
 #include "RemotesViewContext.h"
 
 RemotesView::RemotesView()
-    : GlobalView( QLatin1String( "Remotes" ) )
+    : View( QLatin1String( "Remotes" ) )
     , mCtx( NULL )
 {
     setupActions( this );
 
-    QVBoxLayout* l = new QVBoxLayout();
-    l->setMargin( 0 );
-    l->setSpacing( 0 );
-    setLayout( l );
-
     mTreeView = new QTreeView();
     mTreeView->setFrameShape( QFrame::NoFrame );
 
-    l->addWidget( tbRemotesTB->toolBarFor( this ) );
-
-    l->addWidget( mTreeView );
+    setToolBar( tbRemotesTB );
+    setWidget( mTreeView );
 
     setViewName( trUtf8( "Remotes" ) );
 }
@@ -49,7 +41,7 @@ Heaven::ViewContext* RemotesView::createContext()
 
 void RemotesView::setContext( Heaven::ViewContext* context )
 {
-    GlobalView::setContext( context );
+    //GlobalView::setContext( context );
     mCtx = qobject_cast< RemotesViewContext* >( context );
     Q_ASSERT( mCtx );
 

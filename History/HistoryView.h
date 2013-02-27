@@ -35,7 +35,7 @@ class HistoryListDelegate;
 
 class HistoryDiff;
 
-class HistoryView : public Heaven::GlobalView,
+class HistoryView : public Heaven::View,
                     private HistoryViewActions,
                     private ConfigUser
 {

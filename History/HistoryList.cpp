@@ -60,6 +60,9 @@ void HistoryList::setModel( QAbstractItemModel* model )
 
     connect( selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
              this, SLOT(onCurrentChanged()) );
+
+    // This call fixes the disappearing HeaderView.
+    updateGeometries();
 }
 
 void HistoryList::configChanged( const QString& subPath, const QVariant& value )

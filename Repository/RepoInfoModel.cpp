@@ -44,14 +44,24 @@ int RepoInfoModel::columnCount( const QModelIndex& parent ) const
 
 QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
 {
-    if( role == Qt::DisplayRole )
+    if( index.isValid() )
     {
-        if( index.isValid() )
+        RepositoryInfo* info = index2Info( index );
+        if( info )
         {
-            RepositoryInfo* info = index2Info( index );
-            if( info )
+            if( role == Qt::DisplayRole )
             {
                 return info->displayAlias();
+            }
+            else if( role == IsActive )
+            {
+                return info->isActive();
+            }
+            else if( role == Qt::FontRole )
+            {
+                QFont f1, f2;
+                f2.setBold( true );
+                return info->isActive() ? f2 : f1;
             }
         }
     }

@@ -18,7 +18,6 @@
 #define MGV_REPO_TREE_VIEW_HPP
 
 #include "libHeaven/Views/GlobalView.hpp"
-#include "libHeaven/Widgets/MiniSplitter.h"
 
 #include "hic_RepoTreeViewCtxMenu.h"
 
@@ -44,7 +43,6 @@ private slots:
     void contextMenu( const QModelIndex& index, const QPoint& globalPos );
 
 private:
-    Heaven::MiniSplitter*   mSplitter;
     RepoInfoModel*          mModel;
     TreeViewCtxMenu*        mRepos;
 };

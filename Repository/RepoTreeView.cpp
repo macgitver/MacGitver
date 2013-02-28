@@ -38,6 +38,9 @@ RepoTreeView::RepoTreeView()
     #endif
     mModel = new RepoInfoModel();
     mRepos->setModel( mModel );
+    mRepos->setIndentation( 12 );
+    mRepos->expandAll();
+    mRepos->setHeaderHidden( true );
 
     connect( mRepos, SIGNAL(contextMenu(QModelIndex,QPoint)),
              this, SLOT(contextMenu(QModelIndex,QPoint)) );

@@ -266,6 +266,7 @@ void HistoryDiff::createPatch()
     {
         Git::Result r;
         GitPatchConsumer p;
+        dl.findRenames( r );
         dl.consumePatch( &p, r );
         setPatch( p.patch() );
     }

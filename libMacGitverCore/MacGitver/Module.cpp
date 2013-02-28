@@ -29,6 +29,7 @@ void Module::repositoryChanged( Git::Repository newRepository )
 
 void Module::registerView( const QString& identifier, Heaven::ViewTypes type, MgvViewCreator* creator )
 {
+    // TODO: Need a tr'ed display name for the view here
     MacGitver::self().registerView( identifier, type, creator );
 }
 

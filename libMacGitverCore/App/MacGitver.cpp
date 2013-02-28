@@ -128,6 +128,7 @@ void MacGitver::setRepository( const Git::Repository& repo )
 void MacGitver::registerView( const QString& identifier, Heaven::ViewTypes type,
                               MgvViewCreator* creator )
 {
+    // TODO: Need a tr'ed display name for the view here
     Q_ASSERT( !d->mViews.contains( identifier ) );
 
     MgvViewInfo vi;

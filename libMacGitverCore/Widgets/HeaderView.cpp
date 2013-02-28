@@ -39,23 +39,29 @@ QString HeaderView::configName() const
 void HeaderView::loadSizes()
 {
     if( mConfigName.isEmpty() )
+    {
         return;
+    }
 
-    bool b = restoreState( Config::self().get( mConfigName ).toByteArray() );
-    Q_ASSERT( b );
+    restoreState( Config::self().get( mConfigName ).toByteArray() );
 }
 
 void HeaderView::saveSizes()
 {
     if( mConfigName.isEmpty() )
+    {
         return;
+    }
 
     Config::self().set( mConfigName, saveState() );
 }
 
 void HeaderView::setModel( QAbstractItemModel* model )
 {
-    saveSizes();
+    if( QHeaderView::model() )   // Don't save, if there is nothing to save and we would destroy
+    {
+        saveSizes();
+    }
     QHeaderView::setModel( model );
     loadSizes();
 }

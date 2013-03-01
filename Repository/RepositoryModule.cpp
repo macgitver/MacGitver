@@ -58,7 +58,7 @@ void RepositoryModule::initialize()
     acRepositoryToolBarAC->mergeInto( "RepositoryToolBarMP" );
 
     MacGitver::self().registerView( QLatin1String( "RepoTree" ),
-                                    Heaven::GlobalViewType,
+                                    tr( "Repository" ),
                                     &RepositoryModule::createRepoTreeView );
 }
 

@@ -43,15 +43,15 @@ Heaven::View* RefsViewsModule::createRefsView()
 void RefsViewsModule::initialize()
 {
     registerView( QLatin1String( "Branches" ),
-                  Heaven::GlobalViewType,
+                  tr( "Branches" ),
                   &RefsViewsModule::createBranchesView );
 
     registerView( QLatin1String( "Refs" ),
-                  Heaven::GlobalViewType,
+                  tr( "Refs" ),
                   &RefsViewsModule::createRefsView );
 
     registerView( QLatin1String( "Tags" ),
-                  Heaven::GlobalViewType,
+                  tr( "Tags" ),
                   &RefsViewsModule::createTagsView );
 }
 

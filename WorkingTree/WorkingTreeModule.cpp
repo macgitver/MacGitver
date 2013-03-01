@@ -31,7 +31,7 @@ Heaven::View* WorkingTreeModule::createWorkTreeView()
 void WorkingTreeModule::initialize()
 {
     registerView( QLatin1String( "WorkTree" ),
-                  Heaven::SingleViewType,
+                  tr( "Working Tree" ),
                   &WorkingTreeModule::createWorkTreeView );
 }
 

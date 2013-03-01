@@ -31,7 +31,7 @@ Heaven::View* LoggingModule::createLoggingView()
 void LoggingModule::initialize()
 {
     registerView( QLatin1String( "Log" ),
-                  Heaven::GlobalViewType,
+                  tr( "Log" ),
                   &LoggingModule::createLoggingView );
 }
 

@@ -37,7 +37,7 @@ Heaven::View* HistoryModule::createHistoryView()
 void HistoryModule::initialize()
 {
     registerView( QLatin1String( "History" ),
-                  Heaven::GlobalViewType,
+                  tr( "History" ),
                   &HistoryModule::createHistoryView );
 }
 

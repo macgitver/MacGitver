@@ -31,7 +31,7 @@ Heaven::View* WelcomeModule::createWelcomeView()
 void WelcomeModule::initialize()
 {
     registerView( QLatin1String( "Welcome" ),
-                  Heaven::SingleViewType,
+                  tr( "Welcome" ),
                   &WelcomeModule::createWelcomeView );
 }
 

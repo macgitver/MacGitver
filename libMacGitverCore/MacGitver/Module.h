@@ -65,12 +65,17 @@ public:
 
 protected:
     /**
-     * @brief If the module has a view, it can register it here to the application.
-     * @param identifier the key to access this module's view (must be unique)
-     * @param type the view type, to specify the behaviour
-     * @param creator the creator used to setup the view
+     * @brief       Register a View to the application.
+     *
+     * @param[in]   identifier  The key to access this module's view (must be unique)
+     *
+     * @param[in]   displayName A translated name that is displayed to the user when this view is
+     *              referenced.
+     *
+     * @param[in]   creator     A call back function that actually creates a View of this type.
      */
-    void registerView( const QString& identifier, Heaven::ViewTypes type, MgvViewCreator* creator );
+    void registerView( const QString& identifier, const QString& displayName,
+                       MgvViewCreator* creator );
 
     /**
      * @brief Unregister a previously registered module view.

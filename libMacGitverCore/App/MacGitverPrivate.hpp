@@ -26,8 +26,8 @@ class Modules;
 struct MgvViewInfo
 {
     QString             mIdentifier;
+    QString             mDisplayName;
     MgvViewCreator*     mCreator;
-    Heaven::ViewTypes   mType;
 };
 
 typedef QHash< QString, MgvViewInfo > MgvViewInfos;

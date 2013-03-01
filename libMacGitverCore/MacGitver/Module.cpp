@@ -27,10 +27,10 @@ void Module::repositoryChanged( Git::Repository newRepository )
     Q_UNUSED( newRepository );
 }
 
-void Module::registerView( const QString& identifier, Heaven::ViewTypes type, MgvViewCreator* creator )
+void Module::registerView( const QString& identifier, const QString& displayName,
+                           MgvViewCreator* creator )
 {
-    // TODO: Need a tr'ed display name for the view here
-    MacGitver::self().registerView( identifier, type, creator );
+    MacGitver::self().registerView( identifier, displayName, creator );
 }
 
 void Module::unregisterView( const QString& identifier )

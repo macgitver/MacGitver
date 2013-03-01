@@ -51,7 +51,8 @@ public:
 
     void integrateView( Heaven::View* view, Heaven::Positions place );
 
-    void registerView( const QString& identifier, Heaven::ViewTypes type, MgvViewCreator* creator );
+    void registerView( const QString& identifier, const QString& displayName,
+                       MgvViewCreator* creator );
     void unregisterView( const QString& identifier );
     Heaven::ViewFactory* viewFactory();
 

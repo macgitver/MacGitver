@@ -17,16 +17,18 @@
 #ifndef MGV_REPO_TREE_VIEW_HPP
 #define MGV_REPO_TREE_VIEW_HPP
 
-#include "libHeaven/CentralUI/Views/GlobalView.hpp"
+#include "libHeaven/CentralUI/Views/ContextView.hpp"
 
 #include "hic_RepoTreeViewCtxMenu.h"
 
 class QModelIndex;
 
+class RepositoryInfo;
+
 class RepoInfoModel;
 class TreeViewCtxMenu;
 
-class RepoTreeView : public Heaven::View, private RepoTreeViewCtxMenu
+class RepoTreeView : public Heaven::ContextView, private RepoTreeViewCtxMenu
 {
     Q_OBJECT
 public:
@@ -35,12 +37,18 @@ public:
 private:
     void setupUi();
 
-private slots:
+private slots:  // from actions
     void onCtxActivate();
     void onCtxClose();
 
-private slots:
+private slots:  // from mRepos
     void contextMenu( const QModelIndex& index, const QPoint& globalPos );
+
+private slots:  // from MacGitver::repoMan()
+    void onRepoActivated( RepositoryInfo* repo );
+
+private:
+    Heaven::ViewContext* createContextObject() const;
 
 private:
     RepoInfoModel*          mModel;

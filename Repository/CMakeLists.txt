@@ -14,6 +14,7 @@ SET( SRC_FILES
 
     RepoInfoModel.cpp
     RepoTreeView.cpp
+    RepositoryContext.cpp
 
     CreateRepositoryDlg.cpp
     CloneRepositoryDlg.cpp
@@ -26,6 +27,7 @@ SET( HDR_FILES
 
     RepoInfoModel.hpp
     RepoTreeView.hpp
+    RepositoryContext.hpp
 
     CreateRepositoryDlg.h
     CloneRepositoryDlg.h

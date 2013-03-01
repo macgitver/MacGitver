@@ -21,7 +21,7 @@
 #include "RemotesViewContext.h"
 
 RemotesViewContext::RemotesViewContext()
-    : ViewContext( NULL )
+    : ViewContext()
     , mModel( NULL )
 {
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),

@@ -19,7 +19,7 @@
 
 #include <QHash>
 
-#include "libHeaven/CentralUI/Views/GlobalView.hpp"
+#include "libHeaven/CentralUI/Views/View.hpp"
 
 #include "libGitWrap/Repository.hpp"
 

@@ -17,7 +17,7 @@
 #ifndef MGV_LOGGING_VIEW_H
 #define MGV_LOGGING_VIEW_H
 
-#include "libHeaven/CentralUI/Views/GlobalView.hpp"
+#include "libHeaven/CentralUI/Views/View.hpp"
 
 class QTextBrowser;
 

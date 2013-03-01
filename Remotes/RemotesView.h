@@ -17,7 +17,7 @@
 #ifndef MGV_REMOTES_VIEW_H
 #define MGV_REMOTES_VIEW_H
 
-#include "libHeaven/CentralUI/Views/GlobalView.hpp"
+#include "libHeaven/CentralUI/Views/View.hpp"
 
 #include "hic_RemotesViewActions.h"
 
@@ -32,8 +32,8 @@ public:
     RemotesView();
 
 protected:
-    Heaven::ViewContext* createContext();
-    void setContext( Heaven::ViewContext* context );
+    //Heaven::ViewContext* createContext();
+    //void setContext( Heaven::ViewContext* context );
 
 private:
     RemotesViewContext* mCtx;

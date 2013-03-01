@@ -34,6 +34,7 @@ RemotesView::RemotesView()
     setViewName( trUtf8( "Remotes" ) );
 }
 
+/*
 Heaven::ViewContext* RemotesView::createContext()
 {
     return new RemotesViewContext;
@@ -47,5 +48,4 @@ void RemotesView::setContext( Heaven::ViewContext* context )
 
     mTreeView->setModel( mCtx->model() );
 }
-
-
+*/

@@ -16,8 +16,10 @@ SET( SRC_FILES
     RefsListDelegate.cpp
 
     RefsView.cpp
-    BranchesView.cpp
     TagsView.cpp
+
+    BranchesModel.cpp 
+    BranchesView.cpp
 )
 
 SET( HDR_FILES
@@ -28,8 +30,10 @@ SET( HDR_FILES
     RefsListDelegate.h
 
     RefsView.h
-    BranchesView.h
     TagsView.h
+
+    BranchesModel.hpp
+    BranchesView.hpp
 )
 
 SET( HID_FILES

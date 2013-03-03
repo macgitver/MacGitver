@@ -14,23 +14,28 @@
  *
  */
 
-#include <QListWidget>
+#include <QTreeView>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "BranchesView.h"
+#include "BranchesView.hpp"
+#include "BranchesModel.hpp"
 
 BranchesView::BranchesView()
     : View( QLatin1String( "Branches" ) )
+    , mData( NULL )
 {
-    mListWidget = new QListWidget();
-    mListWidget->setFrameStyle( QFrame::NoFrame );
+    mTree = new QTreeView;
+    mTree->setFrameStyle( QFrame::NoFrame );
+    mTree->setIndentation( 12 );
+    mTree->setHeaderHidden( true );
+    mTree->setRootIsDecorated( false );
 
     setupActions( this );
 
     setViewName( trUtf8( "Branches" ) );
     setToolBar( tbBranchesTB );
-    setWidget( mListWidget );
+    setWidget( mTree );
 
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
              this, SLOT(repositoryChanged(Git::Repository)) );
@@ -44,32 +49,17 @@ BranchesView::BranchesView()
 
 void BranchesView::repositoryChanged( Git::Repository repo )
 {
-    mRepo = repo;
-    rereadBranches();
-}
-
-void BranchesView::rereadBranches()
-{
-    mListWidget->clear();
-
-    if( mRepo.isValid() )
+    if( !mData )
     {
-        Git::Result r;
-        QString curBranch = mRepo.currentBranch( r );
-        QStringList sl = mRepo.branches( actShowLocal->isChecked(), actShowRemote->isChecked(), r );
-
-        for( int i = 0; i < sl.count(); i++ )
-        {
-            QListWidgetItem* it = new QListWidgetItem( sl[ i ], mListWidget );
-            if( sl[ i ] == curBranch )
-            {
-                QFont f = it->font();
-                f.setBold( true );
-                it->setFont( f );
-            }
-        }
-
+        mData = new BranchesData( this );
+        mData->mModel = new BranchesModel( mData );
+        mTree->setModel( mData->mModel );
     }
+
+    mData->mRepo = repo;
+    mData->mModel->setRepository( repo );
+    mData->mModel->rereadBranches();
+    mTree->expandAll();
 }
 
 QSize BranchesView::sizeHint() const

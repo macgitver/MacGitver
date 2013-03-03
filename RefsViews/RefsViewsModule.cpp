@@ -18,7 +18,7 @@
 
 #include "RefsViewsModule.h"
 #include "TagsView.h"
-#include "BranchesView.h"
+#include "BranchesView.hpp"
 #include "RefsView.h"
 
 RefsViewsModule::RefsViewsModule()

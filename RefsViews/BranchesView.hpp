@@ -1,6 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,16 +16,29 @@
  *
  */
 
-#ifndef MGV_BRANCHES_VIEW_H
-#define MGV_BRANCHES_VIEW_H
+#ifndef MGV_BRANCHES_VIEW_HPP
+#define MGV_BRANCHES_VIEW_HPP
 
-#include "libHeaven/CentralUI/Views/View.hpp"
+#include "libHeaven/CentralUI/Views/ContextView.hpp"
 
 #include "libGitWrap/Repository.hpp"
 
-class QListWidget;
+class QTreeView;
 
 #include "hic_BranchesViewActions.h"
+
+class BranchesModel;
+
+class BranchesData : public QObject
+{
+    Q_OBJECT
+public:
+    BranchesData( QObject* p ) : QObject( p ) {}
+
+public:
+    Git::Repository mRepo;
+    BranchesModel*  mModel;
+};
 
 class BranchesView : public Heaven::View, private BranchesViewActions
 {
@@ -41,8 +56,8 @@ private slots:
     void rereadBranches();
 
 private:
-    Git::Repository mRepo;
-    QListWidget*    mListWidget;
+    QTreeView*      mTree;
+    BranchesData*   mData;
 };
 
 #endif

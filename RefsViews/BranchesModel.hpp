@@ -28,8 +28,7 @@ class BranchesModel : public QAbstractItemModel
     Q_OBJECT
 public:
     BranchesModel( QObject* parent );
-
-public:
+    ~BranchesModel();
 
 public:
     int rowCount( const QModelIndex& parent ) const;

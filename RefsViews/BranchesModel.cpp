@@ -145,6 +145,11 @@ BranchesModel::BranchesModel( QObject* parent )
     mRoot->parent = NULL;
 }
 
+BranchesModel::~BranchesModel()
+{
+    delete mRoot;
+}
+
 int BranchesModel::rowCount( const QModelIndex& parent ) const
 {
     Item* parentItem;
@@ -319,7 +324,6 @@ void BranchesModel::rereadBranches()
 
             for( int i = 0; i < sl.count(); i++ )
             {
-                Branch* branch;
                 QString branchName = sl[ i ];
                 QStringList parts = branchName.split( QChar( L'/' ) );
 
@@ -337,7 +341,7 @@ void BranchesModel::rereadBranches()
                 {
                     if( branchName != QLatin1String( "HEAD" ) )
                     {
-                        branch = new Branch( scope, branchName );
+                        new Branch( scope, branchName );
                     }
                 }
                 else
@@ -367,7 +371,7 @@ void BranchesModel::rereadBranches()
                     Q_ASSERT( ns );
                     if( parts.last() != QLatin1String( "HEAD" ) )
                     {
-                        branch = new Branch( scope, parts.last() );
+                        new Branch( scope, parts.last() );
                     }
                 }
             }

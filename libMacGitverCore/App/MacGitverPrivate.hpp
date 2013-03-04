@@ -25,19 +25,19 @@ class Modules;
 
 struct MgvViewInfo
 {
-    QString             mIdentifier;
-    QString             mDisplayName;
-    MgvViewCreator*     mCreator;
+    Heaven::ViewIdentifier  mIdentifier;
+    QString                 mDisplayName;
+    MgvViewCreator*         mCreator;
 };
 
-typedef QHash< QString, MgvViewInfo > MgvViewInfos;
+typedef QHash< Heaven::ViewIdentifier, MgvViewInfo > MgvViewInfos;
 
 class MgvViewFactory : public Heaven::ViewFactory
 {
 public:
     MgvViewFactory( MacGitverPrivate* _d );
 
-    Heaven::View* createView( const QString& identifier );
+    Heaven::View* createView( const Heaven::ViewIdentifier& identifier );
 
 private:
     MacGitverPrivate* d;

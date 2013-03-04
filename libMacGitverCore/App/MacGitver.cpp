@@ -44,7 +44,7 @@ MgvViewFactory::MgvViewFactory( MacGitverPrivate* _d )
 {
 }
 
-Heaven::View* MgvViewFactory::createView( const QString& identifier )
+Heaven::View* MgvViewFactory::createView( const Heaven::ViewIdentifier& identifier )
 {
     if( d->mViews.contains( identifier ) )
     {
@@ -152,7 +152,7 @@ void MacGitver::setRepository( const Git::Repository& repo )
     emit repositoryChanged( repo );
 }
 
-void MacGitver::registerView( const QString& identifier, const QString &displayName,
+void MacGitver::registerView( const Heaven::ViewIdentifier& identifier, const QString &displayName,
                               MgvViewCreator* creator )
 {
     Q_ASSERT( !d->mViews.contains( identifier ) );
@@ -164,7 +164,7 @@ void MacGitver::registerView( const QString& identifier, const QString &displayN
     d->mViews.insert( identifier, vi );
 }
 
-void MacGitver::unregisterView( const QString& identifier )
+void MacGitver::unregisterView( const Heaven::ViewIdentifier& identifier )
 {
     d->mViews.remove( identifier );
 }

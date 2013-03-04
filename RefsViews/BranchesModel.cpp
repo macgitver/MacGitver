@@ -371,7 +371,7 @@ void BranchesModel::rereadBranches()
                     Q_ASSERT( ns );
                     if( parts.last() != QLatin1String( "HEAD" ) )
                     {
-                        new Branch( scope, parts.last() );
+                        new Branch( ns, parts.last() );
                     }
                 }
             }

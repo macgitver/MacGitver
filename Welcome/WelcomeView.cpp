@@ -20,7 +20,7 @@
 #include "WelcomeView.h"
 
 WelcomeView::WelcomeView()
-    : View( QLatin1String( "Welcome" ) )
+    : View( "Welcome" )
 {
     setViewName( trUtf8( "Welcome" ) );
 

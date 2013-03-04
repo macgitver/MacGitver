@@ -20,7 +20,7 @@
 #include "RemotesViewContext.h"
 
 RemotesView::RemotesView()
-    : View( QLatin1String( "Remotes" ) )
+    : View( "Remotes" )
     , mCtx( NULL )
 {
     setupActions( this );

@@ -21,7 +21,7 @@
 #include "TagsView.h"
 
 TagsView::TagsView()
-    : View( QLatin1String( "Tags" ) )
+    : View( "Tags" )
 {
     setViewName( trUtf8( "Tags" ) );
 

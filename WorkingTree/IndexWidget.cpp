@@ -36,7 +36,7 @@
 #include "WorkingTreeModel.h"
 
 IndexWidget::IndexWidget()
-    : View( QLatin1String( "WorkTree" ) )
+    : View( "WorkTree" )
 {
     mTreeView = new WorkingTreeItemView;
     mTreeView->setFrameShape( QFrame::NoFrame );

@@ -38,7 +38,7 @@
 #include "HistoryDetails.h"
 
 HistoryView::HistoryView()
-    : View( QLatin1String( "History" ) )
+    : View( "History" )
     , ConfigUser( "History" )
 {
     setupActions( this );

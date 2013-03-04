@@ -22,7 +22,7 @@
 #include "BranchesModel.hpp"
 
 BranchesView::BranchesView()
-    : View( QLatin1String( "Branches" ) )
+    : ContextView( "Branches" )
     , mData( NULL )
 {
     mTree = new QTreeView;
@@ -36,6 +36,8 @@ BranchesView::BranchesView()
     setViewName( trUtf8( "Branches" ) );
     setToolBar( tbBranchesTB );
     setWidget( mTree );
+
+    setContextProvider( QLatin1String( "" ) );
 
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
              this, SLOT(repositoryChanged(Git::Repository)) );

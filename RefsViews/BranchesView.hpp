@@ -40,7 +40,7 @@ public:
     BranchesModel*  mModel;
 };
 
-class BranchesView : public Heaven::View, private BranchesViewActions
+class BranchesView : public Heaven::ContextView, private BranchesViewActions
 {
     Q_OBJECT
 public:

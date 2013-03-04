@@ -42,24 +42,24 @@ Heaven::View* RefsViewsModule::createRefsView()
 
 void RefsViewsModule::initialize()
 {
-    registerView( QLatin1String( "Branches" ),
+    registerView( "Branches",
                   tr( "Branches" ),
                   &RefsViewsModule::createBranchesView );
 
-    registerView( QLatin1String( "Refs" ),
+    registerView( "Refs",
                   tr( "Refs" ),
                   &RefsViewsModule::createRefsView );
 
-    registerView( QLatin1String( "Tags" ),
+    registerView( "Tags",
                   tr( "Tags" ),
                   &RefsViewsModule::createTagsView );
 }
 
 void RefsViewsModule::deinitialize()
 {
-    unregisterView( QLatin1String( "Branches" ) );
-    unregisterView( QLatin1String( "Refs" ) );
-    unregisterView( QLatin1String( "Tags" ) );
+    unregisterView( "Branches" );
+    unregisterView( "Refs" );
+    unregisterView( "Tags" );
 }
 
 #if QT_VERSION < 0x050000

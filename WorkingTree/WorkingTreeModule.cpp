@@ -30,14 +30,14 @@ Heaven::View* WorkingTreeModule::createWorkTreeView()
 
 void WorkingTreeModule::initialize()
 {
-    registerView( QLatin1String( "WorkTree" ),
+    registerView( "WorkTree",
                   tr( "Working Tree" ),
                   &WorkingTreeModule::createWorkTreeView );
 }
 
 void WorkingTreeModule::deinitialize()
 {
-    unregisterView( QLatin1String( "WorkTree" ) );
+    unregisterView( "WorkTree" );
 }
 
 #if QT_VERSION < 0x050000

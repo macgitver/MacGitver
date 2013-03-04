@@ -22,7 +22,7 @@
 #include "RefsView.h"
 
 RefsView::RefsView()
-    : View( QLatin1String( "Refs" ) )
+    : View( "Refs" )
 {
     setViewName( trUtf8( "Refs" ) );
 

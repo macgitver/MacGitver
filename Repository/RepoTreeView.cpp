@@ -27,7 +27,7 @@
 #include "RepositoryContext.hpp"
 
 RepoTreeView::RepoTreeView()
-    : ContextView( QLatin1String( "RepoTree" ) )
+    : ContextView( "RepoTree" )
 {
     setViewName( trUtf8( "Repositories" ) );
     setFlags( ProvidesContexts );

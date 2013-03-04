@@ -19,7 +19,7 @@
 #include "LoggingView.h"
 
 LoggingView::LoggingView()
-    : View( QLatin1String( "Log" ) )
+    : View( "Log" )
 {
     setViewName( trUtf8( "Log" ) );
 

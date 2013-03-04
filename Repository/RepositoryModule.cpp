@@ -57,14 +57,14 @@ void RepositoryModule::initialize()
     acRepositoryMenuAC->mergeInto( "RepositoryMenuMP" );
     acRepositoryToolBarAC->mergeInto( "RepositoryToolBarMP" );
 
-    MacGitver::self().registerView( QLatin1String( "RepoTree" ),
+    MacGitver::self().registerView( "RepoTree",
                                     tr( "Repository" ),
                                     &RepositoryModule::createRepoTreeView );
 }
 
 void RepositoryModule::deinitialize()
 {
-    MacGitver::self().unregisterView( QLatin1String( "RepoTree" ) );
+    MacGitver::self().unregisterView( "RepoTree" );
 }
 
 void RepositoryModule::onRepositoryClose()

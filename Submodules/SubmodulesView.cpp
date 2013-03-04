@@ -30,7 +30,7 @@
 
 
 SubmodulesView::SubmodulesView()
-    : View( QLatin1String( "Submodules" ) )
+    : View( "Submodules" )
 {
     setupActions( this );
 

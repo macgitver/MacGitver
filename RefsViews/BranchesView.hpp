@@ -29,14 +29,14 @@ class QTreeView;
 
 class BranchesModel;
 
-class BranchesData : public QObject
+class BranchesViewData : public Heaven::ViewContextData
 {
     Q_OBJECT
 public:
-    BranchesData( QObject* p ) : QObject( p ) {}
+    BranchesViewData( QObject* p ) : QObject( p ) {}
 
 public:
-    Git::Repository mRepo;
+    Git::Repository mRepo;      // this should be a property of the context
     BranchesModel*  mModel;
 };
 
@@ -56,8 +56,8 @@ private slots:
     void rereadBranches();
 
 private:
-    QTreeView*      mTree;
-    BranchesData*   mData;
+    QTreeView*          mTree;
+    BranchesViewData*   mData;
 };
 
 #endif

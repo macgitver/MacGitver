@@ -53,7 +53,7 @@ void BranchesView::repositoryChanged( Git::Repository repo )
 {
     if( !mData )
     {
-        mData = new BranchesData( this );
+        mData = new BranchesViewData( this );
         mData->mModel = new BranchesModel( mData );
         mTree->setModel( mData->mModel );
     }

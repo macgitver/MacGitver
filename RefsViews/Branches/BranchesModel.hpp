@@ -23,11 +23,13 @@
 
 #include "libGitWrap/Repository.hpp"
 
+#include "Branches/BranchesViewData.hpp"
+
 class BranchesModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    BranchesModel( QObject* parent );
+    BranchesModel( BranchesViewData* parent );
     ~BranchesModel();
 
 public:
@@ -41,7 +43,6 @@ public:
     bool hasChildren( const QModelIndex& parent ) const;
 
 public:
-    void setRepository( Git::Repository repo );
     void rereadBranches();
 
 private:
@@ -50,8 +51,9 @@ private:
     class NameSpace;
     class Branch;
     class Remote;
-    Git::Repository mRepo;
-    Item* mRoot;
+
+    BranchesViewData*   mData;
+    Item*               mRoot;
 };
 
 #endif

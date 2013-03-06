@@ -18,8 +18,9 @@ SET( SRC_FILES
     RefsView.cpp
     TagsView.cpp
 
-    BranchesModel.cpp 
-    BranchesView.cpp
+    Branches/BranchesModel.cpp 
+    Branches/BranchesView.cpp
+    Branches/BranchesViewData.cpp
 )
 
 SET( HDR_FILES
@@ -32,13 +33,14 @@ SET( HDR_FILES
     RefsView.h
     TagsView.h
 
-    BranchesModel.hpp
-    BranchesView.hpp
+    Branches/BranchesModel.hpp
+    Branches/BranchesView.hpp
+    Branches/BranchesViewData.hpp
 )
 
 SET( HID_FILES
 
-    BranchesViewActions.hid
+    Branches/BranchesViewActions.hid
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )

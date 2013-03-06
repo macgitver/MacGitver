@@ -102,7 +102,7 @@ void RepoTreeView::onRepoActivated( RepositoryInfo* repo )
         bool isNewContext = false;
         Heaven::ViewContext* ctx = contextFor( keys, &isNewContext );
 
-       if( isNewContext )
+        if( isNewContext )
         {
             RepositoryContext* ctx2 = qobject_cast< RepositoryContext* >( ctx );
             Q_ASSERT( ctx2 );

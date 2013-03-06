@@ -18,8 +18,9 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "BranchesView.hpp"
-#include "BranchesModel.hpp"
+#include "Branches/BranchesView.hpp"
+#include "Branches/BranchesModel.hpp"
+#include "Branches/BranchesViewData.hpp"
 
 BranchesView::BranchesView()
     : ContextView( "Branches" )
@@ -37,34 +38,31 @@ BranchesView::BranchesView()
     setToolBar( tbBranchesTB );
     setWidget( mTree );
 
-    setContextProvider( QLatin1String( "" ) );
-
-    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-             this, SLOT(repositoryChanged(Git::Repository)) );
-
-    Git::Repository repo = MacGitver::self().repository();
-    if( repo.isValid() )
-    {
-        repositoryChanged( repo );
-    }
+    setFlags( ConsumesContexts | DataPerContext );
+    setContextProvider( "RepoTree" );
 }
 
-void BranchesView::repositoryChanged( Git::Repository repo )
+Heaven::ViewContextData* BranchesView::createContextData() const
 {
-    if( !mData )
-    {
-        mData = new BranchesViewData( this );
-        mData->mModel = new BranchesModel( mData );
-        mTree->setModel( mData->mModel );
-    }
-
-    mData->mRepo = repo;
-    mData->mModel->setRepository( repo );
-    mData->mModel->rereadBranches();
-    mTree->expandAll();
+    return new BranchesViewData;
 }
 
 QSize BranchesView::sizeHint() const
 {
-    return QSize( 100, 100 );
+    return QSize( 120, 100 );
+}
+
+void BranchesView::attachedContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data )
+{
+    BranchesViewData* myData = qobject_cast< BranchesViewData* >( data );
+    Q_ASSERT( myData );
+    mData = myData;
+
+    mTree->setModel( mData->mModel );
+}
+
+void BranchesView::detachedContext( Heaven::ViewContext* ctx )
+{
+    mTree->setModel( NULL );
+    mData = NULL;
 }

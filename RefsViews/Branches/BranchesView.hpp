@@ -21,24 +21,11 @@
 
 #include "libHeaven/CentralUI/Views/ContextView.hpp"
 
-#include "libGitWrap/Repository.hpp"
-
 class QTreeView;
 
 #include "hic_BranchesViewActions.h"
 
-class BranchesModel;
-
-class BranchesViewData : public Heaven::ViewContextData
-{
-    Q_OBJECT
-public:
-    BranchesViewData( QObject* p ) : QObject( p ) {}
-
-public:
-    Git::Repository mRepo;      // this should be a property of the context
-    BranchesModel*  mModel;
-};
+class BranchesViewData;
 
 class BranchesView : public Heaven::ContextView, private BranchesViewActions
 {
@@ -46,14 +33,13 @@ class BranchesView : public Heaven::ContextView, private BranchesViewActions
 public:
     BranchesView();
 
-public slots:
-    void repositoryChanged( Git::Repository repo );
-
 public:
     virtual QSize sizeHint() const;
 
-private slots:
-    void rereadBranches();
+private:
+    Heaven::ViewContextData* createContextData() const;
+    virtual void attachedContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data );
+    virtual void detachedContext( Heaven::ViewContext* ctx );
 
 private:
     QTreeView*          mTree;

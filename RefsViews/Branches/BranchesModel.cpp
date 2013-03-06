@@ -138,8 +138,9 @@ public:
     bool cur;
 };
 
-BranchesModel::BranchesModel( QObject* parent )
+BranchesModel::BranchesModel( BranchesViewData* parent )
     : QAbstractItemModel( parent )
+    , mData( parent )
 {
     mRoot = new Item;
     mRoot->parent = NULL;
@@ -248,14 +249,10 @@ bool BranchesModel::hasChildren( const QModelIndex& parent ) const
     return parentItem->children.count() > 0;
 }
 
-void BranchesModel::setRepository( Git::Repository repo )
-{
-    mRepo = repo;
-    rereadBranches();
-}
-
 void BranchesModel::rereadBranches()
 {
+    Git::Repository repo = mData->repository();
+
     beginResetModel();
 
     foreach( Item* i, mRoot->children )
@@ -263,12 +260,12 @@ void BranchesModel::rereadBranches()
     Q_ASSERT( mRoot->children.count() == 0 );
     mRoot->children.empty();
 
-    if( mRepo.isValid() )
+    if( repo.isValid() )
     {
         Git::Result r;
-        QString curBranch = mRepo.currentBranch( r );
+        QString curBranch = repo.currentBranch( r );
 
-        QStringList sl = mRepo.branches( true, false, r );
+        QStringList sl = repo.branches( true, false, r );
         if( sl.count() )
         {
             Scope* scope = new Scope( mRoot, tr( "Local" ) );
@@ -317,7 +314,7 @@ void BranchesModel::rereadBranches()
             }
         }
 
-        sl = mRepo.branches( false, true, r );
+        sl = repo.branches( false, true, r );
         if( sl.count() )
         {
             QHash< QString, Remote* > remotes;

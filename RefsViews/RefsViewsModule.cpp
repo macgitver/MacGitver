@@ -18,8 +18,8 @@
 
 #include "RefsViewsModule.h"
 #include "TagsView.h"
-#include "BranchesView.hpp"
 #include "RefsView.h"
+#include "Branches/BranchesView.hpp"
 
 RefsViewsModule::RefsViewsModule()
 {

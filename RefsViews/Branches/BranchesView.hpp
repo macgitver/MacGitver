@@ -38,8 +38,8 @@ public:
 
 private:
     Heaven::ViewContextData* createContextData() const;
-    virtual void attachedContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data );
-    virtual void detachedContext( Heaven::ViewContext* ctx );
+    virtual void attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data );
+    virtual void detachedFromContext( Heaven::ViewContext* ctx );
 
 private:
     QTreeView*          mTree;

@@ -52,7 +52,7 @@ QSize BranchesView::sizeHint() const
     return QSize( 120, 100 );
 }
 
-void BranchesView::attachedContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data )
+void BranchesView::attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data )
 {
     BranchesViewData* myData = qobject_cast< BranchesViewData* >( data );
     Q_ASSERT( myData );
@@ -61,7 +61,7 @@ void BranchesView::attachedContext( Heaven::ViewContext* ctx, Heaven::ViewContex
     mTree->setModel( mData->mModel );
 }
 
-void BranchesView::detachedContext( Heaven::ViewContext* ctx )
+void BranchesView::detachedFromContext( Heaven::ViewContext* ctx )
 {
     mTree->setModel( NULL );
     mData = NULL;

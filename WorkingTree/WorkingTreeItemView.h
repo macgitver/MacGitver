@@ -24,6 +24,7 @@
 #include "WorkingTreeFilters.h"
 
 class WorkingTreeModel;
+class HeaderView;
 
 class WorkingTreeItemView : public QTreeView
 {
@@ -39,6 +40,7 @@ public:
 
 private:
     Git::Repository         mRepo;
+    HeaderView*             mHeader;
     WorkingTreeModel*       mModel;
     WorkingTreeFilters      mFilters;
 };

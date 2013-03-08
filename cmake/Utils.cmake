@@ -141,3 +141,24 @@ FUNCTION( INSTALL_FRAMEWORK _target _component )
 
 ENDFUNCTION()
 
+# This functions sets up virtual source folders in MSVC that look
+# almost like the ones in QtCreator
+FUNCTION( MSVC_SPLIT_SOURCES target )
+    IF( MSVC )
+        GET_TARGET_PROPERTY( sources ${target} SOURCES )
+
+        FOREACH( source ${sources} )
+            IF( NOT source MATCHES ".*/" )
+                SET( rel "Sources" )
+            ELSE()
+                GET_FILENAME_COMPONENT( source ${source} ABSOLUTE)
+                STRING( REPLACE ${CMAKE_CURRENT_BINARY_DIR}/ "Sources/Generated/" rel ${source} )
+                STRING( REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/ "Sources/" rel ${rel} )
+                STRING( REGEX REPLACE "/([^/]*)$" "" rel ${rel} )
+            ENDIF()
+
+            STRING( REPLACE "/" "\\\\" rel ${rel} )
+            SOURCE_GROUP( ${rel} FILES ${source} )
+        ENDFOREACH()
+    ENDIF()
+ENDFUNCTION()

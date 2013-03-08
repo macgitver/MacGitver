@@ -16,17 +16,19 @@ SET( SRC_FILES
 
 SET( HDR_FILES
 
-        LoggingView.h
-        LoggingModule.h
+    LoggingView.h
+    LoggingModule.h
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )
 
 ADD_MGV_MODULE(
-        Logging
+    Logging
 
     ${SRC_FILES}
     ${HDR_FILES}
     ${MOC_FILES}
 )
+
+MSVC_SPLIT_SOURCES( ModLogging )
 

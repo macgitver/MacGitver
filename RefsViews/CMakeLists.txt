@@ -40,4 +40,7 @@ ADD_MGV_MODULE(
     ${SRC_FILES}
     ${HDR_FILES}
     ${MOC_FILES}
+    ${HIC_FILES} ${HID_FILES}
 )
+
+MSVC_SPLIT_SOURCES( ModRefsViews )

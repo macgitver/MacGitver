@@ -57,9 +57,11 @@ ADD_MGV_MODULE(
     ${SRC_FILES}
     ${HDR_FILES}
     ${MOC_FILES}
-    ${UIC_FILES}
-    ${HIC_FILES}
+    ${UIC_FILES} ${UI_FILES}
+    ${HIC_FILES} ${HID_FILES}
     ${CFG_FILES}
 )
 
 TARGET_LINK_LIBRARIES( ModHistory DiffViews )
+
+MSVC_SPLIT_SOURCES( ModHistory )

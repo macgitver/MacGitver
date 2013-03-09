@@ -14,8 +14,6 @@
  *
  */
 
-#include <QPainter>
-
 #include "libMacGitverCore/Config/Config.h"
 
 #include "libGitWrap/ObjectCommit.hpp"

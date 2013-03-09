@@ -75,7 +75,7 @@ protected:
      * @param[in]   creator     A call back function that actually creates a View of this type.
      */
     void registerView( const Heaven::ViewIdentifier& identifier, const QString& displayName,
-                       MgvViewCreator* creator );
+                       MgvViewCreator creator );
 
     /**
      * @brief Unregister a previously registered module view.

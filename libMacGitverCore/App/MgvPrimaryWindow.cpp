@@ -55,8 +55,6 @@ MgvPrimaryWindow::MgvPrimaryWindow()
     d = new MgvPrimaryWindowPrivate;
     setupUi();
 
-    Heaven::app()->setViewFactory( MacGitver::self().viewFactory() );
-
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
              SLOT(repositoryChanged(Git::Repository)) );
 

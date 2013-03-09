@@ -30,32 +30,6 @@
 #include "libMacGitverCore/MacGitver/RepoManager.hpp"
 
 /**
- * @class   MgvViewFactory
- * @brief   Heaven's Factory for MacGitver-Views
- */
-
-/**
- * @brief       Constructor
- * @param[in]   _d          Pointer to MacGitver's private data
- */
-MgvViewFactory::MgvViewFactory( MacGitverPrivate* _d )
-    : Heaven::ViewFactory( _d )
-    , d( _d )
-{
-}
-
-Heaven::View* MgvViewFactory::createView( const Heaven::ViewIdentifier& identifier )
-{
-    if( d->mViews.contains( identifier ) )
-    {
-        MgvViewInfo vi = d->mViews.value( identifier );
-        return vi.mCreator();
-    }
-
-    return NULL;
-}
-
-/**
  * @class   MacGitver
  * @brief   Central core of the MacGitver application
  *
@@ -81,8 +55,6 @@ MacGitverPrivate::MacGitverPrivate( MacGitver* owner )
     sLog        = new CoreLog;
     sRepoMan    = new RepoManager;
     sModules    = new Modules;
-
-    mViewFactory = new MgvViewFactory( this );
 
     // Continue with the rest of the init-process after QApplication::exec() has started to run.
     QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
@@ -153,20 +125,18 @@ void MacGitver::setRepository( const Git::Repository& repo )
 }
 
 void MacGitver::registerView( const Heaven::ViewIdentifier& identifier, const QString &displayName,
-                              MgvViewCreator* creator )
+                              MgvViewCreator creator )
 {
-    Q_ASSERT( !d->mViews.contains( identifier ) );
-
-    MgvViewInfo vi;
-    vi.mIdentifier = identifier;
-    vi.mDisplayName = displayName;
-    vi.mCreator = creator;
-    d->mViews.insert( identifier, vi );
+    new Heaven::ViewDescriptor( identifier, displayName, creator );
 }
 
 void MacGitver::unregisterView( const Heaven::ViewIdentifier& identifier )
 {
-    d->mViews.remove( identifier );
+    Heaven::ViewDescriptor* vd = Heaven::ViewDescriptor::get( identifier );
+    if( vd )
+    {
+        vd->unregister();
+    }
 }
 
 void MacGitver::log( LogType type, const QString& logMessage )
@@ -204,7 +174,3 @@ int MacGitver::exec()
     return qApp->exec();
 }
 
-Heaven::ViewFactory* MacGitver::viewFactory()
-{
-    return d->mViewFactory;
-}

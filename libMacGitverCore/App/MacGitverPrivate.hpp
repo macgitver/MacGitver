@@ -30,19 +30,6 @@ struct MgvViewInfo
     MgvViewCreator*         mCreator;
 };
 
-typedef QHash< Heaven::ViewIdentifier, MgvViewInfo > MgvViewInfos;
-
-class MgvViewFactory : public Heaven::ViewFactory
-{
-public:
-    MgvViewFactory( MacGitverPrivate* _d );
-
-    Heaven::View* createView( const Heaven::ViewIdentifier& identifier );
-
-private:
-    MacGitverPrivate* d;
-};
-
 class MacGitverPrivate : public QObject
 {
     Q_OBJECT
@@ -60,8 +47,6 @@ private slots:
 public:
     Git::GitWrap        mGitWrap;
     Git::Repository     mRepository;    /* deprecated */
-    MgvViewInfos        mViews;
-    MgvViewFactory*     mViewFactory;
 
 public:
     static MacGitver*   sSelf;

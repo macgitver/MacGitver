@@ -30,6 +30,7 @@
 
 QIcon getWindowsIcon( const QString& pathName )
 {
+#if QT_VERSION < QT_VERSION_CHECK(5,0,0)
     SHFILEINFOW shfi;
     memset( &shfi, 0, sizeof(shfi) );
     DWORD flags = SHGFI_ICON | SHGFI_USEFILEATTRIBUTES | SHGFI_SMALLICON;
@@ -38,6 +39,9 @@ QIcon getWindowsIcon( const QString& pathName )
     QPixmap pm = QPixmap::fromWinHICON( shfi.hIcon );	// Undefined für Qt5!
     DestroyIcon( shfi.hIcon );
     return QIcon( pm );
+#else
+    return QIcon();
+#endif
 }
 #endif
 

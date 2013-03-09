@@ -136,9 +136,11 @@ endfunction()
 
 MACRO( QT_PREPARE )
     SET( QT_USED_MODULES "" )
+    SET( QT_USED_MAIN 0 )
     FOREACH( mod ${ARGN} )
-        IF( ${mod} STREQUAL "Main" )
+        IF( ${mod} STREQUAL "WinMain" )
             # Don't do anything
+            SET( QT_USED_MAIN 1 )
         ELSEIF( NOT ${mod} STREQUAL "-Gui" )
             LIST( APPEND QT_USED_MODULES ${mod} )
         ENDIF()
@@ -157,6 +159,9 @@ MACRO( ADD_QT_EXECUTABLE _target )
 
     ADD_EXECUTABLE( ${_target} ${ARGN} )
     QT5_USE_MODULES( ${_target} ${QT_USED_MODULES} )
+    IF( QT_USED_MAIN )
+        TARGET_LINK_LIBRARIES( ${_target} Qt5::WinMain )
+    ENDIF()
     _ADD_NOCASTS()
 
 ENDMACRO( ADD_QT_EXECUTABLE )

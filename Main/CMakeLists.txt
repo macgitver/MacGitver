@@ -1,7 +1,7 @@
 
 PROJECT( MACGITVER )
 
-QT_PREPARE( Core Gui Widgets Xml Main )
+QT_PREPARE( Core Gui Widgets Xml WinMain )
 
 INCLUDE_DIRECTORIES(
     ${libGitWrap_includes}

@@ -56,6 +56,52 @@ void HistoryDetails::readConfig()
     setCommit( mCurrentSHA1 );
 }
 
+void HistoryDetails::setRepository( Git::Repository repo )
+{
+    mRepo = repo;
+    clear();
+}
+
+void HistoryDetails::clear()
+{
+    mCurrentSHA1 = Git::ObjectId();
+    setHtml( QString() );
+}
+
+void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
+{
+    if( mCurrentSHA1 != sha1 )
+    {
+        mCurrentSHA1 = sha1;
+        updateText();
+    }
+}
+
+static inline QString mkRow( const QString& lbl, const QString& content, bool fixed = false )
+{
+    QString s = QLatin1String(
+                "<tr>"
+                    "<td style=\"font-weight:bold;\">"
+                        "%1:"
+                    "</td>"
+                    "<td%3>"
+                        "%2"
+                    "</td>"
+                "</tr>" );
+
+    QString styleAdd;
+    if( fixed )
+    {
+        QFont fixed = Config::self().defaultFixedFont();
+        styleAdd = QString( QLatin1String( " style=\"font-family: '%1';font-size: %2pt\"" ) )
+                .arg( fixed.family() )
+                .arg( fixed.pointSize() );
+
+    }
+
+    return s.arg( lbl ).arg( content ).arg( styleAdd );
+}
+
 void HistoryDetails::updateText()
 {
     Git::Result r;

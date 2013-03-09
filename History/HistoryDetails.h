@@ -20,7 +20,7 @@
 #include "libGitWrap/ObjectId.hpp"
 #include "libGitWrap/Repository.hpp"
 
-#include <QAbstractScrollArea>
+#include <QTextBrowser>
 
 enum HistoryHeaderDetails
 {
@@ -38,7 +38,7 @@ enum HistoryHeaderDetails
     HHD_ParentsList
 };
 
-class HistoryDetails : public QAbstractScrollArea
+class HistoryDetails : public QTextBrowser
 {
     Q_OBJECT
 public:
@@ -47,51 +47,16 @@ public:
 public:
     void setRepository( Git::Repository repo );
     void setCommit( const Git::ObjectId& sha1 );
+    void clear();
 
 private:
-    void calculate();
-
-protected:
-    void paintEvent( QPaintEvent* ev );
-    void resizeEvent( QResizeEvent* ev );
-    void mouseMoveEvent( QMouseEvent* ev );
-    void mousePressEvent( QMouseEvent* ev );
-    void mouseReleaseEvent( QMouseEvent* ev );
-
-public:
-    void clear();
+    void updateText();
     void readConfig();
 
 private:
-    struct HeaderEntry
-    {
-        HeaderEntry( const QString& param, const QString& value, bool fixed = false )
-            : mParameter( param )
-            , mValue( value )
-            , mFixedFont( fixed )
-            , mHovered( false )
-        {
-        }
-
-        QString mParameter;
-        QString mValue;
-        QRect   mValueRect;
-        bool    mFixedFont  : 1;
-        bool    mHovered    : 1;
-    };
-
-    typedef QList< HeaderEntry > HeaderEntries;
-
-    QString                         mTitle;
     Git::ObjectId                   mCurrentSHA1;
-    HeaderEntries                   mHeaders;
-    QStringList                     mDetails;
-    QRect                           mDetailsRect;
-    QRect                           mHeader;
-    int                             mParamNameWidth;
     Git::Repository                 mRepo;
     QList< HistoryHeaderDetails >   mViewDetailRows;
-    bool                            mViewDetails : 1;
 };
 
 #endif

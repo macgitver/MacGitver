@@ -26,7 +26,7 @@
 #include "HistoryDetails.h"
 
 HistoryDetails::HistoryDetails( QWidget* parent )
-    : QAbstractScrollArea( parent )
+    : QTextBrowser( parent )
 {
     setFrameShape( NoFrame );
 
@@ -53,207 +53,82 @@ void HistoryDetails::readConfig()
         }
     }
 
-    mViewDetails = Config::self().get( "History/Details/Details", true ).toBool();
-
     setCommit( mCurrentSHA1 );
 }
 
-void HistoryDetails::mouseMoveEvent( QMouseEvent* ev )
-{
-}
-
-void HistoryDetails::mousePressEvent( QMouseEvent* ev )
-{
-}
-
-void HistoryDetails::mouseReleaseEvent( QMouseEvent* ev )
-{
-}
-
-
-void HistoryDetails::paintEvent( QPaintEvent* ev )
-{
-    QPainter p( viewport() );
-    QPalette pal( palette() );
-
-    if( mCurrentSHA1.isNull() )
-    {
-        return;
-    }
-
-    QFont fontDefault = Config::defaultFont();
-    QFont fontFixed = Config::defaultFixedFont();
-
-    QFontMetrics fmDefault( fontDefault );
-    QFontMetrics fmFixed( fontFixed );
-
-    p.fillRect( mHeader, pal.color( QPalette::Highlight ) );
-    p.setPen( Qt::black );
-    p.drawRect( mHeader );
-    p.setPen( pal.color( QPalette::HighlightedText ) );
-
-    int t = 3;
-    for( int i = 0; i < mHeaders.count(); i++ )
-    {
-        bool useFixedFont = mHeaders[ i ].mFixedFont;
-        QFontMetrics& fm = ( useFixedFont ? fmFixed : fmDefault );
-        p.setFont( fontDefault );
-        p.drawText( 6, mHeader.top() + t, mParamNameWidth, fm.lineSpacing(), 0, mHeaders[ i ].mParameter );
-
-        QRect r1( mHeader.left() + 3, mHeader.top() + t, mHeader.width() - mParamNameWidth - 9, 5000 );
-        QRect r2 = fm.boundingRect( r1, Qt::TextWordWrap, mHeaders[ i ].mValue );
-
-        p.setFont( useFixedFont ? fontFixed : fontDefault );
-        p.drawText( r2.adjusted( mHeader.left() + mParamNameWidth + 6, 0, mHeader.left() + mParamNameWidth + 6, 0 ), Qt::TextWordWrap, mHeaders[ i ].mValue );
-
-        t += qMax( fm.lineSpacing(), r2.height() + 3 );
-    }
-
-    p.setPen( pal.color( QPalette::Text ) );
-    p.setFont( fontFixed );
-
-    int top = mDetailsRect.top();
-    for( int i = 0; i < mDetails.count(); i++ )
-    {
-        QRect r = QRect( 10, top, mDetailsRect.width(), fmFixed.lineSpacing() );
-        p.drawText( r, mDetails[ i ] );
-        top += fmFixed.lineSpacing();
-    }
-}
-
-void HistoryDetails::resizeEvent( QResizeEvent* ev )
-{
-    calculate();
-    QAbstractScrollArea::resizeEvent( ev );
-}
-
-void HistoryDetails::calculate()
-{
-    QFont font = Config::defaultFont();
-    QFont fontFixed = Config::defaultFixedFont();
-
-    QFontMetrics fm( font );
-    QFontMetrics fmFixed( fontFixed );
-
-    int w = width();
-
-    mParamNameWidth = 0;
-    for( int i = 0; i < mHeaders.count(); i++ )
-    {
-        int w2 = fm.width( mHeaders[ i ].mParameter );
-        mParamNameWidth = qMax( w2, mParamNameWidth );
-    }
-
-    int valueWidth = w - 3 - 3 - 3 - 3 - 3 - mParamNameWidth;
-    int headheight = 0;
-    for( int i = 0; i < mHeaders.count(); i++ )
-    {
-        QRect r( 0, 0, valueWidth, 50000 );
-        QRect r2 = fm.boundingRect( r, Qt::TextWordWrap, mHeaders[ i ].mValue );
-        headheight += r2.height() + 3;
-    }
-
-    mHeader = QRect( 3, 3, w - 3 - 3, headheight );
-
-    int minWidth = 0;
-    for( int i = 0; i < mDetails.count(); i++ )
-    {
-        int width = fmFixed.width( mDetails[ i ] );
-        minWidth = qMax( width, minWidth );
-    }
-
-    mDetailsRect = QRect( 3, 10 + headheight, minWidth, mDetails.count() * fmFixed.lineSpacing() );
-
-    viewport()->update();
-}
-
-void HistoryDetails::clear()
-{
-    mCurrentSHA1 = Git::ObjectId();
-    mHeaders.clear();
-    mDetails.clear();
-    calculate();
-}
-
-void HistoryDetails::setRepository( Git::Repository repo )
-{
-    mRepo = repo;
-    clear();
-}
-
-void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
+void HistoryDetails::updateText()
 {
     Git::Result r;
 
-    Q_ASSERT( mRepo.isValid() || sha1.isNull() );
+    Q_ASSERT( mRepo.isValid() || mCurrentSHA1.isNull() );
 
-    clear();
-    if( sha1.isNull() )
+    if( mCurrentSHA1.isNull() )
     {
+        setHtml( QString() );
         return;
     }
 
-    mCurrentSHA1 = sha1;
-
-    Git::ObjectCommit commit = mRepo.lookupCommit( sha1, r );
+    Git::ObjectCommit commit = mRepo.lookupCommit( mCurrentSHA1, r );
     if( !r )
     {
         MacGitver::log( ltError, r, "Reading commit details" );
-        clear();
         return;
     }
+
+    QString detailRows;
 
     for( int i = 0; i < mViewDetailRows.count(); i++ )
     {
         switch( mViewDetailRows[ i ] )
         {
         case HHD_Subject:
-            mHeaders.append( HeaderEntry( trUtf8( "Subject" ),
-                                          commit.shortMessage( r ) ) );
+            detailRows += mkRow( trUtf8( "Subject" ),
+                                 commit.shortMessage( r ) );
             break;
 
         case HHD_Author:
-            mHeaders.append( HeaderEntry( trUtf8( "Author" ),
-                                          commit.author( r ).fullName() ) );
+            detailRows += mkRow( trUtf8( "Author" ),
+                                 commit.author( r ).fullName() );
             break;
 
         case HHD_AuthorDate:
-            mHeaders.append( HeaderEntry( trUtf8( "Author date" ),
-                                          commit.author( r ).when().toString() ) );
+            detailRows += mkRow( trUtf8( "Author date" ),
+                                 commit.author( r ).when().toString() );
             break;
 
         case HHD_AuthorMail:
-            mHeaders.append( HeaderEntry( trUtf8( "Author mail" ),
-                                          commit.author( r ).email() ) );
+            detailRows += mkRow( trUtf8( "Author mail" ),
+                                 commit.author( r ).email() );
             break;
 
         case HHD_AuthorName:
-            mHeaders.append( HeaderEntry( trUtf8( "Author name" ),
-                                          commit.author( r ).name() ) );
+            detailRows += mkRow( trUtf8( "Author name" ),
+                                 commit.author( r ).name() );
             break;
 
         case HHD_Committer:
-            mHeaders.append( HeaderEntry( trUtf8( "Committer" ),
-                                          commit.committer( r ).fullName() ) );
+            detailRows += mkRow( trUtf8( "Committer" ),
+                                 commit.committer( r ).fullName() );
             break;
 
         case HHD_CommitterDate:
-            mHeaders.append( HeaderEntry( trUtf8( "Committer date" ),
-                                          commit.committer( r ).when().toString() ) );
+            detailRows += mkRow( trUtf8( "Committer date" ),
+                                 commit.committer( r ).when().toString() );
             break;
 
         case HHD_CommitterMail:
-            mHeaders.append( HeaderEntry( trUtf8( "Committer mail" ),
-                                          commit.committer( r ).email() ) );
+            detailRows += mkRow( trUtf8( "Committer mail" ),
+                                 commit.committer( r ).email() );
             break;
 
         case HHD_CommitterName:
-            mHeaders.append( HeaderEntry( trUtf8( "Committer name" ),
-                                          commit.committer( r ).name() ) );
+            detailRows += mkRow( trUtf8( "Committer name" ),
+                                 commit.committer( r ).name() );
             break;
 
         case HHD_SHA1:
-            mHeaders.append( HeaderEntry( trUtf8( "SHA-1" ), sha1.toString(), true ) );
+            detailRows += mkRow( trUtf8( "SHA-1" ),
+                                 mCurrentSHA1.toString(), true );
             break;
 
         default:
@@ -267,8 +142,67 @@ void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
         }
     }
 
-    mDetails = commit.message( r ).split( QChar( L'\n' ) );
-    mDetails.removeFirst();
+    QStringList body = commit.message( r ).split( QChar( L'\n' ) );
+    QString head = body.takeFirst();
 
-    calculate();
+    if( body.count() && !body.first().isEmpty() )
+    {
+        // If someone typed a commit message without the second line being empty,
+        // let's add an empty line after splitting the subject line away.
+        body.prepend( QString() );
+    }
+
+    QPalette p;
+    QColor clrBackSel = p.color( QPalette::Highlight );
+    QColor clrFrntSel = p.color( QPalette::Text ); // Don't want HighlightedText, probably.
+    QColor clrBackDtl = p.color( QPalette::Window );
+    QColor clrFrntDtl = p.color( QPalette::WindowText );
+    QColor clrBackWnd = p.color( QPalette::Base );
+    QColor clrFrntWnd = p.color( QPalette::Text );
+    QFont fixed = Config::self().defaultFixedFont();
+
+    QString html = trUtf8(
+        "<qt style=\"background: %5;\">"
+        //  "<div style=\"margin: 2px;padding:0px;color: %6;background-color: %5\">"
+                "<table style=\""
+                            "border-style: solid;width:100%;"
+                            "background-color: %1;"
+                            "color: %2;"
+                            "border-color: %4;\" border=\"1\" cellspacing=\"0\">"
+                    "<tr>"
+                        "<td width=\"100%\" style=\"font-size: x-large;color:%2;"
+                                                    "padding: 3px;\" bgcolor=\"%1\">"
+                            "%7"
+                        "</td>"
+                    "</tr>"
+                    "<tr>"
+                        "<td style=\"padding: 3px;color: %4;background-color:%3;\">"
+                            "<table>"
+                                "%8"
+                            "</table>"
+                        "</td>"
+                    "</tr>"
+                "</table>"
+                "<pre style=\"font-family: '%10';font-size: %11pt\">"
+                    "%9"
+                "</pre>"
+        //  "</div>"
+        "</qt><!-- %6 --!>" );
+
+    html = html
+            .arg( clrBackSel.name() )  /* %1 */
+            .arg( clrFrntSel.name() )  /* %2 */
+            .arg( clrBackDtl.name() )  /* %3 */
+            .arg( clrFrntDtl.name() )  /* %4 */
+            .arg( clrBackWnd.name() )  /* %5 */
+            .arg( clrFrntWnd.name() )  /* %6 */
+            .arg( head )               /* %7 */
+            .arg( detailRows )         /* %8 */
+            .arg( body.join( QChar( L'\n' ) ) ) /* %9 */
+            .arg( fixed.family() )     /* %10 */
+            .arg( fixed.pointSize() ); /* %11 */
+
+    //qDebug( "%s", qPrintable( html ) );
+
+    setHtml( html );
 }

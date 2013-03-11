@@ -24,7 +24,7 @@ class QToolBar;
 #include "libMacGitverCore/Config/ConfigUser.h"
 
 #include "libHeaven/CentralUI/Views/View.hpp"
-#include "libHeaven/Widgets/MiniSplitter.h"
+#include "libHeaven/Widgets/MiniSplitter.hpp"
 
 #include "hic_HistoryViewActions.h"
 

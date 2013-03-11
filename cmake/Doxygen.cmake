@@ -66,10 +66,22 @@ FUNCTION( ADD_DOXYGEN_TARGET targetName configDir )
         "\n"
     )
 
+    SET( exclude 0 )
     FOREACH( dir ${dirs} )
-        FILE( APPEND ${targetDir}/Doxygen.common
-            "INPUT += ${dir}\n"
-        )
+        IF( dir STREQUAL "EXCLUDE" )
+            SET( exclude 1 )
+        ELSE()
+            IF( exclude )
+                FILE( APPEND ${targetDir}/Doxygen.common
+                    "EXCLUDE += ${dir}\n"
+                )
+                SET( exclude 0 )
+            ELSE()
+                FILE( APPEND ${targetDir}/Doxygen.common
+                    "INPUT += ${dir}\n"
+                )
+            ENDIF()
+        ENDIF()
     ENDFOREACH()
 
     FILE( WRITE ${targetDir}/Doxygen.pub

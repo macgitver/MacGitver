@@ -8,6 +8,7 @@ SET( UTILS_APP_NAME         MacGitver   CACHE INTERNAL "Foo" )
 SET( UTILS_USE_PRIVATE_LIBS 1           CACHE INTERNAL "Foo" )
 
 INCLUDE( cmake/Utils.cmake )
+INCLUDE( cmake/Doxygen.cmake )
 SET_OUTPUT_PATHS()
 INCLUDE( cmake/QtMacros.cmake )
 

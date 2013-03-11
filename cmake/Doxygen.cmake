@@ -61,16 +61,6 @@ FUNCTION( ADD_DOXYGEN_TARGET targetName configDir )
             ${doxyBase}
     )
 
-    MESSAGE( "pubLayout = ${pubLayout}" )
-    MESSAGE( "pubHeader = ${pubHeader}" )
-    MESSAGE( "pubFooter = ${pubFooter}" )
-    MESSAGE( "pubStyle  = ${pubStyle}" )
-
-    MESSAGE( "intLayout = ${intLayout}" )
-    MESSAGE( "intHeader = ${intHeader}" )
-    MESSAGE( "intFooter = ${intFooter}" )
-    MESSAGE( "intStyle  = ${intStyle}" )
-
     FILE( WRITE ${targetDir}/Doxygen.common
         "@INCLUDE = ${doxyBase}/Doxygen.common\n"
         "\n"

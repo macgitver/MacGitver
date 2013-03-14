@@ -25,10 +25,7 @@
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
-#include "libHeaven/CentralUI/WindowState.hpp"
-
 class QDomElement;
-
 
 namespace Heaven
 {

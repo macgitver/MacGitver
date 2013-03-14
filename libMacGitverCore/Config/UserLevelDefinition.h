@@ -27,12 +27,12 @@
 
 class QDomElement;
 
-
 namespace Heaven
 {
     class Mode;
-    class WindowStateBase;
 }
+
+class UserLevelDefinition;
 
 class MGV_CORE_API EnableDisable
 {
@@ -69,104 +69,32 @@ private:
     QList< EnableDisable > mList;
 };
 
-class MGV_CORE_API UserLevelDefaultLayoutEntry : public QSharedData
-{
-public:
-    typedef QExplicitlySharedDataPointer< UserLevelDefaultLayoutEntry > Ptr;
-    typedef QVector< Ptr > Vector;
-
-public:
-    enum Type
-    {
-        View,
-        Split,
-        Tab
-    };
-
-    enum TabPos
-    {
-        Left,
-        Right,
-        Top,
-        Bottom
-    };
-
-public:
-    UserLevelDefaultLayoutEntry();
-    ~UserLevelDefaultLayoutEntry();
-
-public:
-    Type type() const;
-    int numChildren() const;
-    UserLevelDefaultLayoutEntry::Ptr childAt( int index ) const;
-    QVector< UserLevelDefaultLayoutEntry::Ptr > children() const;
-    bool isVertical() const;
-    TabPos tabPos() const;
-    QString name() const;
-
-    void addToWindowState( Heaven::WindowStateBase* parent );
-
-public:
-    static UserLevelDefaultLayoutEntry::Ptr read( const QDomElement& el );
-
-private:
-    static bool parseOrient( const QString& s );
-    static TabPos parseCaption( const QString& s );
-
-private:
-    Type                                mType;
-    QString                             mName;
-    int                                 mStretch;
-    bool                                mVertical;
-    TabPos                              mTabPos;
-    UserLevelDefaultLayoutEntry::Vector mChildren;
-};
-
-class MGV_CORE_API UserLevelDefaultLayout : public QSharedData
-{
-public:
-    typedef QExplicitlySharedDataPointer< UserLevelDefaultLayout > Ptr;
-public:
-    UserLevelDefaultLayout();
-    ~UserLevelDefaultLayout();
-
-public:
-    UserLevelDefaultLayoutEntry::Ptr root() const;
-
-public:
-    static UserLevelDefaultLayout::Ptr read( const QDomElement& el );
-
-private:
-    UserLevelDefaultLayoutEntry::Ptr mRoot;
-};
-
 class MGV_CORE_API UserLevelMode : public QSharedData
 {
 public:
     typedef QExplicitlySharedDataPointer< UserLevelMode > Ptr;
-public:
+private:
     UserLevelMode();
-    UserLevelMode( const QString& modeName );
+public:
+    UserLevelMode( UserLevelDefinition* level, const QString& modeName );
     ~UserLevelMode();
 
 public:
+    QString heavenModeName() const;
     QString name() const;
     EnableDisableList& allowedViews();
     const EnableDisableList& allowedViews() const;
 
-    UserLevelDefaultLayout::Ptr defaultLayout() const;
-
     bool isLockingMode() const;
     bool isUserSelectable() const;
 
-    Heaven::Mode* createHeavenMode();
-
 public:
-    static UserLevelMode::Ptr read( const QDomElement& el );
+    static UserLevelMode::Ptr read( UserLevelDefinition* level, const QDomElement& el );
 
 private:
+    UserLevelDefinition*        mLevel;
     QString                     mModeName;
-    UserLevelDefaultLayout::Ptr mDefaultLayout;
+    Heaven::Mode*               mHeavenMode;
     EnableDisableList           mAllowedViews;
     bool                        mIsLocking;
     bool                        mIsUserSelectable;

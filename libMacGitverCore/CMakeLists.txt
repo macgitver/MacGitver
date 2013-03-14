@@ -66,6 +66,7 @@ SET( PUB_HDR_FILES
     MacGitver/GitPatchConsumer.hpp
     MacGitver/RepositoryInfo.hpp
     MacGitver/RepoManager.hpp
+    MacGitver/IRepositoryContext.hpp
 
     Widgets/FontSelectWidget.h
     Widgets/LineEdit.h

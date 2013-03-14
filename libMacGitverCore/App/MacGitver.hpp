@@ -25,11 +25,12 @@
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Result.hpp"
 
-#include "libHeaven/Views/View.h"
+#include "libHeaven/CentralUI/Views/View.hpp"
+#include "libHeaven/CentralUI/Views/ViewDescriptor.hpp"
 
 class RepoManager;
 
-typedef Heaven::View* (MgvViewCreator)();
+typedef Heaven::ViewDescriptor::CreatorFunc MgvViewCreator;
 
 class MacGitverPrivate;
 
@@ -50,9 +51,9 @@ public:
 
     void integrateView( Heaven::View* view, Heaven::Positions place );
 
-    void registerView( const QString& identifier, Heaven::ViewTypes type, MgvViewCreator* creator );
-    void unregisterView( const QString& identifier );
-    Heaven::View* createView( const QString& identifier );
+    void registerView (const Heaven::ViewIdentifier& identifier, const QString& displayName,
+                       MgvViewCreator creator );
+    void unregisterView( const Heaven::ViewIdentifier& identifier );
 
     static void log( LogType type, const QString& logMessage );
     static void log( LogType type, const char* logMessage );

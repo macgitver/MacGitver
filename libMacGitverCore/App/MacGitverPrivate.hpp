@@ -25,12 +25,10 @@ class Modules;
 
 struct MgvViewInfo
 {
-    QString             mIdentifier;
-    MgvViewCreator*     mCreator;
-    Heaven::ViewTypes   mType;
+    Heaven::ViewIdentifier  mIdentifier;
+    QString                 mDisplayName;
+    MgvViewCreator*         mCreator;
 };
-
-typedef QHash< QString, MgvViewInfo > MgvViewInfos;
 
 class MacGitverPrivate : public QObject
 {
@@ -49,7 +47,6 @@ private slots:
 public:
     Git::GitWrap        mGitWrap;
     Git::Repository     mRepository;    /* deprecated */
-    MgvViewInfos        mViews;
 
 public:
     static MacGitver*   sSelf;

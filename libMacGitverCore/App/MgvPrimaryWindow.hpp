@@ -19,7 +19,6 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "libHeaven/Views/View.h"       // Remove this along with the method that requires it!
 #include "libHeaven/App/PrimaryWindow.hpp"
 
 #include "Config/UserLevelDefinition.h"
@@ -49,7 +48,6 @@ private slots:
     void setupFonts();
 
 public:
-    void integrateView( Heaven::View* view, Heaven::Positions position );
     void activateMode( const QString& modeName );
     void activateLevel( UserLevelDefinition::Ptr uld );
 
@@ -57,8 +55,6 @@ private:
     void savePosition();
     void moveToCenter();
     void activateModeForRepo();
-    void createPartialLayout( Heaven::ViewContainer* parent,
-                              UserLevelDefaultLayoutEntry::Ptr entry );
 
 protected:
     void closeEvent( QCloseEvent* ev );

@@ -74,8 +74,7 @@ void MacGitverPrivate::boot()
     loadLevels();
     sModules->initialize();
 
-    MgvPrimaryWindow* pw = new MgvPrimaryWindow;
-    pw->show();
+    new MgvPrimaryWindow;
 }
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
@@ -125,33 +124,19 @@ void MacGitver::setRepository( const Git::Repository& repo )
     emit repositoryChanged( repo );
 }
 
-void MacGitver::registerView( const QString& identifier, Heaven::ViewTypes type,
-                              MgvViewCreator* creator )
+void MacGitver::registerView( const Heaven::ViewIdentifier& identifier, const QString &displayName,
+                              MgvViewCreator creator )
 {
-    // TODO: Need a tr'ed display name for the view here
-    Q_ASSERT( !d->mViews.contains( identifier ) );
-
-    MgvViewInfo vi;
-    vi.mIdentifier = identifier;
-    vi.mType = type;
-    vi.mCreator = creator;
-    d->mViews.insert( identifier, vi );
+    new Heaven::ViewDescriptor( identifier, displayName, creator );
 }
 
-void MacGitver::unregisterView( const QString& identifier )
+void MacGitver::unregisterView( const Heaven::ViewIdentifier& identifier )
 {
-    d->mViews.remove( identifier );
-}
-
-Heaven::View* MacGitver::createView( const QString& identifier )
-{
-    if( d->mViews.contains( identifier ) )
+    Heaven::ViewDescriptor* vd = Heaven::ViewDescriptor::get( identifier );
+    if( vd )
     {
-        MgvViewInfo vi = d->mViews.value( identifier );
-        return vi.mCreator();
+        vd->unregister();
     }
-
-    return NULL;
 }
 
 void MacGitver::log( LogType type, const QString& logMessage )
@@ -188,3 +173,4 @@ int MacGitver::exec()
     MacGitver mgv;
     return qApp->exec();
 }
+

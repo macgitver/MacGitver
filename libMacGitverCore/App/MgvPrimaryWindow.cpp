@@ -30,8 +30,6 @@
 #include "libGitWrap/Reference.hpp"
 
 #include "libHeaven/App/Application.hpp"
-#include "libHeaven/Views/Mode.h"
-#include "libHeaven/Views/TopLevelWidget.h"
 #include "libHeaven/Widgets/FooterWidget.hpp"
 
 #include "libMacGitverCore/App/MacGitverPrivate.hpp"
@@ -62,6 +60,11 @@ MgvPrimaryWindow::MgvPrimaryWindow()
 
     QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
 
+    setupFonts();
+
+    connect( &Config::self(), SIGNAL(fontsChanged()),
+             this, SLOT(setupFonts()) );
+
     foreach( UserLevelDefinition::Ptr uld, Config::self().levels() )
     {
         if( uld->id() == levelId )
@@ -70,11 +73,6 @@ MgvPrimaryWindow::MgvPrimaryWindow()
             break;
         }
     }
-
-    setupFonts();
-
-    connect( &Config::self(), SIGNAL(fontsChanged()),
-             this, SLOT(setupFonts()) );
 }
 
 MgvPrimaryWindow::~MgvPrimaryWindow()
@@ -114,6 +112,7 @@ void MgvPrimaryWindow::setupUi()
             resize( r.size() );
             move( r.topLeft() );
         }
+        show();
     }
 }
 
@@ -157,15 +156,6 @@ void MgvPrimaryWindow::moveToCenter()
 
 void MgvPrimaryWindow::activateLevel( UserLevelDefinition::Ptr uld )
 {
-    QStringList modeNames;
-
-    foreach( UserLevelMode::Ptr mode, uld->allModes() )
-    {
-        Heaven::Mode* heavenMode = new Heaven::Mode( mode->name(), NULL );
-        Heaven::app()->addMode( heavenMode );
-        modeNames.append( mode->name() );
-    }
-
     d->currentLevel = uld;
 
     activateModeForRepo();
@@ -178,109 +168,19 @@ void MgvPrimaryWindow::activateModeForRepo()
     QString configPath = d->currentLevel->id() % QChar( L'/' ) % preset;
     QString modeName = Config::self().get( configPath, d->currentLevel->preset( preset ) ).toString();
 
-    activateMode( modeName );
-}
-
-void MgvPrimaryWindow::createPartialLayout( Heaven::ViewContainer* parent,
-                                      UserLevelDefaultLayoutEntry::Ptr entry )
-{
-    switch( entry->type() )
-    {
-    case UserLevelDefaultLayoutEntry::Tab:
-        {
-            Heaven::ViewContainer::Type subType = Heaven::ViewContainer::Type( 0 );
-            switch( entry->tabPos() )
-            {
-            case UserLevelDefaultLayoutEntry::Left:
-                subType = Heaven::ViewContainer::SubTabLeft;
-                break;
-
-            case UserLevelDefaultLayoutEntry::Right:
-                subType = Heaven::ViewContainer::SubTabRight;
-                break;
-
-            case UserLevelDefaultLayoutEntry::Top:
-                subType = Heaven::ViewContainer::SubTabTop;
-                break;
-
-            case UserLevelDefaultLayoutEntry::Bottom:
-                subType = Heaven::ViewContainer::SubTabBottom;
-                break;
-            }
-
-            Heaven::ViewContainer* child = new Heaven::ViewContainer(
-                                               Heaven::ViewContainer::MultiBar,
-                                               subType,
-                                               parent );
-
-            parent->addContainer( child );
-
-            foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, entry->children() )
-            {
-                createPartialLayout( child, subEntry );
-            }
-        }
-        break;
-
-    case UserLevelDefaultLayoutEntry::Split:
-        {
-            Heaven::ViewContainer* child = new Heaven::ViewContainer(
-                                               Heaven::ViewContainer::Splitter,
-                                               entry->isVertical() ?
-                                                   Heaven::ViewContainer::SubSplitVert :
-                                                   Heaven::ViewContainer::SubSplitHorz,
-                                               parent );
-
-            parent->addContainer( child );
-
-            foreach( UserLevelDefaultLayoutEntry::Ptr subEntry, entry->children() )
-            {
-                createPartialLayout( child, subEntry );
-            }
-        }
-        break;
-
-    case UserLevelDefaultLayoutEntry::View:
-        {
-            Heaven::View* v = MacGitver::self().createView( entry->name() );
-
-            if( !v )
-            {
-                qDebug( "Could not create a view with id '%s'", qPrintable( entry->name() ) );
-                break;
-            }
-
-            parent->addView( v );
-        }
-        break;
-    }
+    activateMode( d->currentLevel->name() % QChar( L'#' ) % modeName );
 }
 
 void MgvPrimaryWindow::activateMode( const QString& modeName )
 {
     qDebug( "Going to %s mode", qPrintable( modeName ) );
-
-    // Will just update the display for now
     Heaven::app()->setCurrentMode( Heaven::app()->findMode( modeName ) );
-
-    topLevelContainer()->clear();
-
-    UserLevelMode::Ptr mode = d->currentLevel->mode( modeName );
-
-    UserLevelDefaultLayout::Ptr layout = mode->defaultLayout();
-
-    createPartialLayout( topLevelContainer()->rootContainer(), layout->root() );
 }
 
 void MgvPrimaryWindow::repositoryChanged( const Git::Repository& repo )
 {
     d->repo = repo;
     activateModeForRepo();
-}
-
-void MgvPrimaryWindow::integrateView( Heaven::View* view, Heaven::Positions position )
-{
-    topLevelContainer()->addView( view, position );
 }
 
 void MgvPrimaryWindow::onHelpAbout()

@@ -23,8 +23,8 @@ class QToolBar;
 
 #include "libMacGitverCore/Config/ConfigUser.h"
 
-#include "libHeaven/Views/GlobalView.hpp"
-#include "libHeaven/Widgets/MiniSplitter.h"
+#include "libHeaven/CentralUI/Views/View.hpp"
+#include "libHeaven/Widgets/MiniSplitter.hpp"
 
 #include "hic_HistoryViewActions.h"
 
@@ -35,7 +35,7 @@ class HistoryListDelegate;
 
 class HistoryDiff;
 
-class HistoryView : public Heaven::GlobalView,
+class HistoryView : public Heaven::View,
                     private HistoryViewActions,
                     private ConfigUser
 {

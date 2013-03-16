@@ -1,6 +1,8 @@
 /*
- * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * libHeaven - A Qt-based ui framework for strongly modularized applications
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,30 +16,19 @@
  *
  */
 
-#ifndef MGV_REMOTES_VIEW_H
-#define MGV_REMOTES_VIEW_H
+#include "RepositoryContext.hpp"
 
-#include "libHeaven/CentralUI/Views/View.hpp"
-
-#include "hic_RemotesViewActions.h"
-
-class QTreeView;
-
-class RemotesViewContext;
-
-class RemotesView : public Heaven::View, private RemotesViewActions
+RepositoryContext::RepositoryContext()
+    : mRepo( NULL )
 {
-    Q_OBJECT
-public:
-    RemotesView();
+}
 
-protected:
-    //Heaven::ViewContext* createContext();
-    //void setContext( Heaven::ViewContext* context );
+void RepositoryContext::setRepository( RepositoryInfo* repo )
+{
+    mRepo = repo;
+}
 
-private:
-    RemotesViewContext* mCtx;
-    QTreeView*          mTreeView;
-};
-
-#endif
+RepositoryInfo* RepositoryContext::repository()
+{
+    return mRepo;
+}

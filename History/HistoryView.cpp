@@ -25,7 +25,7 @@
 
 #include "libDiffViews/Views/Raw/RawView.hpp"
 
-#include "libHeaven/Widgets/MiniSplitter.h"
+#include "libHeaven/Widgets/MiniSplitter.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
@@ -38,7 +38,7 @@
 #include "HistoryDetails.h"
 
 HistoryView::HistoryView()
-    : GlobalView( QLatin1String( "History" ) )
+    : View( "History" )
     , ConfigUser( "History" )
 {
     setupActions( this );
@@ -66,10 +66,6 @@ HistoryView::HistoryView()
 
     mModel = NULL;
 
-    QVBoxLayout* l = new QVBoxLayout;
-    l->setSpacing( 0 );
-    l->setMargin( 0 );
-    setLayout( l );
     initSplitters();
 
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
@@ -157,21 +153,21 @@ void HistoryView::initSplitters()
         mHorzSplit->addWidget( mDiff );
         mVertSplit->addWidget( mList );
         mVertSplit->addWidget( mHorzSplit );
-        layout()->addWidget( mVertSplit );
+        setWidget( mVertSplit );
         break;
     case 1:
         mVertSplit->addWidget( mDetails );
         mVertSplit->addWidget( mDiff );
         mHorzSplit->addWidget( mList );
         mHorzSplit->addWidget( mVertSplit );
-        layout()->addWidget( mHorzSplit );
+        setWidget( mHorzSplit );
         break;
     case 2:
         mVertSplit->addWidget( mList );
         mVertSplit->addWidget( mDetails );
         mHorzSplit->addWidget( mVertSplit );
         mHorzSplit->addWidget( mDiff );
-        layout()->addWidget( mHorzSplit );
+        setWidget( mHorzSplit );
         break;
     }
 

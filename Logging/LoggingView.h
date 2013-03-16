@@ -17,11 +17,11 @@
 #ifndef MGV_LOGGING_VIEW_H
 #define MGV_LOGGING_VIEW_H
 
-#include "libHeaven/Views/GlobalView.hpp"
+#include "libHeaven/CentralUI/Views/View.hpp"
 
 class QTextBrowser;
 
-class LoggingView : public Heaven::GlobalView
+class LoggingView : public Heaven::View
 {
     Q_OBJECT
 public:

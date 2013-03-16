@@ -15,7 +15,6 @@
  */
 
 #include <QDebug>
-#include <QVBoxLayout>
 
 #include "libMacGitverCore/Widgets/TreeViewCtxMenu.hpp"
 
@@ -25,11 +24,14 @@
 
 #include "RepoTreeView.hpp"
 #include "RepoInfoModel.hpp"
+#include "RepositoryContext.hpp"
 
 RepoTreeView::RepoTreeView()
-    : GlobalView( QLatin1String( "RepoTree" ) )
+    : ContextView( "RepoTree" )
 {
     setViewName( trUtf8( "Repositories" ) );
+    setFlags( ProvidesContexts );
+    setupActions( this );
 
     mRepos = new TreeViewCtxMenu;
     mRepos->setFrameShape( QFrame::NoFrame );
@@ -42,15 +44,20 @@ RepoTreeView::RepoTreeView()
     mRepos->expandAll();
     mRepos->setHeaderHidden( true );
 
+    setWidget( mRepos );
+
     connect( mRepos, SIGNAL(contextMenu(QModelIndex,QPoint)),
              this, SLOT(contextMenu(QModelIndex,QPoint)) );
 
-    QVBoxLayout* l = new QVBoxLayout;
-    l->setMargin( 0 );
-    l->addWidget( mRepos );
-    setLayout( l );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
+             this, SLOT(onRepoActivated(RepositoryInfo*)) );
 
-    setupActions( this );
+
+    RepositoryInfo* curRepo = MacGitver::repoMan().activeRepository();
+    if( curRepo )
+    {
+        onRepoActivated( curRepo );
+    }
 }
 
 void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
@@ -83,4 +90,35 @@ void RepoTreeView::onCtxActivate()
 void RepoTreeView::onCtxClose()
 {
 
+}
+
+void RepoTreeView::onRepoActivated( RepositoryInfo* repo )
+{
+    if( repo )
+    {
+        Heaven::ContextKeys keys = mkKeys();
+        keys.set( "RepoName", repo->path() );
+
+        bool isNewContext = false;
+        Heaven::ViewContext* ctx = contextFor( keys, &isNewContext );
+
+        if( isNewContext )
+        {
+            RepositoryContext* ctx2 = qobject_cast< RepositoryContext* >( ctx );
+            Q_ASSERT( ctx2 );
+
+            ctx2->setRepository( repo );
+        }
+
+        setCurrentContext( ctx );
+    }
+    else
+    {
+        setCurrentContext( NULL );
+    }
+}
+
+Heaven::ViewContext* RepoTreeView::createContextObject() const
+{
+    return new RepositoryContext;
 }

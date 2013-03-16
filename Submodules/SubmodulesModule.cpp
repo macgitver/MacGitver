@@ -33,13 +33,13 @@ Heaven::View* SubmodulesModule::createSubmodulesView()
 
 void SubmodulesModule::initialize()
 {
-    registerView( QLatin1String( "Submodules" ), Heaven::GlobalViewType,
+    registerView( "Submodules", tr( "Submodules" ),
                   & SubmodulesModule::createSubmodulesView );
 }
 
 void SubmodulesModule::deinitialize()
 {
-    unregisterView( QLatin1String( "Submodules" ) );
+    unregisterView( "Submodules" );
 }
 
 #if QT_VERSION < 0x050000

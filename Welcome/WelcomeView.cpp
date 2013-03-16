@@ -15,13 +15,12 @@
  */
 
 #include <QTextBrowser>
-#include <QVBoxLayout>
 #include <QFile>
 
 #include "WelcomeView.h"
 
 WelcomeView::WelcomeView()
-    : View( QLatin1String( "Welcome" ) )
+    : View( "Welcome" )
 {
     setViewName( trUtf8( "Welcome" ) );
 
@@ -32,11 +31,7 @@ WelcomeView::WelcomeView()
     f.open( QFile::ReadOnly );
     mBrowser->setHtml( QString::fromUtf8( f.readAll().constData() ) );
 
-    QVBoxLayout* l = new QVBoxLayout;
-    l->addWidget( mBrowser );
-    l->setSpacing( 0 );
-    l->setMargin( 0 );
-    setLayout( l );
+    setWidget( mBrowser );
 }
 
 

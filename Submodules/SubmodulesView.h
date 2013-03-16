@@ -19,7 +19,7 @@
 
 #include <QHash>
 
-#include "libHeaven/Views/GlobalView.hpp"
+#include "libHeaven/CentralUI/Views/View.hpp"
 
 #include "libGitWrap/Repository.hpp"
 
@@ -30,7 +30,7 @@ class QStandardItemModel;
 class QTreeView;
 
 
-class SubmodulesView : public Heaven::GlobalView, private SubmodulesViewActions
+class SubmodulesView : public Heaven::View, private SubmodulesViewActions
 {
     Q_OBJECT
 public:

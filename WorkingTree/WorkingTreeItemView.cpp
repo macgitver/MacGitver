@@ -28,6 +28,10 @@ WorkingTreeItemView::WorkingTreeItemView()
                                      int( WTF_All ) );
     mFilters = WorkingTreeFilters( v.toInt() );
 
+    mHeader = new HeaderView( Qt::Horizontal );
+    setHeader( mHeader );
+    mHeader->setConfigName( QLatin1String( "Worktree/Columns" ) );
+
     #ifdef Q_OS_MACX
     setAttribute( Qt::WA_MacShowFocusRect, false );
     #endif
@@ -52,9 +56,7 @@ void WorkingTreeItemView::setRepository( const Git::Repository& repo )
         setModel( mModel );
     }
 
-    HeaderView* hv = new HeaderView( Qt::Horizontal );
-    setHeader( hv );
-    hv->setConfigName( QLatin1String( "Worktree/Columns" ) );
+    updateGeometries();
 }
 
 WorkingTreeFilters WorkingTreeItemView::filters() const

@@ -15,26 +15,19 @@
  */
 
 #include <QListWidget>
-#include <QVBoxLayout>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "TagsView.h"
 
 TagsView::TagsView()
-    : View( QLatin1String( "Tags" ) )
+    : View( "Tags" )
 {
+    setViewName( trUtf8( "Tags" ) );
+
     mListWidget = new QListWidget();
     mListWidget->setFrameStyle( QFrame::NoFrame );
-
-    QVBoxLayout* l = new QVBoxLayout;
-    l->setSpacing( 0 );
-    l->setMargin( 0 );
-    l->addWidget( mListWidget );
-
-    setLayout( l );
-
-    setViewName( trUtf8( "Tags" ) );
+    setWidget( mListWidget );
 
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
              this, SLOT(repositoryChanged(Git::Repository)) );

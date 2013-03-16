@@ -14,32 +14,24 @@
  *
  */
 
-#ifndef MGV_REMOTES_VIEW_CONTEXT_H
-#define MGV_REMOTES_VIEW_CONTEXT_H
+Ui BranchesViewActions {
 
-#include "libGitWrap/Repository.hpp"
+    ToolBar BranchesTB {
 
-#include "libHeaven/CentralUI/Contexts/ViewContext.hpp"
+        Action          ShowLocal {
+            Text        "Local";
+            Checkable   true;
+            Checked     true;
+            ConnectTo   rereadBranches();
+        };
 
-class QAbstractItemModel;
-class QStandardItem;
-class QStandardItemModel;
+        Action          ShowRemote {
+            Text        "Remote";
+            Checkable   true;
+            Checked     true;
+            ConnectTo   rereadBranches();
+        };
 
-class RemotesViewContext : public Heaven::ViewContext
-{
-    Q_OBJECT
-public:
-    RemotesViewContext();
+    };
 
-private slots:
-    void repositoryChanged( Git::Repository repo );
-
-public:
-    QAbstractItemModel* model();
-
-private:
-    Git::Repository     mRepo;
-    QStandardItemModel* mModel;
 };
-
-#endif

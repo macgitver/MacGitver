@@ -30,14 +30,14 @@ Heaven::View* WelcomeModule::createWelcomeView()
 
 void WelcomeModule::initialize()
 {
-    registerView( QLatin1String( "Welcome" ),
-                  Heaven::SingleViewType,
+    registerView( "Welcome",
+                  tr( "Welcome" ),
                   &WelcomeModule::createWelcomeView );
 }
 
 void WelcomeModule::deinitialize()
 {
-    unregisterView( QLatin1String( "Welcome" ) );
+    unregisterView( "Welcome" );
 }
 
 #if QT_VERSION < 0x050000

@@ -30,14 +30,14 @@ Heaven::View* LoggingModule::createLoggingView()
 
 void LoggingModule::initialize()
 {
-    registerView( QLatin1String( "Log" ),
-                  Heaven::GlobalViewType,
+    registerView( "Log",
+                  tr( "Log" ),
                   &LoggingModule::createLoggingView );
 }
 
 void LoggingModule::deinitialize()
 {
-    unregisterView( QLatin1String( "Log" ) );
+    unregisterView( "Log" );
 }
 
 #if QT_VERSION < 0x050000

@@ -14,7 +14,6 @@
  *
  */
 
-#include <QVBoxLayout>
 #include <QStandardItemModel>
 #include <QToolBar>
 #include <QTreeView>
@@ -31,28 +30,22 @@
 
 
 SubmodulesView::SubmodulesView()
-    : GlobalView( QLatin1String( "Submodules" ) )
+    : View( "Submodules" )
 {
     setupActions( this );
 
-    QVBoxLayout* l = new QVBoxLayout;
-    l->setSpacing( 0 );
-    l->setMargin( 0 );
-
-    l->addWidget( tbSMViewToolbar->toolBarFor( this ) );
+    setToolBar( tbSMViewToolbar );
 
     mTree = new QTreeView;
     mTree->setRootIsDecorated( false );
     mTree->setHeaderHidden( true );
     mTree->setFrameShape( QFrame::NoFrame );
-    l->addWidget( mTree );
+    setWidget( mTree );
 
     mModel = new QStandardItemModel( this );
     mTree->setModel( mModel );
 
     mTree->setItemDelegate( new SubmodulesViewDelegate( this ) );
-
-    setLayout( l );
 
     setViewName( trUtf8( "Submodules" ) );
 

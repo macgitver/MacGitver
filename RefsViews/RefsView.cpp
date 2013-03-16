@@ -15,7 +15,6 @@
  */
 
 #include <QListView>
-#include <QVBoxLayout>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
@@ -23,19 +22,13 @@
 #include "RefsView.h"
 
 RefsView::RefsView()
-    : View( QLatin1String( "Refs" ) )
+    : View( "Refs" )
 {
+    setViewName( trUtf8( "Refs" ) );
+
     mListView = new QListView();
     mListView->setFrameStyle( QFrame::NoFrame );
-
-    QVBoxLayout* l = new QVBoxLayout;
-    l->setSpacing( 0 );
-    l->setMargin( 0 );
-    l->addWidget( mListView );
-
-    setLayout( l );
-
-    setViewName( trUtf8( "Refs" ) );
+    setWidget( mListView );
 
     mModel = new RefsListModel( this );
     mListView->setModel( mModel );

@@ -1,6 +1,8 @@
 /*
- * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * libHeaven - A Qt-based ui framework for strongly modularized applications
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,32 +16,27 @@
  *
  */
 
-#ifndef MGV_REMOTES_VIEW_CONTEXT_H
-#define MGV_REMOTES_VIEW_CONTEXT_H
+#ifndef REPOSITORY_CONTEXT_HPP
+#define REPOSITORY_CONTEXT_HPP
 
-#include "libGitWrap/Repository.hpp"
+#include "libMacGitverCore/MacGitver/IRepositoryContext.hpp"
 
 #include "libHeaven/CentralUI/Contexts/ViewContext.hpp"
 
-class QAbstractItemModel;
-class QStandardItem;
-class QStandardItemModel;
-
-class RemotesViewContext : public Heaven::ViewContext
+class RepositoryContext : public Heaven::ViewContext, public IRepositoryContext
 {
     Q_OBJECT
-public:
-    RemotesViewContext();
-
-private slots:
-    void repositoryChanged( Git::Repository repo );
+    Q_INTERFACES( IRepositoryContext )
 
 public:
-    QAbstractItemModel* model();
+    RepositoryContext();
+
+public:
+    void setRepository( RepositoryInfo* repo );
+    RepositoryInfo* repository();
 
 private:
-    Git::Repository     mRepo;
-    QStandardItemModel* mModel;
+    RepositoryInfo*         mRepo;
 };
 
 #endif

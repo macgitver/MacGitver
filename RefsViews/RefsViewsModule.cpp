@@ -18,8 +18,8 @@
 
 #include "RefsViewsModule.h"
 #include "TagsView.h"
-#include "BranchesView.h"
 #include "RefsView.h"
+#include "Branches/BranchesView.hpp"
 
 RefsViewsModule::RefsViewsModule()
 {
@@ -42,24 +42,24 @@ Heaven::View* RefsViewsModule::createRefsView()
 
 void RefsViewsModule::initialize()
 {
-    registerView( QLatin1String( "Branches" ),
-                  Heaven::GlobalViewType,
+    registerView( "Branches",
+                  tr( "Branches" ),
                   &RefsViewsModule::createBranchesView );
 
-    registerView( QLatin1String( "Refs" ),
-                  Heaven::GlobalViewType,
+    registerView( "Refs",
+                  tr( "Refs" ),
                   &RefsViewsModule::createRefsView );
 
-    registerView( QLatin1String( "Tags" ),
-                  Heaven::GlobalViewType,
+    registerView( "Tags",
+                  tr( "Tags" ),
                   &RefsViewsModule::createTagsView );
 }
 
 void RefsViewsModule::deinitialize()
 {
-    unregisterView( QLatin1String( "Branches" ) );
-    unregisterView( QLatin1String( "Refs" ) );
-    unregisterView( QLatin1String( "Tags" ) );
+    unregisterView( "Branches" );
+    unregisterView( "Refs" );
+    unregisterView( "Tags" );
 }
 
 #if QT_VERSION < 0x050000

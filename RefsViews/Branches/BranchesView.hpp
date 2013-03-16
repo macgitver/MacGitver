@@ -1,6 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,30 +16,34 @@
  *
  */
 
-#ifndef MGV_TAGS_VIEW_H
-#define MGV_TAGS_VIEW_H
+#ifndef MGV_BRANCHES_VIEW_HPP
+#define MGV_BRANCHES_VIEW_HPP
 
-#include "libHeaven/CentralUI/Views/View.hpp"
+#include "libHeaven/CentralUI/Views/ContextView.hpp"
 
-#include "libGitWrap/Repository.hpp"
+class QTreeView;
 
-class QListWidget;
+#include "hic_BranchesViewActions.h"
 
-class TagsView : public Heaven::View
+class BranchesViewData;
+
+class BranchesView : public Heaven::ContextView, private BranchesViewActions
 {
     Q_OBJECT
 public:
-    TagsView();
-
-public slots:
-    void repositoryChanged( Git::Repository repo );
+    BranchesView();
 
 public:
     virtual QSize sizeHint() const;
 
 private:
-    Git::Repository mRepo;
-    QListWidget*    mListWidget;
+    Heaven::ViewContextData* createContextData() const;
+    virtual void attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data );
+    virtual void detachedFromContext( Heaven::ViewContext* ctx );
+
+private:
+    QTreeView*          mTree;
+    BranchesViewData*   mData;
 };
 
 #endif

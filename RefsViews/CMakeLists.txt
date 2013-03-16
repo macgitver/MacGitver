@@ -16,8 +16,11 @@ SET( SRC_FILES
     RefsListDelegate.cpp
 
     RefsView.cpp
-    BranchesView.cpp
     TagsView.cpp
+
+    Branches/BranchesModel.cpp 
+    Branches/BranchesView.cpp
+    Branches/BranchesViewData.cpp
 )
 
 SET( HDR_FILES
@@ -28,11 +31,20 @@ SET( HDR_FILES
     RefsListDelegate.h
 
     RefsView.h
-    BranchesView.h
     TagsView.h
+
+    Branches/BranchesModel.hpp
+    Branches/BranchesView.hpp
+    Branches/BranchesViewData.hpp
+)
+
+SET( HID_FILES
+
+    Branches/BranchesViewActions.hid
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )
+HIC( HIC_FILES ${HID_FILES} )
 
 ADD_MGV_MODULE(
     RefsViews

@@ -36,14 +36,14 @@ Heaven::View* HistoryModule::createHistoryView()
 
 void HistoryModule::initialize()
 {
-    registerView( QLatin1String( "History" ),
-                  Heaven::GlobalViewType,
+    registerView( "History",
+                  tr( "History" ),
                   &HistoryModule::createHistoryView );
 }
 
 void HistoryModule::deinitialize()
 {
-    unregisterView( QLatin1String( "History" ) );
+    unregisterView( "History" );
 }
 
 #if QT_VERSION < 0x050000

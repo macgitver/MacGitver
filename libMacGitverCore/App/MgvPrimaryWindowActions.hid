@@ -57,6 +57,9 @@ Ui MgvPrimaryWindowActions {
                 ConnectTo       onToolsPreferences();
             };
 
+            Separator;
+            MergePlace CustomToolsMP;
+
         };
 
         Menu HelpMenu {

@@ -34,7 +34,7 @@ Ui MgvPrimaryWindowActions {
                 MenuRole        QuitRole;
                 StatusToolTip   "Terminate MacGitver.";
 
-                _ConnectTo      onQuit();
+                ConnectTo       onQuit();
             };
 
         };
@@ -54,7 +54,7 @@ Ui MgvPrimaryWindowActions {
                 Text            "&Preferences...";
                 StatusToolTip   "Edit MacGitver global preferences.";
 
-                _ConnectTo      onToolsPreferences();
+                ConnectTo       onToolsPreferences();
             };
 
         };
@@ -66,7 +66,7 @@ Ui MgvPrimaryWindowActions {
             Action HelpAbout {
                 Text            "&About...";
                 StatusToolTip   "Show information about this release of MacGitver.";
-                _ConnectTo      onHelpAbout();
+                ConnectTo       onHelpAbout();
             };
         };
     };

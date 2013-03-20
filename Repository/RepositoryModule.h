@@ -1,6 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -22,6 +24,8 @@
 #include "libMacGitverCore/Config/ConfigUser.h"
 
 #include "hic_RepositoryModule.h"
+
+class RepositoryInfo;
 
 class RepositoryModule : public Module, public RepositoryActions, private ConfigUser
 {
@@ -46,11 +50,18 @@ private slots:
     void onRepositoryClone();
     void onRepositoryOpen();
     void onRepositoryClose();
+    void onRecentRepositoryOpen( const QVariant& path );
+
+    void onCoreRepoOpen( RepositoryInfo* repo );
+
+private:
+    void updateMostRecentlyUsedMenu();
 
 private:
     static Heaven::View* createRepoTreeView();
 
 private:
+    QStringList     mMostRecentlyUsed;
     Git::Repository mRepo;
 };
 

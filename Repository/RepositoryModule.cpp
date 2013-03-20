@@ -1,6 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -57,6 +59,16 @@ void RepositoryModule::initialize()
     acRepositoryMenuAC->mergeInto( "RepositoryMenuMP" );
     acRepositoryToolBarAC->mergeInto( "RepositoryToolBarMP" );
 
+    connect( damRecentlyUsed, SIGNAL(entryTriggered(QVariant)),
+             this, SLOT(onRecentRepositoryOpen(QVariant)) );
+
+    mMostRecentlyUsed = configGet( "MRU", QStringList() );
+
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryOpened(RepositoryInfo*)),
+             this, SLOT(onCoreRepoOpen(RepositoryInfo*)) );
+
+    updateMostRecentlyUsedMenu();
+
     MacGitver::self().registerView( "RepoTree",
                                     tr( "Repository" ),
                                     &RepositoryModule::createRepoTreeView );
@@ -88,6 +100,33 @@ void RepositoryModule::onRepositoryOpen()
 void RepositoryModule::onRepositoryClone()
 {
     CloneRepositoryDlg().exec();
+}
+
+void RepositoryModule::onRecentRepositoryOpen( const QVariant& path )
+{
+    QString repoPath = path.toString();
+    MacGitver::repoMan().open( repoPath );
+}
+
+void RepositoryModule::onCoreRepoOpen( RepositoryInfo* repo )
+{
+    if( repo->isSubModule() )
+    {
+        return;
+    }
+
+    QString path = repo->path();
+    mMostRecentlyUsed.removeAll( path );
+    mMostRecentlyUsed.prepend( path );
+
+    configSet( "MRU", mMostRecentlyUsed );
+    updateMostRecentlyUsedMenu();
+}
+
+void RepositoryModule::updateMostRecentlyUsedMenu()
+{
+    damRecentlyUsed->setMode( Heaven::DAMergerAdvancedList );
+    damRecentlyUsed->addStringList( mMostRecentlyUsed );
 }
 
 #if QT_VERSION < 0x050000

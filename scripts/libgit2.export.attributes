@@ -1,5 +1,4 @@
 tests-clar/* export-ignore
-deps/* export-ignore
 docs/* export-ignore
 examples/* export-ignore
 packaging/* export-ignore

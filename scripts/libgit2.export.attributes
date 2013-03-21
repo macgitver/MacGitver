@@ -1,0 +1,9 @@
+tests-clar/* export-ignore
+deps/* export-ignore
+docs/* export-ignore
+examples/* export-ignore
+packaging/* export-ignore
+libgit2.pc.in export-ignore
+CMakeLists.txt export-ignore
+Makefile.embed export-ignore
+libgit2_clar.supp export-ignore

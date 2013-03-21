@@ -6,3 +6,6 @@ libgit2.pc.in export-ignore
 CMakeLists.txt export-ignore
 Makefile.embed export-ignore
 libgit2_clar.supp export-ignore
+.git* export-ignore
+.travis* export-ignore
+api.docurium export-ignore

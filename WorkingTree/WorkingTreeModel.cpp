@@ -169,36 +169,36 @@ void WorkingTreeModel::update()
     QIcon folderIcon = ip.icon( QFileIconProvider::Folder );
 
     Git::Result r;
-    Git::StatusHash sh = mRepo.statusHash( r );
-    Git::StatusHash::ConstIterator it = sh.constBegin();
+    Git::FileStatusHash sh = mRepo.status(r);
+    Git::FileStatusHash::ConstIterator it = sh.constBegin();
     while( it != sh.constEnd() )
     {
         WorkingTreeFilters curState;
 
         unsigned int st = it.value();
-        if( st == Git::StatusCurrent )
+        if( st == Git::Unchanged )
             curState |= WTF_Unchanged;
 
-        else if( st & Git::StatusIgnored )
+        else if( st & Git::Ignored )
             curState |= WTF_Ignored;
 
-        else if( st & Git::StatusWorkingTreeModified )
+        else if( st & Git::WorkingTreeModified )
             curState |= WTF_Changed;
 
-        else if( st & Git::StatusWorkingTreeNew )
+        else if( st & Git::WorkingTreeNew )
             curState |= WTF_Untracked;
 
-        else if( st & Git::StatusWorkingTreeDeleted )
+        else if( st & Git::WorkingTreeDeleted )
             curState |= WTF_Missing;
 
         #if 0
-        else if( st & Git::StatusIndexModified )
+        else if( st & Git::IndexModified )
             curState |= Changed;
 
-        else if( st & Git::StatusIndexNew )
+        else if( st & Git::IndexNew )
             curState |= Untracked;
 
-        else if( st & Git::StatusIndexDeleted )
+        else if( st & Git::IndexDeleted )
             curState |= Missing;
         #endif
 

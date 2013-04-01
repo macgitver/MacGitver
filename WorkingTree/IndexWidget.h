@@ -35,6 +35,7 @@ class WorkingTreeModel;
 class WorkingTreeItemView;
 
 #include "WorkingTreeFilters.h"
+class QPlainTextEdit;
 
 #include "hic_WorkingTreeActions.h"
 
@@ -65,6 +66,8 @@ private:
     WorkingTreeItemView*    mTreeView;
     WorkingTreeModel*       mModel;
     DiffViews::DiffView*    mDiffView;
+    WorkingTreeItemView*    mIndexTreeView;
+    QPlainTextEdit*         mCommitMessage;
     Git::Repository         mRepo;
     bool                    mFilterRecursion;
 };

@@ -37,9 +37,14 @@
 
 IndexWidget::IndexWidget()
     : View( "WorkTree" )
+    , mSplitter( new Heaven::MiniSplitter( Qt::Vertical ) )
+    , mTreeView( new WorkingTreeItemView )
+    , mIndexTreeView( new WorkingTreeItemView )
+    , mCommitMessage( new QPlainTextEdit )
 {
-    mTreeView = new WorkingTreeItemView;
     mTreeView->setFrameShape( QFrame::NoFrame );
+    mIndexTreeView->setFrameShape( QFrame::NoFrame );
+    mCommitMessage->setFrameShape( QFrame::NoFrame );
 
     setupActions( this );
 
@@ -48,9 +53,18 @@ IndexWidget::IndexWidget()
 
     mDiffView = DiffViews::DiffViews::self().defaultCreator()->create( this );
 
-    mSplitter = new Heaven::MiniSplitter( Qt::Horizontal );
-    mSplitter->addWidget( mTreeView );
-    mSplitter->addWidget( mDiffView );
+    Heaven::MiniSplitter *hSplit_1 = new Heaven::MiniSplitter( Qt::Horizontal );
+    hSplit_1->addWidget( mTreeView );
+    hSplit_1->addWidget( mDiffView );
+
+    mSplitter->addWidget( hSplit_1 );
+
+    Heaven::MiniSplitter *hSplit_2 = new Heaven::MiniSplitter( Qt::Horizontal );
+
+    hSplit_2->addWidget( mIndexTreeView );
+    hSplit_2->addWidget( mCommitMessage );
+
+    mSplitter->addWidget( hSplit_2 );
 
     setWidget( mSplitter );
 

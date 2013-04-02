@@ -55,6 +55,9 @@ bool WorkingTreeFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &
         return false;
 
     QVariant v = i.data( WorkingTreeAbstractItem::StatusRole );
+    if ( !v.isValid() )
+        return true;
+
     WorkingTreeFilters f = WorkingTreeFilters( v.toInt() );
     return ( f & mStatusFilter );
 }

@@ -52,6 +52,13 @@ Ui WorkingTreeActions {
                 Checked     true;
                 _ConnectTo  onShowUntracked(bool);
             };
+
+            Action ShowStaged {
+                Text        "Staged";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowStaged(bool);
+            };
         };
 
         Separator;

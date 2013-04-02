@@ -59,6 +59,7 @@ private slots:
     void onShowIgnored( bool enabled );
     void onShowUntracked( bool enabled );
     void onShowUnchanged( bool enabled );
+    void onShowStaged( bool enabled );
     //void workingTreeChanged();
 
 private:

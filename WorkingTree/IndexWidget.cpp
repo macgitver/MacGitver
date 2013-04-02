@@ -114,6 +114,7 @@ void IndexWidget::setupFilters()
     actShowModified->setChecked( filters & WTF_Changed );
     actShowUnchanged->setChecked( filters & WTF_Unchanged );
     actShowUntracked->setChecked( filters & WTF_Untracked );
+    actShowStaged->setChecked( filters & WTF_Staged );
 
     mFilterRecursion = false;
 }
@@ -176,6 +177,7 @@ void IndexWidget::onShowAll( bool enabled )
     actShowModified->setChecked( enabled );
     actShowUnchanged->setChecked( enabled );
     actShowUntracked->setChecked( enabled );
+    actShowStaged->setChecked( enabled );
 
     mFilterRecursion = false;
 }
@@ -203,6 +205,11 @@ void IndexWidget::onShowUntracked( bool enabled )
 void IndexWidget::onShowUnchanged( bool enabled )
 {
     setWtFilter( enabled, WTF_Unchanged );
+}
+
+void IndexWidget::onShowStaged( bool enabled )
+{
+    setWtFilter( enabled, WTF_Staged );
 }
 
 //void IndexWidget::workingTreeChanged()

@@ -19,41 +19,9 @@ WorkingTreeDirItem::~WorkingTreeDirItem()
     mChildren.clear();
 }
 
-int WorkingTreeDirItem::visibleChildren() const
+int WorkingTreeDirItem::childCount() const
 {
-    int visible = 0;
-
-    for( int i = 0; i < mDirs.count(); i++ )
-    {
-        if( mDirs[ i ]->isVisible() )
-            visible++;
-    }
-
-    for( int i = 0; i < mFiles.count(); i++ )
-    {
-        if( mFiles[ i ]->isVisible() )
-            visible++;
-    }
-
-    return visible;
-}
-
-WorkingTreeAbstractItem* WorkingTreeDirItem::visibleChildAt( int index )
-{
-    for( int i = 0; i < mChildren.count(); i++ )
-    {
-        WorkingTreeAbstractItem* c = childAt( i );
-
-        if( c->isVisible() )
-        {
-            if( !index )
-                return c;
-            else
-                --index;
-        }
-    }
-
-    return NULL;
+    return mChildren.count();
 }
 
 WorkingTreeAbstractItem* WorkingTreeDirItem::childAt( int index )
@@ -97,15 +65,14 @@ QVariant WorkingTreeDirItem::data( int column, int role ) const
     return QVariant();
 }
 
-int WorkingTreeDirItem::visibleIndex() const
+int WorkingTreeDirItem::row() const
 {
     if( !mParent )
         return -1;
 
-    int numVis = mParent->visibleChildren();
-    for( int i = 0; i < numVis; i++ )
+    for( int i = 0; i < mParent->childCount(); i++ )
     {
-        if( mParent->visibleChildAt( i ) == this )
+        if( mParent->childAt( i ) == this )
         {
             return i;
         }
@@ -163,7 +130,7 @@ bool WorkingTreeDirItem::isDirectory() const
 
 void WorkingTreeDirItem::removeChild( WorkingTreeAbstractItem* child )
 {
-    int i = child->visibleIndex();
+    int i = child->index().row();
 
     if( i != -1 )
     {

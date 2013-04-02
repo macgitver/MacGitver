@@ -35,7 +35,7 @@ public:
 
 public:
     void setName( const QString& name );
-    void setState( WorkingTreeFilters state, bool shouldBeVisible );
+    void setState(WorkingTreeFilters state);
     void setIcon( const QIcon& icon );
     void setSize( qint64 size );
     void setOwner( const QString& owner );
@@ -44,11 +44,11 @@ public:
 public:
     QString name() const;
     bool isDirectory() const;
-    int visibleChildren() const;
-    WorkingTreeAbstractItem* visibleChildAt( int index );
+    int childCount() const;
+    WorkingTreeAbstractItem* childAt( int index );
     QVariant data( int column, int role ) const;
     WorkingTreeAbstractItem* parent();
-    int visibleIndex() const;
+    int row() const;
     WorkingTreeAbstractItem* childByName( const QString& name );
     void removeChild( WorkingTreeAbstractItem* child );
     QModelIndex index() const;

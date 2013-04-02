@@ -104,7 +104,7 @@ QModelIndex WorkingTreeModel::index( int row, int column, const QModelIndex& par
     else
         parentItem = static_cast<WorkingTreeAbstractItem*>( parent.internalPointer() );
 
-    WorkingTreeAbstractItem* childItem = parentItem->visibleChildAt( row );
+    WorkingTreeAbstractItem* childItem = parentItem->childAt( row );
     if( childItem )
         return createIndex( row, column, childItem );
     else
@@ -120,10 +120,10 @@ QModelIndex WorkingTreeModel::parent( const QModelIndex& index ) const
             static_cast< WorkingTreeAbstractItem* >( index.internalPointer() );
     WorkingTreeAbstractItem* parentItem = childItem->parent();
 
-    if( parentItem == mRootItem )
+    if( parentItem == mRootItem || parentItem == 0 )
         return QModelIndex();
 
-    return createIndex( parentItem->visibleIndex(), 0, parentItem );
+    return createIndex( parentItem->row(), 0, parentItem );
 }
 
 int WorkingTreeModel::rowCount( const QModelIndex& parent ) const
@@ -140,7 +140,7 @@ int WorkingTreeModel::rowCount( const QModelIndex& parent ) const
         parentItem = static_cast< WorkingTreeAbstractItem* >( parent.internalPointer() );
 
     if (parentItem != 0)
-        return parentItem->visibleChildren();
+        return parentItem->childCount();
 
     return 0;
 }
@@ -256,7 +256,7 @@ void WorkingTreeModel::update()
         file->setLastModified( fi.lastModified() );
         file->setOwner( fi.owner() );
 
-        file->setState( curState, true );
+        file->setState( curState );
 
         ++it;
     }

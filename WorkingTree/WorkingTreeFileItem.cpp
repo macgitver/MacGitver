@@ -28,12 +28,12 @@ WorkingTreeFileItem::~WorkingTreeFileItem()
 {
 }
 
-int WorkingTreeFileItem::visibleChildren() const
+int WorkingTreeFileItem::childCount() const
 {
     return 0;
 }
 
-WorkingTreeAbstractItem* WorkingTreeFileItem::visibleChildAt( int index )
+WorkingTreeAbstractItem* WorkingTreeFileItem::childAt( int index )
 {
     Q_UNUSED( index );
     return NULL;
@@ -81,7 +81,7 @@ WorkingTreeAbstractItem* WorkingTreeFileItem::parent()
     return mParent;
 }
 
-int WorkingTreeFileItem::visibleIndex() const
+int WorkingTreeFileItem::row() const
 {
     return 0;
 }
@@ -101,21 +101,9 @@ void WorkingTreeFileItem::setName( const QString& name )
     mName = name;
 }
 
-void WorkingTreeFileItem::setState( WorkingTreeFilters state, bool shouldBeVisible )
+void WorkingTreeFileItem::setState( WorkingTreeFilters state )
 {
     mState = state;
-
-    if( shouldBeVisible != isVisible() )
-    {
-        if( isVisible() )
-        {
-            makeInvisible();
-        }
-        else
-        {
-            makeVisible();
-        }
-    }
 }
 
 void WorkingTreeFileItem::setIcon( const QIcon& icon )

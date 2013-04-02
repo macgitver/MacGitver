@@ -18,6 +18,7 @@
 #include <QToolBar>
 #include <QSplitter>
 #include <QVBoxLayout>
+#include <QPlainTextEdit>
 
 #include "libGitWrap/Index.hpp"
 #include "libGitWrap/DiffList.hpp"
@@ -27,6 +28,7 @@
 #include "libDiffViews/Views/Interfaces/DiffViews.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/MacGitver/FSWatcher.h"
 #include "libMacGitverCore/MacGitver/GitPatchConsumer.hpp"
 
@@ -34,6 +36,7 @@
 
 #include "WorkingTreeItemView.h"
 #include "WorkingTreeModel.h"
+#include "WorkingTreeFilterModel.h"
 
 IndexWidget::IndexWidget()
     : View( "WorkTree" )
@@ -41,6 +44,7 @@ IndexWidget::IndexWidget()
     , mTreeView( new WorkingTreeItemView )
     , mIndexTreeView( new WorkingTreeItemView )
     , mCommitMessage( new QPlainTextEdit )
+    , mStatusModel( new WorkingTreeModel( this ) )
 {
     mTreeView->setFrameShape( QFrame::NoFrame );
     mIndexTreeView->setFrameShape( QFrame::NoFrame );
@@ -68,17 +72,7 @@ IndexWidget::IndexWidget()
 
     setWidget( mSplitter );
 
-    mFilterRecursion = true;
-    WorkingTreeFilters filters = mTreeView->filters();
-
-    actShowAll->setChecked( filters == WTF_All );
-    actShowIgnored->setChecked( filters & WTF_Ignored );
-    actShowMissing->setChecked( filters & WTF_Missing );
-    actShowModified->setChecked( filters & WTF_Changed );
-    actShowUnchanged->setChecked( filters & WTF_Unchanged );
-    actShowUntracked->setChecked( filters & WTF_Untracked );
-
-    mFilterRecursion = false;
+    setupFilters();
 
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
              this, SLOT(repositoryChanged(Git::Repository)) );
@@ -93,14 +87,45 @@ IndexWidget::IndexWidget()
     }
 }
 
+void IndexWidget::setupFilters()
+{
+    WorkingTreeFilterModel *wtFilter = new WorkingTreeFilterModel;
+    QVariant v = Config::self().get( QLatin1String("Worktree/Filters"),
+                                     int( WTF_All ) );
+    wtFilter->setSourceModel( mStatusModel );
+    wtFilter->setFilter( WorkingTreeFilters( v.toInt() ) );
+    //wtFilter->setDynamicSortFilter( true );
+
+    WorkingTreeFilterModel *indexFilter = new WorkingTreeFilterModel;
+    indexFilter->setSourceModel( mStatusModel );
+    indexFilter->setFilter( WorkingTreeFilters( WTF_Missing | WTF_Changed ) );
+    //wtFilter->setDynamicSortFilter( true );
+
+    mTreeView->setModel( wtFilter );
+    mIndexTreeView->setModel( indexFilter );
+
+    mFilterRecursion = true;
+
+    WorkingTreeFilters filters = wtFilter->filter();
+
+    actShowAll->setChecked( filters == WTF_All );
+    actShowIgnored->setChecked( filters & WTF_Ignored );
+    actShowMissing->setChecked( filters & WTF_Missing );
+    actShowModified->setChecked( filters & WTF_Changed );
+    actShowUnchanged->setChecked( filters & WTF_Unchanged );
+    actShowUntracked->setChecked( filters & WTF_Untracked );
+
+    mFilterRecursion = false;
+}
+
 void IndexWidget::repositoryChanged( Git::Repository repo )
 {
     mRepo = repo;
-    mTreeView->setRepository( repo );
 
     if( mRepo.isValid() )
     {
         updateDiff();
+        mStatusModel->setRepository( repo );
     }
 }
 
@@ -114,6 +139,27 @@ void IndexWidget::updateDiff()
     mDiffView->setPatch( p.patch() );
 }
 
+void IndexWidget::setWtFilter(bool enabled, WorkingTreeFilter flag)
+{
+    if( mFilterRecursion )
+        return;
+
+    mFilterRecursion = true;
+
+    WorkingTreeFilterModel *wtfModel = dynamic_cast<WorkingTreeFilterModel*>( mTreeView->model() );
+    if ( wtfModel )
+    {
+        WorkingTreeFilters f = wtfModel->filter();
+        wtfModel->setFilter( enabled ? f |= flag : f &= ~flag );
+        Config::self().set( QLatin1String( "Worktree/Filters" ),
+                            int( wtfModel->filter() ) );
+
+        actShowAll->setChecked( f == WTF_All );
+    }
+
+    mFilterRecursion = false;
+}
+
 void IndexWidget::onShowAll( bool enabled )
 {
     if( mFilterRecursion )
@@ -121,7 +167,9 @@ void IndexWidget::onShowAll( bool enabled )
 
     mFilterRecursion = true;
 
-    setTreeFilter( enabled ? WTF_All : WTF_None );
+    WorkingTreeFilterModel *wtfModel = dynamic_cast<WorkingTreeFilterModel*>( mTreeView->model() );
+    if ( wtfModel )
+        wtfModel->setFilter( enabled ? WTF_All : WTF_None );
 
     actShowIgnored->setChecked( enabled );
     actShowMissing->setChecked( enabled);
@@ -134,112 +182,37 @@ void IndexWidget::onShowAll( bool enabled )
 
 void IndexWidget::onShowModified( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Changed;
-    else
-        f &= ~WTF_Changed;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, WTF_Changed );
 }
 
 void IndexWidget::onShowMissing( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Missing;
-    else
-        f &= ~WTF_Missing;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, WTF_Missing );
 }
 
 void IndexWidget::onShowIgnored( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Ignored;
-    else
-        f &= ~WTF_Ignored;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, WTF_Ignored );
 }
 
 void IndexWidget::onShowUntracked( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Untracked;
-    else
-        f &= ~WTF_Untracked;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, WTF_Untracked );
 }
 
 void IndexWidget::onShowUnchanged( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Unchanged;
-    else
-        f &= ~WTF_Unchanged;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, WTF_Unchanged );
 }
 
-void IndexWidget::setTreeFilter( WorkingTreeFilters filters )
-{
-    mTreeView->setFilter( filters );
-}
+//void IndexWidget::workingTreeChanged()
+//{
+//    WorkingTreeModel* model = static_cast< WorkingTreeModel* >( mTreeView->model() );
+//    if( !model )
+//    {
+//        return;
+//    }
 
-void IndexWidget::workingTreeChanged()
-{
-    WorkingTreeModel* model = static_cast< WorkingTreeModel* >( mTreeView->model() );
-    if( !model )
-    {
-        return;
-    }
-
-    model->update();
-    updateDiff();
-}
+//    model->update();
+//    updateDiff();
+//}

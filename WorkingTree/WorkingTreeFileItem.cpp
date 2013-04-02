@@ -66,6 +66,9 @@ QVariant WorkingTreeFileItem::data( int column, int role ) const
         else if( mState & WTF_Ignored )     return QColor( Qt::gray );
         else                                return QColor( 0xFFCCFF );
 
+    case WorkingTreeAbstractItem::StatusRole:
+        return int( mState );
+
     default:
         break;
     }
@@ -98,7 +101,7 @@ void WorkingTreeFileItem::setName( const QString& name )
     mName = name;
 }
 
-void WorkingTreeFileItem::setState( WorkingTreeFilter state, bool shouldBeVisible )
+void WorkingTreeFileItem::setState( WorkingTreeFilters state, bool shouldBeVisible )
 {
     mState = state;
 

@@ -17,6 +17,7 @@ SET( SRC_FILES
     WorkingTreeFileItem.cpp
     WorkingTreeItemView.cpp
     WorkingTreeModel.cpp
+    WorkingTreeFilterModel.cpp
 )
 
 SET( HDR_FILES
@@ -29,6 +30,7 @@ SET( HDR_FILES
     WorkingTreeItemView.h
     WorkingTreeModel.h
     WorkingTreeFilters.h
+    WorkingTreeFilterModel.h
 )
 
 SET( HID_FILES

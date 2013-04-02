@@ -35,7 +35,7 @@ public:
 
 public:
     void setName( const QString& name );
-    void setState( WorkingTreeFilter state, bool shouldBeVisible );
+    void setState( WorkingTreeFilters state, bool shouldBeVisible );
     void setIcon( const QIcon& icon );
     void setSize( qint64 size );
     void setOwner( const QString& owner );
@@ -59,7 +59,7 @@ private:
     QDateTime           mLastMod;
     QString             mOwner;
     qint64              mSize;
-    WorkingTreeFilter   mState;
+    WorkingTreeFilters  mState;
 };
 
 #endif

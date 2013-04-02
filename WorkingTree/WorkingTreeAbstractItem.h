@@ -28,6 +28,12 @@ class WorkingTreeModel;
 class WorkingTreeAbstractItem
 {
 public:
+    enum DataRole
+    {
+        StatusRole = Qt::UserRole + 1
+    };
+
+public:
 	WorkingTreeAbstractItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent );
 	virtual ~WorkingTreeAbstractItem();
 

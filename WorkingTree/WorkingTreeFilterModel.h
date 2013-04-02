@@ -14,26 +14,28 @@
  *
  */
 
-#ifndef MGV_WORKING_TREE_ITEM_VIEW_H
-#define MGV_WORKING_TREE_ITEM_VIEW_H
-
-#include <QTreeView>
-
-#include "libGitWrap/Repository.hpp"
+#ifndef MGV_MODULE_WORKINGTREEFILTERMODEL_H
+#define MGV_MODULE_WORKINGTREEFILTERMODEL_H
 
 #include "WorkingTreeFilters.h"
 
-class WorkingTreeModel;
-class HeaderView;
+#include <QSortFilterProxyModel>
 
-class WorkingTreeItemView : public QTreeView
+class WorkingTreeFilterModel : public QSortFilterProxyModel
 {
-    Q_OBJECT
 public:
-    WorkingTreeItemView();
+    WorkingTreeFilterModel(QObject *parent = 0);
+    ~WorkingTreeFilterModel();
+
+    WorkingTreeFilters filter() const;
+    void setFilter(WorkingTreeFilters value);
 
 private:
-    HeaderView*             mHeader;
+    bool filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+
+private:
+    WorkingTreeFilters    mStatusFilter;
 };
 
-#endif
+#endif // MGV_MODULE_WORKINGTREEFILTERMODEL_H

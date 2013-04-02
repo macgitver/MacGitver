@@ -26,6 +26,10 @@ class QSplitter;
 #include "libHeaven/CentralUI/Views/View.hpp"
 #include "libHeaven/Widgets/MiniSplitter.hpp"
 
+#include "WorkingTreeFilters.h"
+
+#include "hic_WorkingTreeActions.h"
+
 namespace DiffViews
 {
     class DiffView;
@@ -34,16 +38,16 @@ namespace DiffViews
 class WorkingTreeModel;
 class WorkingTreeItemView;
 
-#include "WorkingTreeFilters.h"
 class QPlainTextEdit;
 
-#include "hic_WorkingTreeActions.h"
 
 class IndexWidget : public Heaven::View, private WorkingTreeActions
 {
     Q_OBJECT
 public:
     IndexWidget();
+
+    void setupFilters();
 
 public slots:
     void repositoryChanged( Git::Repository repo );
@@ -55,11 +59,11 @@ private slots:
     void onShowIgnored( bool enabled );
     void onShowUntracked( bool enabled );
     void onShowUnchanged( bool enabled );
-    void workingTreeChanged();
+    //void workingTreeChanged();
 
 private:
     void updateDiff();
-    void setTreeFilter( WorkingTreeFilters filters );
+    void setWtFilter(bool enabled, WorkingTreeFilter flag);
 
 private:
     Heaven::MiniSplitter*   mSplitter;
@@ -68,6 +72,9 @@ private:
     DiffViews::DiffView*    mDiffView;
     WorkingTreeItemView*    mIndexTreeView;
     QPlainTextEdit*         mCommitMessage;
+
+    WorkingTreeModel*       mStatusModel;
+
     Git::Repository         mRepo;
     bool                    mFilterRecursion;
 };

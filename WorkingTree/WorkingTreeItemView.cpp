@@ -22,12 +22,6 @@
 
 WorkingTreeItemView::WorkingTreeItemView()
 {
-    mModel = NULL;
-
-    QVariant v = Config::self().get( QLatin1String( "Worktree/Filters" ),
-                                     int( WTF_All ) );
-    mFilters = WorkingTreeFilters( v.toInt() );
-
     mHeader = new HeaderView( Qt::Horizontal );
     setHeader( mHeader );
     mHeader->setConfigName( QLatin1String( "Worktree/Columns" ) );
@@ -35,42 +29,4 @@ WorkingTreeItemView::WorkingTreeItemView()
     #ifdef Q_OS_MACX
     setAttribute( Qt::WA_MacShowFocusRect, false );
     #endif
-}
-
-void WorkingTreeItemView::setRepository( const Git::Repository& repo )
-{
-    if( mModel )
-    {
-        setModel( NULL );
-        delete mModel;
-        mModel = NULL;
-    }
-
-    mRepo = repo;
-
-    if( mRepo.isValid() )
-    {
-        mModel = new WorkingTreeModel( Git::Repository(), this );
-        mModel->setRepository( mRepo );
-        mModel->setFilters( mFilters );
-        setModel( mModel );
-    }
-
-    updateGeometries();
-}
-
-WorkingTreeFilters WorkingTreeItemView::filters() const
-{
-    return mFilters;
-}
-
-void WorkingTreeItemView::setFilter( WorkingTreeFilters filters )
-{
-    mFilters = filters;
-    if( mModel )
-    {
-        mModel->setFilters( filters );
-    }
-
-    Config::self().set( QLatin1String( "Worktree/Filters" ), int( mFilters ) );
 }

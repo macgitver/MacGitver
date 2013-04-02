@@ -98,7 +98,7 @@ void IndexWidget::setupFilters()
 
     WorkingTreeFilterModel *indexFilter = new WorkingTreeFilterModel;
     indexFilter->setSourceModel( mStatusModel );
-    indexFilter->setFilter( WorkingTreeFilters( WTF_Missing | WTF_Changed ) );
+    indexFilter->setFilter( WorkingTreeFilters( WTF_Staged ) );
     //wtFilter->setDynamicSortFilter( true );
 
     mTreeView->setModel( wtFilter );

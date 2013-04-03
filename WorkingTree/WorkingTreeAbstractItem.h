@@ -17,8 +17,6 @@
 #ifndef MGV_WORKING_TREE_ABSTRACT_ITEM_H
 #define MGV_WORKING_TREE_ABSTRACT_ITEM_H
 
-#include "WorkingTreeFilters.h"
-
 class QVariant;
 class QString;
 class QModelIndex;

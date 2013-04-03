@@ -29,7 +29,6 @@ SET( HDR_FILES
     WorkingTreeFileItem.h
     WorkingTreeItemView.h
     WorkingTreeModel.h
-    WorkingTreeFilters.h
     WorkingTreeFilterModel.h
 )
 

@@ -21,8 +21,6 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "WorkingTreeFilters.h"
-
 class WorkingTreeModel;
 class HeaderView;
 

@@ -22,19 +22,19 @@
 WorkingTreeFilterModel::WorkingTreeFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
-    mStatusFilter = WTF_All;
+    mStatusFilter = ALL_FILE_STATUS_FILTERS;
 }
 
 WorkingTreeFilterModel::~WorkingTreeFilterModel()
 {
 }
 
-WorkingTreeFilters WorkingTreeFilterModel::filter() const
+Git::StatusFlags WorkingTreeFilterModel::filter() const
 {
     return mStatusFilter;
 }
 
-void WorkingTreeFilterModel::setFilter(WorkingTreeFilters value)
+void WorkingTreeFilterModel::setFilter(Git::StatusFlags value)
 {
     mStatusFilter = value;
     invalidateFilter();
@@ -58,6 +58,6 @@ bool WorkingTreeFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &
     if ( !v.isValid() )
         return true;
 
-    WorkingTreeFilters f = WorkingTreeFilters( v.toInt() );
+    Git::StatusFlags f = Git::StatusFlags( v.toInt() );
     return ( f & mStatusFilter );
 }

@@ -164,38 +164,6 @@ void WorkingTreeModel::setRepository( Git::Repository repo )
     endResetModel();
 }
 
-WorkingTreeFilters WorkingTreeModel::GitStatusToWtFilters(unsigned int st)
-{
-    WorkingTreeFilters curState = WTF_None;
-
-    if( st == Git::FileUnchanged )
-        curState |= WTF_Unchanged;
-
-    if( st & Git::FileIgnored )
-        curState |= WTF_Ignored;
-
-    if( st & Git::FileWorkingTreeModified )
-        curState |= WTF_Changed;
-
-    if( st & Git::FileWorkingTreeNew )
-        curState |= WTF_Untracked;
-
-    if( st & Git::FileWorkingTreeDeleted )
-        curState |= WTF_Missing;
-
-    // index states
-    if( st & Git::FileIndexModified )
-        curState |= WorkingTreeFilters( WTF_Changed | WTF_Staged );
-
-    if( st & Git::FileIndexNew )
-        curState |= WorkingTreeFilters( WTF_Untracked | WTF_Staged );
-
-    if( st & Git::FileIndexDeleted )
-        curState |= WorkingTreeFilters( WTF_Missing | WTF_Staged );
-
-    return curState;
-}
-
 void WorkingTreeModel::update()
 {
     if( !mRepo.isValid() || (mRootItem == NULL) )
@@ -211,7 +179,7 @@ void WorkingTreeModel::update()
     Git::StatusHash::ConstIterator it = sh.constBegin();
     while( it != sh.constEnd() )
     {
-        WorkingTreeFilters curState = GitStatusToWtFilters( it.value() );
+        Git::StatusFlags curState = Git::StatusFlags( it.value() );
 
         WorkingTreeDirItem* cur = mRootItem;
         QStringList slNames = it.key().split( L'/' );

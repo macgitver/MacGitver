@@ -26,8 +26,6 @@ class QSplitter;
 #include "libHeaven/CentralUI/Views/View.hpp"
 #include "libHeaven/Widgets/MiniSplitter.hpp"
 
-#include "WorkingTreeFilters.h"
-
 #include "hic_WorkingTreeActions.h"
 
 namespace DiffViews
@@ -36,6 +34,7 @@ namespace DiffViews
 }
 
 class WorkingTreeModel;
+class WorkingTreeFilterModel;
 class WorkingTreeItemView;
 
 class QPlainTextEdit;
@@ -53,18 +52,20 @@ public slots:
     void repositoryChanged( Git::Repository repo );
 
 private slots:
-    void onShowAll( bool enabled );
+    void onShowAll();
+    void onHideAll();
     void onShowModified( bool enabled );
     void onShowMissing( bool enabled );
     void onShowIgnored( bool enabled );
     void onShowUntracked( bool enabled );
     void onShowUnchanged( bool enabled );
-    void onShowStaged( bool enabled );
     //void workingTreeChanged();
 
 private:
     void updateDiff();
-    void setWtFilter(bool enabled, WorkingTreeFilter flag);
+
+    void updateWtFilterView(const WorkingTreeFilterModel * const wtFilter);
+    void setWtFilter(bool enabled, Git::Status flag);
 
 private:
     Heaven::MiniSplitter*   mSplitter;

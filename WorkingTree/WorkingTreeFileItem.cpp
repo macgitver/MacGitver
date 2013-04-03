@@ -59,12 +59,12 @@ QVariant WorkingTreeFileItem::data( int column, int role ) const
         break;
 
     case Qt::ForegroundRole:
-        if( mState & WTF_Unchanged )        return QColor( Qt::black );
-        else if( mState & WTF_Changed )     return QColor( Qt::blue );
-        else if( mState & WTF_Untracked )   return QColor( Qt::darkGreen );
-        else if( mState & WTF_Missing )     return QColor( Qt::red );
-        else if( mState & WTF_Ignored )     return QColor( Qt::gray );
-        else                                return QColor( 0xFFCCFF );
+        if( mState & Git::FileUnchanged )                       return QColor( Qt::black );
+        else if( mState & Git::FileWorkingTreeModified )        return QColor( Qt::blue );
+        else if( mState & Git::FileWorkingTreeNew )             return QColor( Qt::darkGreen );
+        else if( mState & Git::FileWorkingTreeDeleted )         return QColor( Qt::red );
+        else if( mState & Git::FileIgnored )                    return QColor( Qt::gray );
+        else                                                    return QColor( 0xFFCCFF );
 
     case WorkingTreeAbstractItem::StatusRole:
         return int( mState );
@@ -101,7 +101,7 @@ void WorkingTreeFileItem::setName( const QString& name )
     mName = name;
 }
 
-void WorkingTreeFileItem::setState( WorkingTreeFilters state )
+void WorkingTreeFileItem::setState( Git::StatusFlags state )
 {
     mState = state;
 }

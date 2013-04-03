@@ -17,7 +17,7 @@
 #ifndef MGV_MODULE_WORKINGTREEFILTERMODEL_H
 #define MGV_MODULE_WORKINGTREEFILTERMODEL_H
 
-#include "WorkingTreeFilters.h"
+#include "libGitWrap/GitWrap.hpp"
 
 #include <QSortFilterProxyModel>
 
@@ -27,15 +27,23 @@ public:
     WorkingTreeFilterModel(QObject *parent = 0);
     ~WorkingTreeFilterModel();
 
-    WorkingTreeFilters filter() const;
-    void setFilter(WorkingTreeFilters value);
+    Git::StatusFlags filter() const;
+    void setFilter(Git::StatusFlags value);
 
 private:
     bool filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const;
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
 private:
-    WorkingTreeFilters    mStatusFilter;
+    Git::StatusFlags    mStatusFilter;
 };
+
+
+#define ALL_FILE_STATUS_FILTERS Git::StatusFlags( \
+    Git::FileIgnored | \
+    Git::FileWorkingTreeDeleted | \
+    Git::FileWorkingTreeModified | \
+    Git::FileUnchanged | \
+    Git::FileWorkingTreeNew )
 
 #endif // MGV_MODULE_WORKINGTREEFILTERMODEL_H

@@ -10,10 +10,13 @@ Ui WorkingTreeActions {
         //  Checked         true;
 
             Action ShowAll {
-                Text        "All";
-                Checkable   true;
-                Checked     true;
-                _ConnectTo  onShowAll(bool);
+                Text        "Check all";
+                _ConnectTo  onShowAll();
+            };
+
+            Action HideAll {
+                Text        "Uncheck all";
+                _ConnectTo  onHideAll();
             };
 
             Separator;
@@ -51,13 +54,6 @@ Ui WorkingTreeActions {
                 Checkable   true;
                 Checked     true;
                 _ConnectTo  onShowUntracked(bool);
-            };
-
-            Action ShowStaged {
-                Text        "Staged";
-                Checkable   true;
-                Checked     true;
-                _ConnectTo  onShowStaged(bool);
             };
         };
 

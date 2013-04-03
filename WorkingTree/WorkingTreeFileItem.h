@@ -23,7 +23,8 @@
 #include <QIcon>
 
 #include "WorkingTreeAbstractItem.h"
-#include "WorkingTreeFilters.h"
+
+#include "libGitWrap/GitWrap.hpp"
 
 class WorkingTreeDirItem;
 
@@ -35,7 +36,7 @@ public:
 
 public:
     void setName( const QString& name );
-    void setState(WorkingTreeFilters state);
+    void setState( Git::StatusFlags state );
     void setIcon( const QIcon& icon );
     void setSize( qint64 size );
     void setOwner( const QString& owner );
@@ -59,7 +60,7 @@ private:
     QDateTime           mLastMod;
     QString             mOwner;
     qint64              mSize;
-    WorkingTreeFilters  mState;
+    Git::StatusFlags    mState;
 };
 
 #endif

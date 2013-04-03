@@ -21,8 +21,6 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "WorkingTreeFilters.h"
-
 class WorkingTreeAbstractItem;
 class WorkingTreeDirItem;
 class WorkingTreeFileItem;
@@ -51,7 +49,6 @@ public:
     int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
-    WorkingTreeFilters GitStatusToWtFilters(unsigned int st);
 private:
     void update();
 

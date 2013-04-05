@@ -35,6 +35,8 @@ SET( HDR_FILES
 SET( HID_FILES
 
     WorkingTreeActions.hid
+    WorkingTreeCtxMenu.hid
+    StageViewCtxMenu.hid
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )

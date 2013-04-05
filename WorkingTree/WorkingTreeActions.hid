@@ -57,10 +57,6 @@ Ui WorkingTreeActions {
             };
         };
 
-        Separator;
-
-        Action WorkingTreeStage;
-        Action WorkingTreeCommit;
-        Action WorkingTreeReset;
     };
+
 };

@@ -36,6 +36,7 @@ namespace DiffViews
 class WorkingTreeModel;
 class WorkingTreeFilterModel;
 class WorkingTreeItemView;
+class IndexTreeItemView;
 
 class QPlainTextEdit;
 
@@ -72,7 +73,7 @@ private:
     WorkingTreeItemView*    mTreeView;
     WorkingTreeModel*       mModel;
     DiffViews::DiffView*    mDiffView;
-    WorkingTreeItemView*    mIndexTreeView;
+    IndexTreeItemView*      mIndexTreeView;
     QPlainTextEdit*         mCommitMessage;
 
     WorkingTreeModel*       mStatusModel;

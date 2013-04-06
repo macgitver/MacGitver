@@ -14,15 +14,14 @@
  *
  */
 
-#include "WorkingTreeItemView.h"
-
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
+#include "IndexTreeItemView.h"
 #include "WorkingTreeAbstractItem.h"
 
 
-WorkingTreeItemView::WorkingTreeItemView()
+IndexTreeItemView::IndexTreeItemView()
 {
 #ifdef Q_OS_MACX
     setAttribute( Qt::WA_MacShowFocusRect, false );
@@ -30,41 +29,32 @@ WorkingTreeItemView::WorkingTreeItemView()
 
     mHeader = new HeaderView( Qt::Horizontal );
     setHeader( mHeader );
-    mHeader->setConfigName( QLatin1String( "Worktree/Columns" ) );
+    mHeader->setConfigName( QLatin1String( "Indextree/Columns" ) );
 
-    WorkingTreeCtxMenu::setupActions( this );
+    StageViewCtxMenu::setupActions( this );
 
     connect( this, SIGNAL(contextMenu(QModelIndex, QPoint)),
              this, SLOT(contextMenu(QModelIndex, QPoint)) );
 }
 
-void WorkingTreeItemView::onWtCtxStage()
+void IndexTreeItemView::onWtCtxUnstage()
 {
-    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if( !action )
-        return;
-
+    // TODO: unstage file
 }
 
-void WorkingTreeItemView::onWtCtxReset()
-{
-    // TODO: Reset file changes.
-}
-
-void WorkingTreeItemView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
+void IndexTreeItemView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
 {
     if ( !index.isValid() )
         return;
 
-    WorkingTreeAbstractItem* item = static_cast<WorkingTreeAbstractItem*>( index.internalPointer() );
+    WorkingTreeAbstractItem* item =
+            static_cast<WorkingTreeAbstractItem*>( index.internalPointer() );
 
-    Heaven::Menu* menu = 0;
     if( item ) // && !item->isDirectory() )
     {
-        Heaven::Menu* menu = menuCtxMenuWtFile;
+        Heaven::Menu* menu = menuCtxMenuStageView;
         //menu->setActivationContext( item );
-    }
 
-    if ( menu )
         menu->showPopup( globalPos );
+    }
 }

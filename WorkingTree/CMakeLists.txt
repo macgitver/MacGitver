@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(
 SET( SRC_FILES
 
     IndexWidget.cpp
+    IndexTreeItemView.cpp
     WorkingTreeModule.cpp
     WorkingTreeAbstractItem.cpp
     WorkingTreeDirItem.cpp
@@ -23,6 +24,7 @@ SET( SRC_FILES
 SET( HDR_FILES
 
     IndexWidget.h
+    IndexTreeItemView.h
     WorkingTreeModule.h
     WorkingTreeAbstractItem.h
     WorkingTreeDirItem.h

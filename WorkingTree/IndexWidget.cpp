@@ -14,6 +14,8 @@
  *
  */
 
+#include "IndexWidget.h"
+
 #include <QAction>
 #include <QToolBar>
 #include <QSplitter>
@@ -32,8 +34,7 @@
 #include "libMacGitverCore/MacGitver/FSWatcher.h"
 #include "libMacGitverCore/MacGitver/GitPatchConsumer.hpp"
 
-#include "IndexWidget.h"
-
+#include "IndexTreeItemView.h"
 #include "WorkingTreeItemView.h"
 #include "WorkingTreeModel.h"
 #include "WorkingTreeFilterModel.h"
@@ -42,7 +43,7 @@ IndexWidget::IndexWidget()
     : View( "WorkTree" )
     , mSplitter( new Heaven::MiniSplitter( Qt::Vertical ) )
     , mTreeView( new WorkingTreeItemView )
-    , mIndexTreeView( new WorkingTreeItemView )
+    , mIndexTreeView( new IndexTreeItemView )
     , mCommitMessage( new QPlainTextEdit )
     , mStatusModel( new WorkingTreeModel( this ) )
 {

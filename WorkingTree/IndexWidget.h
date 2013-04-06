@@ -60,6 +60,7 @@ private slots:
     void onShowIgnored( bool enabled );
     void onShowUntracked( bool enabled );
     void onShowUnchanged( bool enabled );
+
     //void workingTreeChanged();
 
 private:
@@ -71,7 +72,6 @@ private:
 private:
     Heaven::MiniSplitter*   mSplitter;
     WorkingTreeItemView*    mTreeView;
-    WorkingTreeModel*       mModel;
     DiffViews::DiffView*    mDiffView;
     IndexTreeItemView*      mIndexTreeView;
     QPlainTextEdit*         mCommitMessage;

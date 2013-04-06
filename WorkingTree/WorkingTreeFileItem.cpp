@@ -21,6 +21,8 @@
 
 WorkingTreeFileItem::WorkingTreeFileItem( WorkingTreeModel* model, WorkingTreeAbstractItem* parent )
     : WorkingTreeAbstractItem( model, parent )
+    , mState( Git::FileInvalidStatus )
+    , mSize( 0 )
 {
 }
 

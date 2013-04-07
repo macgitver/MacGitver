@@ -164,6 +164,11 @@ void WorkingTreeModel::setRepository( Git::Repository repo )
     endResetModel();
 }
 
+WorkingTreeAbstractItem *WorkingTreeModel::indexToItem(const QModelIndex &index) const
+{
+    return static_cast< WorkingTreeAbstractItem * >( index.internalPointer() );
+}
+
 void WorkingTreeModel::update()
 {
     if( !mRepo.isValid() || (mRootItem == NULL) )

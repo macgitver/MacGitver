@@ -37,6 +37,7 @@ public:
 
 public:
     void setRepository( Git::Repository repo );
+    WorkingTreeAbstractItem *indexToItem(const QModelIndex &index) const;
 
 public:
     QVariant data( const QModelIndex& index, int role ) const;

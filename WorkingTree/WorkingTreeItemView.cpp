@@ -65,10 +65,9 @@ void WorkingTreeItemView::onWtCtxStage()
         return;
 
     WorkingTreeAbstractItem* item = mModel->indexToItem( srcIndex );
-    if ( item )
-    {
-        // TODO: move file to index
-    }
+    Q_ASSERT( item )
+
+    // TODO: move file to index
 }
 
 void WorkingTreeItemView::onWtCtxReset()

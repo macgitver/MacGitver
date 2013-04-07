@@ -66,7 +66,7 @@ void IndexTreeItemView::contextMenu( const QModelIndex& index, const QPoint& glo
     if ( !srcIndex.isValid() )
         return;
 
-    WorkingTreeAbstractItem* item = static_cast<WorkingTreeAbstractItem*>( srcIndex.internalPointer() );
+    WorkingTreeAbstractItem* item = mModel->indexToItem( srcIndex );
 
     Heaven::Menu* menu = 0;
     if ( item && !item->isDirectory() )

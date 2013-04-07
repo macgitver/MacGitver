@@ -27,7 +27,7 @@ class WorkingTreeItemView : public TreeViewCtxMenu, private WorkingTreeCtxMenu
 {
     Q_OBJECT
 public:
-    WorkingTreeItemView();
+    WorkingTreeItemView(QWidget *parent = 0);
 
 private slots:
     // hid actions

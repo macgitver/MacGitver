@@ -23,13 +23,15 @@
 
 #include <QAbstractProxyModel>
 
-WorkingTreeItemView::WorkingTreeItemView()
+
+WorkingTreeItemView::WorkingTreeItemView(QWidget *parent)
+    : TreeViewCtxMenu( parent )
+    , mHeader( new HeaderView( Qt::Horizontal ) )
 {
 #ifdef Q_OS_MACX
     setAttribute( Qt::WA_MacShowFocusRect, false );
 #endif
 
-    mHeader = new HeaderView( Qt::Horizontal );
     setHeader( mHeader );
     mHeader->setConfigName( QLatin1String( "Worktree/Columns" ) );
 

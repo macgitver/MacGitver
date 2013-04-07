@@ -27,7 +27,7 @@ class IndexTreeItemView : public TreeViewCtxMenu, private StageViewCtxMenu
 {
     Q_OBJECT
 public:
-    IndexTreeItemView();
+    IndexTreeItemView(QWidget *parent = 0);
 
 private slots:
     // hid actions

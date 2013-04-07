@@ -166,6 +166,9 @@ void WorkingTreeModel::setRepository( Git::Repository repo )
 
 WorkingTreeAbstractItem *WorkingTreeModel::indexToItem(const QModelIndex &index) const
 {
+    if ( !index.isValid() || ( index.model() != this ) )
+        return NULL;
+
     return static_cast< WorkingTreeAbstractItem * >( index.internalPointer() );
 }
 

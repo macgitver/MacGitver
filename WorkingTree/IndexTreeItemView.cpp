@@ -20,6 +20,7 @@
 #include "IndexTreeItemView.h"
 #include "WorkingTreeAbstractItem.h"
 
+#include <QAbstractProxyModel>
 
 IndexTreeItemView::IndexTreeItemView()
 {
@@ -56,5 +57,18 @@ void IndexTreeItemView::contextMenu( const QModelIndex& index, const QPoint& glo
         //menu->setActivationContext( item );
 
         menu->showPopup( globalPos );
+}
+
+QModelIndex IndexTreeItemView::deeplyMapToSource( QModelIndex current ) const
+{
+    while( current.isValid() )
+    {
+        const QAbstractProxyModel* apm = qobject_cast< const QAbstractProxyModel* >( current.model() );
+        if( !apm )
+            return current;
+
+        current = apm->mapToSource( current );
     }
+
+    return QModelIndex();
 }

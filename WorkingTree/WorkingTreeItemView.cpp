@@ -21,6 +21,7 @@
 
 #include "WorkingTreeAbstractItem.h"
 
+#include <QAbstractProxyModel>
 
 WorkingTreeItemView::WorkingTreeItemView()
 {
@@ -67,4 +68,18 @@ void WorkingTreeItemView::contextMenu( const QModelIndex& index, const QPoint& g
 
     if ( menu )
         menu->showPopup( globalPos );
+}
+
+QModelIndex WorkingTreeItemView::deeplyMapToSource( QModelIndex current ) const
+{
+    while( current.isValid() )
+    {
+        const QAbstractProxyModel* apm = qobject_cast< const QAbstractProxyModel* >( current.model() );
+        if( !apm )
+            return current;
+
+        current = apm->mapToSource( current );
+    }
+
+    return QModelIndex();
 }

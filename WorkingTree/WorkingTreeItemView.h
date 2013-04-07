@@ -37,6 +37,9 @@ private slots:
     void contextMenu(const QModelIndex &index, const QPoint &globalPos);
 
 private:
+    QModelIndex deeplyMapToSource(QModelIndex current) const;
+
+private:
     HeaderView*             mHeader;
 };
 

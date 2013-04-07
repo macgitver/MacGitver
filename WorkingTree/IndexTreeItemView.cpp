@@ -19,6 +19,7 @@
 
 #include "IndexTreeItemView.h"
 #include "WorkingTreeAbstractItem.h"
+#include "WorkingTreeModel.h"
 
 #include <QAbstractProxyModel>
 
@@ -26,6 +27,7 @@
 IndexTreeItemView::IndexTreeItemView(QWidget *parent)
     : TreeViewCtxMenu( parent )
     , mHeader( new HeaderView( Qt::Horizontal ) )
+    , mModel( 0 )
 {
 #ifdef Q_OS_MACX
     setAttribute( Qt::WA_MacShowFocusRect, false );
@@ -38,6 +40,17 @@ IndexTreeItemView::IndexTreeItemView(QWidget *parent)
 
     connect( this, SIGNAL(contextMenu(QModelIndex, QPoint)),
              this, SLOT(contextMenu(QModelIndex, QPoint)) );
+}
+
+void IndexTreeItemView::setModel(QAbstractItemModel *model)
+{
+    TreeViewCtxMenu::setModel( model );
+
+    QAbstractProxyModel *apm = qobject_cast< QAbstractProxyModel* >( model );
+    if ( apm )
+        model = apm->sourceModel();
+
+    mModel = qobject_cast< WorkingTreeModel * >( model );
 }
 
 void IndexTreeItemView::onWtCtxUnstage()

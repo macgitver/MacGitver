@@ -22,12 +22,16 @@
 #include "hic_StageViewCtxMenu.h"
 
 class HeaderView;
+class WorkingTreeModel;
 
 class IndexTreeItemView : public TreeViewCtxMenu, private StageViewCtxMenu
 {
     Q_OBJECT
 public:
     IndexTreeItemView(QWidget *parent = 0);
+
+public:
+    void setModel(QAbstractItemModel *model);
 
 private slots:
     // hid actions
@@ -40,6 +44,7 @@ private:
 
 private:
     HeaderView*             mHeader;
+    WorkingTreeModel*       mModel;
 };
 
 #endif // MGV_INDEX_TREE_ITEM_VIEW_H

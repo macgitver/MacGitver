@@ -20,6 +20,7 @@
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
 #include "WorkingTreeAbstractItem.h"
+#include "WorkingTreeModel.h"
 
 #include <QAbstractProxyModel>
 
@@ -27,6 +28,7 @@
 WorkingTreeItemView::WorkingTreeItemView(QWidget *parent)
     : TreeViewCtxMenu( parent )
     , mHeader( new HeaderView( Qt::Horizontal ) )
+    , mModel( 0 )
 {
 #ifdef Q_OS_MACX
     setAttribute( Qt::WA_MacShowFocusRect, false );
@@ -39,6 +41,17 @@ WorkingTreeItemView::WorkingTreeItemView(QWidget *parent)
 
     connect( this, SIGNAL(contextMenu(QModelIndex, QPoint)),
              this, SLOT(contextMenu(QModelIndex, QPoint)) );
+}
+
+void WorkingTreeItemView::setModel(QAbstractItemModel *model)
+{
+    TreeViewCtxMenu::setModel( model );
+
+    QAbstractProxyModel *apm = qobject_cast< QAbstractProxyModel* >( model );
+    if ( apm )
+        model = apm->sourceModel();
+
+    mModel = qobject_cast< WorkingTreeModel * >( model );
 }
 
 void WorkingTreeItemView::onWtCtxStage()

@@ -22,12 +22,16 @@
 #include "hic_WorkingTreeCtxMenu.h"
 
 class HeaderView;
+class WorkingTreeModel;
 
 class WorkingTreeItemView : public TreeViewCtxMenu, private WorkingTreeCtxMenu
 {
     Q_OBJECT
 public:
     WorkingTreeItemView(QWidget *parent = 0);
+
+public:
+    void setModel(QAbstractItemModel *model);
 
 private slots:
     // hid actions
@@ -41,6 +45,7 @@ private:
 
 private:
     HeaderView*             mHeader;
+    WorkingTreeModel*       mModel;
 };
 
 #endif

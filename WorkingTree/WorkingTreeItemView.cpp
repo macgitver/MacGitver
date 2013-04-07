@@ -48,8 +48,12 @@ void WorkingTreeItemView::setModel(QAbstractItemModel *model)
     TreeViewCtxMenu::setModel( model );
 
     QAbstractProxyModel *apm = qobject_cast< QAbstractProxyModel* >( model );
-    if ( apm )
+    while ( apm )
+    {
         model = apm->sourceModel();
+        Q_ASSERT( model );
+        apm = qobject_cast< QAbstractProxyModel* >( model );
+    }
 
     mModel = qobject_cast< WorkingTreeModel * >( model );
 }

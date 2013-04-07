@@ -57,9 +57,18 @@ void WorkingTreeItemView::setModel(QAbstractItemModel *model)
 void WorkingTreeItemView::onWtCtxStage()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if( !action )
+    if ( !action )
         return;
 
+    QModelIndex srcIndex = deeplyMapToSource( currentIndex() );
+    if ( !srcIndex.isValid() )
+        return;
+
+    WorkingTreeAbstractItem* item = mModel->indexToItem( srcIndex );
+    if ( item )
+    {
+        // TODO: move file to index
+    }
 }
 
 void WorkingTreeItemView::onWtCtxReset()
@@ -69,15 +78,18 @@ void WorkingTreeItemView::onWtCtxReset()
 
 void WorkingTreeItemView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
 {
-    if ( !index.isValid() )
+    Q_ASSERT( mModel );
+
+    QModelIndex srcIndex = deeplyMapToSource( index );
+    if ( !srcIndex.isValid() )
         return;
 
-    WorkingTreeAbstractItem* item = static_cast<WorkingTreeAbstractItem*>( index.internalPointer() );
+    WorkingTreeAbstractItem* item = mModel->indexToItem( srcIndex );
 
     Heaven::Menu* menu = 0;
-    if( item ) // && !item->isDirectory() )
+    if ( item && !item->isDirectory() )
     {
-        Heaven::Menu* menu = menuCtxMenuWtFile;
+        menu = menuCtxMenuWtFile;
         //menu->setActivationContext( item );
     }
 

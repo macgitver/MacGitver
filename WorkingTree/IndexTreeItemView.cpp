@@ -60,17 +60,22 @@ void IndexTreeItemView::onWtCtxUnstage()
 
 void IndexTreeItemView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
 {
-    if ( !index.isValid() )
+    Q_ASSERT( mModel );
+
+    QModelIndex srcIndex = deeplyMapToSource( index );
+    if ( !srcIndex.isValid() )
         return;
 
-    WorkingTreeAbstractItem* item =
-            static_cast<WorkingTreeAbstractItem*>( index.internalPointer() );
+    WorkingTreeAbstractItem* item = static_cast<WorkingTreeAbstractItem*>( srcIndex.internalPointer() );
 
-    if( item ) // && !item->isDirectory() )
+    Heaven::Menu* menu = 0;
+    if ( item && !item->isDirectory() )
     {
-        Heaven::Menu* menu = menuCtxMenuStageView;
+        menu = menuCtxMenuStageView;
         //menu->setActivationContext( item );
+    }
 
+    if ( menu )
         menu->showPopup( globalPos );
 }
 

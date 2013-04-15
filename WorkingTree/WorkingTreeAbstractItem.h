@@ -49,6 +49,8 @@ public:
     WorkingTreeAbstractItem* parent() const;
 	QModelIndex index() const;
 
+    QString path() const;
+
 protected:
 	WorkingTreeModel* model();
 

@@ -50,3 +50,15 @@ QModelIndex WorkingTreeAbstractItem::index() const
     QModelIndex idx = mModel->index( row(), 0, mParent->index() );
 	return idx;
 }
+
+QString WorkingTreeAbstractItem::path() const
+{
+    QString result = name();
+    WorkingTreeAbstractItem *p = parent();
+    if ( (p != NULL) && !p->name().isEmpty() )
+    {
+        result.prepend( parent()->path().append( QLatin1Char('/') ) );
+    }
+
+    return result;
+}

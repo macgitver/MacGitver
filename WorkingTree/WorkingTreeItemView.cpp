@@ -19,6 +19,9 @@
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
+#include "libGitWrap/Index.hpp"
+#include "libGitWrap/Result.hpp"
+
 #include "WorkingTreeAbstractItem.h"
 #include "WorkingTreeModel.h"
 
@@ -71,7 +74,14 @@ void WorkingTreeItemView::onWtCtxStage()
     WorkingTreeAbstractItem* item = mModel->indexToItem( srcIndex );
     Q_ASSERT( item );
 
-    // TODO: move file to index
+    Git::Repository repo = mModel->repository();
+
+    Git::Result r;
+    Git::Index i = repo.index( r );
+
+    i.read( r );
+    i.addEntry( item->path(), r );
+    i.write( r );
 }
 
 void WorkingTreeItemView::onWtCtxReset()

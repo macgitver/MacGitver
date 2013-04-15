@@ -26,6 +26,7 @@
 #include "WorkingTreeModel.h"
 
 #include <QAbstractProxyModel>
+#include <QMessageBox>
 
 
 WorkingTreeItemView::WorkingTreeItemView(QWidget *parent)
@@ -82,6 +83,12 @@ void WorkingTreeItemView::onWtCtxStage()
     i.read( r );
     i.addEntry( item->path(), r );
     i.write( r );
+
+    if ( !r )
+    {
+        QMessageBox::warning( this, trUtf8("Error while adding file to Git index"),
+                              trUtf8("File not staged. Git message:\n%1").arg(r.errorText()) );
+    }
 }
 
 void WorkingTreeItemView::onWtCtxReset()

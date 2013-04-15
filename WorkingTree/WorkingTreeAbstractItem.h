@@ -45,7 +45,8 @@ public:
     virtual WorkingTreeAbstractItem* childByName( const QString& name ) = 0;
 	virtual void removeChild( WorkingTreeAbstractItem* child ) = 0;
 
-	WorkingTreeAbstractItem* parent();
+public:
+    WorkingTreeAbstractItem* parent() const;
 	QModelIndex index() const;
 
 protected:

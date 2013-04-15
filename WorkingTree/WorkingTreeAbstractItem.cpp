@@ -35,7 +35,7 @@ WorkingTreeModel* WorkingTreeAbstractItem::model()
 	return mModel;
 }
 
-WorkingTreeAbstractItem* WorkingTreeAbstractItem::parent()
+WorkingTreeAbstractItem* WorkingTreeAbstractItem::parent() const
 {
 	return mParent;
 }

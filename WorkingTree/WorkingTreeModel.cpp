@@ -150,6 +150,11 @@ int WorkingTreeModel::columnCount( const QModelIndex& parent ) const
     return 4;
 }
 
+const Git::Repository &WorkingTreeModel::repository() const
+{
+    return mRepo;
+}
+
 void WorkingTreeModel::setRepository( Git::Repository repo )
 {
     beginResetModel();

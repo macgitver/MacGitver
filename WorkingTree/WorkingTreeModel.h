@@ -36,7 +36,9 @@ public:
     ~WorkingTreeModel();
 
 public:
+    const Git::Repository &repository() const;
     void setRepository( Git::Repository repo );
+
     WorkingTreeAbstractItem *indexToItem(const QModelIndex &index) const;
 
 public:

@@ -14,23 +14,26 @@
  *
  */
 
-#ifndef MGV_WT_WORKING_TREE_FILTERS_H
-#define MGV_WT_WORKING_TREE_FILTERS_H
+Ui WorkingTreeCtxMenu {
 
-#include <QFlags>
+    Action Stage {
+        Text            "&Stage";
+        StatusToolTip   "Mark this file ready to commit.";
+        ConnectTo       onWtCtxStage();
+    };
 
-enum WorkingTreeFilter
-{
-    WTF_Untracked   = 1 << 0,
-    WTF_Missing     = 1 << 1,
-    WTF_Changed     = 1 << 2,
-    WTF_Unchanged   = 1 << 3,
-    WTF_Ignored     = 1 << 4,
+    Action Reset {
+        Text            "&Reset changes";
+        StatusToolTip   "Reset all current changes to this file.";
+        ConnectTo       onWtCtxReset();
+    };
 
-    WTF_None        = 0,
-    WTF_All         = WTF_Unchanged | WTF_Untracked | WTF_Missing | WTF_Ignored | WTF_Changed
+    Menu CtxMenuWtFile {
+
+        Action      Stage;
+        Separator;
+        Action      Reset;
+
+    };
+
 };
-
-typedef QFlags< WorkingTreeFilter > WorkingTreeFilters;
-
-#endif

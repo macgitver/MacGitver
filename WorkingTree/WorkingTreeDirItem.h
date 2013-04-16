@@ -38,10 +38,10 @@ public:
 public:
     QString name() const;
     bool isDirectory() const;
-    int visibleChildren() const;
-    WorkingTreeAbstractItem* visibleChildAt( int index );
+    int childCount() const;
+    WorkingTreeAbstractItem* childAt( int index );
     QVariant data( int column, int role ) const;
-    int visibleIndex() const;
+    int row() const;
     WorkingTreeAbstractItem* childByName( const QString& name );
     void removeChild( WorkingTreeAbstractItem* child );
     void appendItem( WorkingTreeAbstractItem* item );
@@ -49,7 +49,6 @@ public:
     friend class WorkingTreeAbstractItem;
 private:
     int totalChildren() const{ return mChildren.count(); }
-    WorkingTreeAbstractItem* childAt( int index );
 
 private:
     QString                                     mName;

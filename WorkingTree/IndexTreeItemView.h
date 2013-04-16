@@ -14,29 +14,28 @@
  *
  */
 
-#ifndef MGV_WORKING_TREE_ITEM_VIEW_H
-#define MGV_WORKING_TREE_ITEM_VIEW_H
+#ifndef MGV_INDEX_TREE_ITEM_VIEW_H
+#define MGV_INDEX_TREE_ITEM_VIEW_H
 
 #include "libMacGitverCore/Widgets/TreeViewCtxMenu.hpp"
 
-#include "hic_WorkingTreeCtxMenu.h"
+#include "hic_StageViewCtxMenu.h"
 
 class HeaderView;
 class WorkingTreeModel;
 
-class WorkingTreeItemView : public TreeViewCtxMenu, private WorkingTreeCtxMenu
+class IndexTreeItemView : public TreeViewCtxMenu, private StageViewCtxMenu
 {
     Q_OBJECT
 public:
-    WorkingTreeItemView(QWidget *parent = 0);
+    IndexTreeItemView(QWidget *parent = 0);
 
 public:
     void setModel(QAbstractItemModel *model);
 
 private slots:
     // hid actions
-    void onWtCtxStage();
-    void onWtCtxReset();
+    void onWtCtxUnstage();
 
     void contextMenu(const QModelIndex &index, const QPoint &globalPos);
 
@@ -48,4 +47,4 @@ private:
     WorkingTreeModel*       mModel;
 };
 
-#endif
+#endif // MGV_INDEX_TREE_ITEM_VIEW_H

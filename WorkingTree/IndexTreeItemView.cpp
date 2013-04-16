@@ -14,22 +14,17 @@
  *
  */
 
-#include "WorkingTreeItemView.h"
-
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
-#include "libGitWrap/Index.hpp"
-#include "libGitWrap/Result.hpp"
-
+#include "IndexTreeItemView.h"
 #include "WorkingTreeAbstractItem.h"
 #include "WorkingTreeModel.h"
 
 #include <QAbstractProxyModel>
-#include <QMessageBox>
 
 
-WorkingTreeItemView::WorkingTreeItemView(QWidget *parent)
+IndexTreeItemView::IndexTreeItemView(QWidget *parent)
     : TreeViewCtxMenu( parent )
     , mHeader( new HeaderView( Qt::Horizontal ) )
     , mModel( 0 )
@@ -39,15 +34,15 @@ WorkingTreeItemView::WorkingTreeItemView(QWidget *parent)
 #endif
 
     setHeader( mHeader );
-    mHeader->setConfigName( QLatin1String( "Worktree/Columns" ) );
+    mHeader->setConfigName( QLatin1String( "Indextree/Columns" ) );
 
-    WorkingTreeCtxMenu::setupActions( this );
+    StageViewCtxMenu::setupActions( this );
 
     connect( this, SIGNAL(contextMenu(QModelIndex, QPoint)),
              this, SLOT(contextMenu(QModelIndex, QPoint)) );
 }
 
-void WorkingTreeItemView::setModel(QAbstractItemModel *model)
+void IndexTreeItemView::setModel(QAbstractItemModel *model)
 {
     TreeViewCtxMenu::setModel( model );
 
@@ -62,41 +57,12 @@ void WorkingTreeItemView::setModel(QAbstractItemModel *model)
     mModel = qobject_cast< WorkingTreeModel * >( model );
 }
 
-void WorkingTreeItemView::onWtCtxStage()
+void IndexTreeItemView::onWtCtxUnstage()
 {
-    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action )
-        return;
-
-    QModelIndex srcIndex = deeplyMapToSource( currentIndex() );
-    if ( !srcIndex.isValid() )
-        return;
-
-    WorkingTreeAbstractItem* item = mModel->indexToItem( srcIndex );
-    Q_ASSERT( item );
-
-    Git::Repository repo = mModel->repository();
-
-    Git::Result r;
-    Git::Index i = repo.index( r );
-
-    i.read( r );
-    i.addEntry( item->path(), r );
-    i.write( r );
-
-    if ( !r )
-    {
-        QMessageBox::warning( this, trUtf8("Error while adding file to Git index"),
-                              trUtf8("File not staged. Git message:\n%1").arg(r.errorText()) );
-    }
+    // TODO: unstage file
 }
 
-void WorkingTreeItemView::onWtCtxReset()
-{
-    // TODO: Reset file changes.
-}
-
-void WorkingTreeItemView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
+void IndexTreeItemView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
 {
     Q_ASSERT( mModel );
 
@@ -109,7 +75,7 @@ void WorkingTreeItemView::contextMenu( const QModelIndex& index, const QPoint& g
     Heaven::Menu* menu = 0;
     if ( item && !item->isDirectory() )
     {
-        menu = menuCtxMenuWtFile;
+        menu = menuCtxMenuStageView;
         //menu->setActivationContext( item );
     }
 
@@ -117,7 +83,7 @@ void WorkingTreeItemView::contextMenu( const QModelIndex& index, const QPoint& g
         menu->showPopup( globalPos );
 }
 
-QModelIndex WorkingTreeItemView::deeplyMapToSource( QModelIndex current ) const
+QModelIndex IndexTreeItemView::deeplyMapToSource( QModelIndex current ) const
 {
     while( current.isValid() )
     {

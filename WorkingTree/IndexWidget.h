@@ -26,17 +26,20 @@ class QSplitter;
 #include "libHeaven/CentralUI/Views/View.hpp"
 #include "libHeaven/Widgets/MiniSplitter.hpp"
 
+#include "hic_WorkingTreeActions.h"
+
 namespace DiffViews
 {
     class DiffView;
 }
 
 class WorkingTreeModel;
+class WorkingTreeFilterModel;
 class WorkingTreeItemView;
+class IndexTreeItemView;
 
-#include "WorkingTreeFilters.h"
+class QPlainTextEdit;
 
-#include "hic_WorkingTreeActions.h"
 
 class IndexWidget : public Heaven::View, private WorkingTreeActions
 {
@@ -44,27 +47,37 @@ class IndexWidget : public Heaven::View, private WorkingTreeActions
 public:
     IndexWidget();
 
+    void setupFilters();
+
 public slots:
     void repositoryChanged( Git::Repository repo );
 
 private slots:
-    void onShowAll( bool enabled );
+    void onShowAll();
+    void onHideAll();
     void onShowModified( bool enabled );
     void onShowMissing( bool enabled );
     void onShowIgnored( bool enabled );
     void onShowUntracked( bool enabled );
     void onShowUnchanged( bool enabled );
-    void workingTreeChanged();
+
+    //void workingTreeChanged();
 
 private:
     void updateDiff();
-    void setTreeFilter( WorkingTreeFilters filters );
+
+    void updateWtFilterView(const WorkingTreeFilterModel * const wtFilter);
+    void setWtFilter(bool enabled, Git::Status flag);
 
 private:
     Heaven::MiniSplitter*   mSplitter;
     WorkingTreeItemView*    mTreeView;
-    WorkingTreeModel*       mModel;
     DiffViews::DiffView*    mDiffView;
+    IndexTreeItemView*      mIndexTreeView;
+    QPlainTextEdit*         mCommitMessage;
+
+    WorkingTreeModel*       mStatusModel;
+
     Git::Repository         mRepo;
     bool                    mFilterRecursion;
 };

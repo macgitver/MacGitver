@@ -21,8 +21,6 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "WorkingTreeFilters.h"
-
 class WorkingTreeAbstractItem;
 class WorkingTreeDirItem;
 class WorkingTreeFileItem;
@@ -34,12 +32,14 @@ class WorkingTreeModel : public QAbstractItemModel
     friend class WorkingTreeFileItem;
     Q_OBJECT
 public:
-    WorkingTreeModel( Git::Repository repo, QObject* parent = 0 );
+    WorkingTreeModel( QObject* parent = 0 );
     ~WorkingTreeModel();
 
 public:
+    const Git::Repository &repository() const;
     void setRepository( Git::Repository repo );
-    void setFilters( WorkingTreeFilters filters );
+
+    WorkingTreeAbstractItem *indexToItem(const QModelIndex &index) const;
 
 public:
     QVariant data( const QModelIndex& index, int role ) const;
@@ -52,13 +52,12 @@ public:
     int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
-public:
+private:
     void update();
 
 private:
     Git::Repository     mRepo;
     WorkingTreeDirItem* mRootItem;
-    WorkingTreeFilters  mFilters;
 };
 
 #endif

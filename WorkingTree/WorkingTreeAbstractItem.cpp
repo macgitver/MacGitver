@@ -24,25 +24,18 @@ WorkingTreeAbstractItem::WorkingTreeAbstractItem( WorkingTreeModel* model, Worki
 {
 	mModel = model;
 	mParent = parent;
-	mVisible = !parent;		// marks all as invisible excpet the actually invisibleRootItem() :-)
 }
 
 WorkingTreeAbstractItem::~WorkingTreeAbstractItem()
 {
 }
 
-bool WorkingTreeAbstractItem::isVisible() const
-{
-	return mVisible;
-}
-
-
 WorkingTreeModel* WorkingTreeAbstractItem::model()
 {
 	return mModel;
 }
 
-WorkingTreeAbstractItem* WorkingTreeAbstractItem::parent()
+WorkingTreeAbstractItem* WorkingTreeAbstractItem::parent() const
 {
 	return mParent;
 }
@@ -54,53 +47,18 @@ QModelIndex WorkingTreeAbstractItem::index() const
 		return QModelIndex();
 	}
 
-	QModelIndex idx = mModel->index( visibleIndex(), 0, mParent->index() );
+    QModelIndex idx = mModel->index( row(), 0, mParent->index() );
 	return idx;
 }
 
-void WorkingTreeAbstractItem::makeVisible()
+QString WorkingTreeAbstractItem::path() const
 {
-	if( mParent )
-	{
-		if( !mParent->isVisible() )
-		{
-			mParent->makeVisible();
-		}
-		Q_ASSERT( mParent->isDirectory() );
+    QString result = name();
+    WorkingTreeAbstractItem *p = parent();
+    if ( (p != NULL) && !p->name().isEmpty() )
+    {
+        result.prepend( parent()->path().append( QLatin1Char('/') ) );
+    }
 
-		WorkingTreeDirItem* par = (WorkingTreeDirItem*) mParent;
-
-		int idx = 0;
-		for( int i = 0; i < par->totalChildren(); i++ )
-		{
-			if( par->childAt( i )->name() > name() )
-			{
-				break;
-			}
-			if( par->childAt( i )->isVisible() )
-				idx++;
-		}
-
-		mModel->beginInsertRows( mParent->index(), idx, idx );
-		mVisible = true;
-		mModel->endInsertRows();
-		return;
-	}
-}
-
-void WorkingTreeAbstractItem::makeInvisible()
-{
-	int i = visibleIndex();
-
-	if( i != -1 )
-	{
-		mModel->beginRemoveRows( mParent->index(), i, i );
-		mVisible = false;
-		mModel->endRemoveRows();
-	}
-
-	if( mParent && mParent->visibleChildren() == 0 )
-	{
-		mParent->makeInvisible();
-	}
+    return result;
 }

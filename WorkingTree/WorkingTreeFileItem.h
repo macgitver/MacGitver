@@ -23,7 +23,8 @@
 #include <QIcon>
 
 #include "WorkingTreeAbstractItem.h"
-#include "WorkingTreeFilters.h"
+
+#include "libGitWrap/GitWrap.hpp"
 
 class WorkingTreeDirItem;
 
@@ -35,7 +36,7 @@ public:
 
 public:
     void setName( const QString& name );
-    void setState( WorkingTreeFilter state, bool shouldBeVisible );
+    void setState( Git::StatusFlags state );
     void setIcon( const QIcon& icon );
     void setSize( qint64 size );
     void setOwner( const QString& owner );
@@ -44,11 +45,11 @@ public:
 public:
     QString name() const;
     bool isDirectory() const;
-    int visibleChildren() const;
-    WorkingTreeAbstractItem* visibleChildAt( int index );
+    int childCount() const;
+    WorkingTreeAbstractItem* childAt( int index );
     QVariant data( int column, int role ) const;
     WorkingTreeAbstractItem* parent();
-    int visibleIndex() const;
+    int row() const;
     WorkingTreeAbstractItem* childByName( const QString& name );
     void removeChild( WorkingTreeAbstractItem* child );
     QModelIndex index() const;
@@ -59,7 +60,7 @@ private:
     QDateTime           mLastMod;
     QString             mOwner;
     qint64              mSize;
-    WorkingTreeFilter   mState;
+    Git::StatusFlags    mState;
 };
 
 #endif

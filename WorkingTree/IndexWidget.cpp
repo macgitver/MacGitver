@@ -14,10 +14,13 @@
  *
  */
 
+#include "IndexWidget.h"
+
 #include <QAction>
 #include <QToolBar>
 #include <QSplitter>
 #include <QVBoxLayout>
+#include <QPlainTextEdit>
 
 #include "libGitWrap/Index.hpp"
 #include "libGitWrap/DiffList.hpp"
@@ -27,19 +30,26 @@
 #include "libDiffViews/Views/Interfaces/DiffViews.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/MacGitver/FSWatcher.h"
 #include "libMacGitverCore/MacGitver/GitPatchConsumer.hpp"
 
-#include "IndexWidget.h"
-
+#include "IndexTreeItemView.h"
 #include "WorkingTreeItemView.h"
 #include "WorkingTreeModel.h"
+#include "WorkingTreeFilterModel.h"
 
 IndexWidget::IndexWidget()
     : View( "WorkTree" )
+    , mSplitter( new Heaven::MiniSplitter( Qt::Vertical ) )
+    , mTreeView( new WorkingTreeItemView )
+    , mIndexTreeView( new IndexTreeItemView )
+    , mCommitMessage( new QPlainTextEdit )
+    , mStatusModel( new WorkingTreeModel( this ) )
 {
-    mTreeView = new WorkingTreeItemView;
     mTreeView->setFrameShape( QFrame::NoFrame );
+    mIndexTreeView->setFrameShape( QFrame::NoFrame );
+    mCommitMessage->setFrameShape( QFrame::NoFrame );
 
     setupActions( this );
 
@@ -48,23 +58,22 @@ IndexWidget::IndexWidget()
 
     mDiffView = DiffViews::DiffViews::self().defaultCreator()->create( this );
 
-    mSplitter = new Heaven::MiniSplitter( Qt::Horizontal );
-    mSplitter->addWidget( mTreeView );
-    mSplitter->addWidget( mDiffView );
+    Heaven::MiniSplitter *hSplit_1 = new Heaven::MiniSplitter( Qt::Horizontal );
+    hSplit_1->addWidget( mTreeView );
+    hSplit_1->addWidget( mDiffView );
+
+    mSplitter->addWidget( hSplit_1 );
+
+    Heaven::MiniSplitter *hSplit_2 = new Heaven::MiniSplitter( Qt::Horizontal );
+
+    hSplit_2->addWidget( mIndexTreeView );
+    hSplit_2->addWidget( mCommitMessage );
+
+    mSplitter->addWidget( hSplit_2 );
 
     setWidget( mSplitter );
 
-    mFilterRecursion = true;
-    WorkingTreeFilters filters = mTreeView->filters();
-
-    actShowAll->setChecked( filters == WTF_All );
-    actShowIgnored->setChecked( filters & WTF_Ignored );
-    actShowMissing->setChecked( filters & WTF_Missing );
-    actShowModified->setChecked( filters & WTF_Changed );
-    actShowUnchanged->setChecked( filters & WTF_Unchanged );
-    actShowUntracked->setChecked( filters & WTF_Untracked );
-
-    mFilterRecursion = false;
+    setupFilters();
 
     connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
              this, SLOT(repositoryChanged(Git::Repository)) );
@@ -79,14 +88,51 @@ IndexWidget::IndexWidget()
     }
 }
 
+void IndexWidget::updateWtFilterView(const WorkingTreeFilterModel * const wtFilter)
+{
+    mFilterRecursion = true;
+
+    Git::StatusFlags filters = wtFilter->filter();
+
+    actShowIgnored->setChecked( filters & Git::FileIgnored );
+    actShowMissing->setChecked( filters & Git::FileWorkingTreeDeleted );
+    actShowModified->setChecked( filters & Git::FileWorkingTreeModified );
+    actShowUnchanged->setChecked( filters & Git::FileUnchanged );
+    actShowUntracked->setChecked( filters & Git::FileWorkingTreeNew );
+
+    mFilterRecursion = false;
+}
+
+void IndexWidget::setupFilters()
+{
+    WorkingTreeFilterModel *wtFilter = new WorkingTreeFilterModel;
+    QVariant v = Config::self().get( QLatin1String("Worktree/Filters"),
+                                     int( ALL_FILE_STATUS_FILTERS ) );
+    wtFilter->setSourceModel( mStatusModel );
+    wtFilter->setFilter( Git::StatusFlags( v.toInt() ) );
+    //wtFilter->setDynamicSortFilter( true );
+
+    WorkingTreeFilterModel *indexFilter = new WorkingTreeFilterModel;
+    indexFilter->setSourceModel( mStatusModel );
+    indexFilter->setFilter( Git::StatusFlags( Git::FileIndexNew
+                                              | Git::FileIndexDeleted
+                                              | Git::FileIndexModified ) );
+    //wtFilter->setDynamicSortFilter( true );
+
+    mTreeView->setModel( wtFilter );
+    mIndexTreeView->setModel( indexFilter );
+
+    updateWtFilterView( wtFilter );
+}
+
 void IndexWidget::repositoryChanged( Git::Repository repo )
 {
     mRepo = repo;
-    mTreeView->setRepository( repo );
 
     if( mRepo.isValid() )
     {
         updateDiff();
+        mStatusModel->setRepository( repo );
     }
 }
 
@@ -100,132 +146,82 @@ void IndexWidget::updateDiff()
     mDiffView->setPatch( p.patch() );
 }
 
-void IndexWidget::onShowAll( bool enabled )
+void IndexWidget::setWtFilter(bool enabled, Git::Status flag)
 {
     if( mFilterRecursion )
         return;
 
     mFilterRecursion = true;
 
-    setTreeFilter( enabled ? WTF_All : WTF_None );
-
-    actShowIgnored->setChecked( enabled );
-    actShowMissing->setChecked( enabled);
-    actShowModified->setChecked( enabled );
-    actShowUnchanged->setChecked( enabled );
-    actShowUntracked->setChecked( enabled );
+    WorkingTreeFilterModel *wtfModel = dynamic_cast<WorkingTreeFilterModel*>( mTreeView->model() );
+    if ( wtfModel )
+    {
+        Git::StatusFlags f = wtfModel->filter();
+        wtfModel->setFilter( enabled ? f |= flag : f &= ~flag );
+        Config::self().set( QLatin1String( "Worktree/Filters" ),
+                            int( wtfModel->filter() ) );
+    }
 
     mFilterRecursion = false;
+}
+
+void IndexWidget::onShowAll()
+{
+    if( mFilterRecursion )
+        return;
+
+    WorkingTreeFilterModel *wtfModel = dynamic_cast<WorkingTreeFilterModel*>( mTreeView->model() );
+    if ( wtfModel )
+        wtfModel->setFilter( ALL_FILE_STATUS_FILTERS );
+
+    updateWtFilterView( wtfModel );
+}
+
+void IndexWidget::onHideAll()
+{
+    if( mFilterRecursion )
+        return;
+
+    WorkingTreeFilterModel *wtfModel = dynamic_cast<WorkingTreeFilterModel*>( mTreeView->model() );
+    if ( wtfModel )
+        wtfModel->setFilter( Git::FileInvalidStatus );
+
+    updateWtFilterView( wtfModel );
 }
 
 void IndexWidget::onShowModified( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Changed;
-    else
-        f &= ~WTF_Changed;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, Git::FileWorkingTreeModified );
 }
 
 void IndexWidget::onShowMissing( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Missing;
-    else
-        f &= ~WTF_Missing;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, Git::FileWorkingTreeDeleted );
 }
 
 void IndexWidget::onShowIgnored( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Ignored;
-    else
-        f &= ~WTF_Ignored;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, Git::FileIgnored );
 }
 
 void IndexWidget::onShowUntracked( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Untracked;
-    else
-        f &= ~WTF_Untracked;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, Git::FileWorkingTreeNew );
 }
 
 void IndexWidget::onShowUnchanged( bool enabled )
 {
-    if( mFilterRecursion )
-        return;
-
-    mFilterRecursion = true;
-
-    WorkingTreeFilters f = mTreeView->filters();
-    if( enabled )
-        f |= WTF_Unchanged;
-    else
-        f &= ~WTF_Unchanged;
-    setTreeFilter( f );
-
-    actShowAll->setChecked( f == WTF_All );
-
-    mFilterRecursion = false;
+    setWtFilter( enabled, Git::FileUnchanged );
 }
 
-void IndexWidget::setTreeFilter( WorkingTreeFilters filters )
-{
-    mTreeView->setFilter( filters );
-}
+//void IndexWidget::workingTreeChanged()
+//{
+//    WorkingTreeModel* model = static_cast< WorkingTreeModel* >( mTreeView->model() );
+//    if( !model )
+//    {
+//        return;
+//    }
 
-void IndexWidget::workingTreeChanged()
-{
-    WorkingTreeModel* model = static_cast< WorkingTreeModel* >( mTreeView->model() );
-    if( !model )
-    {
-        return;
-    }
-
-    model->update();
-    updateDiff();
-}
+//    model->update();
+//    updateDiff();
+//}

@@ -11,29 +11,34 @@ INCLUDE_DIRECTORIES(
 SET( SRC_FILES
 
     IndexWidget.cpp
+    IndexTreeItemView.cpp
     WorkingTreeModule.cpp
     WorkingTreeAbstractItem.cpp
     WorkingTreeDirItem.cpp
     WorkingTreeFileItem.cpp
     WorkingTreeItemView.cpp
     WorkingTreeModel.cpp
+    WorkingTreeFilterModel.cpp
 )
 
 SET( HDR_FILES
 
     IndexWidget.h
+    IndexTreeItemView.h
     WorkingTreeModule.h
     WorkingTreeAbstractItem.h
     WorkingTreeDirItem.h
     WorkingTreeFileItem.h
     WorkingTreeItemView.h
     WorkingTreeModel.h
-    WorkingTreeFilters.h
+    WorkingTreeFilterModel.h
 )
 
 SET( HID_FILES
 
     WorkingTreeActions.hid
+    WorkingTreeCtxMenu.hid
+    StageViewCtxMenu.hid
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )

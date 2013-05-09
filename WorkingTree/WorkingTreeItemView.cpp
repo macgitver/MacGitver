@@ -84,6 +84,9 @@ void WorkingTreeItemView::onWtCtxStage()
     i.addEntry( item->path(), r );
     i.write( r );
 
+    // TODO: workaround to update the model
+    mModel->setRepository(repo);
+
     if ( !r )
     {
         QMessageBox::warning( this, trUtf8("Error while adding file to Git index"),

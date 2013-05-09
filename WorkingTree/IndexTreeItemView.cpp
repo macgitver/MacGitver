@@ -91,6 +91,9 @@ void IndexTreeItemView::onWtCtxUnstage()
     }
     i.write( r );
 
+    // TODO: workaround to update the model
+    mModel->setRepository(repo);
+
     if ( !r )
     {
         QMessageBox::warning( this, trUtf8("Error while unstaging file."),

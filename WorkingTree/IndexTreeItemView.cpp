@@ -87,8 +87,7 @@ void IndexTreeItemView::onWtCtxUnstage()
     }
     else
     {
-        // TODO: Update status of index entry
-        QMessageBox::critical( 0, trUtf8("TODO"), trUtf8("Not implemented yet.") );
+        i.resetDefault( QStringList( itemPath ), r );
     }
     i.write( r );
 

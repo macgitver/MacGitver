@@ -94,7 +94,7 @@ void WorkingTreeItemView::onWtCtxStage()
     }
 }
 
-void WorkingTreeItemView::onWtCtxReset()
+void WorkingTreeItemView::onWtCtxDiscard()
 {
     // TODO: Reset file changes.
 }

@@ -36,7 +36,7 @@ public:
 private slots:
     // hid actions
     void onWtCtxStage();
-    void onWtCtxReset();
+    void onWtCtxDiscard();
 
     void contextMenu(const QModelIndex &index, const QPoint &globalPos);
 

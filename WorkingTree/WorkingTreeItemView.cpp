@@ -96,7 +96,40 @@ void WorkingTreeItemView::onWtCtxStage()
 
 void WorkingTreeItemView::onWtCtxDiscard()
 {
-    // TODO: Reset file changes.
+    int button = QMessageBox::question( this, trUtf8("Discard unstaged changes"),
+                                        trUtf8("Discard unstaged changes?\n\n"
+                                               "You cannot undo this action."),
+                                        QMessageBox::Ok | QMessageBox::Abort );
+    if ( button != QMessageBox::Ok )
+        return;
+
+    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
+    if ( !action )
+        return;
+
+    QModelIndex srcIndex = deeplyMapToSource( currentIndex() );
+    if ( !srcIndex.isValid() )
+        return;
+
+    WorkingTreeAbstractItem* item = mModel->indexToItem( srcIndex );
+    Q_ASSERT( item );
+
+    Git::Repository repo = mModel->repository();
+
+    Git::Result r;
+    Git::Index i = repo.index( r );
+
+    // index stays unchanged; no need to read/write
+    i.checkout( QStringList( item->path() ), r );
+
+    // TODO: workaround to update the model
+    mModel->setRepository(repo);
+
+    if ( !r )
+    {
+        QMessageBox::warning( this, trUtf8("Error while discarding file changes"),
+                              trUtf8("File remains unchanged. Git message:\n%1").arg(r.errorText()) );
+    }
 }
 
 void WorkingTreeItemView::contextMenu( const QModelIndex& index, const QPoint& globalPos )

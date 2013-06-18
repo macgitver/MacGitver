@@ -81,7 +81,7 @@ void WorkingTreeItemView::onWtCtxStage()
     Git::Index i = repo.index( r );
 
     i.read( r );
-    i.addEntry( item->path(), r );
+    i.addEntry( r, item->path() );
     i.write( r );
 
     if ( !r )

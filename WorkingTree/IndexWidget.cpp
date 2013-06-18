@@ -141,7 +141,7 @@ void IndexWidget::updateDiff()
     Git::Result r;
     Git::DiffList dl = mRepo.diffIndexToWorkingDir( r );
     GitPatchConsumer p;
-    dl.consumePatch( &p, r );
+    dl.consumePatch( r, &p );
 
     mDiffView->setPatch( p.patch() );
 }

@@ -31,7 +31,7 @@ HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryModel* model )
 {
     Git::Result r;
     mWalker = mRepo.newWalker( r );
-    mWalker.setSorting( true, false, r );
+    mWalker.setSorting( r, true, false );
 }
 
 HistoryBuilder::~HistoryBuilder()
@@ -50,7 +50,7 @@ void HistoryBuilder::addAllRefs()
     QStringList sl = mRepo.allBranches( r );
     foreach( QString s, sl )
     {
-        mWalker.pushRef( s, r );
+        mWalker.pushRef( r, s );
     }
 }
 
@@ -275,7 +275,7 @@ void HistoryBuilder::start()
             createGlyphSlot( ggBranch, currentSHA1 );
             mCurrentLine++;
         }
-        curCommit = mRepo.lookupCommit( currentSHA1, r );
+        curCommit = mRepo.lookupCommit( r, currentSHA1 );
         if( !r )
         {
             MacGitver::log( ltError, r, "Could not find a commit the RevWalker gave us." );
@@ -360,7 +360,7 @@ void HistoryBuilder::start()
 
             for( int j = 1; j < numParents; j++ )
             {
-                Git::ObjectId parentSha1 = curCommit.parentCommitId( j, r );
+                Git::ObjectId parentSha1 = curCommit.parentCommitId( r, j );
                 int idx = nextParent( parentSha1 );
                 if( idx != -1 )
                 {
@@ -434,7 +434,7 @@ void HistoryBuilder::start()
         }
         else
         {
-            mNextParent[ mCurrentLine ] = curCommit.parentCommitId( 0, r );
+            mNextParent[ mCurrentLine ] = curCommit.parentCommitId( r, 0 );
         }
 
         if( numParents > 1 )

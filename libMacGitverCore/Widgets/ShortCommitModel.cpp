@@ -54,7 +54,7 @@ bool ShortCommitModel::setCommitList( Git::Repository repo, const QList< Git::Ob
 
     foreach( Git::ObjectId sha1, list )
     {
-        Git::ObjectCommit commit = repo.lookupCommit( sha1, r );
+        Git::ObjectCommit commit = repo.lookupCommit( r, sha1 );
         if( !r )
         {
             return false;

@@ -160,7 +160,7 @@ void HistoryDiff::setCommitId( const Git::ObjectId& sha1 )
 
     Git::Result r;
 
-    mCommit = mRepo.lookupCommit( sha1, r );
+    mCommit = mRepo.lookupCommit( r, sha1 );
     mRepo.index( r ).read( r );
 
     mParentsModel->setCommitList( mCommit.parentCommits( r ) );
@@ -194,19 +194,19 @@ void HistoryDiff::onDiffToChanged( int index )
 Git::DiffList HistoryDiff::makePatchTo( const QString& ref )
 {
     Git::Result r;
-    Git::ObjectId oid = mRepo.lookupRef( ref, r ).resolveToObjectId( r );
+    Git::ObjectId oid = mRepo.lookupRef( r, ref ).resolveToObjectId( r );
     if( !r )
     {
         return Git::DiffList();
     }
 
-    Git::ObjectCommit commit = mRepo.lookupCommit( oid, r );
+    Git::ObjectCommit commit = mRepo.lookupCommit( r, oid );
     if( !r )
     {
         return Git::DiffList();
     }
 
-    return mRepo.diffCommitToCommit( mCommit, commit, r );
+    return mRepo.diffCommitToCommit( r, mCommit, commit );
 }
 
 void HistoryDiff::createPatch()
@@ -231,7 +231,7 @@ void HistoryDiff::createPatch()
     case DTT_WT_and_Index:
         dl = tree.diffToWorkingDir( r );
         dl2 = tree.diffToIndex( r );
-        dl2.mergeOnto( dl, r );
+        dl2.mergeOnto( r, dl );
         break;
 
     case DTT_AllParents:
@@ -242,7 +242,7 @@ void HistoryDiff::createPatch()
         index = mDiffToParent->currentIndex();
         if( index != -1 )
         {
-            dl = mCommit.diffFromParent( (unsigned int) index, r );
+            dl = mCommit.diffFromParent( r, (unsigned int) index );
         }
         break;
 
@@ -267,7 +267,7 @@ void HistoryDiff::createPatch()
         Git::Result r;
         GitPatchConsumer p;
         dl.findRenames( r );
-        dl.consumePatch( &p, r );
+        dl.consumePatch( r, &p );
         setPatch( p.patch() );
     }
     else

@@ -112,7 +112,7 @@ void HistoryDetails::updateText()
         return;
     }
 
-    Git::ObjectCommit commit = mRepo.lookupCommit( mCurrentSHA1, r );
+    Git::ObjectCommit commit = mRepo.lookupCommit( r, mCurrentSHA1 );
     if( !r )
     {
         MacGitver::log( ltError, r, "Reading commit details" );

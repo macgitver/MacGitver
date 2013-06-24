@@ -265,7 +265,7 @@ void BranchesModel::rereadBranches()
         Git::Result r;
         QString curBranch = repo.currentBranch( r );
 
-        QStringList sl = repo.branches( true, false, r );
+        QStringList sl = repo.branches( r, true, false );
         if( sl.count() )
         {
             Scope* scope = new Scope( mRoot, tr( "Local" ) );
@@ -314,7 +314,7 @@ void BranchesModel::rereadBranches()
             }
         }
 
-        sl = repo.branches( false, true, r );
+        sl = repo.branches( r, false, true );
         if( sl.count() )
         {
             QHash< QString, Remote* > remotes;

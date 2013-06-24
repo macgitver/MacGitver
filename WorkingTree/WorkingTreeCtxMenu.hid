@@ -23,9 +23,9 @@ Ui WorkingTreeCtxMenu {
     };
 
     Action Reset {
-        Text            "&Reset changes";
-        StatusToolTip   "Reset all current changes to this file.";
-        ConnectTo       onWtCtxReset();
+        Text            "&Discard changes";
+        StatusToolTip   "Discard unstaged changes to this file.";
+        ConnectTo       onWtCtxDiscard();
     };
 
     Menu CtxMenuWtFile {

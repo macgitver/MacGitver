@@ -17,11 +17,15 @@
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
+#include "libGitWrap/Index.hpp"
+#include "libGitWrap/Result.hpp"
+
 #include "IndexTreeItemView.h"
 #include "WorkingTreeAbstractItem.h"
 #include "WorkingTreeModel.h"
 
 #include <QAbstractProxyModel>
+#include <QMessageBox>
 
 
 IndexTreeItemView::IndexTreeItemView(QWidget *parent)
@@ -59,7 +63,42 @@ void IndexTreeItemView::setModel(QAbstractItemModel *model)
 
 void IndexTreeItemView::onWtCtxUnstage()
 {
-    // TODO: unstage file
+    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
+    if ( !action )
+        return;
+
+    QModelIndex srcIndex = deeplyMapToSource( currentIndex() );
+    if ( !srcIndex.isValid() )
+        return;
+
+    WorkingTreeAbstractItem* item = mModel->indexToItem( srcIndex );
+    Q_ASSERT( item );
+
+    Git::Repository repo = mModel->repository();
+
+    Git::Result r;
+    Git::Index i = repo.index( r );
+
+    i.read( r );
+    const QString itemPath = item->path();
+    if ( repo.status(itemPath, r).testFlag(Git::FileIndexNew) )
+    {
+        i.removeEntry( itemPath, r );
+    }
+    else
+    {
+        i.resetDefault( QStringList( itemPath ), r );
+    }
+    i.write( r );
+
+    // TODO: workaround to update the model
+    mModel->setRepository(repo);
+
+    if ( !r )
+    {
+        QMessageBox::warning( this, trUtf8("Error while unstaging file."),
+                              trUtf8("Error while unstaging file. Git message:\n%1").arg(r.errorText()) );
+    }
 }
 
 void IndexTreeItemView::contextMenu( const QModelIndex& index, const QPoint& globalPos )

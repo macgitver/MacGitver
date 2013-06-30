@@ -22,38 +22,6 @@
 
 #include "BranchesModel.hpp"
 
-class BranchesModel::Item
-{
-public:
-    Item()
-        : parent( NULL )
-        , text()
-    {}
-
-    Item( Item* p, const QString& t )
-        : parent( p )
-        , text( t )
-    {
-        Q_ASSERT( p );
-        p->children.append( this );
-    }
-
-    virtual ~Item()
-    {
-        if( parent )
-        {
-            parent->children.removeOne( this );
-        }
-        qDeleteAll( children );
-    }
-
-public:
-    Item* parent;
-    QList< Item* > children;
-    QString text;
-
-    virtual QVariant data( int col, int role ) const { return QVariant(); }
-};
 
 class BranchesModel::Scope : public BranchesModel::Item
 {

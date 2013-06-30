@@ -16,6 +16,12 @@
 
 Ui BranchesViewActions {
 
+    Action CheckoutRef {
+        Text            "&Checkout";
+        StatusToolTip   "Checkout this reference.";
+        ConnectTo       onCheckoutRef();
+    };
+
     ToolBar BranchesTB {
 
         Action          ShowLocal {
@@ -32,6 +38,10 @@ Ui BranchesViewActions {
             ConnectTo   rereadBranches();
         };
 
+    };
+
+    Menu CtxMenuRefsView {
+        Action      CheckoutRef;
     };
 
 };

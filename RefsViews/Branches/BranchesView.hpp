@@ -22,6 +22,7 @@
 #include "libHeaven/CentralUI/Views/ContextView.hpp"
 
 class QTreeView;
+class QModelIndex;
 
 #include "hic_BranchesViewActions.h"
 
@@ -35,6 +36,15 @@ public:
 
 public:
     virtual QSize sizeHint() const;
+
+public slots:
+    void showContextMenu(const QModelIndex &index, const QPoint &globalPos);
+
+    // hid actions
+    void onCheckoutRef();
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *ev);
 
 private:
     Heaven::ViewContextData* createContextData() const;

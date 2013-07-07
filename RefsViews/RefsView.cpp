@@ -45,17 +45,7 @@ RefsView::RefsView()
 
 void RefsView::repositoryChanged( Git::Repository repo )
 {
-    mRepo = repo;
-
-    if( mRepo.isValid() )
-    {
-        Git::Result r;
-        mModel->syncTo( mRepo.allReferenceNames( r ) );
-    }
-    else
-    {
-        mModel->clear();
-    }
+    mModel->sync( repo );
 }
 
 QSize RefsView::sizeHint() const

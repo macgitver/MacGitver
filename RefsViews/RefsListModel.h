@@ -17,16 +17,24 @@
 #ifndef MGV_REFS_LIST_MODEL_H
 #define MGV_REFS_LIST_MODEL_H
 
+#include "libGitWrap/Repository.hpp"
+
 #include <QAbstractListModel>
+
+class RefItem;
+class RefScope;
+
+namespace Git
+{
+    class ObjectId;
+    class Reference;
+}
 
 class RefsListModel : public QAbstractListModel
 {
     Q_OBJECT
-
-    struct RefInfo
-    {
-        QString mRefName;
-    };
+private:
+    class RefId;
 
 public:
     RefsListModel( QObject* parent = 0 );
@@ -39,13 +47,16 @@ public:
 public:
     void clear();
     void updateRef( const QString& refName );
-    void addRef( const QString& refName );
+    void addRef(const Git::Reference &ref );
     void removeRef( const QString& refName );
-    void syncTo( const QStringList& refs );
+    void sync( const Git::Repository &repo );
 
 private:
-    QList< RefInfo* >           mOrderedData;
-    QHash< QString, RefInfo* >  mData;
+    Git::Repository             mRepo;
+
+    QList< QString >            mOrderedData;
+    QHash< QString, RefItem* >  mData;
+    QMap< QString, RefScope* >  mScopes;
 };
 
 #endif

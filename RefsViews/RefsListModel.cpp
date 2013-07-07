@@ -18,6 +18,12 @@
 #include <QSet>
 
 #include "RefsListModel.h"
+#include "RefItem.hpp"
+
+#include "libGitWrap/Reference.hpp"
+#include "libGitWrap/Repository.hpp"
+#include "libGitWrap/Result.hpp"
+
 
 RefsListModel::RefsListModel( QObject* parent )
 {
@@ -42,7 +48,7 @@ QVariant RefsListModel::data( const QModelIndex& index, int role ) const
     switch( role )
     {
     case Qt::DisplayRole:
-        return mOrderedData.at( index.row() )->mRefName;
+        return mOrderedData.at( index.row() );
     }
 
     return QVariant();
@@ -52,17 +58,17 @@ void RefsListModel::updateRef( const QString& refName )
 {
 }
 
-void RefsListModel::addRef( const QString& refName )
+void RefsListModel::addRef( const Git::Reference& ref )
 {
-    RefInfo* ref = new RefInfo;
-    ref->mRefName = refName;
-
-    mData.insert( refName, ref );
+    if ( ref.isValid() )
+        return;
 
     int row = mOrderedData.count();
 
     beginInsertRows( QModelIndex(), row, row );
-    mOrderedData.insert( row, ref );
+    mData.insert( ref.name(), new RefBranch( 0, ref.shorthand(), ref ) );
+
+    mOrderedData.insert( row, ref.name() );
     endInsertRows();
 }
 
@@ -70,23 +76,35 @@ void RefsListModel::removeRef( const QString& refName )
 {
 }
 
-void RefsListModel::syncTo( const QStringList& refs )
+void RefsListModel::sync(const Git::Repository &repo )
 {
-    QSet< QString > oldRefs = mData.keys().toSet();
+//    if ( mRepo != repo )
+        mRepo = repo;
 
-    foreach( QString refName, refs )
+    if( !mRepo.isValid() )
     {
-        if( oldRefs.contains( refName ) )
+        clear();
+        return;
+    }
+
+    QSet< QString > oldRefs = mData.keys().toSet();
+    Git::Result r;
+    Git::ReferenceList refs = mRepo.allReferences( r );
+    if ( !r ) return;
+
+    foreach( const Git::Reference &ref, refs )
+    {
+        if( oldRefs.contains( ref.name() ) )
         {
-            oldRefs.remove( refName );
+            oldRefs.remove( ref.name() );
         }
-        if( mData.contains( refName ) )
+        if( mData.contains( ref.shorthand() ) )
         {
-            updateRef( refName );
+            updateRef( ref.shorthand() );
         }
         else
         {
-            addRef( refName );
+            addRef( ref );
         }
     }
 
@@ -102,6 +120,6 @@ void RefsListModel::clear()
     mData.clear();
     endResetModel();
 
-    qDeleteAll( mOrderedData );
+    //qDeleteAll( mOrderedData );
     mOrderedData.clear();
 }

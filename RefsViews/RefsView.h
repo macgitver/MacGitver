@@ -38,7 +38,6 @@ public:
     virtual QSize sizeHint() const;
 
 private:
-    Git::Repository mRepo;
     QListView*      mListView;
     RefsListModel*  mModel;
 };

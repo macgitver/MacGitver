@@ -97,7 +97,7 @@ void HistoryBuilder::updateReferences()
     QElapsedTimer		timer;
     Git::ResolvedRefs	refs;
     Git::Result			r;
-    QString				curBranch;
+    Git::Reference		refHEAD;
     QHash< Git::ObjectId, HistoryInlineRefs > refsById;
 
     if( !mRepo.isValid() )
@@ -106,7 +106,7 @@ void HistoryBuilder::updateReferences()
     }
 
     refs = mRepo.allResolvedRefs( r );
-    curBranch = mRepo.currentBranch( r );
+    refHEAD = mRepo.HEAD( r );
     if( !r )
     {
         MacGitver::log( ltError, r.errorText() );
@@ -131,7 +131,7 @@ void HistoryBuilder::updateReferences()
             inlRef.mIsRemote = false;
             inlRef.mIsTag = false;
             inlRef.mIsStash = false;
-            inlRef.mIsCurrent = inlRef.mRefName == curBranch;
+            inlRef.mIsCurrent = inlRef.mRefName == refHEAD.shorthand();
         }
         else if( ref.startsWith( QLatin1String( "refs/tags/" ) ) )
         {

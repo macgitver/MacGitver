@@ -18,7 +18,9 @@ SET( SRC_FILES
     RefsView.cpp
     TagsView.cpp
 
-    Branches/BranchesModel.cpp 
+    RefItem.cpp
+
+    Branches/BranchesModel.cpp
     Branches/BranchesView.cpp
     Branches/BranchesViewData.cpp
 )
@@ -32,6 +34,8 @@ SET( HDR_FILES
 
     RefsView.h
     TagsView.h
+
+    RefItem.hpp
 
     Branches/BranchesModel.hpp
     Branches/BranchesView.hpp

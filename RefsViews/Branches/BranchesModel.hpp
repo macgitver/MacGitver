@@ -25,43 +25,11 @@
 
 #include "Branches/BranchesViewData.hpp"
 
+class RefItem;
+
 class BranchesModel : public QAbstractItemModel
 {
     Q_OBJECT
-public:
-    class Item
-    {
-    public:
-        Item()
-            : parent( NULL )
-            , text()
-        {}
-
-        Item( Item* p, const QString& t )
-            : parent( p )
-            , text( t )
-        {
-            Q_ASSERT( p );
-            p->children.append( this );
-        }
-
-        virtual ~Item()
-        {
-            if( parent )
-            {
-                parent->children.removeOne( this );
-            }
-            qDeleteAll( children );
-        }
-
-    public:
-        Item* parent;
-        QList< Item* > children;
-        QString text;
-
-        virtual QVariant data( int col, int role ) const { return QVariant(); }
-    };
-
 public:
     BranchesModel( BranchesViewData* parent );
     ~BranchesModel();
@@ -80,13 +48,8 @@ public:
     void rereadBranches();
 
 private:
-    class Scope;
-    class NameSpace;
-    class Branch;
-    class Remote;
-
     BranchesViewData*   mData;
-    Item*               mRoot;
+    RefItem*            mRoot;
 };
 
 #endif

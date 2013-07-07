@@ -26,6 +26,8 @@
 
 #include "libGitWrap/Reference.hpp"
 
+#include "RefItem.hpp"
+
 BranchesView::BranchesView()
     : ContextView( "Branches" )
     , mData( NULL )
@@ -62,10 +64,10 @@ void BranchesView::showContextMenu(const QModelIndex &index, const QPoint &globa
     if ( !srcIndex.isValid() )
         return;
 
-    QString refName = index.data().toString();
+    const RefItem *item = static_cast<const RefItem*>(srcIndex.internalPointer());
 
     Heaven::Menu* menu = 0;
-    if ( !refName.isEmpty() )
+    if ( item && item->isContentItem() )
     {
         menu = menuCtxMenuRefsView;
         //menu->setActivationContext( item );
@@ -85,28 +87,23 @@ void BranchesView::onCheckoutRef()
     if ( !srcIndex.isValid() )
         return;
 
-    const BranchesModel::Item *item =
-            static_cast<const BranchesModel::Item *>( srcIndex.internalPointer() );
-    Q_ASSERT( item );
+    const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
+    if ( !branch ) return;
 
     Git::Result r;
-    // TODO: Do it right! The Reference object is used as a placeholder here!.
-    Git::Reference ref = mData->repository().lookupRef(
-                r, QString::fromUtf8("refs/heads/%1").arg(item->text) );
-
-    ref.checkout(r);
+    branch->reference().checkout(r);
 
     if ( !r )
     {
         QMessageBox::warning( this, trUtf8("Error while checking out reference."),
                               trUtf8("Failed to checkout reference (%1).\nGit message: %2")
-                              .arg(item->text)
+                              .arg(branch->reference().shorthand())
                               .arg(r.errorText()) );
     }
     else
     {
-        // TODO: workaround to update the model
-        mData->mModel->rereadBranches();
+        // TODO: workaround to update the views
+        update();
     }
 }
 

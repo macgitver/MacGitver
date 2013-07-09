@@ -19,6 +19,8 @@
 #include "RefItem.hpp"
 
 #include "libGitWrap/Reference.hpp"
+#include "libGitWrap/Repository.hpp"
+#include "libGitWrap/Result.hpp"
 
 #include <QFont>
 #include <QLinearGradient>
@@ -136,11 +138,20 @@ QVariant RefBranch::data(int col, int role) const
         break;
 
     case Qt::BackgroundRole:
+        Git::Result r;
         if ( mRef.isCurrentBranch() )
         {
             QLinearGradient g( 0, 0, 0, 30 );
             g.setColorAt( 0.0, QColor(255, 255, 255, 0) );
             g.setColorAt( 0.5, QColor(255, 181, 79) );
+            g.setColorAt( 1.0, QColor(255, 255, 255, 0) );
+            return QBrush(g);
+        }
+        else if ( mRef == mRef.repository(r).HEAD(r) )
+        {
+            QLinearGradient g( 0, 0, 0, 30 );
+            g.setColorAt( 0.0, QColor(255, 255, 255, 0) );
+            g.setColorAt( 0.5, QColor(255, 181, 79).lighter() );
             g.setColorAt( 1.0, QColor(255, 255, 255, 0) );
             return QBrush(g);
         }

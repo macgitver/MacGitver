@@ -151,7 +151,13 @@ void BranchesView::attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewCont
 {
     BranchesViewData* myData = qobject_cast< BranchesViewData* >( data );
     Q_ASSERT( myData );
+
+    mTree->setModel( NULL );
+    delete mData;
     mData = myData;
+
+    connect( mData->mModel, SIGNAL(gitError(const Git::Result&))
+             , this, SLOT(actionFailed(const Git::Result&)) );
 
     mTree->setModel( mData->mModel );
 }

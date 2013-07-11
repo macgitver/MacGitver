@@ -26,6 +26,11 @@ class QModelIndex;
 
 #include "hic_BranchesViewActions.h"
 
+namespace Git
+{
+    class Result;
+}
+
 class BranchesViewData;
 
 class BranchesView : public Heaven::ContextView, private BranchesViewActions
@@ -43,6 +48,8 @@ public slots:
     // hid actions
     void onCheckoutRef();
     void onRenameRef();
+
+    void actionFailed(const Git::Result &error);
 
 protected:
     void contextMenuEvent(QContextMenuEvent *ev);

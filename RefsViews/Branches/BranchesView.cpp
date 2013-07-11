@@ -110,6 +110,28 @@ void BranchesView::onCheckoutRef()
     }
 }
 
+void BranchesView::onRenameRef()
+{
+    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
+    if ( !action )
+        return;
+
+    QModelIndex srcIndex = mTree->currentIndex();
+    if ( !srcIndex.isValid() )
+        return;
+
+    mTree->edit( srcIndex );
+}
+
+void BranchesView::actionFailed( const Git::Result& error )
+{
+    if ( error ) return;
+
+    QMessageBox::warning( this, trUtf8("Error on last action."),
+                          trUtf8("The action Failed!\nGit message: %1")
+                          .arg(error.errorText()) );
+}
+
 void BranchesView::contextMenuEvent(QContextMenuEvent *ev)
 {
     if( ev->reason() == QContextMenuEvent::Keyboard )

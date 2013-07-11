@@ -42,6 +42,7 @@ public slots:
 
     // hid actions
     void onCheckoutRef();
+    void onRenameRef();
 
 protected:
     void contextMenuEvent(QContextMenuEvent *ev);

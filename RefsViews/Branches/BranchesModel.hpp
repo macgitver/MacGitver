@@ -47,6 +47,9 @@ public:
 public:
     void rereadBranches();
 
+signals:
+    void gitError( const Git::Result& error );
+
 private:
     BranchesViewData*   mData;
     RefItem*            mRoot;

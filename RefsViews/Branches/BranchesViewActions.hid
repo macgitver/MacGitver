@@ -22,6 +22,12 @@ Ui BranchesViewActions {
         ConnectTo       onCheckoutRef();
     };
 
+    Action RenameRef {
+        Text            "&Rename";
+        StatusToolTip   "Rename this reference.";
+        ConnectTo       onRenameRef();
+    };
+
     ToolBar BranchesTB {
 
         Action          ShowLocal {
@@ -42,6 +48,7 @@ Ui BranchesViewActions {
 
     Menu CtxMenuRefsView {
         Action      CheckoutRef;
+        Action      RenameRef;
     };
 
 };

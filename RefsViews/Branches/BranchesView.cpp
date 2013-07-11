@@ -33,6 +33,9 @@ BranchesView::BranchesView()
     , mData( NULL )
 {
     mTree = new QTreeView;
+#ifdef Q_OS_MACX
+    mTree->setAttribute( Qt::WA_MacShowFocusRect, false );
+#endif
     mTree->setFrameStyle( QFrame::NoFrame );
     mTree->setIndentation( 12 );
     mTree->setHeaderHidden( true );

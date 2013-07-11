@@ -38,6 +38,7 @@ public:
 
     virtual bool isContentItem() const;
     virtual QVariant data( int col, int role ) const;
+    virtual bool setData(Git::Result &result, const QVariant &value, int role, int col );
     virtual QString text() const;
 
     virtual bool isEditable() const;
@@ -73,6 +74,7 @@ public:
     RefBranch( RefItem* p, const QString& t, const Git::Reference &ref );
 
     QVariant data( int col, int role ) const;
+    bool setData(Git::Result& result, const QVariant &value, int role, int col);
     bool isContentItem() const;
     bool isEditable() const;
 

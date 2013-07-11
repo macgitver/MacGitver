@@ -103,11 +103,9 @@ void BranchesView::onCheckoutRef()
                               .arg(branch->reference().shorthand())
                               .arg(r.errorText()) );
     }
-    else
-    {
-        // TODO: workaround to update the views
-        update();
-    }
+
+    // TODO: workaround to update the views
+    update();
 }
 
 void BranchesView::onRemoveRef()

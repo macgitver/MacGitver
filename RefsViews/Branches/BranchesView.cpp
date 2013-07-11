@@ -110,6 +110,38 @@ void BranchesView::onCheckoutRef()
 
 void BranchesView::onRemoveRef()
 {
+    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
+    if ( !action )
+        return;
+
+    QModelIndex srcIndex = mTree->currentIndex();
+    if ( !srcIndex.isValid() )
+        return;
+
+    const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
+    if ( !branch ) return;
+
+    QMessageBox::StandardButton answer =
+            QMessageBox::question( this, trUtf8("Are you sure?"), trUtf8("Delete reference \'%1\'?")
+                                   .arg(branch->reference().shorthand())
+                                   , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
+    if ( answer != QMessageBox::Yes ) return;
+
+    Git::Result r;
+    Git::Reference ref = branch->reference();
+    // TODO: perform some safety checks before actually deleting the git-ref
+    ref.destroy(r);
+
+    if ( !r )
+    {
+        QMessageBox::warning( this, trUtf8("Error while removing reference."),
+                              trUtf8("Failed to remove reference (%1).\nGit message: %2")
+                              .arg(branch->reference().shorthand())
+                              .arg(r.errorText()) );
+    }
+
+    // TODO: workaround to update the views
+    mData->mModel->rereadBranches();
 }
 
 void BranchesView::onRenameRef()

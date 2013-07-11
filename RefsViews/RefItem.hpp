@@ -39,6 +39,8 @@ public:
     virtual bool isContentItem() const;
     virtual QVariant data( int col, int role ) const;
     virtual QString text() const;
+
+    virtual bool isEditable() const;
 };
 
 
@@ -72,6 +74,7 @@ public:
 
     QVariant data( int col, int role ) const;
     bool isContentItem() const;
+    bool isEditable() const;
 
     Git::Reference reference() const
     {

@@ -78,8 +78,19 @@ bool BranchesModel::setData( const QModelIndex& index, const QVariant& value, in
 
 Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
 {
-    Q_UNUSED( index );
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    if ( !index.isValid() )
+        return Qt::NoItemFlags;
+
+    Qt::ItemFlags result = Qt::ItemIsEnabled;
+    const RefItem *item = static_cast<const RefItem *>( index.internalPointer() );
+
+    if ( item->isContentItem() )
+        result |= Qt::ItemIsSelectable;
+
+    if ( item->isEditable() )
+        result |= Qt::ItemIsEditable;
+
+    return result;
 }
 
 QModelIndex BranchesModel::index( int row, int column, const QModelIndex& parent ) const

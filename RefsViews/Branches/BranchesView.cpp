@@ -110,6 +110,10 @@ void BranchesView::onCheckoutRef()
     }
 }
 
+void BranchesView::onRemoveRef()
+{
+}
+
 void BranchesView::onRenameRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );

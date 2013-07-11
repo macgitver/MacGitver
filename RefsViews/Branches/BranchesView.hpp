@@ -47,6 +47,7 @@ public slots:
 
     // hid actions
     void onCheckoutRef();
+    void onRemoveRef();
     void onRenameRef();
 
     void actionFailed(const Git::Result &error);

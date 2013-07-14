@@ -33,8 +33,6 @@ public:
     void deinitialize();
 
 private:
-    static Heaven::View* createBranchesView();
-    static Heaven::View* createTagsView();
     static Heaven::View* createRefsView();
 };
 

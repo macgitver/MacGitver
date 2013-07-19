@@ -123,7 +123,7 @@ void HistoryDiff::setRepository( Git::Repository repo )
     if( mRepo.isValid() )
     {
 
-        QStringList list = mRepo.allBranches( r );
+        QStringList list = mRepo.allBranchNames( r );
         if( r )
         {
             mDiffToBranch->clear();
@@ -134,7 +134,7 @@ void HistoryDiff::setRepository( Git::Repository repo )
             r.clear();
         }
 
-        list = mRepo.allTags( r );
+        list = mRepo.allTagNames( r );
         if( r )
         {
             mDiffToTag->clear();

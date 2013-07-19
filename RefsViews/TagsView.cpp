@@ -48,7 +48,7 @@ void TagsView::repositoryChanged( Git::Repository repo )
     if( mRepo.isValid() )
     {
         Git::Result r;
-        QStringList sl = mRepo.allTags( r );
+        QStringList sl = mRepo.allTagNames( r );
 
         for( int i = 0; i < sl.count(); i++ )
         {

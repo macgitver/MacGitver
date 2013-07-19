@@ -47,7 +47,7 @@ void HistoryBuilder::addHEAD()
 void HistoryBuilder::addAllRefs()
 {
     Git::Result r;
-    QStringList sl = mRepo.allBranches( r );
+    QStringList sl = mRepo.allBranchNames( r );
     foreach( QString s, sl )
     {
         mWalker.pushRef( r, s );

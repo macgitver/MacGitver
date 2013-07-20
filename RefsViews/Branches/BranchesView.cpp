@@ -119,11 +119,8 @@ void BranchesView::onRemoveRef()
     const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
     if ( !branch ) return;
 
-    QMessageBox::StandardButton answer =
-            QMessageBox::question( this, trUtf8("Are you sure?"), trUtf8("Delete reference \'%1\'?")
-                                   .arg(branch->reference().shorthand())
-                                   , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
-    if ( answer != QMessageBox::Yes ) return;
+    if ( !askToGoOn( trUtf8("Delete reference \'%1\'?").arg(branch->reference().shorthand()) ) )
+        return;
 
     Git::Result r;
     Git::Reference ref = branch->reference();
@@ -198,4 +195,12 @@ void BranchesView::detachedFromContext( Heaven::ViewContext* ctx )
 {
     mTree->setModel( NULL );
     mData = NULL;
+}
+
+bool BranchesView::askToGoOn(const QString &message)
+{
+    QMessageBox::StandardButton answer =
+            QMessageBox::question( this, trUtf8("Are you sure?"), message + trUtf8("\n\nAre you sure?")
+                                   , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
+    return ( answer == QMessageBox::Yes );
 }

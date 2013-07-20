@@ -60,6 +60,8 @@ private:
     virtual void attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data );
     virtual void detachedFromContext( Heaven::ViewContext* ctx );
 
+    bool askToGoOn(const QString& message);
+
 private:
     QTreeView*          mTree;
     BranchesViewData*   mData;

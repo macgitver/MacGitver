@@ -124,7 +124,9 @@ void BranchesView::onRemoveRef()
 
     Git::Result r;
     Git::Reference ref = branch->reference();
-    // TODO: perform some safety checks before actually deleting the git-ref
+
+    if ( !checkRemoveRef( ref ) ) return;
+
     ref.destroy(r);
 
     if ( !r )
@@ -137,6 +139,57 @@ void BranchesView::onRemoveRef()
 
     // TODO: workaround to update the views
     mData->mModel->rereadBranches();
+}
+
+bool BranchesView::checkRemoveRef( const Git::Reference& ref )
+{
+    if ( !ref.isLocal() )
+    {
+        // TODO: Remove remote branches and tags by doing something like 'git push <REMOTE> :refspec'
+        const QString tmpRefName = ref.shorthand();
+        QString tmpSplitRefName = ref.isRemote() ?
+                    ( tmpRefName.section(L'/', 0, 0) + QString::fromUtf8(" :") + tmpRefName.section(L'/', 1) )
+                  : ( QString::fromUtf8( "<REMOTE> :" ) + tmpRefName );
+
+        QMessageBox::information( this, trUtf8("Not implemented yet.")
+                                  , trUtf8("Sorry, this feature is not available yet."
+                                           " To delete the remote reference '%1', please type in a terminal:"
+                                           "\n`$ git push %2`")
+                                  .arg(tmpRefName, tmpSplitRefName ) );
+        return false;
+    }
+
+    if ( ref.isCurrentBranch() )
+    {
+        bool goOn = askToGoOn( trUtf8( "You are about to delete the currently active branch '%1'." )
+                               .arg( ref.shorthand() ) );
+        if ( !goOn ) return false;
+    }
+
+    Git::Result r;
+
+    // is there another reference pointing to here?
+    bool foundBuddyRef = false;
+    foreach ( const Git::Reference& current, ref.repository(r).allReferences(r) )
+    {
+        foundBuddyRef = ( current == ref ) && ( (current.name() != ref.name()) );
+        if (foundBuddyRef)
+            break;
+    }
+
+    if ( !foundBuddyRef )
+    {
+        // TODO: also check, if the commit is otherwise "visible"
+        // -> Is it a parent of a referenced commit?
+        // In this case the reference can safely be deleted.
+
+        bool goOn = askToGoOn( trUtf8( "You are about to remove the last reference '%1'."
+                                       "\nThis will move all commits in this branch to the \"lost-found\" area." )
+                               .arg( ref.shorthand() ) );
+        if ( !goOn ) return false;
+    }
+
+    return true;
 }
 
 void BranchesView::onRenameRef()

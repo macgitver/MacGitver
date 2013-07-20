@@ -28,6 +28,7 @@ class QModelIndex;
 
 namespace Git
 {
+    class Reference;
     class Result;
 }
 
@@ -61,6 +62,7 @@ private:
     virtual void detachedFromContext( Heaven::ViewContext* ctx );
 
     bool askToGoOn(const QString& message);
+    inline bool checkRemoveRef(const Git::Reference &ref);
 
 private:
     QTreeView*          mTree;

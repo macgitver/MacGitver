@@ -111,12 +111,10 @@ void BranchesView::onCheckoutRef()
 void BranchesView::onRemoveRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action )
-        return;
+    if ( !action ) return;
 
     QModelIndex srcIndex = mTree->currentIndex();
-    if ( !srcIndex.isValid() )
-        return;
+    if ( !srcIndex.isValid() ) return;
 
     const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
     if ( !branch ) return;

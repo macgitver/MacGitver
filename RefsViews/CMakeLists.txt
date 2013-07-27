@@ -12,13 +12,9 @@ SET( SRC_FILES
 
     RefsViewsModule.cpp
 
-    RefsListModel.cpp
-    RefsListDelegate.cpp
+    RefItem.cpp
 
-    RefsView.cpp
-    TagsView.cpp
-
-    Branches/BranchesModel.cpp 
+    Branches/BranchesModel.cpp
     Branches/BranchesView.cpp
     Branches/BranchesViewData.cpp
 )
@@ -27,11 +23,7 @@ SET( HDR_FILES
 
     RefsViewsModule.h
 
-    RefsListModel.h
-    RefsListDelegate.h
-
-    RefsView.h
-    TagsView.h
+    RefItem.hpp
 
     Branches/BranchesModel.hpp
     Branches/BranchesView.hpp

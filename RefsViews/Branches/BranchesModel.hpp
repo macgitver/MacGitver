@@ -25,6 +25,8 @@
 
 #include "Branches/BranchesViewData.hpp"
 
+class RefItem;
+
 class BranchesModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -45,15 +47,12 @@ public:
 public:
     void rereadBranches();
 
-private:
-    class Item;
-    class Scope;
-    class NameSpace;
-    class Branch;
-    class Remote;
+signals:
+    void gitError( const Git::Result& error );
 
+private:
     BranchesViewData*   mData;
-    Item*               mRoot;
+    RefItem*            mRoot;
 };
 
 #endif

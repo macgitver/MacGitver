@@ -22,8 +22,15 @@
 #include "libHeaven/CentralUI/Views/ContextView.hpp"
 
 class QTreeView;
+class QModelIndex;
 
 #include "hic_BranchesViewActions.h"
+
+namespace Git
+{
+    class Reference;
+    class Result;
+}
 
 class BranchesViewData;
 
@@ -36,10 +43,26 @@ public:
 public:
     virtual QSize sizeHint() const;
 
+public slots:
+    void showContextMenu(const QModelIndex &index, const QPoint &globalPos);
+
+    // hid actions
+    void onCheckoutRef();
+    void onRemoveRef();
+    void onRenameRef();
+
+    void actionFailed(const Git::Result &error);
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *ev);
+
 private:
     Heaven::ViewContextData* createContextData() const;
     virtual void attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data );
     virtual void detachedFromContext( Heaven::ViewContext* ctx );
+
+    bool askToGoOn(const QString& message);
+    inline bool checkRemoveRef(const Git::Reference &ref);
 
 private:
     QTreeView*          mTree;

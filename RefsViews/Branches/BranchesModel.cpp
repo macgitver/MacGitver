@@ -19,131 +19,18 @@
 #include <QFont>
 
 #include "libGitWrap/Result.hpp"
+#include "libGitWrap/Reference.hpp"
 
 #include "BranchesModel.hpp"
 
-class BranchesModel::Item
-{
-public:
-    Item()
-        : parent( NULL )
-        , text()
-    {}
+#include "RefItem.hpp"
 
-    Item( Item* p, const QString& t )
-        : parent( p )
-        , text( t )
-    {
-        Q_ASSERT( p );
-        p->children.append( this );
-    }
-
-    virtual ~Item()
-    {
-        if( parent )
-        {
-            parent->children.removeOne( this );
-        }
-        qDeleteAll( children );
-    }
-
-public:
-    Item* parent;
-    QList< Item* > children;
-    QString text;
-
-    virtual QVariant data( int col, int role ) const { return QVariant(); }
-};
-
-class BranchesModel::Scope : public BranchesModel::Item
-{
-public:
-    Scope( Item* p, const QString& t )
-        : Item( p, t ) {}
-
-    QVariant data( int col, int role ) const
-    {
-        switch( role )
-        {
-        case Qt::DisplayRole:
-            return text;
-        }
-
-        return QVariant();
-    }
-};
-
-class BranchesModel::Remote : public BranchesModel::Item
-{
-public:
-    Remote( Item* p, const QString& t )
-        : Item( p, t ) {}
-
-    QVariant data( int col, int role ) const
-    {
-        switch( role )
-        {
-        case Qt::DisplayRole:
-            return text;
-        }
-
-        return QVariant();
-    }
-};
-
-class BranchesModel::NameSpace : public BranchesModel::Item
-{
-public:
-    NameSpace( Item* p, const QString& t )
-        : Item( p, t ) {}
-
-    QVariant data( int col, int role ) const
-    {
-        switch( role )
-        {
-        case Qt::DisplayRole:
-            return text;
-        }
-
-        return QVariant();
-    }
-};
-
-class BranchesModel::Branch : public BranchesModel::Item
-{
-public:
-    Branch( Item* p, const QString& t )
-        : Item( p, t ), cur( false ) {}
-
-    QVariant data( int col, int role ) const
-    {
-        switch( role )
-        {
-        case Qt::DisplayRole:
-            return text;
-
-        case Qt::FontRole:
-            if( cur )
-            {
-                QFont f;
-                f.setBold( true );
-                return f;
-            }
-            break;
-        }
-
-        return QVariant();
-    }
-
-    bool cur;
-};
 
 BranchesModel::BranchesModel( BranchesViewData* parent )
     : QAbstractItemModel( parent )
     , mData( parent )
+    , mRoot( new RefItem )
 {
-    mRoot = new Item;
-    mRoot->parent = NULL;
 }
 
 BranchesModel::~BranchesModel()
@@ -153,7 +40,7 @@ BranchesModel::~BranchesModel()
 
 int BranchesModel::rowCount( const QModelIndex& parent ) const
 {
-    Item* parentItem;
+    RefItem* parentItem;
     if( parent.column() > 0 )
     {
         return 0;
@@ -162,7 +49,7 @@ int BranchesModel::rowCount( const QModelIndex& parent ) const
     if( !parent.isValid() )
         parentItem = mRoot;
     else
-        parentItem = static_cast< Item* >( parent.internalPointer() );
+        parentItem = static_cast< RefItem* >( parent.internalPointer() );
 
     return parentItem->children.count();
 }
@@ -179,20 +66,47 @@ QVariant BranchesModel::data( const QModelIndex& index, int role ) const
         return QVariant();
     }
 
-    Item* item = static_cast< Item* >( index.internalPointer() );
+    RefItem* item = static_cast< RefItem* >( index.internalPointer() );
     return item->data( index.column(), role );
 }
 
 bool BranchesModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
-    Q_ASSERT( false );
-    return false;
+    if ( !index.isValid() || (role != Qt::EditRole) )
+        return false;
+
+    RefItem *item = static_cast<RefItem *>( index.internalPointer() );
+    if ( !item )
+        return false;
+
+    Git::Result result;
+    if ( !item->setData( result, value, role, index.column() ) )
+    {
+        if( !result )
+            emit gitError( result );
+
+        return false;
+    }
+
+    emit dataChanged(index, index);
+    return true;
 }
 
 Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
 {
-    Q_UNUSED( index );
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    if ( !index.isValid() )
+        return Qt::NoItemFlags;
+
+    Qt::ItemFlags result = Qt::ItemIsEnabled;
+    const RefItem *item = static_cast<const RefItem *>( index.internalPointer() );
+
+    if ( item->isContentItem() )
+        result |= Qt::ItemIsSelectable;
+
+    if ( item->isEditable() )
+        result |= Qt::ItemIsEditable;
+
+    return result;
 }
 
 QModelIndex BranchesModel::index( int row, int column, const QModelIndex& parent ) const
@@ -202,14 +116,14 @@ QModelIndex BranchesModel::index( int row, int column, const QModelIndex& parent
         return QModelIndex();
     }
 
-    Item* parentItem;
+    RefItem* parentItem;
 
     if( !parent.isValid() )
         parentItem = mRoot;
     else
-        parentItem = static_cast< Item* >( parent.internalPointer() );
+        parentItem = static_cast< RefItem* >( parent.internalPointer() );
 
-    Item* childItem = parentItem->children.at( row );
+    RefItem* childItem = parentItem->children.at( row );
     if( childItem )
         return createIndex( row, column, childItem );
     else
@@ -223,8 +137,8 @@ QModelIndex BranchesModel::parent( const QModelIndex& child ) const
         return QModelIndex();
     }
 
-    Item* childItem = static_cast< Item* >( child.internalPointer() );
-    Item* parentItem = childItem->parent;
+    RefItem* childItem = static_cast< RefItem* >( child.internalPointer() );
+    RefItem* parentItem = childItem->parent;
 
     if( parentItem == mRoot )
         return QModelIndex();
@@ -235,7 +149,7 @@ QModelIndex BranchesModel::parent( const QModelIndex& child ) const
 
 bool BranchesModel::hasChildren( const QModelIndex& parent ) const
 {
-    Item* parentItem;
+    RefItem* parentItem;
     if( parent.column() > 0 )
     {
         return 0;
@@ -244,53 +158,59 @@ bool BranchesModel::hasChildren( const QModelIndex& parent ) const
     if( !parent.isValid() )
         parentItem = mRoot;
     else
-        parentItem = static_cast< Item* >( parent.internalPointer() );
+        parentItem = static_cast< RefItem* >( parent.internalPointer() );
 
     return parentItem->children.count() > 0;
 }
 
 void BranchesModel::rereadBranches()
 {
-    Git::Repository repo = mData->repository();
-
     beginResetModel();
 
-    foreach( Item* i, mRoot->children )
-        delete i;
-    Q_ASSERT( mRoot->children.count() == 0 );
-    mRoot->children.empty();
+    Git::Repository repo = mData->repository();
+
+    qDeleteAll( mRoot->children );
+    Q_ASSERT( mRoot->children.isEmpty() );
 
     if( repo.isValid() )
     {
         Git::Result r;
-        QString curBranch = repo.currentBranch( r );
-
-        QStringList sl = repo.branchNames( r, true, false );
-        if( sl.count() )
+        Git::ReferenceList sl = repo.allReferences( r );
+        if( !sl.isEmpty() )
         {
-            Scope* scope = new Scope( mRoot, tr( "Local" ) );
+            RefScope* scopeLocal = new RefScope( mRoot, tr( "Local" ) );
+            RefScope* scopeRemote = new RefScope( mRoot, tr( "Remote" ) );
+            RefScope* scopeOther = new RefScope( mRoot, tr( "Tags" ) );
 
-            for( int i = 0; i < sl.count(); i++ )
+            for( int i = 0; i < sl.count(); ++i )
             {
-                Branch* branch;
-                QString branchName = sl[ i ];
-                QStringList parts = branchName.split( QChar( L'/' ) );
-                if( parts.count() == 1 )
+                const Git::Reference &currentRef = sl[ i ];
+                RefScope* parentScope = NULL;
+                if ( currentRef.isLocal() )
+                    parentScope = scopeLocal;
+                else if ( currentRef.isRemote() )
+                    parentScope = scopeRemote;
+                else
+                    parentScope = scopeOther;
+
+                RefBranch* branch = NULL;
+                QStringList parts = currentRef.shorthand().split( QChar( L'/' ) );
+                if ( parts.count() == 1 )
                 {
-                    branch = new Branch( scope, branchName );
+                    branch = new RefBranch( parentScope, parts.last(), currentRef );
                 }
                 else
                 {
-                    Item* ns = scope;
+                    RefItem* ns = parentScope;
                     QString totPart;
                     for( int j = 0; j < parts.count() - 1; j++ )
                     {
-                        Item* next = NULL;
+                        RefItem* next = NULL;
                         QString partName = parts[ j ];
                         totPart += partName + QChar( L'/' );
-                        foreach( Item* nsChild, ns->children )
+                        foreach( RefItem* nsChild, ns->children )
                         {
-                            if( nsChild->text == partName ) // + Type
+                            if( nsChild->text() == partName ) // + Type
                             {
                                 next = nsChild;
                                 break;
@@ -298,78 +218,13 @@ void BranchesModel::rereadBranches()
                         }
                         if( !next )
                         {
-                            next = new NameSpace( ns, partName );
+                            next = new RefNameSpace( ns, partName );
                         }
                         ns = next;
                     }
 
                     Q_ASSERT( ns );
-                    branch = new Branch( ns, parts.last() );
-                }
-
-                if( branchName == curBranch )
-                {
-                    branch->cur = true;
-                }
-            }
-        }
-
-        sl = repo.branchNames( r, false, true );
-        if( sl.count() )
-        {
-            QHash< QString, Remote* > remotes;
-
-            for( int i = 0; i < sl.count(); i++ )
-            {
-                QString branchName = sl[ i ];
-                QStringList parts = branchName.split( QChar( L'/' ) );
-
-                QString remoteName = parts.takeFirst();
-                branchName = parts.join( QString( L'/' ) );
-
-                Remote* scope = remotes.value( remoteName, NULL );
-                if( !scope )
-                {
-                    scope = new Remote( mRoot, remoteName );
-                    remotes[ remoteName ] = scope;
-                }
-
-                if( parts.count() == 1 )
-                {
-                    if( branchName != QLatin1String( "HEAD" ) )
-                    {
-                        new Branch( scope, branchName );
-                    }
-                }
-                else
-                {
-                    Item* ns = scope;
-                    QString totPart;
-                    for( int j = 0; j < parts.count() - 1; j++ )
-                    {
-                        Item* next = NULL;
-                        QString partName = parts[ j ];
-                        totPart += partName + QChar( L'/' );
-                        foreach( Item* nsChild, ns->children )
-                        {
-                            if( nsChild->text == partName ) // + Type
-                            {
-                                next = nsChild;
-                                break;
-                            }
-                        }
-                        if( !next )
-                        {
-                            next = new NameSpace( ns, partName );
-                        }
-                        ns = next;
-                    }
-
-                    Q_ASSERT( ns );
-                    if( parts.last() != QLatin1String( "HEAD" ) )
-                    {
-                        new Branch( ns, parts.last() );
-                    }
+                    branch = new RefBranch( ns, parts.last(), currentRef );
                 }
             }
         }

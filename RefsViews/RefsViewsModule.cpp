@@ -17,49 +17,28 @@
 #include <QtPlugin>
 
 #include "RefsViewsModule.h"
-#include "TagsView.h"
-#include "RefsView.h"
+
 #include "Branches/BranchesView.hpp"
 
 RefsViewsModule::RefsViewsModule()
 {
 }
 
-Heaven::View* RefsViewsModule::createBranchesView()
-{
-    return new BranchesView();
-}
-
-Heaven::View* RefsViewsModule::createTagsView()
-{
-    return new TagsView();
-}
-
 Heaven::View* RefsViewsModule::createRefsView()
 {
-    return new RefsView();
+    return new BranchesView();
 }
 
 void RefsViewsModule::initialize()
 {
     registerView( "Branches",
-                  tr( "Branches" ),
-                  &RefsViewsModule::createBranchesView );
-
-    registerView( "Refs",
-                  tr( "Refs" ),
+                  tr( "References" ),
                   &RefsViewsModule::createRefsView );
-
-    registerView( "Tags",
-                  tr( "Tags" ),
-                  &RefsViewsModule::createTagsView );
 }
 
 void RefsViewsModule::deinitialize()
 {
     unregisterView( "Branches" );
-    unregisterView( "Refs" );
-    unregisterView( "Tags" );
 }
 
 #if QT_VERSION < 0x050000

@@ -16,6 +16,24 @@
 
 Ui BranchesViewActions {
 
+    Action CheckoutRef {
+        Text            "&Checkout";
+        StatusToolTip   "Checkout this reference.";
+        ConnectTo       onCheckoutRef();
+    };
+
+    Action RemoveRef {
+        Text            "&Remove";
+        StatusToolTip   "Remove this reference.";
+        ConnectTo       onRemoveRef();
+    };
+
+    Action RenameRef {
+        Text            "&Rename";
+        StatusToolTip   "Rename this reference.";
+        ConnectTo       onRenameRef();
+    };
+
     ToolBar BranchesTB {
 
         Action          ShowLocal {
@@ -32,6 +50,13 @@ Ui BranchesViewActions {
             ConnectTo   rereadBranches();
         };
 
+    };
+
+    Menu CtxMenuRefsView {
+        Action      CheckoutRef;
+        Action      RenameRef;
+        Separator;
+        Action      RemoveRef;
     };
 
 };

@@ -28,6 +28,8 @@
 #include "libHeaven/Widgets/MiniSplitter.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 
 #include "HistoryView.h"
 #include "HistoryEntry.h"
@@ -68,34 +70,33 @@ HistoryView::HistoryView()
 
     initSplitters();
 
-    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-             this, SLOT(repositoryChanged(Git::Repository)) );
-
-    Git::Repository repo = MacGitver::self().repository();
-    if( repo.isValid() )
-    {
-        repositoryChanged( repo );
-    }
+    mRepoInfo = NULL;
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
+             this, SLOT(repoActivated(RepositoryInfo*)));
 }
 
-void HistoryView::repositoryChanged( Git::Repository repo )
+void HistoryView::repoActivated(RepositoryInfo* repoInfo)
 {
-    mRepo = repo;
+    if (mRepoInfo != repoInfo) {
+        mRepoInfo = repoInfo;
 
-    if( mModel )
-    {
-        mList->setModel( NULL );
-        mModel->deleteLater();
-    }
+        if (mRepoInfo) {
+            Git::Repository repo = mRepoInfo->gitRepo();
 
-    mDetails->setRepository( repo );
-    mDiff->setRepository( repo );
+            if (mModel) {
+                mList->setModel(NULL);
+                mModel->deleteLater();
+            }
 
-    if( mRepo.isValid() )
-    {
-        mModel = new HistoryModel( mRepo, this );
-        mModel->buildHistory();
-        mList->setModel( mModel );
+            mDetails->setRepository(repo);
+            mDiff->setRepository(repo);
+
+            if (repo.isValid()) {
+                mModel = new HistoryModel(repo, this);
+                mModel->buildHistory();
+                mList->setModel(mModel);
+            }
+        }
     }
 }
 

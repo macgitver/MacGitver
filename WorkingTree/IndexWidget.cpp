@@ -33,6 +33,8 @@
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/MacGitver/FSWatcher.h"
 #include "libMacGitverCore/MacGitver/GitPatchConsumer.hpp"
+#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 
 #include "IndexTreeItemView.h"
 #include "WorkingTreeItemView.h"
@@ -75,17 +77,11 @@ IndexWidget::IndexWidget()
 
     setupFilters();
 
-    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-             this, SLOT(repositoryChanged(Git::Repository)) );
-
 //  connect( MacGitver::self().watcher(), SIGNAL(workingTreeChanged()),
 //           this, SLOT(workingTreeChanged()) );
 
-    Git::Repository repo = MacGitver::self().repository();
-    if( repo.isValid() )
-    {
-        repositoryChanged( repo );
-    }
+    connect(&MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
+            this, SLOT(repositoryActivated(RepositoryInfo*)));
 }
 
 void IndexWidget::updateWtFilterView(const WorkingTreeFilterModel * const wtFilter)
@@ -125,25 +121,31 @@ void IndexWidget::setupFilters()
     updateWtFilterView( wtFilter );
 }
 
-void IndexWidget::repositoryChanged( Git::Repository repo )
+void IndexWidget::repositoryActivated( RepositoryInfo* repo )
 {
     mRepo = repo;
 
-    if( mRepo.isValid() )
-    {
-        updateDiff();
-        mStatusModel->setRepository( repo );
+    if (mRepo) {
+        mStatusModel->setRepository(mRepo->gitRepo());
     }
+    else {
+        mStatusModel->setRepository(Git::Repository());
+    }
+
+    updateDiff();
 }
 
 void IndexWidget::updateDiff()
 {
-    Git::Result r;
-    Git::DiffList dl = mRepo.diffIndexToWorkingDir( r );
     GitPatchConsumer p;
-    dl.consumePatch( r, &p );
 
-    mDiffView->setPatch( p.patch() );
+    if (mRepo) {
+        Git::Result r;
+        Git::DiffList dl = mRepo->gitRepo().diffIndexToWorkingDir(r);
+        dl.consumePatch(r, &p);
+    }
+
+    mDiffView->setPatch(p.patch());
 }
 
 void IndexWidget::setWtFilter(bool enabled, Git::Status flag)

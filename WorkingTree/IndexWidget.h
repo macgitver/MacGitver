@@ -40,6 +40,7 @@ class IndexTreeItemView;
 
 class QPlainTextEdit;
 
+class RepositoryInfo;
 
 class IndexWidget : public Heaven::View, private WorkingTreeActions
 {
@@ -50,7 +51,7 @@ public:
     void setupFilters();
 
 public slots:
-    void repositoryChanged( Git::Repository repo );
+    void repositoryActivated( RepositoryInfo* repo );
 
 private slots:
     void onShowAll();
@@ -78,7 +79,7 @@ private:
 
     WorkingTreeModel*       mStatusModel;
 
-    Git::Repository         mRepo;
+    RepositoryInfo*         mRepo;
     bool                    mFilterRecursion;
 };
 

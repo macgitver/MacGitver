@@ -47,6 +47,8 @@ public:
     void internalActivate( RepositoryInfo* repository );
 
 signals:
+    void firstRepositoryOpened();
+    void lastRepositoryClosed();
     void repositoryOpened( RepositoryInfo* repo );
     void repositoryClosed( RepositoryInfo* repo );
     void repositoryActivated( RepositoryInfo* repo);

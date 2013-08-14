@@ -27,6 +27,8 @@
 
 class MgvPrimaryWindowPrivate;
 
+class RepositoryInfo;
+
 class MgvPrimaryWindow : public Heaven::PrimaryWindow, private MgvPrimaryWindowActions
 {
     Q_OBJECT
@@ -36,9 +38,6 @@ public:
 
 private:
     void setupUi();
-
-public slots:
-    void repositoryChanged( const Git::Repository& repo );
 
 private slots:
     void onQuit();
@@ -54,6 +53,8 @@ public:
 private:
     void savePosition();
     void moveToCenter();
+
+private slots:
     void activateModeForRepo();
 
 protected:

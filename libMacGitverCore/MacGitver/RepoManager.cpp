@@ -123,6 +123,10 @@ bool RepoManager::open( const Git::Repository& repo )
 
         // we need to scan for submodules explicitly, since we didn't call load() on the RepoInfo
         info->scanSubmodules();
+
+        if (mRepos.count() == 1) {
+            emit firstRepositoryOpened();
+        }
     }
 
     activate( info );
@@ -173,14 +177,7 @@ void RepoManager::activate( RepositoryInfo* repository )
 
     if( repository )
     {
-        // For compatibility
-        MacGitver::self().setRepository( repository->gitRepo() );
-
         repository->setActive( true );
-    }
-    else
-    {
-        MacGitver::self().setRepository( Git::Repository() );
     }
 }
 

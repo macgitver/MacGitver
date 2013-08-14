@@ -36,6 +36,8 @@
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
 #include "libMacGitverCore/App/MgvPrimaryWindowPrivate.hpp"
 #include "libMacGitverCore/MacGitver/Modules.h"
+#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
 #include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
@@ -45,7 +47,6 @@
 
 MgvPrimaryWindowPrivate::MgvPrimaryWindowPrivate()
     : currentLevel()
-    , repo()
 {
 }
 
@@ -55,8 +56,11 @@ MgvPrimaryWindow::MgvPrimaryWindow()
     d = new MgvPrimaryWindowPrivate;
     setupUi();
 
-    connect( &MacGitver::self(), SIGNAL(repositoryChanged(Git::Repository)),
-             SLOT(repositoryChanged(Git::Repository)) );
+    connect(&MacGitver::repoMan(), SIGNAL(firstRepositoryOpened()),
+            this, SLOT(activateModeForRepo()));
+
+    connect(&MacGitver::repoMan(), SIGNAL(lastRepositoryClosed()),
+            this, SLOT(activateModeForRepo()));
 
     QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
 
@@ -163,7 +167,8 @@ void MgvPrimaryWindow::activateLevel( UserLevelDefinition::Ptr uld )
 
 void MgvPrimaryWindow::activateModeForRepo()
 {
-    QString preset = QLatin1String( d->repo.isValid() ? "Normal" : "Welcome" );
+    QString preset = QLatin1String( (MacGitver::repoMan().repositories().count() > 0)
+                                    ? "Normal" : "Welcome" );
 
     QString configPath = d->currentLevel->id() % QChar( L'/' ) % preset;
     QString modeName = Config::self().get( configPath, d->currentLevel->preset( preset ) ).toString();
@@ -175,12 +180,6 @@ void MgvPrimaryWindow::activateMode( const QString& modeName )
 {
     qDebug( "Going to %s mode", qPrintable( modeName ) );
     Heaven::app()->setCurrentMode( Heaven::app()->findMode( modeName ) );
-}
-
-void MgvPrimaryWindow::repositoryChanged( const Git::Repository& repo )
-{
-    d->repo = repo;
-    activateModeForRepo();
 }
 
 void MgvPrimaryWindow::onHelpAbout()

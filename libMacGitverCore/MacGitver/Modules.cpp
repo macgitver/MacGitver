@@ -29,7 +29,6 @@ Modules::~Modules()
 {
     foreach( Module* module, mModules )
     {
-        module->repositoryChanged( Git::Repository() );
         delete module;
     }
 }
@@ -101,14 +100,6 @@ void Modules::setupInternals()
         {
             addModule( mod );
         }
-    }
-}
-
-void Modules::repositoryChanged( Git::Repository newRepository )
-{
-    foreach( Module* module, mModules )
-    {
-        module->repositoryChanged( newRepository );
     }
 }
 

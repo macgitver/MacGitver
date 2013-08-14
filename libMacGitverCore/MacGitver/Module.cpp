@@ -22,11 +22,6 @@ Module::Module()
 {
 }
 
-void Module::repositoryChanged( Git::Repository newRepository )
-{
-    Q_UNUSED( newRepository );
-}
-
 void Module::registerView( const Heaven::ViewIdentifier& identifier, const QString& displayName,
                            MgvViewCreator creator )
 {

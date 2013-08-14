@@ -106,22 +106,7 @@ MacGitver::MacGitver()
 
 MacGitver::~MacGitver()
 {
-    setRepository( Git::Repository() );
     delete d;
-}
-
-Git::Repository MacGitver::repository() const
-{
-    return d->mRepository;
-}
-
-void MacGitver::setRepository( const Git::Repository& repo )
-{
-    d->mRepository = repo;
-
-    MacGitverPrivate::sModules->repositoryChanged( repo );
-
-    emit repositoryChanged( repo );
 }
 
 void MacGitver::registerView( const Heaven::ViewIdentifier& identifier, const QString &displayName,

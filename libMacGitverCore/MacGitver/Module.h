@@ -42,12 +42,6 @@ public:
 
 public:
     /**
-     * @brief Informs a module about the currently referenced repository has changed.
-     * @param newRepository
-     */
-    virtual void repositoryChanged( Git::Repository newRepository );
-
-    /**
      * @brief Setup a configuration dialog for a module, which is used in the settings.
      * @param dialog
      */

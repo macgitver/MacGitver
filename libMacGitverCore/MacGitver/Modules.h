@@ -38,9 +38,6 @@ public:
     void initialize();
     void setupConfigPages( ConfigDialog* dlg );
 
-public:
-    void repositoryChanged( Git::Repository newRepository );
-
 private:
     void setupInternals();
     void search( const QDir& binDir );

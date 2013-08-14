@@ -46,9 +46,6 @@ public:
     static int exec();
 
 public:
-    void setRepository( const Git::Repository &repo );  /* deprecated */
-    Git::Repository repository() const; /* deprecated */
-
     void integrateView( Heaven::View* view, Heaven::Positions place );
 
     void registerView (const Heaven::ViewIdentifier& identifier, const QString& displayName,

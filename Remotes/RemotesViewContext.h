@@ -17,8 +17,6 @@
 #ifndef MGV_REMOTES_VIEW_CONTEXT_H
 #define MGV_REMOTES_VIEW_CONTEXT_H
 
-#include "libGitWrap/Repository.hpp"
-
 #include "libHeaven/CentralUI/Contexts/ViewContext.hpp"
 
 class QAbstractItemModel;
@@ -31,14 +29,10 @@ class RemotesViewContext : public Heaven::ViewContext
 public:
     RemotesViewContext();
 
-private slots:
-    void repositoryChanged( Git::Repository repo );
-
 public:
     QAbstractItemModel* model();
 
 private:
-    Git::Repository     mRepo;
     QStandardItemModel* mModel;
 };
 

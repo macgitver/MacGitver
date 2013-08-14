@@ -28,17 +28,6 @@ RemotesViewContext::RemotesViewContext()
              this, SLOT(repositoryChanged(Git::Repository)) );
 
     mModel = new QStandardItemModel( 0, 1, this );
-
-    Git::Repository repo = MacGitver::self().repository();
-    if( repo.isValid() )
-    {
-        repositoryChanged( repo );
-    }
-}
-
-void RemotesViewContext::repositoryChanged( Git::Repository repo )
-{
-    mRepo = repo;
 }
 
 QAbstractItemModel* RemotesViewContext::model()

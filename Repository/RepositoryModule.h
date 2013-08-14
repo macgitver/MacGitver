@@ -38,8 +38,6 @@ public:
     ~RepositoryModule();
 
 public:
-    void repositoryChanged( Git::Repository newRepository );
-
     void setupConfigPages( ConfigDialog* dlg );
 
     void initialize();
@@ -53,6 +51,7 @@ private slots:
     void onRecentRepositoryOpen( const QVariant& path );
 
     void onCoreRepoOpen( RepositoryInfo* repo );
+    void onCoreRepoActivated(RepositoryInfo* repo);
 
 private:
     void updateMostRecentlyUsedMenu();

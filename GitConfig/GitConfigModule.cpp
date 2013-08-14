@@ -18,17 +18,14 @@
 #include <QFileDialog>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 
 #include "GitConfigModule.h"
 #include "GitConfigDialog.h"
 
 GitConfigModule::GitConfigModule()
 {
-}
-
-void GitConfigModule::repositoryChanged( Git::Repository newRepository )
-{
-    mRepo = newRepository;
 }
 
 void GitConfigModule::initialize()
@@ -43,7 +40,12 @@ void GitConfigModule::deinitialize()
 
 void GitConfigModule::onToolsGitConfig()
 {
-    GitConfigDialog( mRepo ).exec();
+    Git::Repository repo;
+    RepositoryInfo* info = MacGitver::repoMan().activeRepository();
+    if (info) {
+        repo = info->gitRepo();
+    }
+    GitConfigDialog( repo ).exec();
 }
 
 #if QT_VERSION < 0x050000

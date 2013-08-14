@@ -31,16 +31,11 @@ public:
     GitConfigModule();
 
 public:
-    void repositoryChanged( Git::Repository newRepository );
-
     void initialize();
     void deinitialize();
 
 private slots:
     void onToolsGitConfig();
-
-private:
-    Git::Repository mRepo;
 };
 
 #endif

@@ -44,13 +44,14 @@ public:
 
     RepositoryInfo* repoByPath( const QString& basePath, bool searchSubmodules );
 
+    void internalClosedRepo(RepositoryInfo* repository);
     void internalActivate( RepositoryInfo* repository );
 
 signals:
     void firstRepositoryOpened();
     void lastRepositoryClosed();
     void repositoryOpened( RepositoryInfo* repo );
-    void repositoryClosed( RepositoryInfo* repo );
+    void repositoryClosed();
     void repositoryActivated( RepositoryInfo* repo);
 
 private slots:

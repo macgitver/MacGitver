@@ -181,6 +181,25 @@ void RepoManager::activate( RepositoryInfo* repository )
     }
 }
 
+void RepoManager::internalClosedRepo(RepositoryInfo* repository)
+{
+    // This pointer is actually useless. THIS IS THE LAST call issued by the destructor of the
+    // RepositoryInfo itself. We should probably NOT give this pointer away.
+
+    // However, we need it to find the closed repository in our list. Calling here should have
+    // probably happened before the repository is actually destructing itself.
+
+    int i = mRepos.indexOf(repository);
+    if (i != -1) {
+        mRepos.removeAt(i);
+        emit repositoryClosed();
+
+        if (mRepos.count() == 0) {
+            emit lastRepositoryClosed();
+        }
+    }
+}
+
 void RepoManager::internalActivate( RepositoryInfo* repository )
 {
     if( repository == mActiveRepo )

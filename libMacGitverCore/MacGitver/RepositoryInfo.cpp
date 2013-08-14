@@ -69,6 +69,8 @@ RepositoryInfo::~RepositoryInfo()
     {
         mParent->removeChild( this );
     }
+
+    MacGitver::repoMan().internalClosedRepo(this);
 }
 
 Git::Repository RepositoryInfo::gitRepo()

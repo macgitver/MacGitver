@@ -193,11 +193,10 @@ void BranchesModel::rereadBranches()
                 else
                     parentScope = scopeOther;
 
-                RefBranch* branch = NULL;
                 QStringList parts = currentRef.shorthand().split( QChar( L'/' ) );
                 if ( parts.count() == 1 )
                 {
-                    branch = new RefBranch( parentScope, parts.last(), currentRef );
+                    new RefBranch( parentScope, parts.last(), currentRef );
                 }
                 else
                 {
@@ -224,7 +223,7 @@ void BranchesModel::rereadBranches()
                     }
 
                     Q_ASSERT( ns );
-                    branch = new RefBranch( ns, parts.last(), currentRef );
+                    new RefBranch( ns, parts.last(), currentRef );
                 }
             }
         }

@@ -343,7 +343,8 @@ QString RepositoryInfo::branchDisplay() const
         {
             if( HEAD.name() != QLatin1String( "HEAD" ) )
             {
-                return trUtf8( "<b>%1</b>" ).arg( HEAD.name().mid( 11 ) );
+                return trUtf8( "<b style=\"background-color: #FFB54F;"
+                               "\">%1</b>" ).arg( HEAD.name().mid( 11 ) );
             }
             else
             {

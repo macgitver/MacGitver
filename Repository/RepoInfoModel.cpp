@@ -44,27 +44,31 @@ int RepoInfoModel::columnCount( const QModelIndex& parent ) const
 
 QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
 {
-    if( index.isValid() )
+    if( !index.isValid() ) return QVariant();
+
+    RepositoryInfo* info = index2Info( index );
+    if( info )
     {
-        RepositoryInfo* info = index2Info( index );
-        if( info )
+        if( role == Qt::DisplayRole )
         {
-            if( role == Qt::DisplayRole )
-            {
-                return info->displayAlias();
-            }
-            else if( role == IsActive )
-            {
-                return info->isActive();
-            }
-            else if( role == Qt::FontRole )
-            {
-                QFont f1, f2;
-                f2.setBold( true );
-                return info->isActive() ? f2 : f1;
-            }
+            return info->displayAlias();
+        }
+        else if( role == IsActive )
+        {
+            return info->isActive();
+        }
+        else if( role == Qt::FontRole )
+        {
+            QFont f1, f2;
+            f2.setBold( true );
+            return info->isActive() ? f2 : f1;
+        }
+        else if ( role == Qt::ToolTipRole )
+        {
+            return trUtf8( "Branch: %1" ).arg( info->branchDisplay() );
         }
     }
+
     return QVariant();
 }
 

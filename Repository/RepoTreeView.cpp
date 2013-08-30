@@ -87,8 +87,7 @@ void RepoTreeView::onCtxActivate()
             if ( prev != info )
             {
                 // update previous item
-                const QModelIndex prevIndex = mModel->info2Index( prev );
-                mRepos->dataChanged( prevIndex, prevIndex );
+                mModel->invalidate( prev );
             }
         }
     }

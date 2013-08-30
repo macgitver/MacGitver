@@ -32,8 +32,8 @@ public:
 
 public:
     void clear();
-    void setCommitList( const QList< Git::ObjectCommit >& list );
-    bool setCommitList( Git::Repository repo, const QList< Git::ObjectId >& list );
+    void setCommitList( const QVector< Git::ObjectCommit >& list );
+    bool setCommitList( Git::Repository repo, const QVector< Git::ObjectId >& list );
 
 public:
     Git::ObjectCommit indexToCommit( const QModelIndex& index ) const;
@@ -44,7 +44,7 @@ public:
     QVariant data( const QModelIndex& index, int role ) const;
 
 private:
-    QList< Git::ObjectCommit > mCommitList;
+    QVector< Git::ObjectCommit > mCommitList;
 };
 
 #endif

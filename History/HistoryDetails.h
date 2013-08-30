@@ -56,7 +56,7 @@ private:
 private:
     Git::ObjectId                   mCurrentSHA1;
     Git::Repository                 mRepo;
-    QList< HistoryHeaderDetails >   mViewDetailRows;
+    QVector< HistoryHeaderDetails > mViewDetailRows;
 };
 
 #endif

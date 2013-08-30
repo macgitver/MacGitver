@@ -17,7 +17,7 @@
 #ifndef HISTORY_MODEL_H
 #define HISTORY_MODEL_H
 
-#include <QList>
+#include <QVector>
 #include <QAbstractTableModel>
 
 #include "libGitWrap/Repository.hpp"
@@ -78,9 +78,9 @@ private slots:
     void afterAppend();
 
 private:
-    Git::Repository         mRepo;
-    Modes                   mMode;
-    QList< HistoryEntry* >  mEntries;
+    Git::Repository             mRepo;
+    Modes                       mMode;
+    QVector< HistoryEntry* >    mEntries;
 };
 
 #endif

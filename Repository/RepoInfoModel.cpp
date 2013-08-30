@@ -145,3 +145,11 @@ QModelIndex RepoInfoModel::info2Index( RepositoryInfo* info ) const
 
     return createIndex( row, 0, info );
 }
+
+void RepoInfoModel::invalidate( RepositoryInfo *info )
+{
+    if ( !info ) return;
+
+    QModelIndex index = info2Index( info );
+    emit dataChanged( index, index );
+}

@@ -44,6 +44,8 @@ public:
     RepositoryInfo* index2Info( const QModelIndex& index ) const;
     QModelIndex info2Index( RepositoryInfo* info ) const;
 
+    void invalidate( RepositoryInfo* info );
+
 private:
     RepoManager*        mRepoMan;
 };

@@ -54,6 +54,7 @@ signals:
     void repositoryClosed();
     void repositoryActivated( RepositoryInfo* repo );
     void repositoryDeactivated( RepositoryInfo* repo );
+    void hasActiveRepositoryChanged(bool hasActiveRepo);
 
 private slots:
     void onRepositoryOpenHelper();

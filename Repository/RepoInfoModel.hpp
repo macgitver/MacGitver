@@ -45,7 +45,7 @@ public:
     QModelIndex info2Index( RepositoryInfo* info ) const;
 
 public slots:
-    void invalidate( RepositoryInfo* info );
+    void invalidateRepository( RepositoryInfo* info );
 
 private:
     RepoManager*        mRepoMan;

@@ -24,9 +24,9 @@ RepoInfoModel::RepoInfoModel()
     mRepoMan = &MacGitver::repoMan();
 
     connect( mRepoMan, SIGNAL( repositoryDeactivated(RepositoryInfo*) )
-            , this, SLOT( invalidate(RepositoryInfo*) ) );
+            , this, SLOT( invalidateRepository(RepositoryInfo*) ) );
     connect( mRepoMan, SIGNAL( repositoryActivated(RepositoryInfo*) )
-             , this, SLOT( invalidate(RepositoryInfo*) ) );
+             , this, SLOT( invalidateRepository(RepositoryInfo*) ) );
 }
 
 int RepoInfoModel::rowCount( const QModelIndex& parent ) const
@@ -151,7 +151,7 @@ QModelIndex RepoInfoModel::info2Index( RepositoryInfo* info ) const
     return createIndex( row, 0, info );
 }
 
-void RepoInfoModel::invalidate( RepositoryInfo *info )
+void RepoInfoModel::invalidateRepository( RepositoryInfo *info )
 {
     if ( !info ) return;
 

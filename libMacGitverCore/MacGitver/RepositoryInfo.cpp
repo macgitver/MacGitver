@@ -280,7 +280,7 @@ void RepositoryInfo::scanSubmodules()
     }
 
     Git::Result r;
-    Git::SubmoduleList subs = mRepo.submodules( r );
+    Git::Submodule::List subs = mRepo.submodules( r );
     if( !r )
     {
         return;

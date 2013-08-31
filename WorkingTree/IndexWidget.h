@@ -51,7 +51,8 @@ public:
     void setupFilters();
 
 public slots:
-    void repositoryActivated( RepositoryInfo* repo );
+    void repositoryActivated(RepositoryInfo* repo);
+    void repositoryDeactivated(RepositoryInfo* repo);
 
 private slots:
     void onShowAll();

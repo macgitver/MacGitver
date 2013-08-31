@@ -78,24 +78,23 @@ HistoryView::HistoryView()
 void HistoryView::repoActivated(RepositoryInfo* repoInfo)
 {
     if (mRepoInfo != repoInfo) {
+
         mRepoInfo = repoInfo;
 
-        if (mRepoInfo) {
-            Git::Repository repo = mRepoInfo->gitRepo();
+        Git::Repository repo = mRepoInfo->gitRepo();
 
-            if (mModel) {
-                mList->setModel(NULL);
-                mModel->deleteLater();
-            }
+        if (mModel) {
+            mList->setModel(NULL);
+            mModel->deleteLater();
+        }
 
-            mDetails->setRepository(repo);
-            mDiff->setRepository(repo);
+        mDetails->setRepository(repo);
+        mDiff->setRepository(repo);
 
-            if (repo.isValid()) {
-                mModel = new HistoryModel(repo, this);
-                mModel->buildHistory();
-                mList->setModel(mModel);
-            }
+        if (repo.isValid()) {
+            mModel = new HistoryModel(repo, this);
+            mModel->buildHistory();
+            mList->setModel(mModel);
         }
     }
 }

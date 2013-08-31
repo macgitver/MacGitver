@@ -30,7 +30,8 @@ public:
     RepoStateWidget();
 
 private slots:
-    void repositoryActivated( RepositoryInfo* info );
+    void repositoryActivated(RepositoryInfo* info);
+    void repositoryDeactivated(RepositoryInfo* info);
 
 private:
     void setupUi();

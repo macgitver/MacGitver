@@ -207,13 +207,13 @@ void RepoManager::internalActivate( RepositoryInfo* repository )
         return;
     }
 
-    RepositoryInfo* prev = mActiveRepo;
+    if(mActiveRepo)
+        emit repositoryDeactivated(mActiveRepo);
+
     mActiveRepo = repository;
 
-    if ( prev )
-        emit repositoryDeactivated( prev );
-
-    emit repositoryActivated( mActiveRepo );
+    if(mActiveRepo)
+        emit repositoryActivated(mActiveRepo);
 }
 
 RepositoryInfo* RepoManager::activeRepository()

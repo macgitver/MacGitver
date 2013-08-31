@@ -82,13 +82,7 @@ void RepoTreeView::onCtxActivate()
         RepositoryInfo* info = qobject_cast< RepositoryInfo* >( action->activatedBy() );
         if( info )
         {
-            RepositoryInfo* prev = MacGitver::repoMan().activeRepository();
             MacGitver::repoMan().activate( info );
-            if ( prev != info )
-            {
-                // update previous item
-                mModel->invalidate( prev );
-            }
         }
     }
 }

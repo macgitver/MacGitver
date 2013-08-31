@@ -58,8 +58,8 @@ void RepositoryModule::initialize()
     connect(&MacGitver::repoMan(),  SIGNAL(repositoryOpened(RepositoryInfo*)),
             this,                   SLOT(onCoreRepoOpen(RepositoryInfo*)));
 
-    connect(&MacGitver::repoMan(),  SIGNAL(repositoryActivated(RepositoryInfo*)),
-            this,                   SLOT(onCoreRepoActivated(RepositoryInfo*)));
+    connect(&MacGitver::repoMan(),  SIGNAL(hasActiveRepositoryChanged(bool)),
+            actRepositoryClose,     SLOT(setEnabled(bool)));
 
     updateMostRecentlyUsedMenu();
 
@@ -111,12 +111,6 @@ void RepositoryModule::onCoreRepoOpen( RepositoryInfo* repo )
 
     configSet( "MRU", mMostRecentlyUsed );
     updateMostRecentlyUsedMenu();
-}
-
-void RepositoryModule::onCoreRepoActivated(RepositoryInfo* newRepository)
-{
-    bool isValid = newRepository != NULL;
-    actRepositoryClose->setEnabled( isValid );
 }
 
 void RepositoryModule::updateMostRecentlyUsedMenu()

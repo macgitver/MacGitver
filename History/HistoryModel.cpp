@@ -14,6 +14,8 @@
  *
  */
 
+#include <QDebug>
+
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
 #include "HistoryBuilder.h"

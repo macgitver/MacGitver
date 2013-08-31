@@ -37,7 +37,7 @@ void ShortCommitModel::clear()
     endResetModel();
 }
 
-void ShortCommitModel::setCommitList( const QList< Git::ObjectCommit >& list )
+void ShortCommitModel::setCommitList( const QVector< Git::ObjectCommit >& list )
 {
     beginResetModel();
 
@@ -46,9 +46,9 @@ void ShortCommitModel::setCommitList( const QList< Git::ObjectCommit >& list )
     endResetModel();
 }
 
-bool ShortCommitModel::setCommitList( Git::Repository repo, const QList< Git::ObjectId >& list )
+bool ShortCommitModel::setCommitList( Git::Repository repo, const QVector< Git::ObjectId >& list )
 {
-    QList< Git::ObjectCommit > commits;
+    QVector< Git::ObjectCommit > commits;
 
     Git::Result r;
 

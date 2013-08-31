@@ -160,7 +160,7 @@ QVariant RefBranch::data(int col, int role) const
             g.setColorAt( 1.0, QColor(255, 255, 255, 0) );
             return QBrush(g);
         }
-        else if ( mRef == mRef.repository(r).HEAD(r) )
+        else if ( mRef.compare( mRef.repository(r).HEAD(r) ) == 0 )
         {
             QLinearGradient g( 0, 0, 0, 30 );
             g.setColorAt( 0.0, QColor(255, 255, 255, 0) );

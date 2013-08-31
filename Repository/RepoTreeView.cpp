@@ -51,13 +51,6 @@ RepoTreeView::RepoTreeView()
 
     connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
              this, SLOT(onRepoActivated(RepositoryInfo*)) );
-
-
-    RepositoryInfo* curRepo = MacGitver::repoMan().activeRepository();
-    if( curRepo )
-    {
-        onRepoActivated( curRepo );
-    }
 }
 
 void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPos )

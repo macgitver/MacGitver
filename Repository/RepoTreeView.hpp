@@ -44,8 +44,9 @@ private slots:  // from actions
 private slots:  // from mRepos
     void contextMenu( const QModelIndex& index, const QPoint& globalPos );
 
-private slots:  // from MacGitver::repoMan()
-    void onRepoActivated( RepositoryInfo* repo );
+private slots:  // for MacGitver::repoMan()
+    void onRepoActivated(RepositoryInfo* repo);
+    void onRepoDeactivated(RepositoryInfo* repo);
 
 private:
     Heaven::ViewContext* createContextObject() const;

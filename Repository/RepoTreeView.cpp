@@ -51,6 +51,8 @@ RepoTreeView::RepoTreeView()
 
     connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
              this, SLOT(onRepoActivated(RepositoryInfo*)) );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(RepositoryInfo*)),
+             this, SLOT(onRepoDeactivated(RepositoryInfo*)) );
 }
 
 void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
@@ -85,28 +87,29 @@ void RepoTreeView::onCtxClose()
 
 }
 
-void RepoTreeView::onRepoActivated( RepositoryInfo* repo )
+void RepoTreeView::onRepoActivated(RepositoryInfo* repo)
 {
-    if( repo )
-    {
-        Heaven::ContextKeys keys = mkKeys();
-        keys.set( "RepoName", repo->path() );
+    Heaven::ContextKeys keys = mkKeys();
+    keys.set("RepoName", repo->path());
 
-        bool isNewContext = false;
-        Heaven::ViewContext* ctx = contextFor( keys, &isNewContext );
+    bool isNewContext = false;
+    Heaven::ViewContext* ctx = contextFor(keys, &isNewContext);
 
-        if( isNewContext )
-        {
-            RepositoryContext* ctx2 = qobject_cast< RepositoryContext* >( ctx );
-            Q_ASSERT( ctx2 );
+    if (isNewContext) {
+        RepositoryContext* ctx2 = qobject_cast< RepositoryContext* >(ctx);
+        Q_ASSERT(ctx2);
 
-            ctx2->setRepository( repo );
-        }
-
-        setCurrentContext( ctx );
+        ctx2->setRepository(repo);
     }
-    else
-    {
+
+    setCurrentContext(ctx);
+}
+
+void RepoTreeView::onRepoDeactivated(RepositoryInfo* repo)
+{
+    RepositoryContext* ctx = qobject_cast< RepositoryContext* >(currentContext());
+
+    if (ctx && ctx->repository() == repo) {
         setCurrentContext( NULL );
     }
 }

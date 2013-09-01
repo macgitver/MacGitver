@@ -22,6 +22,11 @@
 RepoInfoModel::RepoInfoModel()
 {
     mRepoMan = &MacGitver::repoMan();
+
+    connect( mRepoMan, SIGNAL(repositoryDeactivated(RepositoryInfo*))
+             , this, SLOT(invalidateRepository(RepositoryInfo*)) );
+    connect( mRepoMan, SIGNAL(repositoryActivated(RepositoryInfo*))
+             , this, SLOT(invalidateRepository(RepositoryInfo*)) );
 }
 
 int RepoInfoModel::rowCount( const QModelIndex& parent ) const
@@ -44,27 +49,31 @@ int RepoInfoModel::columnCount( const QModelIndex& parent ) const
 
 QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
 {
-    if( index.isValid() )
+    if( !index.isValid() ) return QVariant();
+
+    RepositoryInfo* info = index2Info( index );
+    if( info )
     {
-        RepositoryInfo* info = index2Info( index );
-        if( info )
+        if( role == Qt::DisplayRole )
         {
-            if( role == Qt::DisplayRole )
-            {
-                return info->displayAlias();
-            }
-            else if( role == IsActive )
-            {
-                return info->isActive();
-            }
-            else if( role == Qt::FontRole )
-            {
-                QFont f1, f2;
-                f2.setBold( true );
-                return info->isActive() ? f2 : f1;
-            }
+            return info->displayAlias();
+        }
+        else if( role == IsActive )
+        {
+            return info->isActive();
+        }
+        else if( role == Qt::FontRole )
+        {
+            QFont f1, f2;
+            f2.setBold( true );
+            return info->isActive() ? f2 : f1;
+        }
+        else if ( role == Qt::ToolTipRole )
+        {
+            return trUtf8( "Branch: %1" ).arg( info->branchDisplay() );
         }
     }
+
     return QVariant();
 }
 
@@ -140,4 +149,12 @@ QModelIndex RepoInfoModel::info2Index( RepositoryInfo* info ) const
     }
 
     return createIndex( row, 0, info );
+}
+
+void RepoInfoModel::invalidateRepository( RepositoryInfo *info )
+{
+    if ( !info ) return;
+
+    QModelIndex index = info2Index( info );
+    emit dataChanged( index, index );
 }

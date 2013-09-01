@@ -23,10 +23,10 @@ RepoInfoModel::RepoInfoModel()
 {
     mRepoMan = &MacGitver::repoMan();
 
-    connect( mRepoMan, SIGNAL( repositoryDeactivated(RepositoryInfo*) )
-            , this, SLOT( invalidateRepository(RepositoryInfo*) ) );
-    connect( mRepoMan, SIGNAL( repositoryActivated(RepositoryInfo*) )
-             , this, SLOT( invalidateRepository(RepositoryInfo*) ) );
+    connect( mRepoMan, SIGNAL(repositoryDeactivated(RepositoryInfo*))
+             , this, SLOT(invalidateRepository(RepositoryInfo*)) );
+    connect( mRepoMan, SIGNAL(repositoryActivated(RepositoryInfo*))
+             , this, SLOT(invalidateRepository(RepositoryInfo*)) );
 }
 
 int RepoInfoModel::rowCount( const QModelIndex& parent ) const

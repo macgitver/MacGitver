@@ -200,15 +200,36 @@ void RepoManager::internalClosedRepo(RepositoryInfo* repository)
     }
 }
 
+/**
+ * @internal
+ * @brief       internally activate a RepositoryInfo
+ *
+ * @param[in]   repository      The repository info to activate.
+ *
+ * Nothing is done if @a repository is already the active repository.
+ *
+ * This method is called internally from all paths that need to change the active repository - these
+ * are more than just the public activation methods.
+ *
+ */
 void RepoManager::internalActivate( RepositoryInfo* repository )
 {
-    if( repository == mActiveRepo )
+    if( repository != mActiveRepo )
     {
-        return;
-    }
+        RepositoryInfo* old = mActiveRepo;
 
-    mActiveRepo = repository;
-    emit repositoryActivated( repository );
+        if(mActiveRepo)
+            emit repositoryDeactivated(mActiveRepo);
+
+        mActiveRepo = repository;
+
+        if(mActiveRepo)
+            emit repositoryActivated(mActiveRepo);
+
+        if ((mActiveRepo != NULL) != (old != NULL)) {
+            emit hasActiveRepositoryChanged(mActiveRepo != NULL);
+        }
+    }
 }
 
 RepositoryInfo* RepoManager::activeRepository()

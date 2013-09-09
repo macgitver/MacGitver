@@ -15,6 +15,11 @@
  */
 
 #include <QDebug>
+#include <QElapsedTimer>
+
+#include "libMacGitverCore/App/MacGitver.hpp"
+
+#include "libGitWrap/Reference.hpp"
 
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
@@ -175,6 +180,7 @@ void HistoryModel::beforeClear()
 
 void HistoryModel::afterClear()
 {
+    scanInlineReferences();
     endResetModel();
 }
 
@@ -227,4 +233,145 @@ void HistoryModel::buildHistory()
     HistoryBuilder b( mRepo, this );
     b.addHEAD();
     b.start();
+}
+
+void HistoryModel::scanInlineReferences()
+{
+    qint64				dur;
+    double				avg;
+    QElapsedTimer		timer;
+    Git::ResolvedRefs	refs;
+    Git::Result			r;
+    Git::Reference		refHEAD;
+    QHash< Git::ObjectId, HistoryInlineRefs > refsById;
+
+    if( !mRepo.isValid() )
+    {
+        return;
+    }
+
+    refs = mRepo.allResolvedRefs( r );
+    refHEAD = mRepo.HEAD( r );
+    if( !r )
+    {
+        MacGitver::log( ltError, r.errorText() );
+        return;
+    }
+
+    timer.start();
+
+    foreach( QString ref, refs.keys() )
+    {
+        HistoryInlineRef inlRef;
+
+        if( ref.startsWith( QLatin1String( "refs/heads/" ) ) )
+        {
+            if( ref.endsWith( QLatin1String( "HEAD" ) ) )
+            {
+                // Skip "HEAD"
+                continue;
+            }
+            inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
+            inlRef.mIsBranch = true;
+            inlRef.mIsRemote = false;
+            inlRef.mIsTag = false;
+            inlRef.mIsStash = false;
+            inlRef.mIsCurrent = inlRef.mRefName == refHEAD.shorthand();
+        }
+        else if( ref.startsWith( QLatin1String( "refs/tags/" ) ) )
+        {
+            inlRef.mRefName = ref.mid( strlen( "refs/tags/" ) );
+            inlRef.mIsBranch = false;
+            inlRef.mIsRemote = false;
+            inlRef.mIsTag = true;
+            inlRef.mIsCurrent = false;
+            inlRef.mIsStash = false;
+        }
+        else if( ref.startsWith( QLatin1String( "refs/remotes/" ) ) )
+        {
+            if( ref.endsWith( QLatin1String( "HEAD" ) ) )
+            {
+                // Skip "HEAD"
+                continue;
+            }
+            inlRef.mRefName = ref.mid( strlen( "refs/remotes/" ) );
+            inlRef.mIsBranch = true;
+            inlRef.mIsRemote = true;
+            inlRef.mIsTag = false;
+            inlRef.mIsCurrent = false;
+            inlRef.mIsStash = false;
+        }
+        else if( ref == QLatin1String( "refs/stash" ) )
+        {
+            inlRef.mRefName = trUtf8( "<recent stash>" );
+            inlRef.mIsBranch = false;
+            inlRef.mIsCurrent = true;
+            inlRef.mIsRemote = false;
+            inlRef.mIsTag = false;
+            inlRef.mIsStash = true;
+        }
+
+        if( !refsById.contains( refs[ ref ] ) )
+        {
+            refsById.insert( refs[ ref ], HistoryInlineRefs() );
+        }
+
+        refsById[ refs[ ref ] ].append( inlRef );
+    }
+
+    for( int i = 0; i < mEntries.count(); i++ )
+    {
+        HistoryEntry* e = mEntries[i];
+        Q_ASSERT( e );
+
+        HistoryInlineRefs newRefs = refsById.value( e->id() );
+        HistoryInlineRefs oldRefs = e->refs();
+
+        if( !newRefs.count() )
+        {
+            if( !oldRefs.count() )
+            {
+                continue;
+            }
+            e->setInlineRefs( newRefs );
+            updateRow( i );
+        }
+        else
+        {
+            if( oldRefs.count() != newRefs.count() )
+            {
+                e->setInlineRefs( newRefs );
+                updateRow( i );
+                continue;
+            }
+
+            int diffs = newRefs.count();
+            for( int j = 0; j < newRefs.count(); j++ )
+            {
+                QString newRef = newRefs.at( j ).mRefName;
+                for( int k = 0; k < oldRefs.count(); k++ )
+                {
+                    if( oldRefs.at( k ).mRefName == newRef )
+                    {
+                        diffs--;
+                        break;
+                    }
+                }
+            }
+
+            if( diffs )
+            {
+                e->setInlineRefs( newRefs );
+                updateRow( i );
+            }
+        }
+    }
+
+    dur = timer.nsecsElapsed();
+    avg = double( dur ) / double( refs.count() );
+    MacGitver::log( ltInformation,
+                    trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
+                        .arg( refs.count() )
+                        .arg( dur )
+                        .arg( avg, 10, 'f', 2 ) );
 }

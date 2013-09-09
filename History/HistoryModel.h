@@ -65,8 +65,11 @@ public:
 
 public:
     void append( HistoryEntry* entry );
-    void updateRow( int row );
     void buildHistory();
+
+private:
+    void updateRow( int row );
+    void scanInlineReferences();
 
 public slots:
     void ensurePopulated( int row );

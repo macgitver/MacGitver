@@ -30,7 +30,7 @@ public:
 
     enum ExtraRoles
     {
-        IsActive
+        IsActive = Qt::UserRole
     };
 
 public:

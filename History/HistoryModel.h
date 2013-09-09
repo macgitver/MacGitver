@@ -47,6 +47,14 @@ public:
         modeFancy
     };
 
+    enum InlineRefDisplay {
+        DisplayLocals       = 1 << 0,
+        DisplayRemotes      = 1 << 1,
+        DisplayTags         = 1 << 2
+    };
+
+    typedef QFlags< InlineRefDisplay > InlineRefDisplays;
+
 public:
     HistoryModel( const Git::Repository& repo, QObject* parent = NULL );
     ~HistoryModel();
@@ -64,6 +72,7 @@ public:
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
 public:
+    void changeDisplays(InlineRefDisplays displays, bool activate);
     void append( HistoryEntry* entry );
     void buildHistory();
 
@@ -81,6 +90,7 @@ private slots:
     void afterAppend();
 
 private:
+    InlineRefDisplays           mDisplays;
     Git::Repository             mRepo;
     Modes                       mMode;
     QVector< HistoryEntry* >    mEntries;

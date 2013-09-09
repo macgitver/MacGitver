@@ -93,6 +93,16 @@ void HistoryView::repoActivated(RepositoryInfo* repoInfo)
 
         if (repo.isValid()) {
             mModel = new HistoryModel(repo, this);
+
+            mModel->changeDisplays(HistoryModel::DisplayLocals,
+                                   actHistoryViewShowLocalBranches->isChecked());
+
+            mModel->changeDisplays(HistoryModel::DisplayRemotes,
+                                   actHistoryViewShowRemoteBranches->isChecked());
+
+            mModel->changeDisplays(HistoryModel::DisplayTags,
+                                   actHistoryViewShowTags->isChecked());
+
             mModel->buildHistory();
             mList->setModel(mModel);
         }
@@ -176,4 +186,25 @@ void HistoryView::initSplitters()
     mDiff->show();
     mList->show();
     mDetails->show();
+}
+
+void HistoryView::onChangeShowLocal(bool checked)
+{
+    if (mModel) {
+        mModel->changeDisplays(HistoryModel::DisplayLocals, checked);
+    }
+}
+
+void HistoryView::onChangeShowRemote(bool checked)
+{
+    if (mModel) {
+        mModel->changeDisplays(HistoryModel::DisplayRemotes, checked);
+    }
+}
+
+void HistoryView::onChangeShowTags(bool checked)
+{
+    if (mModel) {
+        mModel->changeDisplays(HistoryModel::DisplayTags, checked);
+    }
 }

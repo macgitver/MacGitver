@@ -31,6 +31,8 @@ HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
     mRepo = repo;
     mMode = modeSimple;
 
+    mDisplays = 0;
+
     Q_ASSERT( mRepo.isValid() );
 }
 
@@ -264,7 +266,7 @@ void HistoryModel::scanInlineReferences()
     {
         HistoryInlineRef inlRef;
 
-        if( ref.startsWith( QLatin1String( "refs/heads/" ) ) )
+        if( mDisplays.testFlag(DisplayLocals) && ref.startsWith( QLatin1String( "refs/heads/" ) ) )
         {
             if( ref.endsWith( QLatin1String( "HEAD" ) ) )
             {
@@ -278,7 +280,7 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsStash = false;
             inlRef.mIsCurrent = inlRef.mRefName == refHEAD.shorthand();
         }
-        else if( ref.startsWith( QLatin1String( "refs/tags/" ) ) )
+        else if( mDisplays.testFlag(DisplayTags) && ref.startsWith( QLatin1String( "refs/tags/" ) ) )
         {
             inlRef.mRefName = ref.mid( strlen( "refs/tags/" ) );
             inlRef.mIsBranch = false;
@@ -287,7 +289,7 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsCurrent = false;
             inlRef.mIsStash = false;
         }
-        else if( ref.startsWith( QLatin1String( "refs/remotes/" ) ) )
+        else if( mDisplays.testFlag(DisplayRemotes) && ref.startsWith( QLatin1String( "refs/remotes/" ) ) )
         {
             if( ref.endsWith( QLatin1String( "HEAD" ) ) )
             {
@@ -309,6 +311,9 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsRemote = false;
             inlRef.mIsTag = false;
             inlRef.mIsStash = true;
+        }
+        else {
+            continue;
         }
 
         if( !refsById.contains( refs[ ref ] ) )
@@ -374,4 +379,17 @@ void HistoryModel::scanInlineReferences()
                         .arg( refs.count() )
                         .arg( dur )
                         .arg( avg, 10, 'f', 2 ) );
+}
+
+void HistoryModel::changeDisplays(InlineRefDisplays displays, bool activate)
+{
+    InlineRefDisplays old = mDisplays;
+
+    if (activate)
+        mDisplays |= displays;
+    else
+        mDisplays &= ~displays;
+
+    if (mDisplays != old)
+        scanInlineReferences();
 }

@@ -19,19 +19,22 @@ Ui HistoryViewActions {
     Action HistoryViewShowLocalBranches {
         Text        "Local";
         Checkable   true;
-        _ConnectTo  onChangeShowLocal(bool);
+        Checked     true;
+        ConnectTo   onChangeShowLocal(bool);
     };
 
     Action HistoryViewShowRemoteBranches {
         Text        "Remote";
         Checkable   true;
-        _ConnectTo  onChangeShowRemote(bool);
+        Checked     true;
+        ConnectTo   onChangeShowRemote(bool);
     };
 
     Action HistoryViewShowTags {
         Text        "Tags";
         Checkable   true;
-        _ConnectTo  onChangeShowTags(bool);
+        Checked     true;
+        ConnectTo   onChangeShowTags(bool);
     };
 
     ToolBar HistoryViewToolBar {

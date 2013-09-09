@@ -49,6 +49,10 @@ private slots:
     void repoActivated(RepositoryInfo* repoInfo);
     void currentCommitChanged( const Git::ObjectId& sh1 );
 
+    void onChangeShowLocal(bool checked);
+    void onChangeShowRemote(bool checked);
+    void onChangeShowTags(bool checked);
+
 private:
     void configChanged( const QString& subPath, const QVariant& value );
 

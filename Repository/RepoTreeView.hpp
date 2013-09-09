@@ -49,6 +49,7 @@ private slots:  // for MacGitver::repoMan()
     void onRepoDeactivated(RepositoryInfo* repo);
 
 private:
+    QModelIndex deeplyMapToSource( QModelIndex current ) const;
     Heaven::ViewContext* createContextObject() const;
 
 private:

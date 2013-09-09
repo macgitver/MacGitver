@@ -15,6 +15,7 @@
  */
 
 #include <QDebug>
+#include <QSortFilterProxyModel>
 
 #include "libMacGitverCore/Widgets/TreeViewCtxMenu.hpp"
 
@@ -39,7 +40,13 @@ RepoTreeView::RepoTreeView()
     mRepos->setAttribute( Qt::WA_MacShowFocusRect, false );
     #endif
     mModel = new RepoInfoModel();
-    mRepos->setModel( mModel );
+
+    QSortFilterProxyModel* sfpm = new QSortFilterProxyModel(this);
+    sfpm->setSourceModel(mModel);
+    sfpm->setSortRole(Qt::DisplayRole);
+    sfpm->sort(0);
+    mRepos->setModel(sfpm);
+
     mRepos->setIndentation( 12 );
     mRepos->expandAll();
     mRepos->setHeaderHidden( true );
@@ -55,9 +62,23 @@ RepoTreeView::RepoTreeView()
              this, SLOT(onRepoDeactivated(RepositoryInfo*)) );
 }
 
+QModelIndex RepoTreeView::deeplyMapToSource( QModelIndex current ) const
+{
+    while( current.isValid() )
+    {
+        const QAbstractProxyModel* apm = qobject_cast< const QAbstractProxyModel* >( current.model() );
+        if( !apm )
+            return current;
+
+        current = apm->mapToSource( current );
+    }
+
+    return QModelIndex();
+}
+
 void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
 {
-    RepositoryInfo* info = mModel->index2Info( index );
+    RepositoryInfo* info = mModel->index2Info(deeplyMapToSource(index));
 
     if( info && !info->isDisabled() )
     {

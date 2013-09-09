@@ -54,22 +54,21 @@ QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
     RepositoryInfo* info = index2Info( index );
     if( info )
     {
-        if( role == Qt::DisplayRole )
-        {
+        switch(role) {
+        case Qt::DisplayRole:
             return info->displayAlias();
-        }
-        else if( role == IsActive )
-        {
+
+        case Qt::FontRole:
+            {
+                QFont f1, f2;
+                f2.setBold( true );
+                return info->isActive() ? f2 : f1;
+            }
+
+        case IsActive:
             return info->isActive();
-        }
-        else if( role == Qt::FontRole )
-        {
-            QFont f1, f2;
-            f2.setBold( true );
-            return info->isActive() ? f2 : f1;
-        }
-        else if ( role == Qt::ToolTipRole )
-        {
+
+        case Qt::ToolTipRole:
             return trUtf8( "Branch: %1" ).arg( info->branchDisplay() );
         }
     }

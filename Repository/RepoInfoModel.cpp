@@ -23,10 +23,14 @@ RepoInfoModel::RepoInfoModel()
 {
     mRepoMan = &MacGitver::repoMan();
 
-    connect( mRepoMan, SIGNAL(repositoryDeactivated(RepositoryInfo*))
-             , this, SLOT(invalidateRepository(RepositoryInfo*)) );
-    connect( mRepoMan, SIGNAL(repositoryActivated(RepositoryInfo*))
-             , this, SLOT(invalidateRepository(RepositoryInfo*)) );
+    connect( mRepoMan, SIGNAL(repositoryDeactivated(RepositoryInfo*)),
+             this, SLOT(invalidateRepository(RepositoryInfo*)) );
+
+    connect( mRepoMan, SIGNAL(repositoryActivated(RepositoryInfo*)),
+             this, SLOT(invalidateRepository(RepositoryInfo*)) );
+
+    connect( mRepoMan, SIGNAL(repositoryOpened(RepositoryInfo*)),
+             this, SLOT(repositoryOpened(RepositoryInfo*)));
 }
 
 int RepoInfoModel::rowCount( const QModelIndex& parent ) const
@@ -156,4 +160,33 @@ void RepoInfoModel::invalidateRepository( RepositoryInfo *info )
 
     QModelIndex index = info2Index( info );
     emit dataChanged( index, index );
+}
+
+void RepoInfoModel::repositoryOpened(RepositoryInfo *info)
+{
+    if (!info || info->parentRepository()) {
+        return;
+    }
+
+    connect(info, SIGNAL(childAdded(RepositoryInfo*,RepositoryInfo*)),
+            this, SLOT(repositoryChildAdded(RepositoryInfo*,RepositoryInfo*)));
+
+    // we add a row just at the end of the root. This is stupid. But that's the way it works when
+    // a model actually isn't a model...
+
+    int row = mRepoMan->repositories().count() - 1;
+    emit beginInsertRows(QModelIndex(), row, row);
+    emit endInsertRows();
+}
+
+void RepoInfoModel::repositoryChildAdded(RepositoryInfo* parent, RepositoryInfo* child)
+{
+    QModelIndex parentIndex = info2Index(parent);
+
+    // we add a row just at the end of the root. This is stupid. But that's the way it works when
+    // a model actually isn't a model...
+
+    int row = parent->children().count() - 1;
+    emit beginInsertRows(parentIndex, row, row);
+    emit endInsertRows();
 }

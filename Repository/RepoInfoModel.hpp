@@ -46,6 +46,8 @@ public:
 
 public slots:
     void invalidateRepository( RepositoryInfo* info );
+    void repositoryOpened(RepositoryInfo* info);
+    void repositoryChildAdded(RepositoryInfo* parent, RepositoryInfo* child);
 
 private:
     RepoManager*        mRepoMan;

@@ -95,8 +95,15 @@ HistoryEntry* HistoryModel::at( int row, bool populate ) const
 
     if( populate && !e->isPopulated() )
     {
-        QMetaObject::invokeMethod( (HistoryModel*)this, "ensurePopulated", Qt::QueuedConnection,
-                                   Q_ARG( int, row ) );
+        if (!e->isPopulationQueued()) {
+            e->setPopulationQueued();
+
+            QMetaObject::invokeMethod( const_cast<HistoryModel*>(this),
+                                       "ensurePopulated",
+                                       Qt::QueuedConnection,
+                                       Q_ARG( int, row ) );
+        }
+
         return NULL;
     }
     return e;

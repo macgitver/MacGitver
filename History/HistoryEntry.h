@@ -72,6 +72,8 @@ public:
 
 public:
     bool                        isPopulated() const;
+    bool                        isPopulationQueued() const;
+    void                        setPopulationQueued();
 
     QString                     message() const;
     const Git::Signature&       committer() const;
@@ -87,7 +89,8 @@ public:
 
 private:
     Git::ObjectId       mSha1;
-    bool                mPopulated;
+    bool                mPopulated : 1;
+    bool                mPopulationQueued : 1;
 
     QString             mCommitMessage;
     Git::Signature      mCommiter;

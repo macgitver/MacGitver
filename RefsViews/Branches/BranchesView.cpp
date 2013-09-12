@@ -195,8 +195,7 @@ bool BranchesView::checkRemoveRef( const Git::Reference& ref )
 void BranchesView::onRenameRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action )
-        return;
+    if ( !action ) return;
 
     QModelIndex srcIndex = mTree->currentIndex();
     if ( !srcIndex.isValid() )
@@ -223,14 +222,15 @@ void BranchesView::contextMenuEvent(QContextMenuEvent *ev)
     }
     else if( ev->reason() == QContextMenuEvent::Mouse )
     {
-        QModelIndex idx = mTree->indexAt( ev->pos() );
-        showContextMenu( idx, ev->globalPos() );
+        showContextMenu( mTree->indexAt( ev->pos() ), ev->globalPos() );
         ev->accept();
     }
 }
 
 void BranchesView::attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data )
 {
+    Q_UNUSED( ctx );
+
     BranchesViewData* myData = qobject_cast< BranchesViewData* >( data );
     Q_ASSERT( myData );
 

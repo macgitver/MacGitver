@@ -13,6 +13,7 @@ SET( SRC_FILES
     RefsViewsModule.cpp
 
     RefItem.cpp
+    RefsSortProxy.cpp
 
     Branches/BranchesModel.cpp
     Branches/BranchesView.cpp
@@ -24,6 +25,7 @@ SET( HDR_FILES
     RefsViewsModule.h
 
     RefItem.hpp
+    RefsSortProxy.hpp
 
     Branches/BranchesModel.hpp
     Branches/BranchesView.hpp

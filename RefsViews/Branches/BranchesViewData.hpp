@@ -24,6 +24,7 @@
 #include "libGitWrap/Repository.hpp"
 
 class BranchesModel;
+class RefsSortProxy;
 
 class BranchesViewData : public Heaven::ViewContextData
 {
@@ -40,6 +41,7 @@ public:
 
 public:
     BranchesModel*  mModel;
+    RefsSortProxy*  mSortProxy;
 };
 
 #endif

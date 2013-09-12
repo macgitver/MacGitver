@@ -24,9 +24,12 @@
 #include "Branches/BranchesViewData.hpp"
 #include "Branches/BranchesModel.hpp"
 
+#include "RefsSortProxy.hpp"
+
 BranchesViewData::BranchesViewData()
     : Heaven::ViewContextData()
     , mModel( NULL )
+    , mSortProxy( NULL )
 {
 }
 
@@ -35,12 +38,22 @@ void BranchesViewData::attachedToContext( Heaven::ViewContext* context )
     Q_UNUSED( context );
     mModel = new BranchesModel( this );
     mModel->rereadBranches();
+
+    // sort references
+    mSortProxy = new RefsSortProxy( this );
+    mSortProxy->setSourceModel( mModel );
+    mSortProxy->setSortCaseSensitivity( Qt::CaseInsensitive );
+
+    mSortProxy->sort( 0 );
 }
 
 void BranchesViewData::detachedFromContext()
 {
     delete mModel;
     mModel = NULL;
+
+    delete mSortProxy;
+    mSortProxy = NULL;
 }
 
 Git::Repository BranchesViewData::repository() const

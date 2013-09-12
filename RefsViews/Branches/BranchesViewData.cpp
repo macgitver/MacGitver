@@ -26,8 +26,8 @@
 
 BranchesViewData::BranchesViewData()
     : Heaven::ViewContextData()
+    , mModel( NULL )
 {
-    mModel = NULL;
 }
 
 void BranchesViewData::attachedToContext( Heaven::ViewContext* context )

@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -15,6 +18,7 @@
  */
 
 #include <QElapsedTimer>
+#include <QStringBuilder>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
@@ -47,10 +51,35 @@ void HistoryBuilder::addHEAD()
 void HistoryBuilder::addAllRefs()
 {
     Git::Result r;
-    QStringList sl = mRepo.allBranchNames( r );
+
+    // In any case, put head at the top.
+    mWalker.pushHead(r);
+
+    QStringList sl = mRepo.allReferenceNames(r);
     foreach( QString s, sl )
     {
         mWalker.pushRef( r, s );
+    }
+}
+
+void HistoryBuilder::addBranches(bool includeRemotes)
+{
+    Git::Result r;
+
+    // In any case, put head at the top.
+    mWalker.pushHead(r);
+
+    QStringList sl = mRepo.branchNames(r, true, false);
+    foreach (const QString& s, sl) {
+        mWalker.pushRef(r, QLatin1Literal("refs/heads/") % s);
+    }
+
+    if (includeRemotes) {
+        sl = mRepo.branchNames(r, false, true);
+
+        foreach (const QString& s, sl) {
+            mWalker.pushRef(r, QLatin1Literal("refs/remotes/") % s);
+        }
     }
 }
 

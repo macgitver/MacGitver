@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -47,6 +50,13 @@ public:
         modeFancy
     };
 
+    enum Roots {
+        ShowRootAllBranches,
+        ShowRootHeadOnly,
+        ShowRootLocalBranches,
+        ShowRootAllRefs
+    };
+
     enum InlineRefDisplay {
         DisplayLocals       = 1 << 0,
         DisplayRemotes      = 1 << 1,
@@ -72,6 +82,7 @@ public:
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
 public:
+    void setShowRoots( Roots roots );
     void changeDisplays(InlineRefDisplays displays, bool activate);
     void append( HistoryEntry* entry );
     void buildHistory();
@@ -94,6 +105,7 @@ private:
     Git::Repository             mRepo;
     Modes                       mMode;
     QVector< HistoryEntry* >    mEntries;
+    Roots                       mShowRoots;
 };
 
 #endif

@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -37,10 +40,48 @@ Ui HistoryViewActions {
         ConnectTo   onChangeShowTags(bool);
     };
 
+    Action HistoryShowAllRefs {
+        Text        "All references";
+        Checkable   true;
+        ConnectTo   onChangeShowAllRefs(bool);
+    };
+
+    Action HistoryShowLocalBranches {
+        Text        "Local branches";
+        Checkable   true;
+        ConnectTo   onChangeShowLocalBranches(bool);
+    };
+
+    Action HistoryShowAllBranches {
+        Text        "All branches";
+        Checkable   true;
+        ConnectTo   onChangeShowAllBranches(bool);
+    };
+
+    Action HistoryShowHEADonly {
+        Text        "Head only";
+        Checkable   true;
+        ConnectTo   onChangeShowHeadOnly(bool);
+    };
+
     ToolBar HistoryViewToolBar {
-        Action      HistoryViewShowLocalBranches;
-        Action      HistoryViewShowRemoteBranches;
-        Action      HistoryViewShowTags;
+
+        Menu History {
+            Text        "History";
+
+            Action      HistoryShowHEADonly;
+            Action      HistoryShowLocalBranches;
+            Action      HistoryShowAllBranches;
+            Action      HistoryShowAllRefs;
+        };
+
+        Menu Display {
+            Text        "Display";
+
+            Action      HistoryViewShowLocalBranches;
+            Action      HistoryViewShowRemoteBranches;
+            Action      HistoryViewShowTags;
+        };
     };
 
 };

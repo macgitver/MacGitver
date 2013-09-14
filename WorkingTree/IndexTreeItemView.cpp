@@ -83,11 +83,11 @@ void IndexTreeItemView::onWtCtxUnstage()
     const QString itemPath = item->path();
     if ( repo.status(r, itemPath).testFlag(Git::FileIndexNew) )
     {
-        i.removeEntry( r, itemPath );
+        i.removeFile( r, itemPath );
     }
     else
     {
-        i.resetDefault( r, QStringList( itemPath ) );
+        i.resetFiles( r, QStringList( itemPath ) );
     }
     i.write( r );
 

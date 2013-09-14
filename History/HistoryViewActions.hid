@@ -40,28 +40,32 @@ Ui HistoryViewActions {
         ConnectTo   onChangeShowTags(bool);
     };
 
-    Action HistoryShowAllRefs {
-        Text        "All references";
-        Checkable   true;
-        ConnectTo   onChangeShowAllRefs(bool);
-    };
+    ActionGroup Branches {
 
-    Action HistoryShowLocalBranches {
-        Text        "Local branches";
-        Checkable   true;
-        ConnectTo   onChangeShowLocalBranches(bool);
-    };
+        Action HistoryShowAllRefs {
+            Text        "All references";
+            Checkable   true;
+            ConnectTo   onChangeShowAllRefs(bool);
+        };
 
-    Action HistoryShowAllBranches {
-        Text        "All branches";
-        Checkable   true;
-        ConnectTo   onChangeShowAllBranches(bool);
-    };
+        Action HistoryShowLocalBranches {
+            Text        "Local branches";
+            Checkable   true;
+            ConnectTo   onChangeShowLocalBranches(bool);
+        };
 
-    Action HistoryShowHEADonly {
-        Text        "Head only";
-        Checkable   true;
-        ConnectTo   onChangeShowHeadOnly(bool);
+        Action HistoryShowAllBranches {
+            Text        "All branches";
+            Checkable   true;
+            ConnectTo   onChangeShowAllBranches(bool);
+        };
+
+        Action HistoryShowHEADonly {
+            Text        "Head only";
+            Checkable   true;
+            ConnectTo   onChangeShowHeadOnly(bool);
+        };
+
     };
 
     ToolBar HistoryViewToolBar {

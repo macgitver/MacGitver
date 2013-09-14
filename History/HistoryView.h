@@ -55,7 +55,7 @@ private slots:
 
     void onChangeShowLocalBranches(bool checked);
     void onChangeShowAllBranches(bool checked);
-    void onChangeShowHEADonly(bool checked);
+    void onChangeShowHeadOnly(bool checked);
     void onChangeShowAllRefs(bool checked);
 
     void onChangeShowLocal(bool checked);

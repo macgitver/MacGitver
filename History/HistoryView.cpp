@@ -222,7 +222,7 @@ void HistoryView::onChangeShowAllBranches(bool checked)
     }
 }
 
-void HistoryView::onChangeShowHEADonly(bool checked)
+void HistoryView::onChangeShowHeadOnly(bool checked)
 {
     if (checked) {
         setShowBranches(HistoryModel::ShowRootHeadOnly);

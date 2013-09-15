@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -15,6 +18,11 @@
  */
 
 #include <QDebug>
+#include <QElapsedTimer>
+
+#include "libMacGitverCore/App/MacGitver.hpp"
+
+#include "libGitWrap/Reference.hpp"
 
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
@@ -25,6 +33,9 @@ HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
 {
     mRepo = repo;
     mMode = modeSimple;
+    mShowRoots = ShowRootHeadOnly;
+
+    mDisplays = 0;
 
     Q_ASSERT( mRepo.isValid() );
 }
@@ -95,8 +106,15 @@ HistoryEntry* HistoryModel::at( int row, bool populate ) const
 
     if( populate && !e->isPopulated() )
     {
-        QMetaObject::invokeMethod( (HistoryModel*)this, "ensurePopulated", Qt::QueuedConnection,
-                                   Q_ARG( int, row ) );
+        if (!e->isPopulationQueued()) {
+            e->setPopulationQueued();
+
+            QMetaObject::invokeMethod( const_cast<HistoryModel*>(this),
+                                       "ensurePopulated",
+                                       Qt::QueuedConnection,
+                                       Q_ARG( int, row ) );
+        }
+
         return NULL;
     }
     return e;
@@ -164,10 +182,13 @@ QVariant HistoryModel::headerData( int section, Qt::Orientation orientation, int
 void HistoryModel::beforeClear()
 {
     beginResetModel();
+    qDeleteAll(mEntries);
+    mEntries.clear();
 }
 
 void HistoryModel::afterClear()
 {
+    scanInlineReferences();
     endResetModel();
 }
 
@@ -218,6 +239,199 @@ void HistoryModel::append( HistoryEntry* entry )
 void HistoryModel::buildHistory()
 {
     HistoryBuilder b( mRepo, this );
-    b.addHEAD();
+
+    switch (mShowRoots) {
+
+    case ShowRootHeadOnly:
+        b.addHEAD();
+        break;
+
+    case ShowRootLocalBranches:
+        b.addBranches(false);
+        break;
+
+    case ShowRootAllBranches:
+        b.addBranches(true);
+        break;
+
+    case ShowRootAllRefs:
+        b.addAllRefs();
+        break;
+    }
+
     b.start();
+}
+
+void HistoryModel::scanInlineReferences()
+{
+    qint64				dur;
+    double				avg;
+    QElapsedTimer		timer;
+    Git::ResolvedRefs	refs;
+    Git::Result			r;
+    Git::Reference		refHEAD;
+    QHash< Git::ObjectId, HistoryInlineRefs > refsById;
+
+    if( !mRepo.isValid() )
+    {
+        return;
+    }
+
+    // First step: Collect all references.
+
+    refs = mRepo.allResolvedRefs( r );
+    refHEAD = mRepo.HEAD( r );
+    bool detached = mRepo.isHeadDetached();
+    if( !r )
+    {
+        MacGitver::log( ltError, r.errorText() );
+        return;
+    }
+
+    timer.start();
+
+    // Second step: Classify the refs and determine a nice display name for them
+
+    foreach( QString ref, refs.keys() )
+    {
+        HistoryInlineRef inlRef;
+
+        if (mDisplays.testFlag(DisplayLocals) && ref.startsWith(QLatin1String("refs/heads/"))) {
+            if (ref.endsWith(QLatin1String("HEAD"))) {
+                if (detached) {
+                    inlRef.mRefName = trUtf8("<detached head>");
+                }
+                else {
+                    // Skip "HEAD"
+                    continue;
+                }
+            }
+            else {
+                inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
+            }
+            inlRef.mIsBranch = true;
+            inlRef.mIsRemote = false;
+            inlRef.mIsTag = false;
+            inlRef.mIsStash = false;
+            inlRef.mIsCurrent = inlRef.mRefName == refHEAD.shorthand();
+        }
+        else if (mDisplays.testFlag(DisplayTags) && ref.startsWith(QLatin1String("refs/tags/"))) {
+            inlRef.mRefName = ref.mid( strlen( "refs/tags/" ) );
+            inlRef.mIsBranch = false;
+            inlRef.mIsRemote = false;
+            inlRef.mIsTag = true;
+            inlRef.mIsCurrent = false;
+            inlRef.mIsStash = false;
+        }
+        else if (mDisplays.testFlag(DisplayRemotes) &&
+                 ref.startsWith(QLatin1String("refs/remotes/"))) {
+
+            if (ref.endsWith( QLatin1String("HEAD"))) {
+                continue; // Skip "HEAD"
+            }
+            inlRef.mRefName = ref.mid( strlen( "refs/remotes/" ) );
+            inlRef.mIsBranch = true;
+            inlRef.mIsRemote = true;
+            inlRef.mIsTag = false;
+            inlRef.mIsCurrent = false;
+            inlRef.mIsStash = false;
+        }
+        else if (ref == QLatin1String("refs/stash")) {
+            inlRef.mRefName = trUtf8( "<recent stash>" );
+            inlRef.mIsBranch = false;
+            inlRef.mIsCurrent = true;
+            inlRef.mIsRemote = false;
+            inlRef.mIsTag = false;
+            inlRef.mIsStash = true;
+        }
+        else {
+            // qDebug() << "HistoryModel::scanInlineReferences => Unhandled ref:" << ref;
+            continue;
+        }
+
+        if (!refsById.contains(refs[ref])) {
+            refsById.insert(refs[ref], HistoryInlineRefs());
+        }
+
+        refsById[refs[ref]].append(inlRef);
+    }
+
+    // Third step: Update the commitlist and mix it with the inline Refs we just found.
+
+    for( int i = 0; i < mEntries.count(); i++ )
+    {
+        HistoryEntry* e = mEntries[i];
+        Q_ASSERT( e );
+
+        HistoryInlineRefs newRefs = refsById.value( e->id() );
+        HistoryInlineRefs oldRefs = e->refs();
+
+        if( !newRefs.count() )
+        {
+            if( !oldRefs.count() )
+            {
+                continue;
+            }
+            e->setInlineRefs( newRefs );
+            updateRow( i );
+        }
+        else
+        {
+            if( oldRefs.count() != newRefs.count() )
+            {
+                e->setInlineRefs( newRefs );
+                updateRow( i );
+                continue;
+            }
+
+            int diffs = newRefs.count();
+            for( int j = 0; j < newRefs.count(); j++ )
+            {
+                QString newRef = newRefs.at( j ).mRefName;
+                for( int k = 0; k < oldRefs.count(); k++ )
+                {
+                    if( oldRefs.at( k ).mRefName == newRef )
+                    {
+                        diffs--;
+                        break;
+                    }
+                }
+            }
+
+            if( diffs )
+            {
+                e->setInlineRefs( newRefs );
+                updateRow( i );
+            }
+        }
+    }
+
+    dur = timer.nsecsElapsed();
+    avg = double( dur ) / double( refs.count() );
+    MacGitver::log( ltInformation,
+                    trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
+                        .arg( refs.count() )
+                        .arg( dur )
+                        .arg( avg, 10, 'f', 2 ) );
+}
+
+void HistoryModel::changeDisplays(InlineRefDisplays displays, bool activate)
+{
+    InlineRefDisplays old = mDisplays;
+
+    if (activate)
+        mDisplays |= displays;
+    else
+        mDisplays &= ~displays;
+
+    if (mDisplays != old)
+        scanInlineReferences();
+}
+
+void HistoryModel::setShowRoots(Roots roots)
+{
+    if (mShowRoots != roots ) {
+        mShowRoots = roots;
+        buildHistory();
+    }
 }

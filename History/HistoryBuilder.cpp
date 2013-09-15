@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -15,6 +18,7 @@
  */
 
 #include <QElapsedTimer>
+#include <QStringBuilder>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
@@ -47,10 +51,35 @@ void HistoryBuilder::addHEAD()
 void HistoryBuilder::addAllRefs()
 {
     Git::Result r;
-    QStringList sl = mRepo.allBranchNames( r );
+
+    // In any case, put head at the top.
+    mWalker.pushHead(r);
+
+    QStringList sl = mRepo.allReferenceNames(r);
     foreach( QString s, sl )
     {
         mWalker.pushRef( r, s );
+    }
+}
+
+void HistoryBuilder::addBranches(bool includeRemotes)
+{
+    Git::Result r;
+
+    // In any case, put head at the top.
+    mWalker.pushHead(r);
+
+    QStringList sl = mRepo.branchNames(r, true, false);
+    foreach (const QString& s, sl) {
+        mWalker.pushRef(r, QLatin1Literal("refs/heads/") % s);
+    }
+
+    if (includeRemotes) {
+        sl = mRepo.branchNames(r, false, true);
+
+        foreach (const QString& s, sl) {
+            mWalker.pushRef(r, QLatin1Literal("refs/remotes/") % s);
+        }
     }
 }
 
@@ -90,146 +119,7 @@ int HistoryBuilder::createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nex
     return mCurrentGlyphs.count() - 1;
 }
 
-void HistoryBuilder::updateReferences()
-{
-    qint64				dur;
-    double				avg;
-    QElapsedTimer		timer;
-    Git::ResolvedRefs	refs;
-    Git::Result			r;
-    Git::Reference		refHEAD;
-    QHash< Git::ObjectId, HistoryInlineRefs > refsById;
 
-    if( !mRepo.isValid() )
-    {
-        return;
-    }
-
-    refs = mRepo.allResolvedRefs( r );
-    refHEAD = mRepo.HEAD( r );
-    if( !r )
-    {
-        MacGitver::log( ltError, r.errorText() );
-        return;
-    }
-
-    timer.start();
-
-    foreach( QString ref, refs.keys() )
-    {
-        HistoryInlineRef inlRef;
-
-        if( ref.startsWith( QLatin1String( "refs/heads/" ) ) )
-        {
-            if( ref.endsWith( QLatin1String( "HEAD" ) ) )
-            {
-                // Skip "HEAD"
-                continue;
-            }
-            inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
-            inlRef.mIsBranch = true;
-            inlRef.mIsRemote = false;
-            inlRef.mIsTag = false;
-            inlRef.mIsStash = false;
-            inlRef.mIsCurrent = inlRef.mRefName == refHEAD.shorthand();
-        }
-        else if( ref.startsWith( QLatin1String( "refs/tags/" ) ) )
-        {
-            inlRef.mRefName = ref.mid( strlen( "refs/tags/" ) );
-            inlRef.mIsBranch = false;
-            inlRef.mIsRemote = false;
-            inlRef.mIsTag = true;
-            inlRef.mIsCurrent = false;
-            inlRef.mIsStash = false;
-        }
-        else if( ref.startsWith( QLatin1String( "refs/remotes/" ) ) )
-        {
-            if( ref.endsWith( QLatin1String( "HEAD" ) ) )
-            {
-                // Skip "HEAD"
-                continue;
-            }
-            inlRef.mRefName = ref.mid( strlen( "refs/remotes/" ) );
-            inlRef.mIsBranch = true;
-            inlRef.mIsRemote = true;
-            inlRef.mIsTag = false;
-            inlRef.mIsCurrent = false;
-            inlRef.mIsStash = false;
-        }
-        else if( ref == QLatin1String( "refs/stash" ) )
-        {
-            inlRef.mRefName = trUtf8( "<recent stash>" );
-            inlRef.mIsBranch = false;
-            inlRef.mIsCurrent = true;
-            inlRef.mIsRemote = false;
-            inlRef.mIsTag = false;
-            inlRef.mIsStash = true;
-        }
-
-        if( !refsById.contains( refs[ ref ] ) )
-        {
-            refsById.insert( refs[ ref ], HistoryInlineRefs() );
-        }
-
-        refsById[ refs[ ref ] ].append( inlRef );
-    }
-
-    for( int i = 0; i < mModel->rowCount(); i++ )
-    {
-        HistoryEntry* e = mModel->at( i, false );
-        Q_ASSERT( e );
-
-        HistoryInlineRefs newRefs = refsById.value( e->id() );
-        HistoryInlineRefs oldRefs = e->refs();
-
-        if( !newRefs.count() )
-        {
-            if( !oldRefs.count() )
-            {
-                continue;
-            }
-            e->setInlineRefs( newRefs );
-            mModel->updateRow( i );
-        }
-        else
-        {
-            if( oldRefs.count() != newRefs.count() )
-            {
-                e->setInlineRefs( newRefs );
-                mModel->updateRow( i );
-                continue;
-            }
-
-            int diffs = newRefs.count();
-            for( int j = 0; j < newRefs.count(); j++ )
-            {
-                QString newRef = newRefs.at( j ).mRefName;
-                for( int k = 0; k < oldRefs.count(); k++ )
-                {
-                    if( oldRefs.at( k ).mRefName == newRef )
-                    {
-                        diffs--;
-                        break;
-                    }
-                }
-            }
-
-            if( diffs )
-            {
-                e->setInlineRefs( newRefs );
-                mModel->updateRow( i );
-            }
-        }
-    }
-
-    dur = timer.nsecsElapsed();
-    avg = double( dur ) / double( refs.count() );
-    MacGitver::log( ltInformation,
-                    trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
-                        .arg( refs.count() )
-                        .arg( dur )
-                        .arg( avg, 10, 'f', 2 ) );
-}
 
 void HistoryBuilder::start()
 {
@@ -260,8 +150,6 @@ void HistoryBuilder::start()
     {
         mModel->append( new HistoryEntry( commits[ curCommitIdx ] ) );
     }
-
-    updateReferences();
 
     mNextParent.clear();
     mCurrentGlyphs.clear();

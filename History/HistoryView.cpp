@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -68,11 +71,28 @@ HistoryView::HistoryView()
 
     mModel = NULL;
 
+    actHistoryShowHEADonly->setChecked(true);
+
     initSplitters();
 
     mRepoInfo = NULL;
     connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
              this, SLOT(repoActivated(RepositoryInfo*)));
+
+    #if 0 // Missing feature in libHeaven:
+
+    // We cannot use QActionGroup, as we don't know for which widget we should ask a QAction for.
+    // Thus, we cannot change the checkboxes into radio buttons. IIRC we already have other places
+    // where we simulate Radios with Checks...
+    //
+    // Seems like this wants to be my next topic :)
+
+    QActionGroup* g = new QActionGroup(this);
+    g->addAction(actHistoryShowHEADonly);
+    g->addAction(actHistoryShowAllBranches);
+    g->addAction(actHistoryShowLocalBranches);
+    g->addAction(actHistoryShowAllRefs);
+    #endif
 }
 
 void HistoryView::repoActivated(RepositoryInfo* repoInfo)
@@ -93,6 +113,16 @@ void HistoryView::repoActivated(RepositoryInfo* repoInfo)
 
         if (repo.isValid()) {
             mModel = new HistoryModel(repo, this);
+
+            mModel->changeDisplays(HistoryModel::DisplayLocals,
+                                   actHistoryViewShowLocalBranches->isChecked());
+
+            mModel->changeDisplays(HistoryModel::DisplayRemotes,
+                                   actHistoryViewShowRemoteBranches->isChecked());
+
+            mModel->changeDisplays(HistoryModel::DisplayTags,
+                                   actHistoryViewShowTags->isChecked());
+
             mModel->buildHistory();
             mList->setModel(mModel);
         }
@@ -176,4 +206,60 @@ void HistoryView::initSplitters()
     mDiff->show();
     mList->show();
     mDetails->show();
+}
+
+void HistoryView::onChangeShowLocalBranches(bool checked)
+{
+    if (checked) {
+        setShowBranches(HistoryModel::ShowRootLocalBranches);
+    }
+}
+
+void HistoryView::onChangeShowAllBranches(bool checked)
+{
+    if (checked) {
+        setShowBranches(HistoryModel::ShowRootAllBranches);
+    }
+}
+
+void HistoryView::onChangeShowHeadOnly(bool checked)
+{
+    if (checked) {
+        setShowBranches(HistoryModel::ShowRootHeadOnly);
+    }
+}
+
+void HistoryView::onChangeShowLocal(bool checked)
+{
+    if (mModel) {
+        mModel->changeDisplays(HistoryModel::DisplayLocals, checked);
+    }
+}
+
+void HistoryView::onChangeShowAllRefs(bool checked)
+{
+    if (checked) {
+        setShowBranches(HistoryModel::ShowRootAllRefs);
+    }
+}
+
+void HistoryView::onChangeShowRemote(bool checked)
+{
+    if (mModel) {
+        mModel->changeDisplays(HistoryModel::DisplayRemotes, checked);
+    }
+}
+
+void HistoryView::onChangeShowTags(bool checked)
+{
+    if (mModel) {
+        mModel->changeDisplays(HistoryModel::DisplayTags, checked);
+    }
+}
+
+void HistoryView::setShowBranches(HistoryModel::Roots branches)
+{
+    if (mModel) {
+        mModel->setShowRoots(branches);
+    }
 }

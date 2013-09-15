@@ -345,7 +345,7 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsStash = true;
         }
         else {
-            qDebug() << "HistoryModel::scanInlineReferences => Unhandled ref:" << ref;
+            // qDebug() << "HistoryModel::scanInlineReferences => Unhandled ref:" << ref;
             continue;
         }
 

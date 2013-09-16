@@ -23,7 +23,19 @@
 HistoryEntry::HistoryEntry( const Git::ObjectId& sha1 )
     : mSha1( sha1 )
     , mPopulated( false )
+    , mPopulationQueued(false)
 {
+}
+
+bool HistoryEntry::isPopulationQueued() const
+{
+    return mPopulationQueued;
+}
+
+void HistoryEntry::setPopulationQueued()
+{
+    Q_ASSERT(!mPopulated);
+    mPopulationQueued = true;
 }
 
 void HistoryEntry::populate( const Git::ObjectCommit& commit )
@@ -36,6 +48,7 @@ void HistoryEntry::populate( const Git::ObjectCommit& commit )
     mAuthor = commit.author( r );
     mCommitMessage = commit.shortMessage( r );
 
+    mPopulationQueued = false;
     mPopulated = r;
 
     if( !mPopulated )

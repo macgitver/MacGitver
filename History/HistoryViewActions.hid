@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -19,25 +22,66 @@ Ui HistoryViewActions {
     Action HistoryViewShowLocalBranches {
         Text        "Local";
         Checkable   true;
-        _ConnectTo  onChangeShowLocal(bool);
+        Checked     true;
+        ConnectTo   onChangeShowLocal(bool);
     };
 
     Action HistoryViewShowRemoteBranches {
         Text        "Remote";
         Checkable   true;
-        _ConnectTo  onChangeShowRemote(bool);
+        Checked     true;
+        ConnectTo   onChangeShowRemote(bool);
     };
 
     Action HistoryViewShowTags {
         Text        "Tags";
         Checkable   true;
-        _ConnectTo  onChangeShowTags(bool);
+        Checked     true;
+        ConnectTo   onChangeShowTags(bool);
+    };
+
+    ActionGroup ShowRootGroup {
+
+        Action HistoryShowAllRefs {
+            Text        "All references";
+            Checkable   true;
+            ConnectTo   onChangeShowAllRefs(bool);
+        };
+
+        Action HistoryShowLocalBranches {
+            Text        "Local branches";
+            Checkable   true;
+            ConnectTo   onChangeShowLocalBranches(bool);
+        };
+
+        Action HistoryShowAllBranches {
+            Text        "All branches";
+            Checkable   true;
+            ConnectTo   onChangeShowAllBranches(bool);
+        };
+
+        Action HistoryShowHEADonly {
+            Text        "Head only";
+            Checkable   true;
+            ConnectTo   onChangeShowHeadOnly(bool);
+        };
+
     };
 
     ToolBar HistoryViewToolBar {
-        Action      HistoryViewShowLocalBranches;
-        Action      HistoryViewShowRemoteBranches;
-        Action      HistoryViewShowTags;
+
+        Menu History {
+            Text        "History";
+            ActionGroup ShowRootGroup;
+        };
+
+        Menu Display {
+            Text        "Display";
+
+            Action      HistoryViewShowLocalBranches;
+            Action      HistoryViewShowRemoteBranches;
+            Action      HistoryViewShowTags;
+        };
     };
 
 };

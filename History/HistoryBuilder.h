@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -36,6 +39,7 @@ public:
 
 public:
     void addHEAD();
+    void addBranches(bool includeRemotes);
     void addAllRefs();
 
 public:
@@ -44,9 +48,6 @@ public:
 private:
     int nextParent( const Git::ObjectId& sha1, int start = 0 );
     int createGlyphSlot( GraphGlyphs glyph, const Git::ObjectId& nextSha1InSlot, int start = 0 );
-
-private:
-    void updateReferences();
 
 private:
     Git::Repository     mRepo;

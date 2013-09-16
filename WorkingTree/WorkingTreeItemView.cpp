@@ -81,7 +81,7 @@ void WorkingTreeItemView::onWtCtxStage()
     Git::Index i = repo.index( r );
 
     i.read( r );
-    i.addEntry( r, item->path() );
+    i.addFile( r, item->path() );
     i.write( r );
 
     // TODO: workaround to update the model
@@ -120,7 +120,7 @@ void WorkingTreeItemView::onWtCtxDiscard()
     Git::Index i = repo.index( r );
 
     // index stays unchanged; no need to read/write
-    i.checkout( r, QStringList( item->path() ) );
+    i.checkoutFiles( r, QStringList( item->path() ) );
 
     // TODO: workaround to update the model
     mModel->setRepository(repo);

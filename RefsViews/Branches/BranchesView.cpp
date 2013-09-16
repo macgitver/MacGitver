@@ -28,6 +28,7 @@
 
 #include "RefItem.hpp"
 #include "RefsSortProxy.hpp"
+#include "RefRenameDialog.hpp"
 
 
 BranchesView::BranchesView()
@@ -199,11 +200,22 @@ void BranchesView::onRenameRef()
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action ) return;
 
-    QModelIndex proxyIndex = mTree->currentIndex();
-    if ( !proxyIndex.isValid() ) return;
+    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
+    if ( !srcIndex.isValid() ) return;
 
-    // note: Resolving the proxy index is done by the QTreeView::edit().
-    mTree->edit( proxyIndex );
+    RefRenameDialog* dlg = new RefRenameDialog( this );
+    dlg->init( static_cast<RefBranch*>(srcIndex.internalPointer()) );
+
+    if ( dlg->exec() != QDialog::Accepted )
+    {
+        const Git::Result& dlgResult = dlg->gitResult();
+        if ( !dlgResult )
+        {
+            QMessageBox::warning( this, trUtf8("Failed to rename reference"),
+                                  trUtf8("Failed to rename reference:\nGit message: %1")
+                                  .arg(dlgResult.errorText()) );
+        }
+    }
 }
 
 void BranchesView::actionFailed( const Git::Result& error )

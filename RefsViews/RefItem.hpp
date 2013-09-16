@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef REFSITEM_H
-#define REFSITEM_H
+#ifndef REF_ITEM_HPP
+#define REF_ITEM_HPP
 
 #include "libGitWrap/Reference.hpp"
 
@@ -87,4 +87,4 @@ private:
     Git::Reference  mRef;
 };
 
-#endif // BRANCHESMODEL_REFSITEM_H
+#endif // REF_ITEM_HPP

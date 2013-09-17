@@ -59,9 +59,11 @@ void RefRenameDialog::accept()
     }
 
     Git::Reference ref = mRefInfo->reference();
+    const QString oldRefName = ref.name();
+    const QString prefix = oldRefName.left( oldRefName.length() - ref.shorthand().length() );
 
-    QString newRefName = ui->textRefName->text();
-    if ( !newRefName.isEmpty() && (ref.shorthand() != newRefName) )
+    QString newRefName = prefix + ui->textRefName->text();
+    if ( !newRefName.isEmpty() && (oldRefName != newRefName) )
     {
         ref.rename( mGitResult, newRefName );
     }

@@ -52,8 +52,12 @@ bool RefsSortProxy::filterAcceptsColumn(int sourceColumn, const QModelIndex &sou
 
 bool RefsSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    Q_UNUSED( sourceRow )
-    Q_UNUSED( sourceParent )
+    QModelIndex i = sourceModel()->index( sourceRow, 0, sourceParent );
+    if ( !i.isValid() )
+        return false;
 
-    return true;
+    QString itemName = i.data().toString();
+    bool display = itemName.right(4) != QString::fromUtf8( "HEAD" );
+
+    return display;
 }

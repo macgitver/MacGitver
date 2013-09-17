@@ -26,6 +26,7 @@ WelcomeView::WelcomeView()
 
     mBrowser = new QTextBrowser;
     mBrowser->setFrameShape( QFrame::NoFrame );
+    mBrowser->setOpenExternalLinks( true );
 
     QFile f( QLatin1String( ":/ModWelcome/Welcome.html" ) );
     f.open( QFile::ReadOnly );

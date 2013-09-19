@@ -28,6 +28,19 @@
 class RefItem
 {
 public:
+    enum Role
+    {
+        TypeRole = Qt::UserRole
+    };
+
+    enum ItemType
+    {
+        Scope = 1,
+        Namespace,
+        Reference
+    };
+
+public:
     RefItem();
     RefItem( RefItem* p );
     virtual ~RefItem();

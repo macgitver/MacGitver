@@ -99,6 +99,9 @@ QVariant RefScope::data(int col, int role) const
         return QBrush( g );
     }
 
+    if ( role == RefItem::TypeRole )
+        return RefItem::Scope;
+
     return QVariant();
 }
 
@@ -123,6 +126,9 @@ QVariant RefNameSpace::data(int col, int role) const
     case Qt::DecorationRole:
         return QFileIconProvider().icon( QFileIconProvider::Folder );
     }
+
+    if ( role == RefItem::TypeRole )
+        return RefItem::Namespace;
 
     return QVariant();
 }
@@ -169,6 +175,9 @@ QVariant RefBranch::data(int col, int role) const
             return QBrush(g);
         }
     }
+
+    else if ( role == RefItem::TypeRole )
+        return RefItem::Reference;
 
     else if ( role == Qt::EditRole)
         return mRef.name();

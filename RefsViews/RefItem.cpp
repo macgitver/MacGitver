@@ -48,11 +48,6 @@ RefItem::~RefItem()
     qDeleteAll( children );
 }
 
-bool RefItem::isContentItem() const
-{
-    return false;
-}
-
 QVariant RefItem::data(int col, int role) const
 {
     Q_UNUSED( col )
@@ -198,11 +193,6 @@ bool RefBranch::setData(Git::Result& result, const QVariant &value, int role, in
     }
 
     return false;
-}
-
-bool RefBranch::isContentItem() const
-{
-    return true;
 }
 
 bool RefBranch::isEditable() const

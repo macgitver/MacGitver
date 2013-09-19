@@ -73,7 +73,7 @@ void BranchesView::showContextMenu(const QModelIndex &index, const QPoint &globa
     const RefItem *item = static_cast<const RefItem*>(srcIndex.internalPointer());
 
     Heaven::Menu* menu = 0;
-    if ( item && item->isContentItem() )
+    if ( item && (item->data(0, RefItem::TypeRole) == RefItem::Reference) )
     {
         menu = menuCtxMenuRefsView;
         //menu->setActivationContext( item );

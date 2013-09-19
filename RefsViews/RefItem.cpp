@@ -136,21 +136,21 @@ RefBranch::RefBranch(RefItem *p, const QString &t, const Git::Reference &ref)
 
 QVariant RefBranch::data(int col, int role) const
 {
-    switch( role )
-    {
-    case Qt::DisplayRole:
+    if ( role == Qt::DisplayRole )
         return mRef.shorthand().section( QChar(L'/'), -1 );
 
-    case Qt::FontRole:
+    else if ( role == Qt::FontRole )
+    {
         if( mRef.isCurrentBranch() )
         {
             QFont f;
             f.setBold( true );
             return f;
         }
-        break;
+    }
 
-    case Qt::BackgroundRole:
+    else if ( role == Qt::BackgroundRole )
+    {
         Git::Result r;
         if ( mRef.isCurrentBranch() )
         {
@@ -168,10 +168,9 @@ QVariant RefBranch::data(int col, int role) const
             g.setColorAt( 1.0, QColor(255, 255, 255, 0) );
             return QBrush(g);
         }
-        break;
     }
 
-    if ( role == Qt::EditRole)
+    else if ( role == Qt::EditRole)
         return mRef.name();
 
     return QVariant();

@@ -218,6 +218,30 @@ void BranchesView::onRenameRef()
     }
 }
 
+void BranchesView::onJumpToCurrentBranch()
+{
+    QModelIndexList refIndexes = mData->mModel->match(
+                mData->mModel->index(0, 0), RefItem::TypeRole, RefItem::Reference,
+                -1, Qt::MatchRecursive | Qt::MatchExactly );
+    QModelIndex foundIndex;
+    foreach ( const QModelIndex& index, refIndexes )
+    {
+        const RefBranch* item = static_cast<const RefBranch*>(index.internalPointer());
+        if ( item && item->reference().isCurrentBranch() )
+        {
+            foundIndex = index;
+            break;
+        }
+    }
+
+    if ( foundIndex.isValid() )
+    {
+        QModelIndex proxyIndex = mData->mSortProxy->mapFromSource( foundIndex );
+        mTree->scrollTo( proxyIndex );
+        mTree->selectionModel()->select( proxyIndex, QItemSelectionModel::SelectCurrent );
+    }
+}
+
 void BranchesView::actionFailed( const Git::Result& error )
 {
     if ( error ) return;

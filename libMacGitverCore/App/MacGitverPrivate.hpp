@@ -46,7 +46,6 @@ private slots:
 
 public:
     Git::GitWrap        mGitWrap;
-    Git::Repository     mRepository;    /* deprecated */
 
 private:
     void registerGlobalConfigPages();

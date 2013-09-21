@@ -27,7 +27,7 @@
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
 #include "libMacGitverCore/MacGitver/Modules.h"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
 #include "libMacGitverCore/Log/LogManager.hpp"
 

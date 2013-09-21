@@ -36,7 +36,7 @@
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
 #include "libMacGitverCore/App/MgvPrimaryWindowPrivate.hpp"
 #include "libMacGitverCore/MacGitver/Modules.h"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"

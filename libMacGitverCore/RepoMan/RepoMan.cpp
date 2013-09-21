@@ -23,7 +23,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "RepoManager.hpp"
+#include "RepoMan/RepoMan.hpp"
 
 /**
  * @class       RepoManager

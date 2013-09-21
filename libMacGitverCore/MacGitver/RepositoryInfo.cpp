@@ -24,7 +24,7 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "RepositoryInfo.hpp"
-#include "RepoManager.hpp"
+#include "RepoMan/RepoMan.hpp"
 
 RepositoryInfo::RepositoryInfo()
 {

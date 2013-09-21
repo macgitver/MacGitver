@@ -19,7 +19,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "MacGitver/RepoManager.hpp"
+#include "RepoMan/RepoMan.hpp"
 #include "MacGitver/RepositoryInfo.hpp"
 
 #include "RepoStateWidget.hpp"

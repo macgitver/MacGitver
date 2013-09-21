@@ -48,18 +48,27 @@
  *
  */
 
-MacGitverPrivate::MacGitverPrivate( MacGitver* owner )
+MacGitverPrivate::MacGitverPrivate(MacGitver* owner, bool runGui)
 {
-    QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
-    QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
+    // These are used to accquire global settings and stuff...
+    // Set them differently, so we can run unit tests without fiddeling about the global settings.
+    if (runGui) {
+        QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
+        QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
+    } else {
+        QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
+        QApplication::setApplicationName( QLatin1String( "MacGitver_NonGui" ) );
+    }
 
     sSelf       = owner;
     sLog        = Log::Manager::create();
     sRepoMan    = new RM::RepoMan;
     sModules    = new Modules;
 
-    // Continue with the rest of the init-process after QApplication::exec() has started to run.
-    QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
+    if (runGui) {
+        // Continue with the rest of the init-process after QApplication::exec() has started to run.
+        QMetaObject::invokeMethod( this, "bootGui", Qt::QueuedConnection );
+    }
 }
 
 MacGitverPrivate::~MacGitverPrivate()
@@ -73,7 +82,7 @@ MacGitverPrivate::~MacGitverPrivate()
     sSelf = NULL;
 }
 
-void MacGitverPrivate::boot()
+void MacGitverPrivate::bootGui()
 {
     registerGlobalConfigPages();
     loadLevels();
@@ -89,12 +98,16 @@ Modules*        MacGitverPrivate::sModules      = NULL;
 
 MacGitver& MacGitver::self()
 {
-    Q_ASSERT( MacGitverPrivate::sSelf );  /* exec() must have been called */
+    // This assert ensures, a MacGitver instance is actually existing.
+    Q_ASSERT(MacGitverPrivate::sSelf);
+
     return *MacGitverPrivate::sSelf;
 }
 
 RM::RepoMan& MacGitver::repoMan()
 {
+    Q_ASSERT(MacGitverPrivate::sRepoMan);
+
     return *MacGitverPrivate::sRepoMan;
 }
 
@@ -103,10 +116,12 @@ Log::Manager MacGitver::log()
     return MacGitverPrivate::sLog;
 }
 
-MacGitver::MacGitver()
-    : d( new MacGitverPrivate( this ) )
+MacGitver::MacGitver(bool runGui)
+    : d(new MacGitverPrivate(this, runGui))
 {
-    Q_ASSERT( MacGitverPrivate::sSelf == this );
+    // We've run through MacGitverPrivate's constructor, so this should be true unless there
+    // was already a MacGitver instance around.
+    Q_ASSERT(MacGitverPrivate::sSelf == this);
 }
 
 MacGitver::~MacGitver()

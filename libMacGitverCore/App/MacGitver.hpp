@@ -41,6 +41,10 @@ class MGV_CORE_API MacGitver : public QObject
 {
     Q_OBJECT
 public:
+    MacGitver(bool runGui = true);
+    ~MacGitver();
+
+public:
     static MacGitver&   self();
     static RM::RepoMan& repoMan();
     static Log::Manager log();
@@ -63,8 +67,6 @@ signals:
     void repositoryChanged( const Git::Repository& repo ); /* deprecated */
 
 private:
-    MacGitver();
-    ~MacGitver();
     MacGitverPrivate* d;
 };
 

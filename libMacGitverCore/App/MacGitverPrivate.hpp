@@ -34,7 +34,7 @@ class MacGitverPrivate : public QObject
 {
     Q_OBJECT
 public:
-    MacGitverPrivate( MacGitver* owner );
+    MacGitverPrivate(MacGitver *owner, bool runGui = true);
     ~MacGitverPrivate();
 
 public:
@@ -42,7 +42,7 @@ public:
     void searchModules( const QDir& binDir );
 
 private slots:
-    void boot();
+    void bootGui();
 
 public:
     Git::GitWrap        mGitWrap;

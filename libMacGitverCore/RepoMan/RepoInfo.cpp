@@ -23,7 +23,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "RepositoryInfo.hpp"
+#include "RepoMan/RepoInfo.hpp"
 #include "RepoMan/RepoMan.hpp"
 
 RepositoryInfo::RepositoryInfo()

@@ -21,7 +21,7 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
+#include "libMacGitverCore/RepoMan/RepoInfo.hpp"
 
 namespace RM
 {

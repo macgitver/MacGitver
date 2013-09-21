@@ -23,45 +23,50 @@
 
 #include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 
-class MGV_CORE_API RepoManager : public QObject
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoManager();
-    ~RepoManager();
 
-public:
-    void open();
-    bool open( const QString& path );
-    bool open( const Git::Repository& repo );
+    class MGV_CORE_API RepoMan : public QObject
+    {
+        Q_OBJECT
+    public:
+        RepoMan();
+        ~RepoMan();
 
-    void closeAll();
+    public:
+        void open();
+        bool open( const QString& path );
+        bool open( const Git::Repository& repo );
 
-    RepositoryInfo* activeRepository();
-    void activate( RepositoryInfo* repository );
+        void closeAll();
 
-    RepositoryInfo::List repositories() const;
+        RepositoryInfo* activeRepository();
+        void activate( RepositoryInfo* repository );
 
-    RepositoryInfo* repoByPath( const QString& basePath, bool searchSubmodules );
+        RepositoryInfo::List repositories() const;
 
-    void internalClosedRepo(RepositoryInfo* repository);
-    void internalActivate( RepositoryInfo* repository );
+        RepositoryInfo* repoByPath( const QString& basePath, bool searchSubmodules );
 
-signals:
-    void firstRepositoryOpened();
-    void lastRepositoryClosed();
-    void repositoryOpened( RepositoryInfo* repo );
-    void repositoryClosed();
-    void repositoryActivated( RepositoryInfo* repo );
-    void repositoryDeactivated( RepositoryInfo* repo );
-    void hasActiveRepositoryChanged(bool hasActiveRepo);
+        void internalClosedRepo(RepositoryInfo* repository);
+        void internalActivate( RepositoryInfo* repository );
 
-private slots:
-    void onRepositoryOpenHelper();
+    signals:
+        void firstRepositoryOpened();
+        void lastRepositoryClosed();
+        void repositoryOpened( RepositoryInfo* repo );
+        void repositoryClosed();
+        void repositoryActivated( RepositoryInfo* repo );
+        void repositoryDeactivated( RepositoryInfo* repo );
+        void hasActiveRepositoryChanged(bool hasActiveRepo);
 
-private:
-    RepositoryInfo::List    mRepos;
-    RepositoryInfo*         mActiveRepo;
-};
+    private slots:
+        void onRepositoryOpenHelper();
+
+    private:
+        RepositoryInfo::List    mRepos;
+        RepositoryInfo*         mActiveRepo;
+    };
+
+}
 
 #endif

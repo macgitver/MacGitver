@@ -25,219 +25,225 @@
 
 #include "RepoMan/RepoMan.hpp"
 
-/**
- * @class       RepoManager
- * @brief       Manages the open / active repositories
- */
-
-RepoManager::RepoManager()
+namespace RM
 {
-    mActiveRepo = NULL;
-}
 
-RepoManager::~RepoManager()
-{
-    closeAll();
-}
+    /**
+     * @class       RepoManager
+     * @brief       Manages the open / active repositories
+     */
 
-void RepoManager::open()
-{
-    QWidget* parent = Heaven::primaryWindow();
-    QFileDialog *fd = new QFileDialog( parent );
-#ifdef Q_OS_MAC
-    fd->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
-#else
-    fd->setFileMode(QFileDialog::Directory);
-#endif
-
-    QString lastUsedDir = Config::self().get( "Repository/lastUsedDir", "#" ).toString();
-    if( lastUsedDir != QLatin1String( "#" ) )
+    RepoMan::RepoMan()
     {
-        fd->setDirectory( lastUsedDir );
+        mActiveRepo = NULL;
     }
 
-    fd->setWindowTitle( trUtf8("Open a git repository") );
-
-    fd->open( this, SLOT(onRepositoryOpenHelper()) );
-
-#ifdef Q_OS_MAC
-    // workaround for osx sheets without a parent
-    if (parent == 0)
-        fd->exec();
-#endif
-}
-
-void RepoManager::onRepositoryOpenHelper()
-{
-    QFileDialog *fd = qobject_cast<QFileDialog *>(sender());
-    Q_ASSERT(fd != 0);
-
-    if ( fd->selectedFiles().isEmpty() )
+    RepoMan::~RepoMan()
     {
-        return;
+        closeAll();
     }
 
-    //! @todo error handling
-    Git::Result r;
-    QString repoDir = Git::Repository::discover( fd->selectedFiles().first(), false,
-                                                 QStringList(), r );
-    if( repoDir.isEmpty() )
+    void RepoMan::open()
     {
-        return;
-    }
+        QWidget* parent = Heaven::primaryWindow();
+        QFileDialog *fd = new QFileDialog( parent );
 
-    //! @todo error handling
-    Git::Repository repo = Git::Repository::open( repoDir, r );
-    if( !repo.isValid() )
-        return;
+        #ifdef Q_OS_MAC
+        fd->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
+        #else
+        fd->setFileMode(QFileDialog::Directory);
+        #endif
 
-    // If we successfully loaded the repository at that directory,
-    // we store the repository's work dir as "lastUsedDir".
-    // If it is a bare repository, we store the repository's directory.
-    Config::self().set( "Repository/lastUsedDir", repo.isBare() ? repoDir : repo.basePath() );
-
-    open( repo );
-}
-
-bool RepoManager::open( const QString& path )
-{
-    Git::Result result;
-    Git::Repository repo = Git::Repository::open( path, result );
-    if( !result || !repo.isValid() )
-    {
-        return false;
-    }
-
-    return open( repo );
-}
-
-bool RepoManager::open( const Git::Repository& repo )
-{
-    RepositoryInfo* info = repoByPath( repo.basePath(), false );
-
-    if( !info )
-    {
-        info = new RepositoryInfo( repo );
-        mRepos.append( info );
-        emit repositoryOpened( info );
-
-        // we need to scan for submodules explicitly, since we didn't call load() on the RepoInfo
-        info->scanSubmodules();
-
-        if (mRepos.count() == 1) {
-            emit firstRepositoryOpened();
-        }
-    }
-
-    activate( info );
-
-    return true;
-}
-
-RepositoryInfo* RepoManager::repoByPath( const QString& basePath, bool searchSubmodules )
-{
-    foreach( RepositoryInfo* info, mRepos )
-    {
-        if( info->path() == basePath )
+        QString lastUsedDir = Config::self().get( "Repository/lastUsedDir", "#" ).toString();
+        if( lastUsedDir != QLatin1String( "#" ) )
         {
-            return info;
+            fd->setDirectory( lastUsedDir );
         }
 
-        if( searchSubmodules )
+        fd->setWindowTitle( trUtf8("Open a git repository") );
+
+        fd->open( this, SLOT(onRepositoryOpenHelper()) );
+
+        #ifdef Q_OS_MAC
+        // workaround for osx sheets without a parent
+        if (parent == 0)
+            fd->exec();
+        #endif
+    }
+
+    void RepoMan::onRepositoryOpenHelper()
+    {
+        QFileDialog *fd = qobject_cast<QFileDialog *>(sender());
+        Q_ASSERT(fd != 0);
+
+        if ( fd->selectedFiles().isEmpty() )
         {
-            if( RepositoryInfo* sub = info->repoByPath( basePath, true ) )
+            return;
+        }
+
+        //! @todo error handling
+        Git::Result r;
+        QString repoDir = Git::Repository::discover( fd->selectedFiles().first(), false,
+                                                     QStringList(), r );
+        if( repoDir.isEmpty() )
+        {
+            return;
+        }
+
+        //! @todo error handling
+        Git::Repository repo = Git::Repository::open( repoDir, r );
+        if( !repo.isValid() )
+            return;
+
+        // If we successfully loaded the repository at that directory,
+        // we store the repository's work dir as "lastUsedDir".
+        // If it is a bare repository, we store the repository's directory.
+        Config::self().set( "Repository/lastUsedDir", repo.isBare() ? repoDir : repo.basePath() );
+
+        open( repo );
+    }
+
+    bool RepoMan::open( const QString& path )
+    {
+        Git::Result result;
+        Git::Repository repo = Git::Repository::open( path, result );
+        if( !result || !repo.isValid() )
+        {
+            return false;
+        }
+
+        return open( repo );
+    }
+
+    bool RepoMan::open( const Git::Repository& repo )
+    {
+        RepositoryInfo* info = repoByPath( repo.basePath(), false );
+
+        if( !info )
+        {
+            info = new RepositoryInfo( repo );
+            mRepos.append( info );
+            emit repositoryOpened( info );
+
+            // we need to scan for submodules explicitly, since we didn't call load() on the RepoInfo
+            info->scanSubmodules();
+
+            if (mRepos.count() == 1) {
+                emit firstRepositoryOpened();
+            }
+        }
+
+        activate( info );
+
+        return true;
+    }
+
+    RepositoryInfo* RepoMan::repoByPath( const QString& basePath, bool searchSubmodules )
+    {
+        foreach( RepositoryInfo* info, mRepos )
+        {
+            if( info->path() == basePath )
             {
-                return sub;
+                return info;
+            }
+
+            if( searchSubmodules )
+            {
+                if( RepositoryInfo* sub = info->repoByPath( basePath, true ) )
+                {
+                    return sub;
+                }
+            }
+        }
+
+        return NULL;
+    }
+
+    void RepoMan::closeAll()
+    {
+        foreach( RepositoryInfo* repo, mRepos )
+        {
+            repo->close();
+        }
+    }
+
+    void RepoMan::activate( RepositoryInfo* repository )
+    {
+        if( repository == mActiveRepo )
+        {
+            return;
+        }
+
+        if( mActiveRepo )
+        {
+            mActiveRepo->setActive( false );
+        }
+
+        if( repository )
+        {
+            repository->setActive( true );
+        }
+    }
+
+    void RepoMan::internalClosedRepo(RepositoryInfo* repository)
+    {
+        // This pointer is actually useless. THIS IS THE LAST call issued by the destructor of the
+        // RepositoryInfo itself. We should probably NOT give this pointer away.
+
+        // However, we need it to find the closed repository in our list. Calling here should have
+        // probably happened before the repository is actually destructing itself.
+
+        int i = mRepos.indexOf(repository);
+        if (i != -1) {
+            mRepos.removeAt(i);
+            emit repositoryClosed();
+
+            if (mRepos.count() == 0) {
+                emit lastRepositoryClosed();
             }
         }
     }
 
-    return NULL;
-}
-
-void RepoManager::closeAll()
-{
-    foreach( RepositoryInfo* repo, mRepos )
+    /**
+     * @internal
+     * @brief       internally activate a RepositoryInfo
+     *
+     * @param[in]   repository      The repository info to activate.
+     *
+     * Nothing is done if @a repository is already the active repository.
+     *
+     * This method is called internally from all paths that need to change the active repository - these
+     * are more than just the public activation methods.
+     *
+     */
+    void RepoMan::internalActivate( RepositoryInfo* repository )
     {
-        repo->close();
-    }
-}
+        if( repository != mActiveRepo )
+        {
+            RepositoryInfo* old = mActiveRepo;
 
-void RepoManager::activate( RepositoryInfo* repository )
-{
-    if( repository == mActiveRepo )
-    {
-        return;
-    }
+            if(mActiveRepo)
+                emit repositoryDeactivated(mActiveRepo);
 
-    if( mActiveRepo )
-    {
-        mActiveRepo->setActive( false );
-    }
+            mActiveRepo = repository;
 
-    if( repository )
-    {
-        repository->setActive( true );
-    }
-}
+            if(mActiveRepo)
+                emit repositoryActivated(mActiveRepo);
 
-void RepoManager::internalClosedRepo(RepositoryInfo* repository)
-{
-    // This pointer is actually useless. THIS IS THE LAST call issued by the destructor of the
-    // RepositoryInfo itself. We should probably NOT give this pointer away.
-
-    // However, we need it to find the closed repository in our list. Calling here should have
-    // probably happened before the repository is actually destructing itself.
-
-    int i = mRepos.indexOf(repository);
-    if (i != -1) {
-        mRepos.removeAt(i);
-        emit repositoryClosed();
-
-        if (mRepos.count() == 0) {
-            emit lastRepositoryClosed();
+            if ((mActiveRepo != NULL) != (old != NULL)) {
+                emit hasActiveRepositoryChanged(mActiveRepo != NULL);
+            }
         }
     }
-}
 
-/**
- * @internal
- * @brief       internally activate a RepositoryInfo
- *
- * @param[in]   repository      The repository info to activate.
- *
- * Nothing is done if @a repository is already the active repository.
- *
- * This method is called internally from all paths that need to change the active repository - these
- * are more than just the public activation methods.
- *
- */
-void RepoManager::internalActivate( RepositoryInfo* repository )
-{
-    if( repository != mActiveRepo )
+    RepositoryInfo* RepoMan::activeRepository()
     {
-        RepositoryInfo* old = mActiveRepo;
-
-        if(mActiveRepo)
-            emit repositoryDeactivated(mActiveRepo);
-
-        mActiveRepo = repository;
-
-        if(mActiveRepo)
-            emit repositoryActivated(mActiveRepo);
-
-        if ((mActiveRepo != NULL) != (old != NULL)) {
-            emit hasActiveRepositoryChanged(mActiveRepo != NULL);
-        }
+        return mActiveRepo;
     }
-}
 
-RepositoryInfo* RepoManager::activeRepository()
-{
-    return mActiveRepo;
-}
+    RepositoryInfo::List RepoMan::repositories() const
+    {
+        return mRepos;
+    }
 
-RepositoryInfo::List RepoManager::repositories() const
-{
-    return mRepos;
 }

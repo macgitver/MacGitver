@@ -55,7 +55,7 @@ MacGitverPrivate::MacGitverPrivate( MacGitver* owner )
 
     sSelf       = owner;
     sLog        = Log::Manager::create();
-    sRepoMan    = new RepoManager;
+    sRepoMan    = new RM::RepoMan;
     sModules    = new Modules;
 
     // Continue with the rest of the init-process after QApplication::exec() has started to run.
@@ -83,7 +83,7 @@ void MacGitverPrivate::boot()
 }
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
-RepoManager*    MacGitverPrivate::sRepoMan      = NULL;
+RM::RepoMan*    MacGitverPrivate::sRepoMan      = NULL;
 Log::Manager    MacGitverPrivate::sLog;
 Modules*        MacGitverPrivate::sModules      = NULL;
 
@@ -93,7 +93,7 @@ MacGitver& MacGitver::self()
     return *MacGitverPrivate::sSelf;
 }
 
-RepoManager& MacGitver::repoMan()
+RM::RepoMan& MacGitver::repoMan()
 {
     return *MacGitverPrivate::sRepoMan;
 }

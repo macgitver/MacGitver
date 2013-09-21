@@ -56,7 +56,7 @@ public:
     static MacGitver*   sSelf;
     static Modules*     sModules;
     static Log::Manager sLog;
-    static RepoManager* sRepoMan;
+    static RM::RepoMan* sRepoMan;
 };
 
 #endif

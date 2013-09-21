@@ -20,7 +20,10 @@
 #include <QAbstractItemModel>
 
 class RepositoryInfo;
-class RepoManager;
+namespace RM
+{
+    class RepoMan;
+}
 
 class RepoInfoModel : public QAbstractItemModel
 {
@@ -50,7 +53,7 @@ public slots:
     void repositoryChildAdded(RepositoryInfo* parent, RepositoryInfo* child);
 
 private:
-    RepoManager*        mRepoMan;
+    RM::RepoMan*    mRepoMan;
 };
 
 #endif

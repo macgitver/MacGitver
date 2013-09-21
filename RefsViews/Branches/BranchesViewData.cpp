@@ -65,7 +65,7 @@ Git::Repository BranchesViewData::repository() const
         return Git::Repository();
     }
 
-    Repo* repo = ctx->repository();
+    RM::Repo* repo = ctx->repository();
     return repo ? repo->gitRepo() : Git::Repository();
 }
 

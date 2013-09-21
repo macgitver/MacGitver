@@ -19,9 +19,9 @@
 
 #include <QAbstractItemModel>
 
-class Repo;
 namespace RM
 {
+    class Repo;
     class RepoMan;
 }
 
@@ -44,13 +44,13 @@ public:
     QModelIndex parent( const QModelIndex& child ) const;
 
 public:
-    Repo* index2Info( const QModelIndex& index ) const;
-    QModelIndex info2Index( Repo* info ) const;
+    RM::Repo* index2Info( const QModelIndex& index ) const;
+    QModelIndex info2Index( RM::Repo* info ) const;
 
 public slots:
-    void invalidateRepository( Repo* info );
-    void repositoryOpened(Repo* info);
-    void repositoryChildAdded(Repo* parent, Repo* child);
+    void invalidateRepository(RM::Repo* info);
+    void repositoryOpened(RM::Repo* info);
+    void repositoryChildAdded(RM::Repo* parent, RM::Repo* child);
 
 private:
     RM::RepoMan*    mRepoMan;

@@ -53,13 +53,14 @@ RepoTreeView::RepoTreeView()
 
     setWidget( mRepos );
 
-    connect( mRepos, SIGNAL(contextMenu(QModelIndex,QPoint)),
-             this, SLOT(contextMenu(QModelIndex,QPoint)) );
+    connect( mRepos,    SIGNAL(contextMenu(QModelIndex,QPoint)),
+             this,      SLOT(contextMenu(QModelIndex,QPoint)) );
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(Repo*)),
-             this, SLOT(onRepoActivated(Repo*)) );
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(Repo*)),
-             this, SLOT(onRepoDeactivated(Repo*)) );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RM::Repo*)),
+             this,                  SLOT(onRepoActivated(RM::Repo*)) );
+
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(RM::Repo*)),
+             this,                  SLOT(onRepoDeactivated(RM::Repo*)) );
 }
 
 QModelIndex RepoTreeView::deeplyMapToSource( QModelIndex current ) const
@@ -78,7 +79,7 @@ QModelIndex RepoTreeView::deeplyMapToSource( QModelIndex current ) const
 
 void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
 {
-    Repo* info = mModel->index2Info(deeplyMapToSource(index));
+    RM::Repo* info = mModel->index2Info(deeplyMapToSource(index));
 
     if( info && !info->isDisabled() )
     {
@@ -95,7 +96,7 @@ void RepoTreeView::onCtxActivate()
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if( action )
     {
-        Repo* info = qobject_cast< Repo* >( action->activatedBy() );
+        RM::Repo* info = qobject_cast< RM::Repo* >( action->activatedBy() );
         if( info )
         {
             MacGitver::repoMan().activate( info );
@@ -108,7 +109,7 @@ void RepoTreeView::onCtxClose()
 
 }
 
-void RepoTreeView::onRepoActivated(Repo* repo)
+void RepoTreeView::onRepoActivated(RM::Repo* repo)
 {
     Heaven::ContextKeys keys = mkKeys();
     keys.set("RepoName", repo->path());
@@ -126,7 +127,7 @@ void RepoTreeView::onRepoActivated(Repo* repo)
     setCurrentContext(ctx);
 }
 
-void RepoTreeView::onRepoDeactivated(Repo* repo)
+void RepoTreeView::onRepoDeactivated(RM::Repo* repo)
 {
     RepositoryContext* ctx = qobject_cast< RepositoryContext* >(currentContext());
 

@@ -60,8 +60,8 @@ void RepositoryModule::initialize()
 
     mMostRecentlyUsed = configGet( "MRU", QStringList() );
 
-    connect(&MacGitver::repoMan(),  SIGNAL(repositoryOpened(Repo*)),
-            this,                   SLOT(onCoreRepoOpen(Repo*)));
+    connect(&MacGitver::repoMan(),  SIGNAL(repositoryOpened(RM::Repo*)),
+            this,                   SLOT(onCoreRepoOpen(RM::Repo*)));
 
     connect(&MacGitver::repoMan(),  SIGNAL(hasActiveRepositoryChanged(bool)),
             actRepositoryClose,     SLOT(setEnabled(bool)));
@@ -157,7 +157,7 @@ void RepositoryModule::onRecentRepositoryOpen( const QVariant& path )
     MacGitver::repoMan().open( repoPath );
 }
 
-void RepositoryModule::onCoreRepoOpen( Repo* repo )
+void RepositoryModule::onCoreRepoOpen(RM::Repo* repo)
 {
     if( repo->isSubModule() )
     {

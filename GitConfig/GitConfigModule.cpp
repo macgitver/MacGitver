@@ -40,12 +40,12 @@ void GitConfigModule::deinitialize()
 
 void GitConfigModule::onToolsGitConfig()
 {
-    Git::Repository repo;
-    Repo* info = MacGitver::repoMan().activeRepository();
-    if (info) {
-        repo = info->gitRepo();
+    Git::Repository gitRepo;
+    RM::Repo* repo = MacGitver::repoMan().activeRepository();
+    if (repo) {
+        gitRepo = repo->gitRepo();
     }
-    GitConfigDialog( repo ).exec();
+    GitConfigDialog( gitRepo ).exec();
 }
 
 #if QT_VERSION < 0x050000

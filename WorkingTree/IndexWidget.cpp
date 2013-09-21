@@ -76,11 +76,11 @@ IndexWidget::IndexWidget()
 
     setupFilters();
 
-    connect(&MacGitver::repoMan(), SIGNAL(repositoryActivated(Repo*)),
-            this, SLOT(repositoryActivated(Repo*)));
+    connect(&MacGitver::repoMan(),  SIGNAL(repositoryActivated(RM::Repo*)),
+            this,                   SLOT(repositoryActivated(RM::Repo*)));
 
-    connect(&MacGitver::repoMan(), SIGNAL(repositoryDeactivated(Repo*)),
-            this, SLOT(repositoryDeactivated(Repo*)));
+    connect(&MacGitver::repoMan(),  SIGNAL(repositoryDeactivated(RM::Repo*)),
+            this,                   SLOT(repositoryDeactivated(RM::Repo*)));
 }
 
 void IndexWidget::updateWtFilterView(const WorkingTreeFilterModel * const wtFilter)
@@ -120,7 +120,7 @@ void IndexWidget::setupFilters()
     updateWtFilterView( wtFilter );
 }
 
-void IndexWidget::repositoryActivated(Repo* repo)
+void IndexWidget::repositoryActivated(RM::Repo* repo)
 {
     if (mRepo != repo) {
         mRepo = repo;
@@ -131,7 +131,7 @@ void IndexWidget::repositoryActivated(Repo* repo)
     }
 }
 
-void IndexWidget::repositoryDeactivated(Repo* repo)
+void IndexWidget::repositoryDeactivated(RM::Repo* repo)
 {
     if (mRepo == repo) {
         mRepo = NULL;

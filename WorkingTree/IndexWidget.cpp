@@ -31,7 +31,6 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/Config/Config.h"
-#include "libMacGitverCore/MacGitver/FSWatcher.h"
 #include "libMacGitverCore/MacGitver/GitPatchConsumer.hpp"
 #include "libMacGitverCore/MacGitver/RepoManager.hpp"
 #include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
@@ -76,9 +75,6 @@ IndexWidget::IndexWidget()
     setWidget( mSplitter );
 
     setupFilters();
-
-//  connect( MacGitver::self().watcher(), SIGNAL(workingTreeChanged()),
-//           this, SLOT(workingTreeChanged()) );
 
     connect(&MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
             this, SLOT(repositoryActivated(RepositoryInfo*)));

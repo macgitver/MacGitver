@@ -20,7 +20,7 @@
 
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
 #include "CreateRepositoryDlg.h"
 

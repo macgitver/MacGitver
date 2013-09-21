@@ -31,7 +31,7 @@
 #include "libHeaven/Widgets/MiniSplitter.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 
 #include "HistoryView.h"

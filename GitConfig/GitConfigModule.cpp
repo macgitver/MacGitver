@@ -18,7 +18,7 @@
 #include <QFileDialog>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 
 #include "GitConfigModule.h"

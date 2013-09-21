@@ -32,7 +32,7 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/MacGitver/GitPatchConsumer.hpp"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 
 #include "IndexTreeItemView.h"

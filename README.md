@@ -24,7 +24,6 @@ Currently working
 
 Not yet working (In progress)
 - Commit changes
-- Clone repositories
 
 Release Plans
 =============
@@ -38,9 +37,6 @@ Features still to finish:
     - Invoke manual refresh
     - Borrow some icons somewhere :)
 
-- MRU Lists
-    - Save opened repositories and provide "open" for Most-Recently-Used
-
 - History
     - Column selection (Or at least provide sane default)
     - Multi-selection?
@@ -53,15 +49,11 @@ Features still to finish:
     - Context menu "copy sha1" (or _do_ add line edit with sha1 to toolbar?)
 
 - Working tree
-    - Do not ignore *index* states
     - commit selective parts of Working Tree to index or a commit
         - also allow to amend last commit
 
 Already half baked features to disable:
-- Clone (Unfinished WIP)
 - Fetch & Push (Not implemented)
-- Submodules (Just a preview)
-- All Refs Views (Look to cluttered; not required for parity)
 - Some parts of "General Config Page" (Useless as of now)
 - History: Remove any reference to the "fancy-view" mode
 - Remove unfunctional git-config edit-buttons

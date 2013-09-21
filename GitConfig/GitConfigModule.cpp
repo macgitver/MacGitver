@@ -19,7 +19,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/RepoInfo.hpp"
+#include "libMacGitverCore/RepoMan/Repo.hpp"
 
 #include "GitConfigModule.h"
 #include "GitConfigDialog.h"

@@ -19,7 +19,7 @@
 #include "libHeaven/CentralUI/Contexts/ViewContext.hpp"
 
 #include "libMacGitverCore/MacGitver/IRepositoryContext.hpp"
-#include "libMacGitverCore/RepoMan/RepoInfo.hpp"
+#include "libMacGitverCore/RepoMan/Repo.hpp"
 
 #include "Branches/BranchesViewData.hpp"
 #include "Branches/BranchesModel.hpp"

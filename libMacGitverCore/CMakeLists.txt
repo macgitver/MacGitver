@@ -37,7 +37,9 @@ SET( SRC_FILES
     MacGitver/Modules.cpp
     MacGitver/GitPatchConsumer.cpp
     MacGitver/RepositoryInfo.cpp
-    MacGitver/RepoManager.cpp
+    #MacGitver/RepoManager.cpp
+
+    RepoMan/RepoMan.cpp
 
     Widgets/FontSelectWidget.cpp
     Widgets/LineEdit.cpp
@@ -74,8 +76,10 @@ SET( PUB_HDR_FILES
     MacGitver/Modules.h
     MacGitver/GitPatchConsumer.hpp
     MacGitver/RepositoryInfo.hpp
-    MacGitver/RepoManager.hpp
+    #MacGitver/RepoManager.hpp
     MacGitver/IRepositoryContext.hpp
+
+    RepoMan/RepoMan.hpp
 
     Widgets/FontSelectWidget.h
     Widgets/LineEdit.h

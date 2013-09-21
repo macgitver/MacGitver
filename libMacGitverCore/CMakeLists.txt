@@ -29,7 +29,6 @@ SET( SRC_FILES
 
     MacGitver/Module.cpp
     MacGitver/Modules.cpp
-    MacGitver/FSWatcher.cpp
     MacGitver/GitPatchConsumer.cpp
     MacGitver/RepositoryInfo.cpp
     MacGitver/RepoManager.cpp
@@ -62,7 +61,6 @@ SET( PUB_HDR_FILES
 
     MacGitver/Module.h
     MacGitver/Modules.h
-    MacGitver/FSWatcher.h
     MacGitver/GitPatchConsumer.hpp
     MacGitver/RepositoryInfo.hpp
     MacGitver/RepoManager.hpp

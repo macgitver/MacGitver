@@ -48,15 +48,15 @@ namespace RM
         Repo* repoByPath( const QString& basePath, bool searchSubmodules );
 
         void internalClosedRepo(Repo* repository);
-        void internalActivate( Repo* repository );
+        void internalActivate(Repo* repository);
 
     signals:
         void firstRepositoryOpened();
         void lastRepositoryClosed();
-        void repositoryOpened(RM::Repo* repo );
+        void repositoryOpened(RM::Repo* repo);
         void repositoryClosed();
-        void repositoryActivated(RM::Repo* repo );
-        void repositoryDeactivated(RM::Repo* repo );
+        void repositoryActivated(RM::Repo* repo);
+        void repositoryDeactivated(RM::Repo* repo);
         void hasActiveRepositoryChanged(bool hasActiveRepo);
 
     private slots:

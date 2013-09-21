@@ -19,7 +19,7 @@
 #include "libHeaven/CentralUI/Contexts/ViewContext.hpp"
 
 #include "libMacGitverCore/MacGitver/IRepositoryContext.hpp"
-#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
+#include "libMacGitverCore/RepoMan/RepoInfo.hpp"
 
 #include "Branches/BranchesViewData.hpp"
 #include "Branches/BranchesModel.hpp"
@@ -65,7 +65,7 @@ Git::Repository BranchesViewData::repository() const
         return Git::Repository();
     }
 
-    RepositoryInfo* repo = ctx->repository();
+    Repo* repo = ctx->repository();
     return repo ? repo->gitRepo() : Git::Repository();
 }
 

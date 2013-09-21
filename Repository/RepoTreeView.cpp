@@ -21,7 +21,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
+#include "libMacGitverCore/RepoMan/RepoInfo.hpp"
 
 #include "RepoTreeView.hpp"
 #include "RepoInfoModel.hpp"
@@ -56,10 +56,10 @@ RepoTreeView::RepoTreeView()
     connect( mRepos, SIGNAL(contextMenu(QModelIndex,QPoint)),
              this, SLOT(contextMenu(QModelIndex,QPoint)) );
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
-             this, SLOT(onRepoActivated(RepositoryInfo*)) );
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(RepositoryInfo*)),
-             this, SLOT(onRepoDeactivated(RepositoryInfo*)) );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(Repo*)),
+             this, SLOT(onRepoActivated(Repo*)) );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(Repo*)),
+             this, SLOT(onRepoDeactivated(Repo*)) );
 }
 
 QModelIndex RepoTreeView::deeplyMapToSource( QModelIndex current ) const
@@ -78,7 +78,7 @@ QModelIndex RepoTreeView::deeplyMapToSource( QModelIndex current ) const
 
 void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
 {
-    RepositoryInfo* info = mModel->index2Info(deeplyMapToSource(index));
+    Repo* info = mModel->index2Info(deeplyMapToSource(index));
 
     if( info && !info->isDisabled() )
     {
@@ -95,7 +95,7 @@ void RepoTreeView::onCtxActivate()
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if( action )
     {
-        RepositoryInfo* info = qobject_cast< RepositoryInfo* >( action->activatedBy() );
+        Repo* info = qobject_cast< Repo* >( action->activatedBy() );
         if( info )
         {
             MacGitver::repoMan().activate( info );
@@ -108,7 +108,7 @@ void RepoTreeView::onCtxClose()
 
 }
 
-void RepoTreeView::onRepoActivated(RepositoryInfo* repo)
+void RepoTreeView::onRepoActivated(Repo* repo)
 {
     Heaven::ContextKeys keys = mkKeys();
     keys.set("RepoName", repo->path());
@@ -126,7 +126,7 @@ void RepoTreeView::onRepoActivated(RepositoryInfo* repo)
     setCurrentContext(ctx);
 }
 
-void RepoTreeView::onRepoDeactivated(RepositoryInfo* repo)
+void RepoTreeView::onRepoDeactivated(Repo* repo)
 {
     RepositoryContext* ctx = qobject_cast< RepositoryContext* >(currentContext());
 

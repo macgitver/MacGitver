@@ -33,7 +33,7 @@ class QToolBar;
 
 #include "HistoryModel.h"
 
-class RepositoryInfo;
+class Repo;
 
 class HistoryDetails;
 class HistoryList;
@@ -50,7 +50,7 @@ public:
     HistoryView();
 
 private slots:
-    void repoActivated(RepositoryInfo* repoInfo);
+    void repoActivated(Repo* repoInfo);
     void currentCommitChanged( const Git::ObjectId& sh1 );
 
     void onChangeShowLocalBranches(bool checked);
@@ -76,7 +76,7 @@ private:
     HistoryList*            mList;
     HistoryDetails*         mDetails;
     HistoryDiff*            mDiff;
-    RepositoryInfo*         mRepoInfo;
+    Repo*         mRepoInfo;
 };
 
 #endif

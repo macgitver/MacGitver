@@ -23,21 +23,21 @@ RepoInfoModel::RepoInfoModel()
 {
     mRepoMan = &MacGitver::repoMan();
 
-    connect( mRepoMan, SIGNAL(repositoryDeactivated(RepositoryInfo*)),
-             this, SLOT(invalidateRepository(RepositoryInfo*)) );
+    connect( mRepoMan, SIGNAL(repositoryDeactivated(Repo*)),
+             this, SLOT(invalidateRepository(Repo*)) );
 
-    connect( mRepoMan, SIGNAL(repositoryActivated(RepositoryInfo*)),
-             this, SLOT(invalidateRepository(RepositoryInfo*)) );
+    connect( mRepoMan, SIGNAL(repositoryActivated(Repo*)),
+             this, SLOT(invalidateRepository(Repo*)) );
 
-    connect( mRepoMan, SIGNAL(repositoryOpened(RepositoryInfo*)),
-             this, SLOT(repositoryOpened(RepositoryInfo*)));
+    connect( mRepoMan, SIGNAL(repositoryOpened(Repo*)),
+             this, SLOT(repositoryOpened(Repo*)));
 }
 
 int RepoInfoModel::rowCount( const QModelIndex& parent ) const
 {
     if( parent.isValid() )
     {
-        RepositoryInfo* info = index2Info( parent );
+        Repo* info = index2Info( parent );
         return info ? info->children().count() : 0;
     }
     else
@@ -55,7 +55,7 @@ QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
 {
     if( !index.isValid() ) return QVariant();
 
-    RepositoryInfo* info = index2Info( index );
+    Repo* info = index2Info( index );
     if( info )
     {
         switch(role) {
@@ -82,11 +82,11 @@ QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
 
 QModelIndex RepoInfoModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    RepositoryInfo::List list;
+    Repo::List list;
 
     if( parent.isValid() )
     {
-        RepositoryInfo* infoParent = index2Info( parent );
+        Repo* infoParent = index2Info( parent );
         if( !infoParent )
         {
             return QModelIndex();
@@ -114,7 +114,7 @@ QModelIndex RepoInfoModel::parent( const QModelIndex& child ) const
         return QModelIndex();
     }
 
-    RepositoryInfo* info = index2Info( child );
+    Repo* info = index2Info( child );
     if( !info || !info->parentRepository() )
     {
         return QModelIndex();
@@ -123,12 +123,12 @@ QModelIndex RepoInfoModel::parent( const QModelIndex& child ) const
     return info2Index( info->parentRepository() );
 }
 
-RepositoryInfo* RepoInfoModel::index2Info( const QModelIndex& index ) const
+Repo* RepoInfoModel::index2Info( const QModelIndex& index ) const
 {
-    return static_cast< RepositoryInfo* >( index.internalPointer() );
+    return static_cast< Repo* >( index.internalPointer() );
 }
 
-QModelIndex RepoInfoModel::info2Index( RepositoryInfo* info ) const
+QModelIndex RepoInfoModel::info2Index( Repo* info ) const
 {
     int row = 0;
 
@@ -154,7 +154,7 @@ QModelIndex RepoInfoModel::info2Index( RepositoryInfo* info ) const
     return createIndex( row, 0, info );
 }
 
-void RepoInfoModel::invalidateRepository( RepositoryInfo *info )
+void RepoInfoModel::invalidateRepository( Repo *info )
 {
     if ( !info ) return;
 
@@ -162,14 +162,14 @@ void RepoInfoModel::invalidateRepository( RepositoryInfo *info )
     emit dataChanged( index, index );
 }
 
-void RepoInfoModel::repositoryOpened(RepositoryInfo *info)
+void RepoInfoModel::repositoryOpened(Repo *info)
 {
     if (!info || info->parentRepository()) {
         return;
     }
 
-    connect(info, SIGNAL(childAdded(RepositoryInfo*,RepositoryInfo*)),
-            this, SLOT(repositoryChildAdded(RepositoryInfo*,RepositoryInfo*)));
+    connect(info, SIGNAL(childAdded(Repo*,Repo*)),
+            this, SLOT(repositoryChildAdded(Repo*,Repo*)));
 
     // we add a row just at the end of the root. This is stupid. But that's the way it works when
     // a model actually isn't a model...
@@ -179,7 +179,7 @@ void RepoInfoModel::repositoryOpened(RepositoryInfo *info)
     emit endInsertRows();
 }
 
-void RepoInfoModel::repositoryChildAdded(RepositoryInfo* parent, RepositoryInfo* child)
+void RepoInfoModel::repositoryChildAdded(Repo* parent, Repo* child)
 {
     QModelIndex parentIndex = info2Index(parent);
 

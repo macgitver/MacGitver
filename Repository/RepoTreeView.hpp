@@ -23,7 +23,7 @@
 
 class QModelIndex;
 
-class RepositoryInfo;
+class Repo;
 
 class RepoInfoModel;
 class TreeViewCtxMenu;
@@ -45,8 +45,8 @@ private slots:  // from mRepos
     void contextMenu( const QModelIndex& index, const QPoint& globalPos );
 
 private slots:  // for MacGitver::repoMan()
-    void onRepoActivated(RepositoryInfo* repo);
-    void onRepoDeactivated(RepositoryInfo* repo);
+    void onRepoActivated(Repo* repo);
+    void onRepoDeactivated(Repo* repo);
 
 private:
     QModelIndex deeplyMapToSource( QModelIndex current ) const;

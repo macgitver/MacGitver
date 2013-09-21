@@ -32,7 +32,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
+#include "libMacGitverCore/RepoMan/RepoInfo.hpp"
 
 #include "HistoryView.h"
 #include "HistoryEntry.h"
@@ -76,8 +76,8 @@ HistoryView::HistoryView()
     initSplitters();
 
     mRepoInfo = NULL;
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
-             this, SLOT(repoActivated(RepositoryInfo*)));
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(Repo*)),
+             this, SLOT(repoActivated(Repo*)));
 
     #if 0 // Missing feature in libHeaven:
 
@@ -95,7 +95,7 @@ HistoryView::HistoryView()
     #endif
 }
 
-void HistoryView::repoActivated(RepositoryInfo* repoInfo)
+void HistoryView::repoActivated(Repo* repoInfo)
 {
     if (mRepoInfo != repoInfo) {
 

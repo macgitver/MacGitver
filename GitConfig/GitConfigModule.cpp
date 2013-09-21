@@ -19,7 +19,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
+#include "libMacGitverCore/RepoMan/RepoInfo.hpp"
 
 #include "GitConfigModule.h"
 #include "GitConfigDialog.h"
@@ -41,7 +41,7 @@ void GitConfigModule::deinitialize()
 void GitConfigModule::onToolsGitConfig()
 {
     Git::Repository repo;
-    RepositoryInfo* info = MacGitver::repoMan().activeRepository();
+    Repo* info = MacGitver::repoMan().activeRepository();
     if (info) {
         repo = info->gitRepo();
     }

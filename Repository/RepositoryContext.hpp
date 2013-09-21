@@ -32,11 +32,11 @@ public:
     RepositoryContext();
 
 public:
-    void setRepository( RepositoryInfo* repo );
-    RepositoryInfo* repository();
+    void setRepository( Repo* repo );
+    Repo* repository();
 
 private:
-    RepositoryInfo*         mRepo;
+    Repo*         mRepo;
 };
 
 #endif

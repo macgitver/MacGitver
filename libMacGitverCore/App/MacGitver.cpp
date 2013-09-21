@@ -26,7 +26,6 @@
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/MacGitver/Modules.h"
-#include "libMacGitverCore/MacGitver/FSWatcher.h"
 #include "libMacGitverCore/MacGitver/RepoManager.hpp"
 
 /**

@@ -53,10 +53,10 @@ namespace RM
     signals:
         void firstRepositoryOpened();
         void lastRepositoryClosed();
-        void repositoryOpened( Repo* repo );
+        void repositoryOpened(RM::Repo* repo );
         void repositoryClosed();
-        void repositoryActivated( Repo* repo );
-        void repositoryDeactivated( Repo* repo );
+        void repositoryActivated(RM::Repo* repo );
+        void repositoryDeactivated(RM::Repo* repo );
         void hasActiveRepositoryChanged(bool hasActiveRepo);
 
     private slots:

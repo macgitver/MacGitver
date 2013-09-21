@@ -26,334 +26,339 @@
 #include "RepoMan/Repo.hpp"
 #include "RepoMan/RepoMan.hpp"
 
-Repo::Repo()
+namespace RM
 {
-}
 
-Repo::Repo( const Git::Repository& repo )
-{
-    mRepo = repo;
-    mPath = repo.basePath();
-    mIsLoaded = mRepo.isValid();
-    mIsActive = false;
-    mIsDisabled = false;
-    mIsBare = mRepo.isValid() && mRepo.isBare();
-    mIsSubModule = false;
-    mDisplayAlias = QString();
-    mParent = NULL;
-    mUnloadTimer = NULL;
-
-    if( mPath.endsWith( L'/' ) )
+    Repo::Repo()
     {
-        mPath = mPath.left( mPath.length() - 1 );
     }
 
-    findAlias();
-
-    if( mDisplayAlias.isEmpty() )
+    Repo::Repo( const Git::Repository& repo )
     {
-        QStringList sl = mPath.split( QChar( L'/' ), QString::SkipEmptyParts );
-        mDisplayAlias = sl.last();
-    }
-}
-
-Repo::~Repo()
-{
-    qDeleteAll( mChildren );
-
-    if( mIsLoaded )
-    {
-        unload();
-    }
-
-    if( mParent )
-    {
-        mParent->removeChild( this );
-    }
-
-    MacGitver::repoMan().internalClosedRepo(this);
-}
-
-Git::Repository Repo::gitRepo()
-{
-    if( ensureIsLoaded() )
-    {
-        return mRepo;
-    }
-
-    return Git::Repository();
-}
-
-QString Repo::path() const
-{
-    return mPath;
-}
-
-bool Repo::isSubModule() const
-{
-    return mIsSubModule;
-}
-
-bool Repo::isBare() const
-{
-    return mIsBare;
-}
-
-bool Repo::isLoaded() const
-{
-    return mIsLoaded;
-}
-
-bool Repo::isDisabled() const
-{
-    return mIsDisabled;
-}
-
-bool Repo::isActive() const
-{
-    return mIsActive;
-}
-
-Repo* Repo::parentRepository()
-{
-    return mParent;
-}
-
-Repo::List Repo::children() const
-{
-    return mChildren;
-}
-
-void Repo::setActive( bool active )
-{
-    if( active == mIsActive )
-    {
-        return;
-    }
-
-    if( mIsActive )
-    {
-        Q_ASSERT( !mUnloadTimer );
-        mUnloadTimer = new QTimer( this );
-        connect( mUnloadTimer, SIGNAL(timeout()), this, SLOT(unloadTimer()) );
-        mUnloadTimer->setInterval( 15 * 60 * 1000 ); // quarter of an hour
-        mUnloadTimer->start();
-
+        mRepo = repo;
+        mPath = repo.basePath();
+        mIsLoaded = mRepo.isValid();
         mIsActive = false;
+        mIsDisabled = false;
+        mIsBare = mRepo.isValid() && mRepo.isBare();
+        mIsSubModule = false;
+        mDisplayAlias = QString();
+        mParent = NULL;
+        mUnloadTimer = NULL;
 
-        MacGitver::repoMan().internalActivate( NULL );
+        if( mPath.endsWith( L'/' ) )
+        {
+            mPath = mPath.left( mPath.length() - 1 );
+        }
+
+        findAlias();
+
+        if( mDisplayAlias.isEmpty() )
+        {
+            QStringList sl = mPath.split( QChar( L'/' ), QString::SkipEmptyParts );
+            mDisplayAlias = sl.last();
+        }
     }
-    else
+
+    Repo::~Repo()
     {
+        qDeleteAll( mChildren );
+
+        if( mIsLoaded )
+        {
+            unload();
+        }
+
+        if( mParent )
+        {
+            mParent->removeChild( this );
+        }
+
+        MacGitver::repoMan().internalClosedRepo(this);
+    }
+
+    Git::Repository Repo::gitRepo()
+    {
+        if( ensureIsLoaded() )
+        {
+            return mRepo;
+        }
+
+        return Git::Repository();
+    }
+
+    QString Repo::path() const
+    {
+        return mPath;
+    }
+
+    bool Repo::isSubModule() const
+    {
+        return mIsSubModule;
+    }
+
+    bool Repo::isBare() const
+    {
+        return mIsBare;
+    }
+
+    bool Repo::isLoaded() const
+    {
+        return mIsLoaded;
+    }
+
+    bool Repo::isDisabled() const
+    {
+        return mIsDisabled;
+    }
+
+    bool Repo::isActive() const
+    {
+        return mIsActive;
+    }
+
+    Repo* Repo::parentRepository()
+    {
+        return mParent;
+    }
+
+    Repo::List Repo::children() const
+    {
+        return mChildren;
+    }
+
+    void Repo::setActive( bool active )
+    {
+        if( active == mIsActive )
+        {
+            return;
+        }
+
+        if( mIsActive )
+        {
+            Q_ASSERT( !mUnloadTimer );
+            mUnloadTimer = new QTimer( this );
+            connect( mUnloadTimer, SIGNAL(timeout()), this, SLOT(unloadTimer()) );
+            mUnloadTimer->setInterval( 15 * 60 * 1000 ); // quarter of an hour
+            mUnloadTimer->start();
+
+            mIsActive = false;
+
+            MacGitver::repoMan().internalActivate( NULL );
+        }
+        else
+        {
+            if( mUnloadTimer )
+            {
+                mUnloadTimer->stop();
+                mUnloadTimer->deleteLater();
+                mUnloadTimer = NULL;
+            }
+            mIsActive = true;
+
+            MacGitver::repoMan().internalActivate( this );
+        }
+    }
+
+    QString Repo::displayAlias() const
+    {
+        return mDisplayAlias;
+    }
+
+    void Repo::setDisplayAlias( const QString& alias )
+    {
+        if( mDisplayAlias != alias )
+        {
+            mDisplayAlias = alias;
+            emit aliasChanged( alias );
+        }
+    }
+
+    void Repo::load()
+    {
+        Q_ASSERT( !mIsLoaded );
+    }
+
+    void Repo::unload()
+    {
+        if( mIsActive )
+        {
+            qDebug() << "Unloading active RepoInfo. Will deactivate it first.";
+            setActive( false );
+        }
+        Q_ASSERT( !mIsActive );
+
         if( mUnloadTimer )
         {
             mUnloadTimer->stop();
             mUnloadTimer->deleteLater();
             mUnloadTimer = NULL;
         }
-        mIsActive = true;
 
-        MacGitver::repoMan().internalActivate( this );
+        emit aboutToUnload( this );
+
+        mIsLoaded = false;
+        mRepo = Git::Repository();
+
+        emit unloaded( this );
     }
-}
 
-QString Repo::displayAlias() const
-{
-    return mDisplayAlias;
-}
-
-void Repo::setDisplayAlias( const QString& alias )
-{
-    if( mDisplayAlias != alias )
+    bool Repo::ensureIsLoaded()
     {
-        mDisplayAlias = alias;
-        emit aliasChanged( alias );
+        if( mIsLoaded )
+        {
+            return true;
+        }
+
+        if( mIsDisabled )
+        {
+            return false;
+        }
+
+        load();
+        return mIsLoaded;
     }
-}
 
-void Repo::load()
-{
-    Q_ASSERT( !mIsLoaded );
-}
-
-void Repo::unload()
-{
-    if( mIsActive )
+    void Repo::unloadTimer()
     {
-        qDebug() << "Unloading active RepoInfo. Will deactivate it first.";
-        setActive( false );
-    }
-    Q_ASSERT( !mIsActive );
+        Q_ASSERT( mUnloadTimer );
 
-    if( mUnloadTimer )
-    {
         mUnloadTimer->stop();
         mUnloadTimer->deleteLater();
         mUnloadTimer = NULL;
+
+        unload();
     }
 
-    emit aboutToUnload( this );
-
-    mIsLoaded = false;
-    mRepo = Git::Repository();
-
-    emit unloaded( this );
-}
-
-bool Repo::ensureIsLoaded()
-{
-    if( mIsLoaded )
+    void Repo::removeChild( Repo* child )
     {
-        return true;
-    }
-
-    if( mIsDisabled )
-    {
-        return false;
-    }
-
-    load();
-    return mIsLoaded;
-}
-
-void Repo::unloadTimer()
-{
-    Q_ASSERT( mUnloadTimer );
-
-    mUnloadTimer->stop();
-    mUnloadTimer->deleteLater();
-    mUnloadTimer = NULL;
-
-    unload();
-}
-
-void Repo::removeChild( Repo* child )
-{
-    for( int i = 0; i < mChildren.count(); i++ )
-    {
-        if( mChildren.at( i ) == child )
+        for( int i = 0; i < mChildren.count(); i++ )
         {
-            mChildren.removeAt( i );
-            emit childRemoved( this, child );
+            if( mChildren.at( i ) == child )
+            {
+                mChildren.removeAt( i );
+                emit childRemoved( this, child );
+                return;
+            }
+        }
+    }
+
+    void Repo::close()
+    {
+        emit aboutToClose( this );
+
+        foreach( Repo* child, mChildren )
+        {
+            child->close();
+        }
+
+        delete this;
+    }
+
+    Repo* Repo::repoByPath( const QString& basePath, bool searchSubmodules )
+    {
+        foreach( Repo* info, mChildren )
+        {
+            if( info->path() == basePath )
+            {
+                return info;
+            }
+
+            if( searchSubmodules )
+            {
+                if( Repo* sub = info->repoByPath( basePath, true ) )
+                {
+                    return sub;
+                }
+            }
+        }
+
+        return NULL;
+    }
+
+    void Repo::scanSubmodules()
+    {
+        if( !ensureIsLoaded() )
+        {
             return;
         }
-    }
-}
 
-void Repo::close()
-{
-    emit aboutToClose( this );
-
-    foreach( Repo* child, mChildren )
-    {
-        child->close();
-    }
-
-    delete this;
-}
-
-Repo* Repo::repoByPath( const QString& basePath, bool searchSubmodules )
-{
-    foreach( Repo* info, mChildren )
-    {
-        if( info->path() == basePath )
-        {
-            return info;
-        }
-
-        if( searchSubmodules )
-        {
-            if( Repo* sub = info->repoByPath( basePath, true ) )
-            {
-                return sub;
-            }
-        }
-    }
-
-    return NULL;
-}
-
-void Repo::scanSubmodules()
-{
-    if( !ensureIsLoaded() )
-    {
-        return;
-    }
-
-    Git::Result r;
-    Git::Submodule::List subs = mRepo.submodules( r );
-    if( !r )
-    {
-        return;
-    }
-
-    List oldChildren = mChildren;
-
-    foreach (Git::Submodule sub, subs) {
         Git::Result r;
-        Git::Repository subRepo = sub.subRepository(r);
-        if (!r) {
-            continue;
+        Git::Submodule::List subs = mRepo.submodules( r );
+        if( !r )
+        {
+            return;
         }
 
-        Repo* subInfo = NULL;
-        QString path = subRepo.basePath();
+        List oldChildren = mChildren;
 
-        subInfo = repoByPath( path, true );
-        if( !subInfo )
-        {
-            subInfo = new Repo( subRepo );
-            subInfo->mIsSubModule = true;
-            subInfo->setDisplayAlias( subRepo.name() );
-            subInfo->mParent = this;
-            mChildren.append( subInfo );
-
-            emit childAdded( this, subInfo );
-
-            if( !subInfo->isBare() )
-            {
-                subInfo->scanSubmodules();
+        foreach (Git::Submodule sub, subs) {
+            Git::Result child;
+            Git::Repository subRepo = sub.subRepository(child);
+            if (!child) {
+                continue;
             }
-        }
-        else
-        {
-            oldChildren.removeOne( subInfo );
-        }
-    }
 
-    foreach( Repo* info, oldChildren )
-    {
-        removeChild( info );
-    }
-}
+            Repo* subInfo = NULL;
+            QString path = subRepo.basePath();
 
-QString Repo::branchDisplay() const
-{
-    if( mIsLoaded )
-    {
-        Git::Result r;
-        Git::Reference HEAD = mRepo.HEAD( r );
-
-        if( HEAD.isValid() )
-        {
-            if( HEAD.name() != QLatin1String( "HEAD" ) )
+            subInfo = repoByPath( path, true );
+            if( !subInfo )
             {
-                return trUtf8( "<b style=\"background-color: #FFB54F;"
-                               "\">%1</b>" ).arg( HEAD.name().mid( 11 ) );
+                subInfo = new Repo( subRepo );
+                subInfo->mIsSubModule = true;
+                subInfo->setDisplayAlias( subRepo.name() );
+                subInfo->mParent = this;
+                mChildren.append( subInfo );
+
+                emit childAdded( this, subInfo );
+
+                if( !subInfo->isBare() )
+                {
+                    subInfo->scanSubmodules();
+                }
             }
             else
             {
-                return trUtf8( "detached at <b>%1</b>" ).arg(HEAD.objectId().toString());
+                oldChildren.removeOne( subInfo );
             }
         }
-        else
+
+        foreach( Repo* info, oldChildren )
         {
-            return trUtf8( "<b style=\"color: red;\">Branch yet to be born</b>" );
+            removeChild( info );
         }
     }
-    return tr( "&lt;unknown&gt;" );
-}
 
-void Repo::findAlias()
-{
+    QString Repo::branchDisplay() const
+    {
+        if( mIsLoaded )
+        {
+            Git::Result r;
+            Git::Reference HEAD = mRepo.HEAD( r );
+
+            if( HEAD.isValid() )
+            {
+                if( HEAD.name() != QLatin1String( "HEAD" ) )
+                {
+                    return trUtf8( "<b style=\"background-color: #FFB54F;"
+                                   "\">%1</b>" ).arg( HEAD.name().mid( 11 ) );
+                }
+                else
+                {
+                    return trUtf8( "detached at <b>%1</b>" ).arg(HEAD.objectId(r).toString());
+                }
+            }
+            else
+            {
+                return trUtf8( "<b style=\"color: red;\">Branch yet to be born</b>" );
+            }
+        }
+        return tr( "&lt;unknown&gt;" );
+    }
+
+    void Repo::findAlias()
+    {
+    }
+
 }

@@ -25,74 +25,79 @@ class QTimer;
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
-class MGV_CORE_API Repo : public QObject
+namespace RM
 {
-    Q_OBJECT
-public:
-    typedef QList< Repo* > List;
 
-public:
-    Repo();
-    Repo( const Git::Repository& repo );
-    ~Repo();
+    class MGV_CORE_API Repo : public QObject
+    {
+        Q_OBJECT
+    public:
+        typedef QList< Repo* > List;
 
-public:
-    Git::Repository gitRepo();
+    public:
+        Repo();
+        Repo( const Git::Repository& repo );
+        ~Repo();
 
-    bool isSubModule() const;
-    bool isBare() const;
-    bool isLoaded() const;
-    bool isDisabled() const;
-    bool isActive() const;
+    public:
+        Git::Repository gitRepo();
 
-    Repo* parentRepository();
-    List children() const;
+        bool isSubModule() const;
+        bool isBare() const;
+        bool isLoaded() const;
+        bool isDisabled() const;
+        bool isActive() const;
 
-    void setActive( bool active );
+        Repo* parentRepository();
+        List children() const;
 
-    QString path() const;
+        void setActive( bool active );
 
-    QString displayAlias() const;
-    void setDisplayAlias( const QString& alias );
+        QString path() const;
 
-    QString branchDisplay() const;
+        QString displayAlias() const;
+        void setDisplayAlias( const QString& alias );
 
-    void close();
+        QString branchDisplay() const;
 
-    Repo* repoByPath( const QString& basePath, bool searchSubmodules );
-    void scanSubmodules();
+        void close();
 
-private:
-    void load();
-    void unload();
-    void findAlias();
-    bool ensureIsLoaded();
-    void removeChild( Repo* child );
+        Repo* repoByPath( const QString& basePath, bool searchSubmodules );
+        void scanSubmodules();
 
-private slots:
-    void unloadTimer();
+    private:
+        void load();
+        void unload();
+        void findAlias();
+        bool ensureIsLoaded();
+        void removeChild( Repo* child );
 
-signals:
-    void aboutToClose( Repo* repo );
-    void aboutToUnload( Repo* repo );
-    void unloaded( Repo* repo );
-    void loaded( Repo* repo );
-    void childRemoved( Repo* parent, Repo* child );
-    void childAdded( Repo* parent, Repo* child );
-    void aliasChanged( const QString& newAlias );
+    private slots:
+        void unloadTimer();
 
-private:
-    Git::Repository     mRepo;                  //!< GitWrap-Repo, if loaded
-    QString             mPath;                  //!< Full, absolute path to this repository
-    QString             mDisplayAlias;          //!< An alias for display (Default to last path comp.)
-    Repo*     mParent;                //!< This subModule-Repo's parent repository
-    List                mChildren;              //!< This repo's direct submodule repositories
-    bool                mIsSubModule    : 1;    //!< This is a submodule of another repo
-    bool                mIsBare         : 1;    //!< This is a bare repo
-    bool                mIsLoaded       : 1;    //!< This repo is currently loaded (by gitWrap)
-    bool                mIsDisabled     : 1;    //!< We should not try to load this one
-    bool                mIsActive       : 1;    //!< This is MGV's current active repo?
-    QTimer*             mUnloadTimer;           //!< NULL or a timer to unload this repository
-};
+    signals:
+        void aboutToClose   (RM::Repo* repo);
+        void aboutToUnload  (RM::Repo* repo);
+        void unloaded       (RM::Repo* repo);
+        void loaded         (RM::Repo* repo);
+        void childRemoved   (RM::Repo* parent, RM::Repo* child);
+        void childAdded     (RM::Repo* parent, RM::Repo* child);
+        void aliasChanged   (const QString& newAlias);
+
+    private:
+        Git::Repository mRepo;                  //!< GitWrap-Repo, if loaded
+        QString         mPath;                  //!< Full, absolute path to this repository
+        QString         mDisplayAlias;          //!< An alias for display (Default to last path comp.)
+        Repo*           mParent;                //!< This subModule-Repo's parent repository
+        List            mChildren;              //!< This repo's direct submodule repositories
+        bool            mIsSubModule    : 1;    //!< This is a submodule of another repo
+        bool            mIsBare         : 1;    //!< This is a bare repo
+        bool            mIsLoaded       : 1;    //!< This repo is currently loaded (by gitWrap)
+        bool            mIsDisabled     : 1;    //!< We should not try to load this one
+        bool            mIsActive       : 1;    //!< This is MGV's current active repo?
+        QTimer*         mUnloadTimer;           //!< NULL or a timer to unload this repository
+    };
+
+}
 
 #endif

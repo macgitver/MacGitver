@@ -26,32 +26,30 @@
 
 RepoStateWidget::RepoStateWidget()
 {
-    repoInfo = NULL;
+    repo = NULL;
     setupUi();
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(Repo*)),
-             this, SLOT(repositoryActivated(Repo*)) );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RM::Repo*)),
+             this,                  SLOT(repositoryActivated(RM::Repo*)) );
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(Repo*)),
-             this, SLOT(repositoryDeactivated(Repo*)) );
-
-    //repositoryActivated( MacGitver::repoMan().activeRepository() );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(RM::Repo*)),
+             this,                  SLOT(repositoryDeactivated(RM::Repo*)) );
 }
 
-void RepoStateWidget::repositoryActivated( Repo* info )
+void RepoStateWidget::repositoryActivated(RM::Repo* info)
 {
-    if( repoInfo != info )
+    if( repo != info )
     {
-        repoInfo = info;
+        repo = info;
         setRepoState();
     }
 }
 
-void RepoStateWidget::repositoryDeactivated( Repo* info )
+void RepoStateWidget::repositoryDeactivated(RM::Repo* info)
 {
-    if( repoInfo == info )
+    if( repo == info )
     {
-        repoInfo = NULL;
+        repo = NULL;
         setRepoState();
     }
 }
@@ -61,8 +59,8 @@ void RepoStateWidget::setRepoState()
     txthlState->hide();
     txtState->hide();
 
-    txtRepo->setText( repoInfo ? repoInfo->displayAlias() : QString() );
-    txtBranch->setText( repoInfo ? repoInfo->branchDisplay() : QString() );
+    txtRepo->setText( repo ? repo->displayAlias() : QString() );
+    txtBranch->setText( repo ? repo->branchDisplay() : QString() );
 }
 
 void RepoStateWidget::setupUi()

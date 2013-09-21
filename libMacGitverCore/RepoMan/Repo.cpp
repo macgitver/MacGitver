@@ -55,8 +55,13 @@ namespace RM
 
         if( mDisplayAlias.isEmpty() )
         {
-            QStringList sl = mPath.split( QChar( L'/' ), QString::SkipEmptyParts );
-            mDisplayAlias = sl.last();
+            if (mPath.isEmpty()) {
+                mDisplayAlias = trUtf8("Unknown Repository");
+            }
+            else {
+                QStringList sl = mPath.split( QChar( L'/' ), QString::SkipEmptyParts );
+                mDisplayAlias = sl.last();
+            }
         }
     }
 

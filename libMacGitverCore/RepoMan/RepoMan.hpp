@@ -40,31 +40,31 @@ namespace RM
 
         void closeAll();
 
-        RepositoryInfo* activeRepository();
-        void activate( RepositoryInfo* repository );
+        Repo* activeRepository();
+        void activate( Repo* repository );
 
-        RepositoryInfo::List repositories() const;
+        Repo::List repositories() const;
 
-        RepositoryInfo* repoByPath( const QString& basePath, bool searchSubmodules );
+        Repo* repoByPath( const QString& basePath, bool searchSubmodules );
 
-        void internalClosedRepo(RepositoryInfo* repository);
-        void internalActivate( RepositoryInfo* repository );
+        void internalClosedRepo(Repo* repository);
+        void internalActivate( Repo* repository );
 
     signals:
         void firstRepositoryOpened();
         void lastRepositoryClosed();
-        void repositoryOpened( RepositoryInfo* repo );
+        void repositoryOpened( Repo* repo );
         void repositoryClosed();
-        void repositoryActivated( RepositoryInfo* repo );
-        void repositoryDeactivated( RepositoryInfo* repo );
+        void repositoryActivated( Repo* repo );
+        void repositoryDeactivated( Repo* repo );
         void hasActiveRepositoryChanged(bool hasActiveRepo);
 
     private slots:
         void onRepositoryOpenHelper();
 
     private:
-        RepositoryInfo::List    mRepos;
-        RepositoryInfo*         mActiveRepo;
+        Repo::List    mRepos;
+        Repo*         mActiveRepo;
     };
 
 }

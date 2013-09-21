@@ -117,11 +117,11 @@ namespace RM
 
     bool RepoMan::open( const Git::Repository& repo )
     {
-        RepositoryInfo* info = repoByPath( repo.basePath(), false );
+        Repo* info = repoByPath( repo.basePath(), false );
 
         if( !info )
         {
-            info = new RepositoryInfo( repo );
+            info = new Repo( repo );
             mRepos.append( info );
             emit repositoryOpened( info );
 
@@ -138,9 +138,9 @@ namespace RM
         return true;
     }
 
-    RepositoryInfo* RepoMan::repoByPath( const QString& basePath, bool searchSubmodules )
+    Repo* RepoMan::repoByPath( const QString& basePath, bool searchSubmodules )
     {
-        foreach( RepositoryInfo* info, mRepos )
+        foreach( Repo* info, mRepos )
         {
             if( info->path() == basePath )
             {
@@ -149,7 +149,7 @@ namespace RM
 
             if( searchSubmodules )
             {
-                if( RepositoryInfo* sub = info->repoByPath( basePath, true ) )
+                if( Repo* sub = info->repoByPath( basePath, true ) )
                 {
                     return sub;
                 }
@@ -161,13 +161,13 @@ namespace RM
 
     void RepoMan::closeAll()
     {
-        foreach( RepositoryInfo* repo, mRepos )
+        foreach( Repo* repo, mRepos )
         {
             repo->close();
         }
     }
 
-    void RepoMan::activate( RepositoryInfo* repository )
+    void RepoMan::activate( Repo* repository )
     {
         if( repository == mActiveRepo )
         {
@@ -185,7 +185,7 @@ namespace RM
         }
     }
 
-    void RepoMan::internalClosedRepo(RepositoryInfo* repository)
+    void RepoMan::internalClosedRepo(Repo* repository)
     {
         // This pointer is actually useless. THIS IS THE LAST call issued by the destructor of the
         // RepositoryInfo itself. We should probably NOT give this pointer away.
@@ -206,7 +206,7 @@ namespace RM
 
     /**
      * @internal
-     * @brief       internally activate a RepositoryInfo
+     * @brief       internally activate a RepoInfo
      *
      * @param[in]   repository      The repository info to activate.
      *
@@ -216,11 +216,11 @@ namespace RM
      * are more than just the public activation methods.
      *
      */
-    void RepoMan::internalActivate( RepositoryInfo* repository )
+    void RepoMan::internalActivate( Repo* repository )
     {
         if( repository != mActiveRepo )
         {
-            RepositoryInfo* old = mActiveRepo;
+            Repo* old = mActiveRepo;
 
             if(mActiveRepo)
                 emit repositoryDeactivated(mActiveRepo);
@@ -236,12 +236,12 @@ namespace RM
         }
     }
 
-    RepositoryInfo* RepoMan::activeRepository()
+    Repo* RepoMan::activeRepository()
     {
         return mActiveRepo;
     }
 
-    RepositoryInfo::List RepoMan::repositories() const
+    Repo::List RepoMan::repositories() const
     {
         return mRepos;
     }

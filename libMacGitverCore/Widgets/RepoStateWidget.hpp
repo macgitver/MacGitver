@@ -21,7 +21,7 @@ class QLabel;
 
 #include <QWidget>
 
-class RepositoryInfo;
+class Repo;
 
 class RepoStateWidget : public QWidget
 {
@@ -30,15 +30,15 @@ public:
     RepoStateWidget();
 
 private slots:
-    void repositoryActivated(RepositoryInfo* info);
-    void repositoryDeactivated(RepositoryInfo* info);
+    void repositoryActivated(Repo* info);
+    void repositoryDeactivated(Repo* info);
 
 private:
     void setupUi();
     void setRepoState();
 
 private:
-    RepositoryInfo* repoInfo;
+    Repo* repoInfo;
     QLabel*         txthlRepo;
     QLabel*         txthlState;
     QLabel*         txthlBranch;

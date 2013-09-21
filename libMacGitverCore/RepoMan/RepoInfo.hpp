@@ -25,16 +25,16 @@ class QTimer;
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
-class MGV_CORE_API RepositoryInfo : public QObject
+class MGV_CORE_API Repo : public QObject
 {
     Q_OBJECT
 public:
-    typedef QList< RepositoryInfo* > List;
+    typedef QList< Repo* > List;
 
 public:
-    RepositoryInfo();
-    RepositoryInfo( const Git::Repository& repo );
-    ~RepositoryInfo();
+    Repo();
+    Repo( const Git::Repository& repo );
+    ~Repo();
 
 public:
     Git::Repository gitRepo();
@@ -45,7 +45,7 @@ public:
     bool isDisabled() const;
     bool isActive() const;
 
-    RepositoryInfo* parentRepository();
+    Repo* parentRepository();
     List children() const;
 
     void setActive( bool active );
@@ -59,7 +59,7 @@ public:
 
     void close();
 
-    RepositoryInfo* repoByPath( const QString& basePath, bool searchSubmodules );
+    Repo* repoByPath( const QString& basePath, bool searchSubmodules );
     void scanSubmodules();
 
 private:
@@ -67,25 +67,25 @@ private:
     void unload();
     void findAlias();
     bool ensureIsLoaded();
-    void removeChild( RepositoryInfo* child );
+    void removeChild( Repo* child );
 
 private slots:
     void unloadTimer();
 
 signals:
-    void aboutToClose( RepositoryInfo* repo );
-    void aboutToUnload( RepositoryInfo* repo );
-    void unloaded( RepositoryInfo* repo );
-    void loaded( RepositoryInfo* repo );
-    void childRemoved( RepositoryInfo* parent, RepositoryInfo* child );
-    void childAdded( RepositoryInfo* parent, RepositoryInfo* child );
+    void aboutToClose( Repo* repo );
+    void aboutToUnload( Repo* repo );
+    void unloaded( Repo* repo );
+    void loaded( Repo* repo );
+    void childRemoved( Repo* parent, Repo* child );
+    void childAdded( Repo* parent, Repo* child );
     void aliasChanged( const QString& newAlias );
 
 private:
     Git::Repository     mRepo;                  //!< GitWrap-Repo, if loaded
     QString             mPath;                  //!< Full, absolute path to this repository
     QString             mDisplayAlias;          //!< An alias for display (Default to last path comp.)
-    RepositoryInfo*     mParent;                //!< This subModule-Repo's parent repository
+    Repo*     mParent;                //!< This subModule-Repo's parent repository
     List                mChildren;              //!< This repo's direct submodule repositories
     bool                mIsSubModule    : 1;    //!< This is a submodule of another repo
     bool                mIsBare         : 1;    //!< This is a bare repo

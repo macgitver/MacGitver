@@ -29,16 +29,16 @@ RepoStateWidget::RepoStateWidget()
     repoInfo = NULL;
     setupUi();
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
-             this, SLOT(repositoryActivated(RepositoryInfo*)) );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(Repo*)),
+             this, SLOT(repositoryActivated(Repo*)) );
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(RepositoryInfo*)),
-             this, SLOT(repositoryDeactivated(RepositoryInfo*)) );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(Repo*)),
+             this, SLOT(repositoryDeactivated(Repo*)) );
 
     //repositoryActivated( MacGitver::repoMan().activeRepository() );
 }
 
-void RepoStateWidget::repositoryActivated( RepositoryInfo* info )
+void RepoStateWidget::repositoryActivated( Repo* info )
 {
     if( repoInfo != info )
     {
@@ -47,7 +47,7 @@ void RepoStateWidget::repositoryActivated( RepositoryInfo* info )
     }
 }
 
-void RepoStateWidget::repositoryDeactivated( RepositoryInfo* info )
+void RepoStateWidget::repositoryDeactivated( Repo* info )
 {
     if( repoInfo == info )
     {

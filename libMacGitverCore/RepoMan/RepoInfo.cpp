@@ -26,11 +26,11 @@
 #include "RepoMan/RepoInfo.hpp"
 #include "RepoMan/RepoMan.hpp"
 
-RepositoryInfo::RepositoryInfo()
+Repo::Repo()
 {
 }
 
-RepositoryInfo::RepositoryInfo( const Git::Repository& repo )
+Repo::Repo( const Git::Repository& repo )
 {
     mRepo = repo;
     mPath = repo.basePath();
@@ -57,7 +57,7 @@ RepositoryInfo::RepositoryInfo( const Git::Repository& repo )
     }
 }
 
-RepositoryInfo::~RepositoryInfo()
+Repo::~Repo()
 {
     qDeleteAll( mChildren );
 
@@ -74,7 +74,7 @@ RepositoryInfo::~RepositoryInfo()
     MacGitver::repoMan().internalClosedRepo(this);
 }
 
-Git::Repository RepositoryInfo::gitRepo()
+Git::Repository Repo::gitRepo()
 {
     if( ensureIsLoaded() )
     {
@@ -84,47 +84,47 @@ Git::Repository RepositoryInfo::gitRepo()
     return Git::Repository();
 }
 
-QString RepositoryInfo::path() const
+QString Repo::path() const
 {
     return mPath;
 }
 
-bool RepositoryInfo::isSubModule() const
+bool Repo::isSubModule() const
 {
     return mIsSubModule;
 }
 
-bool RepositoryInfo::isBare() const
+bool Repo::isBare() const
 {
     return mIsBare;
 }
 
-bool RepositoryInfo::isLoaded() const
+bool Repo::isLoaded() const
 {
     return mIsLoaded;
 }
 
-bool RepositoryInfo::isDisabled() const
+bool Repo::isDisabled() const
 {
     return mIsDisabled;
 }
 
-bool RepositoryInfo::isActive() const
+bool Repo::isActive() const
 {
     return mIsActive;
 }
 
-RepositoryInfo* RepositoryInfo::parentRepository()
+Repo* Repo::parentRepository()
 {
     return mParent;
 }
 
-RepositoryInfo::List RepositoryInfo::children() const
+Repo::List Repo::children() const
 {
     return mChildren;
 }
 
-void RepositoryInfo::setActive( bool active )
+void Repo::setActive( bool active )
 {
     if( active == mIsActive )
     {
@@ -157,12 +157,12 @@ void RepositoryInfo::setActive( bool active )
     }
 }
 
-QString RepositoryInfo::displayAlias() const
+QString Repo::displayAlias() const
 {
     return mDisplayAlias;
 }
 
-void RepositoryInfo::setDisplayAlias( const QString& alias )
+void Repo::setDisplayAlias( const QString& alias )
 {
     if( mDisplayAlias != alias )
     {
@@ -171,16 +171,16 @@ void RepositoryInfo::setDisplayAlias( const QString& alias )
     }
 }
 
-void RepositoryInfo::load()
+void Repo::load()
 {
     Q_ASSERT( !mIsLoaded );
 }
 
-void RepositoryInfo::unload()
+void Repo::unload()
 {
     if( mIsActive )
     {
-        qDebug() << "Unloading active RepositoryInfo. Will deactivate it first.";
+        qDebug() << "Unloading active RepoInfo. Will deactivate it first.";
         setActive( false );
     }
     Q_ASSERT( !mIsActive );
@@ -200,7 +200,7 @@ void RepositoryInfo::unload()
     emit unloaded( this );
 }
 
-bool RepositoryInfo::ensureIsLoaded()
+bool Repo::ensureIsLoaded()
 {
     if( mIsLoaded )
     {
@@ -216,7 +216,7 @@ bool RepositoryInfo::ensureIsLoaded()
     return mIsLoaded;
 }
 
-void RepositoryInfo::unloadTimer()
+void Repo::unloadTimer()
 {
     Q_ASSERT( mUnloadTimer );
 
@@ -227,7 +227,7 @@ void RepositoryInfo::unloadTimer()
     unload();
 }
 
-void RepositoryInfo::removeChild( RepositoryInfo* child )
+void Repo::removeChild( Repo* child )
 {
     for( int i = 0; i < mChildren.count(); i++ )
     {
@@ -240,11 +240,11 @@ void RepositoryInfo::removeChild( RepositoryInfo* child )
     }
 }
 
-void RepositoryInfo::close()
+void Repo::close()
 {
     emit aboutToClose( this );
 
-    foreach( RepositoryInfo* child, mChildren )
+    foreach( Repo* child, mChildren )
     {
         child->close();
     }
@@ -252,9 +252,9 @@ void RepositoryInfo::close()
     delete this;
 }
 
-RepositoryInfo* RepositoryInfo::repoByPath( const QString& basePath, bool searchSubmodules )
+Repo* Repo::repoByPath( const QString& basePath, bool searchSubmodules )
 {
-    foreach( RepositoryInfo* info, mChildren )
+    foreach( Repo* info, mChildren )
     {
         if( info->path() == basePath )
         {
@@ -263,7 +263,7 @@ RepositoryInfo* RepositoryInfo::repoByPath( const QString& basePath, bool search
 
         if( searchSubmodules )
         {
-            if( RepositoryInfo* sub = info->repoByPath( basePath, true ) )
+            if( Repo* sub = info->repoByPath( basePath, true ) )
             {
                 return sub;
             }
@@ -273,7 +273,7 @@ RepositoryInfo* RepositoryInfo::repoByPath( const QString& basePath, bool search
     return NULL;
 }
 
-void RepositoryInfo::scanSubmodules()
+void Repo::scanSubmodules()
 {
     if( !ensureIsLoaded() )
     {
@@ -296,13 +296,13 @@ void RepositoryInfo::scanSubmodules()
             continue;
         }
 
-        RepositoryInfo* subInfo = NULL;
+        Repo* subInfo = NULL;
         QString path = subRepo.basePath();
 
         subInfo = repoByPath( path, true );
         if( !subInfo )
         {
-            subInfo = new RepositoryInfo( subRepo );
+            subInfo = new Repo( subRepo );
             subInfo->mIsSubModule = true;
             subInfo->setDisplayAlias( subRepo.name() );
             subInfo->mParent = this;
@@ -321,13 +321,13 @@ void RepositoryInfo::scanSubmodules()
         }
     }
 
-    foreach( RepositoryInfo* info, oldChildren )
+    foreach( Repo* info, oldChildren )
     {
         removeChild( info );
     }
 }
 
-QString RepositoryInfo::branchDisplay() const
+QString Repo::branchDisplay() const
 {
     if( mIsLoaded )
     {
@@ -354,6 +354,6 @@ QString RepositoryInfo::branchDisplay() const
     return tr( "&lt;unknown&gt;" );
 }
 
-void RepositoryInfo::findAlias()
+void Repo::findAlias()
 {
 }

@@ -19,14 +19,24 @@
 
 #include "Fixture.hpp"
 
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
-typedef Fixture RepoMan;
-
-TEST_F(RepoMan, Trivial) {
-
+Fixture::Fixture()
+{
+    mgv = NULL;
 }
 
-TEST_F(RepoMan, Trivial2) {
+Fixture::~Fixture()
+{
+    delete mgv;
+    mgv = NULL;
+}
 
+void Fixture::SetUp()
+{
+    mgv = new MacGitver(false);
+}
+
+void Fixture::TearDown()
+{
+    delete mgv;
+    mgv = NULL;
 }

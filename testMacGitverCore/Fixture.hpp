@@ -17,16 +17,28 @@
  *
  */
 
-#include "Fixture.hpp"
+#ifndef TEST_MGV_CORE_FIXTURE_HPP
+#define TEST_MGV_CORE_FIXTURE_HPP
 
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "gtest/gtest.h"
 
-typedef Fixture RepoMan;
+#include "libMacGitverCore/App/MacGitver.hpp"
 
-TEST_F(RepoMan, Trivial) {
+// All MacGitverCore tests MUST use this fixture in order to have libMacGitverCore intialized
+// and deinitialized again.
 
-}
+class Fixture : public ::testing::Test
+{
+public:
+    Fixture();
+    ~Fixture();
 
-TEST_F(RepoMan, Trivial2) {
+public:
+    virtual void SetUp();
+    virtual void TearDown();
 
-}
+private:
+    MacGitver* mgv;
+};
+
+#endif

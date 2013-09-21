@@ -4,8 +4,14 @@ QT_PREPARE(Core)
 SET(SRC_FILES
 
     main.cpp
+    Fixture.cpp
 
     Test_RepoMan.cpp
+)
+
+SET(HDR_FILES
+
+    Fixture.hpp
 )
 
 ADD_CUSTOM_GTEST(
@@ -13,7 +19,7 @@ ADD_CUSTOM_GTEST(
 
     ${SRC_FILES}
     ${HDR_FILES}
-    ${UIC_FILES} ${UI_FILES}
+    ${MOC_FILES}
 )
 
 TARGET_LINK_LIBRARIES(testMacGitverCore MacGitverCore)

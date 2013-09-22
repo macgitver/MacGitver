@@ -26,7 +26,6 @@
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
-    MacGitver mgv(false);
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

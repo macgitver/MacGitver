@@ -17,16 +17,48 @@
  *
  */
 
-#include "Fixture.hpp"
+#include "Test_RepoMan.hpp"
 
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
-typedef Fixture RepoMan;
+void RepoManFixture::expectSignal(QObject* sender, const char * const signature)
+{
+    connect(sender, signature, this, SLOT(expectedSignal()));
 
-TEST_F(RepoMan, Trivial) {
-
+    expectedSender = sender;
+    expectedSignature = signature;
+    gotSignal = false;
 }
 
-TEST_F(RepoMan, Trivial2) {
+bool RepoManFixture::receivedSignal()
+{
+    bool got = gotSignal;
+
+    disconnect(expectedSender, expectedSignature, this, SLOT(expectedSignal()));
+    expectedSender = NULL;
+    expectedSignature = NULL;
+
+    return got;
+}
+
+void RepoManFixture::expectedSignal()
+{
+    if (sender() == expectedSender)
+    {
+        gotSignal = true;
+    }
+}
+
+
+TEST_F(RepoManFixture, Trivial)
+{
+    RM::RepoMan* rm = &MacGitver::repoMan();
+    expectSignal(rm, SIGNAL(firstRepositoryOpened()));
+    rm->open(Git::Repository());
+    ASSERT_TRUE(receivedSignal());
+}
+
+TEST_F(RepoManFixture, Trivial2)
+{
 
 }

@@ -17,29 +17,27 @@
  *
  */
 
-#ifndef TEST_MGV_CORE_FIXTURE_HPP
-#define TEST_MGV_CORE_FIXTURE_HPP
+#ifndef TEST_MGVCORE_REPO_MAN_HPP
+#define TEST_MGVCORE_REPO_MAN_HPP
 
-#include "gtest/gtest.h"
+#include "Fixture.hpp"
 
-#include "libMacGitverCore/App/MacGitver.hpp"
-
-// All MacGitverCore tests MUST use this fixture in order to have libMacGitverCore intialized
-// and deinitialized again.
-
-class Fixture : public QObject, public ::testing::Test
+class RepoManFixture : public Fixture
 {
     Q_OBJECT
 public:
-    Fixture();
-    ~Fixture();
 
-public:
-    virtual void SetUp();
-    virtual void TearDown();
+protected:
+    void expectSignal(QObject* sender, const char* const signature);
+    bool receivedSignal();
 
-private:
-    MacGitver* mgv;
+private slots:
+    void expectedSignal();
+
+protected:
+    const char*     expectedSignature;
+    QObject*        expectedSender;
+    bool            gotSignal;
 };
 
 #endif

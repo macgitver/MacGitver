@@ -12,7 +12,11 @@ SET(SRC_FILES
 SET(HDR_FILES
 
     Fixture.hpp
+
+    Test_RepoMan.hpp
 )
+
+QT_MOC( MOC_FILES ${HDR_FILES} )
 
 ADD_CUSTOM_GTEST(
     testMacGitverCore

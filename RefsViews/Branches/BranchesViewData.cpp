@@ -49,11 +49,11 @@ void BranchesViewData::attachedToContext( Heaven::ViewContext* context )
 
 void BranchesViewData::detachedFromContext()
 {
-    delete mModel;
-    mModel = NULL;
-
     delete mSortProxy;
     mSortProxy = NULL;
+
+    delete mModel;
+    mModel = NULL;
 }
 
 Git::Repository BranchesViewData::repository() const

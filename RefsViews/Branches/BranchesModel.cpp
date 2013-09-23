@@ -100,7 +100,9 @@ Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
     Qt::ItemFlags result = Qt::ItemIsEnabled;
     const RefItem *item = static_cast<const RefItem *>( index.internalPointer() );
 
-    if ( item->isContentItem() )
+    RefItem::ItemType t = static_cast<RefItem::ItemType>(
+                item->data( 0, RefItem::TypeRole ).toInt() );
+    if ( (t == RefItem::Reference) || (t == RefItem::Namespace) )
         result |= Qt::ItemIsSelectable;
 
     if ( item->isEditable() )

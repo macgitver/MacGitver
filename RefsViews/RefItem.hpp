@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef REFSITEM_H
-#define REFSITEM_H
+#ifndef REF_ITEM_HPP
+#define REF_ITEM_HPP
 
 #include "libGitWrap/Reference.hpp"
 
@@ -28,6 +28,19 @@
 class RefItem
 {
 public:
+    enum Role
+    {
+        TypeRole = Qt::UserRole
+    };
+
+    enum ItemType
+    {
+        Scope = 1,
+        Namespace,
+        Reference
+    };
+
+public:
     RefItem();
     RefItem( RefItem* p );
     virtual ~RefItem();
@@ -36,7 +49,6 @@ public:
     RefItem* parent;
     QList< RefItem* > children;
 
-    virtual bool isContentItem() const;
     virtual QVariant data( int col, int role ) const;
     virtual bool setData(Git::Result &result, const QVariant &value, int role, int col );
     virtual QString text() const;
@@ -75,7 +87,6 @@ public:
 
     QVariant data( int col, int role ) const;
     bool setData(Git::Result& result, const QVariant &value, int role, int col);
-    bool isContentItem() const;
     bool isEditable() const;
 
     Git::Reference reference() const
@@ -87,4 +98,4 @@ private:
     Git::Reference  mRef;
 };
 
-#endif // BRANCHESMODEL_REFSITEM_H
+#endif // REF_ITEM_HPP

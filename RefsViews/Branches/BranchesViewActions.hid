@@ -36,18 +36,9 @@ Ui BranchesViewActions {
 
     ToolBar BranchesTB {
 
-        Action          ShowLocal {
-            Text        "Local";
-            Checkable   true;
-            Checked     true;
-            ConnectTo   rereadBranches();
-        };
-
-        Action          ShowRemote {
-            Text        "Remote";
-            Checkable   true;
-            Checked     true;
-            ConnectTo   rereadBranches();
+        Action          JumpToCurrentBranch {
+            Text        "Jump to current branch";
+            ConnectTo   onJumpToCurrentBranch();
         };
 
     };

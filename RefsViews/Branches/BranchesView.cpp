@@ -27,6 +27,9 @@
 #include "libGitWrap/Reference.hpp"
 
 #include "RefItem.hpp"
+#include "RefsSortProxy.hpp"
+#include "RefRenameDialog.hpp"
+
 
 BranchesView::BranchesView()
     : ContextView( "Branches" )
@@ -63,14 +66,14 @@ QSize BranchesView::sizeHint() const
 
 void BranchesView::showContextMenu(const QModelIndex &index, const QPoint &globalPos)
 {
-    QModelIndex srcIndex = index;
+    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( index );
     if ( !srcIndex.isValid() )
         return;
 
     const RefItem *item = static_cast<const RefItem*>(srcIndex.internalPointer());
 
     Heaven::Menu* menu = 0;
-    if ( item && item->isContentItem() )
+    if ( item && (item->data(0, RefItem::TypeRole) == RefItem::Reference) )
     {
         menu = menuCtxMenuRefsView;
         //menu->setActivationContext( item );
@@ -86,7 +89,7 @@ void BranchesView::onCheckoutRef()
     if ( !action )
         return;
 
-    QModelIndex srcIndex = mTree->currentIndex();
+    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
     if ( !srcIndex.isValid() )
         return;
 
@@ -113,7 +116,7 @@ void BranchesView::onRemoveRef()
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action ) return;
 
-    QModelIndex srcIndex = mTree->currentIndex();
+    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
     if ( !srcIndex.isValid() ) return;
 
     const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
@@ -195,14 +198,48 @@ bool BranchesView::checkRemoveRef( const Git::Reference& ref )
 void BranchesView::onRenameRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action )
-        return;
+    if ( !action ) return;
 
-    QModelIndex srcIndex = mTree->currentIndex();
-    if ( !srcIndex.isValid() )
-        return;
+    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
+    if ( !srcIndex.isValid() ) return;
 
-    mTree->edit( srcIndex );
+    RefRenameDialog* dlg = new RefRenameDialog( this );
+    dlg->init( static_cast<RefBranch*>(srcIndex.internalPointer()) );
+
+    if ( dlg->exec() != QDialog::Accepted )
+    {
+        const Git::Result& dlgResult = dlg->gitResult();
+        if ( !dlgResult )
+        {
+            QMessageBox::warning( this, trUtf8("Failed to rename reference"),
+                                  trUtf8("Failed to rename reference:\nGit message: %1")
+                                  .arg(dlgResult.errorText()) );
+        }
+    }
+}
+
+void BranchesView::onJumpToCurrentBranch()
+{
+    QModelIndexList refIndexes = mData->mModel->match(
+                mData->mModel->index(0, 0), RefItem::TypeRole, RefItem::Reference,
+                -1, Qt::MatchRecursive | Qt::MatchExactly );
+    QModelIndex foundIndex;
+    foreach ( const QModelIndex& index, refIndexes )
+    {
+        const RefBranch* item = static_cast<const RefBranch*>(index.internalPointer());
+        if ( item && item->reference().isCurrentBranch() )
+        {
+            foundIndex = index;
+            break;
+        }
+    }
+
+    if ( foundIndex.isValid() )
+    {
+        QModelIndex proxyIndex = mData->mSortProxy->mapFromSource( foundIndex );
+        mTree->scrollTo( proxyIndex );
+        mTree->selectionModel()->select( proxyIndex, QItemSelectionModel::SelectCurrent );
+    }
 }
 
 void BranchesView::actionFailed( const Git::Result& error )
@@ -223,14 +260,15 @@ void BranchesView::contextMenuEvent(QContextMenuEvent *ev)
     }
     else if( ev->reason() == QContextMenuEvent::Mouse )
     {
-        QModelIndex idx = mTree->indexAt( ev->pos() );
-        showContextMenu( idx, ev->globalPos() );
+        showContextMenu( mTree->indexAt( ev->pos() ), ev->globalPos() );
         ev->accept();
     }
 }
 
 void BranchesView::attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data )
 {
+    Q_UNUSED( ctx );
+
     BranchesViewData* myData = qobject_cast< BranchesViewData* >( data );
     Q_ASSERT( myData );
 
@@ -241,7 +279,7 @@ void BranchesView::attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewCont
     connect( mData->mModel, SIGNAL(gitError(const Git::Result&))
              , this, SLOT(actionFailed(const Git::Result&)) );
 
-    mTree->setModel( mData->mModel );
+    mTree->setModel( mData->mSortProxy );
 }
 
 void BranchesView::detachedFromContext( Heaven::ViewContext* ctx )

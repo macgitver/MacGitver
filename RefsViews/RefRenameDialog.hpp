@@ -2,7 +2,7 @@
  * MacGitver
  * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Nils Fenner <nilsfenner@web.de>
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -16,32 +16,41 @@
  *
  */
 
-#ifndef MGV_BRANCHES_VIEW_DATA_HPP
-#define MGV_BRANCHES_VIEW_DATA_HPP
+#ifndef REF_RENAME_DIALOG_HPP
+#define REF_RENAME_DIALOG_HPP
 
-#include "libHeaven/CentralUI/Contexts/ViewContextData.hpp"
+#include <QDialog>
 
-#include "libGitWrap/Repository.hpp"
+#include "libGitWrap/Result.hpp"
 
-class BranchesModel;
-class RefsSortProxy;
+namespace Ui
+{
+    class RefRenameDialog;
+}
 
-class BranchesViewData : public Heaven::ViewContextData
+class RefBranch;
+
+class RefRenameDialog : public QDialog
 {
     Q_OBJECT
-public:
-    BranchesViewData();
+public:    
+    RefRenameDialog( QWidget* parent = 0 );
+    ~RefRenameDialog();
+
+    void init( RefBranch *refInfo );
+    const Git::Result &gitResult() const;
+
+private slots:
+    void accept();
 
 private:
-    void attachedToContext( Heaven::ViewContext* context );
-    void detachedFromContext();
+    Ui::RefRenameDialog*    ui;
 
-public:
-    Git::Repository repository() const;
+    RefBranch*              mRefInfo;
+    Git::Result             mGitResult;
 
-public:
-    BranchesModel*  mModel;
-    RefsSortProxy*  mSortProxy;
+private:
+    void updateValues();
 };
 
-#endif
+#endif // REF_RENAME_DIALOG_HPP

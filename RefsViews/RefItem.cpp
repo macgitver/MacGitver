@@ -48,11 +48,6 @@ RefItem::~RefItem()
     qDeleteAll( children );
 }
 
-bool RefItem::isContentItem() const
-{
-    return false;
-}
-
 QVariant RefItem::data(int col, int role) const
 {
     Q_UNUSED( col )
@@ -99,6 +94,9 @@ QVariant RefScope::data(int col, int role) const
         return QBrush( g );
     }
 
+    if ( role == RefItem::TypeRole )
+        return RefItem::Scope;
+
     return QVariant();
 }
 
@@ -124,6 +122,9 @@ QVariant RefNameSpace::data(int col, int role) const
         return QFileIconProvider().icon( QFileIconProvider::Folder );
     }
 
+    if ( role == RefItem::TypeRole )
+        return RefItem::Namespace;
+
     return QVariant();
 }
 
@@ -136,21 +137,21 @@ RefBranch::RefBranch(RefItem *p, const QString &t, const Git::Reference &ref)
 
 QVariant RefBranch::data(int col, int role) const
 {
-    switch( role )
-    {
-    case Qt::DisplayRole:
+    if ( role == Qt::DisplayRole )
         return mRef.shorthand().section( QChar(L'/'), -1 );
 
-    case Qt::FontRole:
+    else if ( role == Qt::FontRole )
+    {
         if( mRef.isCurrentBranch() )
         {
             QFont f;
             f.setBold( true );
             return f;
         }
-        break;
+    }
 
-    case Qt::BackgroundRole:
+    else if ( role == Qt::BackgroundRole )
+    {
         Git::Result r;
         if ( mRef.isCurrentBranch() )
         {
@@ -168,10 +169,12 @@ QVariant RefBranch::data(int col, int role) const
             g.setColorAt( 1.0, QColor(255, 255, 255, 0) );
             return QBrush(g);
         }
-        break;
     }
 
-    if ( role == Qt::EditRole)
+    else if ( role == RefItem::TypeRole )
+        return RefItem::Reference;
+
+    else if ( role == Qt::EditRole)
         return mRef.name();
 
     return QVariant();
@@ -190,11 +193,6 @@ bool RefBranch::setData(Git::Result& result, const QVariant &value, int role, in
     }
 
     return false;
-}
-
-bool RefBranch::isContentItem() const
-{
-    return true;
 }
 
 bool RefBranch::isEditable() const

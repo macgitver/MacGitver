@@ -2,7 +2,7 @@
  * MacGitver
  * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Nils Fenner <nilsfenner@web.de>
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -16,32 +16,26 @@
  *
  */
 
-#ifndef MGV_BRANCHES_VIEW_DATA_HPP
-#define MGV_BRANCHES_VIEW_DATA_HPP
+#ifndef REFS_SORT_PROXY_HPP
+#define REFS_SORT_PROXY_HPP
 
-#include "libHeaven/CentralUI/Contexts/ViewContextData.hpp"
+#include "libGitWrap/GitWrap.hpp"
 
-#include "libGitWrap/Repository.hpp"
+#include <QSortFilterProxyModel>
 
-class BranchesModel;
-class RefsSortProxy;
-
-class BranchesViewData : public Heaven::ViewContextData
+class RefsSortProxy : public QSortFilterProxyModel
 {
-    Q_OBJECT
 public:
-    BranchesViewData();
+    RefsSortProxy(QObject *parent = 0);
+    ~RefsSortProxy();
+
+public:
+    QModelIndex deeplyMapToSource( QModelIndex current ) const;
 
 private:
-    void attachedToContext( Heaven::ViewContext* context );
-    void detachedFromContext();
+    bool filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
-public:
-    Git::Repository repository() const;
-
-public:
-    BranchesModel*  mModel;
-    RefsSortProxy*  mSortProxy;
 };
 
-#endif
+#endif // REFS_SORT_PROXY_HPP

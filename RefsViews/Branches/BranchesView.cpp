@@ -19,6 +19,7 @@
 #include <QTreeView>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/MacGitver/RepoManager.hpp"
 
 #include "Branches/BranchesView.hpp"
 #include "Branches/BranchesModel.hpp"
@@ -220,9 +221,20 @@ void BranchesView::onRenameRef()
 
 void BranchesView::onJumpToCurrentBranch()
 {
-    QModelIndexList refIndexes = mData->mModel->match(
-                mData->mModel->index(0, 0), RefItem::TypeRole, RefItem::Reference,
-                -1, Qt::MatchRecursive | Qt::MatchExactly );
+    Git::Repository repo = MacGitver::repoMan().activeRepository()->gitRepo();
+
+    if ( !repo.isValid() ) return;
+
+    if ( repo.isHeadDetached() )
+    {
+        QMessageBox::information( this, trUtf8("No branch active"),
+                                  trUtf8("There's currently no branch active on the HEAD commit.") );
+        return;
+    }
+
+    QModelIndexList refIndexes = mData->mModel->match( mData->mModel->index(0, 0),
+                                                       RefItem::TypeRole, RefItem::Reference,
+                                                       -1, Qt::MatchRecursive | Qt::MatchExactly );
     QModelIndex foundIndex;
     foreach ( const QModelIndex& index, refIndexes )
     {

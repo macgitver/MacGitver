@@ -11,6 +11,7 @@ INCLUDE( cmake/Utils.cmake )
 INCLUDE( cmake/Doxygen.cmake )
 SET_OUTPUT_PATHS()
 INCLUDE( cmake/QtMacros.cmake )
+INCLUDE( cmake/GoogleTest.cmake )
 
 IF( UNIX )
     GCC_ADD_FLAG( "-Wall" )

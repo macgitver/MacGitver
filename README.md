@@ -3,7 +3,7 @@ MacGitver
 
 MacGitver is a cross platform, Qt-based user interface for managing Git repositories.
 
-It is still in a somewhat early development stage. First usable features are implemented and definitely worth a glimpse.
+It is still in a somewhat early development stage, but definitely worth a glimpse.
 
 Screenshots
 ========

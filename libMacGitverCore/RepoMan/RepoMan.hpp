@@ -34,7 +34,6 @@ namespace RM
         ~RepoMan();
 
     public:
-        void open();
         bool open( const QString& path );
         bool open( const Git::Repository& repo );
 
@@ -58,9 +57,6 @@ namespace RM
         void repositoryActivated(RM::Repo* repo);
         void repositoryDeactivated(RM::Repo* repo);
         void hasActiveRepositoryChanged(bool hasActiveRepo);
-
-    private slots:
-        void onRepositoryOpenHelper();
 
     private:
         Repo::List    mRepos;

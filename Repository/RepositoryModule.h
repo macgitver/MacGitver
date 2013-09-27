@@ -50,6 +50,7 @@ private slots:
     void onRepositoryClose();
     void onRecentRepositoryOpen( const QVariant& path );
 
+    void onRepositoryOpenHelper();
     void onCoreRepoOpen( RepositoryInfo* repo );
 
 private:

@@ -56,6 +56,9 @@ namespace RM
     private:
         void read();
 
+    protected:
+        bool refreshSelf();
+
     private:
         RefTypes            mType;
         QString             mName;

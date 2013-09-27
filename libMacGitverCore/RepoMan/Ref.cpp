@@ -80,4 +80,9 @@ namespace RM
         }
     }
 
+    bool Ref::refreshSelf()
+    {
+        read();
+        return true;
+    }
 }

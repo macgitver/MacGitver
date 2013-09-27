@@ -128,4 +128,39 @@ namespace RM
         return children;
     }
 
+    Base* Base::parentObject() const
+    {
+        return mParentObj;
+    }
+
+    // Not working yet, because Repo is no Base yet
+    const Repo* Base::repository() const
+    {
+        const Base* cur = this;
+
+        while (cur) {
+            if (cur->objType() == RepoObject) {
+                return NULL; // static_cast< const Repo* >(cur);
+            }
+            cur = cur->parentObject();
+        }
+
+        return NULL;
+    }
+
+    // Not working yet, because Repo is no Base yet
+    Repo* Base::repository()
+    {
+        const Base* cur = this;
+
+        while (cur) {
+            if (cur->objType() == RepoObject) {
+                return NULL; // static_cast< Repo* >(cur);
+            }
+            cur = cur->parentObject();
+        }
+
+        return NULL;
+    }
+
 }

@@ -35,6 +35,8 @@ namespace RM
         RemoteObject
     };
 
+    class Repo;
+
     class Base : public QObject
     {
         Q_OBJECT
@@ -51,6 +53,11 @@ namespace RM
 
     public:
         void refresh();
+
+        const Repo* repository() const;
+        Repo* repository();
+
+        Base* parentObject() const;
 
         Set childObjects() const;
         Set childObjects(ObjTypes type) const;

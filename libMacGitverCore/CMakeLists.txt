@@ -37,6 +37,7 @@ SET( SRC_FILES
     MacGitver/Modules.cpp
     MacGitver/GitPatchConsumer.cpp
 
+    RepoMan/Base.cpp
     RepoMan/Repo.cpp
     RepoMan/RepoMan.cpp
 
@@ -76,6 +77,7 @@ SET( PUB_HDR_FILES
     MacGitver/GitPatchConsumer.hpp
     MacGitver/IRepositoryContext.hpp
 
+    RepoMan/Base.hpp
     RepoMan/Repo.hpp
     RepoMan/RepoMan.hpp
 

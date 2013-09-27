@@ -244,7 +244,7 @@ namespace RM
         {
             if( mChildren.at( i ) == child )
             {
-                mChildren.removeAt( i );
+                mChildren.remove( i );
                 emit childRemoved( this, child );
                 return;
             }
@@ -326,9 +326,11 @@ namespace RM
                     subInfo->scanSubmodules();
                 }
             }
-            else
-            {
-                oldChildren.removeOne( subInfo );
+            else {
+                int i = oldChildren.indexOf(subInfo);
+                if (i != -1) {
+                    oldChildren.remove(i);
+                }
             }
         }
 

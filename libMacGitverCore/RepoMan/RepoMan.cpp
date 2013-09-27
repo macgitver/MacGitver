@@ -195,7 +195,7 @@ namespace RM
 
         int i = mRepos.indexOf(repository);
         if (i != -1) {
-            mRepos.removeAt(i);
+            mRepos.remove(i);
             emit repositoryClosed();
 
             if (mRepos.count() == 0) {

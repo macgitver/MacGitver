@@ -35,7 +35,7 @@ namespace RM
     {
         Q_OBJECT
     public:
-        typedef QList< Repo* > List;
+        typedef QVector< Repo* > List;
 
     public:
         Repo();

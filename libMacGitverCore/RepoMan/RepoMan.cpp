@@ -206,7 +206,7 @@ namespace RM
 
     /**
      * @internal
-     * @brief       internally activate a RepoInfo
+     * @brief       internally activate a Repo
      *
      * @param[in]   repository      The repository info to activate.
      *

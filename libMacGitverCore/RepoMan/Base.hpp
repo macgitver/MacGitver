@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QSet>
 
+#include "MacGitverApi.hpp"
+
 namespace RM
 {
 
@@ -37,7 +39,7 @@ namespace RM
 
     class Repo;
 
-    class Base : public QObject
+    class MGV_CORE_API Base : public QObject
     {
         Q_OBJECT
     public:

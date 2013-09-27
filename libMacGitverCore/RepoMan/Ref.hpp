@@ -34,7 +34,7 @@ namespace RM
         RootStageType
     };
 
-    class Ref : public Base
+    class MGV_CORE_API Ref : public Base
     {
         Q_OBJECT
     public:

@@ -23,7 +23,7 @@ namespace RM
 {
 
     /**
-     * @class       RepoManager
+     * @class       RepoMan
      * @brief       Manages the open / active repositories
      */
 
@@ -37,7 +37,20 @@ namespace RM
         closeAll();
     }
 
-    Repo* RepoMan::open( const QString& path )
+    /**
+     * @brief       Open a repository (By it's path)
+     *
+     * Opens a Git::Repository at the @a path and if this is valid, call open() to setup a RepoMan
+     * repository for it.
+     *
+     * @param[in]   path    The path where to look for the repository to open.
+     *
+     * @return      A pointer to a Repo object that represents the repositorty. An existing one will
+     *              be returned if such a Repo object can be found.
+     *              `NULL` will be returned, if the repository cannot be opened.
+     *
+     */
+    Repo* RepoMan::open(const QString& path)
     {
         Git::Result result;
         Git::Repository repo = Git::Repository::open( path, result );
@@ -49,6 +62,17 @@ namespace RM
         return open( repo );
     }
 
+    /**
+     * @brief       Setup a Repo object for a Git::Repository
+     *
+     * If there is no Repo object for the git repository at that place in the file system, a new one
+     * will be created and registered with the repo-manager and the core.
+     *
+     * @param[in]   repo    The Git::Repository object
+     *
+     * @return      Returns either an existing Repo object or a newly created one.
+     *
+     */
     Repo* RepoMan::open( const Git::Repository& repo )
     {
         Repo* info = repoByPath( repo.basePath(), false );
@@ -59,7 +83,7 @@ namespace RM
             mRepos.append( info );
             emit repositoryOpened( info );
 
-            // we need to scan for submodules explicitly, since we didn't call load() on the RepoInfo
+            // we need to scan for submodules explicitly, since we didn't call load() on the Repo*
             info->scanSubmodules();
 
             if (mRepos.count() == 1) {

@@ -127,19 +127,28 @@ namespace RM
 
     void RepoMan::activate( Repo* repository )
     {
-        if( repository == mActiveRepo )
+        if(repository != mActiveRepo)
         {
-            return;
-        }
+            Repo* old = mActiveRepo;
 
-        if( mActiveRepo )
-        {
-            mActiveRepo->setActive( false );
-        }
+            if( mActiveRepo )
+            {
+                mActiveRepo->deactivated();
+                emit repositoryDeactivated(mActiveRepo);
+            }
 
-        if( repository )
-        {
-            repository->setActive( true );
+            mActiveRepo = repository;
+
+            if( repository )
+            {
+                repository->activated();
+                emit repositoryActivated(mActiveRepo);
+            }
+
+            // Finally emit a signal that just tells about the change
+            if ((mActiveRepo != NULL) != (old != NULL)) {
+                emit hasActiveRepositoryChanged(mActiveRepo != NULL);
+            }
         }
     }
 
@@ -158,38 +167,6 @@ namespace RM
 
             if (mRepos.count() == 0) {
                 emit lastRepositoryClosed();
-            }
-        }
-    }
-
-    /**
-     * @internal
-     * @brief       internally activate a Repo
-     *
-     * @param[in]   repository      The repository info to activate.
-     *
-     * Nothing is done if @a repository is already the active repository.
-     *
-     * This method is called internally from all paths that need to change the active repository - these
-     * are more than just the public activation methods.
-     *
-     */
-    void RepoMan::internalActivate( Repo* repository )
-    {
-        if( repository != mActiveRepo )
-        {
-            Repo* old = mActiveRepo;
-
-            if(mActiveRepo)
-                emit repositoryDeactivated(mActiveRepo);
-
-            mActiveRepo = repository;
-
-            if(mActiveRepo)
-                emit repositoryActivated(mActiveRepo);
-
-            if ((mActiveRepo != NULL) != (old != NULL)) {
-                emit hasActiveRepositoryChanged(mActiveRepo != NULL);
             }
         }
     }

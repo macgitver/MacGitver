@@ -135,37 +135,29 @@ namespace RM
         return mChildren;
     }
 
-    void Repo::setActive( bool active )
+    void Repo::activated()
     {
-        if( active == mIsActive )
-        {
-            return;
+        Q_ASSERT(!mIsActive);
+
+        if(mUnloadTimer) {
+            mUnloadTimer->stop();
+            mUnloadTimer->deleteLater();
+            mUnloadTimer = NULL;
         }
+        mIsActive = true;
+    }
 
-        if( mIsActive )
-        {
-            Q_ASSERT( !mUnloadTimer );
-            mUnloadTimer = new QTimer( this );
-            connect( mUnloadTimer, SIGNAL(timeout()), this, SLOT(unloadTimer()) );
-            mUnloadTimer->setInterval( 15 * 60 * 1000 ); // quarter of an hour
-            mUnloadTimer->start();
+    void Repo::deactivated()
+    {
+        Q_ASSERT(mIsActive);
 
-            mIsActive = false;
+        Q_ASSERT(!mUnloadTimer);
+        mUnloadTimer = new QTimer(this);
+        connect( mUnloadTimer, SIGNAL(timeout()), this, SLOT(unloadTimer()) );
+        mUnloadTimer->setInterval(15 * 60 * 1000); // quarter of an hour
+        mUnloadTimer->start();
 
-            MacGitver::repoMan().internalActivate( NULL );
-        }
-        else
-        {
-            if( mUnloadTimer )
-            {
-                mUnloadTimer->stop();
-                mUnloadTimer->deleteLater();
-                mUnloadTimer = NULL;
-            }
-            mIsActive = true;
-
-            MacGitver::repoMan().internalActivate( this );
-        }
+        mIsActive = false;
     }
 
     QString Repo::displayAlias() const
@@ -192,7 +184,7 @@ namespace RM
         if( mIsActive )
         {
             qDebug() << "Unloading active RepoInfo. Will deactivate it first.";
-            setActive( false );
+            MacGitver::repoMan().activate(NULL);
         }
         Q_ASSERT( !mIsActive );
 

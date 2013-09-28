@@ -31,8 +31,11 @@ class QTimer;
 namespace RM
 {
 
+    class RepoMan;
+
     class MGV_CORE_API Repo : public QObject
     {
+        friend class RepoMan;
         Q_OBJECT
     public:
         typedef QVector< Repo* > List;
@@ -54,8 +57,6 @@ namespace RM
         Repo* parentRepository();
         List children() const;
 
-        void setActive( bool active );
-
         QString path() const;
 
         QString displayAlias() const;
@@ -74,6 +75,9 @@ namespace RM
         void findAlias();
         bool ensureIsLoaded();
         void removeChild( Repo* child );
+
+        void activated();
+        void deactivated();
 
     private slots:
         void unloadTimer();

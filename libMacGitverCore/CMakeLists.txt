@@ -42,6 +42,7 @@ SET( SRC_FILES
     RepoMan/Ref.cpp
     RepoMan/Repo.cpp
     RepoMan/RepoMan.cpp
+    RepoMan/Remote.cpp
 
     Widgets/FontSelectWidget.cpp
     Widgets/LineEdit.cpp
@@ -84,6 +85,7 @@ SET( PUB_HDR_FILES
     RepoMan/Ref.hpp
     RepoMan/Repo.hpp
     RepoMan/RepoMan.hpp
+    RepoMan/Remote.hpp
 
     Widgets/FontSelectWidget.h
     Widgets/LineEdit.h

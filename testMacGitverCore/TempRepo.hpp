@@ -24,6 +24,14 @@
 
 class Fixture;
 
+namespace RM
+{
+    class Repo;
+}
+
+/**
+ * @brief   Copy a Test-Repository and remove it after usage
+ */
 class TempRepo
 {
 public:
@@ -31,11 +39,40 @@ public:
     ~TempRepo();
 
 public:
-    QString path() const;
+    operator QString() const
+    {
+        return mTempRepoDir;
+    }
 
 private:
     QString mTempRepoDir;
     Fixture* fixture;
+};
+
+/**
+ * @brief   Copy a Test-Repo, remove it after use and keep it opened in RepoMan as long
+ *          as it is in use.
+ */
+class TempRepoOpener
+{
+public:
+    TempRepoOpener(Fixture* fixture, const char* name);
+    ~TempRepoOpener();
+
+public:
+    operator RM::Repo*() const
+    {
+        return mRepo;
+    }
+
+    RM::Repo* operator->() const
+    {
+        return mRepo;
+    }
+
+private:
+    TempRepo mTempRepo;
+    RM::Repo* mRepo;
 };
 
 #endif

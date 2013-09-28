@@ -19,6 +19,9 @@
 
 #include <QDir>
 
+#include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+
 #include "Fixture.hpp"
 #include "TempDirProvider.hpp"
 #include "TempRepo.hpp"
@@ -34,7 +37,13 @@ TempRepo::~TempRepo()
     QDir(mTempRepoDir).rmpath(QLatin1String("."));
 }
 
-QString TempRepo::path() const
+TempRepoOpener::TempRepoOpener(Fixture* fixture, const char* name)
+    : mTempRepo(fixture, name)
 {
-    return mTempRepoDir;
+    mRepo = MacGitver::repoMan().open(mTempRepo);
+}
+
+TempRepoOpener::~TempRepoOpener()
+{
+    mRepo->close();
 }

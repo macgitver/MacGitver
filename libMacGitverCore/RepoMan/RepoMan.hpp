@@ -26,7 +26,7 @@
 namespace RM
 {
 
-    class MGV_CORE_API RepoMan : public QObject
+    class MGV_CORE_API RepoMan : public Base
     {
         Q_OBJECT
     public:
@@ -47,7 +47,10 @@ namespace RM
         Repo* repoByPath( const QString& basePath, bool searchSubmodules );
 
         void internalClosedRepo(Repo* repository);
-        void internalActivate(Repo* repository);
+
+    private:
+        bool refreshSelf();
+        ObjTypes objType() const;
 
     signals:
         void firstRepositoryOpened();

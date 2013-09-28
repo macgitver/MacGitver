@@ -32,17 +32,13 @@
 namespace RM
 {
 
-    Repo::Repo()
-    {
-    }
-
     Repo::Repo( const Git::Repository& repo )
+        : Base(NULL)
     {
         mRepo = repo;
         mPath = repo.basePath();
         mIsLoaded = mRepo.isValid();
         mIsActive = false;
-        mIsDisabled = false;
         mIsBare = mRepo.isValid() && mRepo.isBare();
         mIsSubModule = false;
         mDisplayAlias = QString();
@@ -115,11 +111,6 @@ namespace RM
         return mIsLoaded;
     }
 
-    bool Repo::isDisabled() const
-    {
-        return mIsDisabled;
-    }
-
     bool Repo::isActive() const
     {
         return mIsActive;
@@ -130,7 +121,7 @@ namespace RM
         return mParent;
     }
 
-    Repo::List Repo::children() const
+    Repo::List Repo::submodules() const
     {
         return mChildren;
     }
@@ -205,23 +196,16 @@ namespace RM
 
     bool Repo::ensureIsLoaded()
     {
-        if( mIsLoaded )
-        {
-            return true;
+        if (!mIsLoaded) {
+            load();
         }
 
-        if( mIsDisabled )
-        {
-            return false;
-        }
-
-        load();
         return mIsLoaded;
     }
 
     void Repo::unloadTimer()
     {
-        Q_ASSERT( mUnloadTimer );
+        Q_ASSERT(mUnloadTimer);
 
         mUnloadTimer->stop();
         mUnloadTimer->deleteLater();
@@ -361,6 +345,17 @@ namespace RM
 
     void Repo::findAlias()
     {
+    }
+
+    bool Repo::refreshSelf()
+    {
+        Q_ASSERT(false);
+        return true;
+    }
+
+    ObjTypes Repo::objType() const
+    {
+        return RepoObject;
     }
 
 }

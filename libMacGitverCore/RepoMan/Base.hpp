@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QSet>
 
-#include "MacGitverApi.hpp"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 namespace RM
 {
@@ -32,6 +32,7 @@ namespace RM
     {
         InvalidObject,
 
+        RepoManagerObject,
         RepoObject,
         RefObject,
         RemoteObject

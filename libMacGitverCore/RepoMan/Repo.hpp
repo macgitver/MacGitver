@@ -26,14 +26,14 @@ class QTimer;
 
 #include "libGitWrap/Repository.hpp"
 
-#include "libMacGitverCore/MacGitverApi.hpp"
+#include "libMacGitverCore/RepoMan/Base.hpp"
 
 namespace RM
 {
 
     class RepoMan;
 
-    class MGV_CORE_API Repo : public QObject
+    class MGV_CORE_API Repo : public Base
     {
         friend class RepoMan;
         Q_OBJECT
@@ -41,8 +41,7 @@ namespace RM
         typedef QVector< Repo* > List;
 
     public:
-        Repo();
-        Repo( const Git::Repository& repo );
+        Repo(const Git::Repository& repo);
         ~Repo();
 
     public:
@@ -51,11 +50,10 @@ namespace RM
         bool isSubModule() const;
         bool isBare() const;
         bool isLoaded() const;
-        bool isDisabled() const;
         bool isActive() const;
 
         Repo* parentRepository();
-        List children() const;
+        List submodules() const;
 
         QString path() const;
 
@@ -67,7 +65,6 @@ namespace RM
         void close();
 
         Repo* repoByPath( const QString& basePath, bool searchSubmodules );
-        void scanSubmodules();
 
     private:
         void load();
@@ -76,8 +73,16 @@ namespace RM
         bool ensureIsLoaded();
         void removeChild( Repo* child );
 
+    private:
+        // only for repoman:
+        void scanSubmodules();
         void activated();
         void deactivated();
+
+    private:
+        // Base impl
+        bool refreshSelf();
+        ObjTypes objType() const;
 
     private slots:
         void unloadTimer();
@@ -100,7 +105,6 @@ namespace RM
         bool            mIsSubModule    : 1;    //!< This is a submodule of another repo
         bool            mIsBare         : 1;    //!< This is a bare repo
         bool            mIsLoaded       : 1;    //!< This repo is currently loaded (by gitWrap)
-        bool            mIsDisabled     : 1;    //!< We should not try to load this one
         bool            mIsActive       : 1;    //!< This is MGV's current active repo?
         QTimer*         mUnloadTimer;           //!< NULL or a timer to unload this repository
     };

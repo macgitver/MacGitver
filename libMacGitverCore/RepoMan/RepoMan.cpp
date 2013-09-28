@@ -28,6 +28,7 @@ namespace RM
      */
 
     RepoMan::RepoMan()
+        : Base(NULL)
     {
         mActiveRepo = NULL;
     }
@@ -117,6 +118,10 @@ namespace RM
         return NULL;
     }
 
+    /**
+     * @brief       Close all currently open repositories
+     *
+     */
     void RepoMan::closeAll()
     {
         foreach( Repo* repo, mRepos )
@@ -179,6 +184,16 @@ namespace RM
     Repo::List RepoMan::repositories() const
     {
         return mRepos;
+    }
+
+    bool RepoMan::refreshSelf()
+    {
+        return true;
+    }
+
+    ObjTypes RepoMan::objType() const
+    {
+        return RepoManagerObject;
     }
 
 }

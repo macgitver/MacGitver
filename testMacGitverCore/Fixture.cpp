@@ -17,6 +17,10 @@
  *
  */
 
+#include <QStringBuilder>
+#include <QDir>
+
+#include "TempDirProvider.hpp"
 #include "Fixture.hpp"
 
 Fixture::Fixture()
@@ -44,4 +48,62 @@ void Fixture::TearDown()
 QString Fixture::dataDir() const
 {
     return QString::fromLatin1(DATADIR);
+}
+
+bool copyFile(const QString& src, const QString& dest)
+{
+    QFile fInput(src);
+    QFile fOutput(dest);
+
+    if (!fInput.open(QFile::ReadOnly)) {
+        return false;
+    }
+
+    if (!fOutput.open(QFile::WriteOnly)) {
+        return false;
+    }
+
+    for (;;) {
+        char buffer[1024];
+        quint64 size = fInput.read(buffer, sizeof(buffer));
+        if (size) {
+            fOutput.write(buffer, size);
+        }
+        else {
+            return true;
+        }
+    }
+}
+
+bool copyDir(const QString& src, const QString& dest)
+{
+    QDir srcDir(src);
+    foreach (QString subDir, srcDir.entryList(QDir::Dirs|QDir::NoDotAndDotDot|QDir::Hidden)) {
+        QDir destDir(dest);
+        destDir.mkdir(subDir);
+
+        if (!copyDir(src % QChar(L'/') % subDir, dest % QChar(L'/') % subDir)) {
+            return false;
+        }
+    }
+
+    foreach (QString file, srcDir.entryList(QDir::Files|QDir::Hidden)) {
+        if (!copyFile(src % QChar(L'/') % file, dest % QChar(L'/') % file)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+QString Fixture::prepareRepo(const char* name)
+{
+    QString sourceDir = dataDir() % QChar(L'/') % QLatin1String(name);
+    QString destDir = TempDirProvider::get() % QChar(L'/') % QLatin1String(name);
+
+    QDir(TempDirProvider::get()).mkpath(QLatin1String(name));
+
+    copyDir(sourceDir, destDir);
+
+    return destDir;
 }

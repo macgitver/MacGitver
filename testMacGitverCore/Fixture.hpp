@@ -39,6 +39,7 @@ public:
     virtual void TearDown();
 
 protected:
+    QString prepareRepo(const char* name);
     QString dataDir() const;
 
 private:

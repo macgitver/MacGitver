@@ -233,14 +233,14 @@ namespace RM
             MacGitver::repoMan().activate(NULL);
         }
 
-        emit aboutToClose( this );
+        Events::self()->repositoryAboutToClose(this);
+        emit aboutToClose(this);
 
-        foreach( Repo* child, mChildren )
-        {
+        foreach(Repo* child, mChildren) {
             child->close();
         }
 
-        delete this;
+        delete this;    // ### Bad since we started inheriting Base
     }
 
     Repo* Repo::repoByPath( const QString& basePath, bool searchSubmodules )

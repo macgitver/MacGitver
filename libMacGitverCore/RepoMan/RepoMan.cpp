@@ -18,6 +18,7 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "RepoMan/RepoMan.hpp"
+#include "RepoMan/Events.hpp"
 
 namespace RM
 {
@@ -81,47 +82,43 @@ namespace RM
      * If there is no Repo object for the git repository at that place in the file system, a new one
      * will be created and registered with the repo-manager and the core.
      *
-     * @param[in]   repo    The Git::Repository object
+     * @param[in]   gitRepo The Git::Repository object
      *
      * @return      Returns either an existing Repo object or a newly created one.
      *
      */
-    Repo* RepoMan::open( const Git::Repository& repo )
+    Repo* RepoMan::open(const Git::Repository& gitRepo)
     {
-        Repo* info = repoByPath( repo.basePath(), false );
+        Repo* repo = repoByPath( gitRepo.basePath(), false );
 
-        if( !info )
-        {
-            info = new Repo( repo );
-            mRepos.append( info );
-            emit repositoryOpened( info );
+        if(!repo) {
+            repo = new Repo(gitRepo);
+            mRepos.append(repo);
+
+            Events::self()->repositoryOpened(repo);
+            emit repositoryOpened(repo);
 
             // we need to scan for submodules explicitly, since we didn't call load() on the Repo*
-            info->scanSubmodules();
+            repo->scanSubmodules();
 
             if (mRepos.count() == 1) {
                 emit firstRepositoryOpened();
             }
         }
 
-        activate( info );
-
-        return info;
+        activate( repo );
+        return repo;
     }
 
     Repo* RepoMan::repoByPath( const QString& basePath, bool searchSubmodules )
     {
-        foreach( Repo* info, mRepos )
-        {
-            if( info->path() == basePath )
-            {
-                return info;
+        foreach(Repo* repo, mRepos) {
+            if (repo->path() == basePath) {
+                return repo;
             }
 
-            if( searchSubmodules )
-            {
-                if( Repo* sub = info->repoByPath( basePath, true ) )
-                {
+            if (searchSubmodules) {
+                if (Repo* sub = repo->repoByPath(basePath, true)) {
                     return sub;
                 }
             }
@@ -136,28 +133,24 @@ namespace RM
      */
     void RepoMan::closeAll()
     {
-        foreach( Repo* repo, mRepos )
-        {
+        foreach(Repo* repo, mRepos) {
             repo->close();
         }
     }
 
-    void RepoMan::activate( Repo* repository )
+    void RepoMan::activate(Repo* repository)
     {
-        if(repository != mActiveRepo)
-        {
+        if(repository != mActiveRepo) {
             Repo* old = mActiveRepo;
 
-            if( mActiveRepo )
-            {
+            if (mActiveRepo) {
                 mActiveRepo->deactivated();
                 emit repositoryDeactivated(mActiveRepo);
             }
 
             mActiveRepo = repository;
 
-            if( repository )
-            {
+            if (repository) {
                 repository->activated();
                 emit repositoryActivated(mActiveRepo);
             }

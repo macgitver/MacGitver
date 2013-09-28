@@ -17,31 +17,28 @@
  *
  */
 
-#include "Fixture.hpp"
+#ifndef TEST_TEMP_DIR_PROVIDER_HPP
+#define TEST_TEMP_DIR_PROVIDER_HPP
 
-Fixture::Fixture()
-{
-    mgv = NULL;
-}
+#include <QString>
 
-Fixture::~Fixture()
+class TempDirProvider
 {
-    delete mgv;
-    mgv = NULL;
-}
+public:
+    TempDirProvider();
+    ~TempDirProvider();
 
-void Fixture::SetUp()
-{
-    mgv = new MacGitver(false);
-}
+public:
+    static QString get();
 
-void Fixture::TearDown()
-{
-    delete mgv;
-    mgv = NULL;
-}
+private:
+    void create();
+    void remove();
 
-QString Fixture::dataDir() const
-{
-    return QString::fromLatin1(DATADIR);
-}
+private:
+    static TempDirProvider* sSelf;
+    QString tempPath;
+    QString tempDir;
+};
+
+#endif

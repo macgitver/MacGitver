@@ -1,10 +1,13 @@
 
+ADD_DEFINITIONS(-DDATADIR=\"${CMAKE_CURRENT_LIST_DIR}/Data\")
+
 QT_PREPARE(Core)
 
 SET(SRC_FILES
 
     main.cpp
     Fixture.cpp
+    TempDirProvider.cpp
 
     Test_RepoMan.cpp
 )
@@ -12,6 +15,7 @@ SET(SRC_FILES
 SET(HDR_FILES
 
     Fixture.hpp
+    TempDirProvider.hpp
 
     Test_RepoMan.hpp
 )

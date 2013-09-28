@@ -38,6 +38,9 @@ public:
     virtual void SetUp();
     virtual void TearDown();
 
+protected:
+    QString dataDir() const;
+
 private:
     MacGitver* mgv;
 };

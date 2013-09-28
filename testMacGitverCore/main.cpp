@@ -23,9 +23,12 @@
 
 #include "gtest/gtest.h"
 
+#include "TempDirProvider.hpp"
+
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
+    TempDirProvider tdp;
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

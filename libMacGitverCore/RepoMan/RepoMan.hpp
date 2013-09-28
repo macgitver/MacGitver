@@ -30,6 +30,9 @@ namespace RM
     {
         Q_OBJECT
     public:
+        enum { StaticObjectType = RepoManagerObject };
+
+    public:
         RepoMan();
         ~RepoMan();
 

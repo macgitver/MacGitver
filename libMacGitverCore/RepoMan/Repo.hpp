@@ -38,6 +38,7 @@ namespace RM
         friend class RepoMan;
         Q_OBJECT
     public:
+        enum { StaticObjectType = RepoObject };
         typedef QVector< Repo* > List;
 
     public:

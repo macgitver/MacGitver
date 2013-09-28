@@ -27,12 +27,24 @@ namespace RM
      * @brief       Manages the open / active repositories
      */
 
+    /**
+     * @brief       Constructor
+     *
+     * Initializes the repository subsystem. Invoked from MacGitver boot up code.
+     *
+     */
     RepoMan::RepoMan()
         : Base(NULL)
     {
         mActiveRepo = NULL;
     }
 
+    /**
+     * @brief       Destructor
+     *
+     * Close all repositories.
+     *
+     */
     RepoMan::~RepoMan()
     {
         closeAll();

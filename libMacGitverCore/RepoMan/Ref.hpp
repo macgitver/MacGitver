@@ -38,6 +38,9 @@ namespace RM
     {
         Q_OBJECT
     public:
+        enum { StaticObjectType = RefObject };
+
+    public:
         Ref(Base* parent, RefTypes type, const QString& name);
         ~Ref();
 

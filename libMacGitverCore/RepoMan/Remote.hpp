@@ -29,6 +29,9 @@ namespace RM
     {
         Q_OBJECT
     public:
+        enum { StaticObjectType = RemoteObject };
+
+    public:
         Remote(Base* parent);
 
     public:

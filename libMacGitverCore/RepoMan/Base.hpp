@@ -98,7 +98,7 @@ namespace RM
     template< class T >
     inline bool Base::isA() const
     {
-        return objType() == T::StaticObjectType;
+        return objType() == int(T::StaticObjectType);
     }
 
     template< class T >

@@ -34,8 +34,8 @@ namespace RM
         ~RepoMan();
 
     public:
-        bool open( const QString& path );
-        bool open( const Git::Repository& repo );
+        Repo* open(const QString& path);
+        Repo* open(const Git::Repository& repo);
 
         void closeAll();
 

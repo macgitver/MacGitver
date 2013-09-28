@@ -37,19 +37,19 @@ namespace RM
         closeAll();
     }
 
-    bool RepoMan::open( const QString& path )
+    Repo* RepoMan::open( const QString& path )
     {
         Git::Result result;
         Git::Repository repo = Git::Repository::open( path, result );
         if( !result || !repo.isValid() )
         {
-            return false;
+            return NULL;
         }
 
         return open( repo );
     }
 
-    bool RepoMan::open( const Git::Repository& repo )
+    Repo* RepoMan::open( const Git::Repository& repo )
     {
         Repo* info = repoByPath( repo.basePath(), false );
 
@@ -69,7 +69,7 @@ namespace RM
 
         activate( info );
 
-        return true;
+        return info;
     }
 
     Repo* RepoMan::repoByPath( const QString& basePath, bool searchSubmodules )

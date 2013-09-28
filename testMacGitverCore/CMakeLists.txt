@@ -8,6 +8,7 @@ SET(SRC_FILES
     main.cpp
     Fixture.cpp
     TempDirProvider.cpp
+    TempRepo.cpp
 
     Test_RepoMan.cpp
 )
@@ -16,6 +17,7 @@ SET(HDR_FILES
 
     Fixture.hpp
     TempDirProvider.hpp
+    TempRepo.hpp
 
     Test_RepoMan.hpp
 )

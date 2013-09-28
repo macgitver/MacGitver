@@ -17,35 +17,24 @@
  *
  */
 
-#ifndef TEST_MGV_CORE_FIXTURE_HPP
-#define TEST_MGV_CORE_FIXTURE_HPP
+#include <QDir>
 
-#include "gtest/gtest.h"
+#include "Fixture.hpp"
+#include "TempDirProvider.hpp"
+#include "TempRepo.hpp"
 
-#include "libMacGitverCore/App/MacGitver.hpp"
-
-// All MacGitverCore tests MUST use this fixture in order to have libMacGitverCore intialized
-// and deinitialized again.
-
-class Fixture : public QObject, public ::testing::Test
+TempRepo::TempRepo(Fixture* fixture, const char* name)
+    : fixture(fixture)
 {
-    Q_OBJECT
-public:
-    Fixture();
-    ~Fixture();
+    mTempRepoDir = fixture->prepareRepo(name);
+}
 
-public:
-    virtual void SetUp();
-    virtual void TearDown();
+TempRepo::~TempRepo()
+{
+    QDir(mTempRepoDir).rmpath(QLatin1String("."));
+}
 
-public:
-    QString prepareRepo(const char* name);
-
-protected:
-    QString dataDir() const;
-
-private:
-    MacGitver* mgv;
-};
-
-#endif
+QString TempRepo::path() const
+{
+    return mTempRepoDir;
+}

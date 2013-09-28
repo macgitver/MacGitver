@@ -229,6 +229,10 @@ namespace RM
 
     void Repo::close()
     {
+        if (mIsActive) {
+            MacGitver::repoMan().activate(NULL);
+        }
+
         emit aboutToClose( this );
 
         foreach( Repo* child, mChildren )

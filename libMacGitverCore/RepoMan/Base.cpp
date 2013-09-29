@@ -133,7 +133,6 @@ namespace RM
         return mParentObj;
     }
 
-    // Not working yet, because Repo is no Base yet
     const Repo* Base::repository() const
     {
         const Base* cur = this;
@@ -148,7 +147,6 @@ namespace RM
         return NULL;
     }
 
-    // Not working yet, because Repo is no Base yet
     Repo* Base::repository()
     {
         const Base* cur = this;

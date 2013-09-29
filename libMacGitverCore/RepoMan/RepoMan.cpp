@@ -98,7 +98,6 @@ namespace RM
             mRepos.append(repo);
 
             Events::self()->repositoryOpened(repo);
-            emit repositoryOpened(repo);
 
             // we need to scan for submodules explicitly, since we didn't call load() on the Repo*
             repo->scanSubmodules();
@@ -148,7 +147,6 @@ namespace RM
             if (mActiveRepo) {
                 mActiveRepo->deactivated();
                 Events::self()->repositoryDeactivated(mActiveRepo);
-                emit repositoryDeactivated(mActiveRepo);
             }
 
             mActiveRepo = repository;
@@ -156,7 +154,6 @@ namespace RM
             if (repository) {
                 repository->activated();
                 Events::self()->repositoryActivated(mActiveRepo);
-                emit repositoryActivated(mActiveRepo);
             }
 
             // Finally emit a signal that just tells about the change

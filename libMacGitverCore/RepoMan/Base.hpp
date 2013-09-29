@@ -21,6 +21,7 @@
 #define MGV_CORE_REPOMAN_BASE_HPP
 
 #include <QObject>
+#include <QVector>
 #include <QSet>
 
 #include "libMacGitverCore/MacGitverApi.hpp"

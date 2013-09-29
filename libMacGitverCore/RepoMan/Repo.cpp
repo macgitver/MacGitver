@@ -26,6 +26,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
+#include "RepoMan/Events.hpp"
 #include "RepoMan/Repo.hpp"
 #include "RepoMan/RepoMan.hpp"
 

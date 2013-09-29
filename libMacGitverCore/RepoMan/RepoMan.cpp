@@ -145,6 +145,7 @@ namespace RM
 
             if (mActiveRepo) {
                 mActiveRepo->deactivated();
+                Events::self()->repositoryDeactivated(mActiveRepo);
                 emit repositoryDeactivated(mActiveRepo);
             }
 
@@ -152,6 +153,7 @@ namespace RM
 
             if (repository) {
                 repository->activated();
+                Events::self()->repositoryActivated(mActiveRepo);
                 emit repositoryActivated(mActiveRepo);
             }
 

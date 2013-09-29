@@ -22,11 +22,12 @@
 #include "libGitWrap/Repository.hpp"
 
 #include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libMacGitverCore/RepoMan/Events.hpp"
 
 namespace RM
 {
 
-    class MGV_CORE_API RepoMan : public Base
+    class MGV_CORE_API RepoMan : public Base, private EventsInterface
     {
         Q_OBJECT
     public:
@@ -58,11 +59,44 @@ namespace RM
     signals:
         void firstRepositoryOpened();
         void lastRepositoryClosed();
-        void repositoryOpened(RM::Repo* repo);
         void repositoryClosed();
+        void hasActiveRepositoryChanged(bool hasActiveRepo);
+
+    signals:    // These are all from EventsInterface.
+                // We simply redeclare them here as signals
+                // Moc will do the implementation for us.
+        void repositoryOpened(RM::Repo* repo);
+        void repositoryAboutToClose(RM::Repo* repo);
         void repositoryActivated(RM::Repo* repo);
         void repositoryDeactivated(RM::Repo* repo);
-        void hasActiveRepositoryChanged(bool hasActiveRepo);
+        void refTreeNodeCreated(RM::Repo* repo, RM::RefTreeNode* node);
+        void refTreeNodeAboutToBeRemoved(RM::Repo* repo, RM::RefTreeNode* node);
+        void refCreated(RM::Repo* repo, RM::Ref* ref);
+        void refAboutToBeRemoved(RM::Repo* repo, RM::Ref* ref);
+        void refMoved(RM::Repo* repo, RM::Ref* ref);
+        void refLinkChanged(RM::Repo* repo, RM::Ref* ref);
+        void refHeadDetached(RM::Repo* repo, RM::Ref* ref);
+        void tagCreated(RM::Repo* repo, RM::Tag* tag);
+        void tagAboutToBeDeleted(RM::Repo* repo, RM::Tag* tag);
+        void branchCreated(RM::Repo* repo, RM::Branch* branch);
+        void branchAboutToBeDeleted(RM::Repo* repo, RM::Branch* branch);
+        void branchMoved(RM::Repo* repo, RM::Branch* branch);
+        void branchUpstreamChanged(RM::Repo* repo, RM::Branch* branch);
+        void namespaceCreated(RM::Repo* repo, RM::Namespace* nameSpace);
+        void namespaceAboutToBeRemoved(RM::Repo* repo, RM::Namespace* nameSpace);
+        void refLogChanged(RM::Repo* repo, RM::RefLog* reflog);
+        void refLogNewEntry(RM::Repo* repo, RM::RefLog* reflog);
+        void stageCreated(RM::Repo* repo, RM::Ref* ref);
+        void stageAboutToBeRemoved(RM::Repo* repo, RM::Ref* ref);
+        void remoteCreated(RM::Repo* repo, RM::Remote* remote);
+        void remoteAboutToBeRemoved(RM::Repo* repo, RM::Remote* remote);
+        void remoteModified(RM::Repo* repo, RM::Remote* remote);
+        void submoduleCreated(RM::Repo* repo, RM::Submodule* submodule);
+        void submoduleAboutToBeDeleted(RM::Repo* repo, RM::Submodule* submodule);
+        void submoduleMoved(RM::Repo* repo, RM::Submodule* submodule);
+        void repositoryStateChanged(RM::Repo* repo);
+        void indexUpdated(RM::Repo* repo);
+        void workTreeUpdated(RM::Repo* repo);
 
     private:
         Repo::List    mRepos;

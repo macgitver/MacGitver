@@ -37,6 +37,7 @@ namespace RM
     RepoMan::RepoMan()
         : Base(NULL)
     {
+        Events::addReceiver(this);
         mActiveRepo = NULL;
     }
 
@@ -49,6 +50,7 @@ namespace RM
     RepoMan::~RepoMan()
     {
         closeAll();
+        Events::delReceiver(this);
     }
 
     /**

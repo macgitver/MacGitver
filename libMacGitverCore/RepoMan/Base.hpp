@@ -36,7 +36,13 @@ namespace RM
         RepoManagerObject,
         RepoObject,
         RefObject,
-        RemoteObject
+        RemoteObject,
+        TagObject,
+        BranchObject,
+        RefTreeNodeObject,
+        NamespaceObject,
+        SubmoduleObject,
+        RefLogObject
     };
 
     class Repo;

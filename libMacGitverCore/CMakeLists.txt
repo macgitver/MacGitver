@@ -44,6 +44,12 @@ SET( SRC_FILES
     RepoMan/Repo.cpp
     RepoMan/RepoMan.cpp
     RepoMan/Remote.cpp
+    RepoMan/Tag.cpp
+    RepoMan/Branch.cpp
+    RepoMan/RefLog.cpp
+    RepoMan/Submodule.cpp
+    RepoMan/RefTreeNode.cpp
+    RepoMan/Namespace.cpp
 
     Widgets/FontSelectWidget.cpp
     Widgets/LineEdit.cpp
@@ -88,6 +94,12 @@ SET( PUB_HDR_FILES
     RepoMan/Repo.hpp
     RepoMan/RepoMan.hpp
     RepoMan/Remote.hpp
+    RepoMan/Tag.hpp
+    RepoMan/Branch.hpp
+    RepoMan/RefLog.hpp
+    RepoMan/Submodule.hpp
+    RepoMan/RefTreeNode.hpp
+    RepoMan/Namespace.hpp
 
     Widgets/FontSelectWidget.h
     Widgets/LineEdit.h

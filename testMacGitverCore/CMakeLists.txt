@@ -12,6 +12,14 @@ SET(SRC_FILES
     EventCatcher.cpp
 
     Test_RepoMan.cpp
+    Test_Repo.cpp
+    Test_Tag.cpp
+    Test_Submodule.cpp
+    Test_Branch.cpp
+    Test_Remote.cpp
+    Test_Namespace.cpp
+    Test_RefTreeNode.cpp
+    Test_RefLog.cpp
 )
 
 SET(HDR_FILES
@@ -22,6 +30,14 @@ SET(HDR_FILES
     EventCatcher.hpp
 
     Test_RepoMan.hpp
+    Test_Repo.hpp
+    Test_Submodule.hpp
+    Test_Tag.hpp
+    Test_Branch.hpp
+    Test_Remote.hpp
+    Test_Namespace.hpp
+    Test_RefTreeNode.hpp
+    Test_RefLog.hpp
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )

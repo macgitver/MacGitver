@@ -17,44 +17,34 @@
  *
  */
 
-#include "Test_RepoMan.hpp"
-
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Repo.hpp"
 
-void RepoManFixture::expectSignal(QObject* sender, const char * const signature)
+#include "TempRepo.hpp"
+
+#include "Test_Repo.hpp"
+
+#define RMAN() MacGitver::repoMan()
+
+TEST_F(Repo_Fixture, CanOpenRepo)
 {
-    connect(sender, signature, this, SLOT(expectedSignal()));
+    TempRepo tempRepo(this, "SimpleRepo1");
 
-    expectedSender = sender;
-    expectedSignature = signature;
-    gotSignal = false;
+    RM::Repo* repo = RMAN().open(tempRepo);
+    ASSERT_TRUE(repo != NULL);
+
+    repo->close();
+    ASSERT_EQ(0, RMAN().repositories().count());
 }
 
-bool RepoManFixture::receivedSignal()
+TEST_F(Repo_Fixture, Trivial)
 {
-    bool got = gotSignal;
+    TempRepoOpener repo(this, "SimpleRepo1");
 
-    disconnect(expectedSender, expectedSignature, this, SLOT(expectedSignal()));
-    expectedSender = NULL;
-    expectedSignature = NULL;
+    ASSERT_TRUE(repo->isA<RM::Repo>());
 
-    return got;
+    ASSERT_TRUE(repo->isActive());
+    ASSERT_TRUE(repo->isLoaded());
+    ASSERT_FALSE(repo->isSubModule());
+    ASSERT_FALSE(repo->isBare());
 }
-
-void RepoManFixture::expectedSignal()
-{
-    if (sender() == expectedSender)
-    {
-        gotSignal = true;
-    }
-}
-
-
-TEST_F(RepoManFixture, Trivial)
-{
-    RM::RepoMan* rm = &MacGitver::repoMan();
-    expectSignal(rm, SIGNAL(firstRepositoryOpened()));
-    rm->open(Git::Repository());
-    ASSERT_TRUE(receivedSignal());
-}
-

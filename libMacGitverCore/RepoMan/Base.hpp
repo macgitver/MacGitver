@@ -54,8 +54,10 @@ namespace RM
         typedef QVector< Base* > List;
         typedef QSet< Base* > Set;
 
-    public:
+    protected:
         Base(Base* parent);
+
+    public:
         ~Base();
 
     public:
@@ -78,20 +80,13 @@ namespace RM
         template< class T >
         bool isA() const;
 
-    signals:
-        void aboutToVanish();
-        void aboutToRemoveChild(Base* parent, Base* child);
-        void aboutToAddChild(Base* parent, Base* child);
-
     protected:
         virtual bool refreshSelf() = 0;
         virtual void preRefreshChildren();
         virtual void postRefreshChildren();
 
-        virtual void internalChildAdded(Base* child);
-        virtual void internalRemoveChild(Base* child);
-
     private:
+        void terminateObject();
         void linkToParent(Base* parent);
         void unlinkFromParent();
         void addChildObject(Base* object);

@@ -44,11 +44,11 @@ namespace RM
         void closeAll();
 
         Repo* activeRepository();
-        void activate( Repo* repository );
+        void activate(Repo* repository);
 
         Repo::List repositories() const;
 
-        Repo* repoByPath( const QString& basePath, bool searchSubmodules );
+        Repo* repoByPath(const QString& basePath, bool searchSubmodules);
 
         void internalClosedRepo(Repo* repository);
 

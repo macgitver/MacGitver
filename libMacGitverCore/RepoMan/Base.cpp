@@ -18,10 +18,77 @@
  */
 
 #include "Base.hpp"
+#include "Repo.hpp"
 
 namespace RM
 {
 
+    /**
+     * @class       Base
+     * @brief       Base class for all RepoMan objects
+     *
+     * This base class takes care of a unified linking between a parent and its children. Children
+     * are always created with a pointer to their parent. Children may never be reparented. Only a
+     * parent is allowed to create children for itself.
+     *
+     * Further, the Base class takes care of keeping the strict logic of the refresh process. For
+     * details on how to implement the refresh logic, see refresh().
+     *
+     * Finally, this base class allows to dump a partial subtree of RepoMan objects into a textual
+     * hierarchy. See dump() on advanced information.
+     *
+     */
+
+    /**
+     * @fn          ObjType Base::objType() const
+     * @brief       Get the type of this object
+     *
+     * This method must be implemented by all derivats of Base. They must simply return the correct
+     * value from the ObjTypes enum.
+     *
+     * @return      Type of this object
+     *
+     */
+
+    /**
+     * @fn          bool Base::refreshSelf()
+     * @brief       Refresh this object's data and sent events
+     *
+     * This method is called during the refreshing mechanism. It is the first step and can determine
+     * that the object itself does no longer exist. However, if this happens, the child refreshing
+     * logic of the parent is most probably broken.
+     *
+     * Implementations should _only_ refresh the object itself and not the children. See refresh()
+     * for details on how exactly the refreshing process works.
+     */
+
+    /**
+     * @fn          bool Base::isA<T>()
+     * @brief       Check this object's type
+     *
+     * @tparam      T   Type to check against
+     *
+     * @return      `true`, if this is an object of type @a T. `false` otherwise.
+     */
+
+    /*-* // Keep this comment away from doxygen: https://bugzilla.gnome.org/show_bug.cgi?id=709052
+     * @fn          T::Set Base::childObjects() const
+     * @brief       Find (existing) children filtered by a given type
+     *
+     * @tparam      T   Type to check the children against
+     *
+     * @return      A set of children of type @a T.
+     */
+
+    /**
+     * @brief       Constructor
+     *
+     * Creates a new RepoMan object and links it into the parent. Because at this point the new
+     * child is not yet fully constructed, no further action is taken.
+     *
+     * @param[in]   parent      The parent to whom we shall link this new child to.
+     *
+     */
     Base::Base(Base* parent)
         : QObject(NULL) // Don't use QObject hierarchy
         , mParentObj(NULL)
@@ -29,24 +96,45 @@ namespace RM
         linkToParent(parent);
     }
 
+    /**
+     * @brief       Destructor
+     *
+     * At the point where the destructor is called, all children should have been unlinked from the
+     * tree and this object has to be unlinked too.
+     *
+     */
     Base::~Base()
     {
         // THIS _IS_ IMPORTANT
         // We forbid by definition that any RM::* object may be destroyed _before_ it is unlinked
         // from its parent. Otherwise, events cannot be triggered correctly.
+        Q_ASSERT(mChildren.count() == 0);
         Q_ASSERT(mParentObj == NULL);
     }
 
+    /**
+     * @brief       Child-part of linking into the tree
+     *
+     * @param[in]   parent  The parent to link into
+     *
+     * This method is called directly from the constructor. It establishes a relationship with the
+     * parent object. This relationship can never be altered.
+     *
+     */
     void Base::linkToParent(Base* parent)
     {
-        unlinkFromParent();
-
         if (parent) {
             mParentObj = parent;
             mParentObj->addChildObject(this);
         }
     }
 
+    /**
+     * @internal
+     * @brief       Child-Part of unlinking from the tree
+     *
+     * Invokes the parent part on the parent side and then cleans up the reference to the parent.
+     */
     void Base::unlinkFromParent()
     {
         if (mParentObj) {
@@ -55,41 +143,56 @@ namespace RM
         }
     }
 
+    /**
+     * @internal
+     * @brief       Parent-part of linking a new child
+     *
+     * We cannot do any special processing, since the child object is not yet fully constructed. We
+     * just fill the internal structure.
+     *
+     * @param[in]   object  The new child object that shall be linked in.
+     */
     void Base::addChildObject(Base* object)
     {
-        if (!mChildren.contains(object)) {
-            mChildren.insert(object);
-            internalChildAdded(object);
-        }
+        Q_ASSERT(!mChildren.contains(object));
+        mChildren.insert(object);
     }
 
+    /**
+     * @internal
+     * @brief       Parent-part of unlinking a child from the parent
+     *
+     * @param[in]   object  The child that is to be removed from the parent
+     */
     void Base::removeChildObject(Base* object)
     {
-        if (mChildren.contains(object)) {
-            internalRemoveChild(object);
-            mChildren.remove(object);
-        }
+        Q_ASSERT(mChildren.contains(object));
+        mChildren.remove(object);
     }
 
-    void Base::internalChildAdded(Base* child)
-    {
-        emit aboutToAddChild(this, child);
-    }
-
-    void Base::internalRemoveChild(Base* child)
-    {
-        emit aboutToRemoveChild(this, child);
-    }
-
+    /**
+     * @brief       Refresh this object
+     *
+     * Refreshs this object and all its children. First calls to refreshSelf() expecting it to
+     * update this object and send out events. If refreshSelf() returnes `false`, this object is
+     * removed from the tree. In this case all children should already have been removed from the
+     * tree.
+     *
+     * If refreshSelf() returned `true`, preRefreshChildren() is called. It should remove children
+     * that are no longer part of the tree. After that for each child, refresh() is called
+     * recursively. Finally, postRefreshChildren() is invoked, which should search for new objects
+     * and link them into the tree.
+     *
+     * If preRefreshChildren() is implemented correctly on all objects, refreshSelf() should
+     * probably never have to return `false`.
+     *
+     */
     void Base::refresh()
     {
         if (!refreshSelf()) {
             // If refresh self returned false, we are no longer valid and will now destroy
-            // ourselves. We inform whoever might be concerned via the aboutToVanish() signal and
-            // then just unlink and deleteLater().
-            emit aboutToVanish();
-            unlinkFromParent();
-            deleteLater();
+            // ourselves. We just terminateObject().
+            terminateObject();
             return;
         }
 
@@ -102,19 +205,52 @@ namespace RM
         postRefreshChildren();
     }
 
+    /**
+     * @brief       First step in refreshing the children
+     *
+     * This method is called directly after the object refreshed itself (refreshSelf()) but before
+     * any of its children are refreshed.
+     *
+     * It shall be used to figure out which children do no longer exist.
+     *
+     * The base implementation simply does nothing.
+     *
+     */
     void Base::preRefreshChildren()
     {
     }
 
+    /**
+     * @brief       Last step in refreshing the children
+     *
+     * This method is called as last step in the refreshing process. It shall be used to find
+     * objects and add them to the tree.
+     *
+     * The base implementation simply does nothing.
+     *
+     */
     void Base::postRefreshChildren()
     {
     }
 
+    /**
+     * @brief       Find (existing) children
+     *
+     * @return      A set of all children of this object (unfiltered).
+     */
     Base::Set Base::childObjects() const
     {
         return mChildren;
     }
 
+    /**
+     * @brief       Find (existing) children of a specific type
+     *
+     * @param[in]   type    The object type of the children to find.
+     *
+     * @return      A set of children of this object filtered by object type.
+     *
+     */
     Base::Set Base::childObjects(ObjTypes type) const
     {
         Set children;
@@ -128,18 +264,35 @@ namespace RM
         return children;
     }
 
+    /**
+     * @brief       Get the direct parent object
+     *
+     * The direct parent object is specified during construction and can never be changed.
+     *
+     * @return      The direct parent object.
+     *
+     */
     Base* Base::parentObject() const
     {
         return mParentObj;
     }
 
+    /**
+     * @brief       Find the repository for this object
+     *
+     * Walks up the hierarchy of objects to find the repository. Since objects can never be
+     * reparented, the result of this method never changes.
+     *
+     * @return      The first repository in hierarchy that is found
+     *
+     */
     const Repo* Base::repository() const
     {
         const Base* cur = this;
 
         while (cur) {
             if (cur->objType() == RepoObject) {
-                return NULL; // static_cast< const Repo* >(cur);
+                return static_cast< const Repo* >(cur);
             }
             cur = cur->parentObject();
         }
@@ -147,13 +300,22 @@ namespace RM
         return NULL;
     }
 
+    /**
+     * @brief       find the repository for this object
+     *
+     * Walks up the hierarchy of objects to find the repository. Since objects can never be
+     * reparented, the result of this method never changes.
+     *
+     * @return      The first repository in hierarchy that is found
+     *
+     */
     Repo* Base::repository()
     {
-        const Base* cur = this;
+        Base* cur = this;
 
         while (cur) {
             if (cur->objType() == RepoObject) {
-                return NULL; // static_cast< Repo* >(cur);
+                return static_cast< Repo* >(cur);
             }
             cur = cur->parentObject();
         }
@@ -161,4 +323,20 @@ namespace RM
         return NULL;
     }
 
+    /**
+     * @brief       Terminates the lifetime of this object
+     *
+     * For all children, terminateObject() is invoked; the object is then unlinkedFromParent() and
+     * finally it deletes itself.
+     *
+     */
+    void Base::terminateObject()
+    {
+        foreach (Base* child, mChildren) {
+            child->terminateObject();
+        }
+
+        unlinkFromParent();
+        delete this;
+    }
 }

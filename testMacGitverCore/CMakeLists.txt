@@ -9,6 +9,7 @@ SET(SRC_FILES
     Fixture.cpp
     TempDirProvider.cpp
     TempRepo.cpp
+    EventCatcher.cpp
 
     Test_RepoMan.cpp
 )
@@ -18,6 +19,7 @@ SET(HDR_FILES
     Fixture.hpp
     TempDirProvider.hpp
     TempRepo.hpp
+    EventCatcher.hpp
 
     Test_RepoMan.hpp
 )

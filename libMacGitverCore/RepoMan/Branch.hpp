@@ -20,19 +20,19 @@
 #ifndef MGV_CORE_REPOMAN_BRANCH_HPP
 #define MGV_CORE_REPOMAN_BRANCH_HPP
 
-#include "Base.hpp"
+#include "Ref.hpp"
 
 namespace RM
 {
 
-    class MGV_CORE_API Branch : public Base
+    class MGV_CORE_API Branch : public Ref
     {
         Q_OBJECT
     public:
         enum { StaticObjectType = BranchObject };
 
     public:
-        Branch(Base* parent);
+        Branch(Base* parent, const QString& name);
 
     public:
         ObjTypes objType() const;

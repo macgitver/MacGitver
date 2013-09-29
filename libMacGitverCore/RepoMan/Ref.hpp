@@ -31,7 +31,11 @@ namespace RM
     {
         BranchType,
         TagType,
-        RootStageType
+        RootStageType,
+
+        // Very special refs:
+        HEADRefType,
+        MERGE_HEADRefType
     };
 
     class MGV_CORE_API Ref : public Base

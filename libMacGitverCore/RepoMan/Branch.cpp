@@ -22,8 +22,8 @@
 namespace RM
 {
 
-    Branch::Branch(Base* parent)
-        : Base(parent)
+    Branch::Branch(Base* parent, const QString& name)
+        : Ref(parent, BranchType, name)
     {
     }
 

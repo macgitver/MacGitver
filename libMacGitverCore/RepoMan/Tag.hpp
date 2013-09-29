@@ -20,19 +20,19 @@
 #ifndef MGV_CORE_REPOMAN_TAG_HPP
 #define MGV_CORE_REPOMAN_TAG_HPP
 
-#include "Base.hpp"
+#include "Ref.hpp"
 
 namespace RM
 {
 
-    class MGV_CORE_API Tag : public Base
+    class MGV_CORE_API Tag : public Ref
     {
         Q_OBJECT
     public:
         enum { StaticObjectType = TagObject };
 
     public:
-        Tag(Base* parent);
+        Tag(Base* parent, const QString& name);
 
     public:
         ObjTypes objType() const;

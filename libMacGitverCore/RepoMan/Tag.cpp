@@ -22,8 +22,8 @@
 namespace RM
 {
 
-    Tag::Tag(Base* parent)
-        : Base(parent)
+    Tag::Tag(Base* parent, const QString& name)
+        : Ref(parent, TagType, name)
     {
     }
 

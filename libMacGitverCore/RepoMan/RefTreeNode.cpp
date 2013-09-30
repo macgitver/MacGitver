@@ -18,6 +18,7 @@
  */
 
 #include "RefTreeNode.hpp"
+#include "Dumper.hpp"
 
 namespace RM
 {
@@ -30,6 +31,11 @@ namespace RM
     ObjTypes RefTreeNode::objType() const
     {
         return RefTreeNodeObject;
+    }
+
+    void RefTreeNode::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("RefTreeNode 0x%1")).arg(quintptr(this),0,16));
     }
 
 }

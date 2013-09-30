@@ -84,6 +84,7 @@ namespace RM
         // Base impl
         bool refreshSelf();
         ObjTypes objType() const;
+        void dumpSelf(Internal::Dumper& dumper) const;
 
     private slots:
         void unloadTimer();

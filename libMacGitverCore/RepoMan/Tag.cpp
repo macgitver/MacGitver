@@ -18,6 +18,7 @@
  */
 
 #include "Tag.hpp"
+#include "Dumper.hpp"
 
 namespace RM
 {
@@ -30,6 +31,11 @@ namespace RM
     ObjTypes Tag::objType() const
     {
         return TagObject;
+    }
+
+    void Tag::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Tag 0x%1")).arg(quintptr(this),0,16));
     }
 
 }

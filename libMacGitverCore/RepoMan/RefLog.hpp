@@ -34,7 +34,10 @@ namespace RM
         RefLog(Base* parent);
 
     public:
+
+    private:
         ObjTypes objType() const;
+        void dumpSelf(Internal::Dumper& dumper) const;
 
     private:
     };

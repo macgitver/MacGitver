@@ -18,6 +18,7 @@
  */
 
 #include "Namespace.hpp"
+#include "Dumper.hpp"
 
 namespace RM
 {
@@ -30,6 +31,11 @@ namespace RM
     ObjTypes Namespace::objType() const
     {
         return NamespaceObject;
+    }
+
+    void Namespace::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Namespace 0x%1")).arg(quintptr(this),0,16));
     }
 
 }

@@ -18,6 +18,7 @@
  */
 
 #include "Remote.hpp"
+#include "Dumper.hpp"
 
 namespace RM
 {
@@ -30,6 +31,11 @@ namespace RM
     ObjTypes Remote::objType() const
     {
         return RemoteObject;
+    }
+
+    void Remote::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Remote 0x%1")).arg(quintptr(this),0,16));
     }
 
 }

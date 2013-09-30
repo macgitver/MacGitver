@@ -18,6 +18,7 @@
  */
 
 #include "Branch.hpp"
+#include "Dumper.hpp"
 
 namespace RM
 {
@@ -30,6 +31,11 @@ namespace RM
     ObjTypes Branch::objType() const
     {
         return BranchObject;
+    }
+
+    void Branch::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Branch 0x%1")).arg(quintptr(this),0,16));
     }
 
 }

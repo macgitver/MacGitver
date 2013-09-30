@@ -34,7 +34,10 @@ namespace RM
         Branch(Base* parent, const QString& name);
 
     public:
+
+    private:
         ObjTypes objType() const;
+        void dumpSelf(Internal::Dumper& dumper) const;
 
     private:
     };

@@ -18,6 +18,7 @@
  */
 
 #include "RefLog.hpp"
+#include "Dumper.hpp"
 
 namespace RM
 {
@@ -30,6 +31,11 @@ namespace RM
     ObjTypes RefLog::objType() const
     {
         return RefLogObject;
+    }
+
+    void RefLog::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("RefLog 0x%1")).arg(quintptr(this),0,16));
     }
 
 }

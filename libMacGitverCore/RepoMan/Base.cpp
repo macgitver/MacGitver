@@ -17,8 +17,11 @@
  *
  */
 
+#include <QStack>
+
 #include "Base.hpp"
 #include "Repo.hpp"
+#include "Dumper.hpp"
 
 namespace RM
 {
@@ -338,4 +341,38 @@ namespace RM
         unlinkFromParent();
         delete this;
     }
+
+    /**
+     * @brief       Creates a textual dump of this object and its children
+     *
+     * @return      Textual dump.
+     *
+     */
+    QString Base::dump() const
+    {
+        Internal::Dumper dumper;
+        dumpRecursive(dumper);
+        return dumper.output();
+    }
+
+    /**
+     * @internal
+     * @brief       Recursively dump this object into a dumper
+     *
+     * All children will be dumped recursively.
+     *
+     * @param[in]   dumper  The dumper to output to
+     *
+     */
+    void Base::dumpRecursive(Internal::Dumper& dumper) const
+    {
+        dumpSelf(dumper);
+
+        dumper.indent();
+        foreach(Base* child, mChildren) {
+            child->dumpRecursive(dumper);
+        }
+        dumper.dedent();
+    }
+
 }

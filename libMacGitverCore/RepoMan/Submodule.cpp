@@ -18,6 +18,7 @@
  */
 
 #include "Submodule.hpp"
+#include "Dumper.hpp"
 
 namespace RM
 {
@@ -30,6 +31,11 @@ namespace RM
     ObjTypes Submodule::objType() const
     {
         return SubmoduleObject;
+    }
+
+    void Submodule::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Submodule 0x%1")).arg(quintptr(this),0,16));
     }
 
 }

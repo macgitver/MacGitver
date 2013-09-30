@@ -29,6 +29,7 @@
 #include "RepoMan/Events.hpp"
 #include "RepoMan/Repo.hpp"
 #include "RepoMan/RepoMan.hpp"
+#include "RepoMan/Dumper.hpp"
 
 namespace RM
 {
@@ -361,6 +362,11 @@ namespace RM
     ObjTypes Repo::objType() const
     {
         return RepoObject;
+    }
+
+    void Repo::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Repository 0x%1")).arg(quintptr(this),0,16));
     }
 
 }

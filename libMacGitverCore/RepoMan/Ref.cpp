@@ -23,6 +23,7 @@
 #include "Ref.hpp"
 #include "Repo.hpp"
 #include "Events.hpp"
+#include "Dumper.hpp"
 
 namespace RM
 {
@@ -86,4 +87,10 @@ namespace RM
         read();
         return true;
     }
+
+    void Ref::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Ref 0x%1")).arg(quintptr(this),0,16));
+    }
+
 }

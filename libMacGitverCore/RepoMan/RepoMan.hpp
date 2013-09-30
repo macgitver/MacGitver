@@ -54,6 +54,7 @@ namespace RM
 
     private:
         bool refreshSelf();
+        void dumpSelf(Internal::Dumper& dumper) const;
         ObjTypes objType() const;
 
     signals:

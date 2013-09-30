@@ -46,6 +46,11 @@ namespace RM
 
     class Repo;
 
+    namespace Internal
+    {
+        class Dumper;
+    }
+
     class MGV_CORE_API Base
     {
     public:
@@ -78,12 +83,16 @@ namespace RM
         template< class T >
         bool isA() const;
 
+        QString dump() const;
+
     protected:
         virtual bool refreshSelf() = 0;
         virtual void preRefreshChildren();
         virtual void postRefreshChildren();
+        virtual void dumpSelf(Internal::Dumper& dumper) const = 0;
 
     private:
+        void dumpRecursive(Internal::Dumper& dumper) const;
         void terminateObject();
         void linkToParent(Base* parent);
         void unlinkFromParent();

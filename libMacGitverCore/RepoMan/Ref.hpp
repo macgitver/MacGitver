@@ -60,6 +60,7 @@ namespace RM
         void read();
 
     protected:
+        void dumpSelf(Internal::Dumper& dumper) const;
         bool refreshSelf();
 
     private:

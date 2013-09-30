@@ -19,6 +19,7 @@
 
 #include "RepoMan/RepoMan.hpp"
 #include "RepoMan/Events.hpp"
+#include "RepoMan/Dumper.hpp"
 
 namespace RM
 {
@@ -200,6 +201,11 @@ namespace RM
     ObjTypes RepoMan::objType() const
     {
         return RepoManagerObject;
+    }
+
+    void RepoMan::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QLatin1String("Repository-Manager"));
     }
 
 }

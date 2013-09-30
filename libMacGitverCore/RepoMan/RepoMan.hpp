@@ -27,7 +27,7 @@
 namespace RM
 {
 
-    class MGV_CORE_API RepoMan : public Base, private EventsInterface
+    class MGV_CORE_API RepoMan : public QObject, public Base, private EventsInterface
     {
         Q_OBJECT
     public:

@@ -22,6 +22,7 @@
 
 #include "Ref.hpp"
 #include "Repo.hpp"
+#include "Events.hpp"
 
 namespace RM
 {
@@ -75,7 +76,7 @@ namespace RM
         Git::ObjectId id = ref.objectId(r);
 
         if (id != mId) {
-            emit moved(mId, id);
+            Events::self()->refMoved(repository(), this);
             mId = id;
         }
     }

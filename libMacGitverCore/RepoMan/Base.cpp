@@ -90,8 +90,7 @@ namespace RM
      *
      */
     Base::Base(Base* parent)
-        : QObject(NULL) // Don't use QObject hierarchy
-        , mParentObj(NULL)
+        : mParentObj(NULL)
     {
         linkToParent(parent);
     }

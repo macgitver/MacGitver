@@ -27,7 +27,6 @@ namespace RM
 
     class MGV_CORE_API Branch : public Ref
     {
-        Q_OBJECT
     public:
         enum { StaticObjectType = BranchObject };
 

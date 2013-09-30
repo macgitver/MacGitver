@@ -27,7 +27,6 @@ namespace RM
 
     class MGV_CORE_API Remote : public Base
     {
-        Q_OBJECT
     public:
         enum { StaticObjectType = RemoteObject };
 

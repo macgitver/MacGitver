@@ -20,7 +20,6 @@
 #ifndef MGV_CORE_REPOMAN_BASE_HPP
 #define MGV_CORE_REPOMAN_BASE_HPP
 
-#include <QObject>
 #include <QVector>
 #include <QSet>
 
@@ -47,9 +46,8 @@ namespace RM
 
     class Repo;
 
-    class MGV_CORE_API Base : public QObject
+    class MGV_CORE_API Base
     {
-        Q_OBJECT
     public:
         typedef QVector< Base* > List;
         typedef QSet< Base* > Set;
@@ -58,7 +56,7 @@ namespace RM
         Base(Base* parent);
 
     public:
-        ~Base();
+        virtual ~Base();
 
     public:
         virtual ObjTypes objType() const = 0;

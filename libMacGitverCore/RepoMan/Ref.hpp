@@ -40,7 +40,6 @@ namespace RM
 
     class MGV_CORE_API Ref : public Base
     {
-        Q_OBJECT
     public:
         enum { StaticObjectType = RefObject };
 
@@ -56,9 +55,6 @@ namespace RM
         QString name() const;
         QString prefix() const;
         Git::ObjectId id() const;
-
-    signals:
-        void moved(Git::ObjectId fromId, Git::ObjectId toId);
 
     private:
         void read();

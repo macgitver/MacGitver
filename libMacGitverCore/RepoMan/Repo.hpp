@@ -33,7 +33,7 @@ namespace RM
 
     class RepoMan;
 
-    class MGV_CORE_API Repo : public Base
+    class MGV_CORE_API Repo : public QObject, public Base
     {
         friend class RepoMan;
         Q_OBJECT

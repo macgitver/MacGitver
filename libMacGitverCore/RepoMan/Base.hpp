@@ -91,9 +91,11 @@ namespace RM
         virtual void postRefreshChildren();
         virtual void dumpSelf(Internal::Dumper& dumper) const = 0;
 
+    protected:
+        void terminateObject();
+
     private:
         void dumpRecursive(Internal::Dumper& dumper) const;
-        void terminateObject();
         void linkToParent(Base* parent);
         void unlinkFromParent();
         void addChildObject(Base* object);

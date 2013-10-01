@@ -95,7 +95,7 @@ namespace RM
         Repo* repo = repoByPath( gitRepo.basePath(), false );
 
         if(!repo) {
-            repo = new Repo(gitRepo);
+            repo = new Repo(gitRepo, this);
             mRepos.append(repo);
 
             Events::self()->repositoryOpened(repo);

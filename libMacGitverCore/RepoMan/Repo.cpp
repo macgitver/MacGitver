@@ -34,8 +34,8 @@
 namespace RM
 {
 
-    Repo::Repo( const Git::Repository& repo )
-        : Base(NULL)
+    Repo::Repo(const Git::Repository& repo, Base* parent)
+        : Base(parent)
     {
         mRepo = repo;
         mPath = repo.basePath();
@@ -242,7 +242,7 @@ namespace RM
             child->close();
         }
 
-        delete this;    // ### Bad since we started inheriting Base
+        terminateObject();
     }
 
     Repo* Repo::repoByPath( const QString& basePath, bool searchSubmodules )
@@ -295,7 +295,7 @@ namespace RM
             subInfo = repoByPath( path, true );
             if( !subInfo )
             {
-                subInfo = new Repo( subRepo );
+                subInfo = new Repo(subRepo, this);
                 subInfo->mIsSubModule = true;
                 subInfo->setDisplayAlias( subRepo.name() );
                 subInfo->mParent = this;

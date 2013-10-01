@@ -130,7 +130,7 @@ namespace RM
 
         foreach(Base* child, mChildren) {
             if (child->isA<T>()) {
-                children.insert(child);
+                children.insert(static_cast<T*>(child));
             }
         }
 

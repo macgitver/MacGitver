@@ -1,7 +1,7 @@
 
 ADD_DEFINITIONS(-DDATADIR=\"${CMAKE_CURRENT_LIST_DIR}/Data\")
 
-QT_PREPARE(Core)
+QT_PREPARE(Core Gui Widgets)    # We need QtGui in order to pull libMacGitverCore
 
 SET(SRC_FILES
 

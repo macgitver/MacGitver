@@ -57,7 +57,7 @@ int EventCatcher::eventCount() const
 
 int EventCatcher::eventCount(EventTypes type)
 {
-    int count;
+    int count = 0;
 
     foreach (const EventLogEntry& ele, entries) {
         if (ele.type == type) {
@@ -70,7 +70,7 @@ int EventCatcher::eventCount(EventTypes type)
 
 int EventCatcher::eventCount(EventTypes type, RM::Base* p1) const
 {
-    int count;
+    int count = 0;
 
     foreach (const EventLogEntry& ele, entries) {
         if (ele.type == type && ele.params.count() == 1 && ele.params[0] == p1) {
@@ -83,7 +83,7 @@ int EventCatcher::eventCount(EventTypes type, RM::Base* p1) const
 
 int EventCatcher::eventCount(EventTypes type, RM::Base* p1, RM::Base* p2) const
 {
-    int count;
+    int count = 0;
 
     foreach (const EventLogEntry& ele, entries) {
         if (ele.type == type && ele.params.count() == 2 && ele.params[0] == p1 &&
@@ -97,7 +97,7 @@ int EventCatcher::eventCount(EventTypes type, RM::Base* p1, RM::Base* p2) const
 
 int EventCatcher::eventCount(EventTypes type, RM::Base* p1, RM::Base* p2, RM::Base* p3) const
 {
-    int count;
+    int count = 0;
 
     foreach (const EventLogEntry& ele, entries) {
         if (ele.type == type && ele.params.count() == 3 && ele.params[0] == p1 &&

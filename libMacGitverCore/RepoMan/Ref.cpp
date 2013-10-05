@@ -90,7 +90,9 @@ namespace RM
 
     void Ref::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Ref 0x%1")).arg(quintptr(this),0,16));
+        dumper.addLine(QString(QLatin1String("Ref 0x%1 [%2]"))
+                       .arg(quintptr(this),0,16)
+                       .arg(mName));
     }
 
 }

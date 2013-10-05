@@ -1,0 +1,17 @@
+body
+{
+/*
+NOTE: QTextDocument doesn't support this properly.
+background-attachment: fixed;
+background-repeat: no-repeat;
+background-position: center center;
+background-image: url('images/bg_logo.png');
+*/
+
+background-color: qlineargradient( x1:0 y1:0, x2:0 y2:1
+    , stop:0 #FFFFFF
+    , stop:.25 #CBD0D8
+    , stop:.5 #BBC0CA
+    , stop:.75 #CBD0D8
+    , stop:1 #FFFFFF );
+}

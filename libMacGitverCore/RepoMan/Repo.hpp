@@ -39,6 +39,7 @@ namespace RM
         Q_OBJECT
     public:
         enum { StaticObjectType = RepoObject };
+        typedef QSet< Repo* > Set;
         typedef QVector< Repo* > List;
 
     public:

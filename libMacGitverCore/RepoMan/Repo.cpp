@@ -64,6 +64,9 @@ namespace RM
                 mDisplayAlias = sl.last();
             }
         }
+
+        // Do an initial refresh
+        refresh();
     }
 
     Repo::~Repo()

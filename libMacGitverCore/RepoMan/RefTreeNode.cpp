@@ -35,7 +35,27 @@ namespace RM
 
     void RefTreeNode::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("RefTreeNode 0x%1")).arg(quintptr(this),0,16));
+        dumper.addLine(QString(QLatin1String("RefTreeNode 0x%1 [%2]"))
+                       .arg(quintptr(this),0,16)
+                       .arg(mName));
+    }
+
+    bool RefTreeNode::refreshSelf()
+    {
+        // We don't have anything to refresh - we're purely virutual
+        return true;
+    }
+
+    void RefTreeNode::setName(const QString& name)
+    {
+        if (mName != name) {
+            mName = name;
+        }
+    }
+
+    QString RefTreeNode::name() const
+    {
+        return mName;
     }
 
 }

@@ -22,6 +22,7 @@
 
 #include <QVector>
 #include <QSet>
+#include <QStringList>
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -51,6 +52,8 @@ namespace RM
     {
         class Dumper;
     }
+
+    class RefTreeNode;
 
     class MGV_CORE_API Base
     {
@@ -94,6 +97,8 @@ namespace RM
 
     protected:
         void terminateObject();
+        Base* findRefParent(const QStringList& scopes, bool create);
+        RefTreeNode* findRefTreeNode(const QStringList& scopes, bool create);
 
     private:
         void dumpRecursive(Internal::Dumper& dumper) const;

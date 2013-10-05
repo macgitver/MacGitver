@@ -20,6 +20,8 @@
 #ifndef MGV_CORE_REPOMAN_REF_TREE_NODE_HPP
 #define MGV_CORE_REPOMAN_REF_TREE_NODE_HPP
 
+#include <QString>
+
 #include "Base.hpp"
 
 namespace RM
@@ -30,16 +32,23 @@ namespace RM
     public:
         enum { StaticObjectType = RefTreeNodeObject };
 
+        typedef QSet< RefTreeNode* > Set;
+        typedef QList< RefTreeNode* > List;
+
     public:
         RefTreeNode(Base* parent);
 
     public:
+        void setName(const QString& name);
+        QString name() const;
 
     private:
         ObjTypes objType() const;
+        bool refreshSelf();
         void dumpSelf(Internal::Dumper& dumper) const;
 
     private:
+        QString mName;
     };
 
 }

@@ -22,6 +22,7 @@
 #include "Base.hpp"
 #include "Repo.hpp"
 #include "Dumper.hpp"
+#include "RefTreeNode.hpp"
 
 namespace RM
 {
@@ -373,6 +374,74 @@ namespace RM
             child->dumpRecursive(dumper);
         }
         dumper.dedent();
+    }
+
+    /**
+     * @brief       Find the parent for a Ref.
+     *
+     * @param[in]   scopes  List of scopes to search for or to create.
+     *
+     * @param[in]   create  If `true` and @a path is not empty, a reference tree node will be
+     *                      created, if none is found. If `false`, `NULL` will be returned.
+     *
+     * @return      If @a scopes is empty, `this` is returned. Otherwise findRefTreeNode() is called
+     *              to either find or create a RefTreeNode, which will be returned.
+     */
+    Base* Base::findRefParent(const QStringList& scopes, bool create)
+    {
+        if (scopes.isEmpty()) {
+            return this;
+        }
+        return findRefTreeNode(scopes, create);
+    }
+
+    /**
+     * @brief       Search for or create a ref tree node
+     *
+     * Searches for a RefTreeNode for path.
+     *
+     * @param[in]   scopes  List of scopes to search for or to create. Must not be empty.
+     *
+     * @param[in]   create  If `true` and a part of the tree node cannot be found, it will be
+     *                      created. If `false`, `NULL` will be returned in that case.
+     *
+     * @return      If @a create is `true`, a valid RefTreeNode is returned. If @a create is
+     *              `false`, `NULL` will be returned in case the path cannot be found.
+     */
+    RefTreeNode* Base::findRefTreeNode(const QStringList &scopes, bool create)
+    {
+        if (scopes.isEmpty()) {
+            return NULL;
+        }
+
+        Base* current = this;
+
+        foreach (QString scope, scopes) {
+            RefTreeNode::Set nodes = current->childObjects<RefTreeNode>();
+            RefTreeNode* next = NULL;
+
+            foreach(RefTreeNode* child, nodes) {
+                if (child->name() == scope) {
+                    next = child;
+                    break;
+                }
+            }
+
+            if (!next) {
+                if (create) {
+                    // Note: We don't need to roll this back. Either we go all the way or nowhere.
+                    next = new RefTreeNode(current);
+                    next->setName(scope);
+                }
+                else {
+                    return NULL;
+                }
+            }
+
+            current = next;
+        }
+
+        return static_cast< RefTreeNode* >(current);
     }
 
 }

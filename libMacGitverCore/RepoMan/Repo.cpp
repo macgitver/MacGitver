@@ -71,15 +71,10 @@ namespace RM
 
     Repo::~Repo()
     {
-        qDeleteAll( mChildren );
-
-        if( mIsLoaded )
-        {
+        if (mIsLoaded) {
             unload();
         }
-
-        if( mParent )
-        {
+        if (mParent) {
             mParent->removeChild( this );
         }
 
@@ -88,8 +83,7 @@ namespace RM
 
     Git::Repository Repo::gitRepo()
     {
-        if( ensureIsLoaded() )
-        {
+        if (ensureIsLoaded()) {
             return mRepo;
         }
 

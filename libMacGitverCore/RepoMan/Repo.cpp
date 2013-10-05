@@ -90,6 +90,11 @@ namespace RM
         return Git::Repository();
     }
 
+    Git::Repository Repo::gitLoadedRepo() const
+    {
+        return mIsLoaded ? mRepo : Git::Repository();
+    }
+
     QString Repo::path() const
     {
         return mPath;
@@ -363,7 +368,9 @@ namespace RM
 
     void Repo::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Repository 0x%1")).arg(quintptr(this),0,16));
+        dumper.addLine(QString(QLatin1String("Repository 0x%1 - %02"))
+                       .arg(quintptr(this),0,16)
+                       .arg(isLoaded() ? gitLoadedRepo().name() : QLatin1String("<not loaded>")));
     }
 
 }

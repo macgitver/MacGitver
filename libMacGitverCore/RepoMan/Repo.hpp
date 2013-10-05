@@ -48,6 +48,7 @@ namespace RM
 
     public:
         Git::Repository gitRepo();
+        Git::Repository gitLoadedRepo() const;
 
         bool isSubModule() const;
         bool isBare() const;

@@ -41,7 +41,8 @@ namespace RM
         RefTreeNodeObject,
         NamespaceObject,
         SubmoduleObject,
-        RefLogObject
+        RefLogObject,
+        CollectionNodeObject
     };
 
     class Repo;

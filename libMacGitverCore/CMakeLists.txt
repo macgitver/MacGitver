@@ -40,6 +40,7 @@ SET( SRC_FILES
     RepoMan/Base.cpp
     RepoMan/Dumper.cpp
     RepoMan/Events.cpp
+    RepoMan/CollectionNode.cpp
     RepoMan/Ref.cpp
     RepoMan/Repo.cpp
     RepoMan/RepoMan.cpp
@@ -90,6 +91,7 @@ SET( PUB_HDR_FILES
     RepoMan/Base.hpp
     RepoMan/Dumper.hpp
     RepoMan/Events.hpp
+    RepoMan/CollectionNode.hpp
     RepoMan/Ref.hpp
     RepoMan/Repo.hpp
     RepoMan/RepoMan.hpp

@@ -128,9 +128,11 @@ MACRO( QT_PREPARE )
     FOREACH( use ${ARGN} )
 
         IF( ${use} STREQUAL "-Gui" )
-        SET( QT_DONT_USE_QTGUI 1 )
+            SET( QT_DONT_USE_QTGUI 1 )
         ELSEIF( ${use} STREQUAL "Widgets" )
             # Dont do anything for Widgets
+        ELSEIF( ${use} STREQUAL "WebKitWidgets" )
+            # Dont do anything for WebKitWidgets
         ELSEIF( ${use} STREQUAL "Core" )
             # Dont do anything for Core
         ELSE()

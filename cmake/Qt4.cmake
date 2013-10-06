@@ -1,6 +1,6 @@
 
 # Always require the lastest and greatest of Qt
-FIND_PACKAGE( Qt4 4.8.2 REQUIRED )
+FIND_PACKAGE( Qt4 4.8.5 REQUIRED )
 
 MACRO(QT_MOC SourcesVar )
 

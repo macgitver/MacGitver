@@ -27,7 +27,6 @@
 #include "TempRepo.hpp"
 
 TempRepo::TempRepo(Fixture* fixture, const char* name)
-    : fixture(fixture)
 {
     mTempRepoDir = fixture->prepareRepo(name);
 }

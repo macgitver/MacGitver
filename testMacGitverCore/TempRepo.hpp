@@ -46,7 +46,6 @@ public:
 
 private:
     QString mTempRepoDir;
-    Fixture* fixture;
 };
 
 /**

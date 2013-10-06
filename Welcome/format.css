@@ -1,17 +1,15 @@
 body
 {
-/*
-NOTE: QTextDocument doesn't support this properly.
-background-attachment: fixed;
-background-repeat: no-repeat;
-background-position: center center;
-background-image: url('images/bg_logo.png');
-*/
+font-family: 'Verdana';
+font-size: 11;
 
-background-color: qlineargradient( x1:0 y1:0, x2:0 y2:1
-    , stop:0 #FFFFFF
-    , stop:.25 #CBD0D8
-    , stop:.5 #BBC0CA
-    , stop:.75 #CBD0D8
-    , stop:1 #FFFFFF );
+background-attachment: fixed;
+background:
+    url('qrc:/ModWelcome/images/bg_logo.png') no-repeat right bottom
+    , -webkit-linear-gradient(top, #FFFFFF 0%, #CBD0D8 25%, #BBC0CA 50%, #CBD0D8 75%, #FFFFFF 100%);
+}
+
+p
+{
+padding: 10 5 10 5;
 }

@@ -27,14 +27,6 @@
 namespace RM
 {
 
-    enum CollectionTypes
-    {
-        ctBranches,
-        ctTags,
-        ctNamespaces,
-        ctNotes
-    };
-
     class MGV_CORE_API CollectionNode : public Base
     {
         Q_DECLARE_TR_FUNCTIONS(RM_CollectionNode)

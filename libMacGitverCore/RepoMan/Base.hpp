@@ -46,14 +46,28 @@ namespace RM
         CollectionNodeObject
     };
 
+    enum CollectionTypes
+    {
+        ctBranches,
+        ctTags,
+        ctNamespaces,
+        ctNotes
+    };
+
     class Repo;
+    class RefTreeNode;
+    class CollectionNode;
+    class Namespace;
+    class Ref;
+    class Remote;
+    class RefLog;
+    class Submodule;
+    class Tag;
 
     namespace Internal
     {
         class Dumper;
     }
-
-    class RefTreeNode;
 
     class MGV_CORE_API Base
     {
@@ -99,6 +113,7 @@ namespace RM
         void terminateObject();
         Base* findRefParent(const QStringList& scopes, bool create);
         RefTreeNode* findRefTreeNode(const QStringList& scopes, bool create);
+        CollectionNode* getOrCreateCollection(CollectionTypes ctype);
 
     private:
         void dumpRecursive(Internal::Dumper& dumper) const;

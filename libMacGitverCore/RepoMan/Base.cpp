@@ -23,6 +23,7 @@
 #include "Repo.hpp"
 #include "Dumper.hpp"
 #include "RefTreeNode.hpp"
+#include "CollectionNode.hpp"
 
 namespace RM
 {
@@ -444,4 +445,17 @@ namespace RM
         return static_cast< RefTreeNode* >(current);
     }
 
+
+    CollectionNode* Base::getOrCreateCollection(CollectionTypes ctype)
+    {
+        CollectionNode* cn;
+
+        foreach (cn, childObjects<CollectionNode>()) {
+            if (cn->collectionType() == ctype) {
+                return cn;
+            }
+        }
+
+        return new CollectionNode(ctype, this);
+    }
 }

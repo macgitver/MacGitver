@@ -31,7 +31,7 @@ namespace RM
         enum { StaticObjectType = BranchObject };
 
     public:
-        Branch(Base* parent, const QString& name);
+        Branch(Base* parent, const Git::Reference& ref);
 
     public:
 

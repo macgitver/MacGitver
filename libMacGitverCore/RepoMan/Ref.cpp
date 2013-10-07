@@ -28,11 +28,11 @@
 namespace RM
 {
 
-    Ref::Ref(Base* parent, RefTypes type, const QString& name)
+    Ref::Ref(Base* parent, RefTypes type, const Git::Reference &ref)
         : Base(parent)
         , mType(type)
-        , mName(name)
     {
+        mName = ref.name();
         read();
     }
 

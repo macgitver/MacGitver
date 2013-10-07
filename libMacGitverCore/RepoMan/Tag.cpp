@@ -23,8 +23,8 @@
 namespace RM
 {
 
-    Tag::Tag(Base* parent, const QString& name)
-        : Ref(parent, TagType, name)
+    Tag::Tag(Base* parent, const Git::Reference& ref)
+        : Ref(parent, TagType, ref)
     {
     }
 

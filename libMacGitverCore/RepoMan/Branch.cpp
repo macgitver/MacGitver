@@ -23,8 +23,8 @@
 namespace RM
 {
 
-    Branch::Branch(Base* parent, const QString& name)
-        : Ref(parent, BranchType, name)
+    Branch::Branch(Base* parent, const Git::Reference &ref)
+        : Ref(parent, BranchType, ref)
     {
     }
 

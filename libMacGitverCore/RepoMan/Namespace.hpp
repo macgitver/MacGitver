@@ -30,20 +30,28 @@ namespace RM
     {
     public:
         enum { StaticObjectType = NamespaceObject };
+        typedef QSet< Namespace* > Set;
+        typedef QVector< Namespace* > List;
 
     public:
-        Namespace(Base* parent);
+        Namespace(Base* parent, const QString& _name);
 
     public:
+        QString name() const;
 
     private:
         ObjTypes objType() const;
         void dumpSelf(Internal::Dumper& dumper) const;
+        bool refreshSelf();
 
+    public:
         CollectionNode* branches();
         CollectionNode* tags();
         CollectionNode* namespaces();
         CollectionNode* notes();
+
+    private:
+        QString mName;
     };
 
 }

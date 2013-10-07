@@ -31,7 +31,7 @@ namespace RM
         enum { StaticObjectType = TagObject };
 
     public:
-        Tag(Base* parent, const QString& name);
+        Tag(Base* parent, const Git::Reference &ref);
 
     public:
 

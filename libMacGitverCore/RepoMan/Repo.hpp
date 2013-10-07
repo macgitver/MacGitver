@@ -69,6 +69,15 @@ namespace RM
 
         Repo* repoByPath( const QString& basePath, bool searchSubmodules );
 
+        Ref* findReference(const Git::Reference& ref, bool create = false);
+        Namespace* findNamespace(const QStringList& _namespaces, bool create = false);
+        Namespace* findNamespace(const QString& nsFullName, bool create = false);
+
+        CollectionNode* branches();
+        CollectionNode* tags();
+        CollectionNode* namespaces();
+        CollectionNode* notes();
+
     private:
         void load();
         void unload();

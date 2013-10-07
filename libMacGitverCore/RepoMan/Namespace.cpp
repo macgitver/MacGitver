@@ -23,8 +23,9 @@
 namespace RM
 {
 
-    Namespace::Namespace(Base* parent)
+    Namespace::Namespace(Base* parent, const QString& _name)
         : Base(parent)
+        , mName(_name)
     {
     }
 
@@ -35,7 +36,14 @@ namespace RM
 
     void Namespace::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Namespace 0x%1")).arg(quintptr(this),0,16));
+        dumper.addLine(QString(QLatin1String("Namespace 0x%1 - %2"))
+                       .arg(quintptr(this),0,16)
+                       .arg(mName));
+    }
+
+    bool Namespace::refreshSelf()
+    {
+        return true;
     }
 
     CollectionNode* Namespace::branches()
@@ -56,6 +64,11 @@ namespace RM
     CollectionNode* Namespace::notes()
     {
         return getOrCreateCollection(ctNotes);
+    }
+
+    QString Namespace::name() const
+    {
+        return mName;
     }
 
 }

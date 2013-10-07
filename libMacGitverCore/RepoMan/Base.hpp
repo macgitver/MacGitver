@@ -71,6 +71,7 @@ namespace RM
 
     class MGV_CORE_API Base
     {
+        friend class Repo;
     public:
         typedef QVector< Base* > List;
         typedef QSet< Base* > Set;

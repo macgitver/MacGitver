@@ -43,8 +43,11 @@ namespace RM
     public:
         enum { StaticObjectType = RefObject };
 
+        typedef QSet< Ref* > Set;
+        typedef QList< Ref* > List;
+
     public:
-        Ref(Base* parent, RefTypes type, const QString& name);
+        Ref(Base* parent, RefTypes type, const Git::Reference& ref);
         ~Ref();
 
     public:

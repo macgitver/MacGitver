@@ -22,6 +22,7 @@
 
 #include "libGitWrap/Reference.hpp"
 #include "libGitWrap/ObjectId.hpp"
+#include "libGitWrap/RefName.hpp"
 #include "libGitWrap/Submodule.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
@@ -29,6 +30,7 @@
 #include "RepoMan/Events.hpp"
 #include "RepoMan/Repo.hpp"
 #include "RepoMan/RepoMan.hpp"
+#include "RepoMan/Namespace.hpp"
 #include "RepoMan/Ref.hpp"
 #include "RepoMan/Dumper.hpp"
 
@@ -376,11 +378,87 @@ namespace RM
         Git::Result r;
         Git::ReferenceList refs = mRepo.allReferences(r);
         foreach (Git::Reference ref, refs) {
-            QString pfx = ref.prefix();
-            Base* parent = findRefParent(pfx.split(QChar(L'/')), true);
-
-            Ref* rmRef = new Ref(parent, BranchType, ref.shorthand());
+            findReference(ref, true);
         }
+    }
+
+    Ref* Repo::findReference(const Git::Reference& ref, bool create)
+    {
+        Git::RefName rn = ref.nameAnalyzer();
+        CollectionNode* cn = NULL;
+
+        if (rn.isNamespaced()) {
+            Namespace* ns = findNamespace(rn.namespaces(), create);
+
+            if (!ns) {
+                return NULL;
+            }
+
+            if (rn.isBranch()) {
+                cn = ns->branches();
+            }
+            else if (rn.isTag()) {
+                cn = ns->tags();
+            }
+            else {
+                return NULL;
+            }
+        }
+        else {
+            if (rn.isBranch()) {
+                cn = branches();
+            }
+            else if (rn.isTag()) {
+                cn = tags();
+            }
+            else {
+                return NULL;
+            }
+        }
+
+        Base* parent = cn->findRefParent(rn.scopes(), create);
+
+        foreach (Ref* rmRef, parent->childObjects<Ref>()) {
+            if (rmRef->name() == ref.name()) {
+                return rmRef;
+            }
+        }
+
+        return new Ref(parent, rn.isBranch() ? BranchType : TagType, ref);
+    }
+
+    Namespace* Repo::findNamespace(const QStringList& _namespaces, bool create) {
+        Base* par = namespaces();
+        Namespace* child = NULL;
+
+        foreach (QString nsName, _namespaces) {
+            child = NULL;
+
+            foreach (Namespace* ns, par->childObjects<Namespace>()) {
+                if (ns->name() == nsName) {
+                    child = ns;
+                    break;
+                }
+            }
+
+            if (!child) {
+                if (create) {
+                    child = new Namespace(par, nsName);
+                }
+                else {
+                    return NULL;
+                }
+            }
+
+            par = child;
+        }
+
+        return child;
+    }
+
+    Namespace* Repo::findNamespace(const QString& nsFullName, bool create) {
+        QStringList nsNames = nsFullName.split(QChar(L'/'));
+        return findNamespace(nsNames, create);
     }
 
     ObjTypes Repo::objType() const
@@ -393,6 +471,26 @@ namespace RM
         dumper.addLine(QString(QLatin1String("Repository 0x%1 - %02"))
                        .arg(quintptr(this),0,16)
                        .arg(isLoaded() ? gitLoadedRepo().name() : QLatin1String("<not loaded>")));
+    }
+
+    CollectionNode* Repo::branches()
+    {
+        return getOrCreateCollection(ctBranches);
+    }
+
+    CollectionNode* Repo::tags()
+    {
+        return getOrCreateCollection(ctTags);
+    }
+
+    CollectionNode* Repo::namespaces()
+    {
+        return getOrCreateCollection(ctNamespaces);
+    }
+
+    CollectionNode* Repo::notes()
+    {
+        return getOrCreateCollection(ctNotes);
     }
 
 }

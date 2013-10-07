@@ -137,7 +137,7 @@ MACRO( QT_PREPARE )
             # Dont do anything for Core
         ELSEIF( ${use} STREQUAL "WinMain" )
             SET(QT_USE_QTMAIN 1)
-        ELSE()B
+        ELSE()
             STRING( TOUPPER ${use} useUpper )
             SET( QT_USE_QT${useUpper} 1 )
         ENDIF()

@@ -81,8 +81,7 @@ void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPo
 {
     RM::Repo* info = mModel->index2Info(deeplyMapToSource(index));
 
-    if( info && !info->isDisabled() )
-    {
+    if (info) {
         Heaven::Menu* menu = info->isSubModule() ? menuCtxMenuSMRepo : menuCtxMenuRepo;
         menu->setActivationContext( info );
         actActivate->setEnabled( !info->isActive() );

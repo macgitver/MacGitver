@@ -38,7 +38,7 @@ int RepoInfoModel::rowCount( const QModelIndex& parent ) const
     if( parent.isValid() )
     {
         RM::Repo* info = index2Info( parent );
-        return info ? info->children().count() : 0;
+        return info ? info->submodules().count() : 0;
     }
     else
     {
@@ -93,7 +93,7 @@ QModelIndex RepoInfoModel::index( int row, int column, const QModelIndex& parent
             return QModelIndex();
         }
 
-        list = infoParent->children();
+        list = infoParent->submodules();
     }
     else
     {
@@ -140,7 +140,7 @@ QModelIndex RepoInfoModel::info2Index(RM::Repo* info) const
 
     if( info->parentRepository() )
     {
-        row = info->parentRepository()->children().indexOf( info );
+        row = info->parentRepository()->submodules().indexOf( info );
     }
     else
     {
@@ -187,7 +187,7 @@ void RepoInfoModel::repositoryChildAdded(RM::Repo* parent, RM::Repo* child)
     // we add a row just at the end of the root. This is stupid. But that's the way it works when
     // a model actually isn't a model...
 
-    int row = parent->children().count() - 1;
+    int row = parent->submodules().count() - 1;
     emit beginInsertRows(parentIndex, row, row);
     emit endInsertRows();
 }

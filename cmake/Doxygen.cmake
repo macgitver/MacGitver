@@ -1,5 +1,5 @@
 
-FIND_PACKAGE( Doxygen )
+FIND_PACKAGE(Doxygen)
 
 FUNCTION( DOXYGEN_LOCATE_FILE var name1 name2 )
     SET( dirs ${ARGN} )
@@ -19,150 +19,156 @@ ENDFUNCTION()
 
 FUNCTION( ADD_DOXYGEN_TARGET targetName configDir )
 
-    SET( dirs ${ARGN} )
-    SET( doxyBase ${CMAKE_SOURCE_DIR}/doxygen )
+    IF(DOXYGEN_FOUND)
 
-    SET( targetDir ${CMAKE_BINARY_DIR}/docs/${targetName} )
+        SET( dirs ${ARGN} )
+        SET( doxyBase ${CMAKE_SOURCE_DIR}/doxygen )
 
-    FILE( MAKE_DIRECTORY ${targetDir}/int ${targetDir}/pub )
+        SET( targetDir ${CMAKE_BINARY_DIR}/docs/${targetName} )
 
-    DOXYGEN_LOCATE_FILE( pubLayout public.layout.xml layout.xml
-            ${configDir}
-            ${doxyBase}
-    )
-    DOXYGEN_LOCATE_FILE( pubHeader public.header.htm header.htm
-            ${configDir}
-            ${doxyBase}
-    )
-    DOXYGEN_LOCATE_FILE( pubFooter public.footer.htm footer.htm
-            ${configDir}
-            ${doxyBase}
-    )
-    DOXYGEN_LOCATE_FILE( pubStyle public.style.css style.css
-            ${configDir}
-            ${doxyBase}
-    )
+        FILE( MAKE_DIRECTORY ${targetDir}/int ${targetDir}/pub )
+
+        DOXYGEN_LOCATE_FILE( pubLayout public.layout.xml layout.xml
+                ${configDir}
+                ${doxyBase}
+        )
+        DOXYGEN_LOCATE_FILE( pubHeader public.header.htm header.htm
+                ${configDir}
+                ${doxyBase}
+        )
+        DOXYGEN_LOCATE_FILE( pubFooter public.footer.htm footer.htm
+                ${configDir}
+                ${doxyBase}
+        )
+        DOXYGEN_LOCATE_FILE( pubStyle public.style.css style.css
+                ${configDir}
+                ${doxyBase}
+        )
 
 
-    DOXYGEN_LOCATE_FILE( intLayout internal.layout.xml layout.xml
-            ${configDir}
-            ${doxyBase}
-    )
-    DOXYGEN_LOCATE_FILE( intHeader internal.header.htm header.htm
-            ${configDir}
-            ${doxyBase}
-    )
-    DOXYGEN_LOCATE_FILE( intFooter internal.footer.htm footer.htm
-            ${configDir}
-            ${doxyBase}
-    )
-    DOXYGEN_LOCATE_FILE( intStyle internal.style.css style.css
-            ${configDir}
-            ${doxyBase}
-    )
+        DOXYGEN_LOCATE_FILE( intLayout internal.layout.xml layout.xml
+                ${configDir}
+                ${doxyBase}
+        )
+        DOXYGEN_LOCATE_FILE( intHeader internal.header.htm header.htm
+                ${configDir}
+                ${doxyBase}
+        )
+        DOXYGEN_LOCATE_FILE( intFooter internal.footer.htm footer.htm
+                ${configDir}
+                ${doxyBase}
+        )
+        DOXYGEN_LOCATE_FILE( intStyle internal.style.css style.css
+                ${configDir}
+                ${doxyBase}
+        )
 
-    FILE( WRITE ${targetDir}/Doxygen.common
-        "@INCLUDE = ${doxyBase}/Doxygen.common\n"
-        "\n"
-    )
+        FILE( WRITE ${targetDir}/Doxygen.common
+            "@INCLUDE = ${doxyBase}/Doxygen.common\n"
+            "\n"
+        )
 
-    SET( exclude 0 )
-    FOREACH( dir ${dirs} )
-        IF( dir STREQUAL "EXCLUDE" )
-            SET( exclude 1 )
-        ELSE()
-            IF( exclude )
-                FILE( APPEND ${targetDir}/Doxygen.common
-                    "EXCLUDE += ${dir}\n"
-                )
-                SET( exclude 0 )
+        SET( exclude 0 )
+        FOREACH( dir ${dirs} )
+            IF( dir STREQUAL "EXCLUDE" )
+                SET( exclude 1 )
             ELSE()
-                FILE( APPEND ${targetDir}/Doxygen.common
-                    "INPUT += ${dir}\n"
-                )
+                IF( exclude )
+                    FILE( APPEND ${targetDir}/Doxygen.common
+                        "EXCLUDE += ${dir}\n"
+                    )
+                    SET( exclude 0 )
+                ELSE()
+                    FILE( APPEND ${targetDir}/Doxygen.common
+                        "INPUT += ${dir}\n"
+                    )
+                ENDIF()
             ENDIF()
+        ENDFOREACH()
+
+        FILE( WRITE ${targetDir}/Doxygen.pub
+            "@INCLUDE         = ${targetDir}/Doxygen.common\n"
+            "@INCLUDE         = ${doxyBase}/Doxygen.pub\n"
+            "\n"
+            "HTML_HEADER      = ${pubHeader}\n"
+            "HTML_FOOTER      = ${pubFooter}\n"
+            "HTML_STYLESHEET  = ${pubStyle}\n"
+            "LAYOUT_FILE      = ${pubLayout}\n"
+            "\n"
+            "OUTPUT_DIRECTORY = ${targetDir}/pub\n"
+            "\n"
+        )
+
+        FILE( WRITE ${targetDir}/Doxygen.int
+            "@INCLUDE         = ${targetDir}/Doxygen.common\n"
+            "@INCLUDE         = ${doxyBase}/Doxygen.int\n"
+            "\n"
+            "HTML_HEADER      = ${intHeader}\n"
+            "HTML_FOOTER      = ${intFooter}\n"
+            "HTML_STYLESHEET  = ${intStyle}\n"
+            "LAYOUT_FILE      = ${intLayout}\n"
+            "\n"
+            "OUTPUT_DIRECTORY = ${targetDir}/int\n"
+            "\n"
+        )
+
+        IF( EXISTS ${configDir}/Doxygen.common )
+            FILE( APPEND ${targetDir}/Doxygen.common
+                "@INCLUDE = ${configDir}/Doxygen.common\n"
+                "\n"
+            )
         ENDIF()
-    ENDFOREACH()
 
-    FILE( WRITE ${targetDir}/Doxygen.pub
-        "@INCLUDE         = ${targetDir}/Doxygen.common\n"
-        "@INCLUDE         = ${doxyBase}/Doxygen.pub\n"
-        "\n"
-        "HTML_HEADER      = ${pubHeader}\n"
-        "HTML_FOOTER      = ${pubFooter}\n"
-        "HTML_STYLESHEET  = ${pubStyle}\n"
-        "LAYOUT_FILE      = ${pubLayout}\n"
-        "\n"
-        "OUTPUT_DIRECTORY = ${targetDir}/pub\n"
-        "\n"
-    )
+        IF( EXISTS ${configDir}/Doxygen.pub )
+            FILE( APPEND ${targetDir}/Doxygen.pub
+                "@INCLUDE = ${configDir}/Doxygen.pub\n"
+                "\n"
+            )
+        ENDIF()
 
-    FILE( WRITE ${targetDir}/Doxygen.int
-        "@INCLUDE         = ${targetDir}/Doxygen.common\n"
-        "@INCLUDE         = ${doxyBase}/Doxygen.int\n"
-        "\n"
-        "HTML_HEADER      = ${intHeader}\n"
-        "HTML_FOOTER      = ${intFooter}\n"
-        "HTML_STYLESHEET  = ${intStyle}\n"
-        "LAYOUT_FILE      = ${intLayout}\n"
-        "\n"
-        "OUTPUT_DIRECTORY = ${targetDir}/int\n"
-        "\n"
-    )
+        IF( EXISTS ${configDir}/Doxygen.int )
+            FILE( APPEND ${targetDir}/Doxygen.int
+                "@INCLUDE = ${configDir}/Doxygen.int\n"
+                "\n"
+            )
+        ENDIF()
 
-    IF( EXISTS ${configDir}/Doxygen.common )
-        FILE( APPEND ${targetDir}/Doxygen.common
-            "@INCLUDE = ${configDir}/Doxygen.common\n"
-            "\n"
+        ADD_CUSTOM_TARGET(
+            ${targetName}_intdocs
+            ${DOXYGEN_EXECUTABLE} Doxygen.int
+            WORKING_DIRECTORY           ${targetDir}
+            COMMENT                     "Building internal ${targetName} documentation"
         )
-    ENDIF()
 
-    IF( EXISTS ${configDir}/Doxygen.pub )
-        FILE( APPEND ${targetDir}/Doxygen.pub
-            "@INCLUDE = ${configDir}/Doxygen.pub\n"
-            "\n"
+        ADD_CUSTOM_TARGET(
+            ${targetName}_pubdocs
+            ${DOXYGEN_EXECUTABLE} Doxygen.pub
+            WORKING_DIRECTORY           ${targetDir}
+            COMMENT                     "Building public ${targetName} documentation"
         )
-    ENDIF()
 
-    IF( EXISTS ${configDir}/Doxygen.int )
-        FILE( APPEND ${targetDir}/Doxygen.int
-            "@INCLUDE = ${configDir}/Doxygen.int\n"
-            "\n"
+        ADD_CUSTOM_TARGET(
+            ${targetName}_docs
         )
+
+        ADD_DEPENDENCIES(
+            ${targetName}_docs
+
+            ${targetName}_pubdocs
+            ${targetName}_intdocs
+        )
+
+        ADD_DEPENDENCIES( internal_docs ${targetName}_intdocs )
+        ADD_DEPENDENCIES( public_docs ${targetName}_pubdocs )
+
     ENDIF()
-
-    ADD_CUSTOM_TARGET(
-        ${targetName}_intdocs
-        ${DOXYGEN_EXECUTABLE} Doxygen.int
-        WORKING_DIRECTORY           ${targetDir}
-        COMMENT                     "Building internal ${targetName} documentation"
-    )
-
-    ADD_CUSTOM_TARGET(
-        ${targetName}_pubdocs
-        ${DOXYGEN_EXECUTABLE} Doxygen.pub
-        WORKING_DIRECTORY           ${targetDir}
-        COMMENT                     "Building public ${targetName} documentation"
-    )
-
-    ADD_CUSTOM_TARGET(
-        ${targetName}_docs
-    )
-
-    ADD_DEPENDENCIES(
-        ${targetName}_docs
-
-        ${targetName}_pubdocs
-        ${targetName}_intdocs
-    )
-
-    ADD_DEPENDENCIES( internal_docs ${targetName}_intdocs )
-    ADD_DEPENDENCIES( public_docs ${targetName}_pubdocs )
 
 ENDFUNCTION()
 
-ADD_CUSTOM_TARGET( docs )
-ADD_CUSTOM_TARGET( internal_docs )
-ADD_CUSTOM_TARGET( public_docs )
+IF(DOXYGEN_FOUND)
+    ADD_CUSTOM_TARGET( docs )
+    ADD_CUSTOM_TARGET( internal_docs )
+    ADD_CUSTOM_TARGET( public_docs )
 
-ADD_DEPENDENCIES( docs internal_docs public_docs )
+    ADD_DEPENDENCIES( docs internal_docs public_docs )
+ENDIF()

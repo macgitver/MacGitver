@@ -29,6 +29,7 @@
 #include "RepoMan/Events.hpp"
 #include "RepoMan/Repo.hpp"
 #include "RepoMan/RepoMan.hpp"
+#include "RepoMan/Ref.hpp"
 #include "RepoMan/Dumper.hpp"
 
 namespace RM
@@ -357,8 +358,29 @@ namespace RM
 
     bool Repo::refreshSelf()
     {
-        Q_ASSERT(false);
+        if (!mIsLoaded) {
+            // In case we're not loaded, just return and do nothing.
+            return true;
+        }
+
         return true;
+    }
+
+    void Repo::postRefreshChildren()
+    {
+        if (!mIsLoaded) {
+            // In case we're not loaded, just return and do nothing.
+            return;
+        }
+
+        Git::Result r;
+        Git::ReferenceList refs = mRepo.allReferences(r);
+        foreach (Git::Reference ref, refs) {
+            QString pfx = ref.prefix();
+            Base* parent = findRefParent(pfx.split(QChar(L'/')), true);
+
+            Ref* rmRef = new Ref(parent, BranchType, ref.shorthand());
+        }
     }
 
     ObjTypes Repo::objType() const

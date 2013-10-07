@@ -20,6 +20,8 @@
 #ifndef MGV_CORE_REPOMAN_REMOTE_HPP
 #define MGV_CORE_REPOMAN_REMOTE_HPP
 
+#include "libGitWrap/Remote.hpp"
+
 #include "Base.hpp"
 
 namespace RM
@@ -31,15 +33,21 @@ namespace RM
         enum { StaticObjectType = RemoteObject };
 
     public:
-        Remote(Base* parent);
+        Remote(const Git::Remote& gitObj, Base* parent);
 
     public:
+        Git::Remote gitObject() const;
+        QString name() const;
+        CollectionNode* branches();
 
     private:
         ObjTypes objType() const;
+        bool refreshSelf();
         void dumpSelf(Internal::Dumper& dumper) const;
 
     private:
+        Git::Remote         mGitObject;
+        QString             mName;
     };
 
 }

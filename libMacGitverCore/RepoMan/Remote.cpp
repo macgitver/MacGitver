@@ -18,14 +18,17 @@
  */
 
 #include "Remote.hpp"
+#include "CollectionNode.hpp"
 #include "Dumper.hpp"
 
 namespace RM
 {
 
-    Remote::Remote(Base* parent)
+    Remote::Remote(const Git::Remote& gitObj, Base* parent)
         : Base(parent)
+        , mGitObject(gitObj)
     {
+        mName = mGitObject.name();
     }
 
     ObjTypes Remote::objType() const
@@ -35,7 +38,29 @@ namespace RM
 
     void Remote::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Remote 0x%1")).arg(quintptr(this),0,16));
+        dumper.addLine(QString(QLatin1String("Remote %2 0x%1"))
+                       .arg(quintptr(this),0,16)
+                       .arg(mName));
+    }
+
+    Git::Remote Remote::gitObject() const
+    {
+        return mGitObject;
+    }
+
+    QString Remote::name() const
+    {
+        return mName;
+    }
+
+    CollectionNode* Remote::branches()
+    {
+        return getOrCreateCollection(ctBranches);
+    }
+
+    bool Remote::refreshSelf()
+    {
+        return true;
     }
 
 }

@@ -21,6 +21,7 @@
 #define MGV_CORE_REPOMAN_NAMESPACE_HPP
 
 #include "Base.hpp"
+#include "CollectionNode.hpp"
 
 namespace RM
 {
@@ -39,7 +40,10 @@ namespace RM
         ObjTypes objType() const;
         void dumpSelf(Internal::Dumper& dumper) const;
 
-    private:
+        CollectionNode* branches();
+        CollectionNode* tags();
+        CollectionNode* namespaces();
+        CollectionNode* notes();
     };
 
 }

@@ -105,6 +105,8 @@ namespace RM
 
     protected:
         virtual bool refreshSelf() = 0;
+        virtual bool preRefresh();
+        virtual void postRefresh();
         virtual void preRefreshChildren();
         virtual void postRefreshChildren();
         virtual void dumpSelf(Internal::Dumper& dumper) const = 0;

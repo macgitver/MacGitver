@@ -38,4 +38,24 @@ namespace RM
         dumper.addLine(QString(QLatin1String("Namespace 0x%1")).arg(quintptr(this),0,16));
     }
 
+    CollectionNode* Namespace::branches()
+    {
+        return getOrCreateCollection(ctBranches);
+    }
+
+    CollectionNode* Namespace::tags()
+    {
+        return getOrCreateCollection(ctTags);
+    }
+
+    CollectionNode* Namespace::namespaces()
+    {
+        return getOrCreateCollection(ctNamespaces);
+    }
+
+    CollectionNode* Namespace::notes()
+    {
+        return getOrCreateCollection(ctNotes);
+    }
+
 }

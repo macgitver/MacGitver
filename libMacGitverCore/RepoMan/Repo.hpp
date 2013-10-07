@@ -85,6 +85,7 @@ namespace RM
     private:
         // Base impl
         bool refreshSelf();
+        void postRefreshChildren();
         ObjTypes objType() const;
         void dumpSelf(Internal::Dumper& dumper) const;
 

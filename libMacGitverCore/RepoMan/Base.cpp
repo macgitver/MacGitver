@@ -193,6 +193,8 @@ namespace RM
      */
     void Base::refresh()
     {
+        preRefresh();
+
         if (!refreshSelf()) {
             // If refresh self returned false, we are no longer valid and will now destroy
             // ourselves. We just terminateObject().
@@ -200,6 +202,7 @@ namespace RM
             return;
         }
 
+        postRefresh();
         preRefreshChildren();
 
         foreach(Base* child, mChildren) {
@@ -207,6 +210,14 @@ namespace RM
         }
 
         postRefreshChildren();
+    }
+
+    void Base::preRefresh()
+    {
+    }
+
+    void Base::postRefresh()
+    {
     }
 
     /**

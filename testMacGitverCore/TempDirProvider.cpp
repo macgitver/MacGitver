@@ -17,6 +17,8 @@
  *
  */
 
+#include <stdlib.h>
+
 #include <QDir>
 #include <QStringBuilder>
 #include <QCoreApplication>

@@ -212,8 +212,9 @@ namespace RM
         postRefreshChildren();
     }
 
-    void Base::preRefresh()
+    bool Base::preRefresh()
     {
+        return true;
     }
 
     void Base::postRefresh()

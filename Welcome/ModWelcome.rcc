@@ -1,5 +1,7 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource prefix="ModWelcome">
     <file>Welcome.html</file>
+    <file>images/bg_logo.png</file>
+    <file>format.css</file>
  </qresource>
  </RCC>

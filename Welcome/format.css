@@ -1,0 +1,15 @@
+body
+{
+font-family: 'Verdana';
+font-size: 11;
+
+background-attachment: fixed;
+background:
+    url('qrc:/ModWelcome/images/bg_logo.png') no-repeat right bottom
+    , -webkit-linear-gradient(top, #FFFFFF 0%, #CBD0D8 25%, #BBC0CA 50%, #CBD0D8 75%, #FFFFFF 100%);
+}
+
+p
+{
+padding: 10 5 10 5;
+}

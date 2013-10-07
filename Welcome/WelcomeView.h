@@ -19,7 +19,8 @@
 
 #include "libHeaven/CentralUI/Views/View.hpp"
 
-class QTextBrowser;
+class QWebView;
+class QUrl;
 
 class WelcomeView : public Heaven::View
 {
@@ -27,8 +28,11 @@ class WelcomeView : public Heaven::View
 public:
     WelcomeView();
 
+private slots:
+    void onLinkClicked(const QUrl &url);
+
 private:
-    QTextBrowser* mBrowser;
+    QWebView* mBrowser;
 };
 
 #endif

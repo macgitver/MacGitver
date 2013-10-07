@@ -14,8 +14,10 @@
  *
  */
 
-#include <QTextBrowser>
+#include <QDesktopServices>
 #include <QFile>
+#include <QUrl>
+#include <QWebView>
 
 #include "WelcomeView.h"
 
@@ -24,15 +26,18 @@ WelcomeView::WelcomeView()
 {
     setViewName( trUtf8( "Welcome" ) );
 
-    mBrowser = new QTextBrowser;
-    mBrowser->setFrameShape( QFrame::NoFrame );
-    mBrowser->setOpenExternalLinks( true );
+    mBrowser = new QWebView;
+    mBrowser->page()->setLinkDelegationPolicy( QWebPage::DelegateExternalLinks );
+    connect( mBrowser, SIGNAL(linkClicked(QUrl)), this, SLOT(onLinkClicked(const QUrl&)) );
 
-    QFile f( QLatin1String( ":/ModWelcome/Welcome.html" ) );
-    f.open( QFile::ReadOnly );
-    mBrowser->setHtml( QString::fromUtf8( f.readAll().constData() ) );
+    mBrowser->load( QUrl( QLatin1String("qrc:/ModWelcome/Welcome.html") ) );
 
     setWidget( mBrowser );
+}
+
+void WelcomeView::onLinkClicked(const QUrl &url)
+{
+    QDesktopServices::openUrl( url );
 }
 
 

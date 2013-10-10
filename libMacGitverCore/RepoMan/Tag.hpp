@@ -37,6 +37,7 @@ namespace RM
 
     private:
         ObjTypes objType() const;
+        void preTerminate();
         void dumpSelf(Internal::Dumper& dumper) const;
 
     private:

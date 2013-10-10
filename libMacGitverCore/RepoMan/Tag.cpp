@@ -18,6 +18,7 @@
  */
 
 #include "Tag.hpp"
+#include "Events.hpp"
 #include "Dumper.hpp"
 
 namespace RM
@@ -31,6 +32,14 @@ namespace RM
     ObjTypes Tag::objType() const
     {
         return TagObject;
+    }
+
+    void Tag::preTerminate()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->tagAboutToBeDeleted(repository(), this);
+        }
+        Ref::preTerminate();
     }
 
     void Tag::dumpSelf(Internal::Dumper& dumper) const

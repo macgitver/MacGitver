@@ -21,6 +21,7 @@
 
 #include "Repo.hpp"
 #include "Remote.hpp"
+#include "Events.hpp"
 #include "CollectionNode.hpp"
 #include "Dumper.hpp"
 
@@ -43,6 +44,13 @@ namespace RM
         dumper.addLine(QString(QLatin1String("Remote %2 0x%1"))
                        .arg(quintptr(this),0,16)
                        .arg(mName));
+    }
+
+    void Remote::preTerminate()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->remoteAboutToBeDeleted(repository(), this);
+        }
     }
 
     Git::Remote Remote::gitObject()

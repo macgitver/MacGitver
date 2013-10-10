@@ -54,6 +54,7 @@ namespace RM
         bool isBare() const;
         bool isLoaded() const;
         bool isActive() const;
+        bool isInitializing() const;
 
         Repo* parentRepository();
         List submodules() const;
@@ -96,6 +97,7 @@ namespace RM
     private:
         // Base impl
         bool refreshSelf();
+        void preTerminate();
         void postRefreshChildren();
         ObjTypes objType() const;
         void dumpSelf(Internal::Dumper& dumper) const;
@@ -122,6 +124,7 @@ namespace RM
         bool            mIsBare         : 1;    //!< This is a bare repo
         bool            mIsLoaded       : 1;    //!< This repo is currently loaded (by gitWrap)
         bool            mIsActive       : 1;    //!< This is MGV's current active repo?
+        bool            mIsInitializing : 1;    //!< True, while this repository is initializing
         QTimer*         mUnloadTimer;           //!< NULL or a timer to unload this repository
     };
 

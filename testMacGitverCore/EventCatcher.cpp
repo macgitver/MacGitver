@@ -159,7 +159,7 @@ void EventCatcher::refTreeNodeCreated(RM::Repo* repo, RM::RefTreeNode* node)
     recordEvent(ecRefTreeNodeCreated, repo, node);
 }
 
-void EventCatcher::refTreeNodeAboutToBeRemoved(RM::Repo* repo, RM::RefTreeNode* node)
+void EventCatcher::refTreeNodeAboutToBeDeleted(RM::Repo* repo, RM::RefTreeNode* node)
 {
     recordEvent(ecRefTreeNodeAboutToBeRemoved, repo, node);
 }
@@ -169,7 +169,7 @@ void EventCatcher::refCreated(RM::Repo* repo, RM::Ref* ref)
     recordEvent(ecRefCreated, repo, ref);
 }
 
-void EventCatcher::refAboutToBeRemoved(RM::Repo* repo, RM::Ref* ref)
+void EventCatcher::refAboutToBeDeleted(RM::Repo* repo, RM::Ref* ref)
 {
     recordEvent(ecRefAboutToBeRemoved, repo, ref);
 }
@@ -224,7 +224,7 @@ void EventCatcher::namespaceCreated(RM::Repo* repo, RM::Namespace* nameSpace)
     recordEvent(ecNamespaceCreated, repo, nameSpace);
 }
 
-void EventCatcher::namespaceAboutToBeRemoved(RM::Repo* repo, RM::Namespace* nameSpace)
+void EventCatcher::namespaceAboutToBeDeleted(RM::Repo* repo, RM::Namespace* nameSpace)
 {
     recordEvent(ecNamespaceAboutToBeRemoved, repo, nameSpace);
 }
@@ -244,7 +244,7 @@ void EventCatcher::stageCreated(RM::Repo* repo, RM::Ref* ref)
     recordEvent(ecStageCreated, repo, ref);
 }
 
-void EventCatcher::stageAboutToBeRemoved(RM::Repo* repo, RM::Ref* ref)
+void EventCatcher::stageAboutToBeDeleted(RM::Repo* repo, RM::Ref* ref)
 {
     recordEvent(ecStageAboutToBeRemoved, repo, ref);
 }
@@ -254,7 +254,7 @@ void EventCatcher::remoteCreated(RM::Repo* repo, RM::Remote* remote)
     recordEvent(ecRemoteCreated, repo, remote);
 }
 
-void EventCatcher::remoteAboutToBeRemoved(RM::Repo* repo, RM::Remote* remote)
+void EventCatcher::remoteAboutToBeDeleted(RM::Repo* repo, RM::Remote* remote)
 {
     recordEvent(ecRemoteAboutToBeRemoved, repo, remote);
 }

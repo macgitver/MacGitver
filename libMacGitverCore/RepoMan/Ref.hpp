@@ -64,6 +64,7 @@ namespace RM
 
     protected:
         void dumpSelf(Internal::Dumper& dumper) const;
+        void preTerminate();
         bool refreshSelf();
 
     private:

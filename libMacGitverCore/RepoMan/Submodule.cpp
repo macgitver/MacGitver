@@ -38,4 +38,9 @@ namespace RM
         dumper.addLine(QString(QLatin1String("Submodule 0x%1")).arg(quintptr(this),0,16));
     }
 
+    void Submodule::preTerminate()
+    {
+        // Do we need to do smth?
+    }
+
 }

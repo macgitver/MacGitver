@@ -44,6 +44,7 @@ namespace RM
 
     private:
         ObjTypes objType() const;
+        void preTerminate();
         bool refreshSelf();
         void dumpSelf(Internal::Dumper& dumper) const;
 

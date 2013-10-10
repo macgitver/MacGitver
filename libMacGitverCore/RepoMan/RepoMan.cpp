@@ -208,4 +208,10 @@ namespace RM
         dumper.addLine(QLatin1String("Repository-Manager"));
     }
 
+    void RepoMan::preTerminate()
+    {
+        // Do we need to do smth?
+    }
+
+
 }

@@ -47,6 +47,7 @@ namespace RM
         mIsActive = false;
         mIsBare = mRepo.isValid() && mRepo.isBare();
         mIsSubModule = false;
+        mIsInitializing = true;
         mDisplayAlias = QString();
         mParent = NULL;
         mUnloadTimer = NULL;
@@ -71,6 +72,8 @@ namespace RM
 
         // Do an initial refresh
         refresh();
+
+        mIsInitializing = false;
     }
 
     Repo::~Repo()
@@ -122,6 +125,18 @@ namespace RM
     bool Repo::isActive() const
     {
         return mIsActive;
+    }
+
+    /**
+     * @brief       Are we in initialization phase?
+     *
+     * @return      `true` if we're still doing an initial seed with repository objects. In this
+     *              case no events for new or changed objects shall be sent out to any listeners.
+     *
+     */
+    bool Repo::isInitializing() const
+    {
+        return mIsInitializing;
     }
 
     Repo* Repo::parentRepository()
@@ -590,6 +605,11 @@ namespace RM
     CollectionNode* Repo::notes()
     {
         return getOrCreateCollection(ctNotes);
+    }
+
+    void Repo::preTerminate()
+    {
+        // Do we need to do smth?
     }
 
 }

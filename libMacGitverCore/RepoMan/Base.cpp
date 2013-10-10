@@ -342,8 +342,12 @@ namespace RM
     /**
      * @brief       Terminates the lifetime of this object
      *
-     * For all children, terminateObject() is invoked; the object is then unlinkedFromParent() and
-     * finally it deletes itself.
+     * This method MUST be used to destroy an object. Don't just delete an repoman object.
+     *
+     * 1. For all children, terminateObject() gets invoked.
+     * 2. preTerminate() is called, whose objective is to send an event if required.
+     * 3. the object is unlinkedFromParent()
+     * 4. finally it deletes itself. Deleting is not defered; the object is gone immediately.
      *
      */
     void Base::terminateObject()
@@ -352,8 +356,38 @@ namespace RM
             child->terminateObject();
         }
 
+        preTerminate();
         unlinkFromParent();
         delete this;
+    }
+
+    /**
+     * @brief       Are Events blocked for the repository this object belongs to?
+     *
+     * @return      `true` if any events for this repository shall be suppressed. `false` in normal
+     *              operation.
+     *
+     * During the construction of a repository and its initial seeding with objects, no events will
+     * be send to any listeners. This method must be used to query whether we're currently in that
+     * phase or not.
+     *
+     */
+    bool Base::repoEventsBlocked() const
+    {
+        const Repo* repo = repository();
+        return repo->isInitializing();
+    }
+
+    /**
+     * @brief       Pre-Termination call
+     *
+     * This method is called prior to doing the actual object termination. Its objective is to send
+     * out any required events to listeners, unless this repository is still initializing.
+     *
+     */
+    void Base::preTerminate()
+    {
+        // Do nothing
     }
 
     /**

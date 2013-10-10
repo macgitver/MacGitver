@@ -91,6 +91,8 @@ namespace RM
         const Repo* repository() const;
         Repo* repository();
 
+        bool repoEventsBlocked() const;
+
         Base* parentObject() const;
 
         Set childObjects() const;
@@ -110,6 +112,7 @@ namespace RM
         virtual void postRefresh();
         virtual void preRefreshChildren();
         virtual void postRefreshChildren();
+        virtual void preTerminate();
         virtual void dumpSelf(Internal::Dumper& dumper) const = 0;
 
     protected:

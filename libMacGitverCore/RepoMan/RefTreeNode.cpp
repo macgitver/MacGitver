@@ -18,6 +18,7 @@
  */
 
 #include "RefTreeNode.hpp"
+#include "Events.hpp"
 #include "Dumper.hpp"
 
 namespace RM
@@ -38,6 +39,13 @@ namespace RM
         dumper.addLine(QString(QLatin1String("RefTreeNode 0x%1 [%2]"))
                        .arg(quintptr(this),0,16)
                        .arg(mName));
+    }
+
+    void RefTreeNode::preTerminate()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->refTreeNodeAboutToBeDeleted(repository(), this);
+        }
     }
 
     bool RefTreeNode::refreshSelf()

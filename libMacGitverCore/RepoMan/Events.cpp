@@ -187,10 +187,10 @@ namespace RM
         }
     }
 
-    void Events::refTreeNodeAboutToBeRemoved(Repo* repo, RefTreeNode* node)
+    void Events::refTreeNodeAboutToBeDeleted(Repo* repo, RefTreeNode* node)
     {
         foreach (EventsInterface* ei, mEvents) {
-            ei->refTreeNodeAboutToBeRemoved(repo, node);
+            ei->refTreeNodeAboutToBeDeleted(repo, node);
         }
     }
 
@@ -201,10 +201,10 @@ namespace RM
         }
     }
 
-    void Events::refAboutToBeRemoved(Repo* repo, Ref* ref)
+    void Events::refAboutToBeDeleted(Repo* repo, Ref* ref)
     {
         foreach (EventsInterface* ei, mEvents) {
-            ei->refAboutToBeRemoved(repo, ref);
+            ei->refAboutToBeDeleted(repo, ref);
         }
     }
 
@@ -278,10 +278,10 @@ namespace RM
         }
     }
 
-    void Events::namespaceAboutToBeRemoved(Repo* repo, Namespace* nameSpace)
+    void Events::namespaceAboutToBeDeleted(Repo* repo, Namespace* nameSpace)
     {
         foreach (EventsInterface* ei, mEvents) {
-            ei->namespaceAboutToBeRemoved(repo, nameSpace);
+            ei->namespaceAboutToBeDeleted(repo, nameSpace);
         }
     }
 
@@ -306,10 +306,10 @@ namespace RM
         }
     }
 
-    void Events::stageAboutToBeRemoved(Repo* repo, Ref* ref)
+    void Events::stageAboutToBeDeleted(Repo* repo, Ref* ref)
     {
         foreach (EventsInterface* ei, mEvents) {
-            ei->stageAboutToBeRemoved(repo, ref);
+            ei->stageAboutToBeDeleted(repo, ref);
         }
     }
 
@@ -320,10 +320,10 @@ namespace RM
         }
     }
 
-    void Events::remoteAboutToBeRemoved(Repo* repo, Remote* remote)
+    void Events::remoteAboutToBeDeleted(Repo* repo, Remote* remote)
     {
         foreach (EventsInterface* ei, mEvents) {
-            ei->remoteAboutToBeRemoved(repo, remote);
+            ei->remoteAboutToBeDeleted(repo, remote);
         }
     }
 

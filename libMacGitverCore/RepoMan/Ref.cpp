@@ -88,6 +88,13 @@ namespace RM
         return true;
     }
 
+    void Ref::preTerminate()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->refAboutToBeDeleted(repository(), this);
+        }
+    }
+
     void Ref::dumpSelf(Internal::Dumper& dumper) const
     {
         dumper.addLine(QString(QLatin1String("Ref 0x%1 [%2]"))

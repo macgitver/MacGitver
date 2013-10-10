@@ -18,6 +18,7 @@
  */
 
 #include "Namespace.hpp"
+#include "Events.hpp"
 #include "Dumper.hpp"
 
 namespace RM
@@ -39,6 +40,13 @@ namespace RM
         dumper.addLine(QString(QLatin1String("Namespace 0x%1 - %2"))
                        .arg(quintptr(this),0,16)
                        .arg(mName));
+    }
+
+    void Namespace::preTerminate()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->namespaceAboutToBeDeleted(repository(), this);
+        }
     }
 
     bool Namespace::refreshSelf()

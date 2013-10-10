@@ -38,4 +38,9 @@ namespace RM
         dumper.addLine(QString(QLatin1String("RefLog 0x%1")).arg(quintptr(this),0,16));
     }
 
+    void RefLog::preTerminate()
+    {
+        // What to do? We don't send Ref-Log-Deleted events
+    }
+
 }

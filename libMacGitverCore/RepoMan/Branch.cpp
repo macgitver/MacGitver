@@ -18,6 +18,7 @@
  */
 
 #include "Branch.hpp"
+#include "Events.hpp"
 #include "Dumper.hpp"
 
 namespace RM
@@ -31,6 +32,14 @@ namespace RM
     ObjTypes Branch::objType() const
     {
         return BranchObject;
+    }
+
+    void Branch::preTerminate()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->branchAboutToBeDeleted(repository(), this);
+        }
+        Ref::preTerminate();
     }
 
     void Branch::dumpSelf(Internal::Dumper& dumper) const

@@ -119,9 +119,9 @@ protected:
     void repositoryActivated(RM::Repo* repo);
     void repositoryDeactivated(RM::Repo* repo);
     void refTreeNodeCreated(RM::Repo* repo, RM::RefTreeNode* node);
-    void refTreeNodeAboutToBeRemoved(RM::Repo* repo, RM::RefTreeNode* node);
+    void refTreeNodeAboutToBeDeleted(RM::Repo* repo, RM::RefTreeNode* node);
     void refCreated(RM::Repo* repo, RM::Ref* ref);
-    void refAboutToBeRemoved(RM::Repo* repo, RM::Ref* ref);
+    void refAboutToBeDeleted(RM::Repo* repo, RM::Ref* ref);
     void refMoved(RM::Repo* repo, RM::Ref* ref);
     void refLinkChanged(RM::Repo* repo, RM::Ref* ref);
     void refHeadDetached(RM::Repo* repo, RM::Ref* ref);
@@ -132,13 +132,13 @@ protected:
     void branchMoved(RM::Repo* repo, RM::Branch* branch);
     void branchUpstreamChanged(RM::Repo* repo, RM::Branch* branch);
     void namespaceCreated(RM::Repo* repo, RM::Namespace* nameSpace);
-    void namespaceAboutToBeRemoved(RM::Repo* repo, RM::Namespace* nameSpace);
+    void namespaceAboutToBeDeleted(RM::Repo* repo, RM::Namespace* nameSpace);
     void refLogChanged(RM::Repo* repo, RM::RefLog* reflog);
     void refLogNewEntry(RM::Repo* repo, RM::RefLog* reflog);
     void stageCreated(RM::Repo* repo, RM::Ref* ref);
-    void stageAboutToBeRemoved(RM::Repo* repo, RM::Ref* ref);
+    void stageAboutToBeDeleted(RM::Repo* repo, RM::Ref* ref);
     void remoteCreated(RM::Repo* repo, RM::Remote* remote);
-    void remoteAboutToBeRemoved(RM::Repo* repo, RM::Remote* remote);
+    void remoteAboutToBeDeleted(RM::Repo* repo, RM::Remote* remote);
     void remoteModified(RM::Repo* repo, RM::Remote* remote);
     void submoduleCreated(RM::Repo* repo, RM::Submodule* submodule);
     void submoduleAboutToBeDeleted(RM::Repo* repo, RM::Submodule* submodule);

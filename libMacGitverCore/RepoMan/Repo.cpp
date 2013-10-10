@@ -520,6 +520,12 @@ namespace RM
         return findNamespace(nsNames, create);
     }
 
+    /**
+     * @brief       Get this object's type
+     *
+     * @return      always RepoObject.
+     *
+     */
     ObjTypes Repo::objType() const
     {
         return RepoObject;
@@ -532,21 +538,55 @@ namespace RM
                        .arg(isLoaded() ? gitLoadedRepo().name() : QLatin1String("<not loaded>")));
     }
 
+    /**
+     * @brief       Get this repository's collection of branches
+     *
+     * @return      A CollectionNode whose children are the branches included in this repository.
+     *
+     * Branches are references matching the regular expression `^refs/heads/.*$`. Branches may be
+     * scoped in which case they are subdivided into RefTreeNode objects.
+     *
+     */
     CollectionNode* Repo::branches()
     {
         return getOrCreateCollection(ctBranches);
     }
 
+    /**
+     * @brief       Get this repository's collection of tags
+     *
+     * @return      A CollectionNode whose children are the tags included in this repository.
+     *
+     * Tags are references matching the regular expression `^refs/tags/.*$`. Tags may be scoped in
+     * which case they are subdivided into RefTreeNode objects.
+     *
+     */
     CollectionNode* Repo::tags()
     {
         return getOrCreateCollection(ctTags);
     }
 
+    /**
+     * @brief       Get this repository's collection of namespaces
+     *
+     * @return      A CollectionNode whose children are the 1st level namespaces included in this
+     *              repository.
+     *
+     */
     CollectionNode* Repo::namespaces()
     {
         return getOrCreateCollection(ctNamespaces);
     }
 
+    /**
+     * @brief       Get this repository's collection of notes
+     *
+     * @return      A CollectionNode object whose children are the notes included in this repository.
+     *
+     * Notes are refs matching the regular expression `^refs/notes/.*$`. Notes may be scoped, in
+     * which case they are subdivided into RefTreeNode objects.
+     *
+     */
     CollectionNode* Repo::notes()
     {
         return getOrCreateCollection(ctNotes);

@@ -31,12 +31,14 @@ namespace RM
     {
     public:
         enum { StaticObjectType = RemoteObject };
+        typedef QSet< Remote* > Set;
+        typedef QVector< Remote* > List;
 
     public:
         Remote(const Git::Remote& gitObj, Base* parent);
 
     public:
-        Git::Remote gitObject() const;
+        Git::Remote gitObject();
         QString name() const;
         CollectionNode* branches();
 
@@ -46,7 +48,6 @@ namespace RM
         void dumpSelf(Internal::Dumper& dumper) const;
 
     private:
-        Git::Remote         mGitObject;
         QString             mName;
     };
 

@@ -47,4 +47,6 @@ TEST_F(Repo_Fixture, Trivial)
     ASSERT_TRUE(repo->isLoaded());
     ASSERT_FALSE(repo->isSubModule());
     ASSERT_FALSE(repo->isBare());
+
+    qDebug("%s", qPrintable(RMAN().dump()));
 }

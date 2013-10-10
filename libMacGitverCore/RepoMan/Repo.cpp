@@ -30,6 +30,7 @@
 #include "RepoMan/Events.hpp"
 #include "RepoMan/Repo.hpp"
 #include "RepoMan/RepoMan.hpp"
+#include "RepoMan/Remote.hpp"
 #include "RepoMan/Namespace.hpp"
 #include "RepoMan/Ref.hpp"
 #include "RepoMan/Dumper.hpp"
@@ -376,6 +377,11 @@ namespace RM
         }
 
         Git::Result r;
+        Git::Remote::List remotes = mRepo.allRemotes(r);
+        foreach (const Git::Remote& remote, remotes) {
+            findRemote(remote, true);
+        }
+
         Git::ReferenceList refs = mRepo.allReferences(r);
         foreach (Git::Reference ref, refs) {
             findReference(ref, true);
@@ -384,10 +390,20 @@ namespace RM
 
     Ref* Repo::findReference(const Git::Reference& ref, bool create)
     {
+        Base* parent = NULL;
         Git::RefName rn = ref.nameAnalyzer();
         CollectionNode* cn = NULL;
 
-        if (rn.isNamespaced()) {
+        if (rn.isRemote() && rn.isBranch()) {
+            Remote* rm = findRemote(rn.remote(), true);
+
+            if (!rm) {
+                return NULL;
+            }
+
+            parent = rm->findRefParent(rn.scopes(), create);
+        }
+        else if (rn.isNamespaced()) {
             Namespace* ns = findNamespace(rn.namespaces(), create);
 
             if (!ns) {
@@ -403,6 +419,8 @@ namespace RM
             else {
                 return NULL;
             }
+
+            parent = cn->findRefParent(rn.scopes(), create);
         }
         else {
             if (rn.isBranch()) {
@@ -414,9 +432,9 @@ namespace RM
             else {
                 return NULL;
             }
-        }
 
-        Base* parent = cn->findRefParent(rn.scopes(), create);
+            parent = cn->findRefParent(rn.scopes(), create);
+        }
 
         foreach (Ref* rmRef, parent->childObjects<Ref>()) {
             if (rmRef->name() == ref.name()) {
@@ -425,6 +443,47 @@ namespace RM
         }
 
         return new Ref(parent, rn.isBranch() ? BranchType : TagType, ref);
+    }
+
+    Remote* Repo::findRemote(const QString &remoteName, bool create) {
+
+        foreach (Remote* remote, childObjects<Remote>()) {
+            if (remote->name() == remoteName) {
+                return remote;
+            }
+        }
+
+        if (create) {
+            Git::Result r;
+            Git::Remote gr = gitRepo().remote(r, remoteName);
+
+            if (r && gr.isValid()) {
+                Remote* remote = new Remote(gr, this);
+                return remote;
+            }
+        }
+
+        return NULL;
+    }
+
+    Remote* Repo::findRemote(const Git::Remote &remote, bool create) {
+        if (!remote.isValid()) {
+            return NULL;
+        }
+
+        QString remoteName = remote.name();
+        foreach (Remote* rmRemote, childObjects<Remote>()) {
+            if (rmRemote->name() == remoteName) {
+                return rmRemote;
+            }
+        }
+
+        if (create) {
+            Remote* rmRemote = new Remote(remote, this);
+            return rmRemote;
+        }
+
+        return NULL;
     }
 
     Namespace* Repo::findNamespace(const QStringList& _namespaces, bool create) {

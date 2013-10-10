@@ -17,6 +17,9 @@
  *
  */
 
+#include "libGitWrap/Result.hpp"
+
+#include "Repo.hpp"
 #include "Remote.hpp"
 #include "CollectionNode.hpp"
 #include "Dumper.hpp"
@@ -26,9 +29,8 @@ namespace RM
 
     Remote::Remote(const Git::Remote& gitObj, Base* parent)
         : Base(parent)
-        , mGitObject(gitObj)
     {
-        mName = mGitObject.name();
+        mName = gitObj.name();
     }
 
     ObjTypes Remote::objType() const
@@ -43,9 +45,10 @@ namespace RM
                        .arg(mName));
     }
 
-    Git::Remote Remote::gitObject() const
+    Git::Remote Remote::gitObject()
     {
-        return mGitObject;
+        Git::Result r;
+        return repository()->gitRepo().remote(r, mName);
     }
 
     QString Remote::name() const

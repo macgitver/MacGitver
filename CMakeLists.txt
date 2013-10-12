@@ -18,12 +18,12 @@ IF( UNIX )
     GCC_ADD_FLAG( "-fvisibility=hidden" )
 ENDIF()
 
-ADD_SUBDIRECTORY( libGitWrap )
-ADD_SUBDIRECTORY( libHeaven )
-ADD_SUBDIRECTORY( libDiffViews )
+ADD_SUBDIRECTORY(libGitWrap)
+ADD_SUBDIRECTORY(libHeaven)
+ADD_SUBDIRECTORY(libDiffViews)
 
-ADD_SUBDIRECTORY( libMacGitverCore )
-ADD_SUBDIRECTORY( MacGitverModules )
-ADD_SUBDIRECTORY( MacGitverMain )
+ADD_SUBDIRECTORY(libMacGitverCore)
+ADD_SUBDIRECTORY(MacGitverModules)
+ADD_SUBDIRECTORY(MacGitverMain)
 
-
+ADD_SUBDIRECTORY(AddOns)

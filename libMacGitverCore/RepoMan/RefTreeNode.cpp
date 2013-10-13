@@ -61,11 +61,22 @@ namespace RM
                        .arg(name));
     }
 
+    void RefTreeNodePrivate::postCreation()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->refTreeNodeCreated(repository(), pub<RefTreeNode>());
+        }
+
+        BasePrivate::postCreation();
+    }
+
     void RefTreeNodePrivate::preTerminate()
     {
         if (!repoEventsBlocked()) {
             Events::self()->refTreeNodeAboutToBeDeleted(repository(), pub<RefTreeNode>());
         }
+
+        BasePrivate::preTerminate();
     }
 
     QString RefTreeNodePrivate::displayName() const

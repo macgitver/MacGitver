@@ -107,6 +107,17 @@ namespace RM
         return true;
     }
 
+    void RefPrivate::postCreation()
+    {
+        RM_P(Ref);
+
+        if (!repoEventsBlocked()) {
+            Events::self()->refCreated(repository(), p);
+        }
+
+        BasePrivate::postCreation();
+    }
+
     void RefPrivate::preTerminate()
     {
         RM_P(Ref);
@@ -114,6 +125,8 @@ namespace RM
         if (!repoEventsBlocked()) {
             Events::self()->refAboutToBeDeleted(repository(), p);
         }
+
+        BasePrivate::preTerminate();
     }
 
     void RefPrivate::dumpSelf(Internal::Dumper& dumper) const

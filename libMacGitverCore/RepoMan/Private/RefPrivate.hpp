@@ -36,6 +36,7 @@ namespace RM
             ObjTypes objType() const;
             QString displayName() const;
             bool refreshSelf();
+            void postCreation();
             void preTerminate();
             void dumpSelf(Dumper& dumper) const;
 

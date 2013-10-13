@@ -90,11 +90,22 @@ namespace RM
                        .arg(name));
     }
 
+    void NamespacePrivate::postCreation()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->namespaceCreated(repository(), pub<Namespace>());
+        }
+
+        BasePrivate::postCreation();
+    }
+
     void NamespacePrivate::preTerminate()
     {
         if (!repoEventsBlocked()) {
             Events::self()->namespaceAboutToBeDeleted(repository(), pub<Namespace>());
         }
+
+        BasePrivate::preTerminate();
     }
 
     bool NamespacePrivate::refreshSelf()

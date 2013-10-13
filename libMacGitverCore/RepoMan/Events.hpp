@@ -27,6 +27,7 @@
 namespace RM
 {
 
+    class Base;
     class Repo;
     class Ref;
     class Remote;
@@ -47,6 +48,9 @@ namespace RM
         virtual void repositoryAboutToClose(Repo* repo) = 0;
         virtual void repositoryActivated(Repo* repo) = 0;
         virtual void repositoryDeactivated(Repo* repo) = 0;
+
+        virtual void objectCreated(Repo* repo, Base* object) = 0;
+        virtual void objectAboutToBeDeleted(Repo* repo, Base* object) = 0;
 
         virtual void refTreeNodeCreated(Repo* repo, RefTreeNode* node) = 0;
         virtual void refTreeNodeAboutToBeDeleted(Repo* repo, RefTreeNode* node) = 0;
@@ -106,6 +110,8 @@ namespace RM
         void repositoryAboutToClose(Repo* repo);
         void repositoryActivated(Repo* repo);
         void repositoryDeactivated(Repo* repo);
+        void objectCreated(Repo* repo, Base* object);
+        void objectAboutToBeDeleted(Repo* repo, Base* object);
         void refTreeNodeCreated(Repo* repo, RefTreeNode* node);
         void refTreeNodeAboutToBeDeleted(Repo* repo, RefTreeNode* node);
         void refCreated(Repo* repo, Ref* ref);

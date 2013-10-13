@@ -67,8 +67,8 @@ namespace RM
 
     //-- BranchPrivate -----------------------------------------------------------------------------
 
-    BranchPrivate::BranchPrivate(Branch *pub, const Git::Reference &_ref)
-        : RefPrivate(pub, BranchType, _ref)
+    BranchPrivate::BranchPrivate(Branch* _pub, const Git::Reference& _ref)
+        : RefPrivate(_pub, BranchType, _ref)
         , hasUpstream(false)
         , aheadCount(0)
         , behindCount(0)
@@ -78,6 +78,15 @@ namespace RM
     ObjTypes BranchPrivate::objType() const
     {
         return BranchObject;
+    }
+
+    void BranchPrivate::postCreation()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->branchCreated(repository(), pub<Branch>());
+        }
+
+        RefPrivate::postCreation();
     }
 
     void BranchPrivate::preTerminate()

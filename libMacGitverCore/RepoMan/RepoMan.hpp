@@ -77,6 +77,8 @@ namespace RM
         void repositoryAboutToClose(RM::Repo* repo);
         void repositoryActivated(RM::Repo* repo);
         void repositoryDeactivated(RM::Repo* repo);
+        void objectCreated(RM::Repo* repo, RM::Base* object);
+        void objectAboutToBeDeleted(RM::Repo* repo, RM::Base* object);
         void refTreeNodeCreated(RM::Repo* repo, RM::RefTreeNode* node);
         void refTreeNodeAboutToBeDeleted(RM::Repo* repo, RM::RefTreeNode* node);
         void refCreated(RM::Repo* repo, RM::Ref* ref);

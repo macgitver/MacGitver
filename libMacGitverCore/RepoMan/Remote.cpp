@@ -79,11 +79,22 @@ namespace RM
                        .arg(name));
     }
 
+    void RemotePrivate::postCreation()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->remoteCreated(repository(), pub<Remote>());
+        }
+
+        BasePrivate::postCreation();
+    }
+
     void RemotePrivate::preTerminate()
     {
         if (!repoEventsBlocked()) {
             Events::self()->remoteAboutToBeDeleted(repository(), pub<Remote>());
         }
+
+        BasePrivate::preTerminate();
     }
 
     QString RemotePrivate::displayName() const

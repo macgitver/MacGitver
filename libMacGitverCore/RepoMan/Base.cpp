@@ -23,6 +23,7 @@
 #include "Repo.hpp"
 #include "RefTreeNode.hpp"
 #include "CollectionNode.hpp"
+#include "Events.hpp"
 
 #include "Private/Dumper.hpp"
 #include "Private/BasePrivate.hpp"
@@ -466,12 +467,31 @@ namespace RM
      * This method is called prior to doing the actual object termination. Its objective is to send
      * out any required events to listeners, unless this repository is still initializing.
      *
+     * The base implementation will send out a objectAboutToDelete() event.
      */
     void BasePrivate::preTerminate()
     {
-        // Do nothing
+        Events::self()->objectAboutToBeDeleted(repository(), mPub);
     }
 
+    /**
+     * @brief       Post-Construction call
+     *
+     * This method is called just before the last constructor is finished. The call actually will
+     * come from linkToParent().
+     *
+     * The purpose of this method is to send a creation event. The base implementation will send a
+     * objectCreated() event.
+     *
+     * Note that no events should be sent out, if repoEventsBlocked() returns `true`.
+     *
+     */
+    void BasePrivate::postCreation()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->objectCreated(repository(), mPub);
+        }
+    }
 
     /**
      * @brief       Find the parent for a Ref.

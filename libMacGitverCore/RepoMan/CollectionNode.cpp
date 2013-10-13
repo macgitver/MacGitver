@@ -84,8 +84,14 @@ namespace RM
         return true;
     }
 
+    void CollectionNodePrivate::postCreation()
+    {
+        BasePrivate::postCreation();
+    }
+
     void CollectionNodePrivate::preTerminate()
     {
+        BasePrivate::preTerminate();
     }
 
 }

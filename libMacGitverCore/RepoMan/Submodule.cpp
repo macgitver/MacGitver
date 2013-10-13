@@ -51,9 +51,15 @@ namespace RM
                        .arg(quintptr(mPub),0,16));
     }
 
+    void SubmodulePrivate::postCreation()
+    {
+        BasePrivate::postCreation();
+    }
+
     void SubmodulePrivate::preTerminate()
     {
         // Do we need to do smth?
+        BasePrivate::preTerminate();
     }
 
     bool SubmodulePrivate::refreshSelf()

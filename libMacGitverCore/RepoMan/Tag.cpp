@@ -47,6 +47,15 @@ namespace RM
         return TagObject;
     }
 
+    void TagPrivate::postCreation()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->tagCreated(repository(), pub<Tag>());
+        }
+
+        RefPrivate::postCreation();
+    }
+
     void TagPrivate::preTerminate()
     {
         if (!repoEventsBlocked()) {

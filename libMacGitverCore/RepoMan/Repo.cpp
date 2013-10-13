@@ -53,6 +53,10 @@ namespace RM
         refresh();
 
         d->isInitializing = false;
+
+        // linkToParent() will invoke postCreation() and we'll get _one_ initial event for this
+        // repository.
+
         d->linkToParent(_parent);
     }
 

@@ -52,9 +52,15 @@ namespace RM
                        .arg(quintptr(mPub),0,16));
     }
 
+    void RefLogPrivate::postCreation()
+    {
+        BasePrivate::postCreation();
+    }
+
     void RefLogPrivate::preTerminate()
     {
         // What to do? We don't send Ref-Log-Deleted events
+        BasePrivate::preTerminate();
     }
 
     bool RefLogPrivate::refreshSelf()

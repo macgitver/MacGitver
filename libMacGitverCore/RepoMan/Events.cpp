@@ -180,6 +180,20 @@ namespace RM
         }
     }
 
+    void Events::objectCreated(Repo* repo, Base* object)
+    {
+        foreach (EventsInterface* ei, mEvents) {
+            ei->objectCreated(repo, object);
+        }
+    }
+
+    void Events::objectAboutToBeDeleted(Repo* repo, Base* object)
+    {
+        foreach (EventsInterface* ei, mEvents) {
+            ei->objectAboutToBeDeleted(repo, object);
+        }
+    }
+
     void Events::refTreeNodeCreated(Repo* repo, RefTreeNode* node)
     {
         foreach (EventsInterface* ei, mEvents) {

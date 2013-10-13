@@ -101,6 +101,7 @@ namespace RM
             virtual void postRefresh();
             virtual void preRefreshChildren();
             virtual void postRefreshChildren();
+            virtual void postCreation();
             virtual void preTerminate();
             virtual ObjTypes objType() const = 0;
             virtual void dumpSelf(Dumper& dumper) const = 0;

@@ -81,8 +81,6 @@ namespace RM
 
     protected:
         Base(Internal::BasePrivate& _d);
-
-    public:
         virtual ~Base();
 
     public:

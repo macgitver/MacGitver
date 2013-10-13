@@ -50,6 +50,11 @@ namespace RM
         }
     }
 
+    QString CollectionNode::displayName() const
+    {
+        return collectionTypeName();
+    }
+
     void CollectionNode::dumpSelf(Internal::Dumper& dumper) const
     {
         dumper.addLine(QString(QLatin1String("Collection '%2' 0x%1"))

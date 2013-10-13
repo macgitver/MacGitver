@@ -61,6 +61,7 @@ namespace RM
 
         QString path() const;
 
+        QString displayName() const;
         QString displayAlias() const;
         void setDisplayAlias( const QString& alias );
 

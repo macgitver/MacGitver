@@ -391,6 +391,17 @@ namespace RM
     }
 
     /**
+     * @brief       Get a string that can be used to display this object
+     *
+     * @return      Always `<Unknown>`. Reimplementations should return something more meaningful.
+     *
+     */
+    QString Base::displayName() const
+    {
+        return QLatin1String("<Unknown>");
+    }
+
+    /**
      * @brief       Creates a textual dump of this object and its children
      *
      * @return      Textual dump.

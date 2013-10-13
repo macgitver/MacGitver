@@ -38,6 +38,7 @@ namespace RM
 
     public:
         QString name() const;
+        QString displayName() const;
 
     private:
         ObjTypes objType() const;

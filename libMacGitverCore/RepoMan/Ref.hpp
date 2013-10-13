@@ -52,6 +52,7 @@ namespace RM
 
     public:
         ObjTypes objType() const;
+        QString displayName() const;
 
     public:
         RefTypes type() const;

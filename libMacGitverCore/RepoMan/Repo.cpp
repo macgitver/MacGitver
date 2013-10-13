@@ -174,6 +174,11 @@ namespace RM
         mIsActive = false;
     }
 
+    QString Repo::displayName() const
+    {
+        return mDisplayAlias;
+    }
+
     QString Repo::displayAlias() const
     {
         return mDisplayAlias;

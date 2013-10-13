@@ -53,6 +53,11 @@ namespace RM
         }
     }
 
+    QString Remote::displayName() const
+    {
+        return mName;
+    }
+
     Git::Remote Remote::gitObject()
     {
         Git::Result r;

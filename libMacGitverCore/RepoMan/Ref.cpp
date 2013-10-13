@@ -82,6 +82,11 @@ namespace RM
         }
     }
 
+    QString Ref::displayName() const
+    {
+        return mName;
+    }
+
     bool Ref::refreshSelf()
     {
         read();

@@ -38,6 +38,7 @@ namespace RM
         Remote(const Git::Remote& gitObj, Base* parent);
 
     public:
+        QString displayName() const;
         Git::Remote gitObject();
         QString name() const;
         CollectionNode* branches();

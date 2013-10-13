@@ -74,6 +74,11 @@ namespace RM
         return getOrCreateCollection(ctNotes);
     }
 
+    QString Namespace::displayName() const
+    {
+        return mName;
+    }
+
     QString Namespace::name() const
     {
         return mName;

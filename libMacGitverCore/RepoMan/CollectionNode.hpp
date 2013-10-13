@@ -42,6 +42,7 @@ namespace RM
     public:
         CollectionTypes collectionType() const;
         QString collectionTypeName() const;
+        QString displayName() const;
 
     private:
         ObjTypes objType() const;

@@ -104,6 +104,8 @@ namespace RM
         template< class T >
         bool isA() const;
 
+        virtual QString displayName() const;
+
         QString dump() const;
 
     protected:

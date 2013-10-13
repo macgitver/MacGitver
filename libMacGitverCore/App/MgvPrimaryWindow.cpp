@@ -91,6 +91,8 @@ void MgvPrimaryWindow::setupUi()
     setupActions( this );
     setMenuBar( mbMainMenuBar );
 
+    Heaven::ViewDescriptor::mergeViewsMenu("ViewsListMP");
+
     setWindowTitle( trUtf8( "MacGitver" ) );
 
     statusBar()->addWidget( new RepoStateWidget );

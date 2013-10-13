@@ -155,6 +155,18 @@ namespace RM
     }
 
     /**
+     * @brief       Refresh this object
+     *
+     * Refreshs this object and all its children.
+     *
+     */
+    void Base::refresh()
+    {
+        RM_D(Base);
+        d->refresh();
+    }
+
+    /**
      * @brief       Find the repository for this object
      *
      * Walks up the hierarchy of objects to find the repository. Since objects can never be

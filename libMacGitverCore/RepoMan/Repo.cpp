@@ -48,6 +48,11 @@ namespace RM
         : Base(*new RepoPrivate(this, _repo))
     {
         RM_D(Repo);
+
+        // Do an initial refresh
+        refresh();
+
+        d->isInitializing = false;
         d->linkToParent(_parent);
     }
 
@@ -376,11 +381,6 @@ namespace RM
                 displayAlias = sl.last();
             }
         }
-
-        // Do an initial refresh
-        refresh();
-
-        isInitializing = false;
     }
 
     RepoPrivate::~RepoPrivate()

@@ -18,33 +18,88 @@
  */
 
 #include "Branch.hpp"
+#include "Repo.hpp"
 #include "Events.hpp"
-#include "Dumper.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Private/BranchPrivate.hpp"
 
 namespace RM
 {
 
-    Branch::Branch(Base* parent, const Git::Reference &ref)
-        : Ref(parent, BranchType, ref)
+    using namespace Internal;
+
+    Branch::Branch(Base* _parent, const Git::Reference &_ref)
+        : Ref(*new BranchPrivate(this, _ref))
+    {
+        RM_D(Branch);
+        d->linkToParent(_parent);
+    }
+
+    QString Branch::upstreamRefName() const
+    {
+        RM_CD(Branch);
+        return d->upstreamRefName;
+    }
+
+    Ref* Branch::upstream()
+    {
+        return repository()->findReference(upstreamRefName());
+    }
+
+    bool Branch::hasUpstream() const
+    {
+        RM_CD(Branch);
+        return d->hasUpstream;
+    }
+
+    int Branch::aheadCount() const
+    {
+        RM_CD(Branch);
+        return d->aheadCount;
+    }
+
+    int Branch::behindCount() const
+    {
+        RM_CD(Branch);
+        return d->behindCount;
+    }
+
+    //-- BranchPrivate -----------------------------------------------------------------------------
+
+    BranchPrivate::BranchPrivate(Branch *pub, const Git::Reference &_ref)
+        : RefPrivate(pub, BranchType, _ref)
+        , hasUpstream(false)
+        , aheadCount(0)
+        , behindCount(0)
     {
     }
 
-    ObjTypes Branch::objType() const
+    ObjTypes BranchPrivate::objType() const
     {
         return BranchObject;
     }
 
-    void Branch::preTerminate()
+    void BranchPrivate::preTerminate()
     {
         if (!repoEventsBlocked()) {
-            Events::self()->branchAboutToBeDeleted(repository(), this);
+            Events::self()->branchAboutToBeDeleted(repository(), pub<Branch>());
         }
-        Ref::preTerminate();
+
+        RefPrivate::preTerminate();
     }
 
-    void Branch::dumpSelf(Internal::Dumper& dumper) const
+    void BranchPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Branch 0x%1")).arg(quintptr(this),0,16));
+        dumper.addLine(QString(QLatin1String("Branch 0x%1 - %2"))
+                       .arg(quintptr(mPub),0,16)
+                       .arg(name));
+    }
+
+    bool BranchPrivate::refreshSelf()
+    {
+        // ### Update "upstream" and "divergence"
+        return RefPrivate::refreshSelf();
     }
 
 }

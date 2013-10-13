@@ -18,29 +18,47 @@
  */
 
 #include "Submodule.hpp"
-#include "Dumper.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Private/SubmodulePrivate.hpp"
 
 namespace RM
 {
+    using namespace Internal;
 
-    Submodule::Submodule(Base* parent)
-        : Base(parent)
+    Submodule::Submodule(Base* _parent)
+        : Base(*new SubmodulePrivate(this))
+    {
+        RM_D(Submodule);
+        d->linkToParent(_parent);
+    }
+
+    //-- SubmodulePrivate --------------------------------------------------------------------------
+
+    SubmodulePrivate::SubmodulePrivate(Submodule* _pub)
+        : BasePrivate(_pub)
     {
     }
 
-    ObjTypes Submodule::objType() const
+    ObjTypes SubmodulePrivate::objType() const
     {
         return SubmoduleObject;
     }
 
-    void Submodule::dumpSelf(Internal::Dumper& dumper) const
+    void SubmodulePrivate::dumpSelf(Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Submodule 0x%1")).arg(quintptr(this),0,16));
+        dumper.addLine(QString(QLatin1String("Submodule 0x%1"))
+                       .arg(quintptr(mPub),0,16));
     }
 
-    void Submodule::preTerminate()
+    void SubmodulePrivate::preTerminate()
     {
         // Do we need to do smth?
+    }
+
+    bool SubmodulePrivate::refreshSelf()
+    {
+        return true;
     }
 
 }

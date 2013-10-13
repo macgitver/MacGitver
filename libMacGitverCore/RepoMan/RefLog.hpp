@@ -25,22 +25,19 @@
 namespace RM
 {
 
+    namespace Internal
+    {
+        class RefLogPrivate;
+    }
+
     class MGV_CORE_API RefLog : public Base
     {
     public:
         enum { StaticObjectType = RefLogObject };
+        typedef Internal::RefLogPrivate Private;
 
     public:
-        RefLog(Base* parent);
-
-    public:
-
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
-
-    private:
+        RefLog(Base* _parent);
     };
 
 }

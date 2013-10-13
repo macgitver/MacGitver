@@ -27,6 +27,11 @@
 namespace RM
 {
 
+    namespace Internal
+    {
+        class RefPrivate;
+    }
+
     enum RefTypes
     {
         BranchType,
@@ -46,32 +51,18 @@ namespace RM
         typedef QSet< Ref* > Set;
         typedef QList< Ref* > List;
 
-    public:
-        Ref(Base* parent, RefTypes type, const Git::Reference& ref);
-        ~Ref();
+    protected:
+        Ref(Internal::RefPrivate& _data);
 
     public:
-        ObjTypes objType() const;
-        QString displayName() const;
+        Ref(Base* _parent, RefTypes _type, const Git::Reference& _ref);
+        ~Ref();
 
     public:
         RefTypes type() const;
         QString name() const;
         QString prefix() const;
         Git::ObjectId id() const;
-
-    private:
-        void read();
-
-    protected:
-        void dumpSelf(Internal::Dumper& dumper) const;
-        void preTerminate();
-        bool refreshSelf();
-
-    private:
-        RefTypes            mType;
-        QString             mName;
-        Git::ObjectId       mId;
     };
 
 }

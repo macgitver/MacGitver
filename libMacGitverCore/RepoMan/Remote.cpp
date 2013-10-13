@@ -23,58 +23,76 @@
 #include "Remote.hpp"
 #include "Events.hpp"
 #include "CollectionNode.hpp"
-#include "Dumper.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Private/RemotePrivate.hpp"
 
 namespace RM
 {
 
+    using namespace Internal;
+
     Remote::Remote(const Git::Remote& gitObj, Base* parent)
-        : Base(parent)
+        : Base(*new RemotePrivate(this, gitObj))
     {
-        mName = gitObj.name();
-    }
-
-    ObjTypes Remote::objType() const
-    {
-        return RemoteObject;
-    }
-
-    void Remote::dumpSelf(Internal::Dumper& dumper) const
-    {
-        dumper.addLine(QString(QLatin1String("Remote %2 0x%1"))
-                       .arg(quintptr(this),0,16)
-                       .arg(mName));
-    }
-
-    void Remote::preTerminate()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->remoteAboutToBeDeleted(repository(), this);
-        }
-    }
-
-    QString Remote::displayName() const
-    {
-        return mName;
     }
 
     Git::Remote Remote::gitObject()
     {
         Git::Result r;
-        return repository()->gitRepo().remote(r, mName);
+        return repository()->gitRepo().remote(r, name());
     }
 
     QString Remote::name() const
     {
-        return mName;
+        RM_D(Remote);
+
+        return d->name;
     }
 
     CollectionNode* Remote::branches()
     {
-        return getOrCreateCollection(ctBranches);
+        RM_D(Remote);
+
+
+        // ### We don't use this when filling up the branches, yet.
+        return d->getOrCreateCollection(ctBranches);
     }
 
-    bool Remote::refreshSelf()
+    //-- RemotePrivate -----------------------------------------------------------------------------
+
+    RemotePrivate::RemotePrivate(Remote* _pub, const Git::Remote& _obj)
+        : BasePrivate(_pub)
+    {
+        name = _obj.name();
+    }
+
+    ObjTypes RemotePrivate::objType() const
+    {
+        return RemoteObject;
+    }
+
+    void RemotePrivate::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Remote %2 0x%1"))
+                       .arg(quintptr(mPub),0,16)
+                       .arg(name));
+    }
+
+    void RemotePrivate::preTerminate()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->remoteAboutToBeDeleted(repository(), pub<Remote>());
+        }
+    }
+
+    QString RemotePrivate::displayName() const
+    {
+        return name;
+    }
+
+
+    bool RemotePrivate::refreshSelf()
     {
         return true;
     }

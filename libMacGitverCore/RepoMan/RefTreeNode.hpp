@@ -27,29 +27,24 @@
 namespace RM
 {
 
+    namespace Internal
+    {
+        class RefTreeNodePrivate;
+    }
+
     class MGV_CORE_API RefTreeNode : public Base
     {
     public:
         enum { StaticObjectType = RefTreeNodeObject };
-
+        typedef Internal::RefTreeNodePrivate Private;
         typedef QSet< RefTreeNode* > Set;
         typedef QList< RefTreeNode* > List;
 
     public:
-        RefTreeNode(Base* parent);
+        RefTreeNode(Base* _parent, const QString& _name);
 
     public:
-        void setName(const QString& name);
         QString name() const;
-
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        bool refreshSelf();
-        void dumpSelf(Internal::Dumper& dumper) const;
-
-    private:
-        QString mName;
     };
 
 }

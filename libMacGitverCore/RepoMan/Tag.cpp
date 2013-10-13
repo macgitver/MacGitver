@@ -19,32 +19,48 @@
 
 #include "Tag.hpp"
 #include "Events.hpp"
-#include "Dumper.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Private/TagPrivate.hpp"
 
 namespace RM
 {
 
-    Tag::Tag(Base* parent, const Git::Reference& ref)
-        : Ref(parent, TagType, ref)
+    using namespace Internal;
+
+    Tag::Tag(Base* _parent, const Git::Reference& _ref)
+        : Ref(*new TagPrivate(this, _ref))
+    {
+        RM_D(Tag);
+        d->linkToParent(_parent);
+    }
+
+    //-- TagPrivate --------------------------------------------------------------------------------
+
+    TagPrivate::TagPrivate(Tag* _pub, const Git::Reference& _ref)
+        : RefPrivate(_pub, TagType, _ref)
     {
     }
 
-    ObjTypes Tag::objType() const
+    ObjTypes TagPrivate::objType() const
     {
         return TagObject;
     }
 
-    void Tag::preTerminate()
+    void TagPrivate::preTerminate()
     {
         if (!repoEventsBlocked()) {
-            Events::self()->tagAboutToBeDeleted(repository(), this);
+            Events::self()->tagAboutToBeDeleted(repository(), pub<Tag>());
         }
-        Ref::preTerminate();
+
+        RefPrivate::preTerminate();
     }
 
-    void Tag::dumpSelf(Internal::Dumper& dumper) const
+    void TagPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Tag 0x%1")).arg(quintptr(this),0,16));
+        dumper.addLine(QString(QLatin1String("Tag 0x%1 - %2"))
+                       .arg(quintptr(mPub),0,16)
+                       .arg(name));
     }
 
 }

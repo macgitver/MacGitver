@@ -18,29 +18,48 @@
  */
 
 #include "RefLog.hpp"
-#include "Dumper.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Private/RefLogPrivate.hpp"
 
 namespace RM
 {
 
-    RefLog::RefLog(Base* parent)
-        : Base(parent)
+    using namespace Internal;
+
+    RefLog::RefLog(Base* _parent)
+        : Base(*new RefLogPrivate(this))
+    {
+        RM_D(RefLog);
+        d->linkToParent(_parent);
+    }
+
+    //-- RefLogPrivate -----------------------------------------------------------------------------
+
+    RefLogPrivate::RefLogPrivate(RefLog* _pub)
+        : BasePrivate(_pub)
     {
     }
 
-    ObjTypes RefLog::objType() const
+    ObjTypes RefLogPrivate::objType() const
     {
         return RefLogObject;
     }
 
-    void RefLog::dumpSelf(Internal::Dumper& dumper) const
+    void RefLogPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("RefLog 0x%1")).arg(quintptr(this),0,16));
+        dumper.addLine(QString(QLatin1String("RefLog 0x%1"))
+                       .arg(quintptr(mPub),0,16));
     }
 
-    void RefLog::preTerminate()
+    void RefLogPrivate::preTerminate()
     {
         // What to do? We don't send Ref-Log-Deleted events
+    }
+
+    bool RefLogPrivate::refreshSelf()
+    {
+        return true;
     }
 
 }

@@ -33,65 +33,53 @@
 #include "RepoMan/Remote.hpp"
 #include "RepoMan/Namespace.hpp"
 #include "RepoMan/Ref.hpp"
-#include "RepoMan/Dumper.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Private/RepoPrivate.hpp"
+#include "RepoMan/Private/RemotePrivate.hpp"
+#include "RepoMan/Private/CollectionNodePrivate.hpp"
 
 namespace RM
 {
 
-    Repo::Repo(const Git::Repository& repo, Base* parent)
-        : Base(parent)
+    using namespace Internal;
+
+    Repo::Repo(const Git::Repository& _repo, Base* _parent)
+        : Base(*new RepoPrivate(this, _repo))
     {
-        mRepo = repo;
-        mPath = repo.basePath();
-        mIsLoaded = mRepo.isValid();
-        mIsActive = false;
-        mIsBare = mRepo.isValid() && mRepo.isBare();
-        mIsSubModule = false;
-        mIsInitializing = true;
-        mDisplayAlias = QString();
-        mParent = NULL;
-        mUnloadTimer = NULL;
+        RM_D(Repo);
+        d->linkToParent(_parent);
+    }
 
-        if( mPath.endsWith( L'/' ) )
-        {
-            mPath = mPath.left( mPath.length() - 1 );
-        }
+    Repo::Repo(bool forSubmodule, const Git::Repository& _repo, Base* _parent)
+        : Base(*new RepoPrivate(this, _repo))
+    {
+        RM_D(Repo);
+        d->linkToParent(_parent);
 
-        findAlias();
+        if (forSubmodule) {
+            Q_ASSERT(_parent->objType() == RepoObject);
 
-        if( mDisplayAlias.isEmpty() )
-        {
-            if (mPath.isEmpty()) {
-                mDisplayAlias = trUtf8("Unknown Repository");
-            }
-            else {
-                QStringList sl = mPath.split( QChar( L'/' ), QString::SkipEmptyParts );
-                mDisplayAlias = sl.last();
+            d->isSubModule = true;
+            d->parent = static_cast<Repo*>(_parent);
+            setDisplayAlias(_repo.name());
+
+            if (!_repo.isBare()) {
+                d->scanSubmodules();
             }
         }
-
-        // Do an initial refresh
-        refresh();
-
-        mIsInitializing = false;
     }
 
     Repo::~Repo()
     {
-        if (mIsLoaded) {
-            unload();
-        }
-        if (mParent) {
-            mParent->removeChild( this );
-        }
-
-        MacGitver::repoMan().internalClosedRepo(this);
     }
 
     Git::Repository Repo::gitRepo()
     {
-        if (ensureIsLoaded()) {
-            return mRepo;
+        RM_D(Repo);
+
+        if (d->ensureIsLoaded()) {
+            return d->repo;
         }
 
         return Git::Repository();
@@ -99,32 +87,44 @@ namespace RM
 
     Git::Repository Repo::gitLoadedRepo() const
     {
-        return mIsLoaded ? mRepo : Git::Repository();
+        RM_CD(Repo);
+
+        return d->isLoaded ? d->repo : Git::Repository();
     }
 
     QString Repo::path() const
     {
-        return mPath;
+        RM_CD(Repo);
+
+        return d->path;
     }
 
     bool Repo::isSubModule() const
     {
-        return mIsSubModule;
+        RM_CD(Repo);
+
+        return d->isSubModule;
     }
 
     bool Repo::isBare() const
     {
-        return mIsBare;
+        RM_CD(Repo);
+
+        return d->isBare;
     }
 
     bool Repo::isLoaded() const
     {
-        return mIsLoaded;
+        RM_CD(Repo);
+
+        return d->isLoaded;
     }
 
     bool Repo::isActive() const
     {
-        return mIsActive;
+        RM_CD(Repo);
+
+        return d->isActive;
     }
 
     /**
@@ -136,177 +136,334 @@ namespace RM
      */
     bool Repo::isInitializing() const
     {
-        return mIsInitializing;
+        RM_CD(Repo);
+
+        return d->isInitializing;
     }
 
     Repo* Repo::parentRepository()
     {
-        return mParent;
+        RM_CD(Repo);
+
+        return d->parent;
     }
 
     Repo::List Repo::submodules() const
     {
-        return mChildren;
+        RM_CD(Repo);
+
+        return d->children;
     }
 
     void Repo::activated()
     {
-        Q_ASSERT(!mIsActive);
+        // ### Should be very private
+        RM_D(Repo);
+        Q_ASSERT(!d->isActive);
 
-        if(mUnloadTimer) {
-            mUnloadTimer->stop();
-            mUnloadTimer->deleteLater();
-            mUnloadTimer = NULL;
+        if (d->unloadTimer) {
+            d->unloadTimer->stop();
+            d->unloadTimer->deleteLater();
+            d->unloadTimer = NULL;
         }
-        mIsActive = true;
+
+        d->isActive = true;
     }
 
     void Repo::deactivated()
     {
-        Q_ASSERT(mIsActive);
+        // ### Should be very private
+        RM_D(Repo);
+        Q_ASSERT(d->isActive);
 
-        Q_ASSERT(!mUnloadTimer);
-        mUnloadTimer = new QTimer(this);
-        connect( mUnloadTimer, SIGNAL(timeout()), this, SLOT(unloadTimer()) );
-        mUnloadTimer->setInterval(15 * 60 * 1000); // quarter of an hour
-        mUnloadTimer->start();
+        Q_ASSERT(!d->unloadTimer);
+        d->unloadTimer = new QTimer(this);
+        connect(d->unloadTimer, SIGNAL(timeout()), this, SLOT(unloadTimer()));
+        d->unloadTimer->setInterval(15 * 60 * 1000); // quarter of an hour
+        d->unloadTimer->start();
 
-        mIsActive = false;
-    }
-
-    QString Repo::displayName() const
-    {
-        return mDisplayAlias;
+        d->isActive = false;
     }
 
     QString Repo::displayAlias() const
     {
-        return mDisplayAlias;
+        RM_CD(Repo);
+
+        return d->displayAlias;
     }
 
-    void Repo::setDisplayAlias( const QString& alias )
+    void Repo::setDisplayAlias(const QString& alias)
     {
-        if( mDisplayAlias != alias )
-        {
-            mDisplayAlias = alias;
-            emit aliasChanged( alias );
+        RM_D(Repo);
+
+        if (d->displayAlias != alias) {
+            d->displayAlias = alias;
+            emit aliasChanged(alias);
         }
-    }
-
-    void Repo::load()
-    {
-        Q_ASSERT( !mIsLoaded );
-    }
-
-    void Repo::unload()
-    {
-        if( mIsActive )
-        {
-            qDebug() << "Unloading active RepoInfo. Will deactivate it first.";
-            MacGitver::repoMan().activate(NULL);
-        }
-        Q_ASSERT( !mIsActive );
-
-        if( mUnloadTimer )
-        {
-            mUnloadTimer->stop();
-            mUnloadTimer->deleteLater();
-            mUnloadTimer = NULL;
-        }
-
-        emit aboutToUnload( this );
-
-        mIsLoaded = false;
-        mRepo = Git::Repository();
-
-        emit unloaded( this );
-    }
-
-    bool Repo::ensureIsLoaded()
-    {
-        if (!mIsLoaded) {
-            load();
-        }
-
-        return mIsLoaded;
     }
 
     void Repo::unloadTimer()
     {
-        Q_ASSERT(mUnloadTimer);
-
-        mUnloadTimer->stop();
-        mUnloadTimer->deleteLater();
-        mUnloadTimer = NULL;
-
-        unload();
-    }
-
-    void Repo::removeChild( Repo* child )
-    {
-        for( int i = 0; i < mChildren.count(); i++ )
-        {
-            if( mChildren.at( i ) == child )
-            {
-                mChildren.remove( i );
-                emit childRemoved( this, child );
-                return;
-            }
-        }
+        RM_D(Repo);
+        d->unload();
     }
 
     void Repo::close()
     {
-        if (mIsActive) {
+        RM_D(Repo);
+
+        if (d->isActive) {
             MacGitver::repoMan().activate(NULL);
         }
 
         Events::self()->repositoryAboutToClose(this);
         emit aboutToClose(this);
 
-        foreach(Repo* child, mChildren) {
+        foreach(Repo* child, d->children) {
             child->close();
         }
 
-        terminateObject();
+        d->terminateObject();
     }
 
-    Repo* Repo::repoByPath( const QString& basePath, bool searchSubmodules )
+    QString Repo::branchDisplay() const
     {
-        foreach( Repo* info, mChildren )
-        {
-            if( info->path() == basePath )
-            {
-                return info;
-            }
+        // ### This method is totally wrong placed here
+        RM_D(Repo);
 
-            if( searchSubmodules )
-            {
-                if( Repo* sub = info->repoByPath( basePath, true ) )
-                {
-                    return sub;
+        if (d->isLoaded) {
+            Git::Result r;
+            Git::Reference HEAD = d->repo.HEAD(r);
+
+            if (HEAD.isValid()) {
+                if (HEAD.name() != QLatin1String("HEAD")) {
+                    return trUtf8("<b style=\"background-color: #FFB54F;"
+                                  "\">%1</b>" ).arg(HEAD.name().mid(11));
                 }
+                else {
+                    return trUtf8("detached at <b>%1</b>" ).arg(HEAD.objectId(r).toString());
+                }
+            }
+            else {
+                return trUtf8("<b style=\"color: red;\">Branch yet to be born</b>");
+            }
+        }
+        return tr("&lt;unknown&gt;");
+    }
+
+    Ref* Repo::findReference(const Git::Reference& ref)
+    {
+        RM_D(Repo);
+        return d->findReference(ref, false);
+    }
+
+    Ref* Repo::findReference(const QString &fqrn)
+    {
+        RM_D(Repo);
+        return d->findReference(fqrn, false);
+    }
+
+    Remote* Repo::findRemote(const Git::Remote& remote)
+    {
+        RM_D(Repo);
+        return d->findRemote(remote, false);
+    }
+
+    Remote* Repo::findRemote(const QString& remoteName)
+    {
+        RM_D(Repo);
+        return d->findRemote(remoteName, false);
+    }
+
+    Namespace* Repo::findNamespace(const QStringList& namespaces)
+    {
+        RM_D(Repo);
+        return d->findNamespace(namespaces);
+    }
+
+    Namespace* Repo::findNamespace(const QString& nsFullName)
+    {
+        RM_D(Repo);
+        return d->findNamespace(nsFullName);
+    }
+
+    /**
+     * @brief       Get this repository's collection of branches
+     *
+     * @return      A CollectionNode whose children are the branches included in this repository.
+     *
+     * Branches are references matching the regular expression `^refs/heads/.*$`. Branches may be
+     * scoped in which case they are subdivided into RefTreeNode objects.
+     *
+     */
+    CollectionNode* Repo::branches()
+    {
+        RM_D(Repo);
+        return d->getOrCreateCollection(ctBranches);
+    }
+
+    /**
+     * @brief       Get this repository's collection of tags
+     *
+     * @return      A CollectionNode whose children are the tags included in this repository.
+     *
+     * Tags are references matching the regular expression `^refs/tags/.*$`. Tags may be scoped in
+     * which case they are subdivided into RefTreeNode objects.
+     *
+     */
+    CollectionNode* Repo::tags()
+    {
+        RM_D(Repo);
+        return d->getOrCreateCollection(ctTags);
+    }
+
+    /**
+     * @brief       Get this repository's collection of namespaces
+     *
+     * @return      A CollectionNode whose children are the 1st level namespaces included in this
+     *              repository.
+     *
+     */
+    CollectionNode* Repo::namespaces()
+    {
+        RM_D(Repo);
+        return d->getOrCreateCollection(ctNamespaces);
+    }
+
+    /**
+     * @brief       Get this repository's collection of notes
+     *
+     * @return      A CollectionNode object whose children are the notes included in this repository.
+     *
+     * Notes are refs matching the regular expression `^refs/notes/.*$`. Notes may be scoped, in
+     * which case they are subdivided into RefTreeNode objects.
+     *
+     */
+    CollectionNode* Repo::notes()
+    {
+        RM_D(Repo);
+        return d->getOrCreateCollection(ctNotes);
+    }
+
+    //-- RepoPrivate -------------------------------------------------------------------------------
+
+    RepoPrivate::RepoPrivate(Repo* _pub, const Git::Repository& _repo)
+        : BasePrivate(_pub)
+    {
+        repo = _repo;
+        path = repo.basePath();
+        isLoaded = repo.isValid();
+        isActive = false;
+        isBare = repo.isValid() && repo.isBare();
+        isSubModule = false;
+        isInitializing = true;
+        displayAlias = QString();
+        parent = NULL;
+        unloadTimer = NULL;
+
+        if (path.endsWith(L'/')) {
+            path = path.left(path.length() - 1);
+        }
+
+        findAlias();
+
+        if (displayAlias.isEmpty()) {
+            if (path.isEmpty()) {
+                displayAlias = Repo::trUtf8("Unknown Repository");
+            }
+            else {
+                QStringList sl = path.split(QChar(L'/'), QString::SkipEmptyParts);
+                displayAlias = sl.last();
             }
         }
 
-        return NULL;
+        // Do an initial refresh
+        refresh();
+
+        isInitializing = false;
     }
 
-    void Repo::scanSubmodules()
+    RepoPrivate::~RepoPrivate()
     {
-        if( !ensureIsLoaded() )
-        {
+        RM_P(Repo);
+
+        if (isLoaded) {
+            unload();
+        }
+
+        /*
+        if (parent) {
+            parent->mData->removeChild(p);
+        }
+        */ // ### Do we need to do this? Why?
+
+        MacGitver::repoMan().internalClosedRepo(p);
+    }
+
+    bool RepoPrivate::ensureIsLoaded()
+    {
+        if (!isLoaded) {
+            load();
+        }
+
+        return isLoaded;
+    }
+
+    void RepoPrivate::load()
+    {
+        // ### Unimplemented: RepoPrivate::load()
+        Q_ASSERT(!isLoaded);
+    }
+
+    void RepoPrivate::unload()
+    {
+        if (isActive) {
+            qDebug() << "Unloading active RepoInfo. Will deactivate it first.";
+            MacGitver::repoMan().activate(NULL);
+        }
+        Q_ASSERT(!isActive);
+
+        if (unloadTimer) {
+            unloadTimer->stop();
+            unloadTimer->deleteLater();
+            unloadTimer = NULL;
+        }
+
+        Repo* r = pub<Repo>();
+        emit r->aboutToUnload(r);
+
+        isLoaded = false;
+        repo = Git::Repository();
+
+        emit r->unloaded(r);
+    }
+
+
+    QString RepoPrivate::displayName() const
+    {
+        return displayAlias;
+    }
+
+    void RepoPrivate::preTerminate()
+    {
+        // Do we need to do smth?
+    }
+
+    void RepoPrivate::scanSubmodules()
+    {
+        RM_P(Repo);
+
+        if (!ensureIsLoaded()) {
             return;
         }
 
         Git::Result r;
-        Git::Submodule::List subs = mRepo.submodules( r );
-        if( !r )
-        {
+        Git::Submodule::List subs = repo.submodules( r );
+        if (!r) {
             return;
         }
 
-        List oldChildren = mChildren;
+        Repo::List oldChildren = children;
 
         foreach (Git::Submodule sub, subs) {
             Git::Result child;
@@ -318,21 +475,15 @@ namespace RM
             Repo* subInfo = NULL;
             QString path = subRepo.basePath();
 
-            subInfo = repoByPath( path, true );
-            if( !subInfo )
-            {
-                subInfo = new Repo(subRepo, this);
-                subInfo->mIsSubModule = true;
-                subInfo->setDisplayAlias( subRepo.name() );
-                subInfo->mParent = this;
-                mChildren.append( subInfo );
+            subInfo = repoByPath(path, true);
+            if (!subInfo) {
 
-                emit childAdded( this, subInfo );
+                subInfo = new Repo(true, subRepo, p);
 
-                if( !subInfo->isBare() )
-                {
-                    subInfo->scanSubmodules();
-                }
+                children.append(subInfo);
+
+                emit p->childAdded(p, subInfo);
+
             }
             else {
                 int i = oldChildren.indexOf(subInfo);
@@ -342,46 +493,33 @@ namespace RM
             }
         }
 
-        foreach( Repo* info, oldChildren )
-        {
-            removeChild( info );
+        foreach(Repo* repo, oldChildren) {
+            removeChild(repo);
         }
     }
 
-    QString Repo::branchDisplay() const
+    void RepoPrivate::removeChild(Repo* child)
     {
-        if( mIsLoaded )
-        {
-            Git::Result r;
-            Git::Reference HEAD = mRepo.HEAD( r );
-
-            if( HEAD.isValid() )
-            {
-                if( HEAD.name() != QLatin1String( "HEAD" ) )
-                {
-                    return trUtf8( "<b style=\"background-color: #FFB54F;"
-                                   "\">%1</b>" ).arg( HEAD.name().mid( 11 ) );
-                }
-                else
-                {
-                    return trUtf8( "detached at <b>%1</b>" ).arg(HEAD.objectId(r).toString());
-                }
-            }
-            else
-            {
-                return trUtf8( "<b style=\"color: red;\">Branch yet to be born</b>" );
+        RM_P(Repo);
+        for (int i = 0; i < children.count(); i++) {
+            if (children.at( i ) == child) {
+                children.remove( i );
+                emit p->childRemoved(p, child);
+                return;
             }
         }
-        return tr( "&lt;unknown&gt;" );
     }
 
-    void Repo::findAlias()
+
+
+    void RepoPrivate::findAlias()
     {
+        // ### Unimplemented: RepoPrivate::findAlias()
     }
 
-    bool Repo::refreshSelf()
+    bool RepoPrivate::refreshSelf()
     {
-        if (!mIsLoaded) {
+        if (!isLoaded) {
             // In case we're not loaded, just return and do nothing.
             return true;
         }
@@ -389,39 +527,75 @@ namespace RM
         return true;
     }
 
-    void Repo::postRefreshChildren()
+    void RepoPrivate::postRefreshChildren()
     {
-        if (!mIsLoaded) {
+        if (!isLoaded) {
             // In case we're not loaded, just return and do nothing.
             return;
         }
 
         Git::Result r;
-        Git::Remote::List remotes = mRepo.allRemotes(r);
+        Git::Remote::List remotes = repo.allRemotes(r);
         foreach (const Git::Remote& remote, remotes) {
             findRemote(remote, true);
         }
 
-        Git::ReferenceList refs = mRepo.allReferences(r);
+        Git::ReferenceList refs = repo.allReferences(r);
         foreach (Git::Reference ref, refs) {
             findReference(ref, true);
         }
     }
 
-    Ref* Repo::findReference(const Git::Reference& ref, bool create)
+    /**
+     * @brief       Get this object's type
+     *
+     * @return      always RepoObject.
+     *
+     */
+    ObjTypes RepoPrivate::objType() const
+    {
+        return RepoObject;
+    }
+
+    void RepoPrivate::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Repository 0x%1 - %02"))
+                       .arg(quintptr(mPub),0,16)
+                       .arg(isLoaded ? pub<Repo>()->gitLoadedRepo().name()
+                                     : QLatin1String("<not loaded>")));
+    }
+
+
+    Ref* RepoPrivate::findReference(const Git::Reference& ref, bool create)
+    {
+        Git::RefName rn = ref.nameAnalyzer();
+        return findReference(rn, ref, create);
+    }
+
+    Ref* RepoPrivate::findReference(const QString& fqrn, bool create)
+    {
+        Git::RefName rn(fqrn);
+        return findReference(rn, Git::Reference(), create);
+    }
+
+    Ref* RepoPrivate::findReference(Git::RefName& rn, Git::Reference ref, bool create)
     {
         Base* parent = NULL;
-        Git::RefName rn = ref.nameAnalyzer();
         CollectionNode* cn = NULL;
 
         if (rn.isRemote() && rn.isBranch()) {
-            Remote* rm = findRemote(rn.remote(), true);
+            Remote* rm = findRemote(rn.remote(), create);
 
             if (!rm) {
                 return NULL;
             }
 
-            parent = rm->findRefParent(rn.scopes(), create);
+            RemotePrivate* rmp = dataOf<Remote>(rm);
+            if (!rmp) {
+                return NULL;
+            }
+
+            parent = rmp->findRefParent(rn.scopes(), create);
         }
         else if (rn.isNamespaced()) {
             Namespace* ns = findNamespace(rn.namespaces(), create);
@@ -440,24 +614,34 @@ namespace RM
                 return NULL;
             }
 
-            parent = cn->findRefParent(rn.scopes(), create);
+            CollectionNodePrivate* cnp = dataOf<CollectionNode>(cn);
+            if (!cnp) {
+                return NULL;
+            }
+
+            parent = cnp->findRefParent(rn.scopes(), create);
         }
         else {
             if (rn.isBranch()) {
-                cn = branches();
+                cn = getOrCreateCollection(ctBranches);
             }
             else if (rn.isTag()) {
-                cn = tags();
+                cn = getOrCreateCollection(ctTags);
             }
             else {
                 return NULL;
             }
 
-            parent = cn->findRefParent(rn.scopes(), create);
+            CollectionNodePrivate* cnp = dataOf<CollectionNode>(cn);
+            if (!cnp) {
+                return NULL;
+            }
+
+            parent = cnp->findRefParent(rn.scopes(), create);
         }
 
         foreach (Ref* rmRef, parent->childObjects<Ref>()) {
-            if (rmRef->name() == ref.name()) {
+            if (rmRef->name() == rn.fullName()) {
                 return rmRef;
             }
         }
@@ -465,9 +649,11 @@ namespace RM
         return new Ref(parent, rn.isBranch() ? BranchType : TagType, ref);
     }
 
-    Remote* Repo::findRemote(const QString &remoteName, bool create) {
+    Remote* RepoPrivate::findRemote(const QString &remoteName, bool create)
+    {
+        RM_P(Repo);
 
-        foreach (Remote* remote, childObjects<Remote>()) {
+        foreach (Remote* remote, p->childObjects<Remote>()) {
             if (remote->name() == remoteName) {
                 return remote;
             }
@@ -475,10 +661,10 @@ namespace RM
 
         if (create) {
             Git::Result r;
-            Git::Remote gr = gitRepo().remote(r, remoteName);
+            Git::Remote gr = p->gitRepo().remote(r, remoteName);
 
             if (r && gr.isValid()) {
-                Remote* remote = new Remote(gr, this);
+                Remote* remote = new Remote(gr, p);
                 return remote;
             }
         }
@@ -486,28 +672,32 @@ namespace RM
         return NULL;
     }
 
-    Remote* Repo::findRemote(const Git::Remote &remote, bool create) {
+    Remote* RepoPrivate::findRemote(const Git::Remote &remote, bool create)
+    {
+        RM_P(Repo);
+
         if (!remote.isValid()) {
             return NULL;
         }
 
         QString remoteName = remote.name();
-        foreach (Remote* rmRemote, childObjects<Remote>()) {
+        foreach (Remote* rmRemote, p->childObjects<Remote>()) {
             if (rmRemote->name() == remoteName) {
                 return rmRemote;
             }
         }
 
         if (create) {
-            Remote* rmRemote = new Remote(remote, this);
+            Remote* rmRemote = new Remote(remote, p);
             return rmRemote;
         }
 
         return NULL;
     }
 
-    Namespace* Repo::findNamespace(const QStringList& _namespaces, bool create) {
-        Base* par = namespaces();
+    Namespace* RepoPrivate::findNamespace(const QStringList& _namespaces, bool create) {
+
+        Base* par = getOrCreateCollection(ctNamespaces);
         Namespace* child = NULL;
 
         foreach (QString nsName, _namespaces) {
@@ -535,86 +725,29 @@ namespace RM
         return child;
     }
 
-    Namespace* Repo::findNamespace(const QString& nsFullName, bool create) {
+    Namespace* RepoPrivate::findNamespace(const QString& nsFullName, bool create) {
+
         QStringList nsNames = nsFullName.split(QChar(L'/'));
         return findNamespace(nsNames, create);
     }
 
-    /**
-     * @brief       Get this object's type
-     *
-     * @return      always RepoObject.
-     *
-     */
-    ObjTypes Repo::objType() const
+    Repo* RepoPrivate::repoByPath(const QString& basePath, bool searchSubmodules)
     {
-        return RepoObject;
-    }
+        foreach (Repo* subRepo, children) {
+            if (subRepo->path() == basePath) {
+                return subRepo;
+            }
 
-    void Repo::dumpSelf(Internal::Dumper& dumper) const
-    {
-        dumper.addLine(QString(QLatin1String("Repository 0x%1 - %02"))
-                       .arg(quintptr(this),0,16)
-                       .arg(isLoaded() ? gitLoadedRepo().name() : QLatin1String("<not loaded>")));
-    }
+            if (searchSubmodules) {
+                if (RepoPrivate* subRepoPriv = dataOf<Repo>(subRepo)) {
+                    if (Repo* subsubRepo = subRepoPriv->repoByPath(basePath, true)) {
+                        return subsubRepo;
+                    }
+                }
+            }
+        }
 
-    /**
-     * @brief       Get this repository's collection of branches
-     *
-     * @return      A CollectionNode whose children are the branches included in this repository.
-     *
-     * Branches are references matching the regular expression `^refs/heads/.*$`. Branches may be
-     * scoped in which case they are subdivided into RefTreeNode objects.
-     *
-     */
-    CollectionNode* Repo::branches()
-    {
-        return getOrCreateCollection(ctBranches);
-    }
-
-    /**
-     * @brief       Get this repository's collection of tags
-     *
-     * @return      A CollectionNode whose children are the tags included in this repository.
-     *
-     * Tags are references matching the regular expression `^refs/tags/.*$`. Tags may be scoped in
-     * which case they are subdivided into RefTreeNode objects.
-     *
-     */
-    CollectionNode* Repo::tags()
-    {
-        return getOrCreateCollection(ctTags);
-    }
-
-    /**
-     * @brief       Get this repository's collection of namespaces
-     *
-     * @return      A CollectionNode whose children are the 1st level namespaces included in this
-     *              repository.
-     *
-     */
-    CollectionNode* Repo::namespaces()
-    {
-        return getOrCreateCollection(ctNamespaces);
-    }
-
-    /**
-     * @brief       Get this repository's collection of notes
-     *
-     * @return      A CollectionNode object whose children are the notes included in this repository.
-     *
-     * Notes are refs matching the regular expression `^refs/notes/.*$`. Notes may be scoped, in
-     * which case they are subdivided into RefTreeNode objects.
-     *
-     */
-    CollectionNode* Repo::notes()
-    {
-        return getOrCreateCollection(ctNotes);
-    }
-
-    void Repo::preTerminate()
-    {
-        // Do we need to do smth?
+        return NULL;
     }
 
 }

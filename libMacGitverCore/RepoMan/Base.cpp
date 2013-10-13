@@ -21,12 +21,16 @@
 
 #include "Base.hpp"
 #include "Repo.hpp"
-#include "Dumper.hpp"
 #include "RefTreeNode.hpp"
 #include "CollectionNode.hpp"
 
+#include "Private/Dumper.hpp"
+#include "Private/BasePrivate.hpp"
+
 namespace RM
 {
+
+    using namespace Internal;
 
     /**
      * @class       Base
@@ -41,17 +45,6 @@ namespace RM
      *
      * Finally, this base class allows to dump a partial subtree of RepoMan objects into a textual
      * hierarchy. See dump() on advanced information.
-     *
-     */
-
-    /**
-     * @fn          ObjType Base::objType() const
-     * @brief       Get the type of this object
-     *
-     * This method must be implemented by all derivats of Base. They must simply return the correct
-     * value from the ObjTypes enum.
-     *
-     * @return      Type of this object
      *
      */
 
@@ -94,10 +87,9 @@ namespace RM
      * @param[in]   parent      The parent to whom we shall link this new child to.
      *
      */
-    Base::Base(Base* parent)
-        : mParentObj(NULL)
+    Base::Base(BasePrivate& _d)
+        : mData(&_d)
     {
-        linkToParent(parent);
     }
 
     /**
@@ -109,144 +101,7 @@ namespace RM
      */
     Base::~Base()
     {
-        // THIS _IS_ IMPORTANT
-        // We forbid by definition that any RM::* object may be destroyed _before_ it is unlinked
-        // from its parent. Otherwise, events cannot be triggered correctly.
-        Q_ASSERT(mChildren.count() == 0);
-        Q_ASSERT(mParentObj == NULL);
-    }
-
-    /**
-     * @brief       Child-part of linking into the tree
-     *
-     * @param[in]   parent  The parent to link into
-     *
-     * This method is called directly from the constructor. It establishes a relationship with the
-     * parent object. This relationship can never be altered.
-     *
-     */
-    void Base::linkToParent(Base* parent)
-    {
-        if (parent) {
-            mParentObj = parent;
-            mParentObj->addChildObject(this);
-        }
-    }
-
-    /**
-     * @internal
-     * @brief       Child-Part of unlinking from the tree
-     *
-     * Invokes the parent part on the parent side and then cleans up the reference to the parent.
-     */
-    void Base::unlinkFromParent()
-    {
-        if (mParentObj) {
-            mParentObj->removeChildObject(this);
-            mParentObj = NULL;
-        }
-    }
-
-    /**
-     * @internal
-     * @brief       Parent-part of linking a new child
-     *
-     * We cannot do any special processing, since the child object is not yet fully constructed. We
-     * just fill the internal structure.
-     *
-     * @param[in]   object  The new child object that shall be linked in.
-     */
-    void Base::addChildObject(Base* object)
-    {
-        Q_ASSERT(!mChildren.contains(object));
-        mChildren.insert(object);
-    }
-
-    /**
-     * @internal
-     * @brief       Parent-part of unlinking a child from the parent
-     *
-     * @param[in]   object  The child that is to be removed from the parent
-     */
-    void Base::removeChildObject(Base* object)
-    {
-        Q_ASSERT(mChildren.contains(object));
-        mChildren.remove(object);
-    }
-
-    /**
-     * @brief       Refresh this object
-     *
-     * Refreshs this object and all its children. First calls to refreshSelf() expecting it to
-     * update this object and send out events. If refreshSelf() returnes `false`, this object is
-     * removed from the tree. In this case all children should already have been removed from the
-     * tree.
-     *
-     * If refreshSelf() returned `true`, preRefreshChildren() is called. It should remove children
-     * that are no longer part of the tree. After that for each child, refresh() is called
-     * recursively. Finally, postRefreshChildren() is invoked, which should search for new objects
-     * and link them into the tree.
-     *
-     * If preRefreshChildren() is implemented correctly on all objects, refreshSelf() should
-     * probably never have to return `false`.
-     *
-     */
-    void Base::refresh()
-    {
-        preRefresh();
-
-        if (!refreshSelf()) {
-            // If refresh self returned false, we are no longer valid and will now destroy
-            // ourselves. We just terminateObject().
-            terminateObject();
-            return;
-        }
-
-        postRefresh();
-        preRefreshChildren();
-
-        foreach(Base* child, mChildren) {
-            child->refresh();
-        }
-
-        postRefreshChildren();
-    }
-
-    bool Base::preRefresh()
-    {
-        return true;
-    }
-
-    void Base::postRefresh()
-    {
-    }
-
-    /**
-     * @brief       First step in refreshing the children
-     *
-     * This method is called directly after the object refreshed itself (refreshSelf()) but before
-     * any of its children are refreshed.
-     *
-     * It shall be used to figure out which children do no longer exist.
-     *
-     * The base implementation simply does nothing.
-     *
-     */
-    void Base::preRefreshChildren()
-    {
-    }
-
-    /**
-     * @brief       Last step in refreshing the children
-     *
-     * This method is called as last step in the refreshing process. It shall be used to find
-     * objects and add them to the tree.
-     *
-     * The base implementation simply does nothing.
-     *
-     */
-    void Base::postRefreshChildren()
-    {
+        delete mData;
     }
 
     /**
@@ -256,7 +111,9 @@ namespace RM
      */
     Base::Set Base::childObjects() const
     {
-        return mChildren;
+        RM_CD(Base);
+
+        return d->mChildren;
     }
 
     /**
@@ -269,9 +126,11 @@ namespace RM
      */
     Base::Set Base::childObjects(ObjTypes type) const
     {
+        RM_CD(Base);
+
         Set children;
 
-        foreach(Base* child, mChildren) {
+        foreach(Base* child, d->mChildren) {
             if (child->objType() == type) {
                 children.insert(child);
             }
@@ -290,7 +149,9 @@ namespace RM
      */
     Base* Base::parentObject() const
     {
-        return mParentObj;
+        RM_CD(Base);
+
+        return d->mParentObj->mPub;
     }
 
     /**
@@ -327,16 +188,225 @@ namespace RM
      */
     Repo* Base::repository()
     {
-        Base* cur = this;
+        RM_D(Base);
+        return d->repository();
+    }
 
-        while (cur) {
-            if (cur->objType() == RepoObject) {
-                return static_cast< Repo* >(cur);
-            }
-            cur = cur->parentObject();
+    /**
+     * @brief       Get a string that can be used to display this object
+     *
+     * @return      Always `<Unknown>`. Reimplementations should return something more meaningful.
+     *
+     */
+    QString Base::displayName() const
+    {
+        RM_CD(Base);
+        return d->displayName();
+    }
+
+    /**
+     * @brief       Get the type of this object
+     *
+     * This method must be implemented by all derivats of Base. They must simply return the correct
+     * value from the ObjTypes enum.
+     *
+     * @return      Type of this object
+     *
+     */
+    ObjTypes Base::objType() const
+    {
+        RM_CD(Base);
+        return d->objType();
+    }
+
+    /**
+     * @brief       Creates a textual dump of this object and its children
+     *
+     * @return      Textual dump.
+     *
+     */
+    QString Base::dump() const
+    {
+        RM_CD(Base);
+
+        Dumper dumper;
+        d->dumpRecursive(dumper);
+        return dumper.output();
+    }
+
+    BasePrivate::BasePrivate(Base* pub)
+        : mPub(pub)
+        , mParentObj(NULL)
+    {
+        Q_ASSERT(mPub);
+    }
+
+    BasePrivate::~BasePrivate()
+    {
+        // THIS _IS_ IMPORTANT
+        // We forbid by definition that any RM::* object may be destroyed _before_ it is unlinked
+        // from its parent. Otherwise, events cannot be triggered correctly.
+        Q_ASSERT(mChildren.count() == 0);
+        Q_ASSERT(mParentObj == NULL);
+    }
+
+    /**
+     * @brief       Child-part of linking into the tree
+     *
+     * @param[in]   parent  The parent to link into
+     *
+     * This method is called directly from the constructor. It establishes a relationship with the
+     * parent object. This relationship can never be altered.
+     *
+     */
+    void BasePrivate::linkToParent(Base* parent)
+    {
+        if (parent) {
+            mParentObj = parent->mData;
+            mParentObj->addChildObject(mPub);
+        }
+    }
+
+    /**
+     * @internal
+     * @brief       Child-Part of unlinking from the tree
+     *
+     * Invokes the parent part on the parent side and then cleans up the reference to the parent.
+     */
+    void BasePrivate::unlinkFromParent()
+    {
+        if (mParentObj) {
+            mParentObj->removeChildObject(mPub);
+            mParentObj = NULL;
+        }
+    }
+
+    /**
+     * @internal
+     * @brief       Parent-part of linking a new child
+     *
+     * We cannot do any special processing, since the child object is not yet fully constructed. We
+     * just fill the internal structure.
+     *
+     * @param[in]   object  The new child object that shall be linked in.
+     */
+    void BasePrivate::addChildObject(Base* object)
+    {
+        Q_ASSERT(object);
+        Q_ASSERT(!mChildren.contains(object));
+        mChildren.insert(object);
+    }
+
+    /**
+     * @internal
+     * @brief       Parent-part of unlinking a child from the parent
+     *
+     * @param[in]   object  The child that is to be removed from the parent
+     */
+    void BasePrivate::removeChildObject(Base* object)
+    {
+        Q_ASSERT(mChildren.contains(object));
+        mChildren.remove(object);
+    }
+
+    /**
+     * @internal
+     * @brief       Recursively dump this object into a dumper
+     *
+     * All children will be dumped recursively.
+     *
+     * @param[in]   dumper  The dumper to output to
+     *
+     */
+    void BasePrivate::dumpRecursive(Dumper& dumper) const
+    {
+        dumpSelf(dumper);
+
+        dumper.indent();
+        foreach(Base* child, mChildren) {
+            child->mData->dumpRecursive(dumper);
+        }
+        dumper.dedent();
+    }
+
+    QString BasePrivate::displayName() const
+    {
+        return QLatin1String("<Unknown>");
+    }
+
+    /**
+     * @brief       Refresh this object
+     *
+     * Refreshs this object and all its children. First calls to refreshSelf() expecting it to
+     * update this object and send out events. If refreshSelf() returnes `false`, this object is
+     * removed from the tree. In this case all children should already have been removed from the
+     * tree.
+     *
+     * If refreshSelf() returned `true`, preRefreshChildren() is called. It should remove children
+     * that are no longer part of the tree. After that for each child, refresh() is called
+     * recursively. Finally, postRefreshChildren() is invoked, which should search for new objects
+     * and link them into the tree.
+     *
+     * If preRefreshChildren() is implemented correctly on all objects, refreshSelf() should
+     * probably never have to return `false`.
+     *
+     */
+    void BasePrivate::refresh()
+    {
+        preRefresh();
+
+        if (!refreshSelf()) {
+            // If refresh self returned false, we are no longer valid and will now destroy
+            // ourselves. We just terminateObject().
+            terminateObject();
+            return;
         }
 
-        return NULL;
+        postRefresh();
+        preRefreshChildren();
+
+        foreach(Base* child, mChildren) {
+            child->mData->refresh();
+        }
+
+        postRefreshChildren();
+    }
+
+    bool BasePrivate::preRefresh()
+    {
+        return true;
+    }
+
+    void BasePrivate::postRefresh()
+    {
+    }
+
+    /**
+     * @brief       First step in refreshing the children
+     *
+     * This method is called directly after the object refreshed itself (refreshSelf()) but before
+     * any of its children are refreshed.
+     *
+     * It shall be used to figure out which children do no longer exist.
+     *
+     * The base implementation simply does nothing.
+     *
+     */
+    void BasePrivate::preRefreshChildren()
+    {
+    }
+
+    /**
+     * @brief       Last step in refreshing the children
+     *
+     * This method is called as last step in the refreshing process. It shall be used to find
+     * objects and add them to the tree.
+     *
+     * The base implementation simply does nothing.
+     *
+     */
+    void BasePrivate::postRefreshChildren()
+    {
     }
 
     /**
@@ -350,10 +420,10 @@ namespace RM
      * 4. finally it deletes itself. Deleting is not defered; the object is gone immediately.
      *
      */
-    void Base::terminateObject()
+    void BasePrivate::terminateObject()
     {
         foreach (Base* child, mChildren) {
-            child->terminateObject();
+            child->mData->terminateObject();
         }
 
         preTerminate();
@@ -372,9 +442,9 @@ namespace RM
      * phase or not.
      *
      */
-    bool Base::repoEventsBlocked() const
+    bool BasePrivate::repoEventsBlocked() const
     {
-        const Repo* repo = repository();
+        const Repo* repo = mPub->repository();
         return repo->isInitializing();
     }
 
@@ -385,54 +455,11 @@ namespace RM
      * out any required events to listeners, unless this repository is still initializing.
      *
      */
-    void Base::preTerminate()
+    void BasePrivate::preTerminate()
     {
         // Do nothing
     }
 
-    /**
-     * @brief       Get a string that can be used to display this object
-     *
-     * @return      Always `<Unknown>`. Reimplementations should return something more meaningful.
-     *
-     */
-    QString Base::displayName() const
-    {
-        return QLatin1String("<Unknown>");
-    }
-
-    /**
-     * @brief       Creates a textual dump of this object and its children
-     *
-     * @return      Textual dump.
-     *
-     */
-    QString Base::dump() const
-    {
-        Internal::Dumper dumper;
-        dumpRecursive(dumper);
-        return dumper.output();
-    }
-
-    /**
-     * @internal
-     * @brief       Recursively dump this object into a dumper
-     *
-     * All children will be dumped recursively.
-     *
-     * @param[in]   dumper  The dumper to output to
-     *
-     */
-    void Base::dumpRecursive(Internal::Dumper& dumper) const
-    {
-        dumpSelf(dumper);
-
-        dumper.indent();
-        foreach(Base* child, mChildren) {
-            child->dumpRecursive(dumper);
-        }
-        dumper.dedent();
-    }
 
     /**
      * @brief       Find the parent for a Ref.
@@ -445,10 +472,10 @@ namespace RM
      * @return      If @a scopes is empty, `this` is returned. Otherwise findRefTreeNode() is called
      *              to either find or create a RefTreeNode, which will be returned.
      */
-    Base* Base::findRefParent(const QStringList& scopes, bool create)
+    Base* BasePrivate::findRefParent(const QStringList& scopes, bool create)
     {
         if (scopes.isEmpty()) {
-            return this;
+            return mPub;
         }
         return findRefTreeNode(scopes, create);
     }
@@ -466,13 +493,13 @@ namespace RM
      * @return      If @a create is `true`, a valid RefTreeNode is returned. If @a create is
      *              `false`, `NULL` will be returned in case the path cannot be found.
      */
-    RefTreeNode* Base::findRefTreeNode(const QStringList &scopes, bool create)
+    RefTreeNode* BasePrivate::findRefTreeNode(const QStringList &scopes, bool create)
     {
         if (scopes.isEmpty()) {
             return NULL;
         }
 
-        Base* current = this;
+        Base* current = mPub;
 
         foreach (QString scope, scopes) {
             RefTreeNode::Set nodes = current->childObjects<RefTreeNode>();
@@ -488,8 +515,7 @@ namespace RM
             if (!next) {
                 if (create) {
                     // Note: We don't need to roll this back. Either we go all the way or nowhere.
-                    next = new RefTreeNode(current);
-                    next->setName(scope);
+                    next = new RefTreeNode(current, scope);
                 }
                 else {
                     return NULL;
@@ -503,16 +529,31 @@ namespace RM
     }
 
 
-    CollectionNode* Base::getOrCreateCollection(CollectionTypes ctype)
+    CollectionNode* BasePrivate::getOrCreateCollection(CollectionTypes ctype)
     {
         CollectionNode* cn;
 
-        foreach (cn, childObjects<CollectionNode>()) {
+        foreach (cn, mPub->childObjects<CollectionNode>()) {
             if (cn->collectionType() == ctype) {
                 return cn;
             }
         }
 
-        return new CollectionNode(ctype, this);
+        return new CollectionNode(ctype, mPub);
     }
+
+    Repo* BasePrivate::repository()
+    {
+        BasePrivate* cur = this;
+
+        while (cur) {
+            if (cur->objType() == RepoObject) {
+                return static_cast<Repo*>(cur->pub<Repo>());
+            }
+            cur = cur->mParentObj;
+        }
+
+        return NULL;
+    }
+
 }

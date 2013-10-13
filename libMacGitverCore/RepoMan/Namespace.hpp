@@ -26,10 +26,16 @@
 namespace RM
 {
 
+    namespace Internal
+    {
+        class NamespacePrivate;
+    }
+
     class MGV_CORE_API Namespace : public Base
     {
     public:
         enum { StaticObjectType = NamespaceObject };
+        typedef Internal::NamespacePrivate Private;
         typedef QSet< Namespace* > Set;
         typedef QVector< Namespace* > List;
 
@@ -38,22 +44,12 @@ namespace RM
 
     public:
         QString name() const;
-        QString displayName() const;
-
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
-        bool refreshSelf();
 
     public:
         CollectionNode* branches();
         CollectionNode* tags();
         CollectionNode* namespaces();
         CollectionNode* notes();
-
-    private:
-        QString mName;
     };
 
 }

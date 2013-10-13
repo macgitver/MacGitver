@@ -67,23 +67,26 @@ namespace RM
     namespace Internal
     {
         class Dumper;
+        class BasePrivate;
     }
 
     class MGV_CORE_API Base
     {
         friend class Repo;
+        friend class Internal::BasePrivate;
+
     public:
         typedef QVector< Base* > List;
         typedef QSet< Base* > Set;
 
     protected:
-        Base(Base* parent);
+        Base(Internal::BasePrivate& _d);
 
     public:
         virtual ~Base();
 
     public:
-        virtual ObjTypes objType() const = 0;
+        ObjTypes objType() const;
 
     public:
         void refresh();
@@ -104,35 +107,15 @@ namespace RM
         template< class T >
         bool isA() const;
 
-        virtual QString displayName() const;
-
+        QString displayName() const;
         QString dump() const;
 
     protected:
-        virtual bool refreshSelf() = 0;
-        virtual bool preRefresh();
-        virtual void postRefresh();
-        virtual void preRefreshChildren();
-        virtual void postRefreshChildren();
-        virtual void preTerminate();
-        virtual void dumpSelf(Internal::Dumper& dumper) const = 0;
-
-    protected:
-        void terminateObject();
-        Base* findRefParent(const QStringList& scopes, bool create);
-        RefTreeNode* findRefTreeNode(const QStringList& scopes, bool create);
-        CollectionNode* getOrCreateCollection(CollectionTypes ctype);
+        Internal::BasePrivate* mData;
 
     private:
-        void dumpRecursive(Internal::Dumper& dumper) const;
-        void linkToParent(Base* parent);
-        void unlinkFromParent();
-        void addChildObject(Base* object);
-        void removeChildObject(Base* object);
-
-    private:
-        Base*   mParentObj;
-        Set     mChildren;
+        Base(const Base& other);
+        Base& operator=(const Base& other);
     };
 
     template< class T >
@@ -157,7 +140,7 @@ namespace RM
         // Equivalent, but faster:
         typename T::Set children;
 
-        foreach(Base* child, mChildren) {
+        foreach(Base* child, childObjects()) {
             if (child->isA<T>()) {
                 children.insert(static_cast<T*>(child));
             }

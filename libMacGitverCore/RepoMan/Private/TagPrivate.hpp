@@ -17,31 +17,31 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_TAG_HPP
-#define MGV_CORE_REPOMAN_TAG_HPP
+#ifndef REPOMAN_TAG_PRIVATE_HPP
+#define REPOMAN_TAG_PRIVATE_HPP
 
-#include "Ref.hpp"
+#include "RepoMan/Private/RefPrivate.hpp"
+
+#include "RepoMan/Tag.hpp"
 
 namespace RM
 {
 
-    class MGV_CORE_API Tag : public Ref
+    namespace Internal
     {
-    public:
-        enum { StaticObjectType = TagObject };
 
-    public:
-        Tag(Base* _parent, const Git::Reference& _ref);
+        class TagPrivate : public RefPrivate
+        {
+        public:
+            TagPrivate(Tag* pub, const Git::Reference& _ref);
 
-    public:
+        public:
+            ObjTypes objType() const;
+            void preTerminate();
+            void dumpSelf(Dumper& dumper) const;
+        };
 
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
-
-    private:
-    };
+    }
 
 }
 

@@ -27,11 +27,17 @@
 namespace RM
 {
 
+    namespace Internal
+    {
+        class RepoManPrivate;
+    }
+
     class MGV_CORE_API RepoMan : public QObject, public Base, private EventsInterface
     {
         Q_OBJECT
     public:
         enum { StaticObjectType = RepoManagerObject };
+        typedef Internal::RepoManPrivate Private;
 
     public:
         RepoMan();
@@ -99,10 +105,6 @@ namespace RM
         void repositoryStateChanged(RM::Repo* repo);
         void indexUpdated(RM::Repo* repo);
         void workTreeUpdated(RM::Repo* repo);
-
-    private:
-        Repo::List    mRepos;
-        Repo*         mActiveRepo;
     };
 
 }

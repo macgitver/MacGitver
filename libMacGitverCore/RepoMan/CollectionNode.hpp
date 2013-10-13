@@ -27,12 +27,18 @@
 namespace RM
 {
 
+    namespace Internal
+    {
+        class CollectionNodePrivate;
+    }
+
     class MGV_CORE_API CollectionNode : public Base
     {
         Q_DECLARE_TR_FUNCTIONS(RM_CollectionNode)
 
     public:
         enum { StaticObjectType = CollectionNodeObject };
+        typedef Internal::CollectionNodePrivate Private;
         typedef QSet< CollectionNode* > Set;
         typedef QVector< CollectionNode* > List;
 
@@ -42,15 +48,6 @@ namespace RM
     public:
         CollectionTypes collectionType() const;
         QString collectionTypeName() const;
-        QString displayName() const;
-
-    private:
-        ObjTypes objType() const;
-        void dumpSelf(Internal::Dumper& dumper) const;
-        bool refreshSelf();
-
-    private:
-        CollectionTypes ctype;
     };
 
 }

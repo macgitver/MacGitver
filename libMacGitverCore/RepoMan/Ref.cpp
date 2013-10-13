@@ -23,36 +23,41 @@
 #include "Ref.hpp"
 #include "Repo.hpp"
 #include "Events.hpp"
-#include "Dumper.hpp"
+
+#include "Private/Dumper.hpp"
+#include "Private/RefPrivate.hpp"
 
 namespace RM
 {
 
-    Ref::Ref(Base* parent, RefTypes type, const Git::Reference &ref)
-        : Base(parent)
-        , mType(type)
+    using namespace Internal;
+
+    Ref::Ref(RefPrivate& _data)
+        : Base(_data)
     {
-        mName = ref.name();
-        read();
+    }
+
+    Ref::Ref(Base* _parent, RefTypes _type, const Git::Reference& _ref)
+        : Base(*new RefPrivate(this, _type, _ref))
+    {
+        RM_D(Ref);
+        d->linkToParent(_parent);
     }
 
     Ref::~Ref()
     {
     }
 
-    ObjTypes Ref::objType() const
-    {
-        return RefObject;
-    }
-
     RefTypes Ref::type() const
     {
-        return mType;
+        RM_D(Ref);
+        return d->type;
     }
 
     QString Ref::name() const
     {
-        return mName;
+        RM_D(Ref);
+        return d->name;
     }
 
     QString Ref::prefix() const
@@ -62,49 +67,60 @@ namespace RM
 
     Git::ObjectId Ref::id() const
     {
-        return mId;
+        RM_D(Ref);
+        return d->id;
     }
 
-    void Ref::read()
+    RefPrivate::RefPrivate(Ref* pub, RefTypes _type, const Git::Reference& _ref)
+        : BasePrivate(pub)
+        , type(_type)
+    {
+        name = _ref.name();
+    }
+
+    ObjTypes RefPrivate::objType() const
+    {
+        return RefObject;
+    }
+
+    QString RefPrivate::displayName() const
+    {
+        return name;
+    }
+
+    bool RefPrivate::refreshSelf()
     {
         Git::Result r;
 
         Repo* repo = repository();
         Git::Repository gr = repo->gitRepo();
 
-        Git::Reference ref = gr.lookupRef(r, mName);
+        Git::Reference ref = gr.lookupRef(r, name);
 
-        Git::ObjectId id = ref.objectId(r);
+        Git::ObjectId objectId = ref.objectId(r);
 
-        if (id != mId) {
-            Events::self()->refMoved(repository(), this);
-            mId = id;
+        if (objectId != id) {
+            Events::self()->refMoved(repo, pub<Ref>());
+            id = objectId;
         }
-    }
 
-    QString Ref::displayName() const
-    {
-        return mName;
-    }
-
-    bool Ref::refreshSelf()
-    {
-        read();
         return true;
     }
 
-    void Ref::preTerminate()
+    void RefPrivate::preTerminate()
     {
+        RM_P(Ref);
+
         if (!repoEventsBlocked()) {
-            Events::self()->refAboutToBeDeleted(repository(), this);
+            Events::self()->refAboutToBeDeleted(repository(), p);
         }
     }
 
-    void Ref::dumpSelf(Internal::Dumper& dumper) const
+    void RefPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
         dumper.addLine(QString(QLatin1String("Ref 0x%1 [%2]"))
-                       .arg(quintptr(this),0,16)
-                       .arg(mName));
+                       .arg(quintptr(mPub),0,16)
+                       .arg(name));
     }
 
 }

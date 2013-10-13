@@ -19,51 +19,64 @@
 
 #include "RefTreeNode.hpp"
 #include "Events.hpp"
-#include "Dumper.hpp"
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Private/RefTreeNodePrivate.hpp"
 
 namespace RM
 {
 
-    RefTreeNode::RefTreeNode(Base* parent)
-        : Base(parent)
-    {
-    }
+    using namespace Internal;
 
-    ObjTypes RefTreeNode::objType() const
+    RefTreeNode::RefTreeNode(Base* _parent, const QString& _name)
+        : Base(*new RefTreeNodePrivate(this, _name))
     {
-        return RefTreeNodeObject;
-    }
-
-    void RefTreeNode::dumpSelf(Internal::Dumper& dumper) const
-    {
-        dumper.addLine(QString(QLatin1String("RefTreeNode 0x%1 [%2]"))
-                       .arg(quintptr(this),0,16)
-                       .arg(mName));
-    }
-
-    void RefTreeNode::preTerminate()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->refTreeNodeAboutToBeDeleted(repository(), this);
-        }
-    }
-
-    bool RefTreeNode::refreshSelf()
-    {
-        // We don't have anything to refresh - we're purely virutual
-        return true;
-    }
-
-    void RefTreeNode::setName(const QString& name)
-    {
-        if (mName != name) {
-            mName = name;
-        }
+        RM_D(RefTreeNode);
+        d->linkToParent(_parent);
     }
 
     QString RefTreeNode::name() const
     {
-        return mName;
+        RM_D(RefTreeNode);
+
+        return d->name;
+    }
+
+    //-- RefTreeNodePrivate ------------------------------------------------------------------------
+
+    RefTreeNodePrivate::RefTreeNodePrivate(RefTreeNode* _pub, const QString& _name)
+        : BasePrivate(_pub)
+        , name(_name)
+    {
+    }
+
+    ObjTypes RefTreeNodePrivate::objType() const
+    {
+        return RefTreeNodeObject;
+    }
+
+    void RefTreeNodePrivate::dumpSelf(Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("RefTreeNode 0x%1 [%2]"))
+                       .arg(quintptr(mPub),0,16)
+                       .arg(name));
+    }
+
+    void RefTreeNodePrivate::preTerminate()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->refTreeNodeAboutToBeDeleted(repository(), pub<RefTreeNode>());
+        }
+    }
+
+    QString RefTreeNodePrivate::displayName() const
+    {
+        return name;
+    }
+
+    bool RefTreeNodePrivate::refreshSelf()
+    {
+        // We don't have anything to refresh - we're purely virutual
+        return true;
     }
 
 }

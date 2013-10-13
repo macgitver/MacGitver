@@ -19,10 +19,15 @@
 
 #include "RepoMan/RepoMan.hpp"
 #include "RepoMan/Events.hpp"
-#include "RepoMan/Dumper.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Private/RepoManPrivate.hpp"
+#include "RepoMan/Private/RepoPrivate.hpp"
 
 namespace RM
 {
+
+    using namespace Internal;
 
     /**
      * @class       RepoMan
@@ -36,10 +41,9 @@ namespace RM
      *
      */
     RepoMan::RepoMan()
-        : Base(NULL)
+        : Base(*new RepoManPrivate(this))
     {
         Events::addReceiver(this);
-        mActiveRepo = NULL;
     }
 
     /**
@@ -92,18 +96,22 @@ namespace RM
      */
     Repo* RepoMan::open(const Git::Repository& gitRepo)
     {
-        Repo* repo = repoByPath( gitRepo.basePath(), false );
+        RM_D(RepoMan);
+
+        Repo* repo = repoByPath(gitRepo.basePath(), false);
 
         if(!repo) {
             repo = new Repo(gitRepo, this);
-            mRepos.append(repo);
+            d->repos.append(repo);
 
             Events::self()->repositoryOpened(repo);
 
             // we need to scan for submodules explicitly, since we didn't call load() on the Repo*
-            repo->scanSubmodules();
+            if (RepoPrivate* subPriv = Private::dataOf<Repo>(repo)) {
+                subPriv->scanSubmodules();
+            }
 
-            if (mRepos.count() == 1) {
+            if (d->repos.count() == 1) {
                 emit firstRepositoryOpened();
             }
         }
@@ -114,14 +122,18 @@ namespace RM
 
     Repo* RepoMan::repoByPath( const QString& basePath, bool searchSubmodules )
     {
-        foreach(Repo* repo, mRepos) {
+        RM_D(RepoMan);
+
+        foreach (Repo* repo, d->repos) {
             if (repo->path() == basePath) {
                 return repo;
             }
 
             if (searchSubmodules) {
-                if (Repo* sub = repo->repoByPath(basePath, true)) {
-                    return sub;
+                if (RepoPrivate* subPriv = Private::dataOf<Repo>(repo)) {
+                    if (Repo* subSubRepo = subPriv->repoByPath(basePath, true)) {
+                        return subSubRepo;
+                    }
                 }
             }
         }
@@ -135,49 +147,57 @@ namespace RM
      */
     void RepoMan::closeAll()
     {
-        foreach(Repo* repo, mRepos) {
+        RM_D(RepoMan);
+
+        foreach(Repo* repo, d->repos) {
             repo->close();
         }
     }
 
     void RepoMan::activate(Repo* repository)
     {
-        if(repository != mActiveRepo) {
-            Repo* old = mActiveRepo;
+        RM_D(RepoMan);
 
-            if (mActiveRepo) {
-                mActiveRepo->deactivated();
-                Events::self()->repositoryDeactivated(mActiveRepo);
+        if(repository != d->activeRepo) {
+            Repo* old = d->activeRepo;
+
+            if (d->activeRepo) {
+                d->activeRepo->deactivated();
+                Events::self()->repositoryDeactivated(d->activeRepo);
             }
 
-            mActiveRepo = repository;
+            d->activeRepo = repository;
 
             if (repository) {
                 repository->activated();
-                Events::self()->repositoryActivated(mActiveRepo);
+                Events::self()->repositoryActivated(d->activeRepo);
             }
 
             // Finally emit a signal that just tells about the change
-            if ((mActiveRepo != NULL) != (old != NULL)) {
-                emit hasActiveRepositoryChanged(mActiveRepo != NULL);
+            if ((d->activeRepo != NULL) != (old != NULL)) {
+                emit hasActiveRepositoryChanged(d->activeRepo != NULL);
             }
         }
     }
 
     void RepoMan::internalClosedRepo(Repo* repository)
     {
+        RM_D(RepoMan);
+
+        // ### We can implement this by far better, now...
+
         // This pointer is actually useless. THIS IS THE LAST call issued by the destructor of the
         // RepositoryInfo itself. We should probably NOT give this pointer away.
 
         // However, we need it to find the closed repository in our list. Calling here should have
         // probably happened before the repository is actually destructing itself.
 
-        int i = mRepos.indexOf(repository);
+        int i = d->repos.indexOf(repository);
         if (i != -1) {
-            mRepos.remove(i);
+            d->repos.remove(i);
             emit repositoryClosed();
 
-            if (mRepos.count() == 0) {
+            if (d->repos.count() == 0) {
                 emit lastRepositoryClosed();
             }
         }
@@ -185,33 +205,47 @@ namespace RM
 
     Repo* RepoMan::activeRepository()
     {
-        return mActiveRepo;
+        RM_D(RepoMan);
+        return d->activeRepo;
     }
 
     Repo::List RepoMan::repositories() const
     {
-        return mRepos;
+        RM_CD(RepoMan);
+        return d->repos;
     }
 
-    bool RepoMan::refreshSelf()
+    //-- RepoManPrivate ----------------------------------------------------------------------------
+
+    RepoManPrivate::RepoManPrivate(RepoMan* _pub)
+        : BasePrivate(_pub)
+        , activeRepo(NULL)
+    {
+    }
+
+    bool RepoManPrivate::refreshSelf()
     {
         return true;
     }
 
-    ObjTypes RepoMan::objType() const
+    ObjTypes RepoManPrivate::objType() const
     {
         return RepoManagerObject;
     }
 
-    void RepoMan::dumpSelf(Internal::Dumper& dumper) const
+    void RepoManPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
         dumper.addLine(QLatin1String("Repository-Manager"));
     }
 
-    void RepoMan::preTerminate()
+    void RepoManPrivate::preTerminate()
     {
         // Do we need to do smth?
     }
 
+    QString RepoManPrivate::displayName() const
+    {
+        return QLatin1String("RepoMan");
+    }
 
 }

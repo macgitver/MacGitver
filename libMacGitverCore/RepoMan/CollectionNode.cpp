@@ -18,30 +18,34 @@
  */
 
 #include "CollectionNode.hpp"
-#include "Dumper.hpp"
+
+#include "Private/Dumper.hpp"
+#include "Private/CollectionNodePrivate.hpp"
 
 namespace RM
 {
 
-    CollectionNode::CollectionNode(CollectionTypes _ctype, Base* parent)
-        : Base(parent)
-        , ctype(_ctype)
+    using namespace Internal;
+
+    CollectionNode::CollectionNode(CollectionTypes _ctype, Base* _parent)
+        : Base(*new CollectionNodePrivate(this, _ctype))
     {
+        RM_D(CollectionNode);
+        d->linkToParent(_parent);
     }
 
-    ObjTypes CollectionNode::objType() const
-    {
-        return CollectionNodeObject;
-    }
 
     CollectionTypes CollectionNode::collectionType() const
     {
-        return ctype;
+        RM_CD(CollectionNode);
+        return d->ctype;
     }
 
     QString CollectionNode::collectionTypeName() const
     {
-        switch (ctype) {
+        RM_CD(CollectionNode);
+
+        switch (d->ctype) {
         case ctBranches:    return tr("Branches");
         case ctTags:        return tr("Tags");
         case ctNamespaces:  return tr("Namespaces");
@@ -50,21 +54,38 @@ namespace RM
         }
     }
 
-    QString CollectionNode::displayName() const
+    //-- CollectionNodePrivate ---------------------------------------------------------------------
+
+    CollectionNodePrivate::CollectionNodePrivate(CollectionNode* _pub, CollectionTypes _ctype)
+        : BasePrivate(_pub)
+        , ctype(_ctype)
     {
-        return collectionTypeName();
     }
 
-    void CollectionNode::dumpSelf(Internal::Dumper& dumper) const
+    ObjTypes CollectionNodePrivate::objType() const
+    {
+        return CollectionNodeObject;
+    }
+
+    QString CollectionNodePrivate::displayName() const
+    {
+        return pub<CollectionNode>()->collectionTypeName();
+    }
+
+    void CollectionNodePrivate::dumpSelf(Internal::Dumper& dumper) const
     {
         dumper.addLine(QString(QLatin1String("Collection '%2' 0x%1"))
-                       .arg(quintptr(this),0,16)
-                       .arg(collectionTypeName()));
+                       .arg(quintptr(mPub),0,16)
+                       .arg(displayName()));
     }
 
-    bool CollectionNode::refreshSelf()
+    bool CollectionNodePrivate::refreshSelf()
     {
         return true;
+    }
+
+    void CollectionNodePrivate::preTerminate()
+    {
     }
 
 }

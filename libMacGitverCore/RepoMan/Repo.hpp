@@ -33,17 +33,24 @@ namespace RM
 
     class RepoMan;
 
+    namespace Internal
+    {
+        class RepoPrivate;
+    }
+
     class MGV_CORE_API Repo : public QObject, public Base
     {
         friend class RepoMan;
         Q_OBJECT
     public:
         enum { StaticObjectType = RepoObject };
+        typedef Internal::RepoPrivate Private;
         typedef QSet< Repo* > Set;
         typedef QVector< Repo* > List;
 
     public:
-        Repo(const Git::Repository& repo, Base* parent);
+        Repo(const Git::Repository& _repo, Base* _parent);
+        Repo(bool forSubmodule, const Git::Repository& _repo, Base* _parent);
         ~Repo();
 
     public:
@@ -69,13 +76,12 @@ namespace RM
 
         void close();
 
-        Repo* repoByPath( const QString& basePath, bool searchSubmodules );
-
-        Ref*        findReference(  const Git::Reference& ref,          bool create = false);
-        Remote*     findRemote(     const Git::Remote& remote,          bool create = false);
-        Remote*     findRemote(     const QString& remoteName,          bool create = false);
-        Namespace*  findNamespace(  const QStringList& _namespaces,     bool create = false);
-        Namespace*  findNamespace(  const QString& nsFullName,          bool create = false);
+        Ref*        findReference(  const Git::Reference&   ref);
+        Ref*        findReference(  const QString&          fqrn);
+        Remote*     findRemote(     const Git::Remote&      remote);
+        Remote*     findRemote(     const QString&          remoteName);
+        Namespace*  findNamespace(  const QStringList&      namespaces);
+        Namespace*  findNamespace(  const QString&          nsFullName);
 
         CollectionNode* branches();
         CollectionNode* tags();
@@ -83,25 +89,8 @@ namespace RM
         CollectionNode* notes();
 
     private:
-        void load();
-        void unload();
-        void findAlias();
-        bool ensureIsLoaded();
-        void removeChild( Repo* child );
-
-    private:
-        // only for repoman:
-        void scanSubmodules();
         void activated();
         void deactivated();
-
-    private:
-        // Base impl
-        bool refreshSelf();
-        void preTerminate();
-        void postRefreshChildren();
-        ObjTypes objType() const;
-        void dumpSelf(Internal::Dumper& dumper) const;
 
     private slots:
         void unloadTimer();
@@ -114,19 +103,6 @@ namespace RM
         void childRemoved   (RM::Repo* parent, RM::Repo* child);
         void childAdded     (RM::Repo* parent, RM::Repo* child);
         void aliasChanged   (const QString& newAlias);
-
-    private:
-        Git::Repository mRepo;                  //!< GitWrap-Repo, if loaded
-        QString         mPath;                  //!< Full, absolute path to this repository
-        QString         mDisplayAlias;          //!< An alias for display (Default to last path comp.)
-        Repo*           mParent;                //!< This subModule-Repo's parent repository
-        List            mChildren;              //!< This repo's direct submodule repositories
-        bool            mIsSubModule    : 1;    //!< This is a submodule of another repo
-        bool            mIsBare         : 1;    //!< This is a bare repo
-        bool            mIsLoaded       : 1;    //!< This repo is currently loaded (by gitWrap)
-        bool            mIsActive       : 1;    //!< This is MGV's current active repo?
-        bool            mIsInitializing : 1;    //!< True, while this repository is initializing
-        QTimer*         mUnloadTimer;           //!< NULL or a timer to unload this repository
     };
 
 }

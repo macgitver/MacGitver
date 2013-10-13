@@ -27,10 +27,16 @@
 namespace RM
 {
 
+    namespace Internal
+    {
+        class RemotePrivate;
+    }
+
     class MGV_CORE_API Remote : public Base
     {
     public:
         enum { StaticObjectType = RemoteObject };
+        typedef Internal::RemotePrivate Private;
         typedef QSet< Remote* > Set;
         typedef QVector< Remote* > List;
 
@@ -38,19 +44,9 @@ namespace RM
         Remote(const Git::Remote& gitObj, Base* parent);
 
     public:
-        QString displayName() const;
         Git::Remote gitObject();
         QString name() const;
         CollectionNode* branches();
-
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        bool refreshSelf();
-        void dumpSelf(Internal::Dumper& dumper) const;
-
-    private:
-        QString             mName;
     };
 
 }

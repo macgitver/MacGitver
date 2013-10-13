@@ -29,18 +29,18 @@ namespace RM
     {
     public:
         enum { StaticObjectType = BranchObject };
+        typedef QVector< Branch* > List;
+        typedef QSet< Branch* > Set;
 
     public:
-        Branch(Base* parent, const Git::Reference& ref);
+        Branch(Base* _parent, const Git::Reference& _ref);
 
     public:
-
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
-
-    private:
+        bool hasUpstream() const;
+        QString upstreamRefName() const;
+        Ref* upstream();
+        int aheadCount() const;
+        int behindCount() const;
     };
 
 }

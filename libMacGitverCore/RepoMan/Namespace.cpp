@@ -19,69 +19,92 @@
 
 #include "Namespace.hpp"
 #include "Events.hpp"
-#include "Dumper.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Private/NamespacePrivate.hpp"
 
 namespace RM
 {
 
-    Namespace::Namespace(Base* parent, const QString& _name)
-        : Base(parent)
-        , mName(_name)
-    {
-    }
+    using namespace Internal;
 
-    ObjTypes Namespace::objType() const
+    Namespace::Namespace(Base* _parent, const QString& _name)
+        : Base(*new NamespacePrivate(this, _name))
     {
-        return NamespaceObject;
-    }
-
-    void Namespace::dumpSelf(Internal::Dumper& dumper) const
-    {
-        dumper.addLine(QString(QLatin1String("Namespace 0x%1 - %2"))
-                       .arg(quintptr(this),0,16)
-                       .arg(mName));
-    }
-
-    void Namespace::preTerminate()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->namespaceAboutToBeDeleted(repository(), this);
-        }
-    }
-
-    bool Namespace::refreshSelf()
-    {
-        return true;
+        RM_D(Namespace);
+        d->linkToParent(_parent);
     }
 
     CollectionNode* Namespace::branches()
     {
-        return getOrCreateCollection(ctBranches);
+        RM_D(Namespace);
+
+        return d->getOrCreateCollection(ctBranches);
     }
 
     CollectionNode* Namespace::tags()
     {
-        return getOrCreateCollection(ctTags);
+        RM_D(Namespace);
+
+        return d->getOrCreateCollection(ctTags);
     }
 
     CollectionNode* Namespace::namespaces()
     {
-        return getOrCreateCollection(ctNamespaces);
+        RM_D(Namespace);
+
+        return d->getOrCreateCollection(ctNamespaces);
     }
 
     CollectionNode* Namespace::notes()
     {
-        return getOrCreateCollection(ctNotes);
-    }
+        RM_D(Namespace);
 
-    QString Namespace::displayName() const
-    {
-        return mName;
+        return d->getOrCreateCollection(ctNotes);
     }
 
     QString Namespace::name() const
     {
-        return mName;
+        RM_D(Namespace);
+
+        return d->name;
+    }
+
+    //-- NamespacePrivate --------------------------------------------------------------------------
+
+    NamespacePrivate::NamespacePrivate(Namespace* _pub, const QString& _name)
+        : BasePrivate(_pub)
+        , name(_name)
+    {
+    }
+
+    ObjTypes NamespacePrivate::objType() const
+    {
+        return NamespaceObject;
+    }
+
+    void NamespacePrivate::dumpSelf(Internal::Dumper& dumper) const
+    {
+        dumper.addLine(QString(QLatin1String("Namespace 0x%1 - %2"))
+                       .arg(quintptr(mPub),0,16)
+                       .arg(name));
+    }
+
+    void NamespacePrivate::preTerminate()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->namespaceAboutToBeDeleted(repository(), pub<Namespace>());
+        }
+    }
+
+    bool NamespacePrivate::refreshSelf()
+    {
+        return true;
+    }
+
+    QString NamespacePrivate::displayName() const
+    {
+        return name;
     }
 
 }

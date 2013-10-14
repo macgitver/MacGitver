@@ -64,7 +64,11 @@ namespace RM
         : Base(*new RepoPrivate(this, _repo))
     {
         RM_D(Repo);
-        d->linkToParent(_parent);
+
+        // Do an initial refresh
+        refresh();
+
+        d->isInitializing = false;
 
         if (forSubmodule) {
             Q_ASSERT(_parent->objType() == RepoObject);
@@ -77,6 +81,8 @@ namespace RM
                 d->scanSubmodules();
             }
         }
+
+        d->linkToParent(_parent);
     }
 
     Repo::~Repo()

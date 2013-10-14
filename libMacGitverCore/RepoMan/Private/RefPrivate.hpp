@@ -42,6 +42,7 @@ namespace RM
 
         public:
             RefTypes            type;
+            QString             fullQualifiedName;
             QString             name;
             Git::ObjectId       id;
         };

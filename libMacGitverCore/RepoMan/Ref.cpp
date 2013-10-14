@@ -19,6 +19,7 @@
 
 #include "libGitWrap/Result.hpp"
 #include "libGitWrap/Reference.hpp"
+#include "libGitWrap/RefName.hpp"
 
 #include "Ref.hpp"
 #include "Repo.hpp"
@@ -75,7 +76,8 @@ namespace RM
         : BasePrivate(pub)
         , type(_type)
     {
-        name = _ref.name();
+        fullQualifiedName = _ref.name();
+        name = _ref.nameAnalyzer().name();
     }
 
     ObjTypes RefPrivate::objType() const

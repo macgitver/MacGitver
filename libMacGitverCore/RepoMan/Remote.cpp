@@ -32,9 +32,12 @@ namespace RM
 
     using namespace Internal;
 
-    Remote::Remote(const Git::Remote& gitObj, Base* parent)
+    Remote::Remote(const Git::Remote& gitObj, Base* _parent)
         : Base(*new RemotePrivate(this, gitObj))
     {
+        RM_D(Remote);
+
+        d->linkToParent(_parent);
     }
 
     Git::Remote Remote::gitObject()

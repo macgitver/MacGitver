@@ -79,7 +79,7 @@ MACRO( QT_UIC out )
     QT5_WRAP_UI( ${out} ${ARGN} )
 ENDMACRO()
 
-function(QT_RCC infiles outfiles )
+macro(QT_RCC infiles outfiles )
 
     set(options)
     set(oneValueArgs)
@@ -132,7 +132,7 @@ function(QT_RCC infiles outfiles )
 
     set(${outfiles} ${${outfiles}} PARENT_SCOPE)
 
-endfunction()
+endmacro()
 
 MACRO( QT_PREPARE )
     SET( QT_USED_MODULES "" )

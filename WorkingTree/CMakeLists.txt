@@ -56,7 +56,8 @@ ADD_MGV_MODULE(
 TARGET_LINK_LIBRARIES(
     ModWorkingTree
 
-    DiffViews
+    LINK_PRIVATE
+        DiffViews
 )
 
 MSVC_SPLIT_SOURCES( ModWorkingTree )

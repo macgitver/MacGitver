@@ -62,6 +62,11 @@ ADD_MGV_MODULE(
     ${CFG_FILES}
 )
 
-TARGET_LINK_LIBRARIES( ModHistory DiffViews )
+TARGET_LINK_LIBRARIES(
+    ModHistory
+
+    LINK_PRIVATE
+        DiffViews
+)
 
 MSVC_SPLIT_SOURCES( ModHistory )

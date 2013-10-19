@@ -38,9 +38,10 @@ ADD_QT_EXECUTABLE(
 TARGET_LINK_LIBRARIES(
     MacGitver
 
-    GitWrap
-    Heaven
-    MacGitverCore
+    LINK_PRIVATE
+        GitWrap
+        Heaven
+        MacGitverCore
 )
 
 #--------------------------------------------------------------------------------

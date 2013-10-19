@@ -34,6 +34,8 @@ namespace RM
 
     enum RefTypes
     {
+        UnknownRefType,
+
         BranchType,
         TagType,
         RootStageType,

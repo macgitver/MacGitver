@@ -33,6 +33,8 @@
 #include "RepoMan/Remote.hpp"
 #include "RepoMan/Namespace.hpp"
 #include "RepoMan/Ref.hpp"
+#include "RepoMan/Tag.hpp"
+#include "RepoMan/Branch.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 #include "RepoMan/Private/RepoPrivate.hpp"
@@ -656,7 +658,15 @@ namespace RM
             }
         }
 
-        return new Ref(parent, rn.isBranch() ? BranchType : TagType, ref);
+        if (rn.isBranch()) {
+            return new Branch(parent, ref);
+        }
+        else if(rn.isTag()) {
+            return new Tag(parent, ref);
+        }
+        else {
+            return new Ref(parent, UnknownRefType, ref);
+        }
     }
 
     Remote* RepoPrivate::findRemote(const QString &remoteName, bool create)

@@ -41,27 +41,8 @@ MACRO(QT_MOC SourcesVar )
     LIST( APPEND ${SourcesVar} ${_mocfiles} )
 ENDMACRO(QT_MOC)
 
-MACRO (QT_UIC outfiles )
-
-    QT4_EXTRACT_OPTIONS(ui_files ui_options ${ARGN})
-
-    FOREACH (it ${ui_files})
-
-        GET_FILENAME_COMPONENT( itbase  ${it} NAME     )
-        GET_FILENAME_COMPONENT( outfile ${it} NAME_WE  )
-        GET_FILENAME_COMPONENT( infile  ${it} ABSOLUTE )
-
-        SET( outfile ${CMAKE_CURRENT_BINARY_DIR}/ui_${outfile}.h )
-        ADD_CUSTOM_COMMAND(
-            OUTPUT			${outfile}
-            COMMAND			${QT_UIC_EXECUTABLE}
-            ARGS			${ui_options} -o ${outfile} ${infile}
-            MAIN_DEPENDENCY	${infile}
-            COMMENT			"UIC'ing ${itbase}"
-        )
-        SET( ${outfiles} ${${outfiles}} ${outfile} )
-    ENDFOREACH( it )
-
+MACRO(QT_UIC outfiles )
+    QT4_WRAP_UI(${outfiles} ${ARGN})
 ENDMACRO( QT_UIC )
 
 

@@ -42,6 +42,7 @@ namespace RM
             void preTerminate();
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
+            QString objectTypeName() const;
 
         public:
             CollectionTypes ctype;

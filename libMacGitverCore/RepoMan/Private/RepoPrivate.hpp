@@ -40,6 +40,7 @@ namespace RM
             void postRefreshChildren();
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
+            QString objectTypeName() const;
 
         public:
             Ref*        findReference(  const Git::Reference& ref,          bool create = false);

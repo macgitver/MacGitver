@@ -111,4 +111,9 @@ namespace RM
         return RefPrivate::refreshSelf();
     }
 
+    QString BranchPrivate::objectTypeName() const
+    {
+        return QLatin1String("Branch");
+    }
+
 }

@@ -94,4 +94,9 @@ namespace RM
         BasePrivate::preTerminate();
     }
 
+    QString CollectionNodePrivate::objectTypeName() const
+    {
+        return QLatin1String("CollectionNode");
+    }
+
 }

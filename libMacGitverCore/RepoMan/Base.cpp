@@ -247,6 +247,20 @@ namespace RM
         return dumper.output();
     }
 
+    /**
+     * @brief       Get the name of this object type
+     *
+     * @return      The name
+     *
+     */
+    QString Base::typeName() const
+    {
+        RM_CD(Base);
+        return d->objectTypeName();
+    }
+
+    //-- BasePrivate -------------------------------------------------------------------------------
+
     BasePrivate::BasePrivate(Base* pub)
         : mPub(pub)
         , mParentObj(NULL)

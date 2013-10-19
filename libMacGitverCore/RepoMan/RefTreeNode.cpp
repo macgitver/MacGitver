@@ -90,4 +90,9 @@ namespace RM
         return true;
     }
 
+    QString RefTreeNodePrivate::objectTypeName() const
+    {
+        return QLatin1String("RefTreeNode");
+    }
+
 }

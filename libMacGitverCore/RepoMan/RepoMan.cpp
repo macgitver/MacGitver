@@ -248,4 +248,9 @@ namespace RM
         return QLatin1String("RepoMan");
     }
 
+    QString RepoManPrivate::objectTypeName() const
+    {
+        return QLatin1String("RepoMan");
+    }
+
 }

@@ -72,4 +72,9 @@ namespace RM
                        .arg(name));
     }
 
+    QString TagPrivate::objectTypeName() const
+    {
+        return QLatin1String("Tag");
+    }
+
 }

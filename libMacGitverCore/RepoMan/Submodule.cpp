@@ -67,4 +67,9 @@ namespace RM
         return true;
     }
 
+    QString SubmodulePrivate::objectTypeName() const
+    {
+        return QLatin1String("Submodule");
+    }
+
 }

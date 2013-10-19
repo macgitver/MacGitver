@@ -118,4 +118,9 @@ namespace RM
         return name;
     }
 
+    QString NamespacePrivate::objectTypeName() const
+    {
+        return QLatin1String("Namespace");
+    }
+
 }

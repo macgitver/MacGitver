@@ -68,4 +68,9 @@ namespace RM
         return true;
     }
 
+    QString RefLogPrivate::objectTypeName() const
+    {
+        return QLatin1String("RefLog");
+    }
+
 }

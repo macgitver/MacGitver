@@ -138,4 +138,9 @@ namespace RM
                        .arg(name));
     }
 
+    QString RefPrivate::objectTypeName() const
+    {
+        return QLatin1String("Ref");
+    }
+
 }

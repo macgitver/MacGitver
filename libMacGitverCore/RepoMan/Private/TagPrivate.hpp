@@ -40,6 +40,7 @@ namespace RM
             void postCreation();
             void preTerminate();
             void dumpSelf(Dumper& dumper) const;
+            QString objectTypeName() const;
         };
 
     }

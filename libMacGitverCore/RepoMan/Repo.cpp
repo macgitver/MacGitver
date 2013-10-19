@@ -760,4 +760,9 @@ namespace RM
         return NULL;
     }
 
+    QString RepoPrivate::objectTypeName() const
+    {
+        return QLatin1String("Repo");
+    }
+
 }

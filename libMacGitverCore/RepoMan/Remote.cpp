@@ -111,4 +111,9 @@ namespace RM
         return true;
     }
 
+    QString RemotePrivate::objectTypeName() const
+    {
+        return QLatin1String("Remote");
+    }
+
 }

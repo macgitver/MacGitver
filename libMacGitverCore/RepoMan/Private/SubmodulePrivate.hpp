@@ -20,7 +20,7 @@
 #ifndef REPOMAN_SUBMODULE_PRIVATE_HPP
 #define REPOMAN_SUBMODULE_PRIVATE_HPP
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "RepoMan/Private/RepoPrivate.hpp"
 
 #include "RepoMan/Submodule.hpp"
 
@@ -30,10 +30,10 @@ namespace RM
     namespace Internal
     {
 
-        class SubmodulePrivate : public BasePrivate
+        class SubmodulePrivate : public RepoPrivate
         {
         public:
-            SubmodulePrivate(Submodule* _pub);
+            SubmodulePrivate(Submodule* _pub, const Git::Repository& _repo);
 
         public:
             ObjTypes objType() const;

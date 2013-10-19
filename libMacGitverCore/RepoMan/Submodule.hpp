@@ -20,18 +20,18 @@
 #ifndef MGV_CORE_REPOMAN_SUBMODULE_HPP
 #define MGV_CORE_REPOMAN_SUBMODULE_HPP
 
-#include "Base.hpp"
+#include "Repo.hpp"
 
 namespace RM
 {
 
-    class MGV_CORE_API Submodule : public Base
+    class MGV_CORE_API Submodule : public Repo
     {
     public:
         enum { StaticObjectType = SubmoduleObject };
 
     public:
-        Submodule(Base* parent);
+        Submodule(const Git::Repository& _repo, Repo* parent);
 
     public:
 

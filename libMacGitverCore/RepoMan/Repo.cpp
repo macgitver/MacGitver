@@ -35,6 +35,7 @@
 #include "RepoMan/Ref.hpp"
 #include "RepoMan/Tag.hpp"
 #include "RepoMan/Branch.hpp"
+#include "RepoMan/Submodule.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 #include "RepoMan/Private/RepoPrivate.hpp"
@@ -45,6 +46,17 @@ namespace RM
 {
 
     using namespace Internal;
+
+    Repo::Repo(const Git::Repository& _repo, RepoPrivate& _d)
+        : Base(_d)
+    {
+        RM_D(Repo);
+
+        // Do an initial refresh
+        refresh();
+
+        d->isInitializing = false;
+    }
 
     Repo::Repo(const Git::Repository& _repo, Base* _parent)
         : Base(*new RepoPrivate(this, _repo))
@@ -58,31 +70,6 @@ namespace RM
 
         // linkToParent() will invoke postCreation() and we'll get _one_ initial event for this
         // repository.
-
-        d->linkToParent(_parent);
-    }
-
-    Repo::Repo(bool forSubmodule, const Git::Repository& _repo, Base* _parent)
-        : Base(*new RepoPrivate(this, _repo))
-    {
-        RM_D(Repo);
-
-        // Do an initial refresh
-        refresh();
-
-        d->isInitializing = false;
-
-        if (forSubmodule) {
-            Q_ASSERT(_parent->objType() == RepoObject);
-
-            d->isSubModule = true;
-            d->parent = static_cast<Repo*>(_parent);
-            setDisplayAlias(_repo.name());
-
-            if (!_repo.isBare()) {
-                d->scanSubmodules();
-            }
-        }
 
         d->linkToParent(_parent);
     }
@@ -490,7 +477,7 @@ namespace RM
             subInfo = repoByPath(path, true);
             if (!subInfo) {
 
-                subInfo = new Repo(true, subRepo, p);
+                subInfo = new Submodule(subRepo, p);
 
                 children.append(subInfo);
 

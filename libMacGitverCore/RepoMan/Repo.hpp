@@ -48,9 +48,11 @@ namespace RM
         typedef QSet< Repo* > Set;
         typedef QVector< Repo* > List;
 
+    protected:
+        Repo(const Git::Repository& _repo, Internal::RepoPrivate& _d);
+
     public:
         Repo(const Git::Repository& _repo, Base* _parent);
-        Repo(bool forSubmodule, const Git::Repository& _repo, Base* _parent);
         ~Repo();
 
     public:

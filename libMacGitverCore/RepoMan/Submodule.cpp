@@ -26,17 +26,27 @@ namespace RM
 {
     using namespace Internal;
 
-    Submodule::Submodule(Base* _parent)
-        : Base(*new SubmodulePrivate(this))
+    Submodule::Submodule(const Git::Repository& _repo, Repo *_parent)
+        : Repo(_repo, *new SubmodulePrivate(this, _repo))
     {
         RM_D(Submodule);
+
+        d->isSubModule = true;
+        d->parent = static_cast<Repo*>(_parent);
+
+        setDisplayAlias(_repo.name());
+
+        if (!_repo.isBare()) {
+            d->scanSubmodules();
+        }
+
         d->linkToParent(_parent);
     }
 
     //-- SubmodulePrivate --------------------------------------------------------------------------
 
-    SubmodulePrivate::SubmodulePrivate(Submodule* _pub)
-        : BasePrivate(_pub)
+    SubmodulePrivate::SubmodulePrivate(Submodule* _pub, const Git::Repository& _repo)
+        : RepoPrivate(_pub, _repo)
     {
     }
 

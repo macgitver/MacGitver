@@ -153,6 +153,7 @@ SET( UI_FILES
 SET( HID_FILES
 
     App/MgvPrimaryWindowActions.hid
+    RepoMan/Private/RepoManActions.hid
 
 )
 
@@ -183,9 +184,9 @@ TARGET_LINK_LIBRARIES(
     MacGitverCore
 
     LINK_PRIVATE
-    Heaven
-    GitWrap
-    DiffViews
+        Heaven
+        GitWrap
+        DiffViews
 )
 
 INSTALL_FRAMEWORK( MacGitverCore Runtime )

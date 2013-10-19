@@ -22,12 +22,16 @@
 
 #include "libHeaven/Icons/IconRef.hpp"
 
+#include "App/MacGitver.hpp"
+
 #include "Base.hpp"
 #include "Repo.hpp"
+#include "RepoMan.hpp"
 #include "RefTreeNode.hpp"
 #include "CollectionNode.hpp"
 #include "Events.hpp"
 
+#include "Private/RepoManPrivate.hpp"
 #include "Private/Dumper.hpp"
 #include "Private/BasePrivate.hpp"
 
@@ -260,6 +264,19 @@ namespace RM
     {
         RM_CD(Base);
         return d->objectTypeName();
+    }
+
+    /**
+     * @brief       Get a context menu for this object
+     *
+     * @return      A Heaven::Menu that can be used as context menu for this object.
+     *
+     */
+    Heaven::Menu* Base::contextMenu()
+    {
+        RepoMan* rm = &MacGitver::repoMan();
+        RepoMan::Private* rmp = BasePrivate::dataOf<RepoMan>(rm);
+        return rmp->contextMenuFor(this);
     }
 
     /**

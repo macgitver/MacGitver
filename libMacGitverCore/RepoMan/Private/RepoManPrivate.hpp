@@ -24,13 +24,15 @@
 
 #include "RepoMan/RepoMan.hpp"
 
+#include "hic_RepoManActions.h"
+
 namespace RM
 {
 
     namespace Internal
     {
 
-        class RepoManPrivate : public BasePrivate
+        class RepoManPrivate : public BasePrivate, private RepoManActions
         {
         public:
             RepoManPrivate(RepoMan* _pub);
@@ -42,6 +44,8 @@ namespace RM
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
+
+            Heaven::Menu* contextMenuFor(Base* object);
 
         public:
             Repo::List    repos;

@@ -18,6 +18,7 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "RepoMan/RepoMan.hpp"
+#include "RepoMan/CollectionNode.hpp"
 #include "RepoMan/Events.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
@@ -221,6 +222,7 @@ namespace RM
         : BasePrivate(_pub)
         , activeRepo(NULL)
     {
+        setupActions(_pub);
     }
 
     bool RepoManPrivate::refreshSelf()
@@ -251,6 +253,40 @@ namespace RM
     QString RepoManPrivate::objectTypeName() const
     {
         return QLatin1String("RepoMan");
+    }
+
+    Heaven::Menu* RepoManPrivate::contextMenuFor(Base* object)
+    {
+        switch (object->objType()) {
+
+        case BranchObject:      return menuCtxBranch;
+        case TagObject:         return menuCtxTag;
+        case RepoObject:        return menuCtxRepo;
+        case SubmoduleObject:   return menuCtxSubmodule;
+        case NamespaceObject:   return menuCtxNamespace;
+        case RefLogObject:      return menuCtxRefLog;
+        case RemoteObject:      return menuCtxRemote;
+
+        //case RefObject:                 return menuCtxRef;
+        //case RefTreeNodeObject:         return menuCtxRefTreeNode;
+
+        case CollectionNodeObject:
+            switch (static_cast<CollectionNode*>(object)->collectionType()) {
+
+            case ctBranches:    return menuCtxBranches;
+            case ctTags:        return menuCtxTags;
+            case ctNotes:       return menuCtxNotes;
+            case ctNamespaces:  return menuCtxNamespaces;
+
+            default:            break;
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        return NULL;
     }
 
 }

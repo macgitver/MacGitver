@@ -27,7 +27,10 @@
 #include "libMacGitverCore/MacGitverApi.hpp"
 
 namespace Heaven {
+
+    class Menu;
     class IconRef;
+
 }
 
 namespace RM
@@ -114,6 +117,8 @@ namespace RM
         QString typeName() const;
         QString displayName() const;
         QString dump() const;
+
+        Heaven::Menu* contextMenu();
 
     protected:
         Internal::BasePrivate* mData;

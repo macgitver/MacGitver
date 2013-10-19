@@ -7,59 +7,38 @@ MACRO(QT_MOC SourcesVar )
     SET( Mocables ${ARGN} )
     SET( _Force 0 )
     SET( _mocfiles )
-    QT4_GET_MOC_FLAGS(_moc_INCS)
 
     FOREACH(_current_FILE ${Mocables})
-
         IF( _current_FILE STREQUAL "FORCE" )
-
             SET( _Force 1 )
 
         ELSEIF( _Force )
-
             GET_FILENAME_COMPONENT(_abs_FILE ${_current_FILE} ABSOLUTE)
             GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
             SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
-            QT4_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
+            QT4_GENERATE_MOC(${_abs_FILE} ${_moc})
 
             LIST( APPEND ${SourcesVar} ${_moc} )
-            # also, keep the generated moc from beeing scanned by auto-moc'ings
-            SET_SOURCE_FILES_PROPERTIES(
-                ${_moc}
-                PROPERTIES  SKIP_AUTOMOC TRUE )
 
         ELSE()
-
             GET_FILENAME_COMPONENT(_abs_FILE ${_current_FILE} ABSOLUTE)
             GET_SOURCE_FILE_PROPERTY(_skip ${_abs_FILE} SKIP_AUTOMOC)
 
             IF( NOT _skip AND EXISTS ${_abs_FILE} )
-
                 FILE(READ ${_abs_FILE} _contents)
-
                 STRING(REGEX MATCHALL "Q_OBJECT" _match "${_contents}")
-                IF(_match)
 
+                IF(_match)
                     GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
                     SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
-                    QT4_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
+                    QT4_GENERATE_MOC(${_abs_FILE} ${_moc})
 
                     LIST( APPEND _mocfiles ${_moc} )
-                    # also, keep the generated moc from beeing scanned by auto-moc'ings
-                    SET_SOURCE_FILES_PROPERTIES(
-                        ${_moc}
-                        PROPERTIES  SKIP_AUTOMOC TRUE )
-
                 ENDIF()
-
             ENDIF()
-
         ENDIF()
-
     ENDFOREACH()
-
     LIST( APPEND ${SourcesVar} ${_mocfiles} )
-
 ENDMACRO(QT_MOC)
 
 MACRO (QT_UIC outfiles )

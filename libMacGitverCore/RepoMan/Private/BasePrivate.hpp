@@ -97,6 +97,7 @@ namespace RM
         public:
             virtual QString displayName() const;
             virtual QString objectTypeName() const = 0;
+            virtual Heaven::IconRef icon() const;
             virtual bool refreshSelf() = 0;
             virtual bool preRefresh();
             virtual void postRefresh();

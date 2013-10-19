@@ -22,6 +22,9 @@
 
 #include "libGitWrap/GitWrap.hpp"
 
+#include "libHeaven/Icons/IconManager.hpp"
+#include "libHeaven/Icons/IconDefaultProvider.hpp"
+
 #include "libMacGitverCore/App/MacGitverPrivate.hpp"
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
 #include "libMacGitverCore/Config/Config.h"
@@ -55,6 +58,8 @@ MacGitverPrivate::MacGitverPrivate(MacGitver* owner, bool runGui)
     if (runGui) {
         QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
         QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
+
+        Heaven::IconManager::self().defaultProvider()->addSearchPath(QLatin1String(":/Images"));
     } else {
         QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
         QApplication::setApplicationName( QLatin1String( "MacGitver_NonGui" ) );

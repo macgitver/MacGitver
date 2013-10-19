@@ -26,6 +26,10 @@
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
+namespace Heaven {
+    class IconRef;
+}
+
 namespace RM
 {
 
@@ -104,6 +108,8 @@ namespace RM
 
         template< class T >
         bool isA() const;
+
+        Heaven::IconRef icon() const;
 
         QString typeName() const;
         QString displayName() const;

@@ -17,7 +17,10 @@
  *
  */
 
+#include <QStringBuilder>
 #include <QStack>
+
+#include "libHeaven/Icons/IconRef.hpp"
 
 #include "Base.hpp"
 #include "Repo.hpp"
@@ -257,6 +260,18 @@ namespace RM
     {
         RM_CD(Base);
         return d->objectTypeName();
+    }
+
+    /**
+     * @brief       Get an icon for this object
+     *
+     * @return      A iconRef for this object
+     *
+     */
+    Heaven::IconRef Base::icon() const
+    {
+        RM_D(Base);
+        return d->icon();
     }
 
     //-- BasePrivate -------------------------------------------------------------------------------
@@ -600,6 +615,11 @@ namespace RM
         }
 
         return NULL;
+    }
+
+    Heaven::IconRef BasePrivate::icon() const
+    {
+        return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % QLatin1Literal("@24"));
     }
 
 }

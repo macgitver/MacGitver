@@ -17,6 +17,10 @@
  *
  */
 
+#include <QStringBuilder>
+
+#include "libHeaven/Icons/IconRef.hpp"
+
 #include "CollectionNode.hpp"
 
 #include "Private/Dumper.hpp"
@@ -97,6 +101,21 @@ namespace RM
     QString CollectionNodePrivate::objectTypeName() const
     {
         return QLatin1String("CollectionNode");
+    }
+
+    Heaven::IconRef CollectionNodePrivate::icon() const
+    {
+        QString s;
+
+        switch (ctype) {
+        case ctBranches:    s = QLatin1String("Branches");      break;
+        case ctTags:        s = QLatin1String("Tags");          break;
+        case ctNotes:       s = QLatin1String("Notes");         break;
+        case ctNamespaces:  s = QLatin1String("Namespaces");    break;
+        default:            return Heaven::IconRef();
+        }
+
+        return Heaven::IconRef::fromString(QChar(L'#') % s % QLatin1Literal("@24"));
     }
 
 }

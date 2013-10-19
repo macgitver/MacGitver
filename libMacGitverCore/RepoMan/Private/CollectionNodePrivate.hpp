@@ -43,6 +43,7 @@ namespace RM
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
+            Heaven::IconRef icon() const;
 
         public:
             CollectionTypes ctype;

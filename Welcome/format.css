@@ -1,12 +1,32 @@
-body
-{
+body {
 font-family: 'Verdana';
 font-size: 11;
+margin:  0;
+padding: 0;
+background: -webkit-linear-gradient(top, #FFFFFF 0%, #CBD0D8 25%, #BBC0CA 50%, #CBD0D8 75%, #FFFFFF 100%);
+}
 
-background-attachment: fixed;
-background:
-    url('qrc:/ModWelcome/images/bg_logo.png') no-repeat right bottom
-    , -webkit-linear-gradient(top, #FFFFFF 0%, #CBD0D8 25%, #BBC0CA 50%, #CBD0D8 75%, #FFFFFF 100%);
+div.page {
+margin:  5;
+padding: 0;
+}
+
+div.bg_overlay {
+content: "";
+opacity: .5;
+bottom: 0;
+right:  0;
+position: fixed;
+}
+
+div.content {
+top:    0;
+left:   0;
+bottom: 0;
+right:  0;
+display: block;
+position: relative;
+z-index: 100;
 }
 
 p

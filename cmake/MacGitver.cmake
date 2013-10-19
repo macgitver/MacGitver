@@ -14,7 +14,10 @@ MACRO(ADD_MGV_MODULE _Name )
     TARGET_LINK_LIBRARIES(
         ${_Target}
 
-        GitWrap Heaven MacGitverCore
+        LINK_PRIVATE
+                GitWrap
+                Heaven
+                MacGitverCore
     )
 
     IF( APPLE )

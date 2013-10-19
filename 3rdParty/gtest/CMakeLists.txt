@@ -8,5 +8,5 @@ QT_PREPARE(Core -Gui)
 ADD_LIBRARY( gtest_qt_main STATIC gtest_qt_main.cpp )
 ADVANCE_TO_QT_PROJECT(gtest_qt_main)
 
-TARGET_LINK_LIBRARIES(gtest_main gtest)
-TARGET_LINK_LIBRARIES(gtest_qt_main gtest)
+TARGET_LINK_LIBRARIES(gtest_main    LINK_PRIVATE gtest)
+TARGET_LINK_LIBRARIES(gtest_qt_main LINK_PRIVATE gtest)

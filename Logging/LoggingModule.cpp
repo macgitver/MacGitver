@@ -16,8 +16,8 @@
 
 #include <QtPlugin>
 
-#include "LoggingModule.h"
-#include "LoggingView.h"
+#include "LoggingModule.hpp"
+#include "LoggingView.hpp"
 
 LoggingModule::LoggingModule()
 {

@@ -16,7 +16,7 @@
 
 #include <QTextBrowser>
 
-#include "LoggingView.h"
+#include "LoggingView.hpp"
 
 LoggingView::LoggingView()
     : View( "Log" )

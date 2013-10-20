@@ -41,6 +41,10 @@ namespace RM
     class MGV_CORE_API Repo : public QObject, public Base
     {
         friend class RepoMan;
+        #if QT_VERSION < 0x050000
+        friend class Internal::RepoPrivate;
+        #endif
+
         Q_OBJECT
     public:
         enum { StaticObjectType = RepoObject };

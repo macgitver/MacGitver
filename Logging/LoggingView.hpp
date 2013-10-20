@@ -19,7 +19,7 @@
 
 #include "libHeaven/CentralUI/Views/View.hpp"
 
-class QTextBrowser;
+class QWebView;
 
 class LoggingView : public Heaven::View
 {
@@ -31,7 +31,7 @@ public:
     QSize sizeHint() const;
 
 private:
-    QTextBrowser* mBrowser;
+    QWebView* mBrowser;
 };
 
 #endif

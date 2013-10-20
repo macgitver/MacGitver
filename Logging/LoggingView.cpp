@@ -14,7 +14,7 @@
  *
  */
 
-#include <QTextBrowser>
+#include <QWebView>
 
 #include "LoggingView.hpp"
 
@@ -23,8 +23,7 @@ LoggingView::LoggingView()
 {
     setViewName( trUtf8( "Log" ) );
 
-    mBrowser = new QTextBrowser;
-    mBrowser->setFrameShape( QFrame::NoFrame );
+    mBrowser = new QWebView;
 
     setWidget( mBrowser );
 }

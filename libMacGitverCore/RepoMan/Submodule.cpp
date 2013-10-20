@@ -18,6 +18,7 @@
  */
 
 #include "Submodule.hpp"
+#include "Events.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 #include "RepoMan/Private/SubmodulePrivate.hpp"
@@ -63,13 +64,20 @@ namespace RM
 
     void SubmodulePrivate::postCreation()
     {
-        BasePrivate::postCreation();
+        if (!repoEventsBlocked()) {
+            Events::self()->submoduleCreated(repository(), pub<Submodule>());
+        }
+
+        RepoPrivate::postCreation();
     }
 
     void SubmodulePrivate::preTerminate()
     {
-        // Do we need to do smth?
-        BasePrivate::preTerminate();
+        if (!repoEventsBlocked()) {
+            Events::self()->submoduleAboutToBeDeleted(repository(), pub<Submodule>());
+        }
+
+        RepoPrivate::preTerminate();
     }
 
     bool SubmodulePrivate::refreshSelf()

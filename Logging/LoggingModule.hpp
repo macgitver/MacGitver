@@ -39,6 +39,7 @@ public:
     void deinitialize();
 
 public:
+    void queueViewUpdate();
     void setView(LoggingView* view);
     Log::Event::List currentEvents() const;
 
@@ -46,8 +47,6 @@ private:
     void channelAdded(Log::Channel channel);
     void logCleaned(quint64 upToId);
     void eventAdded(Log::Event e);
-
-    void queueViewUpdate();
 
 private slots:
     void viewUpdate();

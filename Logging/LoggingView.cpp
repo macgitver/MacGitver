@@ -102,7 +102,7 @@ void LoggingView::clearPrefixCache()
 {
     htmlPrefix = QString();
     htmlPostfix = QString();
-    regenerate();
+    mModule->queueViewUpdate();
 }
 
 void LoggingView::calculatePrefix()

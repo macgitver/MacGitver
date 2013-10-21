@@ -20,9 +20,18 @@
 #include <QString>
 #include <QHash>
 
+#include "libMacGitverCore/App/MacGitver.hpp"
+
 #include "libMacGitverCore/Log/LogManager.hpp"
 #include "libMacGitverCore/Log/LogTemplate.hpp"
 #include "libMacGitverCore/Log/LogConsumer.hpp"
+#include "libMacGitverCore/Log/LogEvent.hpp"
+
+#define CHNAME_DEBUG        QLatin1String("Debug")
+#define CHNAME_NORMAL       QLatin1String("Normal")
+#define CHNAME_ERROR        QLatin1String("Error")
+#define CHNAME_INFO         QLatin1String("Info")
+#define CHNAME_WARNING      QLatin1String("Warning")
 
 namespace Log
 {
@@ -70,12 +79,83 @@ namespace Log
 
     Manager Manager::create()
     {
-        Data* d = new Data;
-        return d;
+        Manager m(new Data);
+        m.createDefaultChannels();
+        return m;
+    }
+
+    void Manager::createDefaultChannels()
+    {
+        Channel ch = Channel::create(CHNAME_ERROR);
+        ch.setDisplayName(MacGitver::trUtf8("Errors", "Channelname"));
+
+        Template t = Template::create(CHNAME_ERROR);
+        t.setTransformation(QLatin1String("<span style=\"color: red;\">$$</span>"));
+        ch.setDefaultTemplate(t);
+        addTemplate(t);
+
+        addChannel(ch);
+
+        ch = Channel::create(CHNAME_WARNING);
+        ch.setDisplayName(MacGitver::trUtf8("Warnings", "Channelname"));
+
+        t = Template::create(CHNAME_WARNING);
+        t.setTransformation(QLatin1String("<span style=\"color: yellow;\">$$</span>"));
+        addTemplate(t);
+        ch.setDefaultTemplate(t);
+
+        addChannel(ch);
+
+        ch = Channel::create(CHNAME_INFO);
+        ch.setDisplayName(MacGitver::trUtf8("Infos", "Channelname"));
+
+        t = Template::create(CHNAME_INFO);
+        t.setTransformation(QLatin1String("<span style=\"color: blue;\">$$</span>"));
+        addTemplate(t);
+        ch.setDefaultTemplate(t);
+
+        addChannel(ch);
+
+        ch = Channel::create(CHNAME_DEBUG);
+        ch.setDisplayName(MacGitver::trUtf8("Debug", "Channelname"));
+
+        t = Template::create(CHNAME_DEBUG);
+        t.setTransformation(QLatin1String("<span style=\"color: navy;\">$$</span>"));
+        addTemplate(t);
+        ch.setDefaultTemplate(t);
+
+        addChannel(ch);
+
+        ch = Channel::create(CHNAME_NORMAL);
+        ch.setDisplayName(MacGitver::trUtf8("Default output", "Channelname"));
+
+        t = Template::create(CHNAME_NORMAL);
+        t.setTransformation(QLatin1String("$$"));
+        addTemplate(t);
+        ch.setDefaultTemplate(t);
+
+        addChannel(ch);
     }
 
     void Manager::addMessage(Type t, const QString& message)
     {
+        QString channelName;
+        switch(t) {
+        case Error:         channelName = CHNAME_ERROR;     break;
+        case Normal:        channelName = CHNAME_NORMAL;    break;
+        case Information:   channelName = CHNAME_INFO;      break;
+        case Warning:       channelName = CHNAME_WARNING;   break;
+        case Debug:         channelName = CHNAME_DEBUG;     break;
+        }
+
+        Channel channel = findChannel(channelName);
+        if (!channel.isValid()) {
+            qDebug("Should have logged: %s - but got no valid channel.", qPrintable(message));
+            return;
+        }
+
+        Event e = Event::create(channel.defaultTemplate(), message);
+        channel.addEvent(e);
     }
 
     quint64 Manager::nextLogEventId()
@@ -107,6 +187,10 @@ namespace Log
         Q_ASSERT(d);
         if (d) {
             d->channels.insert(ch.name(), ch);
+
+            if (d->consumer) {
+                d->consumer->channelAdded(ch);
+            }
         }
     }
 
@@ -151,6 +235,16 @@ namespace Log
     Consumer* Manager::logConsumer() const
     {
         return d ? d->consumer : NULL;
+    }
+
+    void Manager::eventAdded(Event event)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            if (d->consumer) {
+                d->consumer->eventAdded(event);
+            }
+        }
     }
 
     //-- Manager::Data -------------------------------------------------------------------------- >8

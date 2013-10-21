@@ -117,7 +117,7 @@ namespace Log
         }
 
         return
-            QLatin1Literal("<a name=\"") %
+            QLatin1Literal("<a id=\"") %
             QString::number(event.uniqueId()) %
             QLatin1Literal("\">") %
             s %

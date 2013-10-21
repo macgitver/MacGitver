@@ -21,8 +21,12 @@
 
 #include "libHeaven/Icons/IconRef.hpp"
 
+#include "libMacGitverCore/App/MacGitver.hpp"
+
 #include "libMacGitverCore/Log/LogChannel.hpp"
 #include "libMacGitverCore/Log/LogEvent.hpp"
+#include "libMacGitverCore/Log/LogManager.hpp"
+#include "libMacGitverCore/Log/LogTemplate.hpp"
 
 namespace Log
 {
@@ -33,8 +37,11 @@ namespace Log
         Data();
 
     public:
+        Template        defaultTemplate;
         QString         name;
+        QString         displayName;
         Heaven::IconRef icon;
+        Event::List     events;
     };
 
     Channel::Channel(const Channel& other)
@@ -73,7 +80,6 @@ namespace Log
         return d;
     }
 
-
     QString Channel::name() const
     {
         return d ? d->name : QString();
@@ -84,8 +90,41 @@ namespace Log
         return d ? d->icon : Heaven::IconRef();
     }
 
-    void Channel::addLogEvent(Event event)
+    void Channel::addEvent(Event event)
     {
+        Q_ASSERT(d);
+        if (d) {
+            event.setChannel(d.data());
+            d->events.append(event);
+
+            MacGitver::log().eventAdded(event);
+        }
+    }
+
+    void Channel::setDisplayName(const QString& name)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->displayName = name;
+        }
+    }
+
+    QString Channel::displayName() const
+    {
+        return d ? d->displayName : QString();
+    }
+
+    Template Channel::defaultTemplate() const
+    {
+        return d ? d->defaultTemplate : Template();
+    }
+
+    void Channel::setDefaultTemplate(Template t)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->defaultTemplate = t;
+        }
     }
 
     //-- Channel::Data -------------------------------------------------------------------------- >8

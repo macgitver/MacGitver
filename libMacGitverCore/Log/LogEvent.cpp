@@ -113,7 +113,15 @@ namespace Log
 
     QString Event::html() const
     {
-        return QString();
+        if (!d) {
+            return QString();
+        }
+
+        if (d->htmlTemplate.isValid()) {
+            return d->htmlTemplate.apply(*this);
+        }
+
+        return QLatin1String("Missing template");
     }
 
     void Event::setParam(const QString& param, const QString& text)

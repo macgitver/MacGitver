@@ -39,6 +39,7 @@ namespace Log
 {
 
     class Event;
+    class Template;
 
     class MGV_CORE_API Channel
     {
@@ -58,10 +59,16 @@ namespace Log
         static Channel create(const QString& name);
 
     public:
-        QString name() const;
-        Heaven::IconRef icon() const;
+        void setDefaultTemplate(Template t);
+        void setDisplayName(const QString& name);
 
-        void addLogEvent(Event event);
+    public:
+        QString name() const;
+        QString displayName() const;
+        Heaven::IconRef icon() const;
+        Template defaultTemplate() const;
+
+        void addEvent(Event event);
 
     private:
         QExplicitlySharedDataPointer<Data> d;

@@ -23,6 +23,7 @@
 
 #include <QtGlobal>
 #include <QSharedData>
+#include <QVector>
 
 class QString;
 class QStringList;
@@ -38,6 +39,9 @@ namespace Log
     class MGV_CORE_API Event
     {
         friend class Channel;
+
+    public:
+        typedef QVector<Event> List;
 
     public:
         Event(const Event& other);

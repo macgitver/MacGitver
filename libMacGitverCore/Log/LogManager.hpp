@@ -38,7 +38,8 @@ namespace Log
         Information,
         Normal,
         Warning,
-        Error
+        Error,
+        Debug
     };
 
     class Template;
@@ -47,6 +48,8 @@ namespace Log
 
     class MGV_CORE_API Manager
     {
+        friend class Channel;
+
     public:
         Manager(const Manager& other);
         Manager();
@@ -71,6 +74,10 @@ namespace Log
 
         void setLogConsumer(Consumer* consumer);
         Consumer* logConsumer() const;
+
+    private:
+        void createDefaultChannels();
+        void eventAdded(Event event);
 
     private:
         class Data;

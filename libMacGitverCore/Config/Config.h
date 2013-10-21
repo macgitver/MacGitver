@@ -58,6 +58,9 @@ public:
     void setDefaultDialogFont( const QFont& font );
     void setDefaultFixedFont( const QFont& font );
 
+    static QString defaultFontCSS();
+    static QString defaultFixedFontCSS();
+
 signals:
     void fontsChanged();
 
@@ -66,6 +69,8 @@ private:
 
     void addConfigUser( ConfigUser* user );
     void delConfigUser( ConfigUser* user );
+
+    static QString fontCSS(const QFont& font);
 
 private:
     static Config* sSelf;

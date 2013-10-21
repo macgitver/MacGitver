@@ -231,3 +231,20 @@ void Config::delConfigUser( ConfigUser* user )
     Q_ASSERT( mConfigUsers.contains( user ) );
     mConfigUsers.remove( user );
 }
+
+QString Config::fontCSS(const QFont& font)
+{
+    return QString::fromUtf8("font-family: \"%1\"; font-size: %2pt;")
+            .arg(font.family())
+            .arg(font.pointSize());
+}
+
+QString Config::defaultFontCSS()
+{
+    return fontCSS(defaultFont());
+}
+
+QString Config::defaultFixedFontCSS()
+{
+    return fontCSS(defaultFixedFont());
+}

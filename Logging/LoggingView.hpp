@@ -17,20 +17,40 @@
 #ifndef MGV_LOGGING_VIEW_H
 #define MGV_LOGGING_VIEW_H
 
+#include <QString>
+#include <QSet>
+
 #include "libHeaven/CentralUI/Views/View.hpp"
 
 class QWebView;
+class LoggingModule;
 
 class LoggingView : public Heaven::View
 {
     Q_OBJECT
 public:
-    LoggingView();
+    LoggingView(LoggingModule* module);
+    ~LoggingView();
+
+public:
+    void regenerate();
+    void clearCache();
 
 public:
     QSize sizeHint() const;
 
+private slots:
+    void clearPrefixCache();
+
 private:
+    void calculatePrefix();
+
+private:
+    QString htmlPrefix;
+    QString htmlPostfix;
+    QSet<QString> mHiddenChannels;
+    QHash< quint64, QString > mCache;
+    LoggingModule* mModule;
     QWebView* mBrowser;
 };
 

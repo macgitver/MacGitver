@@ -53,7 +53,7 @@ void HistoryEntry::populate( const Git::ObjectCommit& commit )
 
     if( !mPopulated )
     {
-        MacGitver::log( ltError, r, "Populating a HistoryEntry" );
+        MacGitver::log(Log::Error, r, "Populating a HistoryEntry");
     }
 }
 

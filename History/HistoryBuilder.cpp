@@ -136,11 +136,11 @@ void HistoryBuilder::start()
 
     dur = timer.nsecsElapsed();
     avg = double( dur ) / double( commits.count() );
-    MacGitver::log( ltInformation,
-                    trUtf8( "Walked %1 commits in %2 ns = %3 ns per commit." )
-                        .arg( commits.count() )
-                        .arg( dur )
-                        .arg( avg, 10, 'f', 2 ) );
+    MacGitver::log(Log::Information,
+                   trUtf8("Walked %1 commits in %2 ns = %3 ns per commit.")
+                        .arg(commits.count())
+                        .arg(dur)
+                        .arg(avg, 10, 'f', 2));
 
     timer.restart();
 
@@ -166,7 +166,7 @@ void HistoryBuilder::start()
         curCommit = mRepo.lookupCommit( r, currentSHA1 );
         if( !r )
         {
-            MacGitver::log( ltError, r, "Could not find a commit the RevWalker gave us." );
+            MacGitver::log(Log::Error, r, "Could not find a commit the RevWalker gave us.");
             break;
         }
 
@@ -370,9 +370,9 @@ void HistoryBuilder::start()
     dur = timer.nsecsElapsed();
     avg = double(dur) / double(mModel->rowCount());
 
-    MacGitver::log( ltInformation,
-                    trUtf8( "Glyphed %1 commits in %2 ns = %3 ns per Commit" )
-                        .arg( mModel->rowCount() )
-                        .arg( dur )
-                        .arg( avg, 10, 'f', 2 ) );
+    MacGitver::log(Log::Information,
+                   trUtf8("Glyphed %1 commits in %2 ns = %3 ns per Commit")
+                        .arg(mModel->rowCount())
+                        .arg(dur)
+                        .arg(avg, 10, 'f', 2));
 }

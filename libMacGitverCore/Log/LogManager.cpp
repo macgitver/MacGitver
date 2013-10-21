@@ -17,7 +17,12 @@
  *
  */
 
+#include <QString>
+#include <QHash>
+
 #include "libMacGitverCore/Log/LogManager.hpp"
+#include "libMacGitverCore/Log/LogTemplate.hpp"
+#include "libMacGitverCore/Log/LogConsumer.hpp"
 
 namespace Log
 {
@@ -26,6 +31,12 @@ namespace Log
     {
     public:
         Data();
+
+    public:
+        quint64 nextId;
+        Consumer* consumer;
+        QHash< QString, Template > templates;
+        QHash< QString, Channel > channels;
     };
 
     Manager::Manager(const Manager& other)
@@ -67,10 +78,87 @@ namespace Log
     {
     }
 
+    quint64 Manager::nextLogEventId()
+    {
+        return d ? d->nextId++ : 0;
+    }
+
+    void Manager::addTemplate(Template t)
+    {
+        Q_ASSERT(d && t.isValid());
+
+        if (d && t.isValid()) {
+            d->templates.insert(t.name(), t);
+        }
+    }
+
+    Template Manager::findTemplate(const QString& name) const
+    {
+        Q_ASSERT(d);
+        if (d) {
+            return d->templates.value(name, Template());
+        }
+
+        return Template();
+    }
+
+    void Manager::addChannel(Channel ch)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->channels.insert(ch.name(), ch);
+        }
+    }
+
+    Channel Manager::findChannel(const QString& name) const
+    {
+        Q_ASSERT(d);
+        return d ? d->channels.value(name, Channel()) : Channel();
+    }
+
+    Channel::List Manager::channels() const
+    {
+        Q_ASSERT(d);
+        Channel::List l;
+
+        if (d) {
+            foreach (Channel c, d->channels) {
+                l << c;
+            }
+        }
+
+        return l;
+    }
+
+    void Manager::setLogConsumer(Consumer* consumer)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            if (consumer) {
+                if (d->consumer != consumer) {
+                    if (d->consumer) {
+                        qDebug("A Log-Consumer was already set...");
+                    }
+                    d->consumer = consumer;
+                }
+            }
+            else {
+                d->consumer = NULL;
+            }
+        }
+    }
+
+    Consumer* Manager::logConsumer() const
+    {
+        return d ? d->consumer : NULL;
+    }
+
     //-- Manager::Data -------------------------------------------------------------------------- >8
 
     Manager::Data::Data()
     {
+        nextId = 1;
+        consumer = NULL;
     }
 
 }

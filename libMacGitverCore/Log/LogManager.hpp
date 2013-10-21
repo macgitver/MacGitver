@@ -21,9 +21,14 @@
 #ifndef MGV_LOG_LOG_MANAGER_HPP
 #define MGV_LOG_LOG_MANAGER_HPP
 
+#include <QtGlobal>
 #include <QSharedData>
 
 class QString;
+
+#include "libMacGitverCore/MacGitverApi.hpp"
+
+#include "libMacGitverCore/Log/LogChannel.hpp"
 
 namespace Log
 {
@@ -36,8 +41,11 @@ namespace Log
         Error
     };
 
+    class Template;
+    class Event;
+    class Consumer;
 
-    class Manager
+    class MGV_CORE_API Manager
     {
     public:
         Manager(const Manager& other);
@@ -50,7 +58,19 @@ namespace Log
         static Manager create();
 
     public:
+        quint64 nextLogEventId();
         void addMessage(Type t, const QString& message);
+
+        void addTemplate(Template t);
+        Template findTemplate(const QString& name) const;
+
+        void addChannel(Channel ch);
+        Channel findChannel(const QString& name) const;
+
+        Channel::List channels() const;
+
+        void setLogConsumer(Consumer* consumer);
+        Consumer* logConsumer() const;
 
     private:
         class Data;

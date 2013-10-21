@@ -21,18 +21,24 @@
 #ifndef MGV_LOG_LOG_EVENT_HPP
 #define MGV_LOG_LOG_EVENT_HPP
 
+#include <QtGlobal>
 #include <QSharedData>
 
 class QString;
+class QStringList;
 class QDateTime;
+
+#include "libMacGitverCore/Log/LogChannel.hpp"
 
 namespace Log
 {
 
     class Template;
 
-    class Event
+    class MGV_CORE_API Event
     {
+        friend class Channel;
+
     public:
         Event(const Event& other);
         Event();
@@ -41,16 +47,25 @@ namespace Log
         bool isValid() const;
 
     public:
-        static Event create();
+        static Event create(Template tmpl, const QString& text);
+        static Event create(Template tmpl);
 
     public:
         Template htmlTemplate() const;
+        Channel channel() const;
+
+        quint64 uniqueId() const;
 
         QDateTime timeStamp() const;
         QString html() const;
 
         void setParam(const QString& param, const QString& text);
         QString param(const QString& param) const;
+
+        QStringList paramNames() const;
+
+    private:
+        void setChannel(Channel::Data* d);
 
     private:
         class Data;

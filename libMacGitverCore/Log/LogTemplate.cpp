@@ -19,9 +19,12 @@
 
 #include <QHash>
 #include <QString>
+#include <QStringList>
+#include <QStringBuilder>
 #include <QDateTime>
 
 #include "libMacGitverCore/Log/LogTemplate.hpp"
+#include "libMacGitverCore/Log/LogEvent.hpp"
 
 namespace Log
 {
@@ -32,6 +35,8 @@ namespace Log
         Data();
 
     public:
+        QString         name;
+        QString         transformation;
     };
 
     Template::Template(const Template& other)
@@ -63,7 +68,63 @@ namespace Log
         return d;
     }
 
-    //-- Template::Data ---------------------------------------------------------------------------- >8
+    Template Template::create(const QString& name)
+    {
+        Data* d = new Data;
+        d->name = name;
+        return d;
+    }
+
+    QString Template::name() const
+    {
+        return d ? d->name : QString();
+    }
+
+    void Template::setTransformation(const QString& transformText)
+    {
+        Q_ASSERT(d);
+
+        if (d) {
+            d->transformation = transformText;
+        }
+    }
+
+    QString Template::apply(Event event) const
+    {
+        if (!d) {
+            return QString();
+        }
+
+        QString s = d->transformation;
+
+        if (s.isEmpty()) {
+            s = event.param(QString());
+        }
+        else {
+            s.replace(QLatin1String("$$"), event.param(QString()));
+        }
+
+        foreach (QString pname, event.paramNames()) {
+            if (!pname.isEmpty()) {
+                QString key = QChar(L'$') % pname % QChar(L'$');
+                QString value = event.param(pname);
+
+                value.replace(QChar(L'&'), QLatin1String("&amp;"));
+                value.replace(QChar(L'<'), QLatin1String("&lt;"));
+
+                s.replace(key, value);
+            }
+        }
+
+        return
+            QLatin1Literal("<a name=\"") %
+            QString::number(event.uniqueId()) %
+            QLatin1Literal("\">") %
+            s %
+            QLatin1Literal("</a>");
+    }
+
+    //-- Template::Data ------------------------------------------------------------------------- >8
 
     Template::Data::Data()
     {

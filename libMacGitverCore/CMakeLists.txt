@@ -22,6 +22,7 @@ SET( SRC_FILES
     Log/LogChannel.cpp
     Log/LogTemplate.cpp
     Log/LogManager.cpp
+    Log/LogConsumer.cpp
 
     Config/Config.cpp
     Config/ConfigUser.cpp
@@ -67,6 +68,7 @@ SET( PUB_HDR_FILES
     Log/LogChannel.hpp
     Log/LogTemplate.hpp
     Log/LogManager.hpp
+    Log/LogConsumer.hpp
 
     MacGitver/Module.h
     MacGitver/Modules.h

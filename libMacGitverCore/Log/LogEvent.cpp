@@ -23,7 +23,10 @@
 
 #include "libMacGitverCore/Log/LogEvent.hpp"
 #include "libMacGitverCore/Log/LogChannel.hpp"
+#include "libMacGitverCore/Log/LogManager.hpp"
 #include "libMacGitverCore/Log/LogTemplate.hpp"
+
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 namespace Log
 {
@@ -34,9 +37,10 @@ namespace Log
         Data();
 
     public:
+        Channel::Data*              channel;
         Template                    htmlTemplate;
+        quint64                     id;
         QDateTime                   timeStamp;
-        QString                     text;
         QHash< QString, QString >   parameters;
     };
 
@@ -64,9 +68,37 @@ namespace Log
         return *this;
     }
 
+    Event Event::create(Template tmpl, const QString& text)
+    {
+        Data* d = new Data;
+        d->htmlTemplate = tmpl;
+        d->parameters[QString()] = text;
+        return d;
+    }
+
+    Event Event::create(Template tmpl)
+    {
+        Data* d = new Data;
+        d->htmlTemplate = tmpl;
+        return d;
+    }
+
     bool Event::isValid() const
     {
         return d;
+    }
+
+    void Event::setChannel(Channel::Data* channel)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->channel = channel;
+        }
+    }
+
+    Channel Event::channel() const
+    {
+        return d->channel;
     }
 
     Template Event::htmlTemplate() const
@@ -102,11 +134,23 @@ namespace Log
         return QString();
     }
 
+    QStringList Event::paramNames() const
+    {
+        return d ? d->parameters.keys() : QStringList();
+    }
+
+    quint64 Event::uniqueId() const
+    {
+        return d ? d->id : 0;
+    }
+
     //-- Event::Data ---------------------------------------------------------------------------- >8
 
     Event::Data::Data()
     {
+        channel = NULL;
         timeStamp = QDateTime::currentDateTime();
+        id = MacGitver::log().nextLogEventId();
     }
 
 }

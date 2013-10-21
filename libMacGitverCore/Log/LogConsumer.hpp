@@ -18,53 +18,29 @@
  */
 
 #pragma once
-#ifndef MGV_LOG_LOG_CHANNEL_HPP
-#define MGV_LOG_LOG_CHANNEL_HPP
+#ifndef MGV_LOG_LOG_CONSUMER_HPP
+#define MGV_LOG_LOG_CONSUMER_HPP
 
-#include <QSharedData>
-#include <QVector>
-
-class QString;
+#include <QtGlobal>
 
 #include "libMacGitverCore/MacGitverApi.hpp"
-
-namespace Heaven
-{
-
-    class IconRef;
-
-}
 
 namespace Log
 {
 
+    class Channel;
     class Event;
 
-    class MGV_CORE_API Channel
+    class MGV_CORE_API Consumer
     {
     public:
-        typedef QVector<Channel> List;
+        Consumer();
+        virtual ~Consumer();
 
     public:
-        class Data;
-        Channel(Data* _d);
-        Channel(const Channel& other);
-        Channel();
-        ~Channel();
-        Channel& operator=(const Channel& other);
-        bool isValid() const;
-
-    public:
-        static Channel create(const QString& name);
-
-    public:
-        QString name() const;
-        Heaven::IconRef icon() const;
-
-        void addLogEvent(Event event);
-
-    private:
-        QExplicitlySharedDataPointer<Data> d;
+        virtual void channelAdded(Channel channel) = 0;
+        virtual void logCleaned(quint64 upToId) = 0;
+        virtual void eventAdded(Event e) = 0;
     };
 
 }

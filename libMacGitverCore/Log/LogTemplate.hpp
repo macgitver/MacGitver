@@ -25,10 +25,14 @@
 
 class QString;
 
+#include "libMacGitverCore/MacGitverApi.hpp"
+
 namespace Log
 {
 
-    class Template
+    class Event;
+
+    class MGV_CORE_API Template
     {
     public:
         Template(const Template& other);
@@ -38,7 +42,14 @@ namespace Log
         bool isValid() const;
 
     public:
-        static Template create();
+        static Template create(const QString& name);
+
+    public:
+        QString name() const;
+        void setTransformation(const QString& transformText);
+
+    public:
+        QString apply(Event event) const;
 
     private:
         class Data;

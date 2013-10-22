@@ -29,6 +29,31 @@
 namespace Log
 {
 
+    /**
+     * @class       Template
+     * @brief       A transformation template for Log::Event objects
+     *
+     * In order to display Event objects in a QWebView, their content has to be wrapped nicely into
+     * HTML. This wrapping is the task of instances of this class.
+     *
+     * Each template has a name, which must be unique in the logging system. Templates have to be
+     * registered with the Log::Manager in order to be used.
+     *
+     * For every template, a transformation has to be defined. A transformation is a string with
+     * replacement markers embedded. Replacement markers are any letters covered in dollar signs.
+     *
+     * The text of the marker is used to search for a parameter inside the event and the marker is
+     * then replaced with the content of the parameter.
+     *
+     * If a template has no transformation assigned, then the event's unnamed parameter is used as
+     * the transformation. If the template has a transformation, the replacement marker without text
+     * (two consecutive dollar signs) is treated specially. It is replaced before any other
+     * replacements are processed.
+     *
+     * This allows events to use templates and still have full control over the layout.
+     *
+     */
+
     class Template::Data : public QSharedData
     {
     public:
@@ -39,35 +64,78 @@ namespace Log
         QString         transformation;
     };
 
+    /**
+     * @brief       Copy constructor
+     *
+     * @param[in]   other   Tempalte to copy.
+     *
+     */
     Template::Template(const Template& other)
         : d(other.d)
     {
     }
 
+    /**
+     * @internal
+     * @brief       Create constructor
+     *
+     * @param[in]   _d      Creates a template with private data
+     *
+     */
     Template::Template(Data *_d)
         : d(_d)
     {
     }
 
+    /**
+     * @brief       Default constructor
+     *
+     */
     Template::Template()
     {
     }
 
+    /**
+     * @brief       Destructor.
+     *
+     */
     Template::~Template()
     {
     }
 
+    /**
+     * @brief       Assignment operator
+     *
+     * @param[in]   other   Template to assign to this.
+     *
+     * @return      A reference to this
+     *
+     */
     Template& Template::operator=(const Template& other)
     {
         d = other.d;
         return *this;
     }
 
+    /**
+     * @brief       Validity check
+     *
+     * @return      `true`, if this is a valid template object, `false` otherwise.
+     *
+     */
     bool Template::isValid() const
     {
         return d;
     }
 
+    /**
+     * @brief       Static creator
+     *
+     * @param[in]   name    The name of the template to create
+     *
+     * @return      A new template.
+     *
+     */
     Template Template::create(const QString& name)
     {
         Data* d = new Data;
@@ -75,11 +143,23 @@ namespace Log
         return d;
     }
 
+    /**
+     * @brief       Get the name of the template
+     *
+     * @return      Name of the template
+     *
+     */
     QString Template::name() const
     {
         return d ? d->name : QString();
     }
 
+    /**
+     * @brief       Set the transformation for this template
+     *
+     * @param[in]   transformText   The transformation to be used with this template.
+     *
+     */
     void Template::setTransformation(const QString& transformText)
     {
         Q_ASSERT(d);
@@ -89,6 +169,14 @@ namespace Log
         }
     }
 
+    /**
+     * @brief       Apply this template to an event
+     *
+     * @param[in]   event   The event to apply to
+     *
+     * @return      The transformed template text filled with parameters from the event.
+     *
+     */
     QString Template::apply(Event event) const
     {
         if (!d) {

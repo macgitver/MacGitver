@@ -36,6 +36,19 @@
 namespace Log
 {
 
+    /**
+     * @class       Manager
+     * @brief       Manages the logging facilities
+     *
+     * The Log::Manager class is a central singleton, which is accessible via the static
+     * MacGitver::log() method. Its purpose is to manage the logging facilities of MacGitver.
+     *
+     * In MacGitver, all log entries are categoriyed into channels. Each entry consists of a set of
+     * strings (parameters) and is associated with a template. The template is responsible for
+     * rendering the parameters into HTML, which is then viewed by the consumer.
+     *
+     */
+
     class Manager::Data : public QSharedData
     {
     public:
@@ -48,35 +61,88 @@ namespace Log
         QHash< QString, Channel > channels;
     };
 
+    /**
+     * @brief       Copy constructor
+     *
+     * @param[in]   other   Manager to create a copy of
+     *
+     * Actually, there exists only one Manager. This method is to keep it possible to use the
+     * Manager as a value class.
+     */
     Manager::Manager(const Manager& other)
         : d(other.d)
     {
     }
 
+    /**
+     * @internal
+     * @brief       Constructor
+     *
+     * @param[in]   _d  The internally associated data.
+     *
+     * Creates a manager internally.
+     *
+     */
     Manager::Manager(Data* _d)
         : d(_d)
     {
     }
 
+    /**
+     * @brief       Default constructor
+     *
+     * Required, but should not be used. Creates an invalid Manager object.
+     *
+     */
     Manager::Manager()
     {
     }
 
+    /**
+     * @brief       Destructor
+     *
+     * Does nothing but release the internal data.
+     *
+     */
     Manager::~Manager()
     {
     }
 
+    /**
+     * @brief       Assignment operator
+     *
+     * @param[in]   other   The Manager object to assign from.
+     *
+     * @return      A reference to this.
+     *
+     * Just implemented to gain value class semantics.
+     *
+     */
     Manager& Manager::operator=(const Manager& other)
     {
         d = other.d;
         return *this;
     }
 
+    /**
+     * @brief       Test for validiy
+     *
+     * @return      `true`, if this is the global singleton and is valid; `false` otherwise.
+     *
+     */
     bool Manager::isValid() const
     {
         return d;
     }
 
+    /**
+     * @internal
+     *
+     * @brief       Creator function
+     *
+     * @return      Returns a new Manager
+     *
+     */
     Manager Manager::create()
     {
         Manager m(new Data);
@@ -84,6 +150,13 @@ namespace Log
         return m;
     }
 
+    /**
+     * @internal
+     * @brief       create the default channels
+     *
+     * This method sets up the default channels that are used for convenience logging.
+     *
+     */
     void Manager::createDefaultChannels()
     {
         Channel ch = Channel::create(CHNAME_ERROR);
@@ -137,6 +210,16 @@ namespace Log
         addChannel(ch);
     }
 
+    /**
+     * @brief       Add a message to a default channel
+     *
+     * Adds a simple message event to one of the default channels. No special template is assigned.
+     *
+     * @param[in]   message The message to log.
+     *
+     * @param[in]   t       Type of the message. This is one of the Log::Type enumerations. It
+     *                      defaults to Normal.
+     */
     void Manager::addMessage(const QString& message, Type t)
     {
         QString channelName;
@@ -157,16 +240,39 @@ namespace Log
         Event::create(channel, message);
     }
 
+    /**
+     * @brief       Add an event to a channel
+     *
+     * This is a convenience method to add an event to a channel.
+     *
+     * @param[in]   ch      The channel to add the event to.
+     *
+     * @param[in]   event   The event to add to the channel.
+     *
+     */
     void Manager::addEvent(Channel ch, Event event)
     {
         ch.addEvent(event);
     }
 
+    /**
+     * @internal
+     * @brief       Get tne next event id
+     *
+     * @return      The next available unique id for events.
+     *
+     */
     quint64 Manager::nextLogEventId()
     {
         return d ? d->nextId++ : 0;
     }
 
+    /**
+     * @brief       Add a template
+     *
+     * @param[in]   t       The template to add.
+     *
+     */
     void Manager::addTemplate(Template t)
     {
         Q_ASSERT(d && t.isValid());
@@ -176,6 +282,15 @@ namespace Log
         }
     }
 
+    /**
+     * @brief       Search for a template by its name
+     *
+     * @param[in]   name    The template name to look for.
+     *
+     * @return      Either a valid Template object if it was found or an invalid one if it could
+     *              not be found.
+     *
+     */
     Template Manager::findTemplate(const QString& name) const
     {
         Q_ASSERT(d);
@@ -186,6 +301,15 @@ namespace Log
         return Template();
     }
 
+    /**
+     * @brief       Add a logging channel
+     *
+     * @param[in]   ch      Adds a logging channel to the system.
+     *
+     * If the consumer is already registered, it will be informed about the new channel being
+     * created.
+     *
+     */
     void Manager::addChannel(Channel ch)
     {
         Q_ASSERT(d);
@@ -198,12 +322,27 @@ namespace Log
         }
     }
 
+    /**
+     * @brief       Search for a channel by its name
+     *
+     * @param[in]   name    The channel name to look for
+     *
+     * @return      If found, a valid Channel object, otherwise a default constructed (invalid)
+     *              one.
+     *
+     */
     Channel Manager::findChannel(const QString& name) const
     {
         Q_ASSERT(d);
         return d ? d->channels.value(name, Channel()) : Channel();
     }
 
+    /**
+     * @brief       Get the list of channels
+     *
+     * @return      A Channel::List containing all registered channels.
+     *
+     */
     Channel::List Manager::channels() const
     {
         Q_ASSERT(d);
@@ -218,6 +357,17 @@ namespace Log
         return l;
     }
 
+    /**
+     * @brief       Set the log consumer
+     *
+     * @param[in]   consumer    The new consumer to set.
+     *
+     * There can only be one consumer at a time. If one is already set, a warning will be output to
+     * the debugging log.
+     *
+     * If @a consumer is `NULL` the consumer will be removed.
+     *
+     */
     void Manager::setLogConsumer(Consumer* consumer)
     {
         Q_ASSERT(d);
@@ -236,11 +386,27 @@ namespace Log
         }
     }
 
+    /**
+     * @brief       Get the log consumer
+     *
+     * @return      The currently installed log consumer or `NULL` if no consumer is installed.
+     *
+     */
     Consumer* Manager::logConsumer() const
     {
         return d ? d->consumer : NULL;
     }
 
+    /**
+     * @internal
+     * @brief       Inform log consumer of new event
+     *
+     * @param[in]   event   The new event that was added to a channel.
+     *
+     * This method is internally called from the Channel when a new Event was added to it. If a
+     * Consumer is installed, it will be informed about the new event.
+     *
+     */
     void Manager::eventAdded(Event event)
     {
         Q_ASSERT(d);

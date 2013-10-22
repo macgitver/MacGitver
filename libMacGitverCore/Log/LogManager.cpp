@@ -137,7 +137,7 @@ namespace Log
         addChannel(ch);
     }
 
-    void Manager::addMessage(Type t, const QString& message)
+    void Manager::addMessage(const QString& message, Type t)
     {
         QString channelName;
         switch(t) {

@@ -131,25 +131,24 @@ void MacGitver::unregisterView( const Heaven::ViewIdentifier& identifier )
 
 void MacGitver::log( Log::Type type, const QString& logMessage )
 {
-    log().addMessage( type, logMessage );
+    log().addMessage(logMessage, type);
 }
 
 void MacGitver::log( Log::Type type, const char* logMessage )
 {
-    log().addMessage( type, QString::fromUtf8( logMessage ) );
+    log().addMessage(QString::fromUtf8(logMessage), type);
 }
 
 void MacGitver::log( Log::Type type, const Git::Result& r, const char* logMessage )
 {
     if( logMessage )
     {
-        log().addMessage( type, QString::fromUtf8( "GitWrap-Error: %1\n(%2)" )
-                          .arg( r.errorText() ).arg( QLatin1String( logMessage ) ) );
+        log().addMessage(QString::fromUtf8("GitWrap-Error: %1\n(%2)")
+                         .arg(r.errorText()).arg(QLatin1String(logMessage)), type);
     }
     else
     {
-        log().addMessage( type, QString::fromUtf8( "GitWrap-Error: %1" )
-                          .arg( r.errorText() ) );
+        log().addMessage(QString::fromUtf8("GitWrap-Error: %1").arg(r.errorText()), type);
     }
 }
 

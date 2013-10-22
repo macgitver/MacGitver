@@ -30,6 +30,8 @@ class QString;
 
 #include "libMacGitverCore/Log/LogChannel.hpp"
 
+class MacGitverPrivate;
+
 namespace Log
 {
 
@@ -48,6 +50,7 @@ namespace Log
 
     class MGV_CORE_API Manager
     {
+        friend class ::MacGitverPrivate;
         friend class Channel;
         friend class Event;
 
@@ -59,10 +62,7 @@ namespace Log
         bool isValid() const;
 
     public:
-        static Manager create();
-
-    public:
-        void addMessage(Type t, const QString& message);
+        void addMessage(const QString& message, Type t = Normal);
         void addEvent(Channel ch, Event event);
 
         void addTemplate(Template t);
@@ -82,6 +82,7 @@ namespace Log
         void eventAdded(Event event);
 
     private:
+        static Manager create();
         class Data;
         Manager(Data* _d);
         QExplicitlySharedDataPointer<Data> d;

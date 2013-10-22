@@ -49,6 +49,7 @@ namespace Log
     class MGV_CORE_API Manager
     {
         friend class Channel;
+        friend class Event;
 
     public:
         Manager(const Manager& other);
@@ -61,8 +62,8 @@ namespace Log
         static Manager create();
 
     public:
-        quint64 nextLogEventId();
         void addMessage(Type t, const QString& message);
+        void addEvent(Channel ch, Event event);
 
         void addTemplate(Template t);
         Template findTemplate(const QString& name) const;
@@ -76,6 +77,7 @@ namespace Log
         Consumer* logConsumer() const;
 
     private:
+        quint64 nextLogEventId();
         void createDefaultChannels();
         void eventAdded(Event event);
 

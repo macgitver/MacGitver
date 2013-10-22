@@ -83,6 +83,11 @@ namespace Log
         return d;
     }
 
+    void Event::create(Channel channel, const QString& text)
+    {
+        channel.addEvent(create(channel.defaultTemplate(), text));
+    }
+
     bool Event::isValid() const
     {
         return d;

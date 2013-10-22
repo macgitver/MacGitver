@@ -154,8 +154,12 @@ namespace Log
             return;
         }
 
-        Event e = Event::create(channel.defaultTemplate(), message);
-        channel.addEvent(e);
+        Event::create(channel, message);
+    }
+
+    void Manager::addEvent(Channel ch, Event event)
+    {
+        ch.addEvent(event);
     }
 
     quint64 Manager::nextLogEventId()

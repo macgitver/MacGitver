@@ -53,6 +53,7 @@ namespace Log
     public:
         static Event create(Template tmpl, const QString& text);
         static Event create(Template tmpl);
+        static void create(Channel channel, const QString& text);
 
     public:
         Template htmlTemplate() const;

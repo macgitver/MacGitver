@@ -232,6 +232,18 @@ void Config::delConfigUser( ConfigUser* user )
     mConfigUsers.remove( user );
 }
 
+/**
+ * @internal
+ * @brief       Convert a QFont to a string that can be embedded into CSS.
+ *
+ * @param[in]   font    The font to convert to.
+ *
+ * @return      A QString that can be embedded into CSS.
+ *
+ * This method considers font family and size. Weight and style and anything
+ * else is simply ignored.
+ *
+ */
 QString Config::fontCSS(const QFont& font)
 {
     return QString::fromUtf8("font-family: \"%1\"; font-size: %2pt;")
@@ -239,11 +251,29 @@ QString Config::fontCSS(const QFont& font)
             .arg(font.pointSize());
 }
 
+/**
+ * @brief       Get the default font as string embeddable into CSS.
+ *
+ * @return      A QString that can be embedded into CSS.
+ *
+ * This method considers font family and size. Weight and style and anything
+ * else is simply ignored.
+ *
+ */
 QString Config::defaultFontCSS()
 {
     return fontCSS(defaultFont());
 }
 
+/**
+ * @brief       Get the default fixed font as string embeddable into CSS.
+ *
+ * @return      A QString that can be embedded into CSS.
+ *
+ * This method considers font family and size. Weight and style and anything
+ * else is simply ignored.
+ *
+ */
 QString Config::defaultFixedFontCSS()
 {
     return fontCSS(defaultFixedFont());

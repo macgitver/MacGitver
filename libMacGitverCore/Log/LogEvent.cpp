@@ -148,12 +148,34 @@ namespace Log
      * @return      The new Event object.
      *
      */
-
     Event Event::create(Template tmpl)
     {
         Data* d = new Data;
         d->htmlTemplate = tmpl;
         return d;
+    }
+
+    /**
+     * @brief       Creates a new event
+     *
+     * The event is not assigned to a channel and can thus be still modified before the Consumer
+     * is notified about the new event.
+     *
+     * @param[in]   templ   The name of the template to assign to the event.
+     *
+     * @return      The new Event object. If the @a templ template cannot be looked up, an invalid
+     *              Event object is returned.
+     *
+     */
+    Event Event::create(const QString& templ)
+    {
+        Template t = MacGitver::log().findTemplate(templ);
+
+        if (!t.isValid()) {
+            return Event();
+        }
+
+        return create(t);
     }
 
     /**

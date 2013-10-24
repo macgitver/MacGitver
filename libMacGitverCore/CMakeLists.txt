@@ -53,6 +53,8 @@ SET( SRC_FILES
 
     RepoMan/Private/Dumper.cpp
 
+    RepoMan/Config/RepoManConfigPage.cpp
+
     Widgets/FontSelectWidget.cpp
     Widgets/LineEdit.cpp
     Widgets/StringSelectorWidget.cpp
@@ -137,6 +139,8 @@ SET( PRI_HDR_FILES
     RepoMan/Private/TagPrivate.hpp
     RepoMan/Private/Dumper.hpp
 
+    RepoMan/Config/RepoManConfigPage.hpp
+
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h
     Widgets/RepoStateWidget.hpp
@@ -146,6 +150,8 @@ SET( UI_FILES
 
     Config/Ui/ConfigDialog.ui
     Config/Ui/GeneralConfigPage.ui
+
+    RepoMan/Config/RepoManConfigPage.ui
 
     App/AboutDlg.ui
 )

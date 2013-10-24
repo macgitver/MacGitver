@@ -40,7 +40,6 @@
 #include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
-#include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
 #include "libMacGitverCore/Widgets/RepoStateWidget.hpp"
 
 #include "ui_AboutDlg.h"
@@ -193,8 +192,6 @@ void MgvPrimaryWindow::onHelpAbout()
 void MgvPrimaryWindow::onToolsPreferences()
 {
     ConfigDialog d;
-    d.addPage( new GeneralConfigPage( &d ) );
-    MacGitverPrivate::sModules->setupConfigPages( &d );
     d.exec();
 }
 

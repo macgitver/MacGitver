@@ -50,5 +50,12 @@ ADD_CUSTOM_GTEST(
     ${MOC_FILES}
 )
 
-TARGET_LINK_LIBRARIES(testMacGitverCore MacGitverCore GitWrap)
+TARGET_LINK_LIBRARIES(
+    testMacGitverCore
+
+    LINK_PRIVATE
+        MacGitverCore
+        GitWrap
+)
+
 ADVANCE_TO_QT_PROJECT(testMacGitverCore)

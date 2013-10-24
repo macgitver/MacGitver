@@ -72,6 +72,13 @@ namespace RM
         return d->id;
     }
 
+    QString Ref::displaySha1() const
+    {
+        return id().toString(8);
+    }
+
+    //-- Internal::RefPrivate ------------------------------------------------------------------- >8
+
     RefPrivate::RefPrivate(Ref* pub, RefTypes _type, const Git::Reference& _ref)
         : BasePrivate(pub)
         , type(_type)

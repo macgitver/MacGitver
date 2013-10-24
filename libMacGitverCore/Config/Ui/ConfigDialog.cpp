@@ -33,8 +33,6 @@ ConfigDialog::ConfigDialog()
     connect( ui->buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()),
              this, SLOT(onApply()) );
 
-    addPage(new GeneralConfigPage(this));   // Move to a Cpp
-
     setupConfigPages();
 }
 

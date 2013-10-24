@@ -48,4 +48,44 @@ public:
     virtual int configPagePriority() const = 0;
 };
 
+#define DECLARE_NESTED_PAGE_CREATOR() \
+    public: \
+        static void registerPage(); \
+        static void unregisterPage(); \
+    private: \
+        class PageCreator
+
+#define IMPLEMENT_NESTED_PAGE_CREATOR(CLASS, PRIO) \
+    class CLASS::PageCreator : public ConfigPageProvider \
+    { \
+    public: \
+        PageCreator()  { ConfigDialog::registerProvider(this);   sSelf = this; } \
+        ~PageCreator() { ConfigDialog::unregisterProvider(this); sSelf = NULL; } \
+        \
+        void setupConfigPages(ConfigDialog* dialog) \
+        { \
+            dialog->addPage(new CLASS(dialog)); \
+        } \
+        \
+        int configPagePriority() const \
+        { \
+            return PRIO; \
+        } \
+        \
+        static PageCreator* sSelf; \
+    }; \
+    \
+    CLASS::PageCreator* CLASS::PageCreator::sSelf = NULL; \
+    \
+    void CLASS::registerPage() \
+    { \
+        new PageCreator; \
+    } \
+    \
+    void CLASS::unregisterPage() \
+    { \
+        delete PageCreator::sSelf; \
+    }
+
+
 #endif

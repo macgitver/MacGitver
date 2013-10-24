@@ -25,6 +25,7 @@
 #include "libMacGitverCore/App/MacGitverPrivate.hpp"
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
 #include "libMacGitverCore/Config/Config.h"
+#include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
 #include "libMacGitverCore/MacGitver/Modules.h"
 #include "libMacGitverCore/MacGitver/RepoManager.hpp"
 
@@ -61,6 +62,8 @@ MacGitverPrivate::MacGitverPrivate( MacGitver* owner )
 
 MacGitverPrivate::~MacGitverPrivate()
 {
+    unregisterGlobalConfigPages();
+
     delete sModules;    sModules    = NULL;
     delete sRepoMan;    sRepoMan    = NULL;
     delete sLog;        sLog        = NULL;
@@ -70,6 +73,7 @@ MacGitverPrivate::~MacGitverPrivate()
 
 void MacGitverPrivate::boot()
 {
+    registerGlobalConfigPages();
     loadLevels();
     sModules->initialize();
 
@@ -150,6 +154,16 @@ void MacGitver::log( LogType type, const Git::Result& r, const char* logMessage 
 void MacGitverPrivate::loadLevels()
 {
     Config::self().loadLevels( QLatin1String( ":/Xml/Levels.xml" ) );
+}
+
+void MacGitverPrivate::registerGlobalConfigPages()
+{
+    GeneralConfigPage::registerPage();
+}
+
+void MacGitverPrivate::unregisterGlobalConfigPages()
+{
+    GeneralConfigPage::unregisterPage();
 }
 
 int MacGitver::exec()

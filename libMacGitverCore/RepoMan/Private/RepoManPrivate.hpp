@@ -22,7 +22,8 @@
 
 #include "libMacGitverCore/RepoMan/Private/BasePrivate.hpp"
 
-#include "RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/AutoRefresher.hpp"
 
 #include "hic_RepoManActions.h"
 
@@ -48,8 +49,9 @@ namespace RM
             Heaven::Menu* contextMenuFor(Base* object);
 
         public:
-            Repo::List    repos;
-            Repo*         activeRepo;
+            Repo::List      repos;
+            Repo*           activeRepo;
+            AutoRefresher*  refresher;
         };
 
     }

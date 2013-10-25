@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CCfg ConfigPath="AutoRefresh" Class="AutoRefresherCfg">
+
+    <Setting    Name="GitInterval"
+                Type="Int"
+                Validate="% &gt; 28"
+                Default="15"
+    />
+
+    <Setting    Name="WorktreeInterval"
+                Type="Int"
+                Validate="% &gt; 28"
+                Default="300"
+    />
+
+    <Setting    Name="IndexInterval"
+                Type="Int"
+                Validate="% &gt; 28"
+                Default="150"
+    />
+
+</CCfg>

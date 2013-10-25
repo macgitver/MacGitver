@@ -37,6 +37,7 @@ SET( SRC_FILES
     MacGitver/Modules.cpp
     MacGitver/GitPatchConsumer.cpp
 
+    RepoMan/AutoRefresher.cpp
     RepoMan/Base.cpp
     RepoMan/Ref.cpp
     RepoMan/Branch.cpp
@@ -125,6 +126,8 @@ SET( PRI_HDR_FILES
     Config/Ui/ConfigDialog.hpp
     Config/Ui/GeneralConfigPage.hpp
 
+    RepoMan/AutoRefresher.hpp
+
     RepoMan/Private/BasePrivate.hpp
     RepoMan/Private/BranchPrivate.hpp
     RepoMan/Private/CollectionNodePrivate.hpp
@@ -169,6 +172,11 @@ SET(RCC_FILES
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
+SET(CCFG_FILES
+    RepoMan/AutoRefresherCfg.ccfg
+)
+
+CFGCOMP(CFG_FILES ${CCFG_FILES})
 QT_UIC( UIC_FILES ${UI_FILES} )
 QT_MOC( MOC_FILES ${HDR_FILES} )
 QT_RCC( RCC_DATA QRC_FILES ${RCC_FILES} )
@@ -184,6 +192,7 @@ ADD_QT_LIBRARY(
     ${HIC_FILES} ${HID_FILES}
     ${QRC_FILES}
     ${RCC_DATA}
+    ${CFG_FILES} ${CCFG_FILES}
 )
 
 TARGET_LINK_LIBRARIES(

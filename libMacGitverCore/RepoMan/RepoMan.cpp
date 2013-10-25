@@ -221,6 +221,7 @@ namespace RM
     RepoManPrivate::RepoManPrivate(RepoMan* _pub)
         : BasePrivate(_pub)
         , activeRepo(NULL)
+        , refresher(new AutoRefresher(_pub))
     {
         setupActions(_pub);
     }

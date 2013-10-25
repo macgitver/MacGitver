@@ -34,6 +34,8 @@ WriteClassSource::WriteClassSource( const QString& outFile, const QString& heade
 void WriteClassSource::generate()
 {
     mOutStream << "\n"
+                  "#include <QVariant>\n"
+                  "\n"
                   "#include \"" << mHeaderName << "\"\n"
                   "\n"
                << mSection.className() << "::" << mSection.className() << "( QObject* parent )\n"

@@ -28,7 +28,7 @@ class MGV_CORE_API ConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    ConfigPage( ConfigDialog* dlg );
+    ConfigPage(ConfigDialog* dlg);
     virtual ~ConfigPage();
 
 public:
@@ -38,6 +38,7 @@ public:
     virtual QString groupName() const = 0;
 
     virtual void apply() = 0;
+    virtual void init() = 0;
 
 protected:
     void setModified( bool value = true );

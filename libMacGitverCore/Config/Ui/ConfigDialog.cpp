@@ -84,6 +84,8 @@ void ConfigDialog::addPage( ConfigPage* page )
     QByteArray fullPageId = page->groupId() + "/" + page->pageId();
     mPagesById.insert( fullPageId, page );
     mPageIdsByTree.insert( pageItem, fullPageId );
+
+    page->init();
 }
 
 void ConfigDialog::setModified( ConfigPage* page, bool value )

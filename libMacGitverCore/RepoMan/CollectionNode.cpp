@@ -118,4 +118,9 @@ namespace RM
         return Heaven::IconRef::fromString(QChar(L'#') % s % QLatin1Literal("@24"));
     }
 
+    bool CollectionNodePrivate::inherits(ObjTypes type) const
+    {
+        return type == CollectionNodeObject || BasePrivate::inherits(type);
+    }
+
 }

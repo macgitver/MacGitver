@@ -20,7 +20,7 @@
 #ifndef REPOMAN_REPO_MAN_PRIVATE_HPP
 #define REPOMAN_REPO_MAN_PRIVATE_HPP
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "libMacGitverCore/RepoMan/Private/BasePrivate.hpp"
 
 #include "RepoMan/RepoMan.hpp"
 

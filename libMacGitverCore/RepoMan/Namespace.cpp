@@ -123,4 +123,9 @@ namespace RM
         return QLatin1String("Namespace");
     }
 
+    bool NamespacePrivate::inherits(ObjTypes type) const
+    {
+        return type == NamespaceObject || BasePrivate::inherits(type);
+    }
+
 }

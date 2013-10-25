@@ -105,6 +105,7 @@ namespace RM
             virtual void postRefreshChildren();
             virtual void postCreation();
             virtual void preTerminate();
+            virtual bool inherits(ObjTypes type) const;
             virtual ObjTypes objType() const = 0;
             virtual void dumpSelf(Dumper& dumper) const = 0;
         };

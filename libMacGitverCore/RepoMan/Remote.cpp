@@ -116,4 +116,9 @@ namespace RM
         return QLatin1String("Remote");
     }
 
+    bool RemotePrivate::inherits(ObjTypes type) const
+    {
+        return type == RemoteObject || BasePrivate::inherits(type);
+    }
+
 }

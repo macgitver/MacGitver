@@ -73,4 +73,9 @@ namespace RM
         return QLatin1String("RefLog");
     }
 
+    bool RefLogPrivate::inherits(ObjTypes type) const
+    {
+        return type == RefLogObject || BasePrivate::inherits(type);
+    }
+
 }

@@ -291,7 +291,13 @@ namespace RM
         return d->icon();
     }
 
-    //-- BasePrivate -------------------------------------------------------------------------------
+    bool Base::inheritsRepoManType(ObjTypes type) const
+    {
+        RM_CD(Base);
+        return d->inherits(type);
+    }
+
+    //-- BasePrivate ---------------------------------------------------------------------------- >8
 
     BasePrivate::BasePrivate(Base* pub)
         : mPub(pub)
@@ -637,6 +643,11 @@ namespace RM
     Heaven::IconRef BasePrivate::icon() const
     {
         return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % QLatin1Literal("@24"));
+    }
+
+    bool BasePrivate::inherits(ObjTypes type) const
+    {
+        return false;
     }
 
 }

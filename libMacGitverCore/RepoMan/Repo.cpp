@@ -762,4 +762,9 @@ namespace RM
         return QLatin1String("Repo");
     }
 
+    bool RepoPrivate::inherits(ObjTypes type) const
+    {
+        return type == RepoObject || BasePrivate::inherits(type);
+    }
+
 }

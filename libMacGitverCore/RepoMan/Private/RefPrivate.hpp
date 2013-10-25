@@ -40,6 +40,7 @@ namespace RM
             void preTerminate();
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
+            bool inherits(ObjTypes type) const;
 
         public:
             RefTypes            type;

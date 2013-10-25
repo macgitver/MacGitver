@@ -44,6 +44,7 @@ namespace RM
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             Heaven::IconRef icon() const;
+            bool inherits(ObjTypes type) const;
 
         public:
             CollectionTypes ctype;

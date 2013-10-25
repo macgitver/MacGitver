@@ -95,4 +95,9 @@ namespace RM
         return QLatin1String("RefTreeNode");
     }
 
+    bool RefTreeNodePrivate::inherits(ObjTypes type) const
+    {
+        return type == RefTreeNodeObject || BasePrivate::inherits(type);
+    }
+
 }

@@ -90,4 +90,9 @@ namespace RM
         return QLatin1String("Submodule");
     }
 
+    bool SubmodulePrivate::inherits(ObjTypes type) const
+    {
+        return type == SubmoduleObject || RepoPrivate::inherits(type);
+    }
+
 }

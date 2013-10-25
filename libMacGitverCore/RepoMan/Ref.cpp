@@ -150,4 +150,9 @@ namespace RM
         return QLatin1String("Ref");
     }
 
+    bool RefPrivate::inherits(ObjTypes type) const
+    {
+        return type == RefObject || BasePrivate::inherits(type);
+    }
+
 }

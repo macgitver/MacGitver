@@ -116,4 +116,9 @@ namespace RM
         return QLatin1String("Branch");
     }
 
+    bool BranchPrivate::inherits(ObjTypes type) const
+    {
+        return type == BranchObject || RefPrivate::inherits(type);
+    }
+
 }

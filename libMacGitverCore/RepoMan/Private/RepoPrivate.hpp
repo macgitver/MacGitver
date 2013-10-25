@@ -41,6 +41,7 @@ namespace RM
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
+            bool inherits(ObjTypes type) const;
 
         public:
             Ref*        findReference(  const Git::Reference& ref,          bool create = false);

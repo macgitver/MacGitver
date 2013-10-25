@@ -112,6 +112,11 @@ namespace RM
         template< class T >
         bool isA() const;
 
+        template< class T >
+        bool inheritsRepoManType() const;
+
+        bool inheritsRepoManType(ObjTypes type) const;
+
         Heaven::IconRef icon() const;
 
         QString typeName() const;
@@ -132,6 +137,12 @@ namespace RM
     inline bool Base::isA() const
     {
         return objType() == int(T::StaticObjectType);
+    }
+
+    template< class T >
+    inline bool Base::inheritsRepoManType() const
+    {
+        return inheritsRepoManType(ObjTypes(T::StaticObjectType));
     }
 
     template< class T >

@@ -77,4 +77,9 @@ namespace RM
         return QLatin1String("Tag");
     }
 
+    bool TagPrivate::inherits(ObjTypes type) const
+    {
+        return type == TagObject || RefPrivate::inherits(type);
+    }
+
 }

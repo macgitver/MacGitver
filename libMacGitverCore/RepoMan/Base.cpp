@@ -329,6 +329,7 @@ namespace RM
         if (parent) {
             mParentObj = parent->mData;
             mParentObj->addChildObject(mPub);
+            refreshSelf();
             postCreation();
         }
     }

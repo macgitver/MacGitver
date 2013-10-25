@@ -51,25 +51,26 @@ namespace RM
 
     RefTypes Ref::type() const
     {
-        RM_D(Ref);
+        RM_CD(Ref);
         return d->type;
     }
 
     QString Ref::name() const
     {
-        RM_D(Ref);
+        RM_CD(Ref);
         return d->name;
-    }
-
-    QString Ref::prefix() const
-    {
-        return QString();
     }
 
     Git::ObjectId Ref::id() const
     {
-        RM_D(Ref);
+        RM_CD(Ref);
         return d->id;
+    }
+
+    QString Ref::fullName() const
+    {
+        RM_CD(Ref);
+        return d->fullQualifiedName;
     }
 
     QString Ref::displaySha1() const
@@ -104,7 +105,7 @@ namespace RM
         Repo* repo = repository();
         Git::Repository gr = repo->gitRepo();
 
-        Git::Reference ref = gr.lookupRef(r, name);
+        Git::Reference ref = gr.lookupRef(r, fullQualifiedName);
 
         Git::ObjectId objectId = ref.objectId(r);
 

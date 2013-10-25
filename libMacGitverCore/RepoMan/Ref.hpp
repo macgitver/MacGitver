@@ -63,7 +63,7 @@ namespace RM
     public:
         RefTypes type() const;
         QString name() const;
-        QString prefix() const;
+        QString fullName() const;
         Git::ObjectId id() const;
 
     public:

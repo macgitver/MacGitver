@@ -162,7 +162,7 @@ namespace RM
         typename T::Set children;
 
         foreach(Base* child, childObjects()) {
-            if (child->isA<T>()) {
+            if (child->inheritsRepoManType<T>()) {
                 children.insert(static_cast<T*>(child));
             }
         }

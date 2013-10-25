@@ -640,7 +640,7 @@ namespace RM
         }
 
         foreach (Ref* rmRef, parent->childObjects<Ref>()) {
-            if (rmRef->name() == rn.fullName()) {
+            if (rmRef->fullName() == rn.fullName()) {
                 return rmRef;
             }
         }

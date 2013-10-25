@@ -31,7 +31,7 @@
 #include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
 #include "libMacGitverCore/MacGitver/Modules.h"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
+#include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
 #include "libMacGitverCore/Log/LogManager.hpp"
 
 /**
@@ -180,11 +180,13 @@ void MacGitverPrivate::loadLevels()
 void MacGitverPrivate::registerGlobalConfigPages()
 {
     GeneralConfigPage::registerPage();
+    RepoManConfigPage::registerPage();
 }
 
 void MacGitverPrivate::unregisterGlobalConfigPages()
 {
     GeneralConfigPage::unregisterPage();
+    RepoManConfigPage::unregisterPage();
 }
 
 int MacGitver::exec()

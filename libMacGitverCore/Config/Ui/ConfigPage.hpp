@@ -40,8 +40,8 @@ public:
     virtual void apply() = 0;
     virtual void init() = 0;
 
-protected:
-    void setModified( bool value = true );
+protected slots:
+    void setModified(bool value = true);
 
 private:
     ConfigDialog*   mDialog;

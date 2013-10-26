@@ -66,8 +66,8 @@ MacGitverPrivate::~MacGitverPrivate()
 {
     unregisterGlobalConfigPages();
 
-    delete sModules;    sModules    = NULL;
     delete sRepoMan;    sRepoMan    = NULL;
+    delete sModules;    sModules    = NULL;
     sLog    = Log::Manager();
 
     sSelf = NULL;

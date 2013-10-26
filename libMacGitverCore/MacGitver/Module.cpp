@@ -15,11 +15,22 @@
  */
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-
-#include "MacGitver/Module.h"
+#include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
+#include "libMacGitverCore/MacGitver/Module.h"
 
 Module::Module()
 {
+    ConfigDialog::registerProvider(this);
+}
+
+Module::~Module()
+{
+    ConfigDialog::unregisterProvider(this);
+}
+
+int Module::configPagePriority() const
+{
+    return 500;
 }
 
 void Module::registerView( const Heaven::ViewIdentifier& identifier, const QString& displayName,

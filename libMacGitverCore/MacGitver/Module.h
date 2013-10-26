@@ -23,6 +23,7 @@
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/Config/Ui/ConfigPageProvider.hpp"
 
 #if QT_VERSION < 0x050000
 #define Q_PLUGIN_METADATA(x)
@@ -34,18 +35,19 @@ class ConfigDialog;
  * @brief The Module class provides an abstract implementation for application plugins.
  * Use this, when implementing new plugins.
  */
-class MGV_CORE_API Module : public QObject
+class MGV_CORE_API Module : public QObject, public ConfigPageProvider
 {
     Q_OBJECT
 public:
     Module();
+    ~Module();
 
 public:
     /**
      * @brief Setup a configuration dialog for a module, which is used in the settings.
      * @param dialog
      */
-    virtual void setupConfigPages( ConfigDialog* dialog );
+    virtual void setupConfigPages(ConfigDialog* dialog);
 
     /**
      * @brief Tells the module to initialize itself, after it was loaded and instantiated.
@@ -56,6 +58,9 @@ public:
      * @brief Called before a module is unloaded, telling it to clean up itself.
      */
     virtual void deinitialize() = 0;
+
+protected:
+    virtual int configPagePriority() const;
 
 protected:
     /**

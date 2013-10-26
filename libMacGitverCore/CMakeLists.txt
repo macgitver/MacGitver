@@ -26,6 +26,7 @@ SET( SRC_FILES
     Config/Ui/ConfigDialog.cpp
     Config/Ui/ConfigPage.cpp
     Config/Ui/GeneralConfigPage.cpp
+    Config/Ui/ConfigPageProvider.cpp
 
     MacGitver/Module.cpp
     MacGitver/Modules.cpp

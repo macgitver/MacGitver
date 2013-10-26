@@ -17,11 +17,14 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "libMacGitverCore/Config/Config.h"
-#include "Config/UserLevelDefinition.h"
+#include "libMacGitverCore/Config/UserLevelDefinition.h"
 
-#include "GeneralConfigPage.hpp"
+#include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
+#include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
 
 #include "ui_GeneralConfigPage.h"
+
+IMPLEMENT_NESTED_PAGE_CREATOR(GeneralConfigPage, 200)
 
 GeneralConfigPage::GeneralConfigPage( ConfigDialog* dlg )
     : ConfigPage( dlg )

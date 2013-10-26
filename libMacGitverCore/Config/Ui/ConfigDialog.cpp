@@ -16,7 +16,9 @@
 
 #include <QPushButton>
 
-#include "ConfigDialog.hpp"
+#include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
+#include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
+#include "libMacGitverCore/Config/Ui/ConfigPageProvider.hpp"
 
 #include "ui_ConfigDialog.h"
 
@@ -30,11 +32,35 @@ ConfigDialog::ConfigDialog()
 
     connect( ui->buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()),
              this, SLOT(onApply()) );
+
+    setupConfigPages();
 }
 
 ConfigDialog::~ConfigDialog()
 {
     delete ui;
+}
+
+QMap< int, QSet<ConfigPageProvider*> > ConfigDialog::sProviders;
+
+void ConfigDialog::registerProvider(ConfigPageProvider* provider)
+{
+    QSet<ConfigPageProvider*>& set = sProviders[provider->configPagePriority()];
+    set.insert(provider);
+}
+
+void ConfigDialog::unregisterProvider(ConfigPageProvider* provider)
+{
+    sProviders[provider->configPagePriority()].remove(provider);
+}
+
+void ConfigDialog::setupConfigPages()
+{
+    foreach (int prio, sProviders.keys()) {
+        foreach (ConfigPageProvider* cpp, sProviders[prio]) {
+            cpp->setupConfigPages(this);
+        }
+    }
 }
 
 void ConfigDialog::addPage( ConfigPage* page )
@@ -58,6 +84,8 @@ void ConfigDialog::addPage( ConfigPage* page )
     QByteArray fullPageId = page->groupId() + "/" + page->pageId();
     mPagesById.insert( fullPageId, page );
     mPageIdsByTree.insert( pageItem, fullPageId );
+
+    page->init();
 }
 
 void ConfigDialog::setModified( ConfigPage* page, bool value )

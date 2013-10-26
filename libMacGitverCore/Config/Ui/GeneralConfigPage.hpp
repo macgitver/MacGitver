@@ -19,7 +19,8 @@
 
 #include <QWidget>
 
-#include "Config/Ui/ConfigPage.hpp"
+#include "libMacGitverCore/Config/Ui/ConfigPage.hpp"
+#include "libMacGitverCore/Config/Ui/ConfigPageProvider.hpp"
 
 namespace Ui
 {
@@ -29,6 +30,8 @@ namespace Ui
 class GeneralConfigPage : public ConfigPage
 {
     Q_OBJECT
+    DECLARE_NESTED_PAGE_CREATOR();
+
 public:
     GeneralConfigPage( ConfigDialog* dlg );
     ~GeneralConfigPage();

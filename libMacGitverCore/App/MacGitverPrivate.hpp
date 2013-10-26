@@ -48,6 +48,10 @@ public:
     Git::GitWrap        mGitWrap;
     Git::Repository     mRepository;    /* deprecated */
 
+private:
+    void registerGlobalConfigPages();
+    void unregisterGlobalConfigPages();
+
 public:
     static MacGitver*   sSelf;
     static Modules*     sModules;

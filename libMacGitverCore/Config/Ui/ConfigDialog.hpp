@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -19,6 +22,8 @@
 
 #include <QDialog>
 #include <QHash>
+#include <QMap>
+#include <QSet>
 #include <QByteArray>
 
 class QTreeWidgetItem;
@@ -32,6 +37,8 @@ namespace Ui
     class ConfigDialog;
 }
 
+class ConfigPageProvider;
+
 class ConfigDialog : public Heaven::Dialog
 {
     Q_OBJECT
@@ -43,6 +50,10 @@ public:
     int exec();
 
 public:
+    static void registerProvider(ConfigPageProvider* provider);
+    static void unregisterProvider(ConfigPageProvider* provider);
+
+public:
     virtual void setModified( ConfigPage* page, bool value );
     virtual void addPage( ConfigPage* page );
 
@@ -51,10 +62,15 @@ private slots:
     void onWidgetChange( QTreeWidgetItem* newCurrent );
 
 private:
+    void setupConfigPages();
+
+private:
     Ui::ConfigDialog*                       ui;
-    QHash< QByteArray, QTreeWidgetItem* >   mGroupsById;
-    QHash< QByteArray, ConfigPage* >       mPagesById;
-    QHash< QTreeWidgetItem*, QByteArray >   mPageIdsByTree;
+    QHash<QByteArray, QTreeWidgetItem*>     mGroupsById;
+    QHash<QByteArray, ConfigPage*>          mPagesById;
+    QHash<QTreeWidgetItem*, QByteArray>     mPageIdsByTree;
+    static QMap< int, QSet<ConfigPageProvider*> >
+                                            sProviders;
 };
 
 #endif

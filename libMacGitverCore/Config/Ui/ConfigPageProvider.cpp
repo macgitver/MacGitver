@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,35 +17,14 @@
  *
  */
 
-#ifndef MGV_MODULES_H
-#define MGV_MODULES_H
+#include "libMacGitverCore/Config/Ui/ConfigPageProvider.hpp"
 
-#include <QSet>
+// These are just here, so they don't end up inlined everywhere...
 
-class QDir;
-
-#include "MacGitver/Module.h"
-
-class Modules : public QObject
+ConfigPageProvider::ConfigPageProvider()
 {
-    Q_OBJECT
-public:
-    Modules();
-    ~Modules();
+}
 
-public:
-    void addModule( Module* mod );
-    void delModule( Module* mod );
-
-public:
-    void initialize();
-
-private:
-    void setupInternals();
-    void search( const QDir& binDir );
-
-private:
-    QSet< Module* >     mModules;
-};
-
-#endif
+ConfigPageProvider::~ConfigPageProvider()
+{
+}

@@ -23,11 +23,15 @@
 #include "TemplateNames.hpp"
 
 RepoManLoggerModule::RepoManLoggerModule()
+    : listener(NULL)
 {
 }
 
 RepoManLoggerModule::~RepoManLoggerModule()
 {
+    if (listener) {
+        delete listener;
+    }
 }
 
 void RepoManLoggerModule::initialize()
@@ -43,6 +47,7 @@ void RepoManLoggerModule::deinitialize()
     // Channel should also be kept registered
     // But listener has to be destroyed...
     delete listener;
+    listener = NULL;
 }
 
 void RepoManLoggerModule::setupTemplates()
@@ -64,6 +69,11 @@ void RepoManLoggerModule::setupTemplates()
     t.setTransformation(tr("Branch <em>$ObjName$</em> "
                            "in repository <code>$RepoName$</code> "
                            "moved to <code>$SHA$</code>."));
+    MacGitver::log().addTemplate(t);
+
+    t = Log::Template::create(TMPL_FOUND_NEW_SM);
+    t.setTransformation(tr("Found submodule <em>$ObjName$</em> "
+                           "in repository <code>$RepoName$</code>."));
     MacGitver::log().addTemplate(t);
 }
 

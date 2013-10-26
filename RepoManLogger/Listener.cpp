@@ -20,6 +20,7 @@
 #include "libMacGitverCore/RepoMan/Repo.hpp"
 #include "libMacGitverCore/RepoMan/Tag.hpp"
 #include "libMacGitverCore/RepoMan/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Submodule.hpp"
 
 #include "Listener.hpp"
 #include "TemplateNames.hpp"
@@ -188,6 +189,13 @@ void Listener::remoteModified(RM::Repo* repo, RM::Remote* remote)
 
 void Listener::submoduleCreated(RM::Repo* repo, RM::Submodule* submodule)
 {
+    Log::Event e = Log::Event::create(TMPL_FOUND_NEW_SM);
+    Q_ASSERT(e.isValid());
+
+    e.setParam(QLatin1String("ObjName"),    submodule->displayName());
+    e.setParam(QLatin1String("RepoName"),   repo->displayAlias());
+
+    repoManChannel.addEvent(e);
 }
 
 void Listener::submoduleAboutToBeDeleted(RM::Repo* repo, RM::Submodule* submodule)

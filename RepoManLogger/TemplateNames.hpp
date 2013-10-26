@@ -27,5 +27,6 @@
 #define TMPL_FOUND_NEW_OBJ              TEMPLATE_NAME(FoundNewObj)
 #define TMPL_FOUND_NEW_REF              TEMPLATE_NAME(FoundNewRef)
 #define TMPL_BRANCH_MOVED               TEMPLATE_NAME(BranchMoved)
+#define TMPL_FOUND_NEW_SM               TEMPLATE_NAME(FoundNewSubmodule)
 
 #endif

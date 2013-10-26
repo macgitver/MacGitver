@@ -284,7 +284,7 @@ void HistoryModel::scanInlineReferences()
     bool detached = mRepo.isHeadDetached();
     if( !r )
     {
-        MacGitver::log( ltError, r.errorText() );
+        MacGitver::log(Log::Error, r.errorText());
         return;
     }
 
@@ -408,11 +408,11 @@ void HistoryModel::scanInlineReferences()
 
     dur = timer.nsecsElapsed();
     avg = double( dur ) / double( refs.count() );
-    MacGitver::log( ltInformation,
-                    trUtf8( "Found and peeled %1 refs in %2 ns = %3 ns per ref." )
-                        .arg( refs.count() )
-                        .arg( dur )
-                        .arg( avg, 10, 'f', 2 ) );
+    MacGitver::log(Log::Information,
+                   trUtf8("Found and resolved %1 refs in %2 ns = %3 ns per ref.")
+                        .arg(refs.count())
+                        .arg(dur)
+                        .arg(avg, 10, 'f', 2));
 }
 
 void HistoryModel::changeDisplays(InlineRefDisplays displays, bool activate)

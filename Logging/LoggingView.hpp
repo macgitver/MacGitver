@@ -1,6 +1,9 @@
- /*
+/*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -17,21 +20,41 @@
 #ifndef MGV_LOGGING_VIEW_H
 #define MGV_LOGGING_VIEW_H
 
+#include <QString>
+#include <QSet>
+
 #include "libHeaven/CentralUI/Views/View.hpp"
 
-class QTextBrowser;
+class QWebView;
+class LoggingModule;
 
 class LoggingView : public Heaven::View
 {
     Q_OBJECT
 public:
-    LoggingView();
+    LoggingView(LoggingModule* module);
+    ~LoggingView();
+
+public:
+    void regenerate();
+    void clearCache();
 
 public:
     QSize sizeHint() const;
 
+private slots:
+    void clearPrefixCache();
+
 private:
-    QTextBrowser* mBrowser;
+    void calculatePrefix();
+
+private:
+    QString htmlPrefix;
+    QString htmlPostfix;
+    QSet<QString> mHiddenChannels;
+    QHash< quint64, QString > mCache;
+    LoggingModule* mModule;
+    QWebView* mBrowser;
 };
 
 #endif

@@ -99,7 +99,7 @@ void CreateRepositoryDlg::accept()
         return;
     }
 
-    MacGitver::log( ltNormal, tr( "Created a new repository at %1" ).arg( fn ) );
+    MacGitver::log(Log::Normal, trUtf8("Created a new repository at %1").arg(fn));
 
     MacGitver::repoMan().open( repo );
 

@@ -1,7 +1,7 @@
 
 PROJECT( MGV_MOD_LOGGING )
 
-QT_PREPARE( Core Gui Widgets )
+QT_PREPARE( Core Gui Widgets WebKit WebKitWidgets )
 
 INCLUDE_DIRECTORIES(
     ${MGV_MOD_LOGGING_SOURCE_DIR}
@@ -16,8 +16,8 @@ SET( SRC_FILES
 
 SET( HDR_FILES
 
-    LoggingView.h
-    LoggingModule.h
+    LoggingView.hpp
+    LoggingModule.hpp
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )

@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -19,9 +22,12 @@
 
 #include "libMacGitverCore/MacGitver/Module.h"
 
+#include "libMacGitverCore/Log/LogConsumer.hpp"
+#include "libMacGitverCore/Log/LogEvent.hpp"
+
 class LoggingView;
 
-class LoggingModule : public Module
+class LoggingModule : public Module, private Log::Consumer
 {
     Q_OBJECT
     Q_PLUGIN_METADATA( IID "org.macgitver.Module/0.1" FILE "Module.json" )
@@ -29,12 +35,32 @@ class LoggingModule : public Module
 
 public:
     LoggingModule();
+    ~LoggingModule();
 
 public:
     void initialize();
     void deinitialize();
 
+public:
+    void queueViewUpdate();
+    void setView(LoggingView* view);
+    Log::Event::List currentEvents() const;
+
 private:
+    void channelAdded(Log::Channel channel);
+    void logCleaned(quint64 upToId);
+    void eventAdded(Log::Event e);
+
+private slots:
+    void viewUpdate();
+
+private:
+    bool mQueuedUpdate;
+    LoggingView* mView;
+    Log::Event::List mEvents;
+
+private:
+    static LoggingModule* sSelf;
     static Heaven::View* createLoggingView();
 };
 

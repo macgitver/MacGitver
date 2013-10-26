@@ -53,7 +53,7 @@ namespace RM
         typedef QVector< Repo* > List;
 
     protected:
-        Repo(const Git::Repository& _repo, Internal::RepoPrivate& _d);
+        Repo(Internal::RepoPrivate& _d);
 
     public:
         Repo(const Git::Repository& _repo, Base* _parent);

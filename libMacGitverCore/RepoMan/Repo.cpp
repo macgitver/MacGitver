@@ -47,15 +47,9 @@ namespace RM
 
     using namespace Internal;
 
-    Repo::Repo(const Git::Repository& _repo, RepoPrivate& _d)
+    Repo::Repo(RepoPrivate& _d)
         : Base(_d)
     {
-        RM_D(Repo);
-
-        // Do an initial refresh
-        refresh();
-
-        d->isInitializing = false;
     }
 
     Repo::Repo(const Git::Repository& _repo, Base* _parent)
@@ -63,15 +57,10 @@ namespace RM
     {
         RM_D(Repo);
 
-        // Do an initial refresh
-        refresh();
+        d->linkToParent(_parent);
+        d->refresh();
 
         d->isInitializing = false;
-
-        // linkToParent() will invoke postCreation() and we'll get _one_ initial event for this
-        // repository.
-
-        d->linkToParent(_parent);
     }
 
     Repo::~Repo()
@@ -509,8 +498,6 @@ namespace RM
         }
     }
 
-
-
     void RepoPrivate::findAlias()
     {
         // ### Unimplemented: RepoPrivate::findAlias()
@@ -543,6 +530,8 @@ namespace RM
         foreach (Git::Reference ref, refs) {
             findReference(ref, true);
         }
+
+        scanSubmodules();
     }
 
     /**

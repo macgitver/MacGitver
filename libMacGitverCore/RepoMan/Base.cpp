@@ -512,6 +512,7 @@ namespace RM
     bool BasePrivate::repoEventsBlocked() const
     {
         const Repo* repo = mPub->repository();
+        Q_ASSERT(repo);
         return repo->isInitializing();
     }
 
@@ -633,7 +634,7 @@ namespace RM
         BasePrivate* cur = this;
 
         while (cur) {
-            if (cur->objType() == RepoObject) {
+            if (cur->inherits(RepoObject)) {
                 return static_cast<Repo*>(cur->pub<Repo>());
             }
             cur = cur->mParentObj;

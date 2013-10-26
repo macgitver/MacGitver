@@ -28,7 +28,7 @@ namespace RM
     using namespace Internal;
 
     Submodule::Submodule(const Git::Repository& _repo, Repo *_parent)
-        : Repo(_repo, *new SubmodulePrivate(this, _repo))
+        : Repo(*new SubmodulePrivate(this, _repo))
     {
         RM_D(Submodule);
 
@@ -37,11 +37,10 @@ namespace RM
 
         setDisplayAlias(_repo.name());
 
-        if (!_repo.isBare()) {
-            d->scanSubmodules();
-        }
-
         d->linkToParent(_parent);
+        d->refresh();
+
+        d->isInitializing = false;
     }
 
     //-- SubmodulePrivate --------------------------------------------------------------------------

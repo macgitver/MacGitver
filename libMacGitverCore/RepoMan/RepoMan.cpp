@@ -107,11 +107,6 @@ namespace RM
 
             Events::self()->repositoryOpened(repo);
 
-            // we need to scan for submodules explicitly, since we didn't call load() on the Repo*
-            if (RepoPrivate* subPriv = Private::dataOf<Repo>(repo)) {
-                subPriv->scanSubmodules();
-            }
-
             if (d->repos.count() == 1) {
                 emit firstRepositoryOpened();
             }

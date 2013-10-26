@@ -204,12 +204,14 @@ namespace Log
             }
         }
 
-        return
+        return s;
+        /* We're adding these later:
             QLatin1Literal("<a id=\"") %
             QString::number(event.uniqueId()) %
             QLatin1Literal("\">") %
             s %
             QLatin1Literal("</a>");
+        */
     }
 
     //-- Template::Data ------------------------------------------------------------------------- >8

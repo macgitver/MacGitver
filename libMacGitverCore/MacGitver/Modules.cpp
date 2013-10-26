@@ -27,10 +27,14 @@ Modules::Modules()
 
 Modules::~Modules()
 {
-    foreach( Module* module, mModules )
-    {
-        delete module;
+    foreach(Module* module, mModules) {
+        if (module) {
+            module->deinitialize();
+            delete module;
+        }
     }
+
+    mModules.clear();
 }
 
 void Modules::search( const QDir& binDir )

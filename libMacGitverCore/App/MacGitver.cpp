@@ -29,6 +29,8 @@
 #include "libMacGitverCore/MacGitver/Modules.h"
 #include "libMacGitverCore/MacGitver/RepoManager.hpp"
 
+#include "libMacGitverCore/Log/LogManager.hpp"
+
 /**
  * @class   MacGitver
  * @brief   Central core of the MacGitver application
@@ -52,7 +54,7 @@ MacGitverPrivate::MacGitverPrivate( MacGitver* owner )
     QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
 
     sSelf       = owner;
-    sLog        = new CoreLog;
+    sLog        = Log::Manager::create();
     sRepoMan    = new RepoManager;
     sModules    = new Modules;
 
@@ -64,9 +66,9 @@ MacGitverPrivate::~MacGitverPrivate()
 {
     unregisterGlobalConfigPages();
 
-    delete sModules;    sModules    = NULL;
     delete sRepoMan;    sRepoMan    = NULL;
-    delete sLog;        sLog        = NULL;
+    delete sModules;    sModules    = NULL;
+    sLog    = Log::Manager();
 
     sSelf = NULL;
 }
@@ -82,7 +84,7 @@ void MacGitverPrivate::boot()
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
 RepoManager*    MacGitverPrivate::sRepoMan      = NULL;
-CoreLog*        MacGitverPrivate::sLog          = NULL;
+Log::Manager    MacGitverPrivate::sLog;
 Modules*        MacGitverPrivate::sModules      = NULL;
 
 MacGitver& MacGitver::self()
@@ -96,9 +98,9 @@ RepoManager& MacGitver::repoMan()
     return *MacGitverPrivate::sRepoMan;
 }
 
-CoreLog& MacGitver::log()
+Log::Manager MacGitver::log()
 {
-    return *MacGitverPrivate::sLog;
+    return MacGitverPrivate::sLog;
 }
 
 MacGitver::MacGitver()
@@ -127,27 +129,26 @@ void MacGitver::unregisterView( const Heaven::ViewIdentifier& identifier )
     }
 }
 
-void MacGitver::log( LogType type, const QString& logMessage )
+void MacGitver::log( Log::Type type, const QString& logMessage )
 {
-    log().addMessage( type, logMessage );
+    log().addMessage(logMessage, type);
 }
 
-void MacGitver::log( LogType type, const char* logMessage )
+void MacGitver::log( Log::Type type, const char* logMessage )
 {
-    log().addMessage( type, QString::fromUtf8( logMessage ) );
+    log().addMessage(QString::fromUtf8(logMessage), type);
 }
 
-void MacGitver::log( LogType type, const Git::Result& r, const char* logMessage )
+void MacGitver::log( Log::Type type, const Git::Result& r, const char* logMessage )
 {
     if( logMessage )
     {
-        log().addMessage( type, QString::fromUtf8( "GitWrap-Error: %1\n(%2)" )
-                          .arg( r.errorText() ).arg( QLatin1String( logMessage ) ) );
+        log().addMessage(QString::fromUtf8("GitWrap-Error: %1\n(%2)")
+                         .arg(r.errorText()).arg(QLatin1String(logMessage)), type);
     }
     else
     {
-        log().addMessage( type, QString::fromUtf8( "GitWrap-Error: %1" )
-                          .arg( r.errorText() ) );
+        log().addMessage(QString::fromUtf8("GitWrap-Error: %1").arg(r.errorText()), type);
     }
 }
 

@@ -15,9 +15,14 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
-    App/CoreLog.cpp
     App/MacGitver.cpp
     App/MgvPrimaryWindow.cpp
+
+    Log/LogEvent.cpp
+    Log/LogChannel.cpp
+    Log/LogTemplate.cpp
+    Log/LogManager.cpp
+    Log/LogConsumer.cpp
 
     Config/Config.cpp
     Config/ConfigUser.cpp
@@ -51,7 +56,6 @@ SET( PUB_HDR_FILES
 
     MacGitverApi.hpp
 
-    App/CoreLog.hpp
     App/MacGitver.hpp
     App/MgvPrimaryWindow.hpp
 
@@ -59,6 +63,12 @@ SET( PUB_HDR_FILES
     Config/ConfigUser.h
     Config/UserLevelDefinition.h
     Config/Ui/ConfigPage.hpp
+
+    Log/LogEvent.hpp
+    Log/LogChannel.hpp
+    Log/LogTemplate.hpp
+    Log/LogManager.hpp
+    Log/LogConsumer.hpp
 
     MacGitver/Module.h
     MacGitver/Modules.h

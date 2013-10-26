@@ -20,7 +20,7 @@
 #include <QObject>
 
 #include "libMacGitverCore/MacGitverApi.hpp"
-#include "libMacGitverCore/App/CoreLog.hpp"
+#include "libMacGitverCore/Log/LogManager.hpp"
 
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Result.hpp"
@@ -40,7 +40,7 @@ class MGV_CORE_API MacGitver : public QObject
 public:
     static MacGitver&   self();
     static RepoManager& repoMan();
-    static CoreLog&     log();
+    static Log::Manager log();
 
 public:
     static int exec();
@@ -52,9 +52,9 @@ public:
                        MgvViewCreator creator );
     void unregisterView( const Heaven::ViewIdentifier& identifier );
 
-    static void log( LogType type, const QString& logMessage );
-    static void log( LogType type, const char* logMessage );
-    static void log( LogType type, const Git::Result& r, const char* logMessage = NULL );
+    static void log( Log::Type type, const QString& logMessage );
+    static void log( Log::Type type, const char* logMessage );
+    static void log( Log::Type type, const Git::Result& r, const char* logMessage = NULL );
 
 signals:
     void repositoryChanged( const Git::Repository& repo ); /* deprecated */

@@ -83,15 +83,23 @@ void LoggingView::regenerate()
             eventHtml = mCache[e.uniqueId()];
         }
         else {
-            eventHtml = e.html();
+            QDateTime stamp = e.timeStamp();
+            eventHtml =
+                    tr("<div id=\"%3\" class=\"evt\"><span class=\"ts\">%1</span>%2</div>\n")
+                       .arg(stamp.time().toString())
+                       .arg(e.html())
+                       .arg(e.uniqueId());
             mCache.insert(e.uniqueId(), eventHtml);
         }
 
-        html = html % QLatin1Literal("<p>") % eventHtml % QLatin1Literal("</p>");
+
+        html = html % eventHtml;
         lastId = e.uniqueId();
     }
 
     html += htmlPostfix;
+
+    //qDebug("Setting HTML to\n%s", qPrintable(html));
 
     mBrowser->setHtml(html);
 
@@ -111,19 +119,39 @@ void LoggingView::clearPrefixCache()
 void LoggingView::calculatePrefix()
 {
     const char* sz =
-            "<html>"
-              "<head>"
-                "<style>"
-                  "body { margin: 2px; } "
-                  "p { margin: 0px; padding: 1px 2px 3px 2px; %1 } "
-                  "code { margin: 0px;"
-                        " background-color: #EEE;"
-                        " border-radius: 5px;"
-                        " border: 1px solid #CCC;"
-                        " padding: 0px 1px 0px 1px; %2 }"
-                "</style>"
-              "</head>"
-              "<body>";
+            "<html>\n"
+            "  <head>\n"
+            "    <style type=\"text/css\">\n"
+
+            "      body {\n"
+            "        margin: 2px;\n"
+            "      }\n"
+
+            "      div {\n"
+            "        margin: 0px 0px 0px 72px;\n"
+            "        padding: 1px 2px 3px 0px;\n"
+            "        %1\n"
+            "      }\n"
+
+            "      span.ts {\n"
+            "        text-color: blue;\n"
+            "        padding: 0px 0px 0px 2px;\n"
+            "        margin: 0px 7px 0px -72px;\n"
+            "        %2\n"
+            "      }\n"
+
+            "      code {\n"
+            "        margin: 0px;\n"
+            "        background-color: #EEE;\n"
+            "        border-radius: 5px;\n"
+            "        border: 1px solid #CCC;\n"
+            "        padding: 0px 1px 0px 1px;\n"
+            "        %2\n"
+            "      }\n"
+
+            "    </style>\n"
+            "  </head>\n"
+            "  <body>\n";
 
     htmlPrefix = QString::fromUtf8(sz)
             .arg(Config::defaultFontCSS())

@@ -50,6 +50,21 @@ void RepoManLoggerModule::setupTemplates()
     Log::Template t = Log::Template::create(TMPL_REPO_ACTIVITY);
     t.setTransformation(tr("Repository <code>$RepoName$</code> was <em>$Action$</em>."));
     MacGitver::log().addTemplate(t);
+
+    t = Log::Template::create(TMPL_FOUND_NEW_OBJ);
+    t.setTransformation(tr("Found the $Type$ <em>$ObjName</em> in <code>$RepoName$</code>."));
+    MacGitver::log().addTemplate(t);
+
+    t = Log::Template::create(TMPL_FOUND_NEW_REF);
+    t.setTransformation(tr("Found the $Type$ <em>$ObjName$</em> at <code>$SHA$</code> "
+                           "in repository <code>$RepoName$</code>."));
+    MacGitver::log().addTemplate(t);
+
+    t = Log::Template::create(TMPL_BRANCH_MOVED);
+    t.setTransformation(tr("Branch <em>$ObjName$</em> "
+                           "in repository <code>$RepoName$</code> "
+                           "moved to <code>$SHA$</code>."));
+    MacGitver::log().addTemplate(t);
 }
 
 void RepoManLoggerModule::setupChannel()

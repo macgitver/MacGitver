@@ -18,6 +18,8 @@
  */
 
 #include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libMacGitverCore/RepoMan/Tag.hpp"
+#include "libMacGitverCore/RepoMan/Branch.hpp"
 
 #include "Listener.hpp"
 #include "TemplateNames.hpp"
@@ -68,6 +70,7 @@ void Listener::repositoryActivated(RM::Repo* repo)
 
 void Listener::repositoryDeactivated(RM::Repo* repo)
 {
+    // We don't want to report deactivation
 }
 
 void Listener::objectCreated(RM::Repo* repo, RM::Base* object)
@@ -108,6 +111,15 @@ void Listener::refHeadDetached(RM::Repo* repo, RM::Ref* ref)
 
 void Listener::tagCreated(RM::Repo* repo, RM::Tag* tag)
 {
+    Log::Event e = Log::Event::create(TMPL_FOUND_NEW_REF);
+    Q_ASSERT(e.isValid());
+
+    e.setParam(QLatin1String("Type"),       tr("tag"));
+    e.setParam(QLatin1String("ObjName"),    tag->displayName());
+    e.setParam(QLatin1String("SHA"),        tag->displaySha1());
+    e.setParam(QLatin1String("RepoName"),   repo->displayAlias());
+
+    repoManChannel.addEvent(e);
 }
 
 void Listener::tagAboutToBeDeleted(RM::Repo* repo, RM::Tag* tag)
@@ -124,6 +136,14 @@ void Listener::branchAboutToBeDeleted(RM::Repo* repo, RM::Branch* branch)
 
 void Listener::branchMoved(RM::Repo* repo, RM::Branch* branch)
 {
+    Log::Event e = Log::Event::create(TMPL_BRANCH_MOVED);
+    Q_ASSERT(e.isValid());
+
+    e.setParam(QLatin1String("ObjName"),    branch->displayName());
+    e.setParam(QLatin1String("SHA"),        branch->displaySha1());
+    e.setParam(QLatin1String("RepoName"),   repo->displayAlias());
+
+    repoManChannel.addEvent(e);
 }
 
 void Listener::branchUpstreamChanged(RM::Repo* repo, RM::Branch* branch)

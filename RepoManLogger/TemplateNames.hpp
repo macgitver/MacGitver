@@ -24,5 +24,8 @@
     QLatin1String(#name)
 
 #define TMPL_REPO_ACTIVITY              TEMPLATE_NAME(RepoActivity)
+#define TMPL_FOUND_NEW_OBJ              TEMPLATE_NAME(FoundNewObj)
+#define TMPL_FOUND_NEW_REF              TEMPLATE_NAME(FoundNewRef)
+#define TMPL_BRANCH_MOVED               TEMPLATE_NAME(BranchMoved)
 
 #endif

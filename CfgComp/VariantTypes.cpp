@@ -119,17 +119,21 @@ QString VariantType::defaultCTored() const
 
 VariantTypes::VariantTypes()
 {
-    mTypes.append( VariantType( QLatin1String( "String" ),
-                                QVariant::String,
-                                QLatin1String( "QString" ) ) );
+    mTypes.append(VariantType(QLatin1String("String"),
+                              QVariant::String,
+                              QLatin1String("QString")));
 
-    mTypes.append( VariantType( QLatin1String( "Int" ),
-                                QVariant::Int,
-                                QLatin1String( "qint32" ) ) );
+    mTypes.append(VariantType(QLatin1String("Int"),
+                              QVariant::Int,
+                              QLatin1String("qint32")));
 
-    mTypes.append( VariantType( QLatin1String( "UInt" ),
-                                QVariant::UInt,
-                                QLatin1String( "quint32" ) ) );
+    mTypes.append(VariantType(QLatin1String("UInt"),
+                              QVariant::UInt,
+                              QLatin1String("quint32")));
+
+    mTypes.append(VariantType(QLatin1String("Bool"),
+                              QVariant::Bool,
+                              QLatin1String("bool")));
 }
 
 VariantTypes* VariantTypes::sSelf = NULL;

@@ -26,6 +26,11 @@
 
 #include "ui_RepoManConfigPage.h"
 
+namespace RM
+{
+    class AutoRefresher;
+}
+
 class RepoManConfigPage : public ConfigPage, private Ui::RepoManConfigPage
 {
     Q_OBJECT
@@ -47,6 +52,9 @@ public:
     QByteArray groupId() const;
     QString groupName() const;
     QWidget* widget();
+
+private:
+    RM::AutoRefresher* refresher;
 };
 
 #endif

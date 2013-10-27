@@ -17,12 +17,18 @@
  *
  */
 
-#include "RepoManConfigPage.hpp"
+#include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
+#include "libMacGitverCore/RepoMan/Private/RepoManPrivate.hpp"
+#include "libMacGitverCore/RepoMan/AutoRefresher.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+
+#include "libMacGitverCore/App/MacGitver.hpp"
 
 IMPLEMENT_NESTED_PAGE_CREATOR(RepoManConfigPage, 210)
 
 RepoManConfigPage::RepoManConfigPage(ConfigDialog* dlg)
     : ConfigPage(dlg)
+    , refresher(NULL)
 {
     setupUi(this);
 
@@ -38,11 +44,47 @@ RepoManConfigPage::RepoManConfigPage(ConfigDialog* dlg)
 
 void RepoManConfigPage::apply()
 {
+    int v;
+
+    refresher->setRefreshEnabled(grpEnableAutoRefresh->isChecked());
+
+    v = spnGitRefresh->value();
+    if (!chkGitRefresh->isChecked()) {
+        v = 0;
+    }
+    refresher->setRefreshGitInterval(v == spnGitRefresh->minimum() ? 0 : v);
+
+    v = spnIndexRefresh->value();
+    if (!chkIndexRefresh->isChecked()) {
+        v = 0;
+    }
+    refresher->setRefreshIndexInterval(v == spnIndexRefresh->minimum() ? 0 : v);
+
+    v = spnWorktreeRefresh->value();
+    if (!chkWorktreeRefresh->isChecked()) {
+        v = 0;
+    }
+    refresher->setRefreshWorktreeInterval(v == spnWorktreeRefresh->minimum() ? 0 : v);
+
     setModified(false);
 }
 
 void RepoManConfigPage::init()
 {
+    RM::RepoMan* rm = &MacGitver::repoMan();
+    RM::Internal::RepoManPrivate* rmp = RM::Internal::BasePrivate::dataOf<RM::RepoMan>(rm);
+    refresher = rmp->refresher;
+
+    grpEnableAutoRefresh->setChecked(refresher->refreshEnabled());
+
+    chkGitRefresh->setChecked(refresher->refreshGitEnabled());
+    chkIndexRefresh->setChecked(refresher->refreshIndexEnabled());
+    chkWorktreeRefresh->setChecked(refresher->refreshWorktreeEnabled());
+
+    spnGitRefresh->setValue(refresher->gitRefreshInterval());
+    spnIndexRefresh->setValue(refresher->indexRefreshInterval());
+    spnWorktreeRefresh->setValue(refresher->worktreeRefreshInterval());
+
     updateEnabled();
 }
 

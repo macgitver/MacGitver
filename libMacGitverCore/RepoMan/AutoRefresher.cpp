@@ -37,13 +37,16 @@ namespace RM
     {
         new AutoRefresherCfg(this);
 
-        setRefreshGitInterval(AutoRefresherCfg::gitInterval(), true);
-        setRefreshIndexInterval(AutoRefresherCfg::indexInterval(), true);
-        setRefreshWorktreeInterval(AutoRefresherCfg::worktreeInterval(), true);
+        forcedUpdate();
     }
 
     AutoRefresher::~AutoRefresher()
     {
+    }
+
+    bool AutoRefresher::refreshEnabled() const
+    {
+        return AutoRefresherCfg::refreshEnabled();
     }
 
     bool AutoRefresher::refreshGitEnabled() const
@@ -59,6 +62,19 @@ namespace RM
     bool AutoRefresher::refreshWorktreeEnabled() const
     {
         return AutoRefresherCfg::worktreeInterval() != 0;
+    }
+
+    void AutoRefresher::setRefreshEnabled(bool enabled)
+    {
+        AutoRefresherCfg::setRefreshEnabled(enabled);
+        forcedUpdate();
+    }
+
+    void AutoRefresher::forcedUpdate()
+    {
+        setRefreshGitInterval(AutoRefresherCfg::gitInterval(), true);
+        setRefreshIndexInterval(AutoRefresherCfg::indexInterval(), true);
+        setRefreshWorktreeInterval(AutoRefresherCfg::worktreeInterval(), true);
     }
 
     void AutoRefresher::setRefreshGitInterval(int interval, bool force)

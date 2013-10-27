@@ -37,6 +37,7 @@ namespace RM
         ~AutoRefresher();
 
     public:
+        bool refreshEnabled() const;
         bool refreshGitEnabled() const;
         bool refreshIndexEnabled() const;
         bool refreshWorktreeEnabled() const;
@@ -45,6 +46,7 @@ namespace RM
         int indexRefreshInterval() const;
         int worktreeRefreshInterval() const;
 
+        void setRefreshEnabled(bool enabled);
         void setRefreshGitInterval(int interval, bool force = false);
         void setRefreshIndexInterval(int interval, bool force = false);
         void setRefreshWorktreeInterval(int interval, bool force = false);
@@ -53,6 +55,9 @@ namespace RM
         void onRefreshGit();
         void onRefreshIndex();
         void onRefreshWorktree();
+
+    private:
+        void forcedUpdate();
 
     private:
         QTimer*     refreshGitTimer;

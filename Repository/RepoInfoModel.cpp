@@ -93,7 +93,9 @@ QModelIndex RepoInfoModel::index( int row, int column, const QModelIndex& parent
             return QModelIndex();
         }
 
-        list = infoParent->submodules();
+        foreach (RM::Repo* r, infoParent->submodules()) {
+            list.append(r);
+        }
     }
     else
     {
@@ -140,7 +142,12 @@ QModelIndex RepoInfoModel::info2Index(RM::Repo* info) const
 
     if( info->parentRepository() )
     {
-        row = info->parentRepository()->submodules().indexOf( info );
+        RM::Repo::Set sms = info->parentRepository()->submodules();
+        RM::Repo::List list;
+        foreach (RM::Repo* r, sms) {
+            list.append(r);
+        }
+        row = list.indexOf(info);
     }
     else
     {

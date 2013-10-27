@@ -23,7 +23,7 @@
 #include <QStringBuilder>
 #include <QCoreApplication>
 
-#include "TempDirProvider.hpp"
+#include "Infra/TempDirProvider.hpp"
 
 TempDirProvider::TempDirProvider()
 {

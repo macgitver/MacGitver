@@ -20,7 +20,7 @@
 #ifndef TEST_MGVCORE_SUBMODULE_HPP
 #define TEST_MGVCORE_SUBMODULE_HPP
 
-#include "Fixture.hpp"
+#include "Infra/Fixture.hpp"
 
 typedef Fixture Submodule_Fixture;
 

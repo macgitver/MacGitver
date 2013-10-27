@@ -20,7 +20,7 @@
 #ifndef TEST_MGVCORE_NAMESPACE_HPP
 #define TEST_MGVCORE_NAMESPACE_HPP
 
-#include "Fixture.hpp"
+#include "Infra/Fixture.hpp"
 
 typedef Fixture Namespace_Fixture;
 

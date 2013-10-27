@@ -20,7 +20,7 @@
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/RepoMan/Repo.hpp"
 
-#include "TempRepo.hpp"
+#include "Infra/TempRepo.hpp"
 
 #include "Test_Repo.hpp"
 

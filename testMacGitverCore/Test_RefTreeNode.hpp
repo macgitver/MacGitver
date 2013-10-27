@@ -20,7 +20,7 @@
 #ifndef TEST_MGVCORE_REF_TREE_NODE_HPP
 #define TEST_MGVCORE_REF_TREE_NODE_HPP
 
-#include "Fixture.hpp"
+#include "Infra/Fixture.hpp"
 
 typedef Fixture RefTreeNode_Fixture;
 

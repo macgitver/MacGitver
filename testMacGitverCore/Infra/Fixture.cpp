@@ -20,8 +20,8 @@
 #include <QStringBuilder>
 #include <QDir>
 
-#include "TempDirProvider.hpp"
-#include "Fixture.hpp"
+#include "Infra/TempDirProvider.hpp"
+#include "Infra/Fixture.hpp"
 
 Fixture::Fixture()
 {

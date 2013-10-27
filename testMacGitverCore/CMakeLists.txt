@@ -3,13 +3,17 @@ ADD_DEFINITIONS(-DDATADIR=\"${CMAKE_CURRENT_LIST_DIR}/Data\")
 
 QT_PREPARE(Core Gui Widgets)    # We need QtGui in order to pull libMacGitverCore
 
+INCLUDE_DIRECTORIES(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 SET(SRC_FILES
 
-    main.cpp
-    Fixture.cpp
-    TempDirProvider.cpp
-    TempRepo.cpp
-    EventCatcher.cpp
+    Infra/main.cpp
+    Infra/Fixture.cpp
+    Infra/TempDirProvider.cpp
+    Infra/TempRepo.cpp
+    Infra/EventCatcher.cpp
 
     Test_RepoMan.cpp
     Test_Repo.cpp
@@ -24,10 +28,10 @@ SET(SRC_FILES
 
 SET(HDR_FILES
 
-    Fixture.hpp
-    TempDirProvider.hpp
-    TempRepo.hpp
-    EventCatcher.hpp
+    Infra/Fixture.hpp
+    Infra/TempDirProvider.hpp
+    Infra/TempRepo.hpp
+    Infra/EventCatcher.hpp
 
     Test_RepoMan.hpp
     Test_Repo.hpp

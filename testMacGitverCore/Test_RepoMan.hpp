@@ -20,7 +20,7 @@
 #ifndef TEST_MGVCORE_REPO_MAN_HPP
 #define TEST_MGVCORE_REPO_MAN_HPP
 
-#include "Fixture.hpp"
+#include "Infra/Fixture.hpp"
 
 class RepoManFixture : public Fixture
 {

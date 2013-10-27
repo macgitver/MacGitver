@@ -17,32 +17,18 @@
  *
  */
 
-#include <QDir>
+#include <QCoreApplication>
 
-#include "libMacGitverCore/RepoMan/Repo.hpp"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "Fixture.hpp"
-#include "TempDirProvider.hpp"
-#include "TempRepo.hpp"
+#include "gtest/gtest.h"
 
-TempRepo::TempRepo(Fixture* fixture, const char* name)
+#include "Infra/TempDirProvider.hpp"
+
+int main(int argc, char** argv)
 {
-    mTempRepoDir = fixture->prepareRepo(name);
-}
-
-TempRepo::~TempRepo()
-{
-    QDir(mTempRepoDir).rmpath(QLatin1String("."));
-}
-
-TempRepoOpener::TempRepoOpener(Fixture* fixture, const char* name)
-    : mTempRepo(fixture, name)
-{
-    mRepo = MacGitver::repoMan().open(mTempRepo);
-}
-
-TempRepoOpener::~TempRepoOpener()
-{
-    mRepo->close();
+    QCoreApplication app(argc, argv);
+    TempDirProvider tdp;
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

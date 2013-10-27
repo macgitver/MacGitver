@@ -28,7 +28,7 @@
 #include "libMacGitverCore/RepoMan/Namespace.hpp"
 #include "libMacGitverCore/RepoMan/RefTreeNode.hpp"
 
-#include "EventCatcher.hpp"
+#include "Infra/EventCatcher.hpp"
 
 EventCatcher::EventCatcher()
 {

@@ -20,7 +20,7 @@
 #ifndef TEST_MGVCORE_BRANCH_HPP
 #define TEST_MGVCORE_BRANCH_HPP
 
-#include "Fixture.hpp"
+#include "Infra/Fixture.hpp"
 
 typedef Fixture Branch_Fixture;
 

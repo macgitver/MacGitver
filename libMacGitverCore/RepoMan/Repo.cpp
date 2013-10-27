@@ -463,6 +463,10 @@ namespace RM
             Repo* subInfo = NULL;
             QString path = subRepo.basePath();
 
+            if (path.endsWith(L'/')) {
+                path = path.left(path.length() - 1);
+            }
+
             subInfo = repoByPath(path, true);
             if (!subInfo) {
 

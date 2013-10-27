@@ -136,9 +136,17 @@ namespace RM
 
     Repo* Repo::parentRepository()
     {
-        RM_CD(Repo);
+        Base* p = parentObject();
 
-        return d->parent;
+        if (!p) {
+            return NULL;
+        }
+
+        if (p->inheritsRepoManType(RepoObject)) {
+            return static_cast<Repo*>(p);
+        }
+
+        return NULL;
     }
 
     Repo::List Repo::submodules() const
@@ -351,7 +359,6 @@ namespace RM
         isSubModule = false;
         isInitializing = true;
         displayAlias = QString();
-        parent = NULL;
         unloadTimer = NULL;
 
         if (path.endsWith(L'/')) {

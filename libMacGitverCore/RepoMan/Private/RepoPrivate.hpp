@@ -67,7 +67,6 @@ namespace RM
             Git::Repository repo;                  //!< GitWrap-Repo, if loaded
             QString         path;                  //!< Full, absolute path to this repository
             QString         displayAlias;          //!< An alias for display (Default to last path comp.)
-            Repo*           parent;                //!< This subModule-Repo's parent repository
             Repo::List      children;              //!< This repo's direct submodule repositories
             bool            isSubModule    : 1;    //!< This is a submodule of another repo
             bool            isBare         : 1;    //!< This is a bare repo

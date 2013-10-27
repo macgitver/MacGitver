@@ -33,7 +33,6 @@ namespace RM
         RM_D(Submodule);
 
         d->isSubModule = true;
-        d->parent = static_cast<Repo*>(_parent);
 
         setDisplayAlias(_repo.name());
 

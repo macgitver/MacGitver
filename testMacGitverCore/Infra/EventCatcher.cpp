@@ -95,21 +95,6 @@ int EventCatcher::eventCount(EventTypes type, RM::Base* p1, RM::Base* p2) const
     return count;
 }
 
-int EventCatcher::eventCount(EventTypes type, RM::Base* p1, RM::Base* p2, RM::Base* p3) const
-{
-    int count = 0;
-
-    foreach (const EventLogEntry& ele, entries) {
-        if (ele.type == type && ele.params.count() == 3 && ele.params[0] == p1 &&
-                ele.params[1] == p2 && ele.params[2] == p3) {
-            count++;
-        }
-    }
-
-    return count;
-}
-
-
 void EventCatcher::recordEvent(EventTypes type, RM::Base* p1)
 {
     EventLogEntry ele;
@@ -123,14 +108,6 @@ void EventCatcher::recordEvent(EventTypes type, RM::Base* p1, RM::Base* p2)
     EventLogEntry ele;
     ele.type = type;
     ele.params << p1 << p2;
-    entries << ele;
-}
-
-void EventCatcher::recordEvent(EventTypes type, RM::Base* p1, RM::Base* p2, RM::Base* p3)
-{
-    EventLogEntry ele;
-    ele.type = type;
-    ele.params << p1 << p2 << p3;
     entries << ele;
 }
 

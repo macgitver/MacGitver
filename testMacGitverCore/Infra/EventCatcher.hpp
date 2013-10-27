@@ -106,12 +106,10 @@ public:
     int eventCount(EventTypes type);
     int eventCount(EventTypes type, RM::Base* p1) const;
     int eventCount(EventTypes type, RM::Base* p1, RM::Base* p2) const;
-    int eventCount(EventTypes type, RM::Base* p1, RM::Base* p2, RM::Base* p3) const;
 
 private:
     void recordEvent(EventTypes type, RM::Base* p1);
     void recordEvent(EventTypes type, RM::Base* p1, RM::Base* p2);
-    void recordEvent(EventTypes type, RM::Base* p1, RM::Base* p2, RM::Base* p3);
 
 protected:
     void repositoryOpened(RM::Repo* repo);

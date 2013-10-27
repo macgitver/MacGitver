@@ -149,11 +149,9 @@ namespace RM
         return NULL;
     }
 
-    Repo::List Repo::submodules() const
+    Repo::Set Repo::submodules() const
     {
-        RM_CD(Repo);
-
-        return d->children;
+        return childObjects<Repo>();
     }
 
     void Repo::activated()
@@ -220,7 +218,7 @@ namespace RM
         Events::self()->repositoryAboutToClose(this);
         emit aboutToClose(this);
 
-        foreach(Repo* child, d->children) {
+        foreach (Repo* child, submodules()) {
             child->close();
         }
 
@@ -386,12 +384,6 @@ namespace RM
             unload();
         }
 
-        /*
-        if (parent) {
-            parent->mData->removeChild(p);
-        }
-        */ // ### Do we need to do this? Why?
-
         MacGitver::repoMan().internalClosedRepo(p);
     }
 
@@ -458,7 +450,7 @@ namespace RM
             return;
         }
 
-        Repo::List oldChildren = children;
+        Repo::Set oldSubmodules = pub<Repo>()->submodules();
 
         foreach (Git::Submodule sub, subs) {
             Git::Result child;
@@ -478,34 +470,16 @@ namespace RM
             if (!subInfo) {
 
                 subInfo = new Submodule(subRepo, p);
-
-                children.append(subInfo);
-
                 emit p->childAdded(p, subInfo);
 
             }
             else {
-                int i = oldChildren.indexOf(subInfo);
-                if (i != -1) {
-                    oldChildren.remove(i);
-                }
+                oldSubmodules.remove(subInfo);
             }
         }
 
-        foreach(Repo* repo, oldChildren) {
-            removeChild(repo);
-        }
-    }
-
-    void RepoPrivate::removeChild(Repo* child)
-    {
-        RM_P(Repo);
-        for (int i = 0; i < children.count(); i++) {
-            if (children.at( i ) == child) {
-                children.remove( i );
-                emit p->childRemoved(p, child);
-                return;
-            }
+        foreach(Repo* repo, oldSubmodules) {
+            dataOf<Repo>(repo)->terminateObject();
         }
     }
 
@@ -742,7 +716,8 @@ namespace RM
 
     Repo* RepoPrivate::repoByPath(const QString& basePath, bool searchSubmodules)
     {
-        foreach (Repo* subRepo, children) {
+        foreach (Repo* subRepo, mPub->childObjects<Repo>()) {
+
             if (subRepo->path() == basePath) {
                 return subRepo;
             }

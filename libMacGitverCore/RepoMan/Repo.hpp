@@ -70,7 +70,7 @@ namespace RM
         bool isInitializing() const;
 
         Repo* parentRepository();
-        List submodules() const;
+        Set submodules() const;
 
         QString path() const;
 
@@ -105,7 +105,6 @@ namespace RM
         void aboutToUnload  (RM::Repo* repo);
         void unloaded       (RM::Repo* repo);
         void loaded         (RM::Repo* repo);
-        void childRemoved   (RM::Repo* parent, RM::Repo* child);
         void childAdded     (RM::Repo* parent, RM::Repo* child);
         void aliasChanged   (const QString& newAlias);
     };

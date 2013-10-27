@@ -52,6 +52,7 @@
  */
 
 MacGitverPrivate::MacGitverPrivate(MacGitver* owner, bool runGui)
+    : isGui(runGui)
 {
     // These are used to accquire global settings and stuff...
     // Set them differently, so we can run unit tests without fiddeling about the global settings.
@@ -195,3 +196,7 @@ int MacGitver::exec()
     return qApp->exec();
 }
 
+bool MacGitver::isRunningGui() const
+{
+    return d->isGui;
+}

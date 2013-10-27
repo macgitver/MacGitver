@@ -52,6 +52,7 @@ private:
     void unregisterGlobalConfigPages();
 
 public:
+    bool                isGui;
     static MacGitver*   sSelf;
     static Modules*     sModules;
     static Log::Manager sLog;

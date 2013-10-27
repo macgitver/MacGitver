@@ -53,6 +53,9 @@ public:
     static int exec();
 
 public:
+    bool isRunningGui() const;
+
+public:
     void integrateView( Heaven::View* view, Heaven::Positions place );
 
     void registerView (const Heaven::ViewIdentifier& identifier, const QString& displayName,

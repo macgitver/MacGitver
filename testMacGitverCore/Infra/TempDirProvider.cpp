@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <QDir>
+#include <QDateTime>
 #include <QStringBuilder>
 #include <QCoreApplication>
 
@@ -49,6 +50,8 @@ QString TempDirProvider::get()
 
 void TempDirProvider::create()
 {
+    qsrand(QDateTime::currentMSecsSinceEpoch());
+
     QDir base = QDir::temp();
     QString realPath;
     for (int i = 0; i < 10; i++) {

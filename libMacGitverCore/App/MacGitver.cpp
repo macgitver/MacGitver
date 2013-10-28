@@ -54,9 +54,14 @@
 MacGitverPrivate::MacGitverPrivate(MacGitver* owner, bool runGui)
     : isGui(runGui)
 {
+    sSelf = owner;
+}
+
+void MacGitverPrivate::init()
+{
     // These are used to accquire global settings and stuff...
     // Set them differently, so we can run unit tests without fiddeling about the global settings.
-    if (runGui) {
+    if (isGui) {
         QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
         QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
 
@@ -66,12 +71,11 @@ MacGitverPrivate::MacGitverPrivate(MacGitver* owner, bool runGui)
         QApplication::setApplicationName( QLatin1String( "MacGitver_NonGui" ) );
     }
 
-    sSelf       = owner;
     sLog        = Log::Manager::create();
     sRepoMan    = new RM::RepoMan;
     sModules    = new Modules;
 
-    if (runGui) {
+    if (isGui) {
         // Continue with the rest of the init-process after QApplication::exec() has started to run.
         QMetaObject::invokeMethod( this, "bootGui", Qt::QueuedConnection );
     }
@@ -125,6 +129,8 @@ Log::Manager MacGitver::log()
 MacGitver::MacGitver(bool runGui)
     : d(new MacGitverPrivate(this, runGui))
 {
+    d->init();
+
     // We've run through MacGitverPrivate's constructor, so this should be true unless there
     // was already a MacGitver instance around.
     Q_ASSERT(MacGitverPrivate::sSelf == this);

@@ -38,6 +38,7 @@ public:
     ~MacGitverPrivate();
 
 public:
+    void init();
     void loadLevels();
     void searchModules( const QDir& binDir );
 

@@ -21,7 +21,7 @@
 
 #include "libMacGitverCore/Config/Config.h"
 
-#include "libGitWrap/CloneOperation.hpp"
+#include "libGitWrap/Operations/CloneOperation.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 

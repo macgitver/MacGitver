@@ -174,7 +174,7 @@ bool BranchesView::checkRemoveRef( const Git::Reference& ref )
 
     // is there another reference pointing to here?
     bool foundBuddyRef = false;
-    foreach ( const Git::Reference& current, ref.repository(r).allReferences(r) )
+    foreach ( const Git::Reference& current, ref.repository().allReferences(r) )
     {
         foundBuddyRef = ( current == ref ) && ( (current.name() != ref.name()) );
         if (foundBuddyRef)

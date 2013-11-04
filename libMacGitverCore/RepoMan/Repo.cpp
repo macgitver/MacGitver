@@ -458,6 +458,7 @@ namespace RM
             if (!child) {
                 continue;
             }
+            Q_ASSERT(subRepo.isValid());
 
             Repo* subInfo = NULL;
             QString path = subRepo.basePath();

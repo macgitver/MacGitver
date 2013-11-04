@@ -19,6 +19,7 @@
 
 #include "libGitWrap/Reference.hpp"
 #include "libGitWrap/ObjectId.hpp"
+#include "libGitWrap/Submodule.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 

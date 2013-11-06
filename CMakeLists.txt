@@ -19,6 +19,8 @@ IF(UNIX)
     GCC_ADD_FLAG( "-fvisibility=hidden" )
 ENDIF()
 
+ENABLE_TESTING()
+
 ADD_SUBDIRECTORY(libGitWrap)
 ADD_SUBDIRECTORY(libHeaven)
 ADD_SUBDIRECTORY(libDiffViews)

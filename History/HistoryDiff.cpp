@@ -200,7 +200,7 @@ Git::DiffList HistoryDiff::makePatchTo( const QString& ref )
         return Git::DiffList();
     }
 
-    Git::ObjectCommit commit = mRepo.lookupCommit( r, oid );
+    Git::Commit commit = mRepo.lookupCommit( r, oid );
     if( !r )
     {
         return Git::DiffList();
@@ -220,7 +220,7 @@ void HistoryDiff::createPatch()
     DiffToTypes dtt = DiffToTypes( mDiffTo->itemData( index ).toInt() );
     Git::Result r;
     Git::DiffList dl, dl2;
-    Git::ObjectTree tree = mCommit.tree( r );
+    Git::Tree tree = mCommit.tree( r );
 
     switch( dtt )
     {

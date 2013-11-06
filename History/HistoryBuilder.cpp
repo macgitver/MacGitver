@@ -125,7 +125,7 @@ void HistoryBuilder::start()
 {
     QVector< Git::ObjectId >	commits;
     Git::ObjectId				currentSHA1;
-    Git::ObjectCommit			curCommit;
+    Git::Commit                 curCommit;
     Git::Result					r;
     qint64						dur;
     double						avg;

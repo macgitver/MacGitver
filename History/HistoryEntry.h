@@ -83,7 +83,7 @@ public:
     const HistoryInlineRefs&    refs() const;
 
 public:
-    void populate( const Git::ObjectCommit& commit );
+    void populate( const Git::Commit& commit );
     void setGlyphs( const GraphGlyphVector& glyphs );
     void setInlineRefs( const HistoryInlineRefs& refs );
 

@@ -112,7 +112,7 @@ void HistoryDetails::updateText()
         return;
     }
 
-    Git::ObjectCommit commit = mRepo.lookupCommit( r, mCurrentSHA1 );
+    Git::Commit commit = mRepo.lookupCommit( r, mCurrentSHA1 );
     if( !r )
     {
         MacGitver::log( Log::Error, r, "Reading commit details" );
@@ -127,47 +127,47 @@ void HistoryDetails::updateText()
         {
         case HHD_Subject:
             detailRows += mkRow( trUtf8( "Subject" ),
-                                 commit.shortMessage( r ) );
+                                 commit.shortMessage() );
             break;
 
         case HHD_Author:
             detailRows += mkRow( trUtf8( "Author" ),
-                                 commit.author( r ).fullName() );
+                                 commit.author().fullName() );
             break;
 
         case HHD_AuthorDate:
             detailRows += mkRow( trUtf8( "Author date" ),
-                                 commit.author( r ).when().toString() );
+                                 commit.author().when().toString() );
             break;
 
         case HHD_AuthorMail:
             detailRows += mkRow( trUtf8( "Author mail" ),
-                                 commit.author( r ).email() );
+                                 commit.author().email() );
             break;
 
         case HHD_AuthorName:
             detailRows += mkRow( trUtf8( "Author name" ),
-                                 commit.author( r ).name() );
+                                 commit.author().name() );
             break;
 
         case HHD_Committer:
             detailRows += mkRow( trUtf8( "Committer" ),
-                                 commit.committer( r ).fullName() );
+                                 commit.committer().fullName() );
             break;
 
         case HHD_CommitterDate:
             detailRows += mkRow( trUtf8( "Committer date" ),
-                                 commit.committer( r ).when().toString() );
+                                 commit.committer().when().toString() );
             break;
 
         case HHD_CommitterMail:
             detailRows += mkRow( trUtf8( "Committer mail" ),
-                                 commit.committer( r ).email() );
+                                 commit.committer().email() );
             break;
 
         case HHD_CommitterName:
             detailRows += mkRow( trUtf8( "Committer name" ),
-                                 commit.committer( r ).name() );
+                                 commit.committer().name() );
             break;
 
         case HHD_SHA1:
@@ -186,7 +186,7 @@ void HistoryDetails::updateText()
         }
     }
 
-    QStringList body = commit.message( r ).split( QChar( L'\n' ) );
+    QStringList body = commit.message().split( QChar( L'\n' ) );
     QString head = body.takeFirst();
 
     if( body.count() && !body.first().isEmpty() )

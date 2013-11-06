@@ -87,7 +87,7 @@ private:
         QAction* >          mDiffToActions;
 
     Git::Repository         mRepo;
-    Git::ObjectCommit       mCommit;
+    Git::Commit             mCommit;
 };
 
 #endif

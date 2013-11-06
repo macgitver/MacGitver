@@ -38,15 +38,15 @@ void HistoryEntry::setPopulationQueued()
     mPopulationQueued = true;
 }
 
-void HistoryEntry::populate( const Git::ObjectCommit& commit )
+void HistoryEntry::populate( const Git::Commit &commit )
 {
     Q_ASSERT( !mPopulated );
 
     Git::Result r;
 
-    mCommiter = commit.committer( r );
-    mAuthor = commit.author( r );
-    mCommitMessage = commit.shortMessage( r );
+    mCommiter = commit.committer();
+    mAuthor = commit.author();
+    mCommitMessage = commit.shortMessage();
 
     mPopulationQueued = false;
     mPopulated = r;

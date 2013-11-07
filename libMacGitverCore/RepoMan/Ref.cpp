@@ -107,7 +107,7 @@ namespace RM
 
         Git::Reference ref = gr.lookupRef(r, fullQualifiedName);
 
-        Git::ObjectId objectId = ref.objectId(r);
+        Git::ObjectId objectId = ref.objectId();
 
         if (objectId != id) {
             Events::self()->refMoved(repo, pub<Ref>());

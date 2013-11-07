@@ -240,7 +240,7 @@ namespace RM
                                   "\">%1</b>" ).arg(HEAD.name().mid(11));
                 }
                 else {
-                    return trUtf8("detached at <b>%1</b>" ).arg(HEAD.objectId(r).toString());
+                    return trUtf8("detached at <b>%1</b>" ).arg(HEAD.objectId().toString());
                 }
             }
             else {

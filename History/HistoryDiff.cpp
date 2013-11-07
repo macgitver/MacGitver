@@ -194,7 +194,7 @@ void HistoryDiff::onDiffToChanged( int index )
 Git::DiffList HistoryDiff::makePatchTo( const QString& ref )
 {
     Git::Result r;
-    Git::ObjectId oid = mRepo.lookupRef( r, ref ).resolveToObjectId( r );
+    Git::ObjectId oid = mRepo.reference(r, ref).resolveToObjectId( r );
     if( !r )
     {
         return Git::DiffList();

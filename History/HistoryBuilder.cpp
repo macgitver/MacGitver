@@ -34,8 +34,8 @@ HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryModel* model )
     , mModel( model )
 {
     Git::Result r;
-    mWalker = mRepo.newWalker( r );
-    mWalker.setSorting( r, true, false );
+    mWalker = Git::RevisionWalker::create(r, mRepo);
+    mWalker.setSorting(r, true, false);
 }
 
 HistoryBuilder::~HistoryBuilder()

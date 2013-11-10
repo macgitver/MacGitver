@@ -34,8 +34,8 @@ HistoryBuilder::HistoryBuilder( Git::Repository repo, HistoryModel* model )
     , mModel( model )
 {
     Git::Result r;
-    mWalker = mRepo.newWalker( r );
-    mWalker.setSorting( r, true, false );
+    mWalker = Git::RevisionWalker::create(r, mRepo);
+    mWalker.setSorting(r, true, false);
 }
 
 HistoryBuilder::~HistoryBuilder()
@@ -125,7 +125,7 @@ void HistoryBuilder::start()
 {
     QVector< Git::ObjectId >	commits;
     Git::ObjectId				currentSHA1;
-    Git::ObjectCommit			curCommit;
+    Git::Commit                 curCommit;
     Git::Result					r;
     qint64						dur;
     double						avg;

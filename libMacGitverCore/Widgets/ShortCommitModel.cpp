@@ -37,7 +37,7 @@ void ShortCommitModel::clear()
     endResetModel();
 }
 
-void ShortCommitModel::setCommitList( const QVector< Git::ObjectCommit >& list )
+void ShortCommitModel::setCommitList( const Git::CommitList& list )
 {
     beginResetModel();
 
@@ -46,17 +46,14 @@ void ShortCommitModel::setCommitList( const QVector< Git::ObjectCommit >& list )
     endResetModel();
 }
 
-bool ShortCommitModel::setCommitList( Git::Repository repo, const QVector< Git::ObjectId >& list )
+bool ShortCommitModel::setCommitList(Git::Repository repo, const Git::ObjectIdList& list )
 {
-    QVector< Git::ObjectCommit > commits;
-
+    Git::CommitList commits;
     Git::Result r;
 
-    foreach( Git::ObjectId sha1, list )
-    {
-        Git::ObjectCommit commit = repo.lookupCommit( r, sha1 );
-        if( !r )
-        {
+    foreach (Git::ObjectId sha1, list) {
+        Git::Commit commit = repo.lookupCommit(r, sha1);
+        if (!r) {
             return false;
         }
         commits.append( commit );
@@ -66,13 +63,12 @@ bool ShortCommitModel::setCommitList( Git::Repository repo, const QVector< Git::
     return true;
 }
 
-Git::ObjectCommit ShortCommitModel::indexToCommit( const QModelIndex& index ) const
+Git::Commit ShortCommitModel::indexToCommit( const QModelIndex& index ) const
 {
-    if( index.isValid() )
-    {
+    if(index.isValid()) {
         return mCommitList.at( index.row() );
     }
-    return Git::ObjectCommit();
+    return Git::Commit();
 }
 
 int ShortCommitModel::rowCount( const QModelIndex& parent ) const
@@ -92,19 +88,19 @@ QVariant ShortCommitModel::data( const QModelIndex& index, int role ) const
 
     if( role == Qt::DisplayRole )
     {
-        Git::ObjectCommit commit = indexToCommit( index );
+        Git::Commit commit = indexToCommit( index );
         switch( index.column() )
         {
         case 0:
-            value = commit.shortMessage( r );
+            value = commit.shortMessage();
             break;
 
         case 1:
-            value = commit.author( r ).when().toString();
+            value = commit.author().when().toString();
             break;
 
         case 2:
-            value = commit.id( r ).toString().left( 7 );
+            value = commit.id().toString().left( 7 );
             break;
 
         default:

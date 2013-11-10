@@ -289,19 +289,13 @@ void RepositoryInfo::scanSubmodules()
 
     List oldChildren = mChildren;
 
-    foreach( Git::Submodule sub, subs )
-    {
-        if( !sub.isOpened() )
-        {
-            Git::Result r;
-            if( !sub.open( r ) || !r )
-            {
-                continue;
-            }
+    foreach (Git::Submodule sub, subs) {
+        Git::Result r;
+        Git::Repository subRepo = sub.subRepository(r);
+        if (!r) {
+            continue;
         }
-        Q_ASSERT( sub.isOpened() );
 
-        Git::Repository subRepo = sub.repository();
         RepositoryInfo* subInfo = NULL;
         QString path = subRepo.basePath();
 
@@ -349,7 +343,7 @@ QString RepositoryInfo::branchDisplay() const
             }
             else
             {
-                return trUtf8( "detached at <b>%1</b>" ).arg( HEAD.objectId( r ).toString() );
+                return trUtf8( "detached at <b>%1</b>" ).arg(HEAD.objectId().toString());
             }
         }
         else

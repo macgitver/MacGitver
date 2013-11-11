@@ -2,3 +2,4 @@ CMakeLists.txt.user*
 *~
 *.autosave
 Doxyfile
+*.kdev4

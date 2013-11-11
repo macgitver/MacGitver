@@ -105,7 +105,7 @@ namespace RM
         Repo* repo = repository();
         Git::Repository gr = repo->gitRepo();
 
-        Git::Reference ref = gr.lookupRef(r, fullQualifiedName);
+        Git::Reference ref = gr.reference(r, fullQualifiedName);
 
         Git::ObjectId objectId = ref.objectId();
 

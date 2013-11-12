@@ -25,7 +25,10 @@
 
 #include "hic_RepositoryModule.h"
 
-class RepositoryInfo;
+namespace RM
+{
+    class Repo;
+}
 
 class RepositoryModule : public Module, public RepositoryActions, private ConfigUser
 {
@@ -51,7 +54,7 @@ private slots:
     void onRecentRepositoryOpen( const QVariant& path );
 
     void onRepositoryOpenHelper();
-    void onCoreRepoOpen( RepositoryInfo* repo );
+    void onCoreRepoOpen(RM::Repo* repo);
 
 private:
     void updateMostRecentlyUsedMenu();

@@ -32,8 +32,8 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/MacGitver/GitPatchConsumer.hpp"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
-#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Repo.hpp"
 
 #include "IndexTreeItemView.h"
 #include "WorkingTreeItemView.h"
@@ -76,11 +76,11 @@ IndexWidget::IndexWidget()
 
     setupFilters();
 
-    connect(&MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
-            this, SLOT(repositoryActivated(RepositoryInfo*)));
+    connect(&MacGitver::repoMan(),  SIGNAL(repositoryActivated(RM::Repo*)),
+            this,                   SLOT(repositoryActivated(RM::Repo*)));
 
-    connect(&MacGitver::repoMan(), SIGNAL(repositoryDeactivated(RepositoryInfo*)),
-            this, SLOT(repositoryDeactivated(RepositoryInfo*)));
+    connect(&MacGitver::repoMan(),  SIGNAL(repositoryDeactivated(RM::Repo*)),
+            this,                   SLOT(repositoryDeactivated(RM::Repo*)));
 }
 
 void IndexWidget::updateWtFilterView(const WorkingTreeFilterModel * const wtFilter)
@@ -120,7 +120,7 @@ void IndexWidget::setupFilters()
     updateWtFilterView( wtFilter );
 }
 
-void IndexWidget::repositoryActivated(RepositoryInfo* repo)
+void IndexWidget::repositoryActivated(RM::Repo* repo)
 {
     if (mRepo != repo) {
         mRepo = repo;
@@ -131,7 +131,7 @@ void IndexWidget::repositoryActivated(RepositoryInfo* repo)
     }
 }
 
-void IndexWidget::repositoryDeactivated(RepositoryInfo* repo)
+void IndexWidget::repositoryDeactivated(RM::Repo* repo)
 {
     if (mRepo == repo) {
         mRepo = NULL;

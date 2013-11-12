@@ -31,8 +31,9 @@
 #include "libHeaven/Widgets/MiniSplitter.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
-#include "libMacGitverCore/MacGitver/RepositoryInfo.hpp"
+
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Repo.hpp"
 
 #include "HistoryView.h"
 #include "HistoryEntry.h"
@@ -75,9 +76,9 @@ HistoryView::HistoryView()
 
     initSplitters();
 
-    mRepoInfo = NULL;
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
-             this, SLOT(repoActivated(RepositoryInfo*)));
+    mRepo = NULL;
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RM::Repo*)),
+             this,                  SLOT(repoActivated(RM::Repo*)));
 
     #if 0 // Missing feature in libHeaven:
 
@@ -95,13 +96,13 @@ HistoryView::HistoryView()
     #endif
 }
 
-void HistoryView::repoActivated(RepositoryInfo* repoInfo)
+void HistoryView::repoActivated(RM::Repo* repo)
 {
-    if (mRepoInfo != repoInfo) {
+    if (mRepo != repo) {
 
-        mRepoInfo = repoInfo;
+        mRepo = repo;
 
-        Git::Repository repo = mRepoInfo->gitRepo();
+        Git::Repository repo = mRepo->gitRepo();
 
         if (mModel) {
             mList->setModel(NULL);
@@ -129,7 +130,7 @@ void HistoryView::repoActivated(RepositoryInfo* repoInfo)
     }
 }
 
-void HistoryView::currentCommitChanged( const Git::ObjectId& sha1 )
+void HistoryView::currentCommitChanged(const Git::ObjectId& sha1)
 {
     mDetails->setCommit( sha1 );
     mDiff->setCommitId( sha1 );

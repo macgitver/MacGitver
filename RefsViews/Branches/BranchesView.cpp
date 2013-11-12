@@ -19,7 +19,7 @@
 #include <QTreeView>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
 #include "Branches/BranchesView.hpp"
 #include "Branches/BranchesModel.hpp"

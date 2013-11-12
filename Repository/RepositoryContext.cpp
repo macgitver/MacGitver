@@ -23,12 +23,12 @@ RepositoryContext::RepositoryContext()
 {
 }
 
-void RepositoryContext::setRepository( RepositoryInfo* repo )
+void RepositoryContext::setRepository(RM::Repo* repo)
 {
     mRepo = repo;
 }
 
-RepositoryInfo* RepositoryContext::repository()
+RM::Repo* RepositoryContext::repository()
 {
     return mRepo;
 }

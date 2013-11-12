@@ -19,7 +19,7 @@
 
 #include "Config/UserLevelDefinition.h"
 
-class RepositoryInfo;
+class Repo;
 
 class MgvPrimaryWindowPrivate
 {
@@ -28,7 +28,7 @@ public:
 
 public:
     UserLevelDefinition::Ptr    currentLevel;
-    RepositoryInfo*             repo;
+    Repo*             repo;
 };
 
 #endif

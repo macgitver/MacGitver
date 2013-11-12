@@ -36,8 +36,25 @@ SET( SRC_FILES
     MacGitver/Module.cpp
     MacGitver/Modules.cpp
     MacGitver/GitPatchConsumer.cpp
-    MacGitver/RepositoryInfo.cpp
-    MacGitver/RepoManager.cpp
+
+    RepoMan/AutoRefresher.cpp
+    RepoMan/Base.cpp
+    RepoMan/Ref.cpp
+    RepoMan/Branch.cpp
+    RepoMan/CollectionNode.cpp
+    RepoMan/Events.cpp
+    RepoMan/Repo.cpp
+    RepoMan/RepoMan.cpp
+    RepoMan/Remote.cpp
+    RepoMan/Tag.cpp
+    RepoMan/RefLog.cpp
+    RepoMan/Submodule.cpp
+    RepoMan/RefTreeNode.cpp
+    RepoMan/Namespace.cpp
+
+    RepoMan/Private/Dumper.cpp
+
+    RepoMan/Config/RepoManConfigPage.cpp
 
     Widgets/FontSelectWidget.cpp
     Widgets/LineEdit.cpp
@@ -73,9 +90,21 @@ SET( PUB_HDR_FILES
     MacGitver/Module.h
     MacGitver/Modules.h
     MacGitver/GitPatchConsumer.hpp
-    MacGitver/RepositoryInfo.hpp
-    MacGitver/RepoManager.hpp
     MacGitver/IRepositoryContext.hpp
+
+    RepoMan/Base.hpp
+    RepoMan/Events.hpp
+    RepoMan/CollectionNode.hpp
+    RepoMan/Ref.hpp
+    RepoMan/Repo.hpp
+    RepoMan/RepoMan.hpp
+    RepoMan/Remote.hpp
+    RepoMan/Tag.hpp
+    RepoMan/Branch.hpp
+    RepoMan/RefLog.hpp
+    RepoMan/Submodule.hpp
+    RepoMan/RefTreeNode.hpp
+    RepoMan/Namespace.hpp
 
     Widgets/FontSelectWidget.h
     Widgets/LineEdit.h
@@ -97,6 +126,24 @@ SET( PRI_HDR_FILES
     Config/Ui/ConfigDialog.hpp
     Config/Ui/GeneralConfigPage.hpp
 
+    RepoMan/AutoRefresher.hpp
+
+    RepoMan/Private/BasePrivate.hpp
+    RepoMan/Private/BranchPrivate.hpp
+    RepoMan/Private/CollectionNodePrivate.hpp
+    RepoMan/Private/NamespacePrivate.hpp
+    RepoMan/Private/RefPrivate.hpp
+    RepoMan/Private/RefLogPrivate.hpp
+    RepoMan/Private/RefTreeNodePrivate.hpp
+    RepoMan/Private/RemotePrivate.hpp
+    RepoMan/Private/RepoPrivate.hpp
+    RepoMan/Private/RepoManPrivate.hpp
+    RepoMan/Private/SubmodulePrivate.hpp
+    RepoMan/Private/TagPrivate.hpp
+    RepoMan/Private/Dumper.hpp
+
+    RepoMan/Config/RepoManConfigPage.hpp
+
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h
     Widgets/RepoStateWidget.hpp
@@ -107,19 +154,32 @@ SET( UI_FILES
     Config/Ui/ConfigDialog.ui
     Config/Ui/GeneralConfigPage.ui
 
+    RepoMan/Config/RepoManConfigPage.ui
+
     App/AboutDlg.ui
 )
 
 SET( HID_FILES
 
     App/MgvPrimaryWindowActions.hid
+    RepoMan/Private/RepoManActions.hid
 
+)
+
+SET(RCC_FILES
+    Images.rcc
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
+SET(CCFG_FILES
+    RepoMan/AutoRefresherCfg.ccfg
+)
+
+CFGCOMP(CFG_FILES ${CCFG_FILES})
 QT_UIC( UIC_FILES ${UI_FILES} )
 QT_MOC( MOC_FILES ${HDR_FILES} )
+QT_RCC( RCC_DATA QRC_FILES ${RCC_FILES} )
 HIC( HIC_FILES ${HID_FILES} )
 
 ADD_QT_LIBRARY(
@@ -130,17 +190,27 @@ ADD_QT_LIBRARY(
     ${MOC_FILES}
     ${UIC_FILES} ${UI_FILES}
     ${HIC_FILES} ${HID_FILES}
+    ${QRC_FILES}
+    ${RCC_DATA}
+    ${CFG_FILES} ${CCFG_FILES}
 )
 
 TARGET_LINK_LIBRARIES(
     MacGitverCore
 
     LINK_PRIVATE
-    Heaven
-    GitWrap
-    DiffViews
+        Heaven
+        GitWrap
+        DiffViews
 )
 
 INSTALL_FRAMEWORK( MacGitverCore Runtime )
 
 MSVC_SPLIT_SOURCES( MacGitverCore )
+
+ADD_DOXYGEN_TARGET(
+    MacGitverCore
+    ${MGV_CORE_SOURCE_DIR}/doc
+
+    ${MGV_CORE_SOURCE_DIR}
+)

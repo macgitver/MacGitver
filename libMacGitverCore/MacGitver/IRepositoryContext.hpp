@@ -21,12 +21,15 @@
 
 #include <QObject>
 
-class RepositoryInfo;
+namespace RM
+{
+    class Repo;
+}
 
 class IRepositoryContext
 {
 public:
-    virtual RepositoryInfo* repository() = 0;
+    virtual RM::Repo* repository() = 0;
 };
 
 Q_DECLARE_INTERFACE( IRepositoryContext,

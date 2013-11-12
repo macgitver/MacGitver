@@ -28,7 +28,10 @@
 #include "libHeaven/CentralUI/Views/View.hpp"
 #include "libHeaven/CentralUI/Views/ViewDescriptor.hpp"
 
-class RepoManager;
+namespace RM
+{
+    class RepoMan;
+}
 
 typedef Heaven::ViewDescriptor::CreatorFunc MgvViewCreator;
 
@@ -38,12 +41,19 @@ class MGV_CORE_API MacGitver : public QObject
 {
     Q_OBJECT
 public:
+    MacGitver(bool runGui = true);
+    ~MacGitver();
+
+public:
     static MacGitver&   self();
-    static RepoManager& repoMan();
+    static RM::RepoMan& repoMan();
     static Log::Manager log();
 
 public:
     static int exec();
+
+public:
+    bool isRunningGui() const;
 
 public:
     void integrateView( Heaven::View* view, Heaven::Positions place );
@@ -60,8 +70,6 @@ signals:
     void repositoryChanged( const Git::Repository& repo ); /* deprecated */
 
 private:
-    MacGitver();
-    ~MacGitver();
     MacGitverPrivate* d;
 };
 

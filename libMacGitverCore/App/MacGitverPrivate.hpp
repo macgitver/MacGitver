@@ -34,29 +34,30 @@ class MacGitverPrivate : public QObject
 {
     Q_OBJECT
 public:
-    MacGitverPrivate( MacGitver* owner );
+    MacGitverPrivate(MacGitver *owner, bool runGui = true);
     ~MacGitverPrivate();
 
 public:
+    void init();
     void loadLevels();
     void searchModules( const QDir& binDir );
 
 private slots:
-    void boot();
+    void bootGui();
 
 public:
     Git::GitWrap        mGitWrap;
-    Git::Repository     mRepository;    /* deprecated */
 
 private:
     void registerGlobalConfigPages();
     void unregisterGlobalConfigPages();
 
 public:
+    bool                isGui;
     static MacGitver*   sSelf;
     static Modules*     sModules;
     static Log::Manager sLog;
-    static RepoManager* sRepoMan;
+    static RM::RepoMan* sRepoMan;
 };
 
 #endif

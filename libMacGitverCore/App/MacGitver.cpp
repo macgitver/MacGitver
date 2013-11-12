@@ -22,13 +22,16 @@
 
 #include "libGitWrap/GitWrap.hpp"
 
+#include "libHeaven/Icons/IconManager.hpp"
+#include "libHeaven/Icons/IconDefaultProvider.hpp"
+
 #include "libMacGitverCore/App/MacGitverPrivate.hpp"
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
 #include "libMacGitverCore/MacGitver/Modules.h"
-#include "libMacGitverCore/MacGitver/RepoManager.hpp"
-
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
 #include "libMacGitverCore/Log/LogManager.hpp"
 
 /**
@@ -48,18 +51,34 @@
  *
  */
 
-MacGitverPrivate::MacGitverPrivate( MacGitver* owner )
+MacGitverPrivate::MacGitverPrivate(MacGitver* owner, bool runGui)
+    : isGui(runGui)
 {
-    QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
-    QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
+    sSelf = owner;
+}
 
-    sSelf       = owner;
+void MacGitverPrivate::init()
+{
+    // These are used to accquire global settings and stuff...
+    // Set them differently, so we can run unit tests without fiddeling about the global settings.
+    if (isGui) {
+        QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
+        QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
+
+        Heaven::IconManager::self().defaultProvider()->addSearchPath(QLatin1String(":/Images"));
+    } else {
+        QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
+        QApplication::setApplicationName( QLatin1String( "MacGitver_NonGui" ) );
+    }
+
     sLog        = Log::Manager::create();
-    sRepoMan    = new RepoManager;
+    sRepoMan    = new RM::RepoMan;
     sModules    = new Modules;
 
-    // Continue with the rest of the init-process after QApplication::exec() has started to run.
-    QMetaObject::invokeMethod( this, "boot", Qt::QueuedConnection );
+    if (isGui) {
+        // Continue with the rest of the init-process after QApplication::exec() has started to run.
+        QMetaObject::invokeMethod( this, "bootGui", Qt::QueuedConnection );
+    }
 }
 
 MacGitverPrivate::~MacGitverPrivate()
@@ -73,7 +92,7 @@ MacGitverPrivate::~MacGitverPrivate()
     sSelf = NULL;
 }
 
-void MacGitverPrivate::boot()
+void MacGitverPrivate::bootGui()
 {
     registerGlobalConfigPages();
     loadLevels();
@@ -83,18 +102,22 @@ void MacGitverPrivate::boot()
 }
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
-RepoManager*    MacGitverPrivate::sRepoMan      = NULL;
+RM::RepoMan*    MacGitverPrivate::sRepoMan      = NULL;
 Log::Manager    MacGitverPrivate::sLog;
 Modules*        MacGitverPrivate::sModules      = NULL;
 
 MacGitver& MacGitver::self()
 {
-    Q_ASSERT( MacGitverPrivate::sSelf );  /* exec() must have been called */
+    // This assert ensures, a MacGitver instance is actually existing.
+    Q_ASSERT(MacGitverPrivate::sSelf);
+
     return *MacGitverPrivate::sSelf;
 }
 
-RepoManager& MacGitver::repoMan()
+RM::RepoMan& MacGitver::repoMan()
 {
+    Q_ASSERT(MacGitverPrivate::sRepoMan);
+
     return *MacGitverPrivate::sRepoMan;
 }
 
@@ -103,10 +126,14 @@ Log::Manager MacGitver::log()
     return MacGitverPrivate::sLog;
 }
 
-MacGitver::MacGitver()
-    : d( new MacGitverPrivate( this ) )
+MacGitver::MacGitver(bool runGui)
+    : d(new MacGitverPrivate(this, runGui))
 {
-    Q_ASSERT( MacGitverPrivate::sSelf == this );
+    d->init();
+
+    // We've run through MacGitverPrivate's constructor, so this should be true unless there
+    // was already a MacGitver instance around.
+    Q_ASSERT(MacGitverPrivate::sSelf == this);
 }
 
 MacGitver::~MacGitver()
@@ -160,11 +187,13 @@ void MacGitverPrivate::loadLevels()
 void MacGitverPrivate::registerGlobalConfigPages()
 {
     GeneralConfigPage::registerPage();
+    RepoManConfigPage::registerPage();
 }
 
 void MacGitverPrivate::unregisterGlobalConfigPages()
 {
     GeneralConfigPage::unregisterPage();
+    RepoManConfigPage::unregisterPage();
 }
 
 int MacGitver::exec()
@@ -173,3 +202,7 @@ int MacGitver::exec()
     return qApp->exec();
 }
 
+bool MacGitver::isRunningGui() const
+{
+    return d->isGui;
+}

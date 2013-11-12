@@ -19,39 +19,37 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "MacGitver/RepoManager.hpp"
-#include "MacGitver/RepositoryInfo.hpp"
+#include "RepoMan/RepoMan.hpp"
+#include "RepoMan/Repo.hpp"
 
 #include "RepoStateWidget.hpp"
 
 RepoStateWidget::RepoStateWidget()
 {
-    repoInfo = NULL;
+    repo = NULL;
     setupUi();
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RepositoryInfo*)),
-             this, SLOT(repositoryActivated(RepositoryInfo*)) );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RM::Repo*)),
+             this,                  SLOT(repositoryActivated(RM::Repo*)) );
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(RepositoryInfo*)),
-             this, SLOT(repositoryDeactivated(RepositoryInfo*)) );
-
-    //repositoryActivated( MacGitver::repoMan().activeRepository() );
+    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(RM::Repo*)),
+             this,                  SLOT(repositoryDeactivated(RM::Repo*)) );
 }
 
-void RepoStateWidget::repositoryActivated( RepositoryInfo* info )
+void RepoStateWidget::repositoryActivated(RM::Repo* info)
 {
-    if( repoInfo != info )
+    if( repo != info )
     {
-        repoInfo = info;
+        repo = info;
         setRepoState();
     }
 }
 
-void RepoStateWidget::repositoryDeactivated( RepositoryInfo* info )
+void RepoStateWidget::repositoryDeactivated(RM::Repo* info)
 {
-    if( repoInfo == info )
+    if( repo == info )
     {
-        repoInfo = NULL;
+        repo = NULL;
         setRepoState();
     }
 }
@@ -61,8 +59,8 @@ void RepoStateWidget::setRepoState()
     txthlState->hide();
     txtState->hide();
 
-    txtRepo->setText( repoInfo ? repoInfo->displayAlias() : QString() );
-    txtBranch->setText( repoInfo ? repoInfo->branchDisplay() : QString() );
+    txtRepo->setText( repo ? repo->displayAlias() : QString() );
+    txtBranch->setText( repo ? repo->branchDisplay() : QString() );
 }
 
 void RepoStateWidget::setupUi()

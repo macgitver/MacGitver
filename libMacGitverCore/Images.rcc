@@ -1,0 +1,19 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="">
+    <file>Images/Branch.svg</file>
+    <file>Images/Branches.svg</file>
+    <file>Images/Namespace.svg</file>
+    <file>Images/Namespaces.svg</file>
+    <file>Images/Note.svg</file>
+    <file>Images/Notes.svg</file>
+    <file>Images/Ref.svg</file>
+    <file>Images/RefLog.svg</file>
+    <file>Images/Remote.svg</file>
+    <file>Images/Repo.svg</file>
+    <file>Images/RefTreeNode.svg</file>
+    <file>Images/Stage.svg</file>
+    <file>Images/Submodule.svg</file>
+    <file>Images/Tag.svg</file>
+    <file>Images/Tags.svg</file>
+</qresource>
+</RCC>

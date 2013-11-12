@@ -27,7 +27,7 @@
 
 class MgvPrimaryWindowPrivate;
 
-class RepositoryInfo;
+class Repo;
 
 class MgvPrimaryWindow : public Heaven::PrimaryWindow, private MgvPrimaryWindowActions
 {

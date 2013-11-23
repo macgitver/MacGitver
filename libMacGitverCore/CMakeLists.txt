@@ -56,7 +56,7 @@ SET( SRC_FILES
 
     RepoMan/Config/RepoManConfigPage.cpp
 
-    SHMParser/ShMacroparser.cpp
+    SHMParser/ShMacroParser.cpp
 
     Widgets/FontSelectWidget.cpp
     Widgets/LineEdit.cpp

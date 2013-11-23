@@ -22,7 +22,8 @@
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
-template <class Key, class T> class QHash;
+#include <QHash>
+
 class QString;
 
 class MGV_CORE_API ShMacroParser

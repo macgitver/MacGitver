@@ -20,7 +20,6 @@
 #include "ShMacroParser.hpp"
 
 #include <QString>
-#include <QHash>
 
 ShMacroParser::ShMacroParser()
 {

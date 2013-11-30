@@ -40,6 +40,12 @@ public:
         ArgumentPart
     };
 
+    static inline bool isVarChar(QChar ch)
+    {
+        // verify this is right
+        return ch.isLetterOrNumber() || ch == L'_';
+    }
+
 public:
     State(const QString& in)
         : mode(PlainText)
@@ -99,13 +105,6 @@ public:
 };
 
 
-bool ShellExpand::isVarChar(QChar ch)
-{
-    // verify this is right
-    return ch.isLetterOrNumber() || ch == L'_';
-}
-
-
 ShellExpand::ShellExpand(const ShellExpand::Macros &macros)
     : mMacros(macros)
 {
@@ -150,7 +149,7 @@ QString ShellExpand::apply(const QString &input)
             break;
 
         case State::SimpleVarRef:
-            if (isVarChar(s.cur()))
+            if (State::isVarChar(s.cur()))
             {
                 s.pos++;
             }
@@ -165,7 +164,7 @@ QString ShellExpand::apply(const QString &input)
             {
                 s.flush(output, replacementLogic(s.get()), true, true, State::PlainText);
             }
-            else if (isVarChar(s.cur()))
+            else if (State::isVarChar(s.cur()))
             {
                 s.pos++;
             }

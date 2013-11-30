@@ -29,7 +29,6 @@
 class MGV_CORE_API ShellExpand
 {
 private:
-    static inline bool isVarChar(QChar ch);
     class State;
 
 public:

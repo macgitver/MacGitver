@@ -122,15 +122,17 @@ public:
             doSave();        
     }
 
-    inline int recurseIn()
+    inline int recurseIn(bool increment = true)
     {
-        next();
+        if (increment)
+            next();
         return ++mRecur;
     }
 
-    inline int recurseOut()
+    inline int recurseOut(bool increment = true)
     {
-        next();
+        if (increment)
+            next();
         return mRecur ? --mRecur : mRecur;
     }
 

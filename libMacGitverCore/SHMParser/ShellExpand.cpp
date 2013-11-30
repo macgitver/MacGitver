@@ -65,7 +65,7 @@ private:
 public:
     inline bool atEnd() const
     {
-        return (mPos == mInput.length());
+        return (mPos >= mInput.length());
     }
 
     inline int next()
@@ -95,10 +95,7 @@ public:
 
     QChar cur() const
     {
-        if (mPos < mInput.length())
-            return mInput.at(mPos);
-        else
-            return QChar();
+        return atEnd() ? QChar() : mInput.at(mPos);
     }
 
     inline Mode mode() const

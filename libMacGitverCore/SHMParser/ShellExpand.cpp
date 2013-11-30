@@ -48,39 +48,62 @@ public:
 
 public:
     State(const QString& in)
-        : mode(PlainText)
-        , input(in)
-        , save(0)
-        , pos(0)
-        , recur(0)
+        : mMode(PlainText)
+        , mInput(in)
+        , mSave(0)
+        , mPos(0)
+        , mRecur(0)
     {}
 
-public:
-    Mode        mode;
-    QString     input;
-    int         save;
-    int         pos;
-
 private:
-    int         recur;
+    Mode        mMode;
+    QString     mInput;
+    int         mSave;
+    int         mPos;
+    int         mRecur;
 
 public:
+    inline bool atEnd() const
+    {
+        return (mPos == mInput.length());
+    }
+
+    inline int next()
+    {
+        if (atEnd())
+            return mPos;
+
+        return ++mPos;
+    }
+
+    inline void changeMode(Mode mode, bool increment = true)
+    {
+        mMode = mode;
+        if (increment)
+            next();
+    }
+
     QString get()
     {
-        return input.mid(save, pos - save);
+        return mInput.mid(mSave, mPos - mSave);
     }
 
     void doSave()
     {
-        save = pos;
+        mSave = mPos;
     }
 
     QChar cur() const
     {
-        if (pos < input.length())
-            return input.at(pos);
+        if (mPos < mInput.length())
+            return mInput.at(mPos);
         else
             return QChar();
+    }
+
+    inline Mode mode() const
+    {
+        return mMode;
     }
 
     /**
@@ -96,28 +119,26 @@ public:
     {
         output += part;
 
-        if (increment)
-            pos++;
+        changeMode( nextMode, increment );
 
         if (savePos)
-            doSave();
-
-        mode = nextMode;
+            doSave();        
     }
 
     inline int recurseIn()
     {
-        return ++recur;
+        next();
+        return ++mRecur;
     }
 
     inline int recurseOut()
     {
-        return recur ? --recur : recur;
+        return mRecur ? --mRecur : mRecur;
     }
 
     inline void initRecursion()
     {
-        recur = 0;
+        mRecur = 0;
     }
 };
 
@@ -140,27 +161,26 @@ QString ShellExpand::apply(const QString &input)
 
     QString output, partParameter, partCommand, partArgument;
 
-    forever
+    while (!s.atEnd())
     {
-        switch (s.mode)
+        switch (s.mode())
         {
         case State::PlainText:
             if (s.cur() != L'$')
             {
-                s.pos++;
+                s.next();
             }
             else
             {
-                s.flush( output, s.get(), true, true, s.mode );
+                s.flush( output, s.get(), true, true, s.mode() );
                 if (s.cur() == L'{')
                 {
-                    s.mode = State::ParamPart;
-                    s.pos++;
+                    s.changeMode(State::ParamPart);
                     s.doSave();
                 }
                 else
                 {
-                    s.mode = State::SimpleVarRef;
+                    s.changeMode(State::SimpleVarRef, false);
                 }
             }
             break;
@@ -168,7 +188,7 @@ QString ShellExpand::apply(const QString &input)
         case State::SimpleVarRef:
             if (State::isVarChar(s.cur()))
             {
-                s.pos++;
+                s.next();
             }
             else
             {
@@ -183,7 +203,7 @@ QString ShellExpand::apply(const QString &input)
             }
             else if (State::isVarChar(s.cur()))
             {
-                s.pos++;
+                s.next();
             }
             else
             {
@@ -195,7 +215,7 @@ QString ShellExpand::apply(const QString &input)
         case State::CommandPart:
             if (cmdChars.indexOf(s.cur()) != -1)
             {
-                s.pos++;
+                s.next();
             }
             else
             {
@@ -210,7 +230,7 @@ QString ShellExpand::apply(const QString &input)
             {
                 if (s.recurseOut())
                 {
-                    s.pos++;
+                    s.next();
                 }
                 else
                 {
@@ -222,26 +242,24 @@ QString ShellExpand::apply(const QString &input)
             else if (s.cur() == L'{')
             {
                 s.recurseIn();
-                s.pos++;
             }
             else
             {
-                s.pos++;
+                s.next();
             }
             break;
         }
-
-        if (s.pos == s.input.length())
-        {
-            if (s.mode == State::PlainText)
-            {
-                s.flush( output, s.get(), false, false, State::PlainText );
-                return output;
-            }
-            // fucked up!
-            return QString();
-        }
     }
+
+    // end of text
+    if (s.mode() == State::PlainText)
+    {
+        s.flush( output, s.get(), false, false, State::PlainText );
+        return output;
+    }
+
+    // fucked up!
+    return QString();
 }
 
 

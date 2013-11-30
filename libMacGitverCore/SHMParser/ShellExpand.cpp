@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <QRegExp>
 
-class State
+class ShellExpand::State
 {
 public:
     enum Mode

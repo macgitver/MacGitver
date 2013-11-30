@@ -77,7 +77,6 @@ QString ShellExpand::apply(const QString &input)
             else
             {
                 output += replacementLogic(s.get());
-                s.pos++;
                 s.doSave();
                 s.mode = PlainText;
             }

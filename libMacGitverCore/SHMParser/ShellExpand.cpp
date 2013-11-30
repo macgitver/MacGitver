@@ -50,17 +50,19 @@ public:
     State(const QString& in)
         : mode(PlainText)
         , input(in)
-        , recur(0)
         , save(0)
         , pos(0)
+        , recur(0)
     {}
 
 public:
     Mode        mode;
     QString     input;
-    int         recur;
     int         save;
     int         pos;
+
+private:
+    int         recur;
 
 public:
     QString get()
@@ -101,6 +103,21 @@ public:
             doSave();
 
         mode = nextMode;
+    }
+
+    inline int recurseIn()
+    {
+        return ++recur;
+    }
+
+    inline int recurseOut()
+    {
+        return recur ? --recur : recur;
+    }
+
+    inline void initRecursion()
+    {
+        recur = 0;
     }
 };
 
@@ -184,16 +201,15 @@ QString ShellExpand::apply(const QString &input)
             {
                 partCommand = s.get();
                 s.flush(output, partCommand, false, true, State::ArgumentPart);
-                s.recur = 0;
+                s.initRecursion();
             }
             break;
 
         case State::ArgumentPart:
             if (s.cur() == L'}')
             {
-                if (s.recur)
+                if (s.recurseOut())
                 {
-                    s.recur--;
                     s.pos++;
                 }
                 else
@@ -205,7 +221,7 @@ QString ShellExpand::apply(const QString &input)
             }
             else if (s.cur() == L'{')
             {
-                s.recur++;
+                s.recurseIn();
                 s.pos++;
             }
             else

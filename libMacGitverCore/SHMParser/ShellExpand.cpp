@@ -23,6 +23,88 @@
 #include <QStringList>
 #include <QRegExp>
 
+class State
+{
+public:
+    enum Mode
+    {
+        // "Normal"
+        PlainText,
+
+        // $foo
+        SimpleVarRef,
+
+        // ${ ParamPart CommandPart ArgumentPart }
+        ParamPart,
+        CommandPart,
+        ArgumentPart
+    };
+
+public:
+    State(const QString& in)
+        : mode(PlainText)
+        , input(in)
+        , recur(0)
+        , save(0)
+        , pos(0)
+    {}
+
+public:
+    Mode        mode;
+    QString     input;
+    int         recur;
+    int         save;
+    int         pos;
+
+public:
+    QString get()
+    {
+        return input.mid(save, pos - save);
+    }
+
+    void doSave()
+    {
+        save = pos;
+    }
+
+    QChar cur() const
+    {
+        if (pos < input.length())
+            return input.at(pos);
+        else
+            return QChar();
+    }
+
+    /**
+     * @brief Appends the currently parsed text part to the output stream and updates the state.
+     *
+     * @param output the output stream
+     * @param part the current parsed part to append
+     * @param increment when true, parser goes to the next character
+     * @param savePos remember the current (incremented) reading position
+     * @param nextMode the mode to switch the state into
+     */
+    inline void flush(QString &output, const QString &part, bool increment, bool savePos, State::Mode nextMode)
+    {
+        output += part;
+
+        if (increment)
+            pos++;
+
+        if (savePos)
+            doSave();
+
+        mode = nextMode;
+    }
+};
+
+
+bool ShellExpand::isVarChar(QChar ch)
+{
+    // verify this is right
+    return ch.isLetterOrNumber() || ch == L'_';
+}
+
 
 ShellExpand::ShellExpand(const ShellExpand::Macros &macros)
     : mMacros(macros)
@@ -46,49 +128,42 @@ QString ShellExpand::apply(const QString &input)
     {
         switch (s.mode)
         {
-        case PlainText:
+        case State::PlainText:
             if (s.cur() != L'$')
             {
                 s.pos++;
             }
             else
             {
-                output += s.get();
-                s.pos++;
-                s.doSave();
+                s.flush( output, s.get(), true, true, s.mode );
                 if (s.cur() == L'{')
                 {
-                    s.mode = ParamPart;
+                    s.mode = State::ParamPart;
                     s.pos++;
                     s.doSave();
                 }
                 else
                 {
-                    s.mode = SimpleVarRef;
+                    s.mode = State::SimpleVarRef;
                 }
             }
             break;
 
-        case SimpleVarRef:
+        case State::SimpleVarRef:
             if (isVarChar(s.cur()))
             {
                 s.pos++;
             }
             else
             {
-                output += replacementLogic(s.get());
-                s.doSave();
-                s.mode = PlainText;
+                s.flush( output, replacementLogic(s.get()), false, true, State::PlainText );
             }
             break;
 
-        case ParamPart:
+        case State::ParamPart:
             if (s.cur() == L'}')
             {
-                output += replacementLogic(s.get());
-                s.pos++;
-                s.doSave();
-                s.mode = PlainText;
+                s.flush(output, replacementLogic(s.get()), true, true, State::PlainText);
             }
             else if (isVarChar(s.cur()))
             {
@@ -97,12 +172,11 @@ QString ShellExpand::apply(const QString &input)
             else
             {
                 partParameter = s.get();
-                s.doSave();
-                s.mode = CommandPart;
+                s.flush( output, partParameter, false, true, State::CommandPart );
             }
             break;
 
-        case CommandPart:
+        case State::CommandPart:
             if (cmdChars.indexOf(s.cur()) != -1)
             {
                 s.pos++;
@@ -110,13 +184,12 @@ QString ShellExpand::apply(const QString &input)
             else
             {
                 partCommand = s.get();
-                s.doSave();
+                s.flush(output, partCommand, false, true, State::ArgumentPart);
                 s.recur = 0;
-                s.mode = ArgumentPart;
             }
             break;
 
-        case ArgumentPart:
+        case State::ArgumentPart:
             if (s.cur() == L'}')
             {
                 if (s.recur)
@@ -127,10 +200,8 @@ QString ShellExpand::apply(const QString &input)
                 else
                 {
                     partArgument = s.get();
-                    output += replacementLogic(partParameter, partCommand, partArgument);
-                    s.pos++;
-                    s.doSave();
-                    s.mode = PlainText;
+                    s.flush(output, replacementLogic(partParameter, partCommand, partArgument),
+                            true, true, State::PlainText);
                 }
             }
             else if (s.cur() == L'{')
@@ -147,9 +218,9 @@ QString ShellExpand::apply(const QString &input)
 
         if (s.pos == s.input.length())
         {
-            if (s.mode == PlainText)
+            if (s.mode == State::PlainText)
             {
-                output += s.get();
+                s.flush( output, s.get(), false, false, State::PlainText );
                 return output;
             }
             // fucked up!
@@ -207,28 +278,4 @@ QString ShellExpand::replacementLogic(QString parameter, QString command, QStrin
     }
 
     return value;
-}
-
-QString ShellExpand::State::get()
-{
-    return input.mid(save, pos - save);
-}
-
-void ShellExpand::State::doSave()
-{
-    save = pos;
-}
-
-QChar ShellExpand::State::cur() const
-{
-    if (pos < input.length())
-        return input.at(pos);
-    else
-        return QChar();
-}
-
-bool ShellExpand::isVarChar(QChar ch)
-{
-    // verify this is right
-    return ch.isLetterOrNumber() || ch == L'_';
 }

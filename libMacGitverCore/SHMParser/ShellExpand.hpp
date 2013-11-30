@@ -29,43 +29,6 @@
 class MGV_CORE_API ShellExpand
 {
 private:
-    enum Mode
-    {
-        // "Normal"
-        PlainText,
-
-        // $foo
-        SimpleVarRef,
-
-        // ${ ParamPart CommandPart ArgumentPart }
-        ParamPart,
-        CommandPart,
-        ArgumentPart
-    };
-
-    struct State
-    {
-        Mode        mode;
-        QString     input;
-        int         recur;
-        int         save;
-        int         pos;
-
-        QString get();
-
-        void doSave();
-
-        QChar cur() const;
-
-        State(const QString& in)
-            : mode(PlainText)
-            , input(in)
-            , recur(0)
-            , save(0)
-            , pos(0)
-        {}
-    };
-
     static inline bool isVarChar(QChar ch);
 
 public:

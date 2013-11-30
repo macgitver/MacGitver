@@ -263,27 +263,22 @@ QString ShellExpand::apply(const QString &input)
 QString ShellExpand::replacementLogic(QString parameter, QString command, QString arg)
 {
     QString value = mMacros.value(parameter, QString());
+    QStringList simpleApplyRules;
+    simpleApplyRules << QLatin1String(":-") << QLatin1String(":+");
 
     if (!command.isEmpty())
     {
-        if (command == QLatin1String(":-"))
+        if (simpleApplyRules.contains(command))
         {
-            if (value.isEmpty()) {
+            if (value.isEmpty())
                 value = apply(arg);
-            }
         }
         else if (command == QLatin1String(":="))
         {
-            if (value.isEmpty()) {
-                value = apply(arg);
-                mMacros[parameter] = value;
-            }
-        }
-        else if (command == QLatin1String(":+"))
-        {
-            if (!value.isEmpty())
+            if (value.isEmpty())
             {
                 value = apply(arg);
+                mMacros[parameter] = value;
             }
         }
         else if (command == QLatin1String(":"))

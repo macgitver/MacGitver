@@ -57,6 +57,7 @@ SET( SRC_FILES
     RepoMan/Config/RepoManConfigPage.cpp
 
     SHMParser/ShMacroParser.cpp
+    SHMParser/ShellExpand.cpp
 
     Widgets/FontSelectWidget.cpp
     Widgets/LineEdit.cpp
@@ -109,6 +110,7 @@ SET( PUB_HDR_FILES
     RepoMan/Namespace.hpp
 
     SHMParser/ShMacroParser.hpp
+    SHMParser/ShellExpand.hpp
 
     Widgets/FontSelectWidget.h
     Widgets/LineEdit.h

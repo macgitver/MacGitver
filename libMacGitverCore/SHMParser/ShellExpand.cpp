@@ -133,6 +133,7 @@ public:
 
     inline int recurseOut()
     {
+        next();
         return mRecur ? --mRecur : mRecur;
     }
 
@@ -228,15 +229,11 @@ QString ShellExpand::apply(const QString &input)
         case State::ArgumentPart:
             if (s.cur() == L'}')
             {
-                if (s.recurseOut())
-                {
-                    s.next();
-                }
-                else
+                if (!s.recurseOut())
                 {
                     partArgument = s.get();
                     s.flush(output, replacementLogic(partParameter, partCommand, partArgument),
-                            true, true, State::PlainText);
+                            false, true, State::PlainText);
                 }
             }
             else if (s.cur() == L'{')

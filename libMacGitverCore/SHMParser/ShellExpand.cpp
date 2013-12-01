@@ -309,10 +309,32 @@ QString ShellExpand::replacementLogic(QString parameter, QString command, QStrin
                 value = QLatin1String(">Error: Bar arg count<");
             }
         }
-        else {
+        else if (!processExternal(value, command, arg))
+        {
             value = QLatin1String(">Error: Unknonwn command<");
         }
     }
 
     return value;
+}
+
+bool ShellExpand::processExternal(QString &value, const QString &command, const QString &arg)
+{
+    bool result = true;
+
+    if (command == QLatin1String("&-"))
+    {
+        expandFile( arg );
+    }
+    else if (command == QLatin1String("&"))
+    {
+        if (value.isEmpty())
+            value = expandFile( arg );
+    }
+    else
+    {
+        result = false;
+    }
+
+    return result;
 }

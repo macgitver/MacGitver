@@ -38,6 +38,7 @@ public:
 
 public:
     QString apply(const QString& input);
+    QString apply(QIODevice &input, QTextCodec *codec = 0);
 
 private:
     QString replacementLogic(QString parameter, QString command = QString(), QString arg = QString());

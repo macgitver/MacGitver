@@ -22,6 +22,8 @@
 
 #include <QStringList>
 #include <QRegExp>
+#include <QTextStream>
+#include <QFile>
 
 class ShellExpand::State
 {
@@ -258,6 +260,17 @@ QString ShellExpand::apply(const QString &input)
     return QString();
 }
 
+QString ShellExpand::apply(QIODevice &input, QTextCodec *codec)
+{
+    if (!input.open(QIODevice::ReadOnly))
+        return QString();
+
+    QTextStream s(&input);
+    if (codec)
+        s.setCodec(codec);
+
+    return apply(s.readAll());
+}
 
 QString ShellExpand::replacementLogic(QString parameter, QString command, QString arg)
 {

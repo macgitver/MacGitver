@@ -155,7 +155,7 @@ ShellExpand::ShellExpand(const ShellExpand::Macros &macros)
  * @param input the template string
  * @return The resulting string with the replaced macros.
  */
-QString ShellExpand::apply(const QString &input)
+QString ShellExpand::expandText(const QString &input)
 {
     static QString cmdChars = QLatin1String(":#/%+-=");
 
@@ -260,16 +260,16 @@ QString ShellExpand::apply(const QString &input)
     return QString();
 }
 
-QString ShellExpand::apply(QIODevice &input, QTextCodec *codec)
+QString ShellExpand::expandFile(const QString& fileName)
 {
+    QFile input(fileName);
     if (!input.open(QIODevice::ReadOnly))
         return QString();
 
     QTextStream s(&input);
-    if (codec)
-        s.setCodec(codec);
+    s.setCodec("UTF-8");
 
-    return apply(s.readAll());
+    return expandText(s.readAll());
 }
 
 QString ShellExpand::replacementLogic(QString parameter, QString command, QString arg)
@@ -283,13 +283,13 @@ QString ShellExpand::replacementLogic(QString parameter, QString command, QStrin
         if (simpleApplyRules.contains(command))
         {
             if (value.isEmpty())
-                value = apply(arg);
+                value = expandText(arg);
         }
         else if (command == QLatin1String(":="))
         {
             if (value.isEmpty())
             {
-                value = apply(arg);
+                value = expandText(arg);
                 mMacros[parameter] = value;
             }
         }

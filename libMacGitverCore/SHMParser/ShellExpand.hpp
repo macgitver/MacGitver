@@ -37,8 +37,8 @@ public:
     ShellExpand(const Macros& macros);
 
 public:
-    QString apply(const QString& input);
-    QString apply(QIODevice &input, QTextCodec *codec = 0);
+    QString expandText(const QString& input);
+    QString expandFile(const QString& fileName);
 
 private:
     QString replacementLogic(QString parameter, QString command = QString(), QString arg = QString());

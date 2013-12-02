@@ -157,7 +157,7 @@ ShellExpand::ShellExpand(const ShellExpand::Macros &macros)
  */
 QString ShellExpand::expandText(const QString &input)
 {
-    static QString cmdChars = QLatin1String(":#/%+-=");
+    static QString cmdChars = QLatin1String(":#/%+-=&");
 
     State s(input);
 

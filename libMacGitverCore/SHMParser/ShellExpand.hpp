@@ -34,9 +34,14 @@ private:
 public:
     typedef QHash<QString, QString> Macros;
 
-    ShellExpand(const Macros& macros);
+    ShellExpand();
 
 public:
+    bool overwriteMacroDeclarations() const;
+    void setOverwriteMacroDeclarations(bool enabled);
+
+    bool addMacro(const QString &name, const QString &value);
+
     QString expandText(const QString& input);
     QString expandFile(const QString& fileName);
 
@@ -45,7 +50,8 @@ private:
     inline bool processExternal(QString &value, const QString &command, const QString &arg);
 
 private:
-    Macros mMacros;
+    Macros  mMacros;
+    bool    mOverwriteMacroDecls;
 };
 
 

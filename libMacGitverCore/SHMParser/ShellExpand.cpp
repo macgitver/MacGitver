@@ -145,9 +145,29 @@ public:
 };
 
 
-ShellExpand::ShellExpand(const ShellExpand::Macros &macros)
-    : mMacros(macros)
+ShellExpand::ShellExpand()
+    : mOverwriteMacroDecls(false)
 {
+}
+
+bool ShellExpand::overwriteMacroDeclarations() const
+{
+    return mOverwriteMacroDecls;
+}
+
+void ShellExpand::setOverwriteMacroDeclarations(bool enabled)
+{
+    mOverwriteMacroDecls = enabled;
+}
+
+bool ShellExpand::addMacro(const QString& name, const QString& value)
+{
+    if (!mOverwriteMacroDecls && mMacros.contains(name))
+        return false;
+
+    mMacros[name] = value;
+
+    return true;
 }
 
 /**

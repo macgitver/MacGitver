@@ -29,8 +29,8 @@
 #include "libGitWrap/ObjectId.hpp"
 #include "libGitWrap/Reference.hpp"
 
-#include "libHeaven/App/Application.hpp"
-#include "libHeaven/Widgets/FooterWidget.hpp"
+#include "libBlueSky/Application.hpp"
+#include "libBlueSky/FooterWidget.hpp"
 
 #include "libMacGitverCore/App/MacGitverPrivate.hpp"
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
@@ -50,7 +50,7 @@ MgvPrimaryWindowPrivate::MgvPrimaryWindowPrivate()
 }
 
 MgvPrimaryWindow::MgvPrimaryWindow()
-    : Heaven::PrimaryWindow()
+    : BlueSky::PrimaryWindow()
 {
     d = new MgvPrimaryWindowPrivate;
     setupUi();
@@ -61,21 +61,10 @@ MgvPrimaryWindow::MgvPrimaryWindow()
     connect(&MacGitver::repoMan(), SIGNAL(lastRepositoryClosed()),
             this, SLOT(activateModeForRepo()));
 
-    QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
-
     setupFonts();
 
     connect( &Config::self(), SIGNAL(fontsChanged()),
              this, SLOT(setupFonts()) );
-
-    foreach( UserLevelDefinition::Ptr uld, Config::self().levels() )
-    {
-        if( uld->id() == levelId )
-        {
-            activateLevel( uld );
-            break;
-        }
-    }
 }
 
 MgvPrimaryWindow::~MgvPrimaryWindow()
@@ -93,7 +82,7 @@ void MgvPrimaryWindow::setupUi()
 
     setWindowTitle( trUtf8( "MacGitver" ) );
 
-    statusBar()->addWidget( new RepoStateWidget );
+    footer()->addWidget( new RepoStateWidget );
 
     if( Config::self().get( "FullScreen" ).toBool() )
     {
@@ -130,7 +119,7 @@ void MgvPrimaryWindow::savePosition()
 void MgvPrimaryWindow::closeEvent( QCloseEvent* ev )
 {
     savePosition();
-    Heaven::PrimaryWindow::closeEvent( ev );
+    BlueSky::PrimaryWindow::closeEvent( ev );
 }
 
 void MgvPrimaryWindow::onQuit()
@@ -178,7 +167,8 @@ void MgvPrimaryWindow::activateModeForRepo()
 void MgvPrimaryWindow::activateMode( const QString& modeName )
 {
     qDebug( "Going to %s mode", qPrintable( modeName ) );
-    Heaven::app()->setCurrentMode( Heaven::app()->findMode( modeName ) );
+    BlueSky::Mode* mode = BlueSky::Application::instance()->findMode(modeName.toUtf8());
+    BlueSky::Application::instance()->setActiveMode(mode);
 }
 
 void MgvPrimaryWindow::onHelpAbout()

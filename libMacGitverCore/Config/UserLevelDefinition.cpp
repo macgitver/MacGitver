@@ -23,10 +23,8 @@
 
 #include "UserLevelDefinition.h"
 
-#include "libHeaven/Heaven.hpp"
-
-#include "libHeaven/App/Application.hpp"
-#include "libHeaven/App/Mode.hpp"
+#include "libBlueSky/Application.hpp"
+#include "libBlueSky/Mode.hpp"
 
 EnableDisable::EnableDisable()
 {
@@ -204,8 +202,9 @@ UserLevelMode::Ptr UserLevelMode::read( UserLevelDefinition* level, const QDomEl
         }
         else if( e.tagName() == QLatin1String( "DefaultLayout" ) )
         {
-            Heaven::Mode* m = new Heaven::Mode( mode->heavenModeName(), e );
-            Heaven::app()->addMode( m );
+            BlueSky::Mode* m = new BlueSky::Mode(mode->heavenModeName().toUtf8());
+            m->readFromState(e, true);
+            BlueSky::Application::instance()->addMode(m);
             mode->mHeavenMode = m;
         }
     }

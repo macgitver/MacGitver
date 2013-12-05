@@ -203,7 +203,10 @@ TARGET_LINK_LIBRARIES(
     MacGitverCore
 
     LINK_PRIVATE
+        HeavenActions
+        HeavenIcons
         Heaven
+        BlueSky
         GitWrap
         DiffViews
 )

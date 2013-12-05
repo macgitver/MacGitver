@@ -19,7 +19,7 @@
 
 #include <QString>
 
-#include "libHeaven/Icons/IconRef.hpp"
+#include "libHeavenIcons/IconRef.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 

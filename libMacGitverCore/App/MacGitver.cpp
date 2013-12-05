@@ -22,8 +22,8 @@
 
 #include "libGitWrap/GitWrap.hpp"
 
-#include "libHeaven/Icons/IconManager.hpp"
-#include "libHeaven/Icons/IconDefaultProvider.hpp"
+#include "libHeavenIcons/IconManager.hpp"
+#include "libHeavenIcons/IconDefaultProvider.hpp"
 
 #include "libMacGitverCore/App/MacGitverPrivate.hpp"
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
@@ -98,7 +98,17 @@ void MacGitverPrivate::bootGui()
     loadLevels();
     sModules->initialize();
 
-    new MgvPrimaryWindow;
+    MgvPrimaryWindow* pw = static_cast<MgvPrimaryWindow*>(bsApp.primaryWindow());
+    QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
+
+    foreach( UserLevelDefinition::Ptr uld, Config::self().levels() )
+    {
+        if( uld->id() == levelId )
+        {
+            pw->activateLevel( uld );
+            break;
+        }
+    }
 }
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
@@ -141,17 +151,16 @@ MacGitver::~MacGitver()
     delete d;
 }
 
-void MacGitver::registerView( const Heaven::ViewIdentifier& identifier, const QString &displayName,
-                              MgvViewCreator creator )
+void MacGitver::registerView(const BlueSky::ViewIdentifier& identifier, const QString &displayName,
+                             MgvViewCreator creator )
 {
-    new Heaven::ViewDescriptor( identifier, displayName, creator );
+    new BlueSky::ViewDescriptor( identifier, displayName, creator );
 }
 
-void MacGitver::unregisterView( const Heaven::ViewIdentifier& identifier )
+void MacGitver::unregisterView(const BlueSky::ViewIdentifier& identifier)
 {
-    Heaven::ViewDescriptor* vd = Heaven::ViewDescriptor::get( identifier );
-    if( vd )
-    {
+    BlueSky::ViewDescriptor* vd = BlueSky::ViewDescriptor::get(identifier);
+    if (vd) {
         vd->unregister();
     }
 }

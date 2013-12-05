@@ -27,7 +27,7 @@
 
 class QDomElement;
 
-namespace Heaven
+namespace BlueSky
 {
     class Mode;
 }
@@ -94,7 +94,7 @@ public:
 private:
     UserLevelDefinition*        mLevel;
     QString                     mModeName;
-    Heaven::Mode*               mHeavenMode;
+    BlueSky::Mode*              mHeavenMode;
     EnableDisableList           mAllowedViews;
     bool                        mIsLocking;
     bool                        mIsUserSelectable;

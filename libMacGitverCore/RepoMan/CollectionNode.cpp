@@ -19,7 +19,7 @@
 
 #include <QStringBuilder>
 
-#include "libHeaven/Icons/IconRef.hpp"
+#include "libHeavenIcons/IconRef.hpp"
 
 #include "CollectionNode.hpp"
 

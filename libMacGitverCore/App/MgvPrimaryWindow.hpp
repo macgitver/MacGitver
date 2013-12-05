@@ -19,7 +19,7 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "libHeaven/App/PrimaryWindow.hpp"
+#include "libBlueSky/Windows.hpp"
 
 #include "Config/UserLevelDefinition.h"
 
@@ -29,7 +29,7 @@ class MgvPrimaryWindowPrivate;
 
 class Repo;
 
-class MgvPrimaryWindow : public Heaven::PrimaryWindow, private MgvPrimaryWindowActions
+class MgvPrimaryWindow : public BlueSky::PrimaryWindow, private MgvPrimaryWindowActions
 {
     Q_OBJECT
 public:

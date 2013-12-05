@@ -33,13 +33,13 @@ int Module::configPagePriority() const
     return 500;
 }
 
-void Module::registerView( const Heaven::ViewIdentifier& identifier, const QString& displayName,
-                           MgvViewCreator creator )
+void Module::registerView(const BlueSky::ViewIdentifier& identifier, const QString& displayName,
+                          MgvViewCreator creator)
 {
-    MacGitver::self().registerView( identifier, displayName, creator );
+    MacGitver::self().registerView(identifier, displayName, creator);
 }
 
-void Module::unregisterView( const Heaven::ViewIdentifier& identifier )
+void Module::unregisterView(const BlueSky::ViewIdentifier& identifier)
 {
     MacGitver::self().unregisterView( identifier );
 }

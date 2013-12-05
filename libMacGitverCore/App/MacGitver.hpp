@@ -25,15 +25,16 @@
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Result.hpp"
 
-#include "libHeaven/CentralUI/Views/View.hpp"
-#include "libHeaven/CentralUI/Views/ViewDescriptor.hpp"
+#include "libBlueSky/Views.hpp"
+#include "libBlueSky/Containers.hpp"
+#include "libBlueSky/ViewDescriptor.hpp"
 
 namespace RM
 {
     class RepoMan;
 }
 
-typedef Heaven::ViewDescriptor::CreatorFunc MgvViewCreator;
+typedef BlueSky::ViewDescriptor::CreatorFunc MgvViewCreator;
 
 class MacGitverPrivate;
 
@@ -56,11 +57,11 @@ public:
     bool isRunningGui() const;
 
 public:
-    void integrateView( Heaven::View* view, Heaven::Positions place );
+    void integrateView(BlueSky::View* view, BlueSky::Positions place );
 
-    void registerView (const Heaven::ViewIdentifier& identifier, const QString& displayName,
-                       MgvViewCreator creator );
-    void unregisterView( const Heaven::ViewIdentifier& identifier );
+    void registerView (const BlueSky::ViewIdentifier& identifier, const QString& displayName,
+                       MgvViewCreator creator);
+    void unregisterView(const BlueSky::ViewIdentifier& identifier);
 
     static void log( Log::Type type, const QString& logMessage );
     static void log( Log::Type type, const char* logMessage );

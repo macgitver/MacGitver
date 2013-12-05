@@ -12,11 +12,21 @@
         </Views>
 
         <DefaultLayout>
-            <Window Id="97302003-c519-43b6-aea1-26db56e99941">
-                <Split Orient="Horz" Id="758c6df6-8153-4382-aae7-0f5603302b05">
-                    <View Id="Welcome"/>
-                </Split>
-            </Window>
+            <Sky:Name>Welcome</Sky:Name>
+            <Sky:Id>Novice#Welcome</Sky:Id>
+            <Sky:Layout>
+                <Sky:Id>Novice#Welcome</Sky:Id>
+                <Sky:Window>
+                    <Sky:Id>97302003-c519-43b6-aea1-26db56e99941</Sky:Id>
+                    <Sky:Splitter>
+                       <Sky:Horizontal/>
+                       <Sky:Id>758c6df6-8153-4382-aae7-0f5603302b05</Sky:Id>
+                       <Sky:View>
+                            <Sky:Id>Welcome</Sky:Id>
+                        </Sky:View>
+                    </Sky:Splitter>
+                </Sky:Window>
+            </Sky:Layout>
         </DefaultLayout>
 
     </Mode>
@@ -31,22 +41,46 @@
         </Views>
 
         <DefaultLayout>
-            <Window Id="97302003-c519-43b6-aea1-26db56e99941">
-                <Split Orient="Horz" Id="758c6df6-8153-4382-aae7-0f5603302b05">
-                    <Split Orient="Vert" Id="550c094d-b8e9-4761-a92e-2e715f775d6c">
-                        <Tab Pos="Left" Id="c9e000f4-9fa3-4e42-a3c7-cc77d604096f">
-                            <View Id="RepoTree"/>
-                        </Tab>
-                        <Tab Pos="Left" Id="5549d783-bc26-4838-860e-686cf60256c8">
-                            <View Id="Branches"/>
-                        </Tab>
-                    </Split>
-                    <Tab Pos="Top" Stretch="3" Id="a942b497-d7f0-42c5-a1ae-748eea9bfa0f">
-                        <View Id="History"/>
-                        <View Id="WorkTree"/>
-                    </Tab>
-                </Split>
-            </Window>
+            <Sky:Name>Novice</Sky:Name>
+            <Sky:Id>Novice#Novice</Sky:Id>
+            <Sky:Layout>
+                <Sky:Id>Novice#Novice</Sky:Id>
+                <Sky:Window>
+                    <Sky:Id>97302003-c519-43b6-aea1-26db56e99941</Sky:Id>
+                    <Sky:Splitter>
+                       <Sky:Horizontal/>
+                       <Sky:Id>758c6df6-8153-4382-aae7-0f5603302b05</Sky:Id>
+                       <Sky:Splitter>
+                            <Sky:Vertical/>
+                            <Sky:Id>550c094d-b8e9-4761-a92e-2e715f775d6c</Sky:Id>
+                            <Sky:Tab>
+                                <Sky:Left/>
+                                <Sky:Id>c9e000f4-9fa3-4e42-a3c7-cc77d604096f</Sky:Id>
+                                <Sky:View>
+                                     <Sky:Id>RepoTree</Sky:Id>
+                                </Sky:View>
+                            </Sky:Tab>
+                            <Sky:Tab>
+                                <Sky:Left/>
+                                <Sky:Id>5549d783-bc26-4838-860e-686cf60256c8</Sky:Id>
+                                <Sky:View>
+                                     <Sky:Id>Branches</Sky:Id>
+                                </Sky:View>
+                            </Sky:Tab>
+                        </Sky:Splitter>
+                        <Sky:Tab>
+                            <Sky:Top/>
+                            <Sky:Id>a942b497-d7f0-42c5-a1ae-748eea9bfa0f</Sky:Id>
+                            <Sky:View>
+                                <Sky:Id>History</Sky:Id>
+                            </Sky:View>
+                            <Sky:View>
+                                <Sky:Id>WorkTree</Sky:Id>
+                            </Sky:View>
+                        </Sky:Tab>
+                    </Sky:Splitter>
+                </Sky:Window>
+            </Sky:Layout>
         </DefaultLayout>
 
     <!--

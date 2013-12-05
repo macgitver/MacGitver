@@ -23,7 +23,7 @@ WelcomeModule::WelcomeModule()
 {
 }
 
-Heaven::View* WelcomeModule::createWelcomeView()
+BlueSky::View* WelcomeModule::createWelcomeView()
 {
     return new WelcomeView();
 }

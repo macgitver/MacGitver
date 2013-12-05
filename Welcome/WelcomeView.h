@@ -17,12 +17,12 @@
 #ifndef MGV_MODULE_WELCOMEVIEW_H
 #define MGV_MODULE_WELCOMEVIEW_H
 
-#include "libHeaven/CentralUI/Views/View.hpp"
+#include "libBlueSky/Views.hpp"
 
 class QWebView;
 class QUrl;
 
-class WelcomeView : public Heaven::View
+class WelcomeView : public BlueSky::View
 {
     Q_OBJECT
 public:

@@ -35,7 +35,7 @@ public:
     void deinitialize();
 
 private:
-    static Heaven::View* createWorkTreeView();
+    static BlueSky::View* createWorkTreeView();
 };
 
 #endif

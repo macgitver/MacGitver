@@ -19,21 +19,21 @@
 #ifndef MGV_BRANCHES_VIEW_DATA_HPP
 #define MGV_BRANCHES_VIEW_DATA_HPP
 
-#include "libHeaven/CentralUI/Contexts/ViewContextData.hpp"
+#include "libBlueSky/Contexts.hpp"
 
 #include "libGitWrap/Repository.hpp"
 
 class BranchesModel;
 class RefsSortProxy;
 
-class BranchesViewData : public Heaven::ViewContextData
+class BranchesViewData : public BlueSky::ViewContextData
 {
     Q_OBJECT
 public:
     BranchesViewData();
 
 private:
-    void attachedToContext( Heaven::ViewContext* context );
+    void attachedToContext(BlueSky::ViewContext* context);
     void detachedFromContext();
 
 public:

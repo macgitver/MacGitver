@@ -60,7 +60,7 @@ private:
     void updateMostRecentlyUsedMenu();
 
 private:
-    static Heaven::View* createRepoTreeView();
+    static BlueSky::View* createRepoTreeView();
 
 private:
     QStringList     mMostRecentlyUsed;

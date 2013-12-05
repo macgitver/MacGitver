@@ -33,7 +33,7 @@ public:
     void deinitialize();
 
 private:
-    static Heaven::View* createRefsView();
+    static BlueSky::View* createRefsView();
 };
 
 #endif

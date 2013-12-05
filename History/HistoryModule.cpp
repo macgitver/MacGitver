@@ -29,7 +29,7 @@ void HistoryModule::setupConfigPages( ConfigDialog* dialog )
     dialog->addPage( new HistoryConfigPage( dialog ) );
 }
 
-Heaven::View* HistoryModule::createHistoryView()
+BlueSky::View* HistoryModule::createHistoryView()
 {
     return new HistoryView();
 }

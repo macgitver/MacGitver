@@ -110,11 +110,11 @@ void RepoTreeView::onCtxClose()
 
 void RepoTreeView::onRepoActivated(RM::Repo* repo)
 {
-    Heaven::ContextKeys keys = mkKeys();
+    BlueSky::ContextKeys keys = mkKeys();
     keys.set("RepoName", repo->path());
 
     bool isNewContext = false;
-    Heaven::ViewContext* ctx = contextFor(keys, &isNewContext);
+    BlueSky::ViewContext* ctx = contextFor(keys, &isNewContext);
 
     if (isNewContext) {
         RepositoryContext* ctx2 = qobject_cast< RepositoryContext* >(ctx);
@@ -135,7 +135,7 @@ void RepoTreeView::onRepoDeactivated(RM::Repo* repo)
     }
 }
 
-Heaven::ViewContext* RepoTreeView::createContextObject() const
+BlueSky::ViewContext* RepoTreeView::createContextObject() const
 {
     return new RepositoryContext;
 }

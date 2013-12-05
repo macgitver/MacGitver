@@ -27,7 +27,7 @@ RemotesModule::RemotesModule()
 {
 }
 
-Heaven::View* RemotesModule::createRemotesView()
+BlueSky::View* RemotesModule::createRemotesView()
 {
     return new RemotesView;
 }

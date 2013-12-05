@@ -17,13 +17,13 @@
 #ifndef MGV_REMOTES_VIEW_CONTEXT_H
 #define MGV_REMOTES_VIEW_CONTEXT_H
 
-#include "libHeaven/CentralUI/Contexts/ViewContext.hpp"
+#include "libBlueSky/Contexts.hpp"
 
 class QAbstractItemModel;
 class QStandardItem;
 class QStandardItemModel;
 
-class RemotesViewContext : public Heaven::ViewContext
+class RemotesViewContext : public BlueSky::ViewContext
 {
     Q_OBJECT
 public:

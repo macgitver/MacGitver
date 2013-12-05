@@ -42,7 +42,7 @@
 
 IndexWidget::IndexWidget()
     : View( "WorkTree" )
-    , mSplitter( new Heaven::MiniSplitter( Qt::Vertical ) )
+    , mSplitter( new BlueSky::MiniSplitter( Qt::Vertical ) )
     , mTreeView( new WorkingTreeItemView )
     , mIndexTreeView( new IndexTreeItemView )
     , mCommitMessage( new QPlainTextEdit )
@@ -59,13 +59,13 @@ IndexWidget::IndexWidget()
 
     mDiffView = DiffViews::DiffViews::self().defaultCreator()->create( this );
 
-    Heaven::MiniSplitter *hSplit_1 = new Heaven::MiniSplitter( Qt::Horizontal );
+    BlueSky::MiniSplitter *hSplit_1 = new BlueSky::MiniSplitter( Qt::Horizontal );
     hSplit_1->addWidget( mTreeView );
     hSplit_1->addWidget( mDiffView );
 
     mSplitter->addWidget( hSplit_1 );
 
-    Heaven::MiniSplitter *hSplit_2 = new Heaven::MiniSplitter( Qt::Horizontal );
+    BlueSky::MiniSplitter *hSplit_2 = new BlueSky::MiniSplitter( Qt::Horizontal );
 
     hSplit_2->addWidget( mIndexTreeView );
     hSplit_2->addWidget( mCommitMessage );

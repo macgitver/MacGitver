@@ -61,7 +61,7 @@ private:
 
 private:
     static LoggingModule* sSelf;
-    static Heaven::View* createLoggingView();
+    static BlueSky::View* createLoggingView();
 };
 
 #endif

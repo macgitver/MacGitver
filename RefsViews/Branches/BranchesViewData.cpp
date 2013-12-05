@@ -16,7 +16,7 @@
  *
  */
 
-#include "libHeaven/CentralUI/Contexts/ViewContext.hpp"
+#include "libBlueSky/Contexts.hpp"
 
 #include "libMacGitverCore/MacGitver/IRepositoryContext.hpp"
 #include "libMacGitverCore/RepoMan/Repo.hpp"
@@ -27,13 +27,13 @@
 #include "RefsSortProxy.hpp"
 
 BranchesViewData::BranchesViewData()
-    : Heaven::ViewContextData()
+    : BlueSky::ViewContextData()
     , mModel( NULL )
     , mSortProxy( NULL )
 {
 }
 
-void BranchesViewData::attachedToContext( Heaven::ViewContext* context )
+void BranchesViewData::attachedToContext(BlueSky::ViewContext* context)
 {
     Q_UNUSED( context );
     mModel = new BranchesModel( this );

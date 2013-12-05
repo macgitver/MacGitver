@@ -37,7 +37,7 @@ public:
     void deinitialize();
 
 private:
-    static Heaven::View* createHistoryView();
+    static BlueSky::View* createHistoryView();
 };
 
 #endif

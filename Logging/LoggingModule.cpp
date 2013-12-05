@@ -36,7 +36,7 @@ LoggingModule::~LoggingModule()
     sSelf = NULL;
 }
 
-Heaven::View* LoggingModule::createLoggingView()
+BlueSky::View* LoggingModule::createLoggingView()
 {
     return new LoggingView(sSelf);
 }

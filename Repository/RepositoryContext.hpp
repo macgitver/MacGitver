@@ -21,9 +21,9 @@
 
 #include "libMacGitverCore/MacGitver/IRepositoryContext.hpp"
 
-#include "libHeaven/CentralUI/Contexts/ViewContext.hpp"
+#include "libBlueSky/Contexts.hpp"
 
-class RepositoryContext : public Heaven::ViewContext, public IRepositoryContext
+class RepositoryContext : public BlueSky::ViewContext, public IRepositoryContext
 {
     Q_OBJECT
     Q_INTERFACES( IRepositoryContext )

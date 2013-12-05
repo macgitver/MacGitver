@@ -55,7 +55,7 @@ BranchesView::BranchesView()
     setContextProvider( "RepoTree" );
 }
 
-Heaven::ViewContextData* BranchesView::createContextData() const
+BlueSky::ViewContextData* BranchesView::createContextData() const
 {
     return new BranchesViewData;
 }
@@ -277,7 +277,7 @@ void BranchesView::contextMenuEvent(QContextMenuEvent *ev)
     }
 }
 
-void BranchesView::attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data )
+void BranchesView::attachedToContext(BlueSky::ViewContext* ctx, BlueSky::ViewContextData* data )
 {
     Q_UNUSED( ctx );
 
@@ -294,7 +294,7 @@ void BranchesView::attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewCont
     mTree->setModel( mData->mSortProxy );
 }
 
-void BranchesView::detachedFromContext( Heaven::ViewContext* ctx )
+void BranchesView::detachedFromContext(BlueSky::ViewContext* ctx )
 {
     mTree->setModel( NULL );
     mData = NULL;

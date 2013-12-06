@@ -35,6 +35,7 @@ public:
     typedef QHash<QString, QString> Macros;
 
     ShellExpand();
+    ShellExpand(const Macros& macros);
 
 public:
     bool overwriteMacroDeclarations() const;

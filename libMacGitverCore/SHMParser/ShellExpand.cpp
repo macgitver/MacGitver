@@ -150,6 +150,12 @@ ShellExpand::ShellExpand()
 {
 }
 
+ShellExpand::ShellExpand(const Macros &macros)
+    : mMacros(macros)
+    , mOverwriteMacroDecls(false)
+{
+}
+
 bool ShellExpand::overwriteMacroDeclarations() const
 {
     return mOverwriteMacroDecls;

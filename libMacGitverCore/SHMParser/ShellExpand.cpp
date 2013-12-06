@@ -303,26 +303,24 @@ QString ShellExpand::expandFile(const QString& fileName)
 QString ShellExpand::replacementLogic(const QString& parameter, const QString& command, const QString& arg)
 {
     QString value = mMacros.value(parameter, QString());
-    QStringList simpleApplyRules;
-    simpleApplyRules << QLatin1String(":-") << QLatin1String(":+");
 
     if (!command.isEmpty())
     {
-        if (simpleApplyRules.contains(command))
+        bool replaced = replaceExpandedValue(value, (command == QLatin1String(":+")) && !value.isEmpty(), arg);
+
+        if (!replaced)
+            replaced = replaceExpandedValue(value, (command == QLatin1String(":-")) && value.isEmpty(), arg);
+
+        if (!replaced)
         {
-            if (value.isEmpty())
-                value = expandText(arg);
-        }
-        else if (command == QLatin1String(":="))
-        {
-            if (value.isEmpty())
-            {
-                value = expandText(arg);
+            replaced = replaceExpandedValue(value, command == QLatin1String(":=") && value.isEmpty(), arg);
+            if (replaced)
                 mMacros[parameter] = value;
-            }
         }
-        else if (command == QLatin1String(":"))
+
+        if (!replaced && (command == QLatin1String(":")))
         {
+            replaced = true;
             QStringList sl = arg.split(QLatin1String(":"));
             if (sl.count() == 1)
             {
@@ -337,10 +335,12 @@ QString ShellExpand::replacementLogic(const QString& parameter, const QString& c
                 value = QLatin1String(">Error: Bar arg count<");
             }
         }
-        else if (!processExternal(value, command, arg))
-        {
+
+        if (!replaced)
+            replaced = processExternal(value, command, arg);
+
+        if (!replaced)
             value = QLatin1String(">Error: Unknonwn command<");
-        }
     }
 
     return value;
@@ -365,4 +365,11 @@ bool ShellExpand::processExternal(QString &value, const QString &command, const 
     }
 
     return result;
+}
+
+bool ShellExpand::replaceExpandedValue(QString &value, bool cond, const QString& arg)
+{
+    if (cond)
+        value = expandText(arg);
+    return cond;
 }

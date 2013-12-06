@@ -49,6 +49,7 @@ public:
 private:
     QString replacementLogic(const QString& parameter, const QString& command = QString(), const QString& arg = QString());
     inline bool processExternal(QString &value, const QString &command, const QString &arg);
+    bool replaceExpandedValue(QString& value, bool cond, const QString &arg);
 
 private:
     Macros  mMacros;

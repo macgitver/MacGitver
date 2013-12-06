@@ -282,10 +282,7 @@ QString ShellExpand::expandFile(const QString& fileName)
     if (!input.open(QIODevice::ReadOnly))
         return QString();
 
-    QTextStream s(&input);
-    s.setCodec("UTF-8");
-
-    return expandText(s.readAll());
+    return expandText( QString::fromUtf8(input.readAll().constData()));
 }
 
 QString ShellExpand::replacementLogic(QString parameter, QString command, QString arg)

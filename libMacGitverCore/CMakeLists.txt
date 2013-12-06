@@ -202,11 +202,13 @@ ADD_QT_LIBRARY(
 TARGET_LINK_LIBRARIES(
     MacGitverCore
 
-    LINK_PRIVATE
+    LINK_PUBLIC
         HeavenActions
         HeavenIcons
         Heaven
         BlueSky
+
+    LINK_PRIVATE
         GitWrap
         DiffViews
 )

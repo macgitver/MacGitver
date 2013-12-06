@@ -251,7 +251,7 @@ QString ShellExpand::expandText(const QString &input)
             else
             {
                 partParameter = s.get();
-                s.flush( partParameter, false, true, State::CommandPart );
+                s.changeMode(State::CommandPart);
             }
             break;
 
@@ -263,7 +263,7 @@ QString ShellExpand::expandText(const QString &input)
             else
             {
                 partCommand = s.get();
-                s.flush(partCommand, false, true, State::ArgumentPart);
+                s.changeMode(State::ArgumentPart);
                 s.initRecursion();
             }
             break;

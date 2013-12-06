@@ -21,8 +21,6 @@
 #include "ShellExpand.hpp"
 
 #include <QStringList>
-#include <QRegExp>
-#include <QTextStream>
 #include <QFile>
 
 class ShellExpand::State

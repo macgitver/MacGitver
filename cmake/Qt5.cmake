@@ -130,8 +130,7 @@ macro(QT_RCC infiles outfiles )
         list(APPEND ${outfiles} ${outfile})
     endforeach()
 
-    set(${outfiles} ${${outfiles}} PARENT_SCOPE)
-
+    set(${outfiles} ${${outfiles}})
 endmacro()
 
 MACRO( QT_PREPARE )

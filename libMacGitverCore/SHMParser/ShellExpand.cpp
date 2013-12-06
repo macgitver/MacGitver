@@ -188,22 +188,18 @@ QString ShellExpand::expandText(const QString &input)
         switch (s.mode())
         {
         case State::PlainText:
-            if (s.cur() != L'$')
+            if (s.cur() == L'$')
             {
-                s.next();
-            }
-            else
-            {
-                s.flush( output, s.get(), true, true, s.mode() );
+                s.flush( output, s.get(), true, true, State::SimpleVarRef );
                 if (s.cur() == L'{')
                 {
                     s.changeMode(State::ParamPart);
                     s.doSave();
                 }
-                else
-                {
-                    s.changeMode(State::SimpleVarRef, false);
-                }
+            }
+            else
+            {
+                s.next();
             }
             break;
 

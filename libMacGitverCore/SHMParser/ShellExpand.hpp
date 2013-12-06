@@ -47,7 +47,7 @@ public:
     QString expandFile(const QString& fileName);
 
 private:
-    QString replacementLogic(QString parameter, QString command = QString(), QString arg = QString());
+    QString replacementLogic(const QString& parameter, const QString& command = QString(), const QString& arg = QString());
     inline bool processExternal(QString &value, const QString &command, const QString &arg);
 
 private:

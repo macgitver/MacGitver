@@ -300,7 +300,7 @@ QString ShellExpand::expandFile(const QString& fileName)
     return expandText( QString::fromUtf8(input.readAll().constData()));
 }
 
-QString ShellExpand::replacementLogic(QString parameter, QString command, QString arg)
+QString ShellExpand::replacementLogic(const QString& parameter, const QString& command, const QString& arg)
 {
     QString value = mMacros.value(parameter, QString());
     QStringList simpleApplyRules;

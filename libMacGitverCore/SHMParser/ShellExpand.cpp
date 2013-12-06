@@ -170,6 +170,21 @@ bool ShellExpand::addMacro(const QString& name, const QString& value)
     return true;
 }
 
+bool ShellExpand::addMacros(const ShellExpand::Macros &macros)
+{
+    if (mMacros.count())
+    {
+        bool error = false;
+        foreach (const QString& key, macros.keys())
+        {
+            error = addMacro(key, macros.value(key)) || error;
+        }
+        return error;
+    }
+    mMacros = macros;
+    return true;
+}
+
 /**
  * @brief Apply macro expansion to a given input string.
  * @param input the template string

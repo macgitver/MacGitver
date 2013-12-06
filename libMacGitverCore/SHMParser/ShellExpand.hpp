@@ -41,6 +41,7 @@ public:
     void setOverwriteMacroDeclarations(bool enabled);
 
     bool addMacro(const QString &name, const QString &value);
+    bool addMacros(const Macros& macros);
 
     QString expandText(const QString& input);
     QString expandFile(const QString& fileName);

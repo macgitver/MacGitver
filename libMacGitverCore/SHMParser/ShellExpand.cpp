@@ -60,11 +60,17 @@ public:
 private:
     Mode        mMode;
     QString     mInput;
+    QString     mOutput;
     int         mSave;
     int         mPos;
     int         mRecur;
 
 public:
+    const QString& output() const
+    {
+        return mOutput;
+    }
+
     inline bool atEnd() const
     {
         return (mPos >= mInput.length());
@@ -114,9 +120,9 @@ public:
      * @param savePos remember the current (incremented) reading position
      * @param nextMode the mode to switch the state into
      */
-    inline void flush(QString &output, const QString &part, bool increment, bool savePos, State::Mode nextMode)
+    inline void flush(const QString &part, bool increment, bool savePos, State::Mode nextMode)
     {
-        output += part;
+        mOutput += part;
 
         changeMode( nextMode, increment );
 
@@ -202,7 +208,7 @@ QString ShellExpand::expandText(const QString &input)
 
     State s(input);
 
-    QString output, partParameter, partCommand, partArgument;
+    QString partParameter, partCommand, partArgument;
 
     while (!s.atEnd())
     {
@@ -211,7 +217,7 @@ QString ShellExpand::expandText(const QString &input)
         case State::PlainText:
             if (s.cur() == L'$')
             {
-                s.flush( output, s.get(), true, true, State::SimpleVarRef );
+                s.flush( s.get(), true, true, State::SimpleVarRef );
                 if (s.cur() == L'{')
                 {
                     s.changeMode(State::ParamPart);
@@ -231,14 +237,14 @@ QString ShellExpand::expandText(const QString &input)
             }
             else
             {
-                s.flush( output, replacementLogic(s.get()), false, true, State::PlainText );
+                s.flush( replacementLogic(s.get()), false, true, State::PlainText );
             }
             break;
 
         case State::ParamPart:
             if (s.cur() == L'}')
             {
-                s.flush(output, replacementLogic(s.get()), true, true, State::PlainText);
+                s.flush(replacementLogic(s.get()), true, true, State::PlainText);
             }
             else if (State::isVarChar(s.cur()))
             {
@@ -247,7 +253,7 @@ QString ShellExpand::expandText(const QString &input)
             else
             {
                 partParameter = s.get();
-                s.flush( output, partParameter, false, true, State::CommandPart );
+                s.flush( partParameter, false, true, State::CommandPart );
             }
             break;
 
@@ -259,7 +265,7 @@ QString ShellExpand::expandText(const QString &input)
             else
             {
                 partCommand = s.get();
-                s.flush(output, partCommand, false, true, State::ArgumentPart);
+                s.flush(partCommand, false, true, State::ArgumentPart);
                 s.initRecursion();
             }
             break;
@@ -270,7 +276,7 @@ QString ShellExpand::expandText(const QString &input)
                 if (!s.recurseOut())
                 {
                     partArgument = s.get();
-                    s.flush(output, replacementLogic(partParameter, partCommand, partArgument),
+                    s.flush(replacementLogic(partParameter, partCommand, partArgument),
                             false, true, State::PlainText);
                 }
             }
@@ -289,8 +295,8 @@ QString ShellExpand::expandText(const QString &input)
     // end of text
     if (s.mode() == State::PlainText)
     {
-        s.flush( output, s.get(), false, false, State::PlainText );
-        return output;
+        s.flush( s.get(), false, false, State::PlainText );
+        return s.output();
     }
 
     // fucked up!

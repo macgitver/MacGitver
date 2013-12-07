@@ -16,7 +16,10 @@ MACRO(ADD_MGV_MODULE _Name )
 
         LINK_PRIVATE
                 GitWrap
-                Heaven
+                HeavenActions
+                HeavenColors
+                HeavenIcons
+                BlueSky
                 MacGitverCore
     )
 

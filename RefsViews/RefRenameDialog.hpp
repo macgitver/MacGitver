@@ -19,33 +19,30 @@
 #ifndef REF_RENAME_DIALOG_HPP
 #define REF_RENAME_DIALOG_HPP
 
-#include <QDialog>
+#include "libBlueSky/Dialog.hpp"
 
 #include "libGitWrap/Result.hpp"
 
-namespace Ui
-{
-    class RefRenameDialog;
-}
+#include "ui_RefRenameDialog.h"
 
 class RefBranch;
 
-class RefRenameDialog : public QDialog
+class RefRenameDialog
+        : public BlueSky::Dialog
+        , private Ui::RefRenameDialog
 {
     Q_OBJECT
-public:    
-    RefRenameDialog( QWidget* parent = 0 );
+public:
+    RefRenameDialog();
     ~RefRenameDialog();
 
-    void init( RefBranch *refInfo );
+    void init(RefBranch *refInfo);
     const Git::Result &gitResult() const;
 
 private slots:
     void accept();
 
 private:
-    Ui::RefRenameDialog*    ui;
-
     RefBranch*              mRefInfo;
     Git::Result             mGitResult;
 

@@ -2,13 +2,17 @@
 #ifndef MODREPO_PROGRESS_DLG_HPP
 #define MODREPO_PROGRESS_DLG_HPP
 
+#include "libBlueSky/Dialog.hpp"
+
 #include "ui_ProgressDlg.h"
 
-class ProgressDlg : public QDialog, private Ui::ProgressDlg
+class ProgressDlg
+        : public BlueSky::Dialog
+        , private Ui::ProgressDlg
 {
     Q_OBJECT
 public:
-    ProgressDlg( QWidget* parent );
+    ProgressDlg();
 
 public:
     void setAction( const QString& action, const QStringList& open,

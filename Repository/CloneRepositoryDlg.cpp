@@ -135,7 +135,7 @@ void CloneRepositoryDlg::accept()
     clone->setUrl( txtUrl->text() );
     clone->setPath( txtPath->text() );
 
-    mProgress = new ProgressDlg( this );
+    mProgress = new ProgressDlg;
     mProgress->show();
     mProgress->setCurrent( clone );
 

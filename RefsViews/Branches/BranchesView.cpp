@@ -204,7 +204,7 @@ void BranchesView::onRenameRef()
     QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
     if ( !srcIndex.isValid() ) return;
 
-    RefRenameDialog* dlg = new RefRenameDialog( this );
+    RefRenameDialog* dlg = new RefRenameDialog;
     dlg->init( static_cast<RefBranch*>(srcIndex.internalPointer()) );
 
     if ( dlg->exec() != QDialog::Accepted )

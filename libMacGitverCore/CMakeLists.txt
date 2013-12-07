@@ -205,7 +205,6 @@ TARGET_LINK_LIBRARIES(
     LINK_PUBLIC
         HeavenActions
         HeavenIcons
-        Heaven
         BlueSky
 
     LINK_PRIVATE

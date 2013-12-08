@@ -354,7 +354,7 @@ QString ShellExpand::replacementLogic(const QString& parameter, const QString& c
             replaced = processExternal(value, command, arg);
 
         if (!replaced)
-            value = QLatin1String(">Error: Unknonwn command<");
+            value = QString::fromUtf8(">Error: Unknonwn command: %1<").arg(command);
     }
 
     return value;

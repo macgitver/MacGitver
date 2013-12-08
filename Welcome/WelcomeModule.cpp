@@ -16,6 +16,8 @@
 
 #include <QtPlugin>
 
+#include "libBlueSky/Application.hpp"
+
 #include "WelcomeModule.h"
 #include "WelcomeView.h"
 
@@ -30,9 +32,12 @@ BlueSky::View* WelcomeModule::createWelcomeView()
 
 void WelcomeModule::initialize()
 {
-    registerView( "Welcome",
-                  tr( "Welcome" ),
-                  &WelcomeModule::createWelcomeView );
+    BlueSky::ViewDescriptor* descr = registerView(
+                "Welcome",
+                tr( "Welcome" ),
+                &WelcomeModule::createWelcomeView);
+
+    BlueSky::Application::instance()->setModelessView(descr);
 }
 
 void WelcomeModule::deinitialize()

@@ -1,14 +1,14 @@
 
-PROJECT( MGV_MOD_HISTORY )
+PROJECT(MGV_MOD_HISTORY)
 
-QT_PREPARE( Core Gui Widgets )
+QT_PREPARE(Core Gui Widgets Xml)
 
 INCLUDE_DIRECTORIES(
-    ${MGV_MOD_HISTORY_SOURCE_DIR}
-    ${MGV_MOD_HISTORY_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-SET( SRC_FILES
+SET(SRC_FILES
 
     HistoryView.cpp
     HistoryListDelegate.cpp
@@ -20,9 +20,10 @@ SET( SRC_FILES
     HistoryModule.cpp
     HistoryConfigPage.cpp
     HistoryDiff.cpp
+    HistoryMode.cpp
 )
 
-SET( HDR_FILES
+SET(HDR_FILES
 
     HistoryView.h
     HistoryListDelegate.h
@@ -34,22 +35,29 @@ SET( HDR_FILES
     HistoryModule.h
     HistoryConfigPage.h
     HistoryDiff.h
+    HistoryMode.hpp
 )
 
-SET( UI_FILES
+SET(UI_FILES
 
     HistoryConfigPage.ui
 )
 
-SET( HID_FILES
+SET(HID_FILES
 
     HistoryViewActions.hid
 )
 
-CFGCOMP( CFG_FILES HistoryConfig.ccfg )
-QT_MOC( MOC_FILES ${HDR_FILES} )
-QT_UIC( UIC_FILES ${UI_FILES} )
-HIC( HIC_FILES ${HID_FILES} )
+SET(RCC_FILES
+
+    Resources/HistoryModule.rcc
+)
+
+CFGCOMP(CFG_FILES HistoryConfig.ccfg)
+QT_MOC(MOC_FILES ${HDR_FILES})
+QT_UIC(UIC_FILES ${UI_FILES})
+QT_RCC(RCC_DATA QRC_FILES ${RCC_FILES})
+HIC(HIC_FILES ${HID_FILES})
 
 ADD_MGV_MODULE(
     History
@@ -60,6 +68,9 @@ ADD_MGV_MODULE(
     ${UIC_FILES} ${UI_FILES}
     ${HIC_FILES} ${HID_FILES}
     ${CFG_FILES}
+    ${RCC_DATA}
+    ${QRC_FILES}
+    ${RCC_FILES}
 )
 
 TARGET_LINK_LIBRARIES(
@@ -69,4 +80,4 @@ TARGET_LINK_LIBRARIES(
         DiffViews
 )
 
-MSVC_SPLIT_SOURCES( ModHistory )
+MSVC_SPLIT_SOURCES(ModHistory)

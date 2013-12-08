@@ -16,11 +16,17 @@
 
 #include <QtPlugin>
 
+#include "HistoryMode.hpp"
 #include "HistoryModule.h"
 #include "HistoryView.h"
 #include "HistoryConfigPage.h"
 
 HistoryModule::HistoryModule()
+    : mMode(NULL)
+{
+}
+
+HistoryModule::~HistoryModule()
 {
 }
 
@@ -29,23 +35,23 @@ void HistoryModule::setupConfigPages( ConfigDialog* dialog )
     dialog->addPage( new HistoryConfigPage( dialog ) );
 }
 
-BlueSky::View* HistoryModule::createHistoryView()
-{
-    return new HistoryView();
-}
-
 void HistoryModule::initialize()
 {
-    registerView( "History",
-                  tr( "History" ),
-                  &HistoryModule::createHistoryView );
+    mMode = new HistoryMode(this);
+
+    registerView<HistoryView>(tr("History"));
+    registerMode(mMode);
 }
 
 void HistoryModule::deinitialize()
 {
-    unregisterView( "History" );
+    unregisterView<HistoryView>();
+    unregisterMode(mMode);
+
+    delete mMode;
+    mMode = NULL;
 }
 
 #if QT_VERSION < 0x050000
-Q_EXPORT_PLUGIN2( History, HistoryModule )
+Q_EXPORT_PLUGIN2(History, HistoryModule)
 #endif

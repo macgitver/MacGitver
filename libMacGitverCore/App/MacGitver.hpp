@@ -59,8 +59,9 @@ public:
 public:
     void integrateView(BlueSky::View* view, BlueSky::Positions place );
 
-    void registerView (const BlueSky::ViewIdentifier& identifier, const QString& displayName,
-                       MgvViewCreator creator);
+    BlueSky::ViewDescriptor* registerView(const BlueSky::ViewIdentifier& identifier,
+                                          const QString& displayName,
+                                          MgvViewCreator creator);
     void unregisterView(const BlueSky::ViewIdentifier& identifier);
 
     static void log( Log::Type type, const QString& logMessage );

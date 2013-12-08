@@ -33,10 +33,24 @@ int Module::configPagePriority() const
     return 500;
 }
 
-void Module::registerView(const BlueSky::ViewIdentifier& identifier, const QString& displayName,
-                          MgvViewCreator creator)
+/**
+ * @brief       Register a View to the application.
+ *
+ * @param[in]   identifier  The key to access this module's view (must be unique)
+ *
+ * @param[in]   displayName A translated name that is displayed to the user when this view is
+ *                          referenced.
+ *
+ * @param[in]   creator     A call back function that actually creates a View of this type.
+ *
+ * @return      The descriptor for the new view.
+ *
+ */
+BlueSky::ViewDescriptor* Module::registerView(const BlueSky::ViewIdentifier& identifier,
+                                              const QString& displayName,
+                                              MgvViewCreator creator)
 {
-    MacGitver::self().registerView(identifier, displayName, creator);
+    return MacGitver::self().registerView(identifier, displayName, creator);
 }
 
 void Module::unregisterView(const BlueSky::ViewIdentifier& identifier)

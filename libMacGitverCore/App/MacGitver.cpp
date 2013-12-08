@@ -151,10 +151,25 @@ MacGitver::~MacGitver()
     delete d;
 }
 
-void MacGitver::registerView(const BlueSky::ViewIdentifier& identifier, const QString &displayName,
-                             MgvViewCreator creator )
+
+/**
+ * @brief       Register a View to the application.
+ *
+ * @param[in]   identifier  The key to access this module's view (must be unique)
+ *
+ * @param[in]   displayName A translated name that is displayed to the user when this view is
+ *              referenced.
+ *
+ * @param[in]   creator     A call back function that actually creates a View of this type.
+ *
+ * @return      The descriptor for the new view.
+ *
+ */
+BlueSky::ViewDescriptor* MacGitver::registerView(const BlueSky::ViewIdentifier& identifier,
+                                                 const QString &displayName,
+                                                 MgvViewCreator creator)
 {
-    new BlueSky::ViewDescriptor( identifier, displayName, creator );
+    return new BlueSky::ViewDescriptor( identifier, displayName, creator );
 }
 
 void MacGitver::unregisterView(const BlueSky::ViewIdentifier& identifier)

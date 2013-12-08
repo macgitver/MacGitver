@@ -63,18 +63,9 @@ protected:
     virtual int configPagePriority() const;
 
 protected:
-    /**
-     * @brief       Register a View to the application.
-     *
-     * @param[in]   identifier  The key to access this module's view (must be unique)
-     *
-     * @param[in]   displayName A translated name that is displayed to the user when this view is
-     *              referenced.
-     *
-     * @param[in]   creator     A call back function that actually creates a View of this type.
-     */
-    void registerView(const BlueSky::ViewIdentifier& identifier, const QString& displayName,
-                      MgvViewCreator creator );
+    BlueSky::ViewDescriptor* registerView(const BlueSky::ViewIdentifier& identifier,
+                                          const QString& displayName,
+                                          MgvViewCreator creator );
 
     /**
      * @brief Unregister a previously registered module view.

@@ -27,6 +27,12 @@ This Shell-Macro-Parser supports the following subset of the bash parameter expa
 -   `${parameter%%word}` and `${parameter%word}` (__Suffix removal__)
     _word_ is subject to the replacement logic. If the tail of _parameter_ matches _word_, the shortest (`%`) or longest (`%%`) match is removed from _parameter_ and the result returned.
 
+-   `${&path/to/file}` (__Include__)
+    Includes another file and expands the result as value in place.
+
+-   `${&-path/to/file}` (__Silent include__)
+    Includes another file without expanding the result as value (result is empty). Defined macros will be available. This outsourcing common macro definitions into a central file.
+
 Any matching here refers to the (actually simplified) path name expansion method of bash:
 - ? means any one character
 - * means any number of characters

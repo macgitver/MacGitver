@@ -47,20 +47,17 @@ public:
 
 public:
     void init();
-    void loadLevels();
-    void searchModules( const QDir& binDir );
+    void searchModules(const QDir& binDir);
 
 private slots:
     void bootGui();
-
-public:
-    Git::GitWrap        mGitWrap;
 
 private:
     void registerGlobalConfigPages();
     void unregisterGlobalConfigPages();
 
 public:
+    Git::GitWrap        mGitWrap;
     bool                isGui;
     MgvApp              bsApp;
     static MacGitver*   sSelf;

@@ -45,7 +45,6 @@
 #include "ui_AboutDlg.h"
 
 MgvPrimaryWindowPrivate::MgvPrimaryWindowPrivate()
-    : currentLevel()
 {
 }
 
@@ -146,27 +145,25 @@ void MgvPrimaryWindow::moveToCenter()
     setGeometry( center );
 }
 
-void MgvPrimaryWindow::activateLevel( UserLevelDefinition::Ptr uld )
-{
-    d->currentLevel = uld;
-
-    activateModeForRepo();
-}
-
 void MgvPrimaryWindow::activateModeForRepo()
 {
-    QString preset = QLatin1String( (MacGitver::repoMan().repositories().count() > 0)
-                                    ? "Normal" : "Welcome" );
-
-    QString configPath = d->currentLevel->id() % QChar( L'/' ) % preset;
-    QString modeName = Config::self().get( configPath, d->currentLevel->preset( preset ) ).toString();
-
-    activateMode( d->currentLevel->name() % QChar( L'#' ) % modeName );
+    if (MacGitver::repoMan().repositories().count() > 0) {
+        activateMode(QLatin1String("HistoryMode"));
+    }
+    else {
+        activateMode(QString());
+    }
 }
 
 void MgvPrimaryWindow::activateMode( const QString& modeName )
 {
-    qDebug( "Going to %s mode", qPrintable( modeName ) );
+    if (modeName.isEmpty()) {
+        qDebug() << "Going to mode <NONE>";
+    }
+    else {
+        qDebug() << QByteArray("Going to %s mode") % modeName.toUtf8();
+    }
+
     BlueSky::Mode* mode = BlueSky::Application::instance()->findMode(modeName.toUtf8());
     BlueSky::Application::instance()->setActiveMode(mode);
 }

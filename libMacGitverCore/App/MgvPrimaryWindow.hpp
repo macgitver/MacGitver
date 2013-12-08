@@ -21,8 +21,6 @@
 
 #include "libBlueSky/Windows.hpp"
 
-#include "Config/UserLevelDefinition.h"
-
 #include "hic_MgvPrimaryWindowActions.h"
 
 class MgvPrimaryWindowPrivate;
@@ -48,7 +46,6 @@ private slots:
 
 public:
     void activateMode( const QString& modeName );
-    void activateLevel( UserLevelDefinition::Ptr uld );
 
 private:
     void savePosition();

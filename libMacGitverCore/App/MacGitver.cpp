@@ -95,20 +95,10 @@ MacGitverPrivate::~MacGitverPrivate()
 void MacGitverPrivate::bootGui()
 {
     registerGlobalConfigPages();
-    loadLevels();
     sModules->initialize();
 
-    MgvPrimaryWindow* pw = static_cast<MgvPrimaryWindow*>(bsApp.primaryWindow());
-    QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
-
-    foreach( UserLevelDefinition::Ptr uld, Config::self().levels() )
-    {
-        if( uld->id() == levelId )
-        {
-            pw->activateLevel( uld );
-            break;
-        }
-    }
+    // Create the primary window by explicitly requesting it
+    bsApp.primaryWindow();
 }
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
@@ -201,11 +191,6 @@ void MacGitver::log( Log::Type type, const Git::Result& r, const char* logMessag
     {
         log().addMessage(QString::fromUtf8("GitWrap-Error: %1").arg(r.errorText()), type);
     }
-}
-
-void MacGitverPrivate::loadLevels()
-{
-    Config::self().loadLevels( QLatin1String( ":/Xml/Levels.xml" ) );
 }
 
 void MacGitverPrivate::registerGlobalConfigPages()

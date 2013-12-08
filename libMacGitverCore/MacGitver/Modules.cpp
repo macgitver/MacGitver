@@ -19,6 +19,8 @@
 #include <QStringBuilder>
 #include <QDir>
 
+#include "libBlueSky/Application.hpp"
+
 #include "MacGitver/Modules.h"
 
 Modules::Modules()
@@ -87,10 +89,11 @@ void Modules::initialize()
 
     setupInternals();
 
-    foreach( Module* module, mModules )
-    {
+    foreach (Module* module, mModules) {
         module->initialize();
     }
+
+    BlueSky::Application::instance()->setupModes();
 }
 
 void Modules::setupInternals()

@@ -74,19 +74,21 @@ public:
         return (mPos >= mInput.length());
     }
 
-    inline int next()
+    inline int advance(bool savePos = false)
     {
+        if (savePos)
+            doSave();
+
         if (atEnd())
             return mPos;
 
         return ++mPos;
     }
 
-    inline void changeMode(Mode mode, bool increment = true)
+    inline void advance(Mode mode, bool savePos = false)
     {
         mMode = mode;
-        if (increment)
-            next();
+        advance(savePos);
     }
 
     QString get()
@@ -118,27 +120,18 @@ public:
      * @param savePos remember the current (incremented) reading position
      * @param nextMode the mode to switch the state into
      */
-    inline void flush(const QString &part, bool increment, bool savePos, State::Mode nextMode)
+    inline void flush(const QString &part)
     {
-        mOutput += part;
-
-        changeMode( nextMode, increment );
-
-        if (savePos)
-            doSave();        
+        mOutput += part;      
     }
 
-    inline int recurseIn(bool increment = true)
+    inline int recurseIn()
     {
-        if (increment)
-            next();
         return ++mRecur;
     }
 
-    inline int recurseOut(bool increment = true)
+    inline int recurseOut()
     {
-        if (increment)
-            next();
         return mRecur ? --mRecur : mRecur;
     }
 
@@ -220,55 +213,59 @@ QString ShellExpand::expandText(const QString &input)
         case State::PlainText:
             if (s.cur() == L'$')
             {
-                s.flush( s.get(), true, true, State::SimpleVarRef );
+                s.flush(s.get());
+                s.advance(State::SimpleVarRef, false);
+                s.doSave();
                 if (s.cur() == L'{')
                 {
-                    s.changeMode(State::ParamPart);
+                    s.advance(State::ParamPart, false);
                     s.doSave();
                 }
             }
             else
             {
-                s.next();
+                s.advance();
             }
             break;
 
         case State::SimpleVarRef:
             if (State::isVarChar(s.cur()))
             {
-                s.next();
+                s.advance();
             }
             else
             {
-                s.flush( replacementLogic(s.get()), false, true, State::PlainText );
+                s.flush( replacementLogic(s.get()) );
+                s.advance( State::PlainText, true );
             }
             break;
 
         case State::ParamPart:
             if (s.cur() == L'}')
             {
-                s.flush(replacementLogic(s.get()), true, true, State::PlainText);
+                s.flush( replacementLogic(s.get()) );
+                s.advance(State::PlainText, true);
             }
             else if (State::isVarChar(s.cur()))
             {
-                s.next();
+                s.advance();
             }
             else
             {
                 partParameter = s.get();
-                s.changeMode(State::CommandPart);
+                s.advance(State::CommandPart, true);
             }
             break;
 
         case State::CommandPart:
-            if (cmdChars.indexOf(s.cur()) != -1)
+            if (cmdChars.contains(s.cur()))
             {
-                s.next();
+                s.advance();
             }
             else
             {
                 partCommand = s.get();
-                s.changeMode(State::ArgumentPart);
+                s.advance(State::ArgumentPart, true);
                 s.initRecursion();
             }
             break;
@@ -279,8 +276,9 @@ QString ShellExpand::expandText(const QString &input)
                 if (!s.recurseOut())
                 {
                     partArgument = s.get();
-                    s.flush(replacementLogic(partParameter, partCommand, partArgument),
-                            false, true, State::PlainText);
+                    s.flush(replacementLogic(partParameter, partCommand, partArgument));
+                    s.advance(State::PlainText, false);
+                    s.doSave();
                 }
             }
             else if (s.cur() == L'{')
@@ -289,7 +287,7 @@ QString ShellExpand::expandText(const QString &input)
             }
             else
             {
-                s.next();
+                s.advance();
             }
             break;
         }
@@ -298,7 +296,8 @@ QString ShellExpand::expandText(const QString &input)
     // end of text
     if (s.mode() == State::PlainText)
     {
-        s.flush( s.get(), false, false, State::PlainText );
+        s.flush( s.get() );
+        s.advance( State::PlainText );
         return s.output();
     }
 

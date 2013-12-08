@@ -29,6 +29,7 @@ HistoryMode::HistoryMode(QObject *parent)
 {
     setName(tr("History"));
     setEnabled(false);
+    setDisplayOrder(5);
 
     connect(&MacGitver::self().repoMan(), SIGNAL(hasActiveRepositoryChanged(bool)),
             this, SLOT(setEnabled(bool)));

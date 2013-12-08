@@ -29,6 +29,7 @@ LoggingMode::LoggingMode(QObject *parent)
 {
     setName(tr("Logbook"));
     setEnabled(false);
+    setDisplayOrder(100);
 
     connect(&MacGitver::self().repoMan(), SIGNAL(hasActiveRepositoryChanged(bool)),
             this, SLOT(setEnabled(bool)));

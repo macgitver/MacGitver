@@ -14,6 +14,8 @@
  *
  */
 
+#include "libBlueSky/Application.hpp"
+
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
 #include "libMacGitverCore/MacGitver/Module.h"
@@ -53,9 +55,34 @@ BlueSky::ViewDescriptor* Module::registerView(const BlueSky::ViewIdentifier& ide
     return MacGitver::self().registerView(identifier, displayName, creator);
 }
 
-void Module::unregisterView(const BlueSky::ViewIdentifier& identifier)
-{
-    MacGitver::self().unregisterView( identifier );
+/**
+ * @brief       Unregister a previously registered module view.
+ *
+ * @param[in]   identifier      The view identifier that was used to register the view.
+ *
+ */
+void Module::unregisterView(const BlueSky::ViewIdentifier& identifier) {
+    MacGitver::self().unregisterView(identifier);
+}
+
+/**
+ * @brief       Register a mode in libBlueSky
+ *
+ * @param[in]   mode        The mode to register.
+ *
+ */
+void Module::registerMode(BlueSky::Mode* mode) {
+    BlueSky::Application::instance()->addMode(mode);
+}
+
+/**
+ * @brief       Unregister a mode from libBlueSky
+ *
+ * @param[in]   mode        The mode to unregister.
+ *
+ */
+void Module::unregisterMode(BlueSky::Mode* mode) {
+    BlueSky::Application::instance()->removeMode(mode);
 }
 
 void Module::setupConfigPages( ConfigDialog* dialog )

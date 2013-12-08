@@ -1,7 +1,5 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
 	 <file>mgv_sak32.png</file>
-	 <file>Xml/Levels.xml</file>
-	 <file>Xml/Novice.Gui.xml</file>
  </qresource>
  </RCC>

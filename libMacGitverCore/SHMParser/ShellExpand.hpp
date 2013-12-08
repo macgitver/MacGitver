@@ -44,6 +44,8 @@ public:
     bool addMacro(const QString &name, const QString &value);
     bool addMacros(const Macros& macros);
 
+    const Macros& macros() const;
+
     QString expandText(const QString& input);
     QString expandFile(const QString& fileName);
 

@@ -195,6 +195,11 @@ bool ShellExpand::addMacros(const ShellExpand::Macros &macros)
     return true;
 }
 
+const ShellExpand::Macros& ShellExpand::macros() const
+{
+    return mMacros;
+}
+
 /**
  * @brief Apply macro expansion to a given input string.
  * @param input the template string

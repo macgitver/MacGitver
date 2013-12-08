@@ -58,6 +58,9 @@ QVariant WorkingTreeDirItem::data( int column, int role ) const
         }
         break;
 
+    case StatusRole:
+        return 0;
+
     default:
         break;
     }

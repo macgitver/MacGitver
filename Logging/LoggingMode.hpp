@@ -17,45 +17,23 @@
  *
  */
 
-#ifndef MGV_LOGGING_VIEW_H
-#define MGV_LOGGING_VIEW_H
+#ifndef MGV_LOGGING_MODE_HPP
+#define MGV_LOGGING_MODE_HPP
+#pragma once
 
-#include <QString>
-#include <QSet>
+#include "libBlueSky/Mode.hpp"
 
-#include "libBlueSky/Views.hpp"
-
-class QWebView;
-class LoggingModule;
-
-class LoggingView : public BlueSky::View
+class LoggingMode
+        : public BlueSky::Mode
 {
     Q_OBJECT
 public:
-    LoggingView();
-    ~LoggingView();
+    LoggingMode(QObject* parent);
 
-public:
-    void regenerate();
-    void clearCache();
-
-public:
-    QSize sizeHint() const;
-
-private slots:
-    void clearPrefixCache();
+protected:
+    QString createDefaultState() const;
 
 private:
-    void calculatePrefix();
-
-private:
-    QString htmlPrefix;
-    QString htmlPostfix;
-    QSet<QString> mHiddenChannels;
-    QHash< quint64, QString > mCache;
-    LoggingModule* mModule;
-    QWebView* mBrowser;
 };
 
 #endif
-

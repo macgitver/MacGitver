@@ -23,46 +23,49 @@
 
 #include "LoggingModule.hpp"
 #include "LoggingView.hpp"
+#include "LoggingMode.hpp"
 
 LoggingModule::LoggingModule()
     : mQueuedUpdate(false)
     , mView(NULL)
+    , mMode(NULL)
 {
     sSelf = this;
 }
 
-LoggingModule::~LoggingModule()
-{
+LoggingModule::~LoggingModule() {
     sSelf = NULL;
 }
 
-BlueSky::View* LoggingModule::createLoggingView()
-{
-    return new LoggingView(sSelf);
+LoggingModule* LoggingModule::self() {
+    return sSelf;
 }
 
-void LoggingModule::initialize()
-{
-    registerView( "Log",
-                  tr( "Log" ),
-                  &LoggingModule::createLoggingView );
+void LoggingModule::initialize() {
+
+    mMode = new LoggingMode(this);
+
+    registerView<LoggingView>(tr("Logbook"));
+    registerMode(mMode);
 
     MacGitver::log().setLogConsumer(this);
 }
 
-void LoggingModule::deinitialize()
-{
+void LoggingModule::deinitialize() {
     MacGitver::log().setLogConsumer(NULL);
-    unregisterView( "Log" );
+
+    unregisterView<LoggingView>();
+    unregisterMode(mMode);
+
+    delete mMode;
+    mMode = NULL;
 }
 
-void LoggingModule::setView(LoggingView* view)
-{
+void LoggingModule::setView(LoggingView* view) {
     mView = view;
 }
 
-void LoggingModule::channelAdded(Log::Channel channel)
-{
+void LoggingModule::channelAdded(Log::Channel channel) {
     queueViewUpdate();
 }
 
@@ -90,21 +93,19 @@ void LoggingModule::eventAdded(Log::Event e)
     queueViewUpdate();
 }
 
-void LoggingModule::queueViewUpdate()
-{
+void LoggingModule::queueViewUpdate() {
+
     if (!mQueuedUpdate) {
         mQueuedUpdate = true;
         QMetaObject::invokeMethod(this, "viewUpdate", Qt::QueuedConnection);
     }
 }
 
-Log::Event::List LoggingModule::currentEvents() const
-{
+Log::Event::List LoggingModule::currentEvents() const {
     return mEvents;
 }
 
-void LoggingModule::viewUpdate()
-{
+void LoggingModule::viewUpdate() {
     if (mView) {
         mView->regenerate();
     }

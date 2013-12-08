@@ -17,45 +17,28 @@
  *
  */
 
-#ifndef MGV_LOGGING_VIEW_H
-#define MGV_LOGGING_VIEW_H
+#include <QFile>
 
-#include <QString>
-#include <QSet>
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
-#include "libBlueSky/Views.hpp"
+#include "LoggingMode.hpp"
 
-class QWebView;
-class LoggingModule;
-
-class LoggingView : public BlueSky::View
+LoggingMode::LoggingMode(QObject *parent)
+    : BlueSky::Mode(staticMetaObject.className(), parent)
 {
-    Q_OBJECT
-public:
-    LoggingView();
-    ~LoggingView();
+    setName(tr("Logbook"));
+    setEnabled(false);
 
-public:
-    void regenerate();
-    void clearCache();
+    connect(&MacGitver::self().repoMan(), SIGNAL(hasActiveRepositoryChanged(bool)),
+            this, SLOT(setEnabled(bool)));
+}
 
-public:
-    QSize sizeHint() const;
+QString LoggingMode::createDefaultState() const {
+    QFile f(QLatin1String(":/Modes/LoggingMode.xml"));
+    if (!f.open(QFile::ReadOnly)) {
+        return QString();
+    }
 
-private slots:
-    void clearPrefixCache();
-
-private:
-    void calculatePrefix();
-
-private:
-    QString htmlPrefix;
-    QString htmlPostfix;
-    QSet<QString> mHiddenChannels;
-    QHash< quint64, QString > mCache;
-    LoggingModule* mModule;
-    QWebView* mBrowser;
-};
-
-#endif
-
+    return QString::fromUtf8(f.readAll().constData());
+}

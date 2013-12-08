@@ -4,6 +4,7 @@
     <Preset Name="Welcome" Mode="Welcome"/>
     <Preset Name="Normal"  Mode="Novice"/>
 
+    <!-- No longer a mode
     <Mode Name="Welcome" Selectable="0" Locking="1">
 
         <Views>
@@ -30,8 +31,9 @@
         </DefaultLayout>
 
     </Mode>
+    -->
 
-    <Mode Name="Novice" Selectable="0" Locking="1">
+    <Mode Name="History" Selectable="0" Locking="1">
 
         <Views>
             <Disable Match="*"/>
@@ -41,10 +43,10 @@
         </Views>
 
         <DefaultLayout>
-            <Sky:Name>Novice</Sky:Name>
-            <Sky:Id>Novice#Novice</Sky:Id>
+            <Sky:Name>History</Sky:Name>
+            <Sky:Id>History</Sky:Id>
             <Sky:Layout>
-                <Sky:Id>Novice#Novice</Sky:Id>
+                <Sky:Id>History</Sky:Id>
                 <Sky:Window>
                     <Sky:Id>97302003-c519-43b6-aea1-26db56e99941</Sky:Id>
                     <Sky:Splitter>

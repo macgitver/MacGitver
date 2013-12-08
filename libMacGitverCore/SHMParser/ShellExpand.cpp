@@ -350,7 +350,7 @@ QString ShellExpand::replacementLogic(const QString& parameter, const QString& c
             }
         }
 
-        if (!replaced)
+        if (!replaced && parameter.isEmpty())
             replaced = processExternal(value, command, arg);
 
         if (!replaced)

@@ -28,7 +28,7 @@
 #include "RepositoryContext.hpp"
 
 RepoTreeView::RepoTreeView()
-    : ContextView( "RepoTree" )
+    : ContextView("RepoTreeView")
 {
     setViewName( trUtf8( "Repositories" ) );
     setFlags( ProvidesContexts );

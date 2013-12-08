@@ -44,11 +44,6 @@ void RepositoryModule::setupConfigPages( ConfigDialog* dialog )
 {
 }
 
-BlueSky::View* RepositoryModule::createRepoTreeView()
-{
-    return new RepoTreeView;
-}
-
 void RepositoryModule::initialize()
 {
     setupActions( this );
@@ -68,14 +63,12 @@ void RepositoryModule::initialize()
 
     updateMostRecentlyUsedMenu();
 
-    MacGitver::self().registerView( "RepoTree",
-                                    tr( "Repository" ),
-                                    &RepositoryModule::createRepoTreeView );
+    registerView<RepoTreeView>(tr("Repository"));
 }
 
 void RepositoryModule::deinitialize()
 {
-    MacGitver::self().unregisterView( "RepoTree" );
+    unregisterView<RepoTreeView>();
 }
 
 void RepositoryModule::onRepositoryClose()

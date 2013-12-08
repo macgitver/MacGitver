@@ -31,7 +31,9 @@ namespace RM
 class RepoInfoModel;
 class TreeViewCtxMenu;
 
-class RepoTreeView : public BlueSky::ContextView, private RepoTreeViewCtxMenu
+class RepoTreeView
+        : public BlueSky::ContextView
+        , private RepoTreeViewCtxMenu
 {
     Q_OBJECT
 public:

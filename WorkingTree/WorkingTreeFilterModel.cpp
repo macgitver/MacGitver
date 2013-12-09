@@ -15,7 +15,7 @@
  */
 
 #include "WorkingTreeFilterModel.h"
-
+#include "WorkingTreeModel.h"
 #include "WorkingTreeAbstractItem.h"
 
 
@@ -51,13 +51,41 @@ bool WorkingTreeFilterModel::filterAcceptsColumn(int sourceColumn, const QModelI
 bool WorkingTreeFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QModelIndex i = sourceModel()->index( sourceRow, 0, sourceParent );
-    if ( !i.isValid() )
+    if (!i.isValid()) {
         return false;
+    }
 
-    QVariant v = i.data( WorkingTreeAbstractItem::StatusRole );
-    if ( !v.isValid() )
+    WorkingTreeModel* model = qobject_cast<WorkingTreeModel*>(sourceModel());
+    if (!model) {
+        Q_ASSERT(false);
         return true;
+    }
 
-    Git::StatusFlags f = Git::StatusFlags( v.toInt() );
-    return ( f & mStatusFilter );
+    WorkingTreeAbstractItem* it = model->indexToItem(i);
+    if (!it->isDirectory()) {
+
+        // If filter says "show it" and it's not a directory, then accpet it
+        QVariant v = i.data(WorkingTreeAbstractItem::StatusRole);
+        if (!v.isValid()) {
+            return true;
+        }
+
+        Git::StatusFlags f = Git::StatusFlags( v.toInt() );
+        return (f & mStatusFilter);
+    }
+
+    // If it is a directory, check if any child is accepted:
+    int numKids = model->rowCount(i);
+    if (!numKids) {
+        // If we are a directory and got no kids, don't accept it
+        return false;
+    }
+
+    bool anyChildVisible = false;
+    for (int cnt = 0; cnt < numKids; cnt++) {
+        anyChildVisible |= filterAcceptsRow(cnt, i);
+    }
+
+    // We are a directory, then we accept if we have any accepted child
+    return anyChildVisible;
 }

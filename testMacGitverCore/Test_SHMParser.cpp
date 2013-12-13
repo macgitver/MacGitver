@@ -15,3 +15,18 @@ TEST(SHMParser, SimpleAssignMacro)
     ASSERT_TRUE(m.contains(QLatin1String("Macro")));
     EXPECT_STREQ("Value", qPrintable(m[QLatin1String("Macro")]));
 }
+
+TEST(SHMParser, RecursiveAssignMacro_Test)
+{
+    ShellExpand se;
+    QString source = QString::fromUtf8("_${MacroOuter:=${MacroInner:=Recurse}}_");
+    QString result = se.expandText(source);
+
+    ASSERT_STREQ("_RecurseRecurse_", qPrintable(result));
+
+    ShellExpand::Macros m = se.macros();
+    ASSERT_EQ(2, m.count());
+    EXPECT_STREQ("Recurse", qPrintable(m[QLatin1String("MacroInner")]));
+    EXPECT_STREQ("RecurseRecurse", qPrintable(m[QLatin1String("MacroOuter")]));
+
+}

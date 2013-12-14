@@ -27,6 +27,5 @@ TEST(SHMParser, RecursiveAssignMacro_Test)
     ShellExpand::Macros m = se.macros();
     ASSERT_EQ(2, m.count());
     EXPECT_STREQ("Recurse", qPrintable(m[QLatin1String("MacroInner")]));
-    EXPECT_STREQ("RecurseRecurse", qPrintable(m[QLatin1String("MacroOuter")]));
-
+    EXPECT_STREQ("Recurse", qPrintable(m[QLatin1String("MacroOuter")]));
 }

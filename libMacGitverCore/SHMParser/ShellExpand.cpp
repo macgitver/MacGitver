@@ -122,7 +122,7 @@ public:
      */
     inline void flush(const QString &part)
     {
-        mOutput += part;      
+        mOutput += part;
     }
 
     inline int recurseIn()
@@ -267,6 +267,7 @@ QString ShellExpand::expandText(const QString &input)
                 partCommand = s.get();
                 s.advance(State::ArgumentPart, true);
                 s.initRecursion();
+                s.recurseIn();
             }
             break;
 
@@ -280,10 +281,15 @@ QString ShellExpand::expandText(const QString &input)
                     s.advance(State::PlainText, false);
                     s.doSave();
                 }
+                else
+                {
+                    s.advance();
+                }
             }
             else if (s.cur() == L'{')
             {
                 s.recurseIn();
+                s.advance();
             }
             else
             {
@@ -297,7 +303,6 @@ QString ShellExpand::expandText(const QString &input)
     if (s.mode() == State::PlainText)
     {
         s.flush( s.get() );
-        s.advance( State::PlainText );
         return s.output();
     }
 

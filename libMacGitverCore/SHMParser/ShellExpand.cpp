@@ -303,7 +303,6 @@ QString ShellExpand::expandText(const QString &input)
     if (s.mode() == State::PlainText)
     {
         s.flush( s.get() );
-        s.advance( State::PlainText );
         return s.output();
     }
 

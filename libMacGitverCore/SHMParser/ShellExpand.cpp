@@ -122,7 +122,7 @@ public:
      */
     inline void flush(const QString &part)
     {
-        mOutput += part;      
+        mOutput += part;
     }
 
     inline int recurseIn()

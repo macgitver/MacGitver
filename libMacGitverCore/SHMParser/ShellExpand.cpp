@@ -267,6 +267,7 @@ QString ShellExpand::expandText(const QString &input)
                 partCommand = s.get();
                 s.advance(State::ArgumentPart, true);
                 s.initRecursion();
+                s.recurseIn();
             }
             break;
 

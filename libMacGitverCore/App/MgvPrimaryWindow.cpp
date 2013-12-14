@@ -161,7 +161,7 @@ void MgvPrimaryWindow::activateMode( const QString& modeName )
         qDebug() << "Going to mode <NONE>";
     }
     else {
-        qDebug() << QByteArray("Going to %s mode") % modeName.toUtf8();
+        qDebug() << QByteArray("Going to mode: ") % modeName.toUtf8();
     }
 
     BlueSky::Mode* mode = BlueSky::Application::instance()->findMode(modeName.toUtf8());

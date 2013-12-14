@@ -281,10 +281,15 @@ QString ShellExpand::expandText(const QString &input)
                     s.advance(State::PlainText, false);
                     s.doSave();
                 }
+                else
+                {
+                    s.advance();
+                }
             }
             else if (s.cur() == L'{')
             {
                 s.recurseIn();
+                s.advance();
             }
             else
             {

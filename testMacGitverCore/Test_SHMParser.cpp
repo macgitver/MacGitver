@@ -22,7 +22,7 @@ TEST(SHMParser, RecursiveAssignMacro_Test)
     QString source = QString::fromUtf8("_${MacroOuter:=${MacroInner:=Recurse}}_");
     QString result = se.expandText(source);
 
-    ASSERT_STREQ("_RecurseRecurse_", qPrintable(result));
+    ASSERT_STREQ("_Recurse_", qPrintable(result));
 
     ShellExpand::Macros m = se.macros();
     ASSERT_EQ(2, m.count());

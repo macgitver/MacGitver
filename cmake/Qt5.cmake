@@ -20,7 +20,6 @@ MACRO(QT_MOC SourcesVar )
     SET( Mocables ${ARGN} )
     SET( _Force 0 )
     SET( _mocfiles )
-    QT5_GET_MOC_FLAGS(_moc_INCS)
 
     FOREACH(_current_FILE ${Mocables})
 
@@ -29,18 +28,12 @@ MACRO(QT_MOC SourcesVar )
             SET( _Force 1 )
 
         ELSEIF( _Force )
-
             GET_FILENAME_COMPONENT(_abs_FILE ${_current_FILE} ABSOLUTE)
             GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
             SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
-            QT5_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
+            QT5_GENERATE_MOC(${_abs_FILE} ${_moc})
 
             LIST( APPEND ${SourcesVar} ${_moc} )
-            # also, keep the generated moc from beeing scanned by auto-moc'ings
-            SET_SOURCE_FILES_PROPERTIES(
-                ${_moc}
-                PROPERTIES  SKIP_AUTOMOC TRUE )
-
         ELSE()
 
             GET_FILENAME_COMPONENT(_abs_FILE ${_current_FILE} ABSOLUTE)
@@ -52,23 +45,14 @@ MACRO(QT_MOC SourcesVar )
 
                 STRING(REGEX MATCHALL "Q_OBJECT" _match "${_contents}")
                 IF(_match)
-
                     GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
                     SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
-                    QT5_CREATE_MOC_COMMAND(${_abs_FILE} ${_moc} "${_moc_INCS}" "")
+                    QT5_GENERATE_MOC(${_abs_FILE} ${_moc})
 
                     LIST( APPEND _mocfiles ${_moc} )
-                    # also, keep the generated moc from beeing scanned by auto-moc'ings
-                    SET_SOURCE_FILES_PROPERTIES(
-                        ${_moc}
-                        PROPERTIES  SKIP_AUTOMOC TRUE )
-
                 ENDIF()
-
             ENDIF()
-
         ENDIF()
-
     ENDFOREACH()
 
     LIST( APPEND ${SourcesVar} ${_mocfiles} )

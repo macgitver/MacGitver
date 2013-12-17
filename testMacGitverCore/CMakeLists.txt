@@ -24,6 +24,8 @@ SET(SRC_FILES
     Test_Namespace.cpp
     Test_RefTreeNode.cpp
     Test_RefLog.cpp
+
+    Test_SHMParser.cpp
 )
 
 SET(HDR_FILES
@@ -42,6 +44,8 @@ SET(HDR_FILES
     Test_Namespace.hpp
     Test_RefTreeNode.hpp
     Test_RefLog.hpp
+
+    Test_SHMParser.hpp
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )

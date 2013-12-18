@@ -208,6 +208,7 @@ TARGET_LINK_LIBRARIES(
     LINK_PRIVATE
         GitWrap
         DiffViews
+        # Stairway
 )
 
 INSTALL_FRAMEWORK( MacGitverCore Runtime )

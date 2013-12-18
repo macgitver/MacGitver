@@ -42,6 +42,10 @@
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
 #include "libMacGitverCore/Widgets/RepoStateWidget.hpp"
 
+#if 0
+#include "libStairway/StairwayToHeavenTool.hpp"
+#endif
+
 #include "ui_AboutDlg.h"
 
 MgvPrimaryWindowPrivate::MgvPrimaryWindowPrivate()
@@ -53,6 +57,12 @@ MgvPrimaryWindow::MgvPrimaryWindow()
 {
     d = new MgvPrimaryWindowPrivate;
     setupUi();
+
+    #if 0
+    Heaven::StairwayTool::StairwayView* w = new Heaven::StairwayTool::StairwayView();
+    w->setRoot(this);
+    w->show();
+    #endif
 
     connect(&MacGitver::repoMan(), SIGNAL(firstRepositoryOpened()),
             this, SLOT(activateModeForRepo()));

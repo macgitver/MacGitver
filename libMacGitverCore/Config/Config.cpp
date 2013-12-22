@@ -246,7 +246,7 @@ void Config::delConfigUser( ConfigUser* user )
  */
 QString Config::fontCSS(const QFont& font)
 {
-    return QString::fromUtf8("font-family: \"%1\"; font-size: %2pt;")
+    return QString::fromUtf8("font-family: \"%1\"; font-size: %2px;")
             .arg(font.family())
             .arg(font.pointSize());
 }

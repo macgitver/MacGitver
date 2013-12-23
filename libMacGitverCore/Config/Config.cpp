@@ -19,6 +19,7 @@
 #include <QTextStream>
 #include <QSettings>
 #include <QApplication>
+#include <QFontInfo>
 
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Config/ConfigUser.h"
@@ -246,9 +247,10 @@ void Config::delConfigUser( ConfigUser* user )
  */
 QString Config::fontCSS(const QFont& font)
 {
+    QFontInfo info = QFontInfo(font);
     return QString::fromUtf8("font-family: \"%1\"; font-size: %2px;")
             .arg(font.family())
-            .arg(font.pointSize());
+            .arg(info.pixelSize());
 }
 
 /**

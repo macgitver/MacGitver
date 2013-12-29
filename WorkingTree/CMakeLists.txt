@@ -10,6 +10,8 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
 
+    CommitDialog.cpp
+
     IndexWidget.cpp
     IndexTreeItemView.cpp
     WorkingTreeModule.cpp
@@ -23,6 +25,8 @@ SET( SRC_FILES
 
 SET( HDR_FILES
 
+    CommitDialog.h
+
     IndexWidget.h
     IndexTreeItemView.h
     WorkingTreeModule.h
@@ -34,6 +38,11 @@ SET( HDR_FILES
     WorkingTreeFilterModel.h
 )
 
+SET( UI_FILES
+
+    CommitDialog.ui
+)
+
 SET( HID_FILES
 
     WorkingTreeActions.hid
@@ -41,6 +50,7 @@ SET( HID_FILES
     StageViewCtxMenu.hid
 )
 
+QT_UIC( UIC_FILES ${UI_FILES} )
 QT_MOC( MOC_FILES ${HDR_FILES} )
 HIC( HIC_FILES ${HID_FILES} )
 
@@ -50,6 +60,7 @@ ADD_MGV_MODULE(
     ${SRC_FILES}
     ${HDR_FILES}
     ${MOC_FILES}
+    ${UIC_FILES} ${UI_FILES}
     ${HIC_FILES} ${HID_FILES}
 )
 

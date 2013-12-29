@@ -35,6 +35,8 @@
 #include "WorkingTreeModel.h"
 #include "WorkingTreeFilterModel.h"
 
+#include <QMessageBox>
+
 IndexWidget::IndexWidget()
     : View( "WorkTree" )
     , mSplitter( new BlueSky::MiniSplitter( Qt::Vertical ) )
@@ -221,6 +223,15 @@ void IndexWidget::onShowUnchanged( bool enabled )
 
 void IndexWidget::onCommitChanges()
 {
+    QString msg = mCommitDialog->message().trimmed();
+    if (msg.isEmpty())
+    {
+        QMessageBox::information( this, trUtf8("Missing commit message"),
+                                  trUtf8("Please provide a commit message."));
+        return;
+    }
+
+    // TODO: implement logic to add a commit to the git repository
 }
 
 //void IndexWidget::workingTreeChanged()

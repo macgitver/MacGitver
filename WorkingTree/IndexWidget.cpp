@@ -35,6 +35,7 @@
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/RepoMan/Repo.hpp"
 
+#include "CommitDialog.h"
 #include "IndexTreeItemView.h"
 #include "WorkingTreeItemView.h"
 #include "WorkingTreeModel.h"
@@ -45,12 +46,11 @@ IndexWidget::IndexWidget()
     , mSplitter( new BlueSky::MiniSplitter( Qt::Vertical ) )
     , mTreeView( new WorkingTreeItemView )
     , mIndexTreeView( new IndexTreeItemView )
-    , mCommitMessage( new QPlainTextEdit )
+    , mCommitDialog( new CommitDialog )
     , mStatusModel( new WorkingTreeModel( this ) )
 {
     mTreeView->setFrameShape( QFrame::NoFrame );
     mIndexTreeView->setFrameShape( QFrame::NoFrame );
-    mCommitMessage->setFrameShape( QFrame::NoFrame );
 
     setupActions( this );
 
@@ -68,7 +68,7 @@ IndexWidget::IndexWidget()
     BlueSky::MiniSplitter *hSplit_2 = new BlueSky::MiniSplitter( Qt::Horizontal );
 
     hSplit_2->addWidget( mIndexTreeView );
-    hSplit_2->addWidget( mCommitMessage );
+    hSplit_2->addWidget( mCommitDialog );
 
     mSplitter->addWidget( hSplit_2 );
 
@@ -81,6 +81,8 @@ IndexWidget::IndexWidget()
 
     connect(&MacGitver::repoMan(),  SIGNAL(repositoryDeactivated(RM::Repo*)),
             this,                   SLOT(repositoryDeactivated(RM::Repo*)));
+
+    connect(mCommitDialog, SIGNAL(aboutToCommit()), this, SLOT(onCommitChanges()));
 }
 
 void IndexWidget::updateWtFilterView(const WorkingTreeFilterModel * const wtFilter)
@@ -221,6 +223,10 @@ void IndexWidget::onShowUntracked( bool enabled )
 void IndexWidget::onShowUnchanged( bool enabled )
 {
     setWtFilter( enabled, Git::FileUnchanged );
+}
+
+void IndexWidget::onCommitChanges()
+{
 }
 
 //void IndexWidget::workingTreeChanged()

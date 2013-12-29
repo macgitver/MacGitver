@@ -37,6 +37,7 @@ class WorkingTreeModel;
 class WorkingTreeFilterModel;
 class WorkingTreeItemView;
 class IndexTreeItemView;
+class CommitDialog;
 
 class QPlainTextEdit;
 
@@ -65,6 +66,7 @@ private slots:
     void onShowIgnored( bool enabled );
     void onShowUntracked( bool enabled );
     void onShowUnchanged( bool enabled );
+    void onCommitChanges();
 
     //void workingTreeChanged();
 
@@ -79,7 +81,7 @@ private:
     WorkingTreeItemView*    mTreeView;
     DiffViews::DiffView*    mDiffView;
     IndexTreeItemView*      mIndexTreeView;
-    QPlainTextEdit*         mCommitMessage;
+    CommitDialog*           mCommitDialog;
 
     WorkingTreeModel*       mStatusModel;
 

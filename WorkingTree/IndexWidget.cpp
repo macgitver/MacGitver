@@ -16,12 +16,6 @@
 
 #include "IndexWidget.h"
 
-#include <QAction>
-#include <QToolBar>
-#include <QSplitter>
-#include <QVBoxLayout>
-#include <QPlainTextEdit>
-
 #include "libGitWrap/Index.hpp"
 #include "libGitWrap/DiffList.hpp"
 

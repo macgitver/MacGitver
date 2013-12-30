@@ -37,6 +37,11 @@ public:
     void setCommitMessage(const QString &message);
 
 signals:
+    void amendHeadCommit(bool enabled);
+
+private slots:
+    void onCommit();
+    void onAmend(bool enabled);
 
 private:
     Ui::CommitDialog *  ui;

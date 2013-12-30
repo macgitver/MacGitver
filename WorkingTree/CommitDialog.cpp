@@ -19,7 +19,13 @@
 #include "CommitDialog.h"
 #include "ui_CommitDialog.h"
 
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Repo.hpp"
+
 #include "libGitWrap/Result.hpp"
+#include "libGitWrap/Commit.hpp"
+#include "libGitWrap/Reference.hpp"
 
 #include <QPlainTextEdit>
 #include <QLayout>
@@ -35,6 +41,7 @@ CommitDialog::CommitDialog(QWidget* parent)
     setContentsMargins(0, 0, 0, 0);
 
     connect(ui->btnCommit, SIGNAL(clicked()), this, SLOT(onCommit()));
+    connect(ui->btnAmend, SIGNAL(toggled(bool)), this, SLOT(onAmend(bool)));
 }
 
 CommitDialog::~CommitDialog()
@@ -63,4 +70,32 @@ void CommitDialog::onCommit()
         QMessageBox::information( this, trUtf8("Failed to commit"),
                                   trUtf8("Failed to commit. Git message:\n%1").arg(r.errorText()));
     }
+}
+
+void CommitDialog::onAmend(bool enabled)
+{
+    Git::Result r;
+
+    RM::Repo *repo = MacGitver::repoMan().activeRepository();
+    if (!repo)
+    {
+        QMessageBox::warning( this, trUtf8("Failed to amend commit"),
+                              trUtf8("Cannot amend a commit without an active repository.") );
+    }
+
+    Git::Commit c =  repo->gitRepo().HEAD(r).peeled(r, Git::otCommit).asCommit();
+
+    if (!r)
+    {
+        QMessageBox::warning( this, trUtf8("Failed to amend commit"),
+                              trUtf8("Amend failed. Git message:\n%1").arg(r.errorText()) );
+    }
+
+    if (!c.isValid())
+    {
+        QMessageBox::information( this, trUtf8("Failed to amend commit"),
+                                  trUtf8("No commit found to amend.") );
+    }
+
+    // TODO: implement logic to amend the last commit in the git repository
 }

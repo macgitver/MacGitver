@@ -77,8 +77,6 @@ IndexWidget::IndexWidget()
 
     connect(&MacGitver::repoMan(),  SIGNAL(repositoryDeactivated(RM::Repo*)),
             this,                   SLOT(repositoryDeactivated(RM::Repo*)));
-
-    connect(mCommitDialog, SIGNAL(aboutToCommit()), this, SLOT(onCommitChanges()));
 }
 
 void IndexWidget::updateWtFilterView(const WorkingTreeFilterModel * const wtFilter)

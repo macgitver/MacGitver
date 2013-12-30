@@ -39,7 +39,7 @@
 
 IndexWidget::IndexWidget()
     : View( "WorkTree" )
-    , mSplitter( new BlueSky::MiniSplitter( Qt::Vertical ) )
+    , mSplitter( new BlueSky::MiniSplitter( Qt::Horizontal ) )
     , mTreeView( new WorkingTreeItemView )
     , mIndexTreeView( new IndexTreeItemView )
     , mCommitDialog( new CommitDialog )
@@ -55,16 +55,15 @@ IndexWidget::IndexWidget()
 
     mDiffView = DiffViews::DiffViews::self().defaultCreator()->create( this );
 
-    BlueSky::MiniSplitter *hSplit_1 = new BlueSky::MiniSplitter( Qt::Horizontal );
+    BlueSky::MiniSplitter *hSplit_1 = new BlueSky::MiniSplitter( Qt::Vertical );
     hSplit_1->addWidget( mTreeView );
-    hSplit_1->addWidget( mDiffView );
+    hSplit_1->addWidget( mIndexTreeView );
+    hSplit_1->addWidget( mCommitDialog );
 
     mSplitter->addWidget( hSplit_1 );
 
-    BlueSky::MiniSplitter *hSplit_2 = new BlueSky::MiniSplitter( Qt::Horizontal );
-
-    hSplit_2->addWidget( mIndexTreeView );
-    hSplit_2->addWidget( mCommitDialog );
+    BlueSky::MiniSplitter *hSplit_2 = new BlueSky::MiniSplitter( Qt::Vertical );
+    hSplit_2->addWidget( mDiffView );
 
     mSplitter->addWidget( hSplit_2 );
 

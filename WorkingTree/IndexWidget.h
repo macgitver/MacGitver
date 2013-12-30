@@ -66,7 +66,6 @@ private slots:
     void onShowIgnored( bool enabled );
     void onShowUntracked( bool enabled );
     void onShowUnchanged( bool enabled );
-    void onCommitChanges();
 
     //void workingTreeChanged();
 

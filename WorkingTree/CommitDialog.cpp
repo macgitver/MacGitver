@@ -19,8 +19,11 @@
 #include "CommitDialog.h"
 #include "ui_CommitDialog.h"
 
+#include "libGitWrap/Result.hpp"
+
 #include <QPlainTextEdit>
 #include <QLayout>
+#include <QMessageBox>
 
 
 CommitDialog::CommitDialog(QWidget* parent)
@@ -31,7 +34,7 @@ CommitDialog::CommitDialog(QWidget* parent)
 
     setContentsMargins(0, 0, 0, 0);
 
-    connect(ui->btnCommit, SIGNAL(clicked()), SIGNAL(aboutToCommit()));
+    connect(ui->btnCommit, SIGNAL(clicked()), this, SLOT(onCommit()));
 }
 
 CommitDialog::~CommitDialog()
@@ -47,4 +50,17 @@ QString CommitDialog::message() const
 void CommitDialog::setCommitMessage(const QString &message)
 {
     ui->textCommitMessage->setPlainText(message);
+}
+
+void CommitDialog::onCommit()
+{
+    Git::Result r;
+
+    // TODO: implement logic to add a commit to the git repository
+
+    if (!r)
+    {
+        QMessageBox::information( this, trUtf8("Failed to commit"),
+                                  trUtf8("Failed to commit. Git message:\n%1").arg(r.errorText()));
+    }
 }

@@ -221,19 +221,6 @@ void IndexWidget::onShowUnchanged( bool enabled )
     setWtFilter( enabled, Git::FileUnchanged );
 }
 
-void IndexWidget::onCommitChanges()
-{
-    QString msg = mCommitDialog->message().trimmed();
-    if (msg.isEmpty())
-    {
-        QMessageBox::information( this, trUtf8("Missing commit message"),
-                                  trUtf8("Please provide a commit message."));
-        return;
-    }
-
-    // TODO: implement logic to add a commit to the git repository
-}
-
 //void IndexWidget::workingTreeChanged()
 //{
 //    WorkingTreeModel* model = static_cast< WorkingTreeModel* >( mTreeView->model() );

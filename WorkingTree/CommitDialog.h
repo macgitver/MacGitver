@@ -37,7 +37,6 @@ public:
     void setCommitMessage(const QString &message);
 
 signals:
-    void aboutToCommit();
 
 private:
     Ui::CommitDialog *  ui;

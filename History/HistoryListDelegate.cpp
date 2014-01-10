@@ -170,20 +170,21 @@ void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, GraphG
         break;
     }
 
+    QPen blackPen(Qt::black);
+    blackPen.setWidth(0);
+    p->setPen(blackPen);
     // center symbol, e.g. rect or ellipse
     switch( glyph )
     {
     case ggCurrent:
     case ggInitial:
     case ggBranch:
-        p->setPen(Qt::black);
         p->setBrush(col);
         p->drawEllipse(R_CENTER);
         break;
     case ggMergeFork:
     case ggMergeForkLeft:
     case ggMergeForkRight:
-        p->setPen(Qt::black);
         p->setBrush(col);
         p->drawRect(R_CENTER);
         break;
@@ -312,7 +313,9 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
             }
 
             p->fillRect( refRect, back );
-            p->setPen( Qt::black );
+            QPen blackPen(Qt::black);
+            blackPen.setWidth(0);
+            p->setPen(blackPen);
             p->drawRect( refRect );
 
             refRect.adjust( 2, 0, -2, 0 );

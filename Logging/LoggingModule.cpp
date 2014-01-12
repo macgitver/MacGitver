@@ -63,6 +63,9 @@ void LoggingModule::deinitialize() {
 
 void LoggingModule::setView(LoggingView* view) {
     mView = view;
+    if (view) {
+        queueViewUpdate();
+    }
 }
 
 void LoggingModule::channelAdded(Log::Channel channel) {

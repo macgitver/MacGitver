@@ -22,19 +22,6 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tabInterfaceLevel">
-      <attribute name="title">
-       <string>Interface Level</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QComboBox" name="cboUserLevel"/>
-       </item>
-       <item>
-        <widget class="QTextBrowser" name="txtUserLevelDescription"/>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="tabFonts">
       <attribute name="title">
        <string>Fonts</string>

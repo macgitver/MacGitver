@@ -18,6 +18,9 @@
 #define MGV_MACGITVER_PRIVATE_HPP
 
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libBlueSky/Application.hpp"
+
+#include "MgvPrimaryWindow.hpp"
 
 class QDir;
 
@@ -25,9 +28,14 @@ class Modules;
 
 struct MgvViewInfo
 {
-    Heaven::ViewIdentifier  mIdentifier;
+    BlueSky::ViewIdentifier mIdentifier;
     QString                 mDisplayName;
     MgvViewCreator*         mCreator;
+};
+
+class MgvApp : public BlueSky::Application {
+public:
+    BlueSky::PrimaryWindow* newPrimaryWindow() { return new MgvPrimaryWindow; }
 };
 
 class MacGitverPrivate : public QObject
@@ -39,21 +47,19 @@ public:
 
 public:
     void init();
-    void loadLevels();
-    void searchModules( const QDir& binDir );
+    void searchModules(const QDir& binDir);
 
 private slots:
     void bootGui();
-
-public:
-    Git::GitWrap        mGitWrap;
 
 private:
     void registerGlobalConfigPages();
     void unregisterGlobalConfigPages();
 
 public:
+    Git::GitWrap        mGitWrap;
     bool                isGui;
+    MgvApp              bsApp;
     static MacGitver*   sSelf;
     static Modules*     sModules;
     static Log::Manager sLog;

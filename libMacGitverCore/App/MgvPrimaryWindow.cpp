@@ -29,8 +29,8 @@
 #include "libGitWrap/ObjectId.hpp"
 #include "libGitWrap/Reference.hpp"
 
-#include "libHeaven/App/Application.hpp"
-#include "libHeaven/Widgets/FooterWidget.hpp"
+#include "libBlueSky/Application.hpp"
+#include "libBlueSky/FooterWidget.hpp"
 
 #include "libMacGitverCore/App/MacGitverPrivate.hpp"
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
@@ -42,18 +42,27 @@
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
 #include "libMacGitverCore/Widgets/RepoStateWidget.hpp"
 
+#if 0
+#include "libStairway/StairwayToHeavenTool.hpp"
+#endif
+
 #include "ui_AboutDlg.h"
 
 MgvPrimaryWindowPrivate::MgvPrimaryWindowPrivate()
-    : currentLevel()
 {
 }
 
 MgvPrimaryWindow::MgvPrimaryWindow()
-    : Heaven::PrimaryWindow()
+    : BlueSky::PrimaryWindow()
 {
     d = new MgvPrimaryWindowPrivate;
     setupUi();
+
+    #if 0
+    Heaven::StairwayTool::StairwayView* w = new Heaven::StairwayTool::StairwayView();
+    w->setRoot(this);
+    w->show();
+    #endif
 
     connect(&MacGitver::repoMan(), SIGNAL(firstRepositoryOpened()),
             this, SLOT(activateModeForRepo()));
@@ -61,21 +70,10 @@ MgvPrimaryWindow::MgvPrimaryWindow()
     connect(&MacGitver::repoMan(), SIGNAL(lastRepositoryClosed()),
             this, SLOT(activateModeForRepo()));
 
-    QString levelId = Config::self().get( "UserLevel", "Novice" ).toString();
-
     setupFonts();
 
     connect( &Config::self(), SIGNAL(fontsChanged()),
              this, SLOT(setupFonts()) );
-
-    foreach( UserLevelDefinition::Ptr uld, Config::self().levels() )
-    {
-        if( uld->id() == levelId )
-        {
-            activateLevel( uld );
-            break;
-        }
-    }
 }
 
 MgvPrimaryWindow::~MgvPrimaryWindow()
@@ -93,7 +91,7 @@ void MgvPrimaryWindow::setupUi()
 
     setWindowTitle( trUtf8( "MacGitver" ) );
 
-    statusBar()->addWidget( new RepoStateWidget );
+    footer()->addWidget( new RepoStateWidget );
 
     if( Config::self().get( "FullScreen" ).toBool() )
     {
@@ -130,7 +128,7 @@ void MgvPrimaryWindow::savePosition()
 void MgvPrimaryWindow::closeEvent( QCloseEvent* ev )
 {
     savePosition();
-    Heaven::PrimaryWindow::closeEvent( ev );
+    BlueSky::PrimaryWindow::closeEvent( ev );
 }
 
 void MgvPrimaryWindow::onQuit()
@@ -157,28 +155,27 @@ void MgvPrimaryWindow::moveToCenter()
     setGeometry( center );
 }
 
-void MgvPrimaryWindow::activateLevel( UserLevelDefinition::Ptr uld )
-{
-    d->currentLevel = uld;
-
-    activateModeForRepo();
-}
-
 void MgvPrimaryWindow::activateModeForRepo()
 {
-    QString preset = QLatin1String( (MacGitver::repoMan().repositories().count() > 0)
-                                    ? "Normal" : "Welcome" );
-
-    QString configPath = d->currentLevel->id() % QChar( L'/' ) % preset;
-    QString modeName = Config::self().get( configPath, d->currentLevel->preset( preset ) ).toString();
-
-    activateMode( d->currentLevel->name() % QChar( L'#' ) % modeName );
+    if (MacGitver::repoMan().repositories().count() > 0) {
+        activateMode(QLatin1String("HistoryMode"));
+    }
+    else {
+        activateMode(QString());
+    }
 }
 
 void MgvPrimaryWindow::activateMode( const QString& modeName )
 {
-    qDebug( "Going to %s mode", qPrintable( modeName ) );
-    Heaven::app()->setCurrentMode( Heaven::app()->findMode( modeName ) );
+    if (modeName.isEmpty()) {
+        qDebug() << "Going to mode <NONE>";
+    }
+    else {
+        qDebug() << QByteArray("Going to mode: ") % modeName.toUtf8();
+    }
+
+    BlueSky::Mode* mode = BlueSky::Application::instance()->findMode(modeName.toUtf8());
+    BlueSky::Application::instance()->setActiveMode(mode);
 }
 
 void MgvPrimaryWindow::onHelpAbout()

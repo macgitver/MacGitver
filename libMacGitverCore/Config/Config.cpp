@@ -46,53 +46,6 @@ Config& Config::self()
     return *sSelf;
 }
 
-void Config::loadLevels( const QString& fileName )
-{
-    QFile f( fileName );
-    if( !f.open( QFile::ReadOnly ) )
-    {
-        qFatal( "Cannot load levels.xml" );
-        return;
-    }
-
-    QDomDocument doc;
-    doc.setContent( &f );
-
-    QDomElement e1 = doc.documentElement();
-    QDomElement e2 = e1.firstChildElement();
-    while( e2.isElement() )
-    {
-        Q_ASSERT( e2.tagName() == QLatin1String( "level" ) );
-        UserLevelDefinition::Ptr lvldef = UserLevelDefinition::read( e2 );
-        if( !lvldef )
-        {
-            return /*false*/;
-        }
-        addUserLevel( lvldef );
-
-        e2 = e2.nextSiblingElement();
-    }
-}
-
-void Config::addUserLevel( UserLevelDefinition::Ptr level )
-{
-    int i = 0;
-    while( i < mLevels.count() )
-    {
-        if( mLevels[ i ]->precedence() < level->precedence() )
-            i++;
-        else
-            break;
-    }
-
-    mLevels.insert( i, level );
-}
-
-QList< UserLevelDefinition::Ptr > Config::levels() const
-{
-    return mLevels;
-}
-
 void Config::loadSettings()
 {
     delete mSettings;

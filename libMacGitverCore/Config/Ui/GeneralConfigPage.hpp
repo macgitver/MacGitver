@@ -22,12 +22,11 @@
 #include "libMacGitverCore/Config/Ui/ConfigPage.hpp"
 #include "libMacGitverCore/Config/Ui/ConfigPageProvider.hpp"
 
-namespace Ui
-{
-    class GeneralConfigPage;
-}
+#include "ui_GeneralConfigPage.h"
 
-class GeneralConfigPage : public ConfigPage
+class GeneralConfigPage
+        : public ConfigPage
+        , private Ui::GeneralConfigPage
 {
     Q_OBJECT
     DECLARE_NESTED_PAGE_CREATOR();
@@ -50,10 +49,6 @@ public:
 
 private slots:
     void onFontChanged();
-    void onUserLevelChanged( int index );
-
-private:
-    Ui::GeneralConfigPage* ui;
 };
 
 #endif

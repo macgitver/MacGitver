@@ -19,9 +19,7 @@
 
 #include "libGitWrap/Repository.hpp"
 
-#include "libHeaven/App/PrimaryWindow.hpp"
-
-#include "Config/UserLevelDefinition.h"
+#include "libBlueSky/Windows.hpp"
 
 #include "hic_MgvPrimaryWindowActions.h"
 
@@ -29,7 +27,7 @@ class MgvPrimaryWindowPrivate;
 
 class Repo;
 
-class MgvPrimaryWindow : public Heaven::PrimaryWindow, private MgvPrimaryWindowActions
+class MgvPrimaryWindow : public BlueSky::PrimaryWindow, private MgvPrimaryWindowActions
 {
     Q_OBJECT
 public:
@@ -48,7 +46,6 @@ private slots:
 
 public:
     void activateMode( const QString& modeName );
-    void activateLevel( UserLevelDefinition::Ptr uld );
 
 private:
     void savePosition();

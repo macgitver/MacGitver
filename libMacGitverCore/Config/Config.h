@@ -25,7 +25,7 @@
 
 class QSettings;
 
-#include "libMacGitverCore/Config/UserLevelDefinition.h"
+#include "libMacGitverCore/MacGitverApi.hpp"
 
 class ConfigUser;
 
@@ -40,9 +40,6 @@ public:
 public:
     void loadSettings();
     void saveSettings();
-
-    void loadLevels( const QString& fileName );
-    QList< UserLevelDefinition::Ptr > levels() const;
 
     QVariant get( const char* szPath, const char* szDefaultValue ) const;
     QVariant get( const char* szPath, const QVariant& defaultValue = QVariant() ) const;
@@ -65,8 +62,6 @@ signals:
     void fontsChanged();
 
 private:
-    void addUserLevel( UserLevelDefinition::Ptr level );
-
     void addConfigUser( ConfigUser* user );
     void delConfigUser( ConfigUser* user );
 
@@ -76,7 +71,6 @@ private:
     static Config* sSelf;
     Config();
     ~Config();
-    QList< UserLevelDefinition::Ptr >   mLevels;
     QSet< ConfigUser* >                 mConfigUsers;
     QSettings*                          mSettings;
     QFont                               mDefaultFont;

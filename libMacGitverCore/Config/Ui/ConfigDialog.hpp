@@ -20,7 +20,6 @@
 #ifndef MGV_CONFIG_WIDGET_H
 #define MGV_CONFIG_WIDGET_H
 
-#include <QDialog>
 #include <QHash>
 #include <QMap>
 #include <QSet>
@@ -30,7 +29,7 @@ class QTreeWidgetItem;
 
 #include "libMacGitverCore/Config/Ui/ConfigPage.hpp"
 
-#include "libHeaven/App/Dialog.hpp"
+#include "libBlueSky/Dialog.hpp"
 
 namespace Ui
 {
@@ -39,7 +38,7 @@ namespace Ui
 
 class ConfigPageProvider;
 
-class ConfigDialog : public Heaven::Dialog
+class ConfigDialog : public BlueSky::Dialog
 {
     Q_OBJECT
 public:

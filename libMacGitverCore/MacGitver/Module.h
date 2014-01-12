@@ -29,6 +29,10 @@
 #define Q_PLUGIN_METADATA(x)
 #endif
 
+namespace BlueSky {
+    class Mode;
+}
+
 class ConfigDialog;
 
 /**
@@ -63,24 +67,61 @@ protected:
     virtual int configPagePriority() const;
 
 protected:
+    BlueSky::ViewDescriptor* registerView(const BlueSky::ViewIdentifier& identifier,
+                                          const QString& displayName,
+                                          MgvViewCreator creator );
+
+    void unregisterView(const BlueSky::ViewIdentifier& identifier);
+
+    void registerMode(BlueSky::Mode* mode);
+    void unregisterMode(BlueSky::Mode* mode);
+
+private:
+    template<typename T>
+    struct ViewCreatorT {
+        static BlueSky::View* create() {
+            return new T;
+        }
+    };
+
+protected:
     /**
-     * @brief       Register a View to the application.
+     * @brief       Register a view
      *
-     * @param[in]   identifier  The key to access this module's view (must be unique)
+     * @tparam      T           Class name of the View to unregister
      *
      * @param[in]   displayName A translated name that is displayed to the user when this view is
-     *              referenced.
+     *                          referenced.
      *
-     * @param[in]   creator     A call back function that actually creates a View of this type.
+     * @return      The descriptor for the new view.
+     *
+     * This method just calls to the regular registerView() but gives @a T's class name (obtained
+     * from Qt's static meta object) as identifier.
+     *
+     * A creator function tailored exactly for that view is automatically instanciated.
+     *
      */
-    void registerView( const Heaven::ViewIdentifier& identifier, const QString& displayName,
-                       MgvViewCreator creator );
+    template<typename T>
+    inline BlueSky::ViewDescriptor* registerView(const QString& displayName) {
+        return registerView(T::staticMetaObject.className(),
+                            displayName,
+                            &ViewCreatorT<T>::create);
+    }
 
     /**
-     * @brief Unregister a previously registered module view.
-     * @param identifier the view identifier used to register the view
+     * @brief       Unregister a view
+     *
+     * @tparam      T    Class name of the View to unregister
+     *
+     * This method just calls to the regular unregisterView() but gives @a T's class name (obtained
+     * from Qt's static meta object) as identifier.
+     *
      */
-    void unregisterView( const Heaven::ViewIdentifier& identifier );
+    template<typename T>
+    inline void unregisterView() {
+        unregisterView(T::staticMetaObject.className());
+    }
+
 };
 
 Q_DECLARE_INTERFACE( Module,

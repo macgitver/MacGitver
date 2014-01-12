@@ -20,7 +20,7 @@
 #include <QStringBuilder>
 #include <QStack>
 
-#include "libHeaven/Icons/IconRef.hpp"
+#include "libHeavenIcons/IconRef.hpp"
 
 #include "App/MacGitver.hpp"
 

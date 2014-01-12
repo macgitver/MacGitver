@@ -17,18 +17,10 @@
 #ifndef MGV_PRIMARY_WINDOW_PRIVATE_HPP
 #define MGV_PRIMARY_WINDOW_PRIVATE_HPP
 
-#include "Config/UserLevelDefinition.h"
-
-class Repo;
-
 class MgvPrimaryWindowPrivate
 {
 public:
     MgvPrimaryWindowPrivate();
-
-public:
-    UserLevelDefinition::Ptr    currentLevel;
-    Repo*             repo;
 };
 
 #endif

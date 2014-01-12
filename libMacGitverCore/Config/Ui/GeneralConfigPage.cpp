@@ -17,48 +17,34 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "libMacGitverCore/Config/Config.h"
-#include "libMacGitverCore/Config/UserLevelDefinition.h"
 
 #include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
-
-#include "ui_GeneralConfigPage.h"
 
 IMPLEMENT_NESTED_PAGE_CREATOR(GeneralConfigPage, 200)
 
 GeneralConfigPage::GeneralConfigPage( ConfigDialog* dlg )
     : ConfigPage( dlg )
-    , ui( new Ui::GeneralConfigPage )
 {
-    ui->setupUi( this );
+    setupUi(this);
 
-    ui->fontGeneral->setSelectedFont( Config::defaultFont() );
-    connect( ui->fontGeneral, SIGNAL(currentFontChanged(QFont)),
-             this, SLOT(onFontChanged()) );
+    fontGeneral->setSelectedFont(Config::defaultFont());
+    connect(fontGeneral, SIGNAL(currentFontChanged(QFont)),
+            this, SLOT(onFontChanged()) );
 
-    ui->fontDialogs->setSelectedFont( Config::defaultDialogFont() );
-    connect( ui->fontDialogs, SIGNAL(currentFontChanged(QFont)),
-             this, SLOT(onFontChanged()) );
+    fontDialogs->setSelectedFont(Config::defaultDialogFont());
+    connect(fontDialogs, SIGNAL(currentFontChanged(QFont)),
+            this, SLOT(onFontChanged()));
 
-    ui->fontSourceCode->setFontFilters( QFontComboBox::MonospacedFonts );
-    ui->fontSourceCode->setSelectedFont( Config::defaultFixedFont() );
-    connect( ui->fontSourceCode, SIGNAL(currentFontChanged(QFont)),
-             this, SLOT(onFontChanged()) );
+    fontSourceCode->setFontFilters(QFontComboBox::MonospacedFonts);
+    fontSourceCode->setSelectedFont(Config::defaultFixedFont());
 
-    foreach( UserLevelDefinition::Ptr lvl, Config::self().levels() )
-    {
-        ui->cboUserLevel->addItem( lvl->name(), lvl->precedence() );
-    }
-
-    connect( ui->cboUserLevel, SIGNAL(currentIndexChanged(int)),
-             this, SLOT(onUserLevelChanged(int)) );
-
-    onUserLevelChanged( 0 );
+    connect(fontSourceCode, SIGNAL(currentFontChanged(QFont)),
+            this, SLOT(onFontChanged()) );
 }
 
 GeneralConfigPage::~GeneralConfigPage()
 {
-    delete ui;
 }
 
 void GeneralConfigPage::init()
@@ -67,36 +53,15 @@ void GeneralConfigPage::init()
 
 void GeneralConfigPage::apply()
 {
-    Config::self().setDefaultFont( ui->fontGeneral->selectedFont() );
-    Config::self().setDefaultDialogFont( ui->fontDialogs->selectedFont() );
-    Config::self().setDefaultFixedFont( ui->fontSourceCode->selectedFont() );
+    Config::self().setDefaultFont      (fontGeneral->selectedFont());
+    Config::self().setDefaultDialogFont(fontDialogs->selectedFont());
+    Config::self().setDefaultFixedFont (fontSourceCode->selectedFont());
     setModified( false );
 }
 
 void GeneralConfigPage::onFontChanged()
 {
     setModified();
-}
-
-void GeneralConfigPage::onUserLevelChanged( int index )
-{
-    if( index == -1 )
-    {
-        return;
-    }
-
-    setModified();
-
-    int data = ui->cboUserLevel->itemData( index ).toInt();
-
-    foreach( UserLevelDefinition::Ptr lvl, Config::self().levels() )
-    {
-        if( lvl->precedence() == data )
-        {
-            ui->txtUserLevelDescription->setHtml( lvl->description() );
-            return;
-        }
-    }
 }
 
 QByteArray GeneralConfigPage::pageId() const

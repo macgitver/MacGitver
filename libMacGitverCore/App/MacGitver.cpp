@@ -22,8 +22,8 @@
 
 #include "libGitWrap/GitWrap.hpp"
 
-#include "libHeaven/Icons/IconManager.hpp"
-#include "libHeaven/Icons/IconDefaultProvider.hpp"
+#include "libHeavenIcons/IconManager.hpp"
+#include "libHeavenIcons/IconDefaultProvider.hpp"
 
 #include "libMacGitverCore/App/MacGitverPrivate.hpp"
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
@@ -95,10 +95,10 @@ MacGitverPrivate::~MacGitverPrivate()
 void MacGitverPrivate::bootGui()
 {
     registerGlobalConfigPages();
-    loadLevels();
     sModules->initialize();
 
-    new MgvPrimaryWindow;
+    // Create the primary window by explicitly requesting it
+    bsApp.primaryWindow();
 }
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
@@ -141,17 +141,31 @@ MacGitver::~MacGitver()
     delete d;
 }
 
-void MacGitver::registerView( const Heaven::ViewIdentifier& identifier, const QString &displayName,
-                              MgvViewCreator creator )
+
+/**
+ * @brief       Register a View to the application.
+ *
+ * @param[in]   identifier  The key to access this module's view (must be unique)
+ *
+ * @param[in]   displayName A translated name that is displayed to the user when this view is
+ *              referenced.
+ *
+ * @param[in]   creator     A call back function that actually creates a View of this type.
+ *
+ * @return      The descriptor for the new view.
+ *
+ */
+BlueSky::ViewDescriptor* MacGitver::registerView(const BlueSky::ViewIdentifier& identifier,
+                                                 const QString &displayName,
+                                                 MgvViewCreator creator)
 {
-    new Heaven::ViewDescriptor( identifier, displayName, creator );
+    return new BlueSky::ViewDescriptor( identifier, displayName, creator );
 }
 
-void MacGitver::unregisterView( const Heaven::ViewIdentifier& identifier )
+void MacGitver::unregisterView(const BlueSky::ViewIdentifier& identifier)
 {
-    Heaven::ViewDescriptor* vd = Heaven::ViewDescriptor::get( identifier );
-    if( vd )
-    {
+    BlueSky::ViewDescriptor* vd = BlueSky::ViewDescriptor::get(identifier);
+    if (vd) {
         vd->unregister();
     }
 }
@@ -177,11 +191,6 @@ void MacGitver::log( Log::Type type, const Git::Result& r, const char* logMessag
     {
         log().addMessage(QString::fromUtf8("GitWrap-Error: %1").arg(r.errorText()), type);
     }
-}
-
-void MacGitverPrivate::loadLevels()
-{
-    Config::self().loadLevels( QLatin1String( ":/Xml/Levels.xml" ) );
 }
 
 void MacGitverPrivate::registerGlobalConfigPages()

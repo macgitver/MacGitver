@@ -543,13 +543,11 @@ namespace RM
     Ref* RepoPrivate::findReference(const Git::Reference& ref, bool create)
     {
         Git::RefName rn = ref.nameAnalyzer();
-        qDebug() << "Got ref: " << qPrintable(rn.fullName());
         return findReference(rn, ref, create);
     }
 
     Ref* RepoPrivate::findReference(const QString& fqrn, bool create)
     {
-        qDebug() << "Got ref: " << qPrintable(fqrn);
         Git::RefName rn(fqrn);
         return findReference(rn, Git::Reference(), create);
     }

@@ -1,7 +1,7 @@
 
-PROJECT( MGV_CORE )
+PROJECT(MGV_CORE)
 
-QT_PREPARE( Core Gui Widgets Xml )
+QT_PREPARE(Core Gui Widgets Xml)
 
 INCLUDE_DIRECTORIES(
     ${libDiffViews_includes}
@@ -26,7 +26,6 @@ SET( SRC_FILES
 
     Config/Config.cpp
     Config/ConfigUser.cpp
-    Config/UserLevelDefinition.cpp
 
     Config/Ui/ConfigDialog.cpp
     Config/Ui/ConfigPage.cpp
@@ -80,7 +79,6 @@ SET( PUB_HDR_FILES
 
     Config/Config.h
     Config/ConfigUser.h
-    Config/UserLevelDefinition.h
     Config/Ui/ConfigPage.hpp
 
     Log/LogEvent.hpp
@@ -202,10 +200,15 @@ ADD_QT_LIBRARY(
 TARGET_LINK_LIBRARIES(
     MacGitverCore
 
+    LINK_PUBLIC
+        HeavenActions
+        HeavenIcons
+        BlueSky
+
     LINK_PRIVATE
-        Heaven
         GitWrap
         DiffViews
+        # Stairway
 )
 
 INSTALL_FRAMEWORK( MacGitverCore Runtime )

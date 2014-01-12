@@ -52,7 +52,6 @@ TARGET_LINK_LIBRARIES(
 
     LINK_PRIVATE
         GitWrap
-        Heaven
         MacGitverCore
 )
 

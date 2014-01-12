@@ -26,16 +26,26 @@
 #include "libMacGitverCore/Log/LogEvent.hpp"
 
 class LoggingView;
+class LoggingMode;
 
-class LoggingModule : public Module, private Log::Consumer
+class LoggingModule
+        : public Module
+        , private Log::Consumer
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA( IID "org.macgitver.Module/0.1" FILE "Module.json" )
-    Q_INTERFACES( Module )
+    Q_PLUGIN_METADATA(
+        IID     "org.macgitver.Module/0.1"
+        FILE    "Module.json"
+    )
+
+    Q_INTERFACES(
+        Module
+    )
 
 public:
     LoggingModule();
     ~LoggingModule();
+    static LoggingModule* self();
 
 public:
     void initialize();
@@ -57,11 +67,11 @@ private slots:
 private:
     bool mQueuedUpdate;
     LoggingView* mView;
+    LoggingMode* mMode;
     Log::Event::List mEvents;
 
 private:
     static LoggingModule* sSelf;
-    static Heaven::View* createLoggingView();
 };
 
 #endif

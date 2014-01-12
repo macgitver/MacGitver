@@ -7,8 +7,8 @@
 
 #include "ProgressDlg.hpp"
 
-ProgressDlg::ProgressDlg( QWidget* parent )
-    : QDialog( NULL )
+ProgressDlg::ProgressDlg()
+    : BlueSky::Dialog()
     , mDone( false )
 {
     setupUi( this );

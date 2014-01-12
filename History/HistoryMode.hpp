@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,28 +17,23 @@
  *
  */
 
-#ifndef MGV_MODULE_WORKINGTREE_H
-#define MGV_MODULE_WORKINGTREE_H
+#ifndef MGV_HISTORY_MODE_HPP
+#define MGV_HISTORY_MODE_HPP
+#pragma once
 
-#include "libMacGitverCore/MacGitver/Module.h"
+#include "libBlueSky/Mode.hpp"
 
-class IndexWidget;
-
-class WorkingTreeModule : public Module
+class HistoryMode
+        : public BlueSky::Mode
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA( IID "org.macgitver.Module/0.1" FILE "Module.json" )
-    Q_INTERFACES( Module )
-
 public:
-    WorkingTreeModule();
+    HistoryMode(QObject* parent);
 
-public:
-    void initialize();
-    void deinitialize();
+protected:
+    QString createDefaultState() const;
 
 private:
-    static BlueSky::View* createWorkTreeView();
 };
 
 #endif

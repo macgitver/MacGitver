@@ -35,7 +35,7 @@ public:
     void deinitialize();
 
 private:
-    static Heaven::View* createWelcomeView();
+    static BlueSky::View* createWelcomeView();
 };
 
 #endif

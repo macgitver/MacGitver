@@ -23,8 +23,8 @@ class QSplitter;
 
 #include "libGitWrap/Repository.hpp"
 
-#include "libHeaven/CentralUI/Views/View.hpp"
-#include "libHeaven/Widgets/MiniSplitter.hpp"
+#include "libBlueSky/Views.hpp"
+#include "libBlueSky/MiniSplitter.hpp"
 
 #include "hic_WorkingTreeActions.h"
 
@@ -45,7 +45,7 @@ namespace RM
     class Repo;
 }
 
-class IndexWidget : public Heaven::View, private WorkingTreeActions
+class IndexWidget : public BlueSky::View, private WorkingTreeActions
 {
     Q_OBJECT
 public:
@@ -75,7 +75,7 @@ private:
     void setWtFilter(bool enabled, Git::Status flag);
 
 private:
-    Heaven::MiniSplitter*   mSplitter;
+    BlueSky::MiniSplitter*  mSplitter;
     WorkingTreeItemView*    mTreeView;
     DiffViews::DiffView*    mDiffView;
     IndexTreeItemView*      mIndexTreeView;

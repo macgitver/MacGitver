@@ -30,11 +30,21 @@ namespace RM
     class Repo;
 }
 
-class RepositoryModule : public Module, public RepositoryActions, private ConfigUser
+class RepositoryModule
+        : public Module
+        , public RepositoryActions
+        , private ConfigUser
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA( IID "org.macgitver.Module/0.1" FILE "Module.json" )
-    Q_INTERFACES( Module )
+
+    Q_PLUGIN_METADATA(
+        IID     "org.macgitver.Module/0.1"
+        FILE    "Module.json"
+    )
+
+    Q_INTERFACES(
+        Module
+    )
 
 public:
     RepositoryModule();
@@ -58,9 +68,6 @@ private slots:
 
 private:
     void updateMostRecentlyUsedMenu();
-
-private:
-    static Heaven::View* createRepoTreeView();
 
 private:
     QStringList     mMostRecentlyUsed;

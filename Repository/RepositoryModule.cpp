@@ -19,8 +19,8 @@
 #include <QFileDialog>
 #include <QtPlugin>
 
-#include "libHeaven/Heaven.hpp"
-#include "libHeaven/App/PrimaryWindow.hpp"
+#include "libBlueSky/Application.hpp"
+#include "libBlueSky/Windows.hpp"
 
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/App/MacGitver.hpp"
@@ -44,11 +44,6 @@ void RepositoryModule::setupConfigPages( ConfigDialog* dialog )
 {
 }
 
-Heaven::View* RepositoryModule::createRepoTreeView()
-{
-    return new RepoTreeView;
-}
-
 void RepositoryModule::initialize()
 {
     setupActions( this );
@@ -68,14 +63,12 @@ void RepositoryModule::initialize()
 
     updateMostRecentlyUsedMenu();
 
-    MacGitver::self().registerView( "RepoTree",
-                                    tr( "Repository" ),
-                                    &RepositoryModule::createRepoTreeView );
+    registerView<RepoTreeView>(tr("Repository"));
 }
 
 void RepositoryModule::deinitialize()
 {
-    MacGitver::self().unregisterView( "RepoTree" );
+    unregisterView<RepoTreeView>();
 }
 
 void RepositoryModule::onRepositoryClose()
@@ -89,7 +82,7 @@ void RepositoryModule::onRepositoryCreate()
 
 void RepositoryModule::onRepositoryOpen()
 {
-    QWidget* parent = Heaven::primaryWindow();
+    QWidget* parent = BlueSky::Application::instance()->primaryWindow();
     QFileDialog *fd = new QFileDialog( parent );
     #ifdef Q_OS_MAC
     fd->setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);

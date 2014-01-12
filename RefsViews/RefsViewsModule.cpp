@@ -24,7 +24,7 @@ RefsViewsModule::RefsViewsModule()
 {
 }
 
-Heaven::View* RefsViewsModule::createRefsView()
+BlueSky::View* RefsViewsModule::createRefsView()
 {
     return new BranchesView();
 }

@@ -23,16 +23,16 @@
 #include <QString>
 #include <QSet>
 
-#include "libHeaven/CentralUI/Views/View.hpp"
+#include "libBlueSky/Views.hpp"
 
 class QWebView;
 class LoggingModule;
 
-class LoggingView : public Heaven::View
+class LoggingView : public BlueSky::View
 {
     Q_OBJECT
 public:
-    LoggingView(LoggingModule* module);
+    LoggingView();
     ~LoggingView();
 
 public:

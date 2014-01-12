@@ -23,7 +23,7 @@ WorkingTreeModule::WorkingTreeModule()
 {
 }
 
-Heaven::View* WorkingTreeModule::createWorkTreeView()
+BlueSky::View* WorkingTreeModule::createWorkTreeView()
 {
     return new IndexWidget();
 }

@@ -19,7 +19,7 @@
 
 #include "libMacGitverCore/MacGitver/Module.h"
 
-class HistoryView;
+class HistoryMode;
 
 class HistoryModule : public Module
 {
@@ -29,6 +29,7 @@ class HistoryModule : public Module
 
 public:
     HistoryModule();
+    ~HistoryModule();
 
 public:
     void setupConfigPages( ConfigDialog* dialog );
@@ -37,7 +38,7 @@ public:
     void deinitialize();
 
 private:
-    static Heaven::View* createHistoryView();
+    HistoryMode* mMode;
 };
 
 #endif

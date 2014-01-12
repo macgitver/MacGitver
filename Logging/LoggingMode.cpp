@@ -1,8 +1,9 @@
 /*
- * libHeaven - A Qt-based ui framework for strongly modularized applications
+ * MacGitver
  * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
  *
  * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -16,27 +17,29 @@
  *
  */
 
-#ifndef REPOSITORY_CONTEXT_HPP
-#define REPOSITORY_CONTEXT_HPP
+#include <QFile>
 
-#include "libMacGitverCore/MacGitver/IRepositoryContext.hpp"
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
-#include "libBlueSky/Contexts.hpp"
+#include "LoggingMode.hpp"
 
-class RepositoryContext : public BlueSky::ViewContext, public IRepositoryContext
+LoggingMode::LoggingMode(QObject *parent)
+    : BlueSky::Mode(staticMetaObject.className(), parent)
 {
-    Q_OBJECT
-    Q_INTERFACES( IRepositoryContext )
+    setName(tr("Logbook"));
+    setEnabled(false);
+    setDisplayOrder(100);
 
-public:
-    RepositoryContext();
+    connect(&MacGitver::self().repoMan(), SIGNAL(hasActiveRepositoryChanged(bool)),
+            this, SLOT(setEnabled(bool)));
+}
 
-public:
-    void setRepository(RM::Repo* repo);
-    RM::Repo* repository();
+QString LoggingMode::createDefaultState() const {
+    QFile f(QLatin1String(":/Modes/LoggingMode.xml"));
+    if (!f.open(QFile::ReadOnly)) {
+        return QString();
+    }
 
-private:
-    RM::Repo*       mRepo;
-};
-
-#endif
+    return QString::fromUtf8(f.readAll().constData());
+}

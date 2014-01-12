@@ -17,7 +17,7 @@
 #ifndef MGV_REMOTES_VIEW_H
 #define MGV_REMOTES_VIEW_H
 
-#include "libHeaven/CentralUI/Views/View.hpp"
+#include "libBlueSky/Views.hpp"
 
 #include "hic_RemotesViewActions.h"
 
@@ -25,7 +25,7 @@ class QTreeView;
 
 class RemotesViewContext;
 
-class RemotesView : public Heaven::View, private RemotesViewActions
+class RemotesView : public BlueSky::View, private RemotesViewActions
 {
     Q_OBJECT
 public:

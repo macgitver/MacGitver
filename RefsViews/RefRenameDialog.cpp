@@ -17,25 +17,21 @@
  */
 
 #include "RefRenameDialog.hpp"
-#include "ui_RefRenameDialog.h"
 
 #include "RefItem.hpp"
 
 #include "libGitWrap/Reference.hpp"
 
-RefRenameDialog::RefRenameDialog(QWidget *parent)
-    : QDialog( parent )
-    , ui( new Ui::RefRenameDialog )
+RefRenameDialog::RefRenameDialog()
+    : BlueSky::Dialog()
     , mRefInfo( 0 )
 {
-    ui->setupUi( this );
-
-    setFixedSize( size() );
+    setupUi( this );
+    setFixedSize( size() ); // Why?
 }
 
 RefRenameDialog::~RefRenameDialog()
 {
-    delete ui;
 }
 
 void RefRenameDialog::init( RefBranch* refInfo )
@@ -52,8 +48,7 @@ const Git::Result &RefRenameDialog::gitResult() const
 
 void RefRenameDialog::accept()
 {
-    if ( !mRefInfo )
-    {
+    if (!mRefInfo) {
         reject();
         return;
     }
@@ -62,7 +57,7 @@ void RefRenameDialog::accept()
     const QString oldRefName = ref.name();
     const QString prefix = oldRefName.left( oldRefName.length() - ref.shorthand().length() );
 
-    QString newRefName = prefix + ui->textRefName->text();
+    QString newRefName = prefix + textRefName->text();
     if ( !newRefName.isEmpty() && (oldRefName != newRefName) )
     {
         ref.rename( mGitResult, newRefName );
@@ -80,5 +75,5 @@ void RefRenameDialog::updateValues()
 
     const Git::Reference& ref = mRefInfo->reference();
     Q_ASSERT( ref.isValid() );
-    ui->textRefName->setText( ref.shorthand() );
+    textRefName->setText( ref.shorthand() );
 }

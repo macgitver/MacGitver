@@ -29,16 +29,15 @@
 
 #include "libMacGitverCore/Config/Config.h"
 
-LoggingView::LoggingView(LoggingModule* module)
+LoggingView::LoggingView()
     : View("Log")
-    , mModule(module)
 {
     setViewName( trUtf8( "Log" ) );
     mBrowser = new QWebView;
     mBrowser->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
     setWidget( mBrowser );
 
-    mModule->setView(this);
+    LoggingModule::self()->setView(this);
 
     connect(&Config::self(), SIGNAL(fontsChanged()),
             this, SLOT(clearPrefixCache()));
@@ -46,7 +45,7 @@ LoggingView::LoggingView(LoggingModule* module)
 
 LoggingView::~LoggingView()
 {
-    mModule->setView(NULL);
+    LoggingModule::self()->setView(NULL);
 }
 
 QSize LoggingView::sizeHint() const
@@ -69,7 +68,7 @@ void LoggingView::regenerate()
 
     html = htmlPrefix;
 
-    Log::Event::List events = mModule->currentEvents();
+    Log::Event::List events = LoggingModule::self()->currentEvents();
 
     foreach (Log::Event e, events) {
 
@@ -113,7 +112,7 @@ void LoggingView::clearPrefixCache()
 {
     htmlPrefix = QString();
     htmlPostfix = QString();
-    mModule->queueViewUpdate();
+    LoggingModule::self()->queueViewUpdate();
 }
 
 void LoggingView::calculatePrefix()

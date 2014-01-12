@@ -28,8 +28,6 @@
 
 #include "libDiffViews/Views/Raw/RawView.hpp"
 
-#include "libHeaven/Widgets/MiniSplitter.hpp"
-
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
@@ -148,7 +146,7 @@ void HistoryView::initSplitters()
 {
     if( !mVertSplit )
     {
-        mVertSplit = new Heaven::MiniSplitter( Qt::Vertical );
+        mVertSplit = new BlueSky::MiniSplitter( Qt::Vertical );
     }
     else
     {
@@ -158,7 +156,7 @@ void HistoryView::initSplitters()
 
     if( !mHorzSplit )
     {
-        mHorzSplit = new Heaven::MiniSplitter( Qt::Horizontal );
+        mHorzSplit = new BlueSky::MiniSplitter( Qt::Horizontal );
     }
     else
     {

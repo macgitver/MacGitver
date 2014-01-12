@@ -17,13 +17,15 @@
 #ifndef MGV_GITCONFIGDIALOG_H
 #define MGV_GITCONFIGDIALOG_H
 
-#include "libHeaven/App/Dialog.hpp"
+#include "libBlueSky/Dialog.hpp"
 
 #include "libGitWrap/Repository.hpp"
 
 #include "ui_GitConfigDialog.h"
 
-class GitConfigDialog : public Heaven::Dialog, private Ui::GitConfigDialog
+class GitConfigDialog
+        : public BlueSky::Dialog
+        , private Ui::GitConfigDialog
 {
     Q_OBJECT
 public:

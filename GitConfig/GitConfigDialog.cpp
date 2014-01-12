@@ -17,7 +17,7 @@
 #include "GitConfigDialog.h"
 
 GitConfigDialog::GitConfigDialog( Git::Repository& repo )
-    : Heaven::Dialog()
+    : BlueSky::Dialog()
     , mRepo( repo )
 {
     setupUi( this );

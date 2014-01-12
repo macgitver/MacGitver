@@ -17,7 +17,7 @@
 #ifndef MGV_REPO_TREE_VIEW_HPP
 #define MGV_REPO_TREE_VIEW_HPP
 
-#include "libHeaven/CentralUI/Views/ContextView.hpp"
+#include "libBlueSky/Contexts.hpp"
 
 #include "hic_RepoTreeViewCtxMenu.h"
 
@@ -31,7 +31,9 @@ namespace RM
 class RepoInfoModel;
 class TreeViewCtxMenu;
 
-class RepoTreeView : public Heaven::ContextView, private RepoTreeViewCtxMenu
+class RepoTreeView
+        : public BlueSky::ContextView
+        , private RepoTreeViewCtxMenu
 {
     Q_OBJECT
 public:
@@ -53,7 +55,7 @@ private slots:  // for MacGitver::repoMan()
 
 private:
     QModelIndex deeplyMapToSource( QModelIndex current ) const;
-    Heaven::ViewContext* createContextObject() const;
+    BlueSky::ViewContext* createContextObject() const;
 
 private:
     RepoInfoModel*          mModel;

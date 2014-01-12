@@ -19,7 +19,7 @@
 #ifndef MGV_BRANCHES_VIEW_HPP
 #define MGV_BRANCHES_VIEW_HPP
 
-#include "libHeaven/CentralUI/Views/ContextView.hpp"
+#include "libBlueSky/Contexts.hpp"
 
 class QTreeView;
 class QModelIndex;
@@ -34,7 +34,7 @@ namespace Git
 
 class BranchesViewData;
 
-class BranchesView : public Heaven::ContextView, private BranchesViewActions
+class BranchesView : public BlueSky::ContextView, private BranchesViewActions
 {
     Q_OBJECT
 public:
@@ -59,9 +59,9 @@ protected:
     void contextMenuEvent(QContextMenuEvent *ev);
 
 private:
-    Heaven::ViewContextData* createContextData() const;
-    virtual void attachedToContext( Heaven::ViewContext* ctx, Heaven::ViewContextData* data );
-    virtual void detachedFromContext( Heaven::ViewContext* ctx );
+    BlueSky::ViewContextData* createContextData() const;
+    virtual void attachedToContext(BlueSky::ViewContext* ctx, BlueSky::ViewContextData* data );
+    virtual void detachedFromContext(BlueSky::ViewContext* ctx );
 
     bool askToGoOn(const QString& message);
     inline bool checkRemoveRef(const Git::Reference &ref);

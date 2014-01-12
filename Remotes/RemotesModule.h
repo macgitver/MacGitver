@@ -35,7 +35,7 @@ public:
     void deinitialize();
 
 private:
-    static Heaven::View* createRemotesView();
+    static BlueSky::View* createRemotesView();
 
 private slots:
     void onRemoteCreate();

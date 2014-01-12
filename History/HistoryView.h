@@ -26,8 +26,8 @@ class QToolBar;
 
 #include "libMacGitverCore/Config/ConfigUser.h"
 
-#include "libHeaven/CentralUI/Views/View.hpp"
-#include "libHeaven/Widgets/MiniSplitter.hpp"
+#include "libBlueSky/Views.hpp"
+#include "libBlueSky/MiniSplitter.hpp"
 
 #include "hic_HistoryViewActions.h"
 
@@ -44,7 +44,7 @@ class HistoryListDelegate;
 
 class HistoryDiff;
 
-class HistoryView : public Heaven::View,
+class HistoryView : public BlueSky::View,
                     private HistoryViewActions,
                     private ConfigUser
 {
@@ -72,8 +72,8 @@ private:
     void setShowBranches(HistoryModel::Roots branches);
 
 private:
-    Heaven::MiniSplitter*   mVertSplit;
-    Heaven::MiniSplitter*   mHorzSplit;
+    BlueSky::MiniSplitter*  mVertSplit;
+    BlueSky::MiniSplitter*  mHorzSplit;
     HistoryListDelegate*    mDelegate;
     HistoryModel*           mModel;
     HistoryList*            mList;

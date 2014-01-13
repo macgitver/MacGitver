@@ -42,10 +42,6 @@ private:
 
 private:
     RM::Repo*       repo;
-    QLabel*         txthlRepo;
-    QLabel*         txthlState;
-    QLabel*         txthlBranch;
-
     QLabel*         txtRepo;
     QLabel*         txtState;
     QLabel*         txtBranch;

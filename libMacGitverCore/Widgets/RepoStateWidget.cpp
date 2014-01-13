@@ -19,6 +19,9 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
+#include "libHeavenIcons/IconRef.hpp"
+#include "libHeavenIcons/Icon.hpp"
+
 #include "RepoMan/RepoMan.hpp"
 #include "RepoMan/Repo.hpp"
 
@@ -56,35 +59,37 @@ void RepoStateWidget::repositoryDeactivated(RM::Repo* info)
 
 void RepoStateWidget::setRepoState()
 {
-    txthlState->hide();
     txtState->hide();
 
     txtRepo->setText( repo ? repo->displayAlias() : QString() );
     txtBranch->setText( repo ? repo->branchDisplay() : QString() );
 }
 
+static inline QLabel* pixmapLabel(const char* name)
+{
+    Heaven::IconRef iconRef(name, 16);
+    QLabel* l = new QLabel;
+    l->setPixmap(iconRef.icon().pixmap());
+    return l;
+}
+
 void RepoStateWidget::setupUi()
 {
-    txthlBranch = new QLabel( trUtf8( "Branch" ) );
-    txthlState = new QLabel( trUtf8( "State" ) );
-    txthlRepo = new QLabel( trUtf8( "Repository" ) );
-
     txtBranch = new QLabel;
     txtState = new QLabel;
     txtRepo = new QLabel;
 
-    QGridLayout* l = new QGridLayout;
-    l->setMargin( 0 );
-    l->setSpacing( 1 );
+    QHBoxLayout* l = new QHBoxLayout;
+    l->setMargin(0);
+    l->setSpacing(3);
 
-    l->addWidget( txthlRepo, 0, 0 );
-    l->addWidget( txtRepo, 1, 0 );
+    l->addWidget(pixmapLabel("Repo"));
+    l->addWidget(txtRepo);
 
-    l->addWidget( txthlState, 0, 1 );
-    l->addWidget( txtState, 1, 1 );
+    l->addWidget(txtState);
 
-    l->addWidget( txthlBranch, 0, 2 );
-    l->addWidget( txtBranch, 1, 2 );
+    l->addWidget(pixmapLabel("Branch"));
+    l->addWidget(txtBranch);
 
     setLayout( l );
 

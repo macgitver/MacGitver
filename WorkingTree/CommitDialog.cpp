@@ -23,9 +23,11 @@
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/RepoMan/Repo.hpp"
 
-#include "libGitWrap/Result.hpp"
 #include "libGitWrap/Commit.hpp"
+#include "libGitWrap/Index.hpp"
 #include "libGitWrap/Reference.hpp"
+#include "libGitWrap/Result.hpp"
+#include "libGitWrap/Tree.hpp"
 
 #include <QPlainTextEdit>
 #include <QLayout>
@@ -63,7 +65,25 @@ void CommitDialog::onCommit()
 {
     Git::Result r;
 
-    // TODO: implement logic to add a commit to the git repository
+    RM::Repo *repo = MacGitver::repoMan().activeRepository();
+    if (!repo)
+    {
+        QMessageBox::warning( this, trUtf8("Failed to amend commit"),
+                              trUtf8("Cannot amend a commit without an active repository.") );
+        return;
+    }
+
+    Git::Repository gitRepo = repo->gitRepo();
+    Git::Index index = gitRepo.index(r);
+    Git::Signature sign = Git::Signature::defaultSignature(r, gitRepo);
+
+    if (r)
+    {
+        Git::CommitList parents;
+        Git::Commit headCommit = gitRepo.HEAD(r).peeled(r, Git::otCommit).asCommit();
+        parents << headCommit;
+        Git::Commit::create( r, gitRepo, index.writeTree(r), message(), sign, sign, parents );
+    }
 
     if (!r)
     {

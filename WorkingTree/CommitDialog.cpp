@@ -23,6 +23,7 @@
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/RepoMan/Repo.hpp"
 
+#include "libGitWrap/Operations/CommitOperation.hpp"
 #include "libGitWrap/Commit.hpp"
 #include "libGitWrap/Index.hpp"
 #include "libGitWrap/Reference.hpp"
@@ -74,15 +75,13 @@ void CommitDialog::onCommit()
     }
 
     Git::Repository gitRepo = repo->gitRepo();
-    Git::Index index = gitRepo.index(r);
-    Git::Signature sign = Git::Signature::defaultSignature(r, gitRepo);
+    QScopedPointer<Git::CommitOperation> opCommit( gitRepo.index(r).commitOperation(r) );
+    opCommit->setMessage( ui->textCommitMessage->toPlainText() );
+    opCommit->setDefaultSignatures();
 
     if (r)
     {
-        Git::CommitList parents;
-        Git::Commit headCommit = gitRepo.HEAD(r).peeled(r, Git::otCommit).asCommit();
-        parents << headCommit;
-        Git::Commit::create( r, gitRepo, index.writeTree(r), message(), sign, sign, parents );
+        r = opCommit->execute();
     }
 
     if (!r)

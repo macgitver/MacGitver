@@ -77,7 +77,6 @@ void CommitDialog::onCommit()
     Git::Repository gitRepo = repo->gitRepo();
     QScopedPointer<Git::CommitOperation> opCommit( gitRepo.index(r).commitOperation(r) );
     opCommit->setMessage( ui->textCommitMessage->toPlainText() );
-    opCommit->setDefaultSignatures();
 
     if (r)
     {

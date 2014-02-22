@@ -52,7 +52,7 @@ BranchesView::BranchesView()
     setWidget( mTree );
 
     setFlags( ConsumesContexts | DataPerContext );
-    setContextProvider( "RepoTree" );
+    setContextProvider( "RepoTreeView" );
 }
 
 BlueSky::ViewContextData* BranchesView::createContextData() const

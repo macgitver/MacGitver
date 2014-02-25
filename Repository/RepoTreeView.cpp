@@ -105,7 +105,15 @@ void RepoTreeView::onCtxActivate()
 
 void RepoTreeView::onCtxClose()
 {
-
+    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
+    if( action )
+    {
+        RM::Repo* info = qobject_cast< RM::Repo* >( action->activatedBy() );
+        if( info )
+        {
+            info->close();
+        }
+    }
 }
 
 void RepoTreeView::onRepoActivated(RM::Repo* repo)

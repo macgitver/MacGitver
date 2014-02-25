@@ -20,7 +20,7 @@
 #include "libGitWrap/ObjectId.hpp"
 #include "libGitWrap/Repository.hpp"
 
-#include <QTextBrowser>
+#include <QWebView>
 
 enum HistoryHeaderDetails
 {
@@ -38,7 +38,7 @@ enum HistoryHeaderDetails
     HHD_ParentsList
 };
 
-class HistoryDetails : public QTextBrowser
+class HistoryDetails : public QWebView
 {
     Q_OBJECT
 public:
@@ -52,11 +52,14 @@ public:
 private:
     void updateText();
     void readConfig();
+    QString updateStyle(const QString &templ) const;
 
 private:
     Git::ObjectId                   mCurrentSHA1;
     Git::Repository                 mRepo;
     QVector< HistoryHeaderDetails > mViewDetailRows;
+
+    QString                         mStyle;
 };
 
 #endif

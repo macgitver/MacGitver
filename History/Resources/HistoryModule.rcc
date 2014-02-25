@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="">
     <file>Modes/HistoryMode.xml</file>
+    <file>commit-detail.css</file>
 </qresource>
 </RCC>

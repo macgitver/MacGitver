@@ -20,14 +20,15 @@
 #include "libGitWrap/Result.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/SHMParser/ShellExpand.hpp"
 
 #include "HistoryDetails.h"
 
-HistoryDetails::HistoryDetails( QWidget* parent )
-    : QTextBrowser( parent )
-{
-    setFrameShape( NoFrame );
+#include <QFile>
 
+HistoryDetails::HistoryDetails( QWidget* parent )
+    : QWebView( parent )
+{
     readConfig();
 }
 
@@ -51,7 +52,24 @@ void HistoryDetails::readConfig()
         }
     }
 
+    QFile fStyle( QLatin1String(":/commit-detail.css") );
+    QString styleTempl = fStyle.open(QFile::ReadOnly) ? QString::fromUtf8( fStyle.readAll().constData() ) : QString();
+
+    mStyle = updateStyle( styleTempl );
+
     setCommit( mCurrentSHA1 );
+}
+
+QString HistoryDetails::updateStyle(const QString &templ) const
+{
+    // TODO: this hash shall be provided by the "Config" mechanism
+    ShellExpand::Macros macros;
+    macros[QLatin1String("MGV_FONT")] = Config::defaultFontCSS();
+    macros[QLatin1String("MGV_BGCOLOR")] =
+            Config::self().get(QLatin1String("mgv-bg")).toString();
+
+    // replace constants in css (sample $MY_CONST)
+    return ShellExpand(macros).expandText(templ);
 }
 
 void HistoryDetails::setRepository( Git::Repository repo )
@@ -79,25 +97,11 @@ static inline QString mkRow( const QString& lbl, const QString& content, bool fi
 {
     QString s = QLatin1String(
                 "<tr>"
-                    "<td style=\"font-weight:bold;\">"
-                        "%1:"
-                    "</td>"
-                    "<td%3>"
-                        "%2"
-                    "</td>"
+                    "<td class=\"name\">%1:</td>"
+                    "<td>%2</td>"
                 "</tr>" );
 
-    QString styleAdd;
-    if( fixed )
-    {
-        QFont fixed = Config::self().defaultFixedFont();
-        styleAdd = QString( QLatin1String( " style=\"font-family: '%1';font-size: %2pt\"" ) )
-                .arg( fixed.family() )
-                .arg( fixed.pointSize() );
-
-    }
-
-    return s.arg( lbl ).arg( content ).arg( styleAdd );
+    return s.arg( lbl ).arg( content );
 }
 
 void HistoryDetails::updateText()
@@ -121,9 +125,9 @@ void HistoryDetails::updateText()
 
     QString detailRows;
 
-    for( int i = 0; i < mViewDetailRows.count(); i++ )
+    foreach (HistoryHeaderDetails detailType, mViewDetailRows)
     {
-        switch( mViewDetailRows[ i ] )
+        switch( detailType )
         {
         case HHD_Subject:
             detailRows += mkRow( trUtf8( "Subject" ),
@@ -196,57 +200,25 @@ void HistoryDetails::updateText()
         body.prepend( QString() );
     }
 
-    QPalette p;
-    QColor clrBackSel = p.color( QPalette::Highlight );
-    QColor clrFrntSel = p.color( QPalette::Text ); // Don't want HighlightedText, probably.
-    QColor clrBackDtl = p.color( QPalette::Window );
-    QColor clrFrntDtl = p.color( QPalette::WindowText );
-    QColor clrBackWnd = p.color( QPalette::Base );
-    QColor clrFrntWnd = p.color( QPalette::Text );
-    QFont fixed = Config::self().defaultFixedFont();
-
     QString html = trUtf8(
-        "<qt style=\"background: %5;\">"
-        //  "<div style=\"margin: 2px;padding:0px;color: %6;background-color: %5\">"
-                "<table style=\""
-                            "border-style: solid;width:100%;"
-                            "background-color: %1;"
-                            "color: %2;"
-                            "border-color: %4;\" border=\"1\" cellspacing=\"0\">"
-                    "<tr>"
-                        "<td width=\"100%\" style=\"font-size: x-large;color:%2;"
-                                                    "padding: 3px;\" bgcolor=\"%1\">"
-                            "%7"
-                        "</td>"
-                    "</tr>"
-                    "<tr>"
-                        "<td style=\"padding: 3px;color: %4;background-color:%3;\">"
-                            "<table>"
-                                "%8"
-                            "</table>"
-                        "</td>"
-                    "</tr>"
-                "</table>"
-                "<pre style=\"font-family: '%10';font-size: %11pt\">"
-                    "%9"
-                "</pre>"
-        //  "</div>"
-        "</qt><!-- %6 --!>" );
+        "<html>"
+            "<head>"
+                "<style type=\"text/css\">%1</style>"
+            "</head>"
+            "<body>"
+                "<div class=\"heading\">%2</div>"
+                "<table>%3</table>"
+                "<pre>%4</pre>"
+            "</body>"
+        "<html>"
+                );
 
     html = html
-            .arg( clrBackSel.name() )  /* %1 */
-            .arg( clrFrntSel.name() )  /* %2 */
-            .arg( clrBackDtl.name() )  /* %3 */
-            .arg( clrFrntDtl.name() )  /* %4 */
-            .arg( clrBackWnd.name() )  /* %5 */
-            .arg( clrFrntWnd.name() )  /* %6 */
-            .arg( head )               /* %7 */
-            .arg( detailRows )         /* %8 */
-            .arg( body.join( QChar( L'\n' ) ) ) /* %9 */
-            .arg( fixed.family() )     /* %10 */
-            .arg( fixed.pointSize() ); /* %11 */
-
-    //qDebug( "%s", qPrintable( html ) );
+            .arg( mStyle )      // %1
+            .arg( head )        // %2
+            .arg( detailRows )  // %3
+            .arg( body.join( QChar( L'\n' ) ) )  // %4
+            ;
 
     setHtml( html );
 }

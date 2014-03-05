@@ -75,12 +75,11 @@ void CommitDialog::onCommit()
     }
 
     Git::Repository gitRepo = repo->gitRepo();
-    QScopedPointer<Git::CommitOperation> opCommit( gitRepo.index(r).commitOperation(r) );
-    opCommit->setMessage( ui->textCommitMessage->toPlainText() );
 
-    if (r)
+    QScopedPointer<Git::CommitOperation> op( gitRepo.commitOperation( r, ui->textCommitMessage->toPlainText() ) );
+    if (op)
     {
-        r = opCommit->execute();
+        r = op->execute();
     }
 
     if (!r)

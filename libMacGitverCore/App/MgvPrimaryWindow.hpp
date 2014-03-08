@@ -43,6 +43,7 @@ private slots:
     void onToolsPreferences();
     void onViewRefresh();
     void setupFonts();
+    void showLater();
 
 public:
     void activateMode( const QString& modeName );

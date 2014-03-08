@@ -92,7 +92,11 @@ void MgvPrimaryWindow::setupUi()
     setWindowTitle( trUtf8( "MacGitver" ) );
 
     footer()->addWidget( new RepoStateWidget );
+    QMetaObject::invokeMethod(this, "showLater", Qt::QueuedConnection);
+}
 
+void MgvPrimaryWindow::showLater()
+{
     if( Config::self().get( "FullScreen" ).toBool() )
     {
         // Useless on MacOSX with Qt < 5.0

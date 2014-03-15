@@ -14,8 +14,6 @@
  *
  */
 
-#include <QDebug>
-
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
 #include "HistoryList.h"

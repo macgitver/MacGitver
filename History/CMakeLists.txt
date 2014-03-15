@@ -46,6 +46,7 @@ SET(UI_FILES
 SET(HID_FILES
 
     HistoryViewActions.hid
+    HistoryCtxMenu.hid
 )
 
 SET(RCC_FILES

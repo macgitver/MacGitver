@@ -69,7 +69,7 @@ void CommitDialog::onCommit()
     RM::Repo *repo = MacGitver::repoMan().activeRepository();
     if (!repo)
     {
-        QMessageBox::warning( this, trUtf8("Failed to amend commit"),
+        QMessageBox::warning( this, trUtf8("Failed to commit"),
                               trUtf8("Cannot amend a commit without an active repository.") );
         return;
     }

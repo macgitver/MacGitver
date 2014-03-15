@@ -20,6 +20,7 @@
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
 
+#include <QAbstractProxyModel>
 HistoryList::HistoryList( QWidget* parent )
     : TreeViewCtxMenu( parent )
     , ConfigUser( "History" )
@@ -94,4 +95,18 @@ void HistoryList::contextMenu( const QModelIndex& index, const QPoint& globalPos
 
     if ( menu )
         menu->showPopup( globalPos );
+}
+
+QModelIndex HistoryList::deeplyMapToSource( QModelIndex current ) const
+{
+    while( current.isValid() )
+    {
+        const QAbstractProxyModel* apm = qobject_cast< const QAbstractProxyModel* >( current.model() );
+        if( !apm )
+            return current;
+
+        current = apm->mapToSource( current );
+    }
+
+    return QModelIndex();
 }

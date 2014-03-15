@@ -41,6 +41,8 @@ signals:
 private:
     void configChanged( const QString& subPath, const QVariant& value );
 
+    QModelIndex deeplyMapToSource( QModelIndex current ) const;
+
 private slots:
     void onCurrentChanged();
     void contextMenu(const QModelIndex& index, const QPoint& globalPos);

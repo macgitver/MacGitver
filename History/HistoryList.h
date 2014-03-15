@@ -20,14 +20,17 @@
 #include "libMacGitverCore/Config/ConfigUser.h"
 
 #include "libGitWrap/ObjectId.hpp"
+#include "libMacGitverCore/Widgets/TreeViewCtxMenu.hpp"
 
-#include <QTreeView>
+#include "hic_HistoryCtxMenu.h"
 
-class HistoryList : public QTreeView, private ConfigUser
+class HistoryModel;
+
+class HistoryList : public TreeViewCtxMenu, private HistoryTreeCtxMenu, private ConfigUser
 {
     Q_OBJECT
 public:
-    HistoryList();
+    HistoryList( QWidget* parent = 0 );
 
 public:
     void setModel( QAbstractItemModel* model );
@@ -40,6 +43,10 @@ private:
 
 private slots:
     void onCurrentChanged();
+    void contextMenu(const QModelIndex& index, const QPoint& globalPos);
+
+private:
+    HistoryModel *      mModel;
 };
 
 #endif

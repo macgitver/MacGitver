@@ -22,8 +22,9 @@
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
 
-HistoryList::HistoryList()
-    : ConfigUser( "History" )
+HistoryList::HistoryList( QWidget* parent )
+    : TreeViewCtxMenu( parent )
+    , ConfigUser( "History" )
 {
     setRootIsDecorated( false );
 
@@ -34,6 +35,11 @@ HistoryList::HistoryList()
     HeaderView* hv = new HeaderView( Qt::Horizontal );
     hv->setConfigName( configSubPath( "Columns" ) );
     setHeader( hv );
+
+    setupActions( this );
+
+    connect( this, SIGNAL(contextMenu(QModelIndex, QPoint)),
+             this, SLOT(contextMenu(QModelIndex, QPoint)) );
 }
 
 void HistoryList::onCurrentChanged()
@@ -56,7 +62,8 @@ void HistoryList::onCurrentChanged()
 
 void HistoryList::setModel( QAbstractItemModel* model )
 {
-    QTreeView::setModel( model );
+    TreeViewCtxMenu::setModel( model );
+    mModel = qobject_cast< HistoryModel * >( model );
 
     connect( selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
              this, SLOT(onCurrentChanged()) );
@@ -68,4 +75,25 @@ void HistoryList::setModel( QAbstractItemModel* model )
 void HistoryList::configChanged( const QString& subPath, const QVariant& value )
 {
     //qDebug() << "ConfigChange:" << subPath << "=>" << value;
+}
+
+void HistoryList::contextMenu( const QModelIndex& index, const QPoint& globalPos )
+{
+    Q_ASSERT( mModel );
+
+    QModelIndex srcIndex = deeplyMapToSource( index );
+    if ( !srcIndex.isValid() )
+        return;
+
+    HistoryEntry* item = mModel->indexToEntry( srcIndex );
+
+    Heaven::Menu* menu = 0;
+    if ( item )
+    {
+        menu = menuCtxMenuHistory;
+        //menu->setActivationContext( item );
+    }
+
+    if ( menu )
+        menu->showPopup( globalPos );
 }

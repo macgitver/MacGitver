@@ -47,6 +47,9 @@ private slots:
     void onCurrentChanged();
     void contextMenu(const QModelIndex& index, const QPoint& globalPos);
 
+    void onCheckout();
+    void onCreateBranch();
+
 private:
     HistoryModel *      mModel;
 };

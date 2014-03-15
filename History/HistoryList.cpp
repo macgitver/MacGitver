@@ -14,13 +14,23 @@
  *
  */
 
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Repo.hpp"
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
 #include "HistoryList.h"
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
 
+#include "libGitWrap/Repository.hpp"
+#include "libGitWrap/Tree.hpp"
+
+#include "libGitWrap/Operations/CheckoutOperation.hpp"
+
 #include <QAbstractProxyModel>
+#include <QMessageBox>
+
 HistoryList::HistoryList( QWidget* parent )
     : TreeViewCtxMenu( parent )
     , ConfigUser( "History" )
@@ -109,4 +119,57 @@ QModelIndex HistoryList::deeplyMapToSource( QModelIndex current ) const
     }
 
     return QModelIndex();
+}
+
+void HistoryList::onCheckout()
+{
+    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
+    if ( !action )
+        return;
+
+    QModelIndex srcIndex = deeplyMapToSource( currentIndex() );
+    if ( !srcIndex.isValid() )
+        return;
+
+    HistoryEntry* item = mModel->indexToEntry( srcIndex );
+    Q_ASSERT( item );
+
+    Git::Result r;
+
+    RM::Repo *repo = MacGitver::repoMan().activeRepository();
+    Q_ASSERT( repo );
+
+    Git::Repository gitRepo = repo->gitRepo();
+    Git::Tree tree = gitRepo.lookupCommit( r, item->id() ).tree( r );
+
+    Git::CheckoutTreeOperation* op = new Git::CheckoutTreeOperation( tree );
+    if ( r )
+        r = op->execute();
+
+    if ( !r )
+    {
+        QMessageBox::information( this, trUtf8("Failed to checkout"),
+                                  trUtf8("Failed to checkout. Git message:\n%1").arg(r.errorText()));
+    }
+}
+
+void HistoryList::onCreateBranch()
+{
+    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
+    if ( !action )
+        return;
+
+    QModelIndex srcIndex = deeplyMapToSource( currentIndex() );
+    if ( !srcIndex.isValid() )
+        return;
+
+    HistoryEntry* item = mModel->indexToEntry( srcIndex );
+    Q_ASSERT( item );
+
+    Git::Result r;
+
+    RM::Repo *repo = MacGitver::repoMan().activeRepository();
+    Q_ASSERT( repo );
+
+    // TODO: Implementation
 }

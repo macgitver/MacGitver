@@ -52,6 +52,9 @@ private slots:
 
 private:
     HistoryModel *      mModel;
+
+private:
+    inline void checkoutBranch(Git::Reference branch);
 };
 
 #endif

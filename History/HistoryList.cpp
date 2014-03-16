@@ -19,12 +19,14 @@
 #include "libMacGitverCore/RepoMan/Repo.hpp"
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
+#include "CreateBranchDialog.h"
 #include "HistoryList.h"
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
 
+#include "libGitWrap/Commit.hpp"
 #include "libGitWrap/Repository.hpp"
-#include "libGitWrap/Tree.hpp"
+#include "libGitWrap/Reference.hpp"
 
 #include "libGitWrap/Operations/CheckoutOperation.hpp"
 
@@ -140,16 +142,27 @@ void HistoryList::onCheckout()
     Q_ASSERT( repo );
 
     Git::Repository gitRepo = repo->gitRepo();
-    Git::Tree tree = gitRepo.lookupCommit( r, item->id() ).tree( r );
-
-    Git::CheckoutTreeOperation* op = new Git::CheckoutTreeOperation( tree );
-    if ( r )
-        r = op->execute();
+    gitRepo.lookupCommit( r, item->id() ).checkout( r );
 
     if ( !r )
     {
         QMessageBox::information( this, trUtf8("Failed to checkout"),
                                   trUtf8("Failed to checkout. Git message:\n%1").arg(r.errorText()));
+    }
+}
+
+void HistoryList::checkoutBranch(Git::Reference branch)
+{
+    Git::Result r;
+
+    branch.checkoutOperation( r );
+
+    if ( !r )
+    {
+        QMessageBox::information( this, trUtf8("Failed to create branch"),
+                                  trUtf8("Failed to checkout branch '%1'. Git message:\n%2")
+                                  .arg( branch.shorthand() )
+                                  .arg( r.errorText() ) );
     }
 }
 
@@ -171,5 +184,22 @@ void HistoryList::onCreateBranch()
     RM::Repo *repo = MacGitver::repoMan().activeRepository();
     Q_ASSERT( repo );
 
-    // TODO: Implementation
+    CreateBranchDialog *dlg = new CreateBranchDialog(this);
+    if ( dlg->exec() != QDialog::Accepted )
+        return;
+
+    Git::Repository gitRepo = repo->gitRepo();
+    Git::Reference branch = gitRepo.lookupCommit( r, item->id() ).createBranch( r, dlg->branchName(), false );
+
+    if ( !r )
+    {
+        QMessageBox::information( this, trUtf8("Failed to create branch"),
+                                  trUtf8("Failed to create branch. Git message:\n%1").arg(r.errorText()) );
+        return;
+    }
+
+    if ( dlg->checkoutBranch() )
+    {
+        checkoutBranch( branch );
+    }
 }

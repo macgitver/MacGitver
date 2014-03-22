@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(
 SET(SRC_FILES
 
     CreateBranchDialog.cpp
+    CreateTagDialog.cpp
 
     HistoryView.cpp
     HistoryListDelegate.cpp
@@ -28,6 +29,7 @@ SET(SRC_FILES
 SET(HDR_FILES
 
     CreateBranchDialog.h
+    CreateTagDialog.h
 
     HistoryView.h
     HistoryListDelegate.h
@@ -45,6 +47,7 @@ SET(HDR_FILES
 SET(UI_FILES
 
     CreateBranchDialog.ui
+    CreateTagDialog.ui
 
     HistoryConfigPage.ui
 )

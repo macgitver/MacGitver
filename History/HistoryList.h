@@ -49,6 +49,7 @@ private slots:
 
     void onCheckout();
     void onCreateBranch();
+    void onCreateTag();
 
 private:
     HistoryModel *      mModel;

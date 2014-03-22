@@ -20,6 +20,7 @@
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
 #include "CreateBranchDialog.h"
+#include "CreateTagDialog.h"
 #include "HistoryList.h"
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
@@ -201,5 +202,46 @@ void HistoryList::onCreateBranch()
     if ( dlg->checkoutBranch() )
     {
         checkoutBranch( branch );
+    }
+}
+
+
+
+void HistoryList::onCreateTag()
+{
+    QMessageBox::information( this, trUtf8("Tag was not created"),
+                              trUtf8("Creating tags is not available yet.") );
+
+    return;
+
+    Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
+    if ( !action )
+        return;
+
+    QModelIndex srcIndex = deeplyMapToSource( currentIndex() );
+    if ( !srcIndex.isValid() )
+        return;
+
+    HistoryEntry* item = mModel->indexToEntry( srcIndex );
+    Q_ASSERT( item );
+
+    Git::Result r;
+
+    RM::Repo *repo = MacGitver::repoMan().activeRepository();
+    Q_ASSERT( repo );
+
+    CreateTagDialog *dlg = new CreateTagDialog(this);
+    if ( dlg->exec() != QDialog::Accepted )
+        return;
+
+    Git::Repository gitRepo = repo->gitRepo();
+    // TODO: implementation of createTag() in libgGitWrap
+//    Git::Tag tag = gitRepo.lookupCommit( r, item->id() ).createTag( r, dlg->tagName() );
+
+    if ( !r )
+    {
+        QMessageBox::information( this, trUtf8("Failed to create tag"),
+                                  trUtf8("Failed to create tag. Git message:\n%1").arg(r.errorText()) );
+        return;
     }
 }

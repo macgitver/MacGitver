@@ -30,11 +30,19 @@ Ui HistoryTreeCtxMenu {
         ConnectTo       onCreateBranch();
     };
 
+    Action CreateTag {
+        Text            "Create &Tag";
+        StatusToolTip   "Create a tag on this commit.";
+        ConnectTo       onCreateTag();
+    };
+
     Menu CtxMenuHistory {
 
         Action      Checkout;
         Separator;
         Action      CreateBranch;
+        Separator;
+        Action      CreateTag;
 
     };
 

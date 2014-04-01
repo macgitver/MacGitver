@@ -37,6 +37,7 @@ class WorkingTreeModel;
 class WorkingTreeFilterModel;
 class WorkingTreeItemView;
 class IndexTreeItemView;
+class CommitDialog;
 
 class QPlainTextEdit;
 
@@ -79,7 +80,7 @@ private:
     WorkingTreeItemView*    mTreeView;
     DiffViews::DiffView*    mDiffView;
     IndexTreeItemView*      mIndexTreeView;
-    QPlainTextEdit*         mCommitMessage;
+    CommitDialog*           mCommitDialog;
 
     WorkingTreeModel*       mStatusModel;
 

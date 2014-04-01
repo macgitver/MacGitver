@@ -16,12 +16,6 @@
 
 #include "IndexWidget.h"
 
-#include <QAction>
-#include <QToolBar>
-#include <QSplitter>
-#include <QVBoxLayout>
-#include <QPlainTextEdit>
-
 #include "libGitWrap/Index.hpp"
 #include "libGitWrap/DiffList.hpp"
 
@@ -35,22 +29,24 @@
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/RepoMan/Repo.hpp"
 
+#include "CommitDialog.h"
 #include "IndexTreeItemView.h"
 #include "WorkingTreeItemView.h"
 #include "WorkingTreeModel.h"
 #include "WorkingTreeFilterModel.h"
 
+#include <QMessageBox>
+
 IndexWidget::IndexWidget()
     : View( "WorkTree" )
-    , mSplitter( new BlueSky::MiniSplitter( Qt::Vertical ) )
+    , mSplitter( new BlueSky::MiniSplitter( Qt::Horizontal ) )
     , mTreeView( new WorkingTreeItemView )
     , mIndexTreeView( new IndexTreeItemView )
-    , mCommitMessage( new QPlainTextEdit )
+    , mCommitDialog( new CommitDialog )
     , mStatusModel( new WorkingTreeModel( this ) )
 {
     mTreeView->setFrameShape( QFrame::NoFrame );
     mIndexTreeView->setFrameShape( QFrame::NoFrame );
-    mCommitMessage->setFrameShape( QFrame::NoFrame );
 
     setupActions( this );
 
@@ -59,16 +55,15 @@ IndexWidget::IndexWidget()
 
     mDiffView = DiffViews::DiffViews::self().defaultCreator()->create( this );
 
-    BlueSky::MiniSplitter *hSplit_1 = new BlueSky::MiniSplitter( Qt::Horizontal );
+    BlueSky::MiniSplitter *hSplit_1 = new BlueSky::MiniSplitter( Qt::Vertical );
     hSplit_1->addWidget( mTreeView );
-    hSplit_1->addWidget( mDiffView );
+    hSplit_1->addWidget( mIndexTreeView );
+    hSplit_1->addWidget( mCommitDialog );
 
     mSplitter->addWidget( hSplit_1 );
 
-    BlueSky::MiniSplitter *hSplit_2 = new BlueSky::MiniSplitter( Qt::Horizontal );
-
-    hSplit_2->addWidget( mIndexTreeView );
-    hSplit_2->addWidget( mCommitMessage );
+    BlueSky::MiniSplitter *hSplit_2 = new BlueSky::MiniSplitter( Qt::Vertical );
+    hSplit_2->addWidget( mDiffView );
 
     mSplitter->addWidget( hSplit_2 );
 

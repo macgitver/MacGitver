@@ -55,7 +55,7 @@ private:
     HistoryModel *      mModel;
 
 private:
-    inline void checkoutBranch(Git::Reference branch);
+    inline void checkoutBranch(Git::Result& result, const Git::Reference& branch);
 };
 
 #endif

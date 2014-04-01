@@ -152,18 +152,16 @@ void HistoryList::onCheckout()
     }
 }
 
-void HistoryList::checkoutBranch(Git::Reference branch)
+void HistoryList::checkoutBranch(Git::Result& result, const Git::Reference& branch)
 {
-    Git::Result r;
+    branch.checkoutOperation( result );
 
-    branch.checkoutOperation( r );
-
-    if ( !r )
+    if ( !result )
     {
         QMessageBox::information( this, trUtf8("Failed to create branch"),
                                   trUtf8("Failed to checkout branch '%1'. Git message:\n%2")
                                   .arg( branch.shorthand() )
-                                  .arg( r.errorText() ) );
+                                  .arg( result.errorText() ) );
     }
 }
 
@@ -199,10 +197,9 @@ void HistoryList::onCreateBranch()
         return;
     }
 
-    if ( dlg->checkoutBranch() )
-    {
-        checkoutBranch( branch );
-    }
+    if ( !dlg->checkoutBranch() ) return;
+
+    checkoutBranch( r, branch );
 }
 
 

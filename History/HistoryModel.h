@@ -37,8 +37,10 @@ public:
         colGraph,
         colMessage,
         colAuthor,
+        colAuthorMail,
         colAuthorDate,
         colCommitter,
+        colCommitterMail,
         colCommitterDate,
         colSHA1
     };

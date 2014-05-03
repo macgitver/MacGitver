@@ -58,6 +58,9 @@ namespace RM
 
         void internalClosedRepo(Repo* repository);
 
+    private slots:
+        void reactivateWorkaround();
+
     private:
         bool refreshSelf();
         void preTerminate();

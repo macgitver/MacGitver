@@ -17,6 +17,9 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
+#include "libHeavenIcons/IconRef.hpp"
+#include "libHeavenIcons/Icon.hpp"
+
 #include "RepoInfoModel.hpp"
 
 RepoInfoModel::RepoInfoModel()
@@ -61,6 +64,9 @@ QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
         switch(role) {
         case Qt::DisplayRole:
             return info->displayAlias();
+
+        case Qt::DecorationRole:
+            return info->icon().icon().pixmap();
 
         case Qt::FontRole:
             {

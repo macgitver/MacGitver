@@ -25,6 +25,8 @@
 #include "RepoMan/Private/RepoManPrivate.hpp"
 #include "RepoMan/Private/RepoPrivate.hpp"
 
+#include "libBlueSky/Application.hpp"
+
 namespace RM
 {
 
@@ -45,6 +47,11 @@ namespace RM
         : Base(*new RepoManPrivate(this))
     {
         Events::addReceiver(this);
+
+        connect(BlueSky::Application::instance(),
+                SIGNAL(activeModeChanged(BlueSky::Mode*)),
+                this,
+                SLOT(reactivateWorkaround()));
     }
 
     /**
@@ -147,6 +154,15 @@ namespace RM
 
         foreach(Repo* repo, d->repos) {
             repo->close();
+        }
+    }
+
+    void RepoMan::reactivateWorkaround()
+    {
+        RM_D(RepoMan);
+        if (d->activeRepo) {
+            Events::self()->repositoryDeactivated(d->activeRepo);
+            Events::self()->repositoryActivated(d->activeRepo);
         }
     }
 

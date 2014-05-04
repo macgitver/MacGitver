@@ -15,6 +15,7 @@
  */
 
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
 #include "libHeavenIcons/IconRef.hpp"
@@ -66,7 +67,13 @@ QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
             return info->displayAlias();
 
         case Qt::DecorationRole:
-            return info->icon().icon().pixmap();
+            {
+                Heaven::IconRef icon = info->icon();
+                QFont f;
+                int size = (f.pixelSize() <= 0) ? f.pointSize() : f.pixelSize();
+                icon.setSize( qMax(size + 2, 16) );
+                return icon.icon().pixmap();
+            }
 
         case Qt::FontRole:
             {

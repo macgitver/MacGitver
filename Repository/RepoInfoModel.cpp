@@ -68,7 +68,7 @@ QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
 
         case Qt::DecorationRole:
             {
-                Heaven::IconRef icon = info->icon();
+                Heaven::IconRef icon = info->icon().clone();
                 QFont f;
                 int size = (f.pixelSize() <= 0) ? f.pointSize() : f.pixelSize();
                 icon.setSize( qMax(size + 2, 16) );

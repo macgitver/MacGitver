@@ -39,6 +39,7 @@ td {
 padding: 3px;
 margin: 0;
 background-color: LightGray; color: black;
+$MGV_VARIABLE_FONT;
 }
 
 pre {
@@ -47,7 +48,7 @@ padding: 3px;
 border-left: 1px solid LightGray;
 border-right: 1px solid LightGray;
 border-bottom: 1px dotted gray;
-$MGV_FONT;
+$MGV_FIXED_FONT;
 white-space: pre-wrap;
 }
 

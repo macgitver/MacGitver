@@ -52,7 +52,7 @@ void HistoryDetails::readConfig()
         }
     }
 
-    QFile fStyle( QLatin1String(":/commit-detail.css") );
+    QFile fStyle( QLatin1String(":/Modules/History/commit-detail.css") );
     QString styleTempl = fStyle.open(QFile::ReadOnly) ? QString::fromUtf8( fStyle.readAll().constData() ) : QString();
 
     mStyle = updateStyle( styleTempl );

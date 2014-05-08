@@ -64,7 +64,8 @@ QString HistoryDetails::updateStyle(const QString &templ) const
 {
     // TODO: this hash shall be provided by the "Config" mechanism
     ShellExpand::Macros macros;
-    macros[QLatin1String("MGV_FONT")] = Config::defaultFontCSS();
+    macros[QLatin1String("MGV_VARIABLE_FONT")] = Config::defaultFontCSS();
+    macros[QLatin1String("MGV_FIXED_FONT")] = Config::defaultFixedFontCSS();
     macros[QLatin1String("MGV_BGCOLOR")] =
             Config::self().get(QLatin1String("mgv-bg")).toString();
 

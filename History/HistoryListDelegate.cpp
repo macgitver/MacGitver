@@ -309,7 +309,12 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
             }
             else if( ref.mIsBranch )
             {
-                back = ref.mIsRemote ? Qt::green : Qt::darkGreen;
+                if ( ref.mIsRemote )
+                    back = QColor( 0xB8E4FF );
+                else if ( ref.mIsCurrent )
+                    back = QColor( 0xFFB54F );
+                else
+                    back = QColor( Qt::green );
             }
 
             p->fillRect( refRect, back );

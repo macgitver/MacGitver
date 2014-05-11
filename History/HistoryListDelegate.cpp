@@ -290,8 +290,6 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
             p->setFont( opt.font );
 
             QRect refRect( r.left(), r.top() + 1, w, r.height() - 3 );
-            QPainterPath refPath;
-            refPath.addRoundRect( refRect, 20 );
 
             QColor back = QColor( 0xD9D9D9 );
             if( ref.mIsTag )
@@ -308,13 +306,16 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
                     back = QColor( 0x9BFD51 );
             }
 
-            p->fillPath( refPath, back );
-            QPen blackPen(Qt::black);
-            blackPen.setWidth(0);
-            p->setPen(blackPen);
-            p->drawPath( refPath );
+            QLinearGradient gradient( refRect.left(), 0, refRect.right(), 0 );
+            gradient.setColorAt( 0.0, back.lighter(125) );
+            gradient.setColorAt( 0.33, back );
+
+            p->setBrush( gradient );
+            p->setPen( QPen(Qt::transparent) );
+            p->drawRoundedRect( refRect, 2.5, 2.5 );
 
             refRect.adjust( 2, 0, -2, 0 );
+            p->setPen( QPen(Qt::black) );
             p->drawText( refRect, Qt::AlignCenter, ref.mRefName );
 
             r.setLeft( r.left() + w + 3 );

@@ -319,12 +319,15 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
 
             r.setLeft( r.left() + w + 3 );
         }
-        r.setLeft( r.left() + 3 );
     }
 
-    p->drawText( r, Qt::AlignTop | Qt::AlignLeft, i.data().toString() );
-
     p->restore();
+
+    // draw text in original color
+    QStyleOptionViewItem newOpt(opt);
+    newOpt.rect = r;
+    newOpt.displayAlignment = Qt::AlignLeft | Qt::AlignVCenter;
+    QItemDelegate::paint( p, newOpt, i );
 }
 
 void HistoryListDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,

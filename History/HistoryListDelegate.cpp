@@ -170,7 +170,7 @@ void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, GraphG
         break;
     }
 
-    QPen blackPen(Qt::black);
+    QPen blackPen(col.darker());
     blackPen.setWidth(0);
     p->setPen(blackPen);
     // center symbol, e.g. rect or ellipse
@@ -210,11 +210,6 @@ void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, GraphG
 void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
                                       const QModelIndex& i ) const
 {
-    static const QColor colors[] = { Qt::red, //DARK_GREEN,
-                                               Qt::blue, Qt::darkGray, //BROWN,
-                                               Qt::magenta //, ORANGE
-                                             };
-
     const HistoryModel* m = qobject_cast< const HistoryModel* >( i.model() );
     HistoryEntry* e = m->at( i.row() );
 
@@ -245,7 +240,7 @@ void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
     int height = opt.rect.height();
     int maxWidth = opt.rect.width();
     int lw = 3 * 18 / 4;
-    QColor activeColor = colors[activeLane % 4];
+    QColor activeColor = laneColor( activeLane );
 //	if (opt.state & QStyle::State_Selected)
 //		activeColor = blend(activeColor, opt.palette.highlightedText().color(), 208);
     for (uint i = 0; i < laneNum && x2 < maxWidth; i++) {
@@ -256,12 +251,35 @@ void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
         GraphGlyphs ln = lanes[i];
         if( ln != ggUnused )
         {
-            QColor color = i == activeLane ? activeColor : colors[i % 4];
+            QColor color = i == activeLane ? activeColor : laneColor( i );
             GraphGlyphs nextGlyph = ( i < laneNum - 1 ) ? lanes[ i + 1 ] : ggUnused;
             paintGraphLane(p, ln, nextGlyph, x1, x2, height, color, activeColor, back);
         }
     }
     p->restore();
+}
+
+QColor HistoryListDelegate::laneColor(int lane)
+{
+    static const QColor laneColors[] =
+    {
+        QColor::fromHsl( 200, 255, 128 ), // blue
+        QColor::fromHsl( 280, 255, 128 ), // violett
+        QColor::fromHsl(   8, 255, 128 ), // red
+        QColor::fromHsl(  56, 255, 128 ), // yellow
+        QColor::fromHsl( 133, 255, 128 ), // green
+
+        QColor::fromHsl(  93, 255, 128 ), // green
+        QColor::fromHsl(  30, 255, 128 ), // orange
+        QColor::fromHsl(  44, 255, 128 ), // yellow
+        QColor::fromHsl( 226, 255, 128 ), // blue
+        QColor::fromHsl(  69, 255, 128 ), // yellow-green
+
+        QColor::fromHsl( 273, 255, 128 ), // violett
+        QColor::fromHsl( 135, 255, 128 )  // green
+    };
+
+    return laneColors[lane % 12];
 }
 
 void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem& opt,

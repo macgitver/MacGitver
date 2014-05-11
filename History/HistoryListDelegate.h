@@ -39,6 +39,8 @@ private:
     void paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
                      const QModelIndex& i ) const;
 
+    inline static QColor laneColor( int lane );
+
     void paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
                        const QModelIndex& i ) const;
 };

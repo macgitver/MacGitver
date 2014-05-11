@@ -175,10 +175,10 @@ QVariant HistoryModel::headerData( int section, Qt::Orientation orientation, int
     case colGraph:          return trUtf8( "Graph" );
     case colMessage:        return trUtf8( "Message" );
     case colAuthor:         return trUtf8( "Author" );
-    case colAuthorMail:     return trUtf8( "Author e-mail" );
+    case colAuthorMail:     return trUtf8( "Author mail" );
     case colAuthorDate:     return trUtf8( "Author date" );
     case colCommitter:      return trUtf8( "Comitter" );
-    case colCommitterMail:  return trUtf8( "Committer e-mail" );
+    case colCommitterMail:  return trUtf8( "Committer mail" );
     case colCommitterDate:  return trUtf8( "Committer date" );
     case colSHA1:           return trUtf8( "SHA1" );
     default:                return QVariant();

@@ -52,25 +52,27 @@ int HistoryModel::columnMap( int index ) const
     case modeSimple:
         switch( index )
         {
-        case -1:    return 4;
+        case -1:    return 5;
         case 0:     return colGraph;
         case 1:     return colMessage;
         case 2:     return colAuthor;
-        case 3:     return colAuthorDate;
+        case 3:     return colAuthorMail;
+        case 4:     return colAuthorDate;
         default:    return -1;
         }
 
     case modeFull:
         switch( index )
         {
-        case -1:    return 7;
+        case -1:    return 8;
         case 0:     return colGraph;
         case 1:     return colMessage;
         case 2:     return colAuthor;
         case 3:     return colAuthorDate;
         case 4:     return colCommitter;
-        case 5:     return colCommitterDate;
-        case 6:     return colSHA1;
+        case 5:     return colCommitterMail;
+        case 6:     return colCommitterDate;
+        case 7:     return colSHA1;
         default:    return -1;
         }
 
@@ -145,9 +147,11 @@ QVariant HistoryModel::data( const QModelIndex& index, int role ) const
         {
         case colGraph:          return QVariant();
         case colMessage:        return e->message();
-        case colAuthor:         return e->author().fullName();
+        case colAuthor:         return e->author().name();
+        case colAuthorMail:     return e->author().email();
         case colAuthorDate:     return e->author().when();
-        case colCommitter:      return e->committer().fullName();
+        case colCommitter:      return e->committer().name();
+        case colCommitterMail:  return e->committer().email();
         case colCommitterDate:  return e->committer().when();
         case colSHA1:           return e->id().toString();
         default:                return QVariant();
@@ -171,8 +175,10 @@ QVariant HistoryModel::headerData( int section, Qt::Orientation orientation, int
     case colGraph:          return trUtf8( "Graph" );
     case colMessage:        return trUtf8( "Message" );
     case colAuthor:         return trUtf8( "Author" );
+    case colAuthorMail:     return trUtf8( "Author mail" );
     case colAuthorDate:     return trUtf8( "Author date" );
     case colCommitter:      return trUtf8( "Comitter" );
+    case colCommitterMail:  return trUtf8( "Committer mail" );
     case colCommitterDate:  return trUtf8( "Committer date" );
     case colSHA1:           return trUtf8( "SHA1" );
     default:                return QVariant();

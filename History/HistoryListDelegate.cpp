@@ -286,19 +286,8 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
         for( int refIdx = 0; refIdx < refs.count(); refIdx++ )
         {
             const HistoryInlineRef& ref = refs.at( refIdx );
-            int w;
-            if( ref.mIsCurrent )
-            {
-                QFont f = opt.font;
-                f.setBold( true );
-                w = QFontMetrics( f ).width( ref.mRefName ) + 6;
-                p->setFont( f );
-            }
-            else
-            {
-                w = opt.fontMetrics.width( ref.mRefName ) + 6;
-                p->setFont( opt.font );
-            }
+            int w = opt.fontMetrics.width( ref.mRefName ) + 6;
+            p->setFont( opt.font );
 
             QRect refRect( r.left(), r.top() + 1, w, r.height() - 3 );
             QPainterPath refPath;

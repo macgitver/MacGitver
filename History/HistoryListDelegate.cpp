@@ -301,6 +301,8 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
             }
 
             QRect refRect( r.left(), r.top() + 1, w, r.height() - 3 );
+            QPainterPath refPath;
+            refPath.addRoundRect( refRect, 20 );
 
             QColor back = Qt::white;
             if( ref.mIsTag )
@@ -317,11 +319,11 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
                     back = QColor( Qt::green );
             }
 
-            p->fillRect( refRect, back );
+            p->fillPath( refPath, back );
             QPen blackPen(Qt::black);
             blackPen.setWidth(0);
             p->setPen(blackPen);
-            p->drawRect( refRect );
+            p->drawPath( refPath );
 
             refRect.adjust( 2, 0, -2, 0 );
             p->drawText( refRect, Qt::AlignCenter, ref.mRefName );

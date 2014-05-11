@@ -293,7 +293,7 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
             QPainterPath refPath;
             refPath.addRoundRect( refRect, 20 );
 
-            QColor back = Qt::white;
+            QColor back = QColor( 0xD9D9D9 );
             if( ref.mIsTag )
             {
                 back = Qt::yellow;
@@ -305,7 +305,7 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
                 else if ( ref.mIsCurrent )
                     back = QColor( 0xFFB54F );
                 else
-                    back = QColor( Qt::green );
+                    back = QColor( 0x9BFD51 );
             }
 
             p->fillPath( refPath, back );

@@ -16,5 +16,7 @@
         <string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
         <key>NSPrincipalClass</key>
         <string>${MACOSX_BUNDLE_NSPRINCIPAL_CLASS}</string>
+	<key>CFBundleIconFile</key>
+	<string>MacGitver.icns</string>
 </dict>
 </plist>

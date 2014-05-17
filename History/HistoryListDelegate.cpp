@@ -264,19 +264,19 @@ QColor HistoryListDelegate::laneColor(int lane)
     static const QColor laneColors[] =
     {
         QColor::fromHsl( 200, 255, 128 ), // blue
-        QColor::fromHsl( 280, 255, 128 ), // violett
+        QColor::fromHsl( 280, 255, 128 ), // purple
         QColor::fromHsl(   8, 255, 128 ), // red
         QColor::fromHsl(  56, 255, 128 ), // yellow
         QColor::fromHsl( 133, 255, 128 ), // green
 
-        QColor::fromHsl(  93, 255, 128 ), // green
+        QColor::fromHsl(   0,  10, 128 ), // gray
         QColor::fromHsl(  30, 255, 128 ), // orange
         QColor::fromHsl(  44, 255, 128 ), // yellow
         QColor::fromHsl( 226, 255, 128 ), // blue
         QColor::fromHsl(  69, 255, 128 ), // yellow-green
 
-        QColor::fromHsl( 273, 255, 128 ), // violett
-        QColor::fromHsl( 135, 255, 128 )  // green
+        QColor::fromHsl(   0,  10, 230 ), // light-gray
+        QColor::fromHsl( 135, 255, 230 )  // light-green
     };
 
     return laneColors[lane % 12];

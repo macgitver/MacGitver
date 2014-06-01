@@ -41,6 +41,7 @@ private:
 
     void paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
                        const QModelIndex& i ) const;
+    inline QColor colorForRefType(const HistoryInlineRef& ref) const;
 };
 
 #endif

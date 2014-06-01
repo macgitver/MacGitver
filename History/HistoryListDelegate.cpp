@@ -19,6 +19,35 @@
 #include "HistoryModel.h"
 #include "HistoryListDelegate.h"
 
+
+namespace Internal
+{
+    const QColor laneColors[] =
+    {
+        QColor::fromHsl( 200, 255, 128 ), // blue
+        QColor::fromHsl( 280, 255, 128 ), // purple
+        QColor::fromHsl(   8, 255, 128 ), // red
+        QColor::fromHsl(  56, 255, 128 ), // yellow
+        QColor::fromHsl( 133, 255, 128 ), // green
+
+        QColor::fromHsl(   0,  10, 128 ), // gray
+        QColor::fromHsl(  30, 255, 128 ), // orange
+        QColor::fromHsl(  44, 255, 128 ), // yellow
+        QColor::fromHsl( 226, 255, 128 ), // blue
+        QColor::fromHsl(  69, 255, 128 ), // yellow-green
+
+        QColor::fromHsl(   0,  10, 230 ), // light-gray
+        QColor::fromHsl( 135, 255, 230 )  // light-green
+    };
+
+    inline QColor laneColor(int lane)
+    {
+        return laneColors[lane % 12];
+    }
+
+}
+
+
 void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, GraphGlyphs lastGlyph,
                                           int x1, int x2, int height, const QColor& col,
                                           const QColor& activeCol, const QBrush& back ) const
@@ -170,7 +199,7 @@ void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, GraphG
         break;
     }
 
-    QPen blackPen(Qt::black);
+    QPen blackPen(col.darker());
     blackPen.setWidth(0);
     p->setPen(blackPen);
     // center symbol, e.g. rect or ellipse
@@ -210,11 +239,6 @@ void HistoryListDelegate::paintGraphLane( QPainter* p, GraphGlyphs glyph, GraphG
 void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& opt,
                                       const QModelIndex& i ) const
 {
-    static const QColor colors[] = { Qt::red, //DARK_GREEN,
-                                               Qt::blue, Qt::darkGray, //BROWN,
-                                               Qt::magenta //, ORANGE
-                                             };
-
     const HistoryModel* m = qobject_cast< const HistoryModel* >( i.model() );
     HistoryEntry* e = m->at( i.row() );
 
@@ -245,7 +269,7 @@ void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
     int height = opt.rect.height();
     int maxWidth = opt.rect.width();
     int lw = 3 * 18 / 4;
-    QColor activeColor = colors[activeLane % 4];
+    QColor activeColor = Internal::laneColor( activeLane );
 //	if (opt.state & QStyle::State_Selected)
 //		activeColor = blend(activeColor, opt.palette.highlightedText().color(), 208);
     for (uint i = 0; i < laneNum && x2 < maxWidth; i++) {
@@ -256,12 +280,31 @@ void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
         GraphGlyphs ln = lanes[i];
         if( ln != ggUnused )
         {
-            QColor color = i == activeLane ? activeColor : colors[i % 4];
+            QColor color = i == activeLane ? activeColor : Internal::laneColor( i );
             GraphGlyphs nextGlyph = ( i < laneNum - 1 ) ? lanes[ i + 1 ] : ggUnused;
             paintGraphLane(p, ln, nextGlyph, x1, x2, height, color, activeColor, back);
         }
     }
     p->restore();
+}
+
+QColor HistoryListDelegate::colorForRefType(const HistoryInlineRef& ref) const
+{
+    if( ref.mIsTag )
+        return Qt::yellow;
+
+    if( ref.mIsBranch )
+    {
+        if ( ref.mIsRemote )
+            return QColor::fromHsl(203, 255, 190);
+
+        if ( ref.mIsCurrent )
+            return QColor::fromHsl(35, 255, 190);
+
+        return QColor::fromHsl(89, 255, 190);
+    }
+
+    return QColor( 0xD9D9D9 );
 }
 
 void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
@@ -272,7 +315,7 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
 
     if( !e )
     {
-        // If we're still required to populate that entry, don't do anyhting here
+        // If we're still required to populate that entry, don't do anything here
         return;
     }
 
@@ -286,49 +329,39 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
         for( int refIdx = 0; refIdx < refs.count(); refIdx++ )
         {
             const HistoryInlineRef& ref = refs.at( refIdx );
-            int w;
-            if( ref.mIsCurrent )
-            {
-                QFont f = opt.font;
-                f.setBold( true );
-                w = QFontMetrics( f ).width( ref.mRefName ) + 6;
-                p->setFont( f );
-            }
-            else
-            {
-                w = opt.fontMetrics.width( ref.mRefName ) + 6;
-                p->setFont( opt.font );
-            }
+            int w = opt.fontMetrics.width( ref.mRefName ) + 6;
+            p->setFont( opt.font );
 
             QRect refRect( r.left(), r.top() + 1, w, r.height() - 3 );
 
-            QColor back = Qt::white;
-            if( ref.mIsTag )
-            {
-                back = Qt::yellow;
-            }
-            else if( ref.mIsBranch )
-            {
-                back = ref.mIsRemote ? Qt::green : Qt::darkGreen;
-            }
+            QColor back = colorForRefType(ref);
+            QColor back2 = back.lighter(135);
+            const qreal wLimit = qreal( qMin(30, refRect.width()) ) / qreal( qMax(30, refRect.width()) );
+            QLinearGradient gradient( refRect.left(), 0, refRect.right(), 0 );
+            gradient.setColorAt( 0.0, back2 );
+            gradient.setColorAt( wLimit, back );
+            gradient.setColorAt( 1.0 - wLimit, back );
+            gradient.setColorAt( 1.0, back2 );
 
-            p->fillRect( refRect, back );
-            QPen blackPen(Qt::black);
-            blackPen.setWidth(0);
-            p->setPen(blackPen);
-            p->drawRect( refRect );
+            p->setBrush( gradient );
+            p->setPen( QPen(Qt::transparent) );
+            p->drawRoundedRect( refRect, 2.5, 2.5 );
 
             refRect.adjust( 2, 0, -2, 0 );
+            p->setPen( QPen(Qt::black) );
             p->drawText( refRect, Qt::AlignCenter, ref.mRefName );
 
             r.setLeft( r.left() + w + 3 );
         }
-        r.setLeft( r.left() + 3 );
     }
 
-    p->drawText( r, Qt::AlignTop | Qt::AlignLeft, i.data().toString() );
-
     p->restore();
+
+    // draw text in original color
+    QStyleOptionViewItem newOpt(opt);
+    newOpt.rect = r;
+    newOpt.displayAlignment = Qt::AlignLeft | Qt::AlignVCenter;
+    QItemDelegate::paint( p, newOpt, i );
 }
 
 void HistoryListDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,

@@ -54,9 +54,6 @@ HistoryView::HistoryView()
     setViewName( trUtf8( "History" ) );
     setToolBar( tbHistoryViewToolBar );
 
-    setSizePolicy( QSizePolicy::MinimumExpanding,
-                   QSizePolicy::MinimumExpanding );
-
     mList = new HistoryList;
     mList->setFrameShape( QFrame::NoFrame );
 

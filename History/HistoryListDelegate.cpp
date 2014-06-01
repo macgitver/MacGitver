@@ -288,6 +288,25 @@ void HistoryListDelegate::paintGraph( QPainter* p, const QStyleOptionViewItem& o
     p->restore();
 }
 
+QColor HistoryListDelegate::colorForRefType(const HistoryInlineRef& ref) const
+{
+    if( ref.mIsTag )
+        return Qt::yellow;
+
+    if( ref.mIsBranch )
+    {
+        if ( ref.mIsRemote )
+            return QColor::fromHsl(203, 255, 190);
+
+        if ( ref.mIsCurrent )
+            return QColor::fromHsl(35, 255, 190);
+
+        return QColor::fromHsl(89, 255, 190);
+    }
+
+    return QColor( 0xD9D9D9 );
+}
+
 void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem& opt,
                                         const QModelIndex& i ) const
 {

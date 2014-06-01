@@ -349,10 +349,13 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
                     back = QColor( 0x9BFD51 );
             }
 
+            QColor back2 = back.lighter(135);
             const qreal wLimit = qreal( qMin(30, refRect.width()) ) / qreal( qMax(30, refRect.width()) );
             QLinearGradient gradient( refRect.left(), 0, refRect.right(), 0 );
-            gradient.setColorAt( 0.0, back.lighter(125) );
+            gradient.setColorAt( 0.0, back2 );
             gradient.setColorAt( wLimit, back );
+            gradient.setColorAt( 1.0 - wLimit, back );
+            gradient.setColorAt( 1.0, back2 );
 
             p->setBrush( gradient );
             p->setPen( QPen(Qt::transparent) );

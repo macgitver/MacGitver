@@ -74,7 +74,6 @@ private:
 private:
     BlueSky::MiniSplitter*  mVertSplit;
     BlueSky::MiniSplitter*  mHorzSplit;
-    HistoryListDelegate*    mDelegate;
     HistoryModel*           mModel;
     HistoryList*            mList;
     HistoryDetails*         mDetails;

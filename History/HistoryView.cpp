@@ -44,6 +44,8 @@
 HistoryView::HistoryView()
     : View( "History" )
     , ConfigUser( "History" )
+    , mModel( 0 )
+    , mRepo( 0 )
 {
     setupActions( this );
 
@@ -61,20 +63,15 @@ HistoryView::HistoryView()
     connect( mList, SIGNAL(currentCommitChanged(Git::ObjectId)),
              this, SLOT(currentCommitChanged(Git::ObjectId)) );
 
-    mDelegate = new HistoryListDelegate;
-
-    mList->setItemDelegate( mDelegate );
+    mList->setItemDelegate( new HistoryListDelegate );
 
     mDetails = new HistoryDetails;
     mDiff = new HistoryDiff;
-
-    mModel = NULL;
 
     actHistoryShowHEADonly->setChecked(true);
 
     initSplitters();
 
-    mRepo = NULL;
     connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RM::Repo*)),
              this,                  SLOT(repoActivated(RM::Repo*)));
 

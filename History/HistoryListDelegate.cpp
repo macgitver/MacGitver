@@ -334,21 +334,7 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
 
             QRect refRect( r.left(), r.top() + 1, w, r.height() - 3 );
 
-            QColor back = QColor( 0xD9D9D9 );
-            if( ref.mIsTag )
-            {
-                back = Qt::yellow;
-            }
-            else if( ref.mIsBranch )
-            {
-                if ( ref.mIsRemote )
-                    back = QColor( 0xB8E4FF );
-                else if ( ref.mIsCurrent )
-                    back = QColor( 0xFFB54F );
-                else
-                    back = QColor( 0x9BFD51 );
-            }
-
+            QColor back = colorForRefType(ref);
             QColor back2 = back.lighter(135);
             const qreal wLimit = qreal( qMin(30, refRect.width()) ) / qreal( qMax(30, refRect.width()) );
             QLinearGradient gradient( refRect.left(), 0, refRect.right(), 0 );

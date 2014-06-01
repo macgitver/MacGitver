@@ -315,7 +315,7 @@ void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem&
 
     if( !e )
     {
-        // If we're still required to populate that entry, don't do anyhting here
+        // If we're still required to populate that entry, don't do anything here
         return;
     }
 

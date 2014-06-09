@@ -4,9 +4,9 @@ PROJECT(MGV_CORE)
 QT_PREPARE(Core Gui Widgets Xml)
 
 INCLUDE_DIRECTORIES(
+    ${HEAVEN_INCLUDE_DIRS}
+    ${GITWRAP_INCLUDE_DIRS}
     ${libDiffViews_includes}
-    ${libHeaven_includes}
-    ${libGitWrap_includes}
     ${libMacGitverCore_includes}
     # And our own source + binary directory
     ${MGV_CORE_SOURCE_DIR}
@@ -211,11 +211,11 @@ TARGET_LINK_LIBRARIES(
         # Stairway
 )
 
-INSTALL_FRAMEWORK( MacGitverCore Runtime )
+RAD_INSTALL_LIBRARY(MacGitverCore MacGitverCore)
 
-MSVC_SPLIT_SOURCES( MacGitverCore )
+RAD_SPLIT_SOURCE_TREE(MacGitverCore)
 
-ADD_DOXYGEN_TARGET(
+RAD_ADD_DOXYGEN_TARGET(
     MacGitverCore
     ${MGV_CORE_SOURCE_DIR}/doc
 

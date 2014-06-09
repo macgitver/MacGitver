@@ -44,4 +44,3 @@ ADD_MGV_MODULE(
     ${RCC_DATA}
 )
 
-MSVC_SPLIT_SOURCES(ModWelcome)

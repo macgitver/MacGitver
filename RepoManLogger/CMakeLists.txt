@@ -41,4 +41,3 @@ ADD_MGV_MODULE(
     ${HIC_FILES} ${HID_FILES}
 )
 
-MSVC_SPLIT_SOURCES(ModRepoManLogger)

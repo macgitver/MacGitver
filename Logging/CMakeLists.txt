@@ -41,4 +41,3 @@ ADD_MGV_MODULE(
     ${RCC_FILES}
 )
 
-MSVC_SPLIT_SOURCES(ModLogging)

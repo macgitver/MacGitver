@@ -88,4 +88,3 @@ TARGET_LINK_LIBRARIES(
         DiffViews
 )
 
-MSVC_SPLIT_SOURCES(ModHistory)

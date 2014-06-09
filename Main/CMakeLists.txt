@@ -4,8 +4,8 @@ PROJECT( MACGITVER )
 QT_PREPARE( Core Gui Widgets Xml WinMain )
 
 INCLUDE_DIRECTORIES(
-    ${libGitWrap_includes}
-    ${libHeaven_includes}
+    ${HEAVEN_INCLUDE_DIRS}
+    ${GITWRAP_INCLUDE_DIRS}
     ${libMacGitverCore_includes}
 
     ${MACGITVER_SOURCE_DIR}

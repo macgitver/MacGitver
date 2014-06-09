@@ -1,9 +1,3 @@
-[submodule "libGitWrap"]
-	path = libGitWrap
-	url = https://github.com/macgitver/libGitWrap.git
-[submodule "libHeaven"]
-	path = libHeaven
-	url = https://github.com/macgitver/libHeaven.git
 [submodule "libDiffViews"]
 	path = libDiffViews
 	url = https://github.com/macgitver/libDiffViews.git

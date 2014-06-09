@@ -4,13 +4,19 @@ CMAKE_MINIMUM_REQUIRED( VERSION 2.8.9 )
 
 CMAKE_POLICY( SET CMP0009 NEW )
 
-SET( UTILS_APP_NAME         MacGitver   CACHE INTERNAL "Foo" )
-SET( UTILS_USE_PRIVATE_LIBS 1           CACHE INTERNAL "Foo" )
+FIND_PACKAGE(RAD-Tools REQUIRED)
+FIND_PACKAGE(Heaven REQUIRED)
+FIND_PACKAGE(GitWrap)
+
+RAD_INIT(
+    FEATURES
+        QtMacros
+        DoxygenTarget
+        SplitSources
+        Installation
+)
 
 INCLUDE(cmake/Utils.cmake)
-INCLUDE(cmake/Doxygen.cmake)
-SET_OUTPUT_PATHS()
-INCLUDE(cmake/QtMacros.cmake)
 INCLUDE(cmake/GoogleTest.cmake)
 INCLUDE(cmake/MacGitver.cmake)
 
@@ -26,10 +32,6 @@ IF(UNIX)
 ENDIF()
 
 ENABLE_TESTING()
-
-ADD_SUBDIRECTORY(libGitWrap)
-ADD_SUBDIRECTORY(libHeaven)
-ADD_SUBDIRECTORY(libDiffViews)
 
 ADD_SUBDIRECTORY(libMacGitverCore)
 ADD_SUBDIRECTORY(MacGitverModules)

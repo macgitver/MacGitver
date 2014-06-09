@@ -1,7 +1,7 @@
 
 INCLUDE_DIRECTORIES(
-    ${libGitWrap_includes}
-    ${libHeaven_includes}
+    ${GITWRAP_INCLUDE_DIRS}
+    ${HEAVEN_INCLUDE_DIRS}
     ${libDiffViews_includes}
     ${libMacGitverCore_includes}
 )

@@ -44,12 +44,12 @@ MACRO(ADD_MGV_MODULE _Name )
             PROPERTIES  INSTALL_RPATH
             "\$ORIGIN/..:\$ORIGIN/../../lib"
             LIBRARY_OUTPUT_DIRECTORY
-            "${CMAKE_BINARY_DIR}/libexec/${UTILS_APP_NAME}/modules"
+            "${CMAKE_BINARY_DIR}/libexec/MacGitver"
         )
 
         INSTALL(
             TARGETS     ${_Target}
-            LIBRARY     DESTINATION libexec/${UTILS_APP_NAME}/modules
+            LIBRARY     DESTINATION libexec/MacGitver
         )
 
     ELSEIF( WIN32 )

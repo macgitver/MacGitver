@@ -83,7 +83,7 @@ void Modules::initialize()
     binDir.cdUp();
 
     #ifdef Q_OS_UNIX
-    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/../libexec/MacGitver/modules" ) );
+    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/../libexec/MacGitver" ) );
     search( binDir );
     #endif
 

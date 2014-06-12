@@ -211,6 +211,14 @@ TARGET_LINK_LIBRARIES(
         # Stairway
 )
 
+IF(UNIX AND NOT APPLE)
+    SET_TARGET_PROPERTIES(
+        MacGitverCore
+        PROPERTIES  INSTALL_RPATH
+        "\$ORIGIN"
+    )
+ENDIF()
+
 RAD_INSTALL_LIBRARY(MacGitverCore MacGitverCore)
 
 RAD_SPLIT_SOURCE_TREE(MacGitverCore)

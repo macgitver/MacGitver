@@ -150,7 +150,7 @@ ELSEIF( UNIX )
     # That means, each excutable needs the "$ORIGIN/../libexec/{app}" r-path.
 
     SET_TARGET_PROPERTIES(  MacGitver
-        PROPERTIES          INSTALL_RPATH "\$ORIGIN/../libexec/${UTILS_APP_NAME}"
+        PROPERTIES          INSTALL_RPATH "\$ORIGIN/../libexec/MacGitver:\$ORIGIN/../lib"
                             RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 

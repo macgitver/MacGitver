@@ -40,11 +40,7 @@ namespace DiffViews
 
     DiffViews::~DiffViews()
     {
-        foreach( DiffViewCreator* c, mCreators )
-        {
-            delete c;
-        }
-
+        qDeleteAll( mCreators );
         sSelf = NULL;
     }
 

@@ -54,8 +54,8 @@ MgvPrimaryWindowPrivate::MgvPrimaryWindowPrivate()
 
 MgvPrimaryWindow::MgvPrimaryWindow()
     : BlueSky::PrimaryWindow()
+    , d( new MgvPrimaryWindowPrivate )
 {
-    d = new MgvPrimaryWindowPrivate;
     setupUi();
 
     #if 0

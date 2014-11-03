@@ -14,10 +14,11 @@
  *
  */
 
-#include <QStringBuilder>
-#include <QMessageBox>
 #include <QDir>
 #include <QFileDialog>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QStringBuilder>
 
 #include "libMacGitverCore/Config/Config.h"
 
@@ -131,15 +132,16 @@ void CloneRepositoryDlg::checkValid()
 void CloneRepositoryDlg::accept()
 {
     Git::CloneOperation* clone = new Git::CloneOperation( this );
+    QString repoName = txtUrl->text();
+    QString targetDir = txtPath->text();
     clone->setBackgroundMode( true );
-    clone->setUrl( txtUrl->text() );
-    clone->setPath( txtPath->text() );
+    clone->setUrl( repoName );
+    clone->setPath( targetDir );
 
     mProgress = new ProgressDlg;
     mProgress->show();
     mProgress->setCurrent( clone );
 
-    QString repoName = txtUrl->text();
     if( repoName.endsWith( QLatin1String( ".git" ) ) )
         repoName = repoName.left( repoName.length() - 4 );
 
@@ -223,6 +225,16 @@ void CloneRepositoryDlg::updateAction()
 
 void CloneRepositoryDlg::rootCloneFinished()
 {
+    Git::BaseOperation* operation = static_cast<Git::BaseOperation*>( sender() );
+    Q_ASSERT( operation );
+    if ( !operation->result() )
+    {
+        QMessageBox::critical(this, tr("Errors while cloning repository."),
+                              tr("Cloning failed:\nGit Message: %1").arg(operation->result().errorText()));
+        mProgress->reject();
+        return;
+    }
+
     if( !chkInitSubmodules->isChecked() )
     {
         if( mStates[ Checkout ] == Current ) doneCheckout();

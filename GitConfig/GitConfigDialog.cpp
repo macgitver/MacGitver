@@ -16,6 +16,8 @@
 
 #include "GitConfigDialog.h"
 
+#include "libGitWrap/Result.hpp"
+
 GitConfigDialog::GitConfigDialog( Git::Repository& repo )
     : BlueSky::Dialog()
     , mRepo( repo )
@@ -24,8 +26,9 @@ GitConfigDialog::GitConfigDialog( Git::Repository& repo )
 
     QStringList cfgs;
 
-    QString fnGlobal = Git::Config::globalFilePath();
-    QString fnUser = Git::Config::userFilePath();
+    Git::Result r;
+    QString fnGlobal = Git::Config::globalFilePath(r);
+    QString fnUser = Git::Config::userFilePath(r);
     QString fnRepo;
 
     cfgSystem->setConfig( fnGlobal );

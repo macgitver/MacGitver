@@ -137,6 +137,7 @@ void CloneRepositoryDlg::accept()
     clone->setBackgroundMode( true );
     clone->setUrl( repoName );
     clone->setPath( targetDir );
+    clone->setBare( chkCloneBare->isChecked() );
 
     mProgress = new ProgressDlg;
     mProgress->show();

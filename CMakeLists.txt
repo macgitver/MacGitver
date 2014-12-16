@@ -8,10 +8,10 @@ FIND_PACKAGE(Heaven REQUIRED)
 
 RAD_INIT(
     FEATURES
-        Installation
         QtMacros
         DoxygenTarget
         SplitSources
+        Installation
 )
 
 RAD_DEFINE_VERSION(MACGITVER_CORE 0 0 1)

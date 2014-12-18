@@ -19,7 +19,10 @@
 
 #include "ui_CloneRepositoryDlg.h"
 
+#include <QPointer>
+
 class ProgressDlg;
+class CloneOptionsWdgt;
 
 class CloneRepositoryDlg : public QDialog, Ui::CloneRepositoryDlg
 {
@@ -33,9 +36,6 @@ protected:
 private slots:
     void onBrowse();
     void onBrowseHelper( const QString& directory );
-    void onCheckout( bool value );
-    void onInitSubmodules( bool value );
-    void onCheckoutBranch( const QString& branch );
     void checkValid();
 
     void doneIndexing();
@@ -44,15 +44,22 @@ private slots:
     void beginDownloading();
     void rootCloneFinished();
 
+    void on_btnCloneopts_toggled(bool checked);
+
+private:
+    enum State { Unused, Open, Done, Current };
+    enum Tasks { Prepare, Download, Index, Checkout };
+
 private:
     void updateAction();
 
 private:
-    ProgressDlg* mProgress;
-    QString mAction;
-    enum State { Unused, Open, Done, Current };
-    enum Tasks { Prepare, Download, Index, Checkout };
-    QHash< Tasks, State > mStates;
+    QPointer<CloneOptionsWdgt>     mCloneOpts;
+
+    ProgressDlg*                mProgress;
+    QString                     mAction;
+    QHash< Tasks, State >       mStates;
+
 };
 
 #endif

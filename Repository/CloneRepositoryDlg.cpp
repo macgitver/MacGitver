@@ -27,6 +27,7 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "CloneRepositoryDlg.h"
+#include "CloneOptionsWdgt.hpp"
 #include "ProgressDlg.hpp"
 
 CloneRepositoryDlg::CloneRepositoryDlg()
@@ -34,11 +35,8 @@ CloneRepositoryDlg::CloneRepositoryDlg()
 {
     setupUi( this );
 
-    connect( btnBrowse, SIGNAL(clicked()), SLOT(onBrowse()) );
+    connect( btnBrowseTo, SIGNAL(clicked()), SLOT(onBrowse()) );
     connect( txtPath, SIGNAL(textChanged(QString)), SLOT(checkValid()) );
-    connect( chkCheckout, SIGNAL(toggled(bool)), this, SLOT(onCheckout(bool)) );
-    connect( chkInitSubmodules, SIGNAL(toggled(bool)), this, SLOT(onInitSubmodules(bool)) );
-    connect( txtCheckoutBranch, SIGNAL(textChanged(QString)), this, SLOT(onCheckoutBranch(QString)) );
 
     checkValid();
 }
@@ -75,40 +73,6 @@ void CloneRepositoryDlg::onBrowseHelper( const QString& directory )
     txtPath->setText( directory );
 }
 
-void CloneRepositoryDlg::onCheckout( bool value )
-{
-    txtCheckoutBranch->setEnabled( value );
-    chkInitSubmodules->setEnabled( value );
-
-    if( !value )
-    {
-        chkInitSubmodules->setChecked( false );
-        txtCheckoutBranch->setText( QString() );
-    }
-}
-
-void CloneRepositoryDlg::onInitSubmodules( bool value )
-{
-    chkSubmodulesRecursive->setEnabled( value );
-    if( !value )
-    {
-        chkSubmodulesRecursive->setChecked( false );
-    }
-}
-
-void CloneRepositoryDlg::onCheckoutBranch( const QString& branch )
-{
-    if( branch.isEmpty() )
-    {
-        chkFetchOne->setDisabled( true );
-        chkFetchOne->setChecked( false );
-    }
-    else
-    {
-        chkFetchOne->setEnabled( true );
-    }
-}
-
 void CloneRepositoryDlg::checkValid()
 {
     bool okay =
@@ -137,7 +101,7 @@ void CloneRepositoryDlg::accept()
     clone->setBackgroundMode( true );
     clone->setUrl( repoName );
     clone->setPath( targetDir );
-    clone->setBare( chkCloneBare->isChecked() );
+    clone->setBare( mCloneOpts && (mCloneOpts->mCloneMode == CloneOptionsWdgt::cmBare) );
 
     mProgress = new ProgressDlg;
     mProgress->show();
@@ -236,7 +200,7 @@ void CloneRepositoryDlg::rootCloneFinished()
         return;
     }
 
-    if( !chkInitSubmodules->isChecked() )
+    if( mCloneOpts && (mCloneOpts->mCloneMode == CloneOptionsWdgt::cmCheckout) && !mCloneOpts->chkInitSubmodules->isChecked() )
     {
         if( mStates[ Checkout ] == Current ) doneCheckout();
 
@@ -244,5 +208,29 @@ void CloneRepositoryDlg::rootCloneFinished()
 
         connect( mProgress, SIGNAL(rejected()), this, SLOT(reject()) );
         return;
+    }
+}
+
+void CloneRepositoryDlg::on_btnCloneopts_toggled(bool checked)
+{
+    if ( checked )
+    {
+        if ( !mCloneOpts )
+        {
+            mCloneOpts = new CloneOptionsWdgt();
+        }
+
+        optsLayout->addWidget( mCloneOpts );
+        mCloneOpts->show();
+    }
+    else
+    {
+        optsLayout->removeWidget( mCloneOpts );
+        if ( mCloneOpts )
+        {
+            mCloneOpts->hide();
+        }
+        layout()->activate();
+        resize( width(), minimumSizeHint().height() );
     }
 }

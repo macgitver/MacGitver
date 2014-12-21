@@ -15,7 +15,7 @@ ProgressDlg::ProgressDlg()
 
     QPushButton* close = buttonBox->button( QDialogButtonBox::Close );
     close->setEnabled( false );
-    connect( close, SIGNAL(clicked()), this, SLOT(reject()) );
+    connect( close, SIGNAL(clicked()), this, SLOT(close ()) );
 
     QPalette p;
     p.setColor( QPalette::Base, p.color( QPalette::Window ) );

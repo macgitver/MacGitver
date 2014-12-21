@@ -1,10 +1,15 @@
 #include "CloneOptionsWdgt.hpp"
 
+#include <QLayout>
+
 
 CloneOptionsWdgt::CloneOptionsWdgt(QWidget *parent) :
     QWidget(parent)
 {
     setupUi(this);
+
+    // margin is controlled by the parent widget's layout
+    layout()->setMargin(0);
 }
 
 CloneOptionsWdgt::~CloneOptionsWdgt()
@@ -13,7 +18,7 @@ CloneOptionsWdgt::~CloneOptionsWdgt()
 
 void CloneOptionsWdgt::on_txtCloneMode_currentIndexChanged(int index)
 {
-    // Clone modes are fixed
+    // Note: clone modes are fixed
     mCloneMode = static_cast<CloneMode>( index );
     grpSubmodules->setEnabled( mCloneMode == cmCheckout );
 }

@@ -87,7 +87,6 @@ public:
 
     QVariant data( int col, int role ) const;
     bool setData(Git::Result& result, const QVariant &value, int role, int col);
-    bool isEditable() const;
 
     Git::Reference reference() const
     {

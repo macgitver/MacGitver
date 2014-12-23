@@ -194,8 +194,3 @@ bool RefBranch::setData(Git::Result& result, const QVariant &value, int role, in
 
     return false;
 }
-
-bool RefBranch::isEditable() const
-{
-    return true;
-}

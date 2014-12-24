@@ -96,8 +96,15 @@ void CloneRepositoryDlg::checkValid()
 void CloneRepositoryDlg::accept()
 {
     Git::CloneOperation* clone = new Git::CloneOperation( this );
-    QString repoName = txtUrl->text();
-    QString targetDir = txtPath->text();
+    QString repoName  = QUrl( txtUrl->text() ).adjusted( QUrl::NormalizePathSegments | QUrl::StripTrailingSlash ).toString();
+    QString targetDir = QUrl( txtPath->text() ).adjusted( QUrl::NormalizePathSegments | QUrl::StripTrailingSlash ).toString();
+
+    if ( chkAppendRepoName->isChecked() )
+    {
+        targetDir += QString::fromUtf8("/%1")
+                    .arg( QUrl( repoName ).fileName() );
+    }
+
     clone->setBackgroundMode( true );
     clone->setUrl( repoName );
     clone->setPath( targetDir );

@@ -106,10 +106,13 @@ void CloneRepositoryDlg::accept()
     clone->setBackgroundMode( true );
     clone->setUrl( repoName );
     clone->setPath( targetDir );
+    clone->setRemoteAlias( txtRemoteAlias->text() );
 
     if ( mCloneOpts )
     {
         clone->setBare( mCloneOpts->mCloneMode == CloneOptionsWdgt::cmBare );
+        clone->setReference( mCloneOpts->txtBranch->text() );
+        clone->setDepth( mCloneOpts->txtCloneDepth->value() );
     }
 
     mProgress = new ProgressDlg;

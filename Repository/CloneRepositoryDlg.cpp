@@ -75,10 +75,8 @@ void CloneRepositoryDlg::onBrowseHelper( const QString& directory )
 
 void CloneRepositoryDlg::checkValid()
 {
-    bool okay =
-            !txtPath->text().isEmpty() &&
-            !txtUrl->text().isEmpty() &&
-            !txtRemoteName->text().isEmpty();
+    bool okay = !txtPath->text().isEmpty() &&
+                !txtUrl->text().isEmpty();
 
     QDir wanted( QDir::toNativeSeparators( txtPath->text() ) );
     if( wanted.exists() )

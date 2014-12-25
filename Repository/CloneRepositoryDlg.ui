@@ -131,12 +131,12 @@
       <string>Alias:</string>
      </property>
      <property name="buddy">
-      <cstring>txtRemoteName</cstring>
+      <cstring>txtRemoteAlias</cstring>
      </property>
     </widget>
    </item>
    <item row="0" column="4" colspan="2">
-    <widget class="LineEdit" name="txtRemoteName">
+    <widget class="LineEdit" name="txtRemoteAlias">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>

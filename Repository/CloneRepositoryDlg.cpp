@@ -106,7 +106,11 @@ void CloneRepositoryDlg::accept()
     clone->setBackgroundMode( true );
     clone->setUrl( repoName );
     clone->setPath( targetDir );
-    clone->setBare( mCloneOpts && (mCloneOpts->mCloneMode == CloneOptionsWdgt::cmBare) );
+
+    if ( mCloneOpts )
+    {
+        clone->setBare( mCloneOpts->mCloneMode == CloneOptionsWdgt::cmBare );
+    }
 
     mProgress = new ProgressDlg;
     mProgress->show();

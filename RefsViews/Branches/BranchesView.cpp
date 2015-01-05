@@ -14,6 +14,8 @@
  *
  */
 
+#include "Branches/BranchesView.hpp"
+
 #include <QContextMenuEvent>
 #include <QMessageBox>
 #include <QTreeView>
@@ -21,15 +23,15 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
-#include "Branches/BranchesView.hpp"
-#include "Branches/BranchesModel.hpp"
-#include "Branches/BranchesViewData.hpp"
-
-#include "libGitWrap/Reference.hpp"
-
 #include "RefItem.hpp"
 #include "RefsSortProxy.hpp"
 #include "RefRenameDialog.hpp"
+
+#include "Branches/BranchesModel.hpp"
+#include "Branches/BranchesViewData.hpp"
+
+
+#include "libGitWrap/Reference.hpp"
 
 
 BranchesView::BranchesView()

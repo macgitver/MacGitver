@@ -30,6 +30,7 @@
 #include "Branches/BranchesModel.hpp"
 #include "Branches/BranchesViewData.hpp"
 
+#include "libGitWrap/Operations/CheckoutOperation.hpp"
 
 #include "libGitWrap/Reference.hpp"
 
@@ -99,9 +100,10 @@ void BranchesView::onCheckoutRef()
     const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
     if ( !branch ) return;
 
-    Git::Result r;
-    branch->reference().checkout(r);
+    Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( branch->reference() );
+    op->execute();
 
+    Git::Result r = op->result();
     if ( !r )
     {
         QMessageBox::warning( this, trUtf8("Error while checking out reference."),

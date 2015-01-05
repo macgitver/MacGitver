@@ -25,6 +25,7 @@
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
 
+#include "libGitWrap/BranchRef.hpp"
 #include "libGitWrap/Commit.hpp"
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Reference.hpp"
@@ -152,15 +153,19 @@ void HistoryList::onCheckout()
     }
 }
 
-void HistoryList::checkoutBranch(Git::Result& result, const Git::Reference& branch)
+void HistoryList::checkout(Git::Result& result, const Git::Reference& ref)
 {
-    branch.checkoutOperation( result );
+    GW_CHECK_RESULT( result, void() )
 
-    if ( !result )
+    Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( ref );
+    // TODO: op->setBackgroundMode( true );
+    op->execute();
+
+    if ( !op->result() )
     {
-        QMessageBox::information( this, trUtf8("Failed to create branch"),
+        QMessageBox::information( this, trUtf8("Failed to checkout branch"),
                                   trUtf8("Failed to checkout branch '%1'. Git message:\n%2")
-                                  .arg( branch.shorthand() )
+                                  .arg( ref.shorthand() )
                                   .arg( result.errorText() ) );
     }
 }
@@ -188,7 +193,8 @@ void HistoryList::onCreateBranch()
         return;
 
     Git::Repository gitRepo = repo->gitRepo();
-    Git::Reference branch = gitRepo.lookupCommit( r, item->id() ).createBranch( r, dlg->branchName(), false );
+    Git::BranchRef branch = Git::BranchRef::create( r, dlg->branchName(),
+                                                    gitRepo.lookupCommit( r, item->id() ) );
 
     if ( !r )
     {
@@ -197,12 +203,11 @@ void HistoryList::onCreateBranch()
         return;
     }
 
-    if ( !dlg->checkoutBranch() ) return;
-
-    checkoutBranch( r, branch );
+    if ( dlg->checkoutBranch() )
+    {
+        checkout( r, branch );
+    }
 }
-
-
 
 void HistoryList::onCreateTag()
 {

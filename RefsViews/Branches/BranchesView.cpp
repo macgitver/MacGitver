@@ -101,6 +101,9 @@ void BranchesView::onCheckoutRef()
     if ( !branch ) return;
 
     Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( branch->reference() );
+    op->setMode( Git::CheckoutSafe );
+    op->setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts );
+    // TODO: setBackgroundMode( true );
     op->execute();
 
     Git::Result r = op->result();

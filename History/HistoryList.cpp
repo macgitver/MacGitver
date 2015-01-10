@@ -158,6 +158,8 @@ void HistoryList::checkout(Git::Result& result, const Git::Reference& ref)
     GW_CHECK_RESULT( result, void() )
 
     Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( ref );
+    op->setMode( Git::CheckoutSafe );
+    op->setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts );
     // TODO: op->setBackgroundMode( true );
     op->execute();
 

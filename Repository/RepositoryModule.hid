@@ -25,12 +25,6 @@ Ui RepositoryActions {
         ConnectTo           onRepositoryOpen();
     };
 
-    Action RepositoryClose {
-        Text        "C&lose";
-        Enabled     false;
-        ConnectTo   onRepositoryClose();
-    };
-
     Action RepositoryClone {
         Text        "&Clone...";
         ConnectTo   onRepositoryClone();
@@ -52,7 +46,6 @@ Ui RepositoryActions {
 
         Action      RepositoryOpen;
         Menu        RepoOpenRecent;
-        Action      RepositoryClose;
         Separator;
         Action      RepositoryCreate;
         Action      RepositoryClone;
@@ -63,7 +56,6 @@ Ui RepositoryActions {
 
         Action      RepositoryOpen;
         Action      RepositoryClone;
-        Action      RepositoryClose;
 
     };
 

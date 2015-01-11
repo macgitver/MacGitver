@@ -58,9 +58,6 @@ void RepositoryModule::initialize()
     connect(&MacGitver::repoMan(),  SIGNAL(repositoryOpened(RM::Repo*)),
             this,                   SLOT(onCoreRepoOpen(RM::Repo*)));
 
-    connect(&MacGitver::repoMan(),  SIGNAL(hasActiveRepositoryChanged(bool)),
-            actRepositoryClose,     SLOT(setEnabled(bool)));
-
     updateMostRecentlyUsedMenu();
 
     registerView<RepoTreeView>(tr("Repository"));

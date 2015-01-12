@@ -31,6 +31,8 @@ Ui MgvPrimaryWindowActions {
 
             Action RepositoryQuit {
                 Text            "&Quit";
+                Shortcut        "Ctrl+Q";
+                ShortcutContext ApplicationShortcut;
                 MenuRole        QuitRole;
                 StatusToolTip   "Terminate MacGitver.";
 

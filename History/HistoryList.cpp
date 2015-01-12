@@ -144,12 +144,22 @@ void HistoryList::onCheckout()
     Q_ASSERT( repo );
 
     Git::Repository gitRepo = repo->gitRepo();
-    gitRepo.lookupCommit( r, item->id() ).checkout( r );
+    Git::Commit commit = gitRepo.lookupCommit( r, item->id() );
+
+    if ( r )
+    {
+        Git::CheckoutCommitOperation op( commit );
+        op.setMode( Git::CheckoutSafe );
+        op.setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts | Git::CheckoutAllowDetachHEAD );
+        op.execute();
+        r = op.result();
+    }
 
     if ( !r )
     {
-        QMessageBox::information( this, trUtf8("Failed to checkout"),
-                                  trUtf8("Failed to checkout. Git message:\n%1").arg(r.errorText()));
+        QMessageBox::information( this, trUtf8("Checkout of commit failed"),
+                                  trUtf8("Checkout of commit failed. Git message:\n%1").arg(r.errorText()));
+        return;
     }
 }
 

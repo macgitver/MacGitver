@@ -29,6 +29,7 @@
 #include "libGitWrap/Commit.hpp"
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Reference.hpp"
+#include "libGitWrap/Tag.hpp"
 
 #include "libGitWrap/Operations/CheckoutOperation.hpp"
 
@@ -223,11 +224,6 @@ void HistoryList::onCreateBranch()
 
 void HistoryList::onCreateTag()
 {
-    QMessageBox::information( this, trUtf8("Tag was not created"),
-                              trUtf8("Creating tags is not available yet.") );
-
-    return;
-
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action )
         return;
@@ -249,8 +245,7 @@ void HistoryList::onCreateTag()
         return;
 
     Git::Repository gitRepo = repo->gitRepo();
-    // TODO: implementation of createTag() in libgGitWrap
-//    Git::Tag tag = gitRepo.lookupCommit( r, item->id() ).createTag( r, dlg->tagName() );
+    Git::Tag::createLight( r, dlg->tagName(), gitRepo.lookupCommit( r, item->id() ) );
 
     if ( !r )
     {

@@ -83,7 +83,7 @@ void CommitDialog::onCommit()
         r = op->result();
     }
 
-    if (!r)
+    if ( !r )
     {
         QMessageBox::information( this, trUtf8("Failed to commit"),
                                   trUtf8("Failed to commit. Git message:\n%1").arg(r.errorText()));

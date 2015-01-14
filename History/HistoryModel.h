@@ -90,7 +90,7 @@ public:
     void buildHistory();
 
 private:
-    void updateRow( int row );
+    void updateRows( int firstRow, int lastRow );
     void scanInlineReferences();
 
 public slots:

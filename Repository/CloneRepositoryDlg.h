@@ -38,10 +38,10 @@ private slots:
     void onBrowseHelper( const QString& directory );
     void checkValid();
 
+    void beginDownloading();
+    void doneDownload();
     void doneIndexing();
     void doneCheckout();
-    void doneDownload();
-    void beginDownloading();
     void rootCloneFinished();
 
     void on_btnCloneopts_toggled(bool checked);

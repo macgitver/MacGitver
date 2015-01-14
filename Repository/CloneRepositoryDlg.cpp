@@ -153,6 +153,12 @@ void CloneRepositoryDlg::beginDownloading()
     updateAction();
 }
 
+void CloneRepositoryDlg::doneDownload()
+{
+    mStates[ Download ] = Done;
+    updateAction();
+}
+
 void CloneRepositoryDlg::doneIndexing()
 {
     mStates[ Index ] = Done;
@@ -169,10 +175,7 @@ void CloneRepositoryDlg::doneCheckout()
     updateAction();
 }
 
-void CloneRepositoryDlg::doneDownload()
 {
-    mStates[ Download ] = Done;
-    updateAction();
 }
 
 void CloneRepositoryDlg::updateAction()

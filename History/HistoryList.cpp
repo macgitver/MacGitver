@@ -254,3 +254,31 @@ void HistoryList::onCreateTag()
         return;
     }
 }
+
+void HistoryList::onShowHEAD()
+{
+    Git::Result r;
+
+    Git::Repository repo = MacGitver::repoMan().activeRepository()->gitRepo();
+    Git::ObjectId headId = repo.HEAD( r ).resolveToObjectId( r );
+
+    if ( !r ) {
+        QMessageBox::information( this, tr("Unable to lookup HEAD"),
+                                  tr("Git message:\n%1").arg( r.errorText() ) );
+        return;
+    }
+
+    QModelIndex headIndex = mModel->indexByObjectId( headId );
+    if ( headIndex.isValid() ) {
+        scrollTo( headIndex );
+        selectionModel()->select( headIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
+    }
+    else {
+        // TODO: Migrate the model data to RepoMan objects and .
+        QMessageBox::information( this, tr("HEAD not found!"),
+                                  tr("HEAD commit was not found in history.\n\n"
+                                     "Important Note: This is a feature preview!\n\n"
+                                     "Please make sure the HEAD commit is at least once visible!" ) );
+    }
+}
+

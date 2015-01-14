@@ -75,6 +75,8 @@ public:
     int columnMap( int index ) const;
 
 public:
+    QModelIndex indexByObjectId( const Git::ObjectId& id ) const;
+
     HistoryEntry* indexToEntry( const QModelIndex& index ) const;
     HistoryEntry* at( int row, bool populate = true ) const;
 

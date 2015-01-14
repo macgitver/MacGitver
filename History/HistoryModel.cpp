@@ -83,6 +83,19 @@ int HistoryModel::columnMap( int index ) const
     return -1;
 }
 
+QModelIndex HistoryModel::indexByObjectId(const Git::ObjectId& id) const
+{
+    for ( int row=0; row <  mEntries.count(); ++row ) {
+        const HistoryEntry* e = at( row );
+
+        if ( e && (e->id() == id) ) {
+            return index( row, 0, QModelIndex() );
+        }
+    }
+
+    return QModelIndex();
+}
+
 int HistoryModel::rowCount( const QModelIndex& parent ) const
 {
     if( parent.isValid() )

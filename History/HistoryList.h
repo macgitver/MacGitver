@@ -51,6 +51,8 @@ private slots:
     void onCreateBranch();
     void onCreateTag();
 
+    void onShowHEAD();
+
 private:
     HistoryModel *      mModel;
 

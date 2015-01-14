@@ -139,6 +139,7 @@ void CloneRepositoryDlg::accept()
              this, SLOT(beginDownloading()) );
     connect( clone, SIGNAL(doneDownloading()), this, SLOT(doneDownload()) );
     connect( clone, SIGNAL(doneIndexing()), this, SLOT(doneIndexing()) );
+    connect( clone, SIGNAL(doneCheckout()), this, SLOT(doneCheckout()) );
     clone->execute();
 }
 
@@ -175,7 +176,20 @@ void CloneRepositoryDlg::doneCheckout()
     updateAction();
 }
 
+void CloneRepositoryDlg::rootCloneFinished()
 {
+    Git::BaseOperation* operation = static_cast<Git::BaseOperation*>( sender() );
+    Q_ASSERT( operation );
+
+    if ( operation->result() )
+    {
+        mProgress->setDone();
+        return;
+    }
+
+    QMessageBox::critical(mProgress, tr("Errors while cloning repository."),
+                          tr("Cloning failed:\nGit Message: %1").arg(operation->result().errorText()));
+    mProgress->reject();
 }
 
 void CloneRepositoryDlg::updateAction()
@@ -201,29 +215,6 @@ void CloneRepositoryDlg::updateAction()
     }
 
     mProgress->setAction( mAction, open, current, done );
-}
-
-void CloneRepositoryDlg::rootCloneFinished()
-{
-    Git::BaseOperation* operation = static_cast<Git::BaseOperation*>( sender() );
-    Q_ASSERT( operation );
-    if ( !operation->result() )
-    {
-        QMessageBox::critical(this, tr("Errors while cloning repository."),
-                              tr("Cloning failed:\nGit Message: %1").arg(operation->result().errorText()));
-        mProgress->reject();
-        return;
-    }
-
-    if( mCloneOpts && (mCloneOpts->mCloneMode == CloneOptionsWdgt::cmCheckout) && !mCloneOpts->chkInitSubmodules->isChecked() )
-    {
-        if( mStates[ Checkout ] == Current ) doneCheckout();
-
-        mProgress->setDone();
-
-        connect( mProgress, SIGNAL(rejected()), this, SLOT(reject()) );
-        return;
-    }
 }
 
 void CloneRepositoryDlg::on_btnCloneopts_toggled(bool checked)

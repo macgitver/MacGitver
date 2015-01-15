@@ -25,9 +25,11 @@
 #include "HistoryModel.h"
 #include "HistoryEntry.h"
 
+#include "libGitWrap/BranchRef.hpp"
 #include "libGitWrap/Commit.hpp"
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Reference.hpp"
+#include "libGitWrap/Tag.hpp"
 
 #include "libGitWrap/Operations/CheckoutOperation.hpp"
 
@@ -143,24 +145,40 @@ void HistoryList::onCheckout()
     Q_ASSERT( repo );
 
     Git::Repository gitRepo = repo->gitRepo();
-    gitRepo.lookupCommit( r, item->id() ).checkout( r );
+    Git::Commit commit = gitRepo.lookupCommit( r, item->id() );
+
+    if ( r )
+    {
+        Git::CheckoutCommitOperation op( commit );
+        op.setMode( Git::CheckoutSafe );
+        op.setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts | Git::CheckoutAllowDetachHEAD );
+        op.execute();
+        r = op.result();
+    }
 
     if ( !r )
     {
-        QMessageBox::information( this, trUtf8("Failed to checkout"),
-                                  trUtf8("Failed to checkout. Git message:\n%1").arg(r.errorText()));
+        QMessageBox::information( this, trUtf8("Checkout of commit failed"),
+                                  trUtf8("Checkout of commit failed. Git message:\n%1").arg(r.errorText()));
+        return;
     }
 }
 
-void HistoryList::checkoutBranch(Git::Result& result, const Git::Reference& branch)
+void HistoryList::checkout(Git::Result& result, const Git::Reference& ref)
 {
-    branch.checkoutOperation( result );
+    GW_CHECK_RESULT( result, void() )
 
-    if ( !result )
+    Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( ref );
+    op->setMode( Git::CheckoutSafe );
+    op->setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts );
+    // TODO: op->setBackgroundMode( true );
+    op->execute();
+
+    if ( !op->result() )
     {
-        QMessageBox::information( this, trUtf8("Failed to create branch"),
+        QMessageBox::information( this, trUtf8("Failed to checkout branch"),
                                   trUtf8("Failed to checkout branch '%1'. Git message:\n%2")
-                                  .arg( branch.shorthand() )
+                                  .arg( ref.shorthand() )
                                   .arg( result.errorText() ) );
     }
 }
@@ -188,7 +206,8 @@ void HistoryList::onCreateBranch()
         return;
 
     Git::Repository gitRepo = repo->gitRepo();
-    Git::Reference branch = gitRepo.lookupCommit( r, item->id() ).createBranch( r, dlg->branchName(), false );
+    Git::BranchRef branch = Git::BranchRef::create( r, dlg->branchName(),
+                                                    gitRepo.lookupCommit( r, item->id() ) );
 
     if ( !r )
     {
@@ -197,20 +216,14 @@ void HistoryList::onCreateBranch()
         return;
     }
 
-    if ( !dlg->checkoutBranch() ) return;
-
-    checkoutBranch( r, branch );
+    if ( dlg->checkoutBranch() )
+    {
+        checkout( r, branch );
+    }
 }
-
-
 
 void HistoryList::onCreateTag()
 {
-    QMessageBox::information( this, trUtf8("Tag was not created"),
-                              trUtf8("Creating tags is not available yet.") );
-
-    return;
-
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action )
         return;
@@ -232,8 +245,7 @@ void HistoryList::onCreateTag()
         return;
 
     Git::Repository gitRepo = repo->gitRepo();
-    // TODO: implementation of createTag() in libgGitWrap
-//    Git::Tag tag = gitRepo.lookupCommit( r, item->id() ).createTag( r, dlg->tagName() );
+    Git::Tag::createLight( r, dlg->tagName(), gitRepo.lookupCommit( r, item->id() ) );
 
     if ( !r )
     {
@@ -242,3 +254,31 @@ void HistoryList::onCreateTag()
         return;
     }
 }
+
+void HistoryList::onShowHEAD()
+{
+    Git::Result r;
+
+    Git::Repository repo = MacGitver::repoMan().activeRepository()->gitRepo();
+    Git::ObjectId headId = repo.HEAD( r ).resolveToObjectId( r );
+
+    if ( !r ) {
+        QMessageBox::information( this, tr("Unable to lookup HEAD"),
+                                  tr("Git message:\n%1").arg( r.errorText() ) );
+        return;
+    }
+
+    QModelIndex headIndex = mModel->indexByObjectId( headId );
+    if ( headIndex.isValid() ) {
+        scrollTo( headIndex );
+        selectionModel()->select( headIndex, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
+    }
+    else {
+        // TODO: Migrate the model data to RepoMan objects and .
+        QMessageBox::information( this, tr("HEAD not found!"),
+                                  tr("HEAD commit was not found in history.\n\n"
+                                     "Important Note: This is a feature preview!\n\n"
+                                     "Please make sure the HEAD commit is at least once visible!" ) );
+    }
+}
+

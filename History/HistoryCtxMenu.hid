@@ -36,14 +36,20 @@ Ui HistoryTreeCtxMenu {
         ConnectTo       onCreateTag();
     };
 
+    Action ShowHEAD {
+        Text            "Show HEAD";
+        StatusToolTip   "Highlight the HEAD commit in the history.";
+        ConnectTo       onShowHEAD();
+    };
+
     Menu CtxMenuHistory {
 
         Action      Checkout;
         Separator;
         Action      CreateBranch;
-        Separator;
         Action      CreateTag;
-
+        Separator;
+        Action      ShowHEAD;
     };
 
 };

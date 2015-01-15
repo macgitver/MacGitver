@@ -83,6 +83,19 @@ int HistoryModel::columnMap( int index ) const
     return -1;
 }
 
+QModelIndex HistoryModel::indexByObjectId(const Git::ObjectId& id) const
+{
+    for ( int row=0; row <  mEntries.count(); ++row ) {
+        const HistoryEntry* e = at( row );
+
+        if ( e && (e->id() == id) ) {
+            return index( row, 0, QModelIndex() );
+        }
+    }
+
+    return QModelIndex();
+}
+
 int HistoryModel::rowCount( const QModelIndex& parent ) const
 {
     if( parent.isValid() )
@@ -94,10 +107,7 @@ int HistoryModel::rowCount( const QModelIndex& parent ) const
 
 int HistoryModel::columnCount( const QModelIndex& parent ) const
 {
-    if( parent.isValid() )
-    {
-        return 0;
-    }
+    Q_ASSERT( !parent.isValid() );
     return columnMap( -1 );
 }
 
@@ -198,9 +208,9 @@ void HistoryModel::afterClear()
     endResetModel();
 }
 
-void HistoryModel::updateRow( int row )
+void HistoryModel::updateRows(int firstRow, int lastRow)
 {
-    dataChanged( index( row, 0 ), index( row, columnCount() ) );
+    emit dataChanged( index( firstRow, 0 ), index( lastRow, columnCount() - 1 ) );
 }
 
 void HistoryModel::beforeAppend()
@@ -215,8 +225,6 @@ void HistoryModel::afterAppend()
 
 void HistoryModel::ensurePopulated( int row )
 {
-    Q_ASSERT( row < mEntries.count() );
-
     HistoryEntry* e = mEntries[ row ];
     if( !e || e->isPopulated() )
     {
@@ -229,11 +237,11 @@ void HistoryModel::ensurePopulated( int row )
     {
         e->populate( commit );
 
-        emit dataChanged( index( row, 0 ), index( row, columnMap( -1 ) - 1 ) );
+        updateRows( row, row );
     }
     else
     {
-        qDebug() << "Failed to lookup a commit" << r.errorText();
+        qDebug() << "Failed to lookup a commit: " << r.errorText();
     }
 }
 
@@ -379,14 +387,14 @@ void HistoryModel::scanInlineReferences()
                 continue;
             }
             e->setInlineRefs( newRefs );
-            updateRow( i );
+            updateRows( i, i );
         }
         else
         {
             if( oldRefs.count() != newRefs.count() )
             {
                 e->setInlineRefs( newRefs );
-                updateRow( i );
+                updateRows( i, i );
                 continue;
             }
 
@@ -407,7 +415,7 @@ void HistoryModel::scanInlineReferences()
             if( diffs )
             {
                 e->setInlineRefs( newRefs );
-                updateRow( i );
+                updateRows( i, i );
             }
         }
     }

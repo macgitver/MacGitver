@@ -77,12 +77,13 @@ void CommitDialog::onCommit()
     Git::Repository gitRepo = repo->gitRepo();
 
     QScopedPointer<Git::CommitOperation> op( gitRepo.commitOperation( r, ui->textCommitMessage->toPlainText() ) );
-    if (op)
+    if ( op && r )
     {
-        r = op->execute();
+        op->execute();
+        r = op->result();
     }
 
-    if (!r)
+    if ( !r )
     {
         QMessageBox::information( this, trUtf8("Failed to commit"),
                                   trUtf8("Failed to commit. Git message:\n%1").arg(r.errorText()));

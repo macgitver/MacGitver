@@ -6,6 +6,7 @@
 
 #include "ui_ProgressDlg.h"
 
+
 class ProgressDlg
         : public BlueSky::Dialog
         , private Ui::ProgressDlg
@@ -17,7 +18,7 @@ public:
 public:
     void setAction( const QString& action, const QStringList& open,
                     const QStringList& current, const QStringList& done );
-    void setCurrent( QObject* current );
+    void setCurrent(QObject* current);
 
 private slots:
     void transportProgress( quint32 totalObjects, quint32 indexedObjects,

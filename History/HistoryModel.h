@@ -75,6 +75,8 @@ public:
     int columnMap( int index ) const;
 
 public:
+    QModelIndex indexByObjectId( const Git::ObjectId& id ) const;
+
     HistoryEntry* indexToEntry( const QModelIndex& index ) const;
     HistoryEntry* at( int row, bool populate = true ) const;
 
@@ -90,7 +92,7 @@ public:
     void buildHistory();
 
 private:
-    void updateRow( int row );
+    void updateRows( int firstRow, int lastRow );
     void scanInlineReferences();
 
 public slots:

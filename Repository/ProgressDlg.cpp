@@ -7,6 +7,7 @@
 
 #include "ProgressDlg.hpp"
 
+
 ProgressDlg::ProgressDlg()
     : BlueSky::Dialog()
     , mDone( false )
@@ -15,7 +16,7 @@ ProgressDlg::ProgressDlg()
 
     QPushButton* close = buttonBox->button( QDialogButtonBox::Close );
     close->setEnabled( false );
-    connect( close, SIGNAL(clicked()), this, SLOT(reject()) );
+    connect( close, SIGNAL(clicked()), this, SLOT(close ()) );
 
     QPalette p;
     p.setColor( QPalette::Base, p.color( QPalette::Window ) );
@@ -49,13 +50,12 @@ void ProgressDlg::setAction( const QString& action,
     lblAction->setText( act );
 }
 
-void ProgressDlg::setCurrent( QObject* current )
+void ProgressDlg::setCurrent(QObject* current)
 {
     mCurrent = current;
 
     connect( mCurrent, SIGNAL(remoteMessage(QString)),
              this, SLOT(remoteMessage(QString)) );
-
     connect( mCurrent, SIGNAL(transportProgress(quint32, quint32, quint32, quint64)),
              this, SLOT(transportProgress(quint32, quint32, quint32, quint64)) );
 }

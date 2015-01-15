@@ -14,6 +14,8 @@
  *
  */
 
+#include "Branches/BranchesView.hpp"
+
 #include <QContextMenuEvent>
 #include <QMessageBox>
 #include <QTreeView>
@@ -21,15 +23,16 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
-#include "Branches/BranchesView.hpp"
-#include "Branches/BranchesModel.hpp"
-#include "Branches/BranchesViewData.hpp"
-
-#include "libGitWrap/Reference.hpp"
-
 #include "RefItem.hpp"
 #include "RefsSortProxy.hpp"
 #include "RefRenameDialog.hpp"
+
+#include "Branches/BranchesModel.hpp"
+#include "Branches/BranchesViewData.hpp"
+
+#include "libGitWrap/Operations/CheckoutOperation.hpp"
+
+#include "libGitWrap/Reference.hpp"
 
 
 BranchesView::BranchesView()
@@ -97,9 +100,13 @@ void BranchesView::onCheckoutRef()
     const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
     if ( !branch ) return;
 
-    Git::Result r;
-    branch->reference().checkout(r);
+    Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( branch->reference() );
+    op->setMode( Git::CheckoutSafe );
+    op->setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts );
+    // TODO: setBackgroundMode( true );
+    op->execute();
 
+    Git::Result r = op->result();
     if ( !r )
     {
         QMessageBox::warning( this, trUtf8("Error while checking out reference."),
@@ -216,41 +223,6 @@ void BranchesView::onRenameRef()
                                   trUtf8("Failed to rename reference:\nGit message: %1")
                                   .arg(dlgResult.errorText()) );
         }
-    }
-}
-
-void BranchesView::onJumpToCurrentBranch()
-{
-    Git::Repository repo = MacGitver::repoMan().activeRepository()->gitRepo();
-
-    if ( !repo.isValid() ) return;
-
-    if ( repo.isHeadDetached() )
-    {
-        QMessageBox::information( this, trUtf8("No branch active"),
-                                  trUtf8("There's currently no branch active on the HEAD commit.") );
-        return;
-    }
-
-    QModelIndexList refIndexes = mData->mModel->match( mData->mModel->index(0, 0),
-                                                       RefItem::TypeRole, RefItem::Reference,
-                                                       -1, Qt::MatchRecursive | Qt::MatchExactly );
-    QModelIndex foundIndex;
-    foreach ( const QModelIndex& index, refIndexes )
-    {
-        const RefBranch* item = static_cast<const RefBranch*>(index.internalPointer());
-        if ( item && item->reference().isCurrentBranch() )
-        {
-            foundIndex = index;
-            break;
-        }
-    }
-
-    if ( foundIndex.isValid() )
-    {
-        QModelIndex proxyIndex = mData->mSortProxy->mapFromSource( foundIndex );
-        mTree->scrollTo( proxyIndex );
-        mTree->selectionModel()->select( proxyIndex, QItemSelectionModel::SelectCurrent );
     }
 }
 

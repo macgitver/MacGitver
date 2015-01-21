@@ -25,6 +25,12 @@
 
 #include "libGitWrap/Repository.hpp"
 
+namespace RM
+{
+    class Ref;
+    class Repo;
+}
+
 class HistoryEntry;
 
 class HistoryModel : public QAbstractTableModel
@@ -103,6 +109,9 @@ private slots:
     void afterClear();
     void beforeAppend();
     void afterAppend();
+
+    // react on RepoMan signals
+    void onRefCreated(RM::Repo* repo, RM::Ref* ref);
 
 private:
     InlineRefDisplays           mDisplays;

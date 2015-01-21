@@ -390,43 +390,31 @@ void HistoryModel::scanInlineReferences()
         HistoryInlineRefs newRefs = refsById.value( e->id() );
         HistoryInlineRefs oldRefs = e->refs();
 
-        if( !newRefs.count() )
+        if( oldRefs.count() != newRefs.count() )
         {
-            if( !oldRefs.count() )
-            {
-                continue;
-            }
             e->setInlineRefs( newRefs );
             updateRows( i, i );
+            continue;
         }
-        else
-        {
-            if( oldRefs.count() != newRefs.count() )
-            {
-                e->setInlineRefs( newRefs );
-                updateRows( i, i );
-                continue;
-            }
 
-            int diffs = newRefs.count();
-            for( int j = 0; j < newRefs.count(); j++ )
+        int diffs = newRefs.count();
+        for( int j = 0; j < newRefs.count(); j++ )
+        {
+            QString newRef = newRefs.at( j ).mRefName;
+            for( int k = 0; k < oldRefs.count(); k++ )
             {
-                QString newRef = newRefs.at( j ).mRefName;
-                for( int k = 0; k < oldRefs.count(); k++ )
+                if( oldRefs.at( k ).mRefName == newRef )
                 {
-                    if( oldRefs.at( k ).mRefName == newRef )
-                    {
-                        diffs--;
-                        break;
-                    }
+                    diffs--;
+                    break;
                 }
             }
+        }
 
-            if( diffs )
-            {
-                e->setInlineRefs( newRefs );
-                updateRows( i, i );
-            }
+        if( diffs )
+        {
+            e->setInlineRefs( newRefs );
+            updateRows( i, i );
         }
     }
 

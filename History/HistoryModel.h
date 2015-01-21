@@ -37,6 +37,7 @@ class HistoryModel : public QAbstractTableModel
 {
     friend class HistoryBuilder;
     Q_OBJECT
+
 public:
     enum Columns
     {
@@ -94,10 +95,10 @@ public:
 public:
     void setShowRoots( Roots roots );
     void changeDisplays(InlineRefDisplays displays, bool activate);
-    void append( HistoryEntry* entry );
     void buildHistory();
 
 private:
+    void append( HistoryEntry* entry );
     void updateRows( int firstRow, int lastRow );
     void scanInlineReferences();
 

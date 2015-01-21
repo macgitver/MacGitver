@@ -34,6 +34,8 @@ HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
     : QAbstractTableModel( parent )
 {
     mRepo = repo;
+    Q_ASSERT( mRepo.isValid() );
+
     mMode = modeSimple;
     mShowRoots = ShowRootHeadOnly;
 
@@ -41,7 +43,6 @@ HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
 
     RM::RepoMan &rm = MacGitver::repoMan();
     connect( &rm, SIGNAL(refCreated(RM::Repo*,RM::Ref*)), this, SLOT(onRefCreated(RM::Repo*,RM::Ref*)) );
-    Q_ASSERT( mRepo.isValid() );
 }
 
 HistoryModel::~HistoryModel()

@@ -52,6 +52,8 @@ signals:
     void gitError( const Git::Result& error );
 
 private:
+    QModelIndex index(RefItem* item) const;
+
     inline RefScope* scopeForRef( const Git::Reference& ref ) const;
 
 private:

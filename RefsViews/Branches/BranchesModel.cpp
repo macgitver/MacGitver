@@ -244,3 +244,14 @@ void BranchesModel::rereadBranches()
     endResetModel();
 }
 
+QModelIndex BranchesModel::index(RefItem* item) const
+{
+    if ( !item || (item == mRoot) )
+    {
+        return QModelIndex();
+    }
+
+    RefItem* parent = item->parent ? item->parent : mRoot;
+    int row = parent->children.indexOf( item );
+    return createIndex( row, 0, item );
+}

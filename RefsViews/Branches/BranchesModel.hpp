@@ -25,6 +25,12 @@
 
 #include "Branches/BranchesViewData.hpp"
 
+namespace RM
+{
+    class Ref;
+    class Repo;
+}
+
 class RefItem;
 class RefScope;
 
@@ -50,6 +56,15 @@ public:
 
 signals:
     void gitError( const Git::Result& error );
+
+private slots:
+    /**
+     * @internal
+     * @see RM::EventInterface
+     */
+    ///@{
+    void onRefCreated(RM::Repo* repo, RM::Ref* ref);
+    ///@}
 
 private:
     QModelIndex index(RefItem* item) const;

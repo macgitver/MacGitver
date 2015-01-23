@@ -18,6 +18,10 @@
 
 #include <QFont>
 
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Ref.hpp"
+
 #include "libGitWrap/Result.hpp"
 #include "libGitWrap/Reference.hpp"
 
@@ -31,6 +35,8 @@ BranchesModel::BranchesModel( BranchesViewData* parent )
     , mData( parent )
     , mRoot( new RefItem )
 {
+    RM::RepoMan& rm = MacGitver::repoMan();
+    connect( &rm, SIGNAL(refCreated(RM::Repo*,RM::Ref*)), this, SLOT(onRefCreated(RM::Repo*,RM::Ref*)) );
 }
 
 BranchesModel::~BranchesModel()
@@ -271,6 +277,15 @@ void BranchesModel::rereadBranches()
     }
 
     endResetModel();
+}
+
+void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
+{
+    Git::Result r;
+    Git::Reference gref = repo->gitRepo().reference( r, ref->fullName() );
+    Q_ASSERT( r );
+
+    insertRef( true, gref );
 }
 
 QModelIndex BranchesModel::index(RefItem* item) const

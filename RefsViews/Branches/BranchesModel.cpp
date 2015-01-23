@@ -247,10 +247,11 @@ void BranchesModel::rereadBranches()
 {
     beginResetModel();
 
-    Git::Repository repo = mData->repository();
 
     qDeleteAll( mRoot->children );
-    Q_ASSERT( mRoot->children.isEmpty() );
+    mRoot->children.clear();
+
+    Git::Repository repo = mData->repository();
 
     if( repo.isValid() )
     {

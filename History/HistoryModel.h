@@ -31,6 +31,7 @@ namespace RM
     class Repo;
 }
 
+
 class HistoryEntry;
 
 class HistoryModel : public QAbstractTableModel
@@ -111,8 +112,13 @@ private slots:
     void beforeAppend();
     void afterAppend();
 
-    // react on RepoMan signals
+    /**
+     * @internal
+     * @see RM::EventInterface
+     */
+    ///@{
     void onRefCreated(RM::Repo* repo, RM::Ref* ref);
+    ///@}
 
 private:
     InlineRefDisplays           mDisplays;

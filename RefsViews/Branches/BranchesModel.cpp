@@ -266,46 +266,7 @@ void BranchesModel::rereadBranches()
             for( int i = 0; i < sl.count(); ++i )
             {
                 const Git::Reference &currentRef = sl[ i ];
-                RefScope* parentScope = NULL;
-                if ( currentRef.isLocal() )
-                    parentScope = scopeLocal;
-                else if ( currentRef.isRemote() )
-                    parentScope = scopeRemote;
-                else
-                    parentScope = scopeOther;
-
-                QStringList parts = currentRef.shorthand().split( QChar( L'/' ) );
-                if ( parts.count() == 1 )
-                {
-                    new RefBranch( parentScope, parts.last(), currentRef );
-                }
-                else
-                {
-                    RefItem* ns = parentScope;
-                    QString totPart;
-                    for( int j = 0; j < parts.count() - 1; j++ )
-                    {
-                        RefItem* next = NULL;
-                        QString partName = parts[ j ];
-                        totPart += partName + QChar( L'/' );
-                        foreach( RefItem* nsChild, ns->children )
-                        {
-                            if( nsChild->text() == partName ) // + Type
-                            {
-                                next = nsChild;
-                                break;
-                            }
-                        }
-                        if( !next )
-                        {
-                            next = new RefNameSpace( ns, partName );
-                        }
-                        ns = next;
-                    }
-
-                    Q_ASSERT( ns );
-                    new RefBranch( ns, parts.last(), currentRef );
-                }
+                insertRef( false, currentRef );
             }
         }
     }

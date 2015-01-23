@@ -54,6 +54,9 @@ signals:
 private:
     QModelIndex index(RefItem* item) const;
 
+    void insertRef(bool notify, const Git::Reference& ref);
+    inline RefItem* insertNamespace(const bool notify, RefItem* parent, const QString& name);
+    inline void insertBranch(const bool notify, RefItem *ns, const QString &name, const Git::Reference& ref);
     inline RefScope* scopeForRef( const Git::Reference& ref ) const;
 
 private:

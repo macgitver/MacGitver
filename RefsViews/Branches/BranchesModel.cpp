@@ -165,6 +165,74 @@ bool BranchesModel::hasChildren( const QModelIndex& parent ) const
     return parentItem->children.count() > 0;
 }
 
+void BranchesModel::insertRef(bool notify, const Git::Reference &ref)
+{
+    RefScope* scope = scopeForRef( ref );
+    Q_ASSERT( scope );
+
+    QStringList parts = ref.shorthand().split( QChar( L'/' ) );
+    if ( parts.count() == 1 )
+    {
+        insertBranch( notify, scope, parts.last(), ref );
+        return;
+    }
+
+    RefItem* ns = scope;
+    for( int j = 0; j < parts.count() - 1; j++ )
+    {
+        RefItem* next = NULL;
+        QString partName = parts[ j ];
+        foreach( RefItem* nsChild, ns->children )
+        {
+            if( nsChild->text() == partName )
+            {
+                next = nsChild;
+                break;
+            }
+        }
+
+        if( !next )
+        {
+            next = insertNamespace( notify, ns, partName );
+        }
+        ns = next;
+    }
+
+    Q_ASSERT( ns );
+
+    insertBranch( notify, ns, parts.last(), ref );
+}
+
+RefItem* BranchesModel::insertNamespace(const bool notify, RefItem* parent, const QString& name)
+{
+    RefItem* next = NULL;
+    if ( notify ) {
+        int fr = parent->children.count();
+        beginInsertRows( index( parent ), fr, fr );
+    }
+
+    next = new RefNameSpace( parent, name );
+
+    if ( notify ) {
+        endInsertRows();
+    }
+    return next;
+}
+
+void BranchesModel::insertBranch(const bool notify, RefItem* parent, const QString& name, const Git::Reference& ref)
+{
+    if ( notify ) {
+        int row = parent->children.count();
+        beginInsertRows( index( parent ), row, row );
+    }
+
+    new RefBranch( parent, name, ref );
+
+    if (notify) {
+        endInsertRows();
+    }
+}
+
 RefScope* BranchesModel::scopeForRef(const Git::Reference& ref) const
 {
     RefItem* scope = NULL;

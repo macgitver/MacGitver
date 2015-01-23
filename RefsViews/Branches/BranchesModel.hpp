@@ -26,6 +26,7 @@
 #include "Branches/BranchesViewData.hpp"
 
 class RefItem;
+class RefScope;
 
 class BranchesModel : public QAbstractItemModel
 {
@@ -49,6 +50,9 @@ public:
 
 signals:
     void gitError( const Git::Result& error );
+
+private:
+    inline RefScope* scopeForRef( const Git::Reference& ref ) const;
 
 private:
     BranchesViewData*   mData;

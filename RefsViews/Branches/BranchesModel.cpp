@@ -165,6 +165,16 @@ bool BranchesModel::hasChildren( const QModelIndex& parent ) const
     return parentItem->children.count() > 0;
 }
 
+RefScope* BranchesModel::scopeForRef(const Git::Reference& ref) const
+{
+    RefItem* scope = NULL;
+    if ( ref.isLocal() )        scope = mRoot->children[0];
+    else if ( ref.isRemote() )  scope = mRoot->children[1];
+    else scope = mRoot->children[2];
+
+    return static_cast< RefScope* >( scope );
+}
+
 void BranchesModel::rereadBranches()
 {
     beginResetModel();

@@ -247,9 +247,12 @@ void BranchesModel::rereadBranches()
 {
     beginResetModel();
 
-
     qDeleteAll( mRoot->children );
     mRoot->children.clear();
+
+    new RefScope( mRoot, tr( "Local" ) );
+    new RefScope( mRoot, tr( "Remote" ) );
+    new RefScope( mRoot, tr( "Tags" ) );
 
     Git::Repository repo = mData->repository();
 
@@ -259,10 +262,6 @@ void BranchesModel::rereadBranches()
         Git::ReferenceList sl = repo.allReferences( r );
         if( !sl.isEmpty() )
         {
-            RefScope* scopeLocal = new RefScope( mRoot, tr( "Local" ) );
-            RefScope* scopeRemote = new RefScope( mRoot, tr( "Remote" ) );
-            RefScope* scopeOther = new RefScope( mRoot, tr( "Tags" ) );
-
             for( int i = 0; i < sl.count(); ++i )
             {
                 const Git::Reference &currentRef = sl[ i ];

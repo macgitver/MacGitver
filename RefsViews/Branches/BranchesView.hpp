@@ -23,6 +23,8 @@
 
 #include "libBlueSky/Contexts.hpp"
 
+#include "RefsViewDelegate.h"
+
 class QTreeView;
 class QModelIndex;
 
@@ -31,6 +33,7 @@ namespace Git
     class Reference;
     class Result;
 }
+
 
 class BranchesViewData;
 
@@ -65,6 +68,7 @@ private:
     inline bool checkRemoveRef(const Git::Reference &ref);
 
 private:
+    RefsViewDelegate    mRefDelegate;
     QTreeView*          mTree;
     BranchesViewData*   mData;
 };

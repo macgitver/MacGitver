@@ -47,6 +47,7 @@ BranchesView::BranchesView()
     mTree->setIndentation( 12 );
     mTree->setHeaderHidden( true );
     mTree->setRootIsDecorated( false );
+    mTree->setItemDelegate( &mRefDelegate );
 
     setupActions( this );
 

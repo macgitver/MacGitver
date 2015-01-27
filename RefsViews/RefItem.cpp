@@ -31,7 +31,6 @@ RefItem::RefItem()
 {
 }
 
-
 RefItem::RefItem(RefItem *p)
     : parent( p )
 {

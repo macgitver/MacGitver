@@ -30,7 +30,9 @@ class RefItem
 public:
     enum Role
     {
-        TypeRole = Qt::UserRole
+        TypeRole = Qt::UserRole,
+        RowBgRole = Qt::UserRole + 1,
+        RowBgGradientRole = Qt::UserRole + 2
     };
 
     enum ItemType

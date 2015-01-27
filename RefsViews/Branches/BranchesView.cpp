@@ -264,6 +264,7 @@ void BranchesView::attachedToContext(BlueSky::ViewContext* ctx, BlueSky::ViewCon
              , this, SLOT(actionFailed(const Git::Result&)) );
 
     mTree->setModel( mData->mSortProxy );
+    mTree->expandAll();
 }
 
 void BranchesView::detachedFromContext(BlueSky::ViewContext* ctx )

@@ -86,11 +86,8 @@ QVariant RefScope::data(int col, int role) const
     case Qt::DisplayRole:
         return mText;
 
-    case Qt::BackgroundRole:
-        QLinearGradient g( 0, 0, 100, 0 );
-        g.setColorAt( 0.0, QColor(0, 0, 0, 0) );
-        g.setColorAt( 1.0, QColor(216, 233, 255) );
-        return QBrush( g );
+    case RefItem::RowBgRole:
+        return QColor(216, 233, 255);
     }
 
     if ( role == RefItem::TypeRole )

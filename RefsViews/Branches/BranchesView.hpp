@@ -19,12 +19,12 @@
 #ifndef MGV_BRANCHES_VIEW_HPP
 #define MGV_BRANCHES_VIEW_HPP
 
+#include "hic_BranchesViewActions.h"
+
 #include "libBlueSky/Contexts.hpp"
 
 class QTreeView;
 class QModelIndex;
-
-#include "hic_BranchesViewActions.h"
 
 namespace Git
 {

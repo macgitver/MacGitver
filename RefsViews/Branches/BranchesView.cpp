@@ -37,9 +37,9 @@
 
 BranchesView::BranchesView()
     : ContextView( "Branches" )
+    , mTree( new QTreeView )
     , mData( NULL )
 {
-    mTree = new QTreeView;
 #ifdef Q_OS_MACX
     mTree->setAttribute( Qt::WA_MacShowFocusRect, false );
 #endif

@@ -149,24 +149,16 @@ QVariant RefBranch::data(int col, int role) const
         }
     }
 
-    else if ( role == Qt::BackgroundRole )
+    else if ( role == RefItem::RowBgGradientRole )
     {
         Git::Result r;
-        if ( mRef.isCurrentBranch() )
+
+        if ( mRef.compare( mRef.repository().HEAD(r) ) == 0 )
         {
-            QLinearGradient g( 0, 0, 0, 30 );
-            g.setColorAt( 0.0, QColor(255, 255, 255, 0) );
-            g.setColorAt( 0.5, QColor(255, 181, 79) );
-            g.setColorAt( 1.0, QColor(255, 255, 255, 0) );
-            return QBrush(g);
-        }
-        else if ( mRef.compare( mRef.repository().HEAD(r) ) == 0 )
-        {
-            QLinearGradient g( 0, 0, 0, 30 );
-            g.setColorAt( 0.0, QColor(255, 255, 255, 0) );
-            g.setColorAt( 0.5, QColor(255, 181, 79).lighter() );
-            g.setColorAt( 1.0, QColor(255, 255, 255, 0) );
-            return QBrush(g);
+            QColor back = mRef.isCurrentBranch()
+                          ? QColor::fromHsl(35, 255, 190)
+                          : QColor::fromHsl(35, 255, 190).lighter(130);
+            return back;
         }
     }
 

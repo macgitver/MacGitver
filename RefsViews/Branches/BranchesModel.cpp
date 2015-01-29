@@ -261,15 +261,14 @@ void BranchesModel::rereadBranches()
     new RefScope( mRoot, tr( "Tags" ) );
 
     RM::Repo* repo = mData->repository();
-    Q_ASSERT( repo );
 
-    // TODO: replace git repo with RM::Repo
+    // TODO: migrate to RM::Repo
     Git::Repository gitRepo = repo ? repo->gitRepo() : Git::Repository();
 
     if( gitRepo.isValid() )
     {
         Git::Result r;
-        Git::ReferenceList sl = repo.allReferences( r );
+        Git::ReferenceList sl = gitRepo.allReferences( r );
         if( !sl.isEmpty() )
         {
             for( int i = 0; i < sl.count(); ++i )

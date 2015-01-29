@@ -85,7 +85,7 @@ public:
 class RefBranch : public RefItem
 {
 public:
-    RefBranch( RefItem* p, const QString& t, const Git::Reference &ref );
+    explicit RefBranch(RefItem* p, const Git::Reference &ref);
 
     QVariant data( int col, int role ) const;
     bool setData(Git::Result& result, const QVariant &value, int role, int col);

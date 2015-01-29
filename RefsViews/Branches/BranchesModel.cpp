@@ -232,7 +232,7 @@ void BranchesModel::insertBranch(const bool notify, RefItem* parent, const QStri
         beginInsertRows( index( parent ), row, row );
     }
 
-    new RefBranch( parent, name, ref );
+    new RefBranch( parent, ref );
 
     if (notify) {
         endInsertRows();

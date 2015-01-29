@@ -125,7 +125,7 @@ QVariant RefNameSpace::data(int col, int role) const
 }
 
 
-RefBranch::RefBranch(RefItem *p, const QString &t, const Git::Reference &ref)
+RefBranch::RefBranch(RefItem *p, const Git::Reference &ref)
     : RefItem( p )
     , mRef( ref )
 {

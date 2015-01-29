@@ -26,6 +26,12 @@
 class BranchesModel;
 class RefsSortProxy;
 
+namespace RM
+{
+    class Repo;
+}
+
+
 class BranchesViewData : public BlueSky::ViewContextData
 {
     Q_OBJECT
@@ -37,7 +43,7 @@ private:
     void detachedFromContext();
 
 public:
-    Git::Repository repository() const;
+    RM::Repo* repository() const;
 
 public:
     BranchesModel*  mModel;

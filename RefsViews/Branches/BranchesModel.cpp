@@ -260,9 +260,13 @@ void BranchesModel::rereadBranches()
     new RefScope( mRoot, tr( "Remote" ) );
     new RefScope( mRoot, tr( "Tags" ) );
 
-    Git::Repository repo = mData->repository();
+    RM::Repo* repo = mData->repository();
+    Q_ASSERT( repo );
 
-    if( repo.isValid() )
+    // TODO: replace git repo with RM::Repo
+    Git::Repository gitRepo = repo ? repo->gitRepo() : Git::Repository();
+
+    if( gitRepo.isValid() )
     {
         Git::Result r;
         Git::ReferenceList sl = repo.allReferences( r );

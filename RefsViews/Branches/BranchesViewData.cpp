@@ -56,16 +56,9 @@ void BranchesViewData::detachedFromContext()
     mModel = NULL;
 }
 
-Git::Repository BranchesViewData::repository() const
+RM::Repo* BranchesViewData::repository() const
 {
     IRepositoryContext* ctx = qobject_cast< IRepositoryContext* >( attachedContext() );
-
-    if( !ctx )
-    {
-        return Git::Repository();
-    }
-
-    RM::Repo* repo = ctx->repository();
-    return repo ? repo->gitRepo() : Git::Repository();
+    return ctx ? ctx->repository() : NULL;
 }
 

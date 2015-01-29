@@ -32,8 +32,6 @@ public:
 public:
     void clear();
 
-    void setModel( FlatTreeModel* model );
-
     void add( const QString& entry );
     void add( const QStringList& entries );
 

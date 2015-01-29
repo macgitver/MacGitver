@@ -30,11 +30,6 @@ FlatTreeComboBox::FlatTreeComboBox( QWidget* parent )
     setView( lv );
 }
 
-void FlatTreeComboBox::setModel( FlatTreeModel* model )
-{
-    QComboBox::setModel( model );
-}
-
 void FlatTreeComboBox::clear()
 {
     FlatTreeModel* m = qobject_cast< FlatTreeModel* >( model() );

@@ -41,6 +41,13 @@ Ui MgvPrimaryWindowActions {
 
         };
 
+        Menu ViewsMenu {
+            Text            "&Views";
+            StatusToolTip   "List of MacGitver views.";
+
+            MergePlace      ViewsListMP;
+        };
+
         MergePlace RemotesMP;
         MergePlace WorkingTreeMP;
 

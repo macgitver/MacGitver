@@ -73,9 +73,16 @@ namespace RM
         void repositoryClosed();
         void hasActiveRepositoryChanged(bool hasActiveRepo);
 
-    signals:    // These are all from EventsInterface.
-                // We simply redeclare them here as signals
-                // Moc will do the implementation for us.
+    signals:
+        /**
+         * @internal
+         * @brief   Redeclared events as signals
+         *
+         *          Moc will do the implementation for us.
+         *
+         * @see     RM::EventInterface
+         */
+        ///@{
         void repositoryOpened(RM::Repo* repo);
         void repositoryAboutToClose(RM::Repo* repo);
         void repositoryActivated(RM::Repo* repo);
@@ -110,6 +117,7 @@ namespace RM
         void repositoryStateChanged(RM::Repo* repo);
         void indexUpdated(RM::Repo* repo);
         void workTreeUpdated(RM::Repo* repo);
+        ///@}
     };
 
 }

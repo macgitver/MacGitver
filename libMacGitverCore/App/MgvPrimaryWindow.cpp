@@ -89,7 +89,7 @@ void MgvPrimaryWindow::setupUi()
     setupActions( this );
     setMenuBar( mbMainMenuBar );
 
-    Heaven::ViewDescriptor::mergeViewsMenu("ViewsListMP");
+    BlueSky::ViewDescriptor::mergeViewsMenu("ViewsListMP");
 
     setWindowTitle( trUtf8( "MacGitver" ) );
 

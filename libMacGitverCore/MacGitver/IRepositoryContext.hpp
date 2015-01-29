@@ -29,7 +29,7 @@ namespace RM
 class IRepositoryContext
 {
 public:
-    virtual RM::Repo* repository() const = 0;
+    virtual RM::Repo* repository() = 0;
 };
 
 Q_DECLARE_INTERFACE( IRepositoryContext,

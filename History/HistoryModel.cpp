@@ -294,22 +294,17 @@ void HistoryModel::scanInlineReferences()
     Git::Reference      refHEAD;
     QHash< Git::ObjectId, HistoryInlineRefs > refsById;
 
-    if( !mRepo.isValid() )
-    {
-        return;
-    }
-
     // First step: Collect all references.
 
     refs = mRepo.allResolvedRefs( r );
     refHEAD = mRepo.HEAD( r );
-    bool detached = mRepo.isHeadDetached();
     if( !r )
     {
         MacGitver::log(Log::Error, r.errorText());
         return;
     }
 
+    bool detached = mRepo.isHeadDetached();
     QElapsedTimer   stopwatch;
     stopwatch.start();
 
@@ -372,11 +367,12 @@ void HistoryModel::scanInlineReferences()
             continue;
         }
 
-        if (!refsById.contains(refs[ref])) {
-            refsById.insert(refs[ref], HistoryInlineRefs());
+        const Git::ObjectId &oid = refs[ref];
+        if ( !refsById.contains( oid ) ) {
+            refsById.insert( oid, HistoryInlineRefs() );
         }
 
-        refsById[refs[ref]].append(inlRef);
+        refsById[ oid ].append( inlRef );
     }
 
     // Third step: Update the commitlist and mix it with the inline Refs we just found.

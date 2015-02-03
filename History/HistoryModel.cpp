@@ -42,6 +42,7 @@ HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
 
     RM::RepoMan &rm = MacGitver::repoMan();
     connect( &rm, SIGNAL(refCreated(RM::Repo*,RM::Ref*)), this, SLOT(onRefCreated(RM::Repo*,RM::Ref*)) );
+    connect( &rm, SIGNAL(refLinkChanged(RM::Repo*,RM::Ref*)), this, SLOT(onRefLinkChanged(RM::Repo*,RM::Ref*)) );
 }
 
 HistoryModel::~HistoryModel()
@@ -228,6 +229,11 @@ void HistoryModel::afterAppend()
 }
 
 void HistoryModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
+{
+    scanInlineReferences();
+}
+
+void HistoryModel::onRefLinkChanged(RM::Repo* repo, RM::Ref* ref)
 {
     scanInlineReferences();
 }

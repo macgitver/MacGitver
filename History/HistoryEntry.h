@@ -70,7 +70,6 @@ struct HistoryInlineRef
         }
 
         return  mRefName    == other.mRefName       &&
-                mRefName    == other.mRefName       &&
                 mIsBranch   == other.mIsBranch      &&
                 mIsCurrent  == other.mIsCurrent     &&
                 mIsRemote   == other.mIsRemote      &&

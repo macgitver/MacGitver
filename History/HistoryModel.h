@@ -25,14 +25,14 @@
 
 #include "libGitWrap/Repository.hpp"
 
+#include "HistoryEntry.h"
+
+
 namespace RM
 {
     class Ref;
     class Repo;
 }
-
-
-class HistoryEntry;
 
 class HistoryModel : public QAbstractTableModel
 {
@@ -102,6 +102,7 @@ private:
     void append( HistoryEntry* entry );
     void updateRows( int firstRow, int lastRow );
     void scanInlineReferences();
+    inline void updateInlineRefs(const QHash< Git::ObjectId, HistoryInlineRefs >& refsById);
 
 public slots:
     void ensurePopulated( int row );

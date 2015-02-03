@@ -27,7 +27,6 @@
 #include "libGitWrap/Reference.hpp"
 
 #include "HistoryModel.h"
-#include "HistoryEntry.h"
 #include "HistoryBuilder.h"
 
 HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
@@ -290,7 +289,6 @@ void HistoryModel::scanInlineReferences()
 {
     qint64				dur;
     double				avg;
-    QElapsedTimer		timer;
     Git::ResolvedRefs	refs;
     Git::Result			r;
     Git::Reference		refHEAD;
@@ -312,7 +310,8 @@ void HistoryModel::scanInlineReferences()
         return;
     }
 
-    timer.start();
+    QElapsedTimer   stopwatch;
+    stopwatch.start();
 
     // Second step: Classify the refs and determine a nice display name for them
 
@@ -382,6 +381,19 @@ void HistoryModel::scanInlineReferences()
 
     // Third step: Update the commitlist and mix it with the inline Refs we just found.
 
+    updateInlineRefs( refsById );
+
+    dur = stopwatch.nsecsElapsed();
+    avg = double( dur ) / double( refs.count() );
+    MacGitver::log(Log::Information,
+                   trUtf8("Found and resolved %1 refs in %2 ns = %3 ns per ref.")
+                        .arg(refs.count())
+                        .arg(dur)
+                        .arg(avg, 10, 'f', 2));
+}
+
+void HistoryModel::updateInlineRefs(const QHash<Git::ObjectId, HistoryInlineRefs>& refsById)
+{
     for( int i = 0; i < mEntries.count(); i++ )
     {
         HistoryEntry* e = mEntries[i];
@@ -417,14 +429,6 @@ void HistoryModel::scanInlineReferences()
             updateRows( i, i );
         }
     }
-
-    dur = timer.nsecsElapsed();
-    avg = double( dur ) / double( refs.count() );
-    MacGitver::log(Log::Information,
-                   trUtf8("Found and resolved %1 refs in %2 ns = %3 ns per ref.")
-                        .arg(refs.count())
-                        .arg(dur)
-                        .arg(avg, 10, 'f', 2));
 }
 
 void HistoryModel::changeDisplays(InlineRefDisplays displays, bool activate)

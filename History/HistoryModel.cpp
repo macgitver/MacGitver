@@ -305,6 +305,12 @@ void HistoryModel::scanInlineReferences()
     }
 
     bool detached = mRepo.isHeadDetached();
+    if ( detached ) {
+        // append HEAD when detached
+        refs[QLatin1Literal("< DETACHED >")] =
+                refHEAD.resolveToObjectId( r );
+    }
+
     QElapsedTimer   stopwatch;
     stopwatch.start();
 
@@ -313,20 +319,10 @@ void HistoryModel::scanInlineReferences()
     foreach( QString ref, refs.keys() )
     {
         HistoryInlineRef inlRef;
+        inlRef.mIsDetached = detached;
 
         if (mDisplays.testFlag(DisplayLocals) && ref.startsWith(QLatin1String("refs/heads/"))) {
-            if (ref.endsWith(QLatin1String("HEAD"))) {
-                if (detached) {
-                    inlRef.mRefName = trUtf8("<detached head>");
-                }
-                else {
-                    // Skip "HEAD"
-                    continue;
-                }
-            }
-            else {
-                inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
-            }
+            inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
             inlRef.mIsBranch = true;
             inlRef.mIsRemote = false;
             inlRef.mIsTag = false;
@@ -361,6 +357,14 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsRemote = false;
             inlRef.mIsTag = false;
             inlRef.mIsStash = true;
+        }
+        else if ( detached && ref == QLatin1Literal("< DETACHED >") ) {
+            inlRef.mRefName = tr("< DETACHED >");
+            inlRef.mIsBranch = false;
+            inlRef.mIsCurrent = false;
+            inlRef.mIsRemote = false;
+            inlRef.mIsTag = false;
+            inlRef.mIsStash = false;
         }
         else {
             // qDebug() << "HistoryModel::scanInlineReferences => Unhandled ref:" << ref;

@@ -304,7 +304,11 @@ QColor HistoryListDelegate::colorForRefType(const HistoryInlineRef& ref) const
         return QColor::fromHsl(89, 255, 190);
     }
 
-    return QColor( 0xD9D9D9 );
+    if ( ref.mIsStash )
+        return QColor( 0xD9D9D9 );
+
+    // DETACHED REF
+    return QColor( 0xFF5959 );
 }
 
 void HistoryListDelegate::paintMessage( QPainter* p, const QStyleOptionViewItem& opt,

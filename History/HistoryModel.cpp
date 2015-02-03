@@ -321,7 +321,7 @@ void HistoryModel::scanInlineReferences()
         HistoryInlineRef inlRef;
         inlRef.mIsDetached = detached;
 
-        if (mDisplays.testFlag(DisplayLocals) && ref.startsWith(QLatin1String("refs/heads/"))) {
+        if ( mDisplays.testFlag(DisplayLocals) && ref.startsWith(QLatin1Literal("refs/heads/")) ) {
             inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
             inlRef.mIsBranch = true;
             inlRef.mIsRemote = false;
@@ -329,7 +329,7 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsStash = false;
             inlRef.mIsCurrent = inlRef.mRefName == refHEAD.shorthand();
         }
-        else if (mDisplays.testFlag(DisplayTags) && ref.startsWith(QLatin1String("refs/tags/"))) {
+        else if (mDisplays.testFlag( DisplayTags ) && ref.startsWith( QLatin1Literal("refs/tags/") ) ) {
             inlRef.mRefName = ref.mid( strlen( "refs/tags/" ) );
             inlRef.mIsBranch = false;
             inlRef.mIsRemote = false;
@@ -338,9 +338,9 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsStash = false;
         }
         else if (mDisplays.testFlag(DisplayRemotes) &&
-                 ref.startsWith(QLatin1String("refs/remotes/"))) {
+                 ref.startsWith( QLatin1Literal("refs/remotes/")) ) {
 
-            if (ref.endsWith( QLatin1String("HEAD"))) {
+            if (ref.endsWith( QLatin1Literal("HEAD"))) {
                 continue; // Skip "HEAD"
             }
             inlRef.mRefName = ref.mid( strlen( "refs/remotes/" ) );
@@ -350,8 +350,8 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsCurrent = false;
             inlRef.mIsStash = false;
         }
-        else if (ref == QLatin1String("refs/stash")) {
-            inlRef.mRefName = trUtf8( "<recent stash>" );
+        else if (ref == QLatin1Literal("refs/stash")) {
+            inlRef.mRefName = tr( "<recent stash>" );
             inlRef.mIsBranch = false;
             inlRef.mIsCurrent = true;
             inlRef.mIsRemote = false;

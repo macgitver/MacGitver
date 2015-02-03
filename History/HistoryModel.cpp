@@ -409,24 +409,14 @@ void HistoryModel::updateInlineRefs(const QHash<Git::ObjectId, HistoryInlineRefs
             continue;
         }
 
-        int diffs = newRefs.count();
-        for( int j = 0; j < newRefs.count(); j++ )
-        {
-            QString newRef = newRefs.at( j ).mRefName;
-            for( int k = 0; k < oldRefs.count(); k++ )
-            {
-                if( oldRefs.at( k ).mRefName == newRef )
-                {
-                    diffs--;
-                    break;
-                }
+        for ( int j = 0; j < newRefs.count(); j++ ) {
+            const HistoryInlineRef& newRef = newRefs[j];
+            const HistoryInlineRef& oldRef = oldRefs[j];
+            if ( newRef != oldRef ) {
+                e->setInlineRefs( newRefs );
+                updateRows( i, i );
+                break;
             }
-        }
-
-        if( diffs )
-        {
-            e->setInlineRefs( newRefs );
-            updateRows( i, i );
         }
     }
 }

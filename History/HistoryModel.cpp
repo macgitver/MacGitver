@@ -327,7 +327,7 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsRemote = false;
             inlRef.mIsTag = false;
             inlRef.mIsStash = false;
-            inlRef.mIsCurrent = inlRef.mRefName == refHEAD.shorthand();
+            inlRef.mIsCurrent = !detached ? (inlRef.mRefName == refHEAD.shorthand()) : false;
         }
         else if (mDisplays.testFlag( DisplayTags ) && ref.startsWith( QLatin1Literal("refs/tags/") ) ) {
             inlRef.mRefName = ref.mid( strlen( "refs/tags/" ) );

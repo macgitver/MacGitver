@@ -390,6 +390,8 @@ void HistoryModel::scanInlineReferences()
 
 void HistoryModel::updateInlineRefs(const QHash<Git::ObjectId, HistoryInlineRefs>& refsById)
 {
+    HistoryInlineRef_LessThan lt;
+
     for( int i = 0; i < mEntries.count(); i++ )
     {
         HistoryEntry* e = mEntries[i];
@@ -397,6 +399,9 @@ void HistoryModel::updateInlineRefs(const QHash<Git::ObjectId, HistoryInlineRefs
 
         HistoryInlineRefs newRefs = refsById.value( e->id() );
         HistoryInlineRefs oldRefs = e->refs();
+
+        // sort newRefs: no need to sort oldRefs as it is already sorted)
+        std::sort( newRefs.begin(), newRefs.end(), lt );
 
         if( oldRefs.count() != newRefs.count() )
         {

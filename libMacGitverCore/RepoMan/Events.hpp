@@ -28,10 +28,10 @@ namespace RM
 {
 
     class Base;
+    class Namespace;
     class Repo;
     class Ref;
     class Remote;
-    class Namespace;
     class Submodule;
     class RefTreeNode;
     class RefLog;

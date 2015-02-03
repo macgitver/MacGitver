@@ -101,6 +101,7 @@ public:
 private:
     void append( HistoryEntry* entry );
     void updateRows( int firstRow, int lastRow );
+
     void scanInlineReferences();
     inline void updateInlineRefs(const QHash< Git::ObjectId, HistoryInlineRefs >& refsById);
 

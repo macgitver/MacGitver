@@ -287,11 +287,11 @@ void HistoryModel::buildHistory()
 
 void HistoryModel::scanInlineReferences()
 {
-    qint64				dur;
-    double				avg;
-    Git::ResolvedRefs	refs;
-    Git::Result			r;
-    Git::Reference		refHEAD;
+    qint64              dur;
+    double              avg;
+    Git::ResolvedRefs   refs;
+    Git::Result         r;
+    Git::Reference      refHEAD;
     QHash< Git::ObjectId, HistoryInlineRefs > refsById;
 
     if( !mRepo.isValid() )

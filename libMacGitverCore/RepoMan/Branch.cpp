@@ -107,7 +107,7 @@ namespace RM
 
     bool BranchPrivate::refreshSelf()
     {
-        // ### Update "upstream" and "divergence"
+        // TODO: Update "upstream" and "divergence"
         return RefPrivate::refreshSelf();
     }
 

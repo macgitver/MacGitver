@@ -35,12 +35,12 @@ namespace RM
         public:
             ObjTypes objType() const;
             QString displayName() const;
-            bool refreshSelf();
-            void postCreation();
-            void preTerminate();
+            virtual bool refreshSelf();
+            virtual void postCreation();
+            virtual void preTerminate();
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
-            bool inherits(ObjTypes type) const;
+            virtual bool inherits(ObjTypes type) const;
 
         public:
             RefTypes            type;

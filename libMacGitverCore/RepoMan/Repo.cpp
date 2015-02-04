@@ -514,7 +514,9 @@ namespace RM
 
         Git::ReferenceList refs = repo.allReferences(r);
         foreach (Git::Reference ref, refs) {
-            findReference(ref, true);
+            Ref* found = findReference(ref, true);
+            Q_UNUSED( found );
+            Q_ASSERT( found );
         }
 
         scanSubmodules();

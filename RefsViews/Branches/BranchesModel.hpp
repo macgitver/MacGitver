@@ -58,13 +58,7 @@ signals:
     void gitError( const Git::Result& error );
 
 private slots:
-    /**
-     * @internal
-     * @see RM::EventInterface
-     */
-    ///@{
     void onRefCreated(RM::Repo* repo, RM::Ref* ref);
-    ///@}
 
 private:
     QModelIndex index(RefItem* item) const;

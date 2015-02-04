@@ -282,6 +282,11 @@ void BranchesModel::rereadBranches()
     endResetModel();
 }
 
+/**
+ * @internal
+ * @see RM::EventInterface
+ */
+///@{
 void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 {
     Git::Result r;
@@ -290,6 +295,7 @@ void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 
     insertRef( true, gref );
 }
+///@}
 
 QModelIndex BranchesModel::index(RefItem* item) const
 {

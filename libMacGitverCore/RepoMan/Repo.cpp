@@ -250,39 +250,39 @@ namespace RM
         return tr("&lt;unknown&gt;");
     }
 
-    Ref* Repo::findReference(const Git::Reference& ref)
+    Ref* Repo::findReference(const Git::Reference& ref) const
     {
-        RM_D(Repo);
+        RM_CD(Repo);
         return d->findReference(ref, false);
     }
 
-    Ref* Repo::findReference(const QString &fqrn)
+    Ref* Repo::findReference(const QString &fqrn) const
     {
-        RM_D(Repo);
+        RM_CD(Repo);
         return d->findReference(fqrn, false);
     }
 
-    Remote* Repo::findRemote(const Git::Remote& remote)
+    Remote* Repo::findRemote(const Git::Remote& remote) const
     {
-        RM_D(Repo);
+        RM_CD(Repo);
         return d->findRemote(remote, false);
     }
 
-    Remote* Repo::findRemote(const QString& remoteName)
+    Remote* Repo::findRemote(const QString& remoteName) const
     {
-        RM_D(Repo);
+        RM_CD(Repo);
         return d->findRemote(remoteName, false);
     }
 
-    Namespace* Repo::findNamespace(const QStringList& namespaces)
+    Namespace* Repo::findNamespace(const QStringList& namespaces) const
     {
-        RM_D(Repo);
+        RM_CD(Repo);
         return d->findNamespace(namespaces);
     }
 
-    Namespace* Repo::findNamespace(const QString& nsFullName)
+    Namespace* Repo::findNamespace(const QString& nsFullName) const
     {
-        RM_D(Repo);
+        RM_CD(Repo);
         return d->findNamespace(nsFullName);
     }
 
@@ -295,10 +295,10 @@ namespace RM
      * scoped in which case they are subdivided into RefTreeNode objects.
      *
      */
-    CollectionNode* Repo::branches()
+    CollectionNode* Repo::branches() const
     {
-        RM_D(Repo);
-        return d->getOrCreateCollection(ctBranches);
+        RM_CD(Repo);
+        return d->getOrCreateCollection( ctBranches );
     }
 
     /**
@@ -310,7 +310,7 @@ namespace RM
      * which case they are subdivided into RefTreeNode objects.
      *
      */
-    CollectionNode* Repo::tags()
+    CollectionNode* Repo::tags() const
     {
         RM_D(Repo);
         return d->getOrCreateCollection(ctTags);
@@ -323,7 +323,7 @@ namespace RM
      *              repository.
      *
      */
-    CollectionNode* Repo::namespaces()
+    CollectionNode* Repo::namespaces() const
     {
         RM_D(Repo);
         return d->getOrCreateCollection(ctNamespaces);
@@ -338,7 +338,7 @@ namespace RM
      * which case they are subdivided into RefTreeNode objects.
      *
      */
-    CollectionNode* Repo::notes()
+    CollectionNode* Repo::notes() const
     {
         RM_D(Repo);
         return d->getOrCreateCollection(ctNotes);
@@ -514,7 +514,9 @@ namespace RM
 
         Git::ReferenceList refs = repo.allReferences(r);
         foreach (Git::Reference ref, refs) {
-            findReference(ref, true);
+            Ref* found = findReference(ref, true);
+            Q_UNUSED( found );
+            Q_ASSERT( found );
         }
 
         scanSubmodules();
@@ -540,19 +542,19 @@ namespace RM
     }
 
 
-    Ref* RepoPrivate::findReference(const Git::Reference& ref, bool create)
+    Ref* RepoPrivate::findReference(const Git::Reference& ref, bool create) const
     {
         Git::RefName rn = ref.nameAnalyzer();
         return findReference(rn, ref, create);
     }
 
-    Ref* RepoPrivate::findReference(const QString& fqrn, bool create)
+    Ref* RepoPrivate::findReference(const QString& fqrn, bool create) const
     {
         Git::RefName rn(fqrn);
         return findReference(rn, Git::Reference(), create);
     }
 
-    Ref* RepoPrivate::findReference(Git::RefName& rn, Git::Reference ref, bool create)
+    Ref* RepoPrivate::findReference(Git::RefName& rn, const Git::Reference& ref, bool create) const
     {
         Base* parent = NULL;
         CollectionNode* cn = NULL;
@@ -631,7 +633,7 @@ namespace RM
         }
     }
 
-    Remote* RepoPrivate::findRemote(const QString &remoteName, bool create)
+    Remote* RepoPrivate::findRemote(const QString &remoteName, bool create) const
     {
         RM_P(Repo);
 
@@ -654,7 +656,7 @@ namespace RM
         return NULL;
     }
 
-    Remote* RepoPrivate::findRemote(const Git::Remote &remote, bool create)
+    Remote* RepoPrivate::findRemote(const Git::Remote &remote, bool create) const
     {
         RM_P(Repo);
 
@@ -677,8 +679,8 @@ namespace RM
         return NULL;
     }
 
-    Namespace* RepoPrivate::findNamespace(const QStringList& _namespaces, bool create) {
-
+    Namespace* RepoPrivate::findNamespace(const QStringList& _namespaces, bool create) const
+    {
         Base* par = getOrCreateCollection(ctNamespaces);
         Namespace* child = NULL;
 
@@ -707,13 +709,13 @@ namespace RM
         return child;
     }
 
-    Namespace* RepoPrivate::findNamespace(const QString& nsFullName, bool create) {
-
+    Namespace* RepoPrivate::findNamespace(const QString& nsFullName, bool create) const
+    {
         QStringList nsNames = nsFullName.split(QChar(L'/'));
         return findNamespace(nsNames, create);
     }
 
-    Repo* RepoPrivate::repoByPath(const QString& basePath, bool searchSubmodules)
+    Repo* RepoPrivate::repoByPath(const QString& basePath, bool searchSubmodules) const
     {
         foreach (Repo* subRepo, mPub->childObjects<Repo>()) {
 

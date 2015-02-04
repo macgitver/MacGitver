@@ -405,7 +405,7 @@ namespace RM
      * @brief       Refresh this object
      *
      * Refreshes this object and all its children. First calls to refreshSelf() expecting it to
-     * update this object and send out events. If refreshSelf() returnes `false`, this object is
+     * update this object and send out events. If refreshSelf() returns `false`, this object is
      * removed from the tree. In this case all children should already have been removed from the
      * tree.
      *
@@ -616,7 +616,7 @@ namespace RM
     }
 
 
-    CollectionNode* BasePrivate::getOrCreateCollection(CollectionTypes ctype)
+    CollectionNode* BasePrivate::getOrCreateCollection(CollectionTypes ctype) const
     {
         CollectionNode* cn;
 

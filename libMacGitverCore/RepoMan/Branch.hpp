@@ -38,7 +38,7 @@ namespace RM
     public:
         bool hasUpstream() const;
         QString upstreamRefName() const;
-        Ref* upstream();
+        Ref* upstream() const;
         int aheadCount() const;
         int behindCount() const;
     };

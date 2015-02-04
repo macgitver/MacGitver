@@ -35,38 +35,36 @@ namespace RM
         d->linkToParent(_parent);
     }
 
-    CollectionNode* Namespace::branches()
+    CollectionNode* Namespace::branches() const
     {
-        RM_D(Namespace);
-
+        RM_CD(Namespace);
         return d->getOrCreateCollection(ctBranches);
     }
 
-    CollectionNode* Namespace::tags()
     {
-        RM_D(Namespace);
+    }
 
+    CollectionNode* Namespace::tags() const
+    {
+        RM_CD(Namespace);
         return d->getOrCreateCollection(ctTags);
     }
 
-    CollectionNode* Namespace::namespaces()
+    CollectionNode* Namespace::namespaces() const
     {
-        RM_D(Namespace);
-
+        RM_CD(Namespace);
         return d->getOrCreateCollection(ctNamespaces);
     }
 
-    CollectionNode* Namespace::notes()
+    CollectionNode* Namespace::notes() const
     {
-        RM_D(Namespace);
-
+        RM_CD(Namespace);
         return d->getOrCreateCollection(ctNotes);
     }
 
     QString Namespace::name() const
     {
-        RM_D(Namespace);
-
+        RM_CD(Namespace);
         return d->name;
     }
 

@@ -46,10 +46,10 @@ namespace RM
         QString name() const;
 
     public:
-        CollectionNode* branches();
-        CollectionNode* tags();
-        CollectionNode* namespaces();
-        CollectionNode* notes();
+        CollectionNode* branches() const;
+        CollectionNode* namespaces() const;
+        CollectionNode* notes() const;
+        CollectionNode* tags() const;
     };
 
 }

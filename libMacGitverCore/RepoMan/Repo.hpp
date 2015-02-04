@@ -81,17 +81,17 @@ namespace RM
 
         void close();
 
-        Ref*        findReference(  const Git::Reference&   ref);
-        Ref*        findReference(  const QString&          fqrn);
-        Remote*     findRemote(     const Git::Remote&      remote);
-        Remote*     findRemote(     const QString&          remoteName);
-        Namespace*  findNamespace(  const QStringList&      namespaces);
-        Namespace*  findNamespace(  const QString&          nsFullName);
+        Ref*        findReference(  const Git::Reference&   ref) const;
+        Ref*        findReference(  const QString&          fqrn) const;
+        Remote*     findRemote(     const Git::Remote&      remote) const;
+        Remote*     findRemote(     const QString&          remoteName) const;
+        Namespace*  findNamespace(  const QStringList&      namespaces) const;
+        Namespace*  findNamespace(  const QString&          nsFullName) const;
 
-        CollectionNode* branches();
-        CollectionNode* tags();
-        CollectionNode* namespaces();
-        CollectionNode* notes();
+        CollectionNode* branches() const;
+        CollectionNode* tags() const;
+        CollectionNode* namespaces() const;
+        CollectionNode* notes() const;
 
     private:
         void activated();

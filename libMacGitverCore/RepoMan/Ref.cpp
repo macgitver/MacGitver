@@ -69,7 +69,7 @@ namespace RM
 
     QString Ref::fullName() const
     {
-        RM_CD(Ref);
+        RM_CD( Ref );
         return d->fullQualifiedName;
     }
 

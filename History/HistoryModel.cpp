@@ -377,7 +377,7 @@ void HistoryModel::scanInlineReferences()
             continue;
         }
 
-        const Git::ObjectId &oid = refs[ref];
+        Git::ObjectId oid = refs[ref];
         if ( !refsById.contains( oid ) ) {
             refsById.insert( oid, HistoryInlineRefs() );
         }

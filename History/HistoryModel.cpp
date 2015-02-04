@@ -359,7 +359,7 @@ void HistoryModel::scanInlineReferences()
         else if (ref == QLatin1Literal("refs/stash")) {
             inlRef.mRefName = tr( "<recent stash>" );
             inlRef.mIsBranch = false;
-            inlRef.mIsCurrent = false;
+            inlRef.mIsCurrent = true;
             inlRef.mIsRemote = false;
             inlRef.mIsTag = false;
             inlRef.mIsStash = true;

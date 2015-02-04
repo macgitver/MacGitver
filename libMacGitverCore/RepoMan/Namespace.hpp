@@ -47,9 +47,9 @@ namespace RM
 
     public:
         CollectionNode* branches();
-        CollectionNode* tags();
         CollectionNode* namespaces();
         CollectionNode* notes();
+        CollectionNode* tags();
     };
 
 }

@@ -276,13 +276,13 @@ namespace RM
 
     Namespace* Repo::findNamespace(const QStringList& namespaces)
     {
-        RM_D(Repo);
+        RM_D( Repo );
         return d->findNamespace(namespaces);
     }
 
     Namespace* Repo::findNamespace(const QString& nsFullName)
     {
-        RM_D(Repo);
+        RM_D( Repo );
         return d->findNamespace(nsFullName);
     }
 
@@ -297,8 +297,8 @@ namespace RM
      */
     CollectionNode* Repo::branches()
     {
-        RM_D(Repo);
-        return d->getOrCreateCollection(ctBranches);
+        RM_D( Repo );
+        return d->getOrCreateCollection( ctBranches );
     }
 
     /**
@@ -312,8 +312,8 @@ namespace RM
      */
     CollectionNode* Repo::tags()
     {
-        RM_D(Repo);
-        return d->getOrCreateCollection(ctTags);
+        RM_D( Repo );
+        return d->getOrCreateCollection( ctTags );
     }
 
     /**
@@ -621,13 +621,13 @@ namespace RM
         }
 
         if (rn.isBranch()) {
-            return new Branch(parent, ref);
+            return new Branch( parent, ref );
         }
         else if(rn.isTag()) {
-            return new Tag(parent, ref);
+            return new Tag( parent, ref );
         }
         else {
-            return new Ref(parent, UnknownRefType, ref);
+            return new Ref( parent, UnknownRefType, ref );
         }
     }
 
@@ -656,7 +656,7 @@ namespace RM
 
     Remote* RepoPrivate::findRemote(const Git::Remote &remote, bool create)
     {
-        RM_P(Repo);
+        RM_P( Repo );
 
         if (!remote.isValid()) {
             return NULL;

@@ -61,16 +61,22 @@ namespace RM
         return d->name;
     }
 
+    QString Ref::fullName() const
+    {
+        RM_CD(Ref);
+        return d->fullQualifiedName;
+    }
+
     Git::ObjectId Ref::id() const
     {
         RM_CD(Ref);
         return d->id;
     }
 
-    QString Ref::fullName() const
+    QString Ref::symbolicTarget() const
     {
         RM_CD( Ref );
-        return d->fullQualifiedName;
+        return d->symbolicTarget;
     }
 
     QString Ref::displaySha1() const

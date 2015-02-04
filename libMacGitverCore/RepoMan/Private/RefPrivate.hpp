@@ -47,6 +47,7 @@ namespace RM
             QString             fullQualifiedName;
             QString             name;
             Git::ObjectId       id;
+            QString             symbolicTarget;
         };
 
     }

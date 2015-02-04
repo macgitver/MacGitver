@@ -302,6 +302,20 @@ namespace RM
     }
 
     /**
+     * @brief       Get this repository's collection of heads
+     *
+     * @return      A CollectionNode whose children are the heads included in this repository.
+     *
+     *              HEADs are references matching the regular expression `^.*HEAD$`.
+     *              They are special references and cannot be scoped.
+     */
+    CollectionNode*Repo::heads()
+    {
+        RM_D( Repo );
+        return d->getOrCreateCollection( ctHeads );
+    }
+
+    /**
      * @brief       Get this repository's collection of tags
      *
      * @return      A CollectionNode whose children are the tags included in this repository.
@@ -596,6 +610,9 @@ namespace RM
             parent = cnp->findRefParent(rn.scopes(), create);
         }
         else {
+            if ( rn.isHead() ) {
+                cn = getOrCreateCollection( ctHeads );
+            }
             if (rn.isBranch()) {
                 cn = getOrCreateCollection(ctBranches);
             }

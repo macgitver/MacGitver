@@ -54,7 +54,7 @@ namespace RM
         typedef QList< Ref* > List;
 
     protected:
-        Ref(Internal::RefPrivate& _data);
+        Ref(Internal::RefPrivate& data);
 
     public:
         Ref(Base* _parent, RefTypes _type, const Git::Reference& _ref);

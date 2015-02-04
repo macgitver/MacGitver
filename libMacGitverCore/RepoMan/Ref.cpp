@@ -31,10 +31,9 @@
 namespace RM
 {
 
-    using namespace Internal;
 
-    Ref::Ref(RefPrivate& _data)
-        : Base(_data)
+    Ref::Ref(Internal::RefPrivate& data)
+        : Base( data )
     {
     }
 
@@ -84,21 +83,24 @@ namespace RM
         return id().toString(8);
     }
 
-    //-- Internal::RefPrivate ------------------------------------------------------------------- >8
 
-    RefPrivate::RefPrivate(Ref* pub, RefTypes _type, const Git::Reference& _ref)
-        : BasePrivate(pub)
-        , type(_type)
+    namespace Internal
     {
-        fullQualifiedName = _ref.name();
-        name = _ref.nameAnalyzer().name();
-    }
 
     ObjTypes RefPrivate::objType() const
     {
         return RefObject;
     }
 
+        RefPrivate::RefPrivate(Ref* pub, RefTypes _type, const Git::Reference& _ref)
+            : BasePrivate( pub )
+            , type( _type )
+            , fullQualifiedName( _ref.name() )
+            , name( _ref.nameAnalyzer().name() )
+            , id( _ref.objectId() )
+            , symbolicTarget( _ref.target() )
+        {
+        }
     QString RefPrivate::displayName() const
     {
         return name;

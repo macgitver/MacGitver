@@ -616,7 +616,7 @@ namespace RM
     }
 
 
-    CollectionNode* BasePrivate::getOrCreateCollection(CollectionTypes ctype)
+    CollectionNode* BasePrivate::getOrCreateCollection(CollectionTypes ctype) const
     {
         CollectionNode* cn;
 

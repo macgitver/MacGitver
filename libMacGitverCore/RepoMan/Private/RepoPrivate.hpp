@@ -44,15 +44,15 @@ namespace RM
             bool inherits(ObjTypes type) const;
 
         public:
-            Ref*        findReference(  const Git::Reference& ref,          bool create = false);
-            Ref*        findReference(  const QString& fqrn,                bool create = false);
-            Remote*     findRemote(     const Git::Remote& remote,          bool create = false);
-            Remote*     findRemote(     const QString& remoteName,          bool create = false);
-            Namespace*  findNamespace(  const QStringList& _namespaces,     bool create = false);
-            Namespace*  findNamespace(  const QString& nsFullName,          bool create = false);
+            Ref*        findReference( const Git::Reference& ref,      bool create = false) const;
+            Ref*        findReference( const QString& fqrn,            bool create = false) const;
+            Remote*     findRemote(    const Git::Remote& remote,      bool create = false) const;
+            Remote*     findRemote(    const QString& remoteName,      bool create = false) const;
+            Namespace*  findNamespace( const QStringList& _namespaces, bool create = false) const;
+            Namespace*  findNamespace( const QString& nsFullName,      bool create = false) const;
 
         private:
-            Ref* findReference(Git::RefName &rn, Git::Reference ref, bool create);
+            Ref* findReference(Git::RefName& rn, const Git::Reference& ref, bool create) const;
 
         public:
             void load();
@@ -60,7 +60,7 @@ namespace RM
             bool ensureIsLoaded();
             void findAlias();
             void scanSubmodules();
-            Repo* repoByPath(const QString& basePath, bool searchSubmodules);
+            Repo* repoByPath(const QString& basePath, bool searchSubmodules) const;
 
         public:
             Git::Repository repo;                  //!< GitWrap-Repo, if loaded

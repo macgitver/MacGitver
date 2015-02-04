@@ -42,7 +42,7 @@ namespace RM
         return d->upstreamRefName;
     }
 
-    Ref* Branch::upstream()
+    Ref* Branch::upstream() const
     {
         return repository()->findReference(upstreamRefName());
     }

@@ -89,9 +89,10 @@ namespace RM
         Namespace*  findNamespace(  const QString&          nsFullName);
 
         CollectionNode* branches();
-        CollectionNode* tags();
+        CollectionNode* heads();
         CollectionNode* namespaces();
         CollectionNode* notes();
+        CollectionNode* tags();
 
     private:
         void activated();

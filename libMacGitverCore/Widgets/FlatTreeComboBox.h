@@ -39,6 +39,10 @@ public:
 
     void remove( const QString& entry );
     void remove( const QStringList& entries );
+
+private:
+    // prevent setting a random QAbstractItemModel
+    using QComboBox::setModel;
 };
 
 #endif

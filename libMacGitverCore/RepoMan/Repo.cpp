@@ -651,6 +651,9 @@ namespace RM
         else if ( rn.isHead() ) {
             return new Ref( parent, HEADRefType, ref );
         }
+        else if ( rn.isMergeHead() ) {
+            return new Ref( parent, MERGE_HEADRefType, ref );
+        }
         else {
             return new Ref( parent, UnknownRefType, ref );
         }

@@ -645,7 +645,7 @@ namespace RM
 
     Heaven::IconRef BasePrivate::icon() const
     {
-        return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % QLatin1Literal("@24"));
+        return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % QStringLiteral("@24"));
     }
 
     bool BasePrivate::inherits(ObjTypes type) const

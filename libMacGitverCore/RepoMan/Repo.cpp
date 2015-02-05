@@ -527,7 +527,7 @@ namespace RM
         }
 
         Git::ReferenceList refs = repo.allReferences( r );
-        Git::Reference headRef = repo.reference( r, QLatin1Literal( "HEAD" ) );
+        Git::Reference headRef = repo.reference( r, QStringLiteral( "HEAD" ) );
         if ( r && headRef.isValid() ) {
             refs << headRef;
         }

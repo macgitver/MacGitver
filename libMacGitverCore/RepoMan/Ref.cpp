@@ -149,6 +149,32 @@ namespace RM
         {
             Git::Result r;
 
+            Repo* repo = repository();
+            Git::Repository gr = repo->gitRepo();
+
+            Git::Reference ref = gr.reference(r, fullQualifiedName);
+            Git::ObjectId objectId = ref.objectId();
+            QString st = ref.target();
+
+            bool moved = objectId != id;
+            if ( moved ) {
+                id = objectId;
+            }
+
+            bool relinked = st != symbolicTarget;
+            if ( relinked ) {
+                symbolicTarget = st;
+            }
+
+            // send events after all values are set
+
+            if ( moved ) {
+                Events::self()->refMoved(repo, pub<Ref>());
+            }
+
+            if ( relinked ) {
+                Events::self()->refLinkChanged( repo, pub<Ref>() );
+            }
 
             return true;
         }

@@ -81,23 +81,18 @@ struct HistoryInlineRef
     inline bool operator !=(const HistoryInlineRef& other) const {
         return !( *this == other );
     }
-};
 
-typedef QList< HistoryInlineRef > HistoryInlineRefs;
-
-struct HistoryInlineRef_LessThan
-{
-    inline bool detachedHEAD(const HistoryInlineRef& ref) const
+    inline bool detachedHEAD() const
     {
-        return ref.mIsDetached && !(ref.mIsTag || ref.mIsBranch || ref.mIsStash);
+        return mIsDetached && !(mIsTag || mIsBranch || mIsStash);
     }
 
-    inline bool nameLessThan(const HistoryInlineRef& a, const HistoryInlineRef& b) const
+    inline bool nameLessThan(const HistoryInlineRef& other) const
     {
-        return a.mRefName < b.mRefName;
+        return mRefName < other.mRefName;
     }
 
-    bool operator ()(const HistoryInlineRef& a, const HistoryInlineRef& b) const
+    bool operator <(const HistoryInlineRef& other) const
     {
         // sort order:
         // - tag
@@ -108,38 +103,40 @@ struct HistoryInlineRef_LessThan
         // - stash
         // - Everything else is sorted by mRefName
 
-        if ( a.mIsTag ) {
+        if ( mIsTag ) {
             // tags have highest priority
-            return b.mIsTag ? nameLessThan(a, b) : true;
+            return other.mIsTag ? nameLessThan(other) : true;
         }
 
-        if ( detachedHEAD( a ) )
+        if ( detachedHEAD() )
         {
             // a detached HEAD comes right after tag ? -> There can only be one!
-            return !b.mIsTag;
+            return !other.mIsTag;
         }
 
-        if ( a.mIsBranch )
+        if ( mIsBranch )
         {
-            if ( b.mIsTag || b.mIsCurrent || detachedHEAD( b ) )
+            if ( other.mIsTag || other.mIsCurrent || other.detachedHEAD() )
                 return false;
 
-            if ( a.mIsCurrent ) {
+            if ( mIsCurrent ) {
                 // a is the current branch
                 return true;
             }
 
-            return ( a.mIsRemote == b.mIsRemote ) ? nameLessThan( a, b ) : !a.mIsRemote;
+            return ( mIsRemote == other.mIsRemote ) ? nameLessThan( other ) : !mIsRemote;
         }
 
-        if ( a.mIsStash ) {
-            return b.mIsStash ? nameLessThan(a, b) : !(b.mIsTag || b.mIsBranch || detachedHEAD( b ));
+        if ( mIsStash ) {
+            return other.mIsStash ? nameLessThan( other )
+                                  : !(other.mIsTag || other.mIsBranch || other.detachedHEAD());
         }
 
-        return !(b.mIsTag || b.mIsBranch || b.mIsStash || detachedHEAD( b )) ? nameLessThan( a, b ) : false;
+        return !(other.mIsTag || other.mIsBranch || other.mIsStash || other.detachedHEAD()) ? nameLessThan( other ) : false;
     }
 };
 
+typedef QList< HistoryInlineRef > HistoryInlineRefs;
 
 class HistoryEntry
 {

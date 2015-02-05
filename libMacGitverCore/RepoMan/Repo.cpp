@@ -526,7 +526,12 @@ namespace RM
             findRemote(remote, true);
         }
 
-        Git::ReferenceList refs = repo.allReferences(r);
+        Git::ReferenceList refs = repo.allReferences( r );
+        Git::Reference headRef = repo.reference( r, QLatin1Literal( "HEAD" ) );
+        if ( r && headRef.isValid() ) {
+            refs << headRef;
+        }
+
         foreach (Git::Reference ref, refs) {
             findReference(ref, true);
         }
@@ -642,6 +647,9 @@ namespace RM
         }
         else if(rn.isTag()) {
             return new Tag( parent, ref );
+        }
+        else if ( rn.isHead() ) {
+            return new Ref( parent, HEADRefType, ref );
         }
         else {
             return new Ref( parent, UnknownRefType, ref );

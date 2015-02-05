@@ -57,14 +57,14 @@ namespace RM
         Ref(Internal::RefPrivate& data);
 
     public:
-        Ref(Base* _parent, RefTypes _type, const Git::Reference& _ref);
-        ~Ref();
+        Ref(Base* parent, RefTypes type, const Git::Reference& ref);
 
     public:
         RefTypes type() const;
         QString name() const;
         QString fullName() const;
         Git::ObjectId id() const;
+        QString symbolicTarget() const;
 
     public:
         QString displaySha1() const;

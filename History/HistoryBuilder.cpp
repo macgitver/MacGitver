@@ -71,14 +71,14 @@ void HistoryBuilder::addBranches(bool includeRemotes)
 
     QStringList sl = mRepo.branchNames(r, true, false);
     foreach (const QString& s, sl) {
-        mWalker.pushRef(r, QLatin1Literal("refs/heads/") % s);
+        mWalker.pushRef(r, QStringLiteral("refs/heads/") % s);
     }
 
     if (includeRemotes) {
         sl = mRepo.branchNames(r, false, true);
 
         foreach (const QString& s, sl) {
-            mWalker.pushRef(r, QLatin1Literal("refs/remotes/") % s);
+            mWalker.pushRef(r, QStringLiteral("refs/remotes/") % s);
         }
     }
 }

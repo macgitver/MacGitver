@@ -34,17 +34,17 @@ void ProgressDlg::setAction( const QString& action,
 
     foreach( QString s, done )
     {
-        act += QLatin1Literal( " (<font color=\"green\">" ) % s % QLatin1Literal( "</font>)" );
+        act += QStringLiteral( " (<font color=\"green\">" ) % s % QStringLiteral( "</font>)" );
     }
 
     foreach( QString s, current )
     {
-        act += QLatin1Literal( " (<font color=\"blue\">" ) % s % QLatin1Literal( "</font>)" );
+        act += QStringLiteral( " (<font color=\"blue\">" ) % s % QStringLiteral( "</font>)" );
     }
 
     foreach( QString s, open )
     {
-        act += QLatin1Literal( " (<font color=\"red\">" ) % s % QLatin1Literal( "</font>)" );
+        act += QStringLiteral( " (<font color=\"red\">" ) % s % QStringLiteral( "</font>)" );
     }
 
     lblAction->setText( act );
@@ -79,15 +79,15 @@ void ProgressDlg::transportProgress( quint32 totalObjects,
     QString recv;
     if( receivedBytes > 1024 * 1024 * 950 ) /* 950 is so we get 0.9 gb */
     {
-        recv = QString::number( receivedBytes / (1024*1024*1024.0), 'f', 2 ) % QLatin1Literal( " Gb" );
+        recv = QString::number( receivedBytes / (1024*1024*1024.0), 'f', 2 ) % QStringLiteral( " Gb" );
     }
     else if( receivedBytes > 1024 * 950 )
     {
-        recv = QString::number( receivedBytes / (1024*1024.0), 'f', 2 ) % QLatin1Literal( " Mb" );
+        recv = QString::number( receivedBytes / (1024*1024.0), 'f', 2 ) % QStringLiteral( " Mb" );
     }
     else if( receivedBytes > 950 )
     {
-        recv = QString::number( receivedBytes / 1024.0, 'f', 2 ) % QLatin1Literal( " Kb" );
+        recv = QString::number( receivedBytes / 1024.0, 'f', 2 ) % QStringLiteral( " Kb" );
     }
     else
     {
@@ -130,7 +130,7 @@ void ProgressDlg::remoteMessage( const QString& msg )
     if( outBufLen )
         output += QString( outputBuffer, outBufLen );
 
-    QString log = mBaseLog % QLatin1Literal( "<br/>" ) %
+    QString log = mBaseLog % QStringLiteral( "<br/>" ) %
             output.replace( QChar( L'\n' ), QLatin1String("<br/>") ).simplified();
 
     txtLog->setHtml( log );
@@ -144,7 +144,7 @@ void ProgressDlg::beginStep( const QString& step )
 
 void ProgressDlg::finalizeStep()
 {
-    mBaseLog = txtLog->toHtml() % QLatin1Literal( "<br/>" );
+    mBaseLog = txtLog->toHtml() % QStringLiteral( "<br/>" );
     mRawRemoteMessage = QString();
 
     txtLog->setHtml( mBaseLog );

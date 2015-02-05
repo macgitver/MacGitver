@@ -319,8 +319,7 @@ void HistoryModel::scanInlineReferences()
     bool detached = mRepo.isHeadDetached();
     if ( detached ) {
         // append HEAD when detached
-        refs[QLatin1Literal("< DETACHED >")] =
-                refHEAD.resolveToObjectId( r );
+        refs[ QStringLiteral("< DETACHED >") ] = refHEAD.resolveToObjectId( r );
     }
 
     QElapsedTimer   stopwatch;
@@ -333,7 +332,7 @@ void HistoryModel::scanInlineReferences()
         HistoryInlineRef inlRef;
         inlRef.mIsDetached = detached;
 
-        if ( mDisplays.testFlag(DisplayLocals) && ref.startsWith(QLatin1Literal("refs/heads/")) ) {
+        if ( mDisplays.testFlag(DisplayLocals) && ref.startsWith(QStringLiteral("refs/heads/")) ) {
             inlRef.mRefName = ref.mid( strlen( "refs/heads/" ) );
             inlRef.mIsBranch = true;
             inlRef.mIsRemote = false;
@@ -341,7 +340,7 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsStash = false;
             inlRef.mIsCurrent = !detached ? (inlRef.mRefName == refHEAD.shorthand()) : false;
         }
-        else if (mDisplays.testFlag( DisplayTags ) && ref.startsWith( QLatin1Literal("refs/tags/") ) ) {
+        else if (mDisplays.testFlag( DisplayTags ) && ref.startsWith( QStringLiteral("refs/tags/") ) ) {
             inlRef.mRefName = ref.mid( strlen( "refs/tags/" ) );
             inlRef.mIsBranch = false;
             inlRef.mIsRemote = false;
@@ -350,9 +349,9 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsStash = false;
         }
         else if (mDisplays.testFlag(DisplayRemotes) &&
-                 ref.startsWith( QLatin1Literal("refs/remotes/")) ) {
+                 ref.startsWith( QStringLiteral("refs/remotes/")) ) {
 
-            if (ref.endsWith( QLatin1Literal("HEAD"))) {
+            if (ref.endsWith( QStringLiteral("HEAD"))) {
                 continue; // Skip "HEAD"
             }
             inlRef.mRefName = ref.mid( strlen( "refs/remotes/" ) );
@@ -362,7 +361,7 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsCurrent = false;
             inlRef.mIsStash = false;
         }
-        else if (ref == QLatin1Literal("refs/stash")) {
+        else if (ref == QStringLiteral("refs/stash")) {
             inlRef.mRefName = tr( "<recent stash>" );
             inlRef.mIsBranch = false;
             inlRef.mIsCurrent = true;
@@ -370,7 +369,7 @@ void HistoryModel::scanInlineReferences()
             inlRef.mIsTag = false;
             inlRef.mIsStash = true;
         }
-        else if ( detached && ref == QLatin1Literal("< DETACHED >") ) {
+        else if ( detached && ref == QStringLiteral("< DETACHED >") ) {
             inlRef.mRefName = tr("< DETACHED >");
             inlRef.mIsBranch = false;
             inlRef.mIsCurrent = false;

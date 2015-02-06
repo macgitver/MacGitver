@@ -31,7 +31,7 @@ namespace RM
         enum { StaticObjectType = SubmoduleObject };
 
     public:
-        Submodule(const Git::Repository& _repo, Repo* parent);
+        Submodule(const Git::Repository& repo, Repo* parent);
 
     public:
 

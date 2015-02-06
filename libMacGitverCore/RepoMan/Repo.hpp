@@ -53,7 +53,7 @@ namespace RM
         Repo(Internal::RepoPrivate& _d);
 
     public:
-        Repo(const Git::Repository& _repo, Base* _parent);
+        Repo(const Git::Repository& repo, Base* parent);
         ~Repo();
 
     public:

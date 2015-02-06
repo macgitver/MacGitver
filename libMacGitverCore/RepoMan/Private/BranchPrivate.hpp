@@ -33,7 +33,7 @@ namespace RM
         class BranchPrivate : public RefPrivate
         {
         public:
-            BranchPrivate(Branch* pub, const Git::Reference& _ref);
+            BranchPrivate(Branch* pub, const Git::Reference& ref);
 
         public:
             ObjTypes objType() const;
@@ -45,10 +45,10 @@ namespace RM
             bool inherits(ObjTypes type) const;
 
         public:
-            bool    hasUpstream;
-            int     aheadCount;
-            int     behindCount;
-            QString upstreamRefName;
+            bool    mHasUpstream;
+            int     mAheadCount;
+            int     mBehindCount;
+            QString mUpstreamRefName;
         };
 
     }

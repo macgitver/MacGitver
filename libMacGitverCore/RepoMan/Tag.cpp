@@ -69,7 +69,7 @@ namespace RM
     {
         dumper.addLine(QString(QLatin1String("Tag 0x%1 - %2"))
                        .arg(quintptr(mPub),0,16)
-                       .arg(name));
+                       .arg(mName));
     }
 
     QString TagPrivate::objectTypeName() const

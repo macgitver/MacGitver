@@ -33,7 +33,7 @@ namespace RM
         typedef QSet< Branch* > Set;
 
     public:
-        Branch(Base* _parent, const Git::Reference& _ref);
+        Branch(Base* parent, const Git::Reference& ref);
 
     public:
         bool hasUpstream() const;

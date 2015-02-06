@@ -48,31 +48,31 @@ namespace RM
     RefTypes Ref::type() const
     {
         RM_CD(Ref);
-        return d->type;
+        return d->mType;
     }
 
     QString Ref::name() const
     {
         RM_CD(Ref);
-        return d->name;
+        return d->mName;
     }
 
     QString Ref::fullName() const
     {
         RM_CD(Ref);
-        return d->fullQualifiedName;
+        return d->mFullQualifiedName;
     }
 
     Git::ObjectId Ref::id() const
     {
         RM_CD(Ref);
-        return d->id;
+        return d->mId;
     }
 
     QString Ref::symbolicTarget() const
     {
         RM_CD( Ref );
-        return d->symbolicTarget;
+        return d->mSymbolicTarget;
     }
 
     QString Ref::displaySha1() const
@@ -86,13 +86,13 @@ namespace RM
 
         //-- Internal::RefPrivate --8>
 
-        RefPrivate::RefPrivate(Ref* pub, RefTypes _type, const Git::Reference& _ref)
+        RefPrivate::RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref)
             : BasePrivate( pub )
-            , type( _type )
-            , fullQualifiedName( _ref.name() )
-            , name( _ref.nameAnalyzer().name() )
-            , id( _ref.objectId() )
-            , symbolicTarget( _ref.target() )
+            , mType( type )
+            , mFullQualifiedName( ref.name() )
+            , mName( ref.nameAnalyzer().name() )
+            , mId( ref.objectId() )
+            , mSymbolicTarget( ref.target() )
         {
         }
 
@@ -100,7 +100,7 @@ namespace RM
         {
             dumper.addLine(QString(QLatin1String("Ref 0x%1 [%2]"))
                            .arg(quintptr(mPub),0,16)
-                           .arg(name));
+                           .arg(mName));
         }
 
         ObjTypes RefPrivate::objType() const
@@ -110,7 +110,7 @@ namespace RM
 
         QString RefPrivate::displayName() const
         {
-            return name;
+            return mName;
         }
 
         QString RefPrivate::objectTypeName() const
@@ -152,18 +152,18 @@ namespace RM
             Repo* repo = repository();
             Git::Repository gr = repo->gitRepo();
 
-            Git::Reference ref = gr.reference(r, fullQualifiedName);
+            Git::Reference ref = gr.reference(r, mFullQualifiedName);
             Git::ObjectId objectId = ref.objectId();
             QString st = ref.target();
 
-            bool moved = objectId != id;
+            bool moved = objectId != mId;
             if ( moved ) {
-                id = objectId;
+                mId = objectId;
             }
 
-            bool relinked = st != symbolicTarget;
+            bool relinked = st != mSymbolicTarget;
             if ( relinked ) {
-                symbolicTarget = st;
+                mSymbolicTarget = st;
             }
 
             // send events after all values are set

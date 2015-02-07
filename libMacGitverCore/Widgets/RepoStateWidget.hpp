@@ -23,6 +23,7 @@ class QLabel;
 
 namespace RM
 {
+    class Ref;
     class Repo;
 }
 
@@ -39,6 +40,9 @@ private slots:
 private:
     void setupUi();
     void setRepoState();
+
+public slots:
+    void onUpdateHEAD(RM::Repo* ownerRepo, RM::Ref* ref);
 
 private:
     RM::Repo*       repo;

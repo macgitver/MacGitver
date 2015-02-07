@@ -22,6 +22,7 @@
 #include "libHeavenIcons/IconRef.hpp"
 #include "libHeavenIcons/Icon.hpp"
 
+#include "RepoMan/Ref.hpp"
 #include "RepoMan/RepoMan.hpp"
 #include "RepoMan/Repo.hpp"
 
@@ -62,6 +63,20 @@ void RepoStateWidget::setRepoState()
     txtState->hide();
 
     txtRepo->setText( repo ? repo->displayAlias() : QString() );
+    onUpdateHEAD( repo, NULL );
+}
+
+void RepoStateWidget::onUpdateHEAD(RM::Repo* ownerRepo, RM::Ref* ref)
+{
+    if ( ownerRepo != repo ) {
+        return;
+    }
+
+    if ( ref && ref->name() != QStringLiteral("HEAD") ) {
+        return;
+    }
+
+    // TODO: implement a HTML formatter to highlight HEAD
     txtBranch->setText( repo ? repo->branchDisplay() : QString() );
 }
 

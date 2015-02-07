@@ -168,7 +168,7 @@ namespace RM
 
             // send events after all values are set
 
-            if ( moved || relinked ) {
+            if ( (moved || relinked) && !repoEventsBlocked() ) {
                 Events::self()->refMoved(repo, pub<Ref>());
             }
 

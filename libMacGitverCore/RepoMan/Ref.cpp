@@ -168,12 +168,8 @@ namespace RM
 
             // send events after all values are set
 
-            if ( moved ) {
+            if ( moved || relinked ) {
                 Events::self()->refMoved(repo, pub<Ref>());
-            }
-
-            if ( relinked ) {
-                Events::self()->refLinkChanged( repo, pub<Ref>() );
             }
 
             return true;

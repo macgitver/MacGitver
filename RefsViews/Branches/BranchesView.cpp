@@ -145,9 +145,6 @@ void BranchesView::onRemoveRef()
                               .arg(branch->reference().shorthand())
                               .arg(r.errorText()) );
     }
-
-    // TODO: workaround to update the views
-    mData->mModel->rereadBranches();
 }
 
 bool BranchesView::checkRemoveRef( const Git::Reference& ref )

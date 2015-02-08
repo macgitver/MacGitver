@@ -61,7 +61,6 @@ public:
     QList< RefItem* > children;
 
     virtual QVariant data( int col, int role ) const;
-    virtual bool setData(Git::Result &result, const QVariant &value, int role, int col );
     virtual QString text() const;
 };
 
@@ -99,7 +98,6 @@ public:
     bool sameReference(const RM::Ref* ref) const;
 
     QVariant data( int col, int role ) const;
-    bool setData(Git::Result& result, const QVariant &value, int role, int col);
 
     Git::Reference reference() const
     {

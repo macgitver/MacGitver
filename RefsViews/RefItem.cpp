@@ -66,13 +66,6 @@ QVariant RefItem::data(int col, int role) const
     return QVariant();
 }
 
-bool RefItem::setData(Git::Result& result, const QVariant &value, int role, int col)
-{
-    Q_UNUSED( value );
-    Q_UNUSED( role );
-    Q_UNUSED( col );
-    return false;
-}
 
 QString RefItem::text() const
 {
@@ -199,17 +192,5 @@ QVariant RefBranch::data(int col, int role) const
     return QVariant();
 }
 
-bool RefBranch::setData(Git::Result& result, const QVariant &value, int role, int col)
-{
-    if ( col == 0 )
-    {
-        QString newName = value.toString();
-        if ( newName.isEmpty() || (newName == mRef.name()) )
-            return false;
 
-        mRef.rename( result, newName );
-        return result;
-    }
 
-    return false;
-}

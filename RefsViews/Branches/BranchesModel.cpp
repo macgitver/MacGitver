@@ -77,27 +77,10 @@ QVariant BranchesModel::data( const QModelIndex& index, int role ) const
     return item->data( index.column(), role );
 }
 
-bool BranchesModel::setData( const QModelIndex& index, const QVariant& value, int role )
-{
-    if ( !index.isValid() || (role != Qt::EditRole) )
-        return false;
 
-    RefItem *item = static_cast<RefItem *>( index.internalPointer() );
-    if ( !item )
-        return false;
 
-    Git::Result result;
-    if ( !item->setData( result, value, role, index.column() ) )
-    {
-        if( !result )
-            emit gitError( result );
 
-        return false;
-    }
 
-    emit dataChanged(index, index);
-    return true;
-}
 
 Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
 {

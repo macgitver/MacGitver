@@ -163,6 +163,8 @@ namespace RM
             Git::Repository gr = repo->gitRepo();
 
             Git::Reference ref = gr.reference(r, mFullQualifiedName);
+            if ( !ref.isValid() || ref.wasDestroyed() ) {
+                return false;
             }
 
             bool moved = setId( ref.objectId() ) || setSymbolicTarget( ref.target() );

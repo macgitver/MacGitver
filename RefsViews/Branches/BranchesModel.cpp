@@ -302,24 +302,18 @@ void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 
 void BranchesModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
 {
-    if ( !ref ) {
-        return;
-    }
-
     // TODO: This is an ugly workaround to find a matching RefItem!
     // We simply recursively search for invalid objects and delete them.
     QVector<RefItem*> invalidItems;
     findInvalidRefItems( invalidItems, mRoot, ref );
 
-    if ( !invalidItems.isEmpty() ) {
-        while ( !invalidItems.isEmpty() ) {
-            RefItem* ri = invalidItems.takeFirst();
-            QModelIndex idx = index( ri );
-            beginRemoveRows( idx.parent(), idx.row(), idx.row() );
-            // RefItem unlinks itself from its parent
-            delete ri;
-            endRemoveRows();
-        }
+    while ( !invalidItems.isEmpty() ) {
+        RefItem* ri = invalidItems.takeFirst();
+        QModelIndex idx = index( ri );
+        beginRemoveRows( idx.parent(), idx.row(), idx.row() );
+        // RefItem unlinks itself from its parent
+        delete ri;
+        endRemoveRows();
     }
 }
 

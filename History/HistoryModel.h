@@ -114,14 +114,8 @@ private slots:
     void beforeAppend();
     void afterAppend();
 
-    /**
-     * @internal
-     * @see RM::EventInterface
-     */
-    ///@{
     void onRefCreated(RM::Repo* repo, RM::Ref* ref);
     void onRefMoved(RM::Repo*repo, RM::Ref*ref);
-    ///@}
 
 private:
     InlineRefDisplays           mDisplays;

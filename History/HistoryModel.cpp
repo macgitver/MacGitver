@@ -228,6 +228,11 @@ void HistoryModel::afterAppend()
     endInsertRows();
 }
 
+/**
+ * @internal
+ * @see RM::EventInterface
+ */
+///@{
 
 void HistoryModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 {
@@ -238,6 +243,7 @@ void HistoryModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)
 {
     scanInlineReferences();
 }
+///@}
 
 void HistoryModel::ensurePopulated( int row )
 {

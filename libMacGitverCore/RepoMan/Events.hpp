@@ -58,7 +58,6 @@ namespace RM
         virtual void refCreated(Repo* repo, Ref* ref) = 0;
         virtual void refAboutToBeDeleted(Repo* repo, Ref* ref) = 0;
         virtual void refMoved(Repo* repo, Ref* ref) = 0;
-        virtual void refLinkChanged(Repo* repo, Ref* ref) = 0;
         virtual void refHeadDetached(Repo* repo, Ref* ref) = 0;
 
         virtual void tagCreated(Repo* repo, Tag* tag) = 0;
@@ -117,7 +116,6 @@ namespace RM
         void refCreated(Repo* repo, Ref* ref);
         void refAboutToBeDeleted(Repo* repo, Ref* ref);
         void refMoved(Repo* repo, Ref* ref);
-        void refLinkChanged(Repo* repo, Ref* ref);
         void refHeadDetached(Repo* repo, Ref* ref);
         void tagCreated(Repo* repo, Tag* tag);
         void tagAboutToBeDeleted(Repo* repo, Tag* tag);

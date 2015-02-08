@@ -156,11 +156,6 @@ void EventCatcher::refMoved(RM::Repo* repo, RM::Ref* ref)
     recordEvent(ecRefMoved, repo, ref);
 }
 
-void EventCatcher::refLinkChanged(RM::Repo* repo, RM::Ref* ref)
-{
-    recordEvent(ecRefLinkChanged, repo, ref);
-}
-
 void EventCatcher::refHeadDetached(RM::Repo* repo, RM::Ref* ref)
 {
     recordEvent(ecRefHeadDetached, repo, ref);

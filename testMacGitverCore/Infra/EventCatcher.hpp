@@ -121,7 +121,6 @@ protected:
     void refCreated(RM::Repo* repo, RM::Ref* ref);
     void refAboutToBeDeleted(RM::Repo* repo, RM::Ref* ref);
     void refMoved(RM::Repo* repo, RM::Ref* ref);
-    void refLinkChanged(RM::Repo* repo, RM::Ref* ref);
     void refHeadDetached(RM::Repo* repo, RM::Ref* ref);
     void tagCreated(RM::Repo* repo, RM::Tag* tag);
     void tagAboutToBeDeleted(RM::Repo* repo, RM::Tag* tag);

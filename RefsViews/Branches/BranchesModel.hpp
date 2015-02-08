@@ -71,6 +71,9 @@ private:
 private:
     BranchesViewData*   mData;
     RefItem*            mRoot;
+
+private:
+    static void findInvalidRefItems(QVector<RefItem*>& invalidItems, RefItem* item, const RM::Ref* ref);
 };
 
 #endif

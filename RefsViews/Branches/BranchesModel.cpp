@@ -265,6 +265,28 @@ void BranchesModel::rereadBranches()
 
 /**
  * @internal
+ *
+ * @brief   Workaround: temporary method to recursively destroy invalid tree items
+ *
+ * @param   item    the current item to check
+ *
+ * @param   ref     when given, the ref name will be compared with the RefItem
+ */
+void BranchesModel::findInvalidRefItems(QVector<RefItem*>& invalidItems, RefItem* item, const RM::Ref* ref )
+{
+    if ( !item->isValid() || item->sameReference( ref ) )
+    {
+        invalidItems << item;
+        return;
+    }
+
+    for ( int i = item->children.count() - 1; i > -1 ; i-- ) {
+        findInvalidRefItems( invalidItems, item->children[i], ref );
+    }
+}
+
+/**
+ * @internal
  * @see RM::EventInterface
  */
 ///@{

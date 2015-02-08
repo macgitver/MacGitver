@@ -54,8 +54,6 @@ public:
     virtual QVariant data( int col, int role ) const;
     virtual bool setData(Git::Result &result, const QVariant &value, int role, int col );
     virtual QString text() const;
-
-    virtual bool isEditable() const;
 };
 
 

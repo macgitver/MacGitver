@@ -112,9 +112,6 @@ Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
     if ( (t == RefItem::Reference) || (t == RefItem::Namespace) )
         result |= Qt::ItemIsSelectable;
 
-    if ( item->isEditable() )
-        result |= Qt::ItemIsEditable;
-
     return result;
 }
 

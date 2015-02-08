@@ -67,11 +67,6 @@ QString RefItem::text() const
     return QString();
 }
 
-bool RefItem::isEditable() const
-{
-    return false;
-}
-
 
 RefScope::RefScope(RefItem *p, const QString &t)
     : RefItem( p )

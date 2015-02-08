@@ -37,6 +37,7 @@ BranchesModel::BranchesModel( BranchesViewData* parent )
 {
     RM::RepoMan& rm = MacGitver::repoMan();
     connect( &rm, SIGNAL(refCreated(RM::Repo*,RM::Ref*)), this, SLOT(onRefCreated(RM::Repo*,RM::Ref*)) );
+    connect( &rm, SIGNAL(refAboutToBeDeleted(RM::Repo*,RM::Ref*)), this, SLOT(onRefDestroyed(RM::Repo*,RM::Ref*)) );
     connect( &rm, SIGNAL(refMoved(RM::Repo*,RM::Ref*)), this, SLOT(onRefMoved(RM::Repo*,RM::Ref*)) );
 }
 
@@ -297,6 +298,31 @@ void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
     Q_ASSERT( r );
 
     insertRef( true, gref );
+}
+
+void BranchesModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
+{
+    if ( !ref ) {
+        return;
+    }
+
+    qDebug( "Reference will be deleted %s", qUtf8Printable(ref->name()) );
+
+    // TODO: This is an ugly workaround to find a matching RefItem!
+    // We simply recursively search for invalid objects and delete them.
+    QVector<RefItem*> invalidItems;
+    findInvalidRefItems( invalidItems, mRoot, ref );
+
+    if ( !invalidItems.isEmpty() ) {
+        while ( !invalidItems.isEmpty() ) {
+            RefItem* ri = invalidItems.takeFirst();
+            QModelIndex idx = index( ri );
+            beginRemoveRows( idx.parent(), idx.row(), idx.row() );
+            // RefItem unlinks itself from its parent
+            delete ri;
+            endRemoveRows();
+        }
+    }
 }
 
 void BranchesModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)

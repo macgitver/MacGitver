@@ -58,6 +58,7 @@ signals:
 
 private slots:
     void onRefCreated(RM::Repo* repo, RM::Ref* ref);
+    void onRefDestroyed(RM::Repo* repo, RM::Ref* ref);
     void onRefMoved(RM::Repo* repo, RM::Ref* ref);
 
 private:

@@ -306,8 +306,6 @@ void BranchesModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
         return;
     }
 
-    qDebug( "Reference will be deleted %s", qUtf8Printable(ref->name()) );
-
     // TODO: This is an ugly workaround to find a matching RefItem!
     // We simply recursively search for invalid objects and delete them.
     QVector<RefItem*> invalidItems;

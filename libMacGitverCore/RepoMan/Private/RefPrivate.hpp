@@ -48,6 +48,10 @@ namespace RM
             QString             mName;
             Git::ObjectId       mId;
             QString             mSymbolicTarget;
+
+        private:
+            inline bool setId(const Git::ObjectId& id);
+            inline bool setSymbolicTarget(const QString& target);
         };
 
     }

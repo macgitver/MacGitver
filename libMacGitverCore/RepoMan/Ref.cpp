@@ -145,6 +145,16 @@ namespace RM
             BasePrivate::preTerminate();
         }
 
+        bool RefPrivate::setId(const Git::ObjectId& id)
+        {
+            return ( id != mId ) ? mId = id, true : false;
+        }
+
+        bool RefPrivate::setSymbolicTarget(const QString &target)
+        {
+            return ( target != mSymbolicTarget ) ? mSymbolicTarget = target, true : false;
+        }
+
         bool RefPrivate::refreshSelf()
         {
             Git::Result r;
@@ -153,22 +163,12 @@ namespace RM
             Git::Repository gr = repo->gitRepo();
 
             Git::Reference ref = gr.reference(r, mFullQualifiedName);
-            Git::ObjectId objectId = ref.objectId();
-            QString st = ref.target();
-
-            bool moved = objectId != mId;
-            if ( moved ) {
-                mId = objectId;
             }
 
-            bool relinked = st != mSymbolicTarget;
-            if ( relinked ) {
-                mSymbolicTarget = st;
-            }
-
-            // send events after all values are set
-
-            if ( (moved || relinked) && !repoEventsBlocked() ) {
+            bool moved = setId( ref.objectId() ) || setSymbolicTarget( ref.target() );
+            if ( moved && !repoEventsBlocked() )
+            {
+                // send events after all values are set
                 Events::self()->refMoved(repo, pub<Ref>());
             }
 

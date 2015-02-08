@@ -24,6 +24,11 @@
 #include <QList>
 #include <QVariant>
 
+namespace RM
+{
+    class Ref;
+}
+
 
 class RefItem
 {
@@ -46,6 +51,10 @@ public:
     RefItem();
     RefItem( RefItem* p );
     virtual ~RefItem();
+
+public:
+    virtual bool isValid() const;
+    virtual bool sameReference(const RM::Ref* ref) const { return false; }
 
 public:
     RefItem* parent;
@@ -84,6 +93,10 @@ class RefBranch : public RefItem
 {
 public:
     explicit RefBranch(RefItem* p, const Git::Reference &ref);
+
+public:
+    bool isValid() const;
+    bool sameReference(const RM::Ref* ref) const;
 
     QVariant data( int col, int role ) const;
     bool setData(Git::Result& result, const QVariant &value, int role, int col);

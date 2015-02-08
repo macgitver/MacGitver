@@ -22,6 +22,8 @@
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Result.hpp"
 
+#include "libMacGitverCore/RepoMan/Ref.hpp"
+
 #include <QFont>
 #include <QLinearGradient>
 #include <QFileIconProvider>
@@ -45,6 +47,16 @@ RefItem::~RefItem()
         parent->children.removeOne( this );
     }
     qDeleteAll( children );
+}
+
+/**
+ * @brief   Checks the validity of internal data.
+ *
+ * @return  the default implementation returns always true
+ */
+bool RefItem::isValid() const
+{
+    return true;
 }
 
 QVariant RefItem::data(int col, int role) const
@@ -124,6 +136,30 @@ RefBranch::RefBranch(RefItem *p, const Git::Reference &ref)
     : RefItem( p )
     , mRef( ref )
 {
+}
+
+/**
+ * @brief   Am I pointing to a valid Git::Reference object?
+ *
+ * @return  true, if the owned reference is valid; false otherwise
+ */
+bool RefBranch::isValid() const
+{
+    return (mRef.isValid() && !mRef.wasDestroyed());
+}
+
+/**
+ * @brief   Workaround to compare the reference name.
+ *
+ *          This method will be deleted when migrating to RM::RepoMan.
+ *
+ * @param   ref the RM::Ref to compare with
+ *
+ * @return  true when both names match; false otherwise
+ */
+bool RefBranch::sameReference(const RM::Ref* ref) const
+{
+    return ref && mRef.name() == ref->fullName();
 }
 
 QVariant RefBranch::data(int col, int role) const

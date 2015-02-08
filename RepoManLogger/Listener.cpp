@@ -102,10 +102,6 @@ void Listener::refMoved(RM::Repo* repo, RM::Ref* ref)
 {
 }
 
-void Listener::refLinkChanged(RM::Repo* repo, RM::Ref* ref)
-{
-}
-
 void Listener::refHeadDetached(RM::Repo* repo, RM::Ref* ref)
 {
 }

@@ -37,6 +37,7 @@ BranchesModel::BranchesModel( BranchesViewData* parent )
 {
     RM::RepoMan& rm = MacGitver::repoMan();
     connect( &rm, SIGNAL(refCreated(RM::Repo*,RM::Ref*)), this, SLOT(onRefCreated(RM::Repo*,RM::Ref*)) );
+    connect( &rm, SIGNAL(refMoved(RM::Repo*,RM::Ref*)), this, SLOT(onRefMoved(RM::Repo*,RM::Ref*)) );
 }
 
 BranchesModel::~BranchesModel()
@@ -294,6 +295,18 @@ void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
     Q_ASSERT( r );
 
     insertRef( true, gref );
+}
+
+void BranchesModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)
+{
+    Q_UNUSED( repo )
+    Q_UNUSED( ref )
+
+    // TODO: scan for changes in RefItems instead of performing a full update.
+    QVector<int> updateRoles;
+    updateRoles << Qt::DisplayRole << Qt::BackgroundRole
+                << Qt::FontRole << Qt::DecorationRole;
+    emit dataChanged( index(0, 0), index( rowCount( QModelIndex() ) - 1, 0 ), updateRoles );
 }
 ///@}
 

@@ -261,8 +261,8 @@ void BranchesView::attachedToContext(BlueSky::ViewContext* ctx, BlueSky::ViewCon
     delete mData;
     mData = myData;
 
-    connect( mData->mModel, SIGNAL(gitError(const Git::Result&))
-             , this, SLOT(actionFailed(const Git::Result&)) );
+    connect( mData->mModel, SIGNAL(gitError(const Git::Result&)),
+             this, SLOT(actionFailed(const Git::Result&)) );
 
     mTree->setModel( mData->mSortProxy );
     mTree->expandAll();

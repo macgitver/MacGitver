@@ -236,15 +236,15 @@ namespace RM
 
             if (HEAD.isValid()) {
                 if (HEAD.name() != QLatin1String("HEAD")) {
-                    return trUtf8("<b style=\"background-color: #FFB54F;"
+                    return tr("<b style=\"background-color: #FFB54F;"
                                   "\">%1</b>" ).arg(HEAD.name().mid(11));
                 }
                 else {
-                    return trUtf8("detached at <b>%1</b>" ).arg(HEAD.objectId().toString());
+                    return tr("detached at <b>%1</b>" ).arg(HEAD.objectId().toString());
                 }
             }
             else {
-                return trUtf8("<b style=\"color: red;\">Branch yet to be born</b>");
+                return tr("<b style=\"color: red;\">Branch yet to be born</b>");
             }
         }
         return tr("&lt;unknown&gt;");
@@ -642,10 +642,10 @@ namespace RM
             }
         }
 
-        if (rn.isBranch()) {
+        if ( rn.isBranch() ) {
             return new Branch( parent, ref );
         }
-        else if(rn.isTag()) {
+        else if( rn.isTag() ) {
             return new Tag( parent, ref );
         }
         else if ( rn.isHead() ) {

@@ -525,7 +525,9 @@ namespace RM
      */
     void BasePrivate::preTerminate()
     {
-        Events::self()->objectAboutToBeDeleted(repository(), mPub);
+        if ( !repoEventsBlocked() ) {
+            Events::self()->objectAboutToBeDeleted( repository(), mPub );
+        }
     }
 
     /**

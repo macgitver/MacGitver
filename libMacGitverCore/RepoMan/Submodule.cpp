@@ -62,8 +62,9 @@ namespace RM
 
     void SubmodulePrivate::postCreation()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->submoduleCreated(repository(), pub<Submodule>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->submoduleCreated( repo, pub<Submodule>() );
         }
 
         RepoPrivate::postCreation();
@@ -71,8 +72,9 @@ namespace RM
 
     void SubmodulePrivate::preTerminate()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->submoduleAboutToBeDeleted(repository(), pub<Submodule>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->submoduleAboutToBeDeleted( repo, pub<Submodule>() );
         }
 
         RepoPrivate::preTerminate();

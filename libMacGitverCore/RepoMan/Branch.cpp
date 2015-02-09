@@ -82,8 +82,9 @@ namespace RM
 
     void BranchPrivate::postCreation()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->branchCreated(repository(), pub<Branch>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->branchCreated( repo, pub<Branch>() );
         }
 
         RefPrivate::postCreation();
@@ -91,8 +92,9 @@ namespace RM
 
     void BranchPrivate::preTerminate()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->branchAboutToBeDeleted(repository(), pub<Branch>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->branchAboutToBeDeleted( repo, pub<Branch>() );
         }
 
         RefPrivate::preTerminate();

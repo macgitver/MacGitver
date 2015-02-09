@@ -78,7 +78,7 @@ namespace RM
             Repo* repository();
 
             void refresh();
-            bool repoEventsBlocked() const;
+            static bool repoEventsBlocked(const Repo* repo);
 
             Base* findRefParent(const QStringList& scopes, bool create);
             RefTreeNode* findRefTreeNode(const QStringList& scopes, bool create);

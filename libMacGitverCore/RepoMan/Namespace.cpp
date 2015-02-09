@@ -91,8 +91,9 @@ namespace RM
 
     void NamespacePrivate::postCreation()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->namespaceCreated(repository(), pub<Namespace>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->namespaceCreated( repo, pub<Namespace>() );
         }
 
         BasePrivate::postCreation();
@@ -100,8 +101,9 @@ namespace RM
 
     void NamespacePrivate::preTerminate()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->namespaceAboutToBeDeleted(repository(), pub<Namespace>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->namespaceAboutToBeDeleted( repo, pub<Namespace>() );
         }
 
         BasePrivate::preTerminate();

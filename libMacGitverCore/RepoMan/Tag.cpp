@@ -49,8 +49,9 @@ namespace RM
 
     void TagPrivate::postCreation()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->tagCreated(repository(), pub<Tag>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->tagCreated( repo, pub<Tag>() );
         }
 
         RefPrivate::postCreation();
@@ -58,8 +59,9 @@ namespace RM
 
     void TagPrivate::preTerminate()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->tagAboutToBeDeleted(repository(), pub<Tag>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->tagAboutToBeDeleted( repo, pub<Tag>() );
         }
 
         RefPrivate::preTerminate();

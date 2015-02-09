@@ -160,6 +160,7 @@ namespace RM
             Git::Result r;
 
             Repo* repo = repository();
+            Q_ASSERT( repo );
             Git::Repository gr = repo->gitRepo();
 
             Git::Reference ref = gr.reference(r, mFullQualifiedName);

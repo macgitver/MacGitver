@@ -236,16 +236,34 @@ void HistoryModel::afterAppend()
 ///@{
 void HistoryModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 {
+    Q_UNUSED( ref )
+
+    if ( !repo || (repo->gitLoadedRepo() != mRepo) ) {
+        return;
+    }
+
     scanInlineReferences();
 }
 
 void HistoryModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
 {
+    Q_UNUSED( ref )
+
+    if ( !repo || (repo->gitLoadedRepo() != mRepo) ) {
+        return;
+    }
+
     scanInlineReferences();
 }
 
 void HistoryModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)
 {
+    Q_UNUSED( ref );
+
+    if ( !repo || (repo->gitLoadedRepo() != mRepo) ) {
+        return;
+    }
+
     scanInlineReferences();
 }
 ///@}

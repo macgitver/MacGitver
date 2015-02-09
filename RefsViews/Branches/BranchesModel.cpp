@@ -246,6 +246,9 @@ void BranchesModel::findInvalidRefItems(QVector<RefItem*>& invalidItems, RefItem
 ///@{
 void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 {
+    if ( repo != mData->repository() ) {
+        return;
+    }
     Git::Result r;
     Git::Reference gref = repo->gitRepo().reference( r, ref->fullName() );
     Q_ASSERT( r );
@@ -255,6 +258,10 @@ void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 
 void BranchesModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
 {
+    if ( repo != mData->repository() ) {
+        return;
+    }
+
     // TODO: This is an ugly workaround to find a matching RefItem!
     // We simply recursively search for invalid objects and delete them.
     QVector<RefItem*> invalidItems;
@@ -272,8 +279,11 @@ void BranchesModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
 
 void BranchesModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)
 {
-    Q_UNUSED( repo )
     Q_UNUSED( ref )
+
+    if ( repo != mData->repository() ) {
+        return;
+    }
 
     // TODO: scan for changes in RefItems instead of performing a full update.
     QVector<int> updateRoles;

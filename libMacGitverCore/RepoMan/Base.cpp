@@ -512,8 +512,7 @@ namespace RM
     bool BasePrivate::repoEventsBlocked() const
     {
         const Repo* repo = mPub->repository();
-        Q_ASSERT(repo);
-        return repo->isInitializing();
+        return repo && repo->isInitializing();
     }
 
     /**

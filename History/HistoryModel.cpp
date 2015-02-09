@@ -234,7 +234,6 @@ void HistoryModel::afterAppend()
  * @see RM::EventInterface
  */
 ///@{
-
 void HistoryModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 {
     scanInlineReferences();

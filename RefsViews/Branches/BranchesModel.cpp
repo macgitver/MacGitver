@@ -23,11 +23,8 @@
 #include "libMacGitverCore/RepoMan/Ref.hpp"
 
 #include "libGitWrap/Result.hpp"
-#include "libGitWrap/Reference.hpp"
 
 #include "BranchesModel.hpp"
-
-#include "RefItem.hpp"
 
 
 BranchesModel::BranchesModel( BranchesViewData* parent )
@@ -77,11 +74,6 @@ QVariant BranchesModel::data( const QModelIndex& index, int role ) const
     RefItem* item = static_cast< RefItem* >( index.internalPointer() );
     return item->data( index.column(), role );
 }
-
-
-
-
-
 
 Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
 {
@@ -161,7 +153,7 @@ void BranchesModel::insertRef(bool notify, const Git::Reference &ref)
     QStringList parts = ref.shorthand().split( QChar( L'/' ) );
     if ( parts.count() == 1 )
     {
-        insertBranch( notify, scope, parts.last(), ref );
+        insertBranch( notify, scope, ref );
         return;
     }
 
@@ -188,48 +180,9 @@ void BranchesModel::insertRef(bool notify, const Git::Reference &ref)
 
     Q_ASSERT( ns );
 
-    insertBranch( notify, ns, parts.last(), ref );
+    insertBranch( notify, ns, ref );
 }
 
-RefItem* BranchesModel::insertNamespace(const bool notify, RefItem* parent, const QString& name)
-{
-    RefItem* next = NULL;
-    if ( notify ) {
-        int fr = parent->children.count();
-        beginInsertRows( index( parent ), fr, fr );
-    }
-
-    next = new RefNameSpace( parent, name );
-
-    if ( notify ) {
-        endInsertRows();
-    }
-    return next;
-}
-
-void BranchesModel::insertBranch(const bool notify, RefItem* parent, const QString& name, const Git::Reference& ref)
-{
-    if ( notify ) {
-        int row = parent->children.count();
-        beginInsertRows( index( parent ), row, row );
-    }
-
-    new RefBranch( parent, ref );
-
-    if (notify) {
-        endInsertRows();
-    }
-}
-
-RefScope* BranchesModel::scopeForRef(const Git::Reference& ref) const
-{
-    RefItem* scope = NULL;
-    if ( ref.isLocal() )        scope = mRoot->children[0];
-    else if ( ref.isRemote() )  scope = mRoot->children[1];
-    else scope = mRoot->children[2];
-
-    return static_cast< RefScope* >( scope );
-}
 
 void BranchesModel::rereadBranches()
 {

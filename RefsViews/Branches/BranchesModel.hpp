@@ -21,9 +21,11 @@
 
 #include <QAbstractItemModel>
 
+#include "libGitWrap/Reference.hpp"
 #include "libGitWrap/Repository.hpp"
 
 #include "Branches/BranchesViewData.hpp"
+#include "RefItem.hpp"
 
 namespace RM
 {
@@ -65,9 +67,45 @@ private:
     QModelIndex index(RefItem* item) const;
 
     void insertRef(bool notify, const Git::Reference& ref);
-    inline RefItem* insertNamespace(const bool notify, RefItem* parent, const QString& name);
-    inline void insertBranch(const bool notify, RefItem *ns, const QString &name, const Git::Reference& ref);
-    inline RefScope* scopeForRef( const Git::Reference& ref ) const;
+    inline RefItem* insertNamespace(const bool notify, RefItem* parent, const QString& name)
+    {
+        RefItem* next = NULL;
+        if ( notify ) {
+            int fr = parent->children.count();
+            beginInsertRows( index( parent ), fr, fr );
+        }
+
+        next = new RefNameSpace( parent, name );
+
+        if ( notify ) {
+            endInsertRows();
+        }
+        return next;
+    }
+
+    inline void insertBranch(const bool notify, RefItem *parent, const Git::Reference& ref)
+    {
+        if ( notify ) {
+            int row = parent->children.count();
+            beginInsertRows( index( parent ), row, row );
+        }
+
+        new RefBranch( parent, ref );
+
+        if (notify) {
+            endInsertRows();
+        }
+    }
+
+    inline RefScope* scopeForRef( const Git::Reference& ref ) const
+    {
+        RefItem* scope = NULL;
+        if ( ref.isLocal() )        scope = mRoot->children[0];
+        else if ( ref.isRemote() )  scope = mRoot->children[1];
+        else scope = mRoot->children[2];
+
+        return static_cast< RefScope* >( scope );
+    }
 
 private:
     BranchesViewData*   mData;

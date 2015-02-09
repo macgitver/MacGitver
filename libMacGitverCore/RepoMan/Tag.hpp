@@ -29,6 +29,8 @@ namespace RM
     {
     public:
         enum { StaticObjectType = TagObject };
+        typedef QVector< Tag* > List;
+        typedef QSet< Tag* > Set;
 
     public:
         Tag(Base* _parent, const Git::Reference& _ref);

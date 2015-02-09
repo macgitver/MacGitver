@@ -31,6 +31,9 @@ BranchesModel::BranchesModel( BranchesViewData* parent )
     : QAbstractItemModel( parent )
     , mData( parent )
     , mRoot( new RefItem )
+    , mHeaderLocal( NULL )
+    , mHeaderRemote( NULL )
+    , mHeaderTags( NULL )
 {
     RM::RepoMan& rm = MacGitver::repoMan();
     connect( &rm, SIGNAL(refCreated(RM::Repo*,RM::Ref*)), this, SLOT(onRefCreated(RM::Repo*,RM::Ref*)) );
@@ -191,9 +194,9 @@ void BranchesModel::rereadBranches()
     qDeleteAll( mRoot->children );
     mRoot->children.clear();
 
-    new RefScope( mRoot, tr( "Local" ) );
-    new RefScope( mRoot, tr( "Remote" ) );
-    new RefScope( mRoot, tr( "Tags" ) );
+    mHeaderLocal    = new RefScope( mRoot, tr( "Local" ) );
+    mHeaderRemote   = new RefScope( mRoot, tr( "Remote" ) );
+    mHeaderTags     = new RefScope( mRoot, tr( "Tags" ) );
 
     RM::Repo* repo = mData->repository();
 

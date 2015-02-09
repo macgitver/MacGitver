@@ -100,9 +100,9 @@ private:
     inline RefScope* scopeForRef( const Git::Reference& ref ) const
     {
         RefItem* scope = NULL;
-        if ( ref.isLocal() )        scope = mRoot->children[0];
-        else if ( ref.isRemote() )  scope = mRoot->children[1];
-        else scope = mRoot->children[2];
+        if ( ref.isLocal() )        scope = mHeaderLocal;
+        else if ( ref.isRemote() )  scope = mHeaderRemote;
+        else scope = mHeaderTags;
 
         return static_cast< RefScope* >( scope );
     }
@@ -110,6 +110,10 @@ private:
 private:
     BranchesViewData*   mData;
     RefItem*            mRoot;
+
+    RefScope*           mHeaderLocal;
+    RefScope*           mHeaderRemote;
+    RefScope*           mHeaderTags;
 
 private:
     static void findInvalidRefItems(QVector<RefItem*>& invalidItems, RefItem* item, const RM::Ref* ref);

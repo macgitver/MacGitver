@@ -147,16 +147,6 @@ namespace RM
             BasePrivate::preTerminate();
         }
 
-        bool RefPrivate::setId(const Git::ObjectId& id)
-        {
-            return ( id != mId ) ? mId = id, true : false;
-        }
-
-        bool RefPrivate::setSymbolicTarget(const QString &target)
-        {
-            return ( target != mSymbolicTarget ) ? mSymbolicTarget = target, true : false;
-        }
-
         bool RefPrivate::refreshSelf()
         {
             Git::Result r;

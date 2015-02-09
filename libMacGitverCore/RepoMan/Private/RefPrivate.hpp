@@ -54,6 +54,20 @@ namespace RM
             inline bool setSymbolicTarget(const QString& target);
         };
 
+
+        // -- INLINED PRIVATE METHODS BEGIN --8>
+
+        bool RefPrivate::setId(const Git::ObjectId& id)
+        {
+            return ( id != mId ) ? mId = id, true : false;
+        }
+
+        bool RefPrivate::setSymbolicTarget(const QString &target)
+        {
+            return ( target != mSymbolicTarget ) ? mSymbolicTarget = target, true : false;
+        }
+
+        // <8-- INLINED PRIVATE METHODS END --
     }
 
 }

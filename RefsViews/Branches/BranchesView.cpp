@@ -24,7 +24,6 @@
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
 #include "RefItem.hpp"
-#include "RefsSortProxy.hpp"
 #include "RefRenameDialog.hpp"
 
 #include "Branches/BranchesModel.hpp"
@@ -69,13 +68,13 @@ QSize BranchesView::sizeHint() const
     return QSize( 120, 100 );
 }
 
-void BranchesView::showContextMenu(const QModelIndex &index, const QPoint &globalPos)
+void BranchesView::showContextMenu(const QModelIndex& index, const QPoint& globalPos)
 {
-    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( index );
-    if ( !srcIndex.isValid() )
+    if ( !index.isValid() ) {
         return;
+    }
 
-    const RefItem *item = static_cast<const RefItem*>(srcIndex.internalPointer());
+    const RefItem *item = static_cast<const RefItem*>(index.internalPointer());
 
     Heaven::Menu* menu = 0;
     if ( item && (item->data(0, RefItem::TypeRole) == RefItem::Reference) )
@@ -94,12 +93,14 @@ void BranchesView::onCheckoutRef()
     if ( !action )
         return;
 
-    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
+    QModelIndex srcIndex = mTree->currentIndex();
     if ( !srcIndex.isValid() )
         return;
 
     const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
-    if ( !branch ) return;
+    if ( !branch ) {
+        return;
+    }
 
     Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( branch->reference() );
     op->setMode( Git::CheckoutSafe );
@@ -122,11 +123,13 @@ void BranchesView::onRemoveRef()
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action ) return;
 
-    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
+    QModelIndex srcIndex = mTree->currentIndex();
     if ( !srcIndex.isValid() ) return;
 
     const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
-    if ( !branch ) return;
+    if ( !branch ) {
+        return;
+    }
 
     if ( !askToGoOn( trUtf8("Delete reference \'%1\'?").arg(branch->reference().shorthand()) ) )
         return;
@@ -203,8 +206,10 @@ void BranchesView::onRenameRef()
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action ) return;
 
-    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
-    if ( !srcIndex.isValid() ) return;
+    QModelIndex srcIndex = mTree->currentIndex();
+    if ( !srcIndex.isValid() ) {
+        return;
+    }
 
     RefRenameDialog* dlg = new RefRenameDialog;
     dlg->init( static_cast<RefBranch*>(srcIndex.internalPointer()) );
@@ -258,7 +263,7 @@ void BranchesView::attachedToContext(BlueSky::ViewContext* ctx, BlueSky::ViewCon
     connect( mData->mModel, SIGNAL(gitError(const Git::Result&)),
              this, SLOT(actionFailed(const Git::Result&)) );
 
-    mTree->setModel( mData->mSortProxy );
+    mTree->setModel( mData->mModel );
     mTree->expandAll();
 }
 

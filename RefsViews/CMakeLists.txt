@@ -14,7 +14,6 @@ SET( SRC_FILES
 
     RefItem.cpp
     RefRenameDialog.cpp
-    RefsSortProxy.cpp
     RefsViewDelegate.cpp
 
     Branches/BranchesModel.cpp
@@ -28,7 +27,6 @@ SET( HDR_FILES
 
     RefItem.hpp
     RefRenameDialog.hpp
-    RefsSortProxy.hpp
     RefsViewDelegate.h
 
     Branches/BranchesModel.hpp

@@ -24,13 +24,11 @@
 #include "libGitWrap/Repository.hpp"
 
 class BranchesModel;
-class RefsSortProxy;
 
 namespace RM
 {
     class Repo;
 }
-
 
 class BranchesViewData : public BlueSky::ViewContextData
 {
@@ -47,7 +45,6 @@ public:
 
 public:
     BranchesModel*  mModel;
-    RefsSortProxy*  mSortProxy;
 };
 
 #endif

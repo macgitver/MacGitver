@@ -12,10 +12,10 @@ SET( SRC_FILES
 
     RefsViewsModule.cpp
 
-    RefItem.cpp
     RefRenameDialog.cpp
     RefsViewDelegate.cpp
 
+    Branches/RefItem.cpp
     Branches/BranchesModel.cpp
     Branches/BranchesView.cpp
     Branches/BranchesViewData.cpp
@@ -25,10 +25,10 @@ SET( HDR_FILES
 
     RefsViewsModule.h
 
-    RefItem.hpp
     RefRenameDialog.hpp
     RefsViewDelegate.h
 
+    Branches/RefItem.hpp
     Branches/BranchesModel.hpp
     Branches/BranchesView.hpp
     Branches/BranchesViewData.hpp

@@ -1,6 +1,6 @@
 #include "RefsViewDelegate.h"
 
-#include "RefItem.hpp"
+#include "Branches/RefItem.hpp"
 
 #include <QPainter>
 

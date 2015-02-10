@@ -18,7 +18,7 @@
 
 #include "RefRenameDialog.hpp"
 
-#include "RefItem.hpp"
+#include "Branches/RefItem.hpp"
 
 #include "libGitWrap/Reference.hpp"
 

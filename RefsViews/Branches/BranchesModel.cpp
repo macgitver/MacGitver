@@ -129,44 +129,17 @@ bool BranchesModel::hasChildren( const QModelIndex& parent ) const
     return parentItem->children.count() > 0;
 }
 
-void BranchesModel::insertRef(bool notify, const Git::Reference &ref)
+QModelIndex BranchesModel::index(RefItem* item) const
 {
-    RefScope* scope = scopeForRef( ref );
-    Q_ASSERT( scope );
-
-    QStringList parts = ref.shorthand().split( QChar( L'/' ) );
-    if ( parts.count() == 1 )
+    if ( !item || (item == mRoot) )
     {
-        insertBranch( notify, scope, ref );
-        return;
+        return QModelIndex();
     }
 
-    RefItem* ns = scope;
-    for( int j = 0; j < parts.count() - 1; j++ )
-    {
-        RefItem* next = NULL;
-        QString partName = parts[ j ];
-        foreach( RefItem* nsChild, ns->children )
-        {
-            if( nsChild->text() == partName )
-            {
-                next = nsChild;
-                break;
-            }
-        }
-
-        if( !next )
-        {
-            next = insertNamespace( notify, ns, partName );
-        }
-        ns = next;
-    }
-
-    Q_ASSERT( ns );
-
-    insertBranch( notify, ns, ref );
+    RefItem* parent = item->parent ? item->parent : mRoot;
+    int row = parent->children.indexOf( item );
+    return createIndex( row, 0, item );
 }
-
 
 void BranchesModel::rereadBranches()
 {
@@ -223,11 +196,88 @@ void BranchesModel::findInvalidRefItems(QVector<RefItem*>& invalidItems, RefItem
     }
 }
 
+void BranchesModel::insertRef(bool notify, const Git::Reference &ref)
+{
+    RefScope* scope = scopeForRef( ref );
+    Q_ASSERT( scope );
+
+    QStringList parts = ref.shorthand().split( QChar( L'/' ) );
+    if ( parts.count() == 1 )
+    {
+        insertBranch( notify, scope, ref );
+        return;
+    }
+
+    RefItem* ns = scope;
+    for( int j = 0; j < parts.count() - 1; j++ )
+    {
+        RefItem* next = NULL;
+        QString partName = parts[ j ];
+        foreach( RefItem* nsChild, ns->children )
+        {
+            if( nsChild->text() == partName )
+            {
+                next = nsChild;
+                break;
+            }
+        }
+
+        if( !next )
+        {
+            next = insertNamespace( notify, ns, partName );
+        }
+        ns = next;
+    }
+
+    Q_ASSERT( ns );
+
+    insertBranch( notify, ns, ref );
+}
+
+RefItem* BranchesModel::insertNamespace(const bool notify, RefItem* parent, const QString& name)
+{
+    RefItem* next = NULL;
+    if ( notify ) {
+        int fr = parent->children.count();
+        beginInsertRows( index( parent ), fr, fr );
+    }
+
+    next = new RefNameSpace( parent, name );
+
+    if ( notify ) {
+        endInsertRows();
+    }
+    return next;
+}
+
+void BranchesModel::insertBranch(const bool notify, RefItem *parent, const Git::Reference& ref)
+{
+    if ( notify ) {
+        int row = parent->children.count();
+        beginInsertRows( index( parent ), row, row );
+    }
+
+    new RefBranch( parent, ref );
+
+    if (notify) {
+        endInsertRows();
+    }
+}
+
+RefScope* BranchesModel::scopeForRef( const Git::Reference& ref ) const
+{
+    RefItem* scope = NULL;
+    if ( ref.isLocal() )        scope = mHeaderLocal;
+    else if ( ref.isRemote() )  scope = mHeaderRemote;
+    else scope = mHeaderTags;
+
+    return static_cast< RefScope* >( scope );
+}
+
 /**
  * @internal
  * @see RM::EventInterface
  */
-///@{
 void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 {
     if ( repo != mData->repository() ) {
@@ -274,17 +324,4 @@ void BranchesModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)
     updateRoles << Qt::DisplayRole << Qt::BackgroundRole
                 << Qt::FontRole << Qt::DecorationRole;
     emit dataChanged( index(0, 0), index( rowCount( QModelIndex() ) - 1, 0 ), updateRoles );
-}
-///@}
-
-QModelIndex BranchesModel::index(RefItem* item) const
-{
-    if ( !item || (item == mRoot) )
-    {
-        return QModelIndex();
-    }
-
-    RefItem* parent = item->parent ? item->parent : mRoot;
-    int row = parent->children.indexOf( item );
-    return createIndex( row, 0, item );
 }

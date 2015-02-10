@@ -58,6 +58,17 @@ BranchesView::BranchesView()
     setContextProvider( "RepoTreeView" );
 }
 
+RefItem* BranchesView::indexToItem(const QModelIndex& index) const
+{
+    if (mData) {
+        if (mData->mModel) {
+            return mData->mModel->indexToItem(index);
+        }
+    }
+
+    return NULL;
+}
+
 BlueSky::ViewContextData* BranchesView::createContextData() const
 {
     return new BranchesViewData;
@@ -70,15 +81,14 @@ QSize BranchesView::sizeHint() const
 
 void BranchesView::showContextMenu(const QModelIndex& index, const QPoint& globalPos)
 {
-    if ( !index.isValid() ) {
+    const RefItem* item = indexToItem(index);
+
+    if (!item) {
         return;
     }
 
-    const RefItem *item = static_cast<const RefItem*>(index.internalPointer());
-
     Heaven::Menu* menu = 0;
-    if ( item && (item->data(0, RefItem::TypeRole) == RefItem::Reference) )
-    {
+    if (item->data(0, RefItem::TypeRole) == RefItem::Reference) {
         menu = menuCtxMenuRefsView;
         //menu->setActivationContext( item );
     }
@@ -90,17 +100,14 @@ void BranchesView::showContextMenu(const QModelIndex& index, const QPoint& globa
 void BranchesView::onCheckoutRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action )
+    if ( !action ) // FIXME: What is this TEST good for?
         return;
 
-    QModelIndex srcIndex = mTree->currentIndex();
-    if ( !srcIndex.isValid() )
-        return;
-
-    const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
-    if ( !branch ) {
+    const RefItem* item = indexToItem(mTree->currentIndex());
+    if (!item || item->data(0, RefItem::TypeRole) != RefItem::Reference ) {
         return;
     }
+    const RefBranch* branch = static_cast<const RefBranch*>(item);
 
     Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( branch->reference() );
     op->setMode( Git::CheckoutSafe );
@@ -121,15 +128,13 @@ void BranchesView::onCheckoutRef()
 void BranchesView::onRemoveRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action ) return;
+    if ( !action ) return; // FIXME: What is this TEST good for?
 
-    QModelIndex srcIndex = mTree->currentIndex();
-    if ( !srcIndex.isValid() ) return;
-
-    const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
-    if ( !branch ) {
+    const RefItem* item = indexToItem(mTree->currentIndex());
+    if (!item || item->data(0, RefItem::TypeRole) != RefItem::Reference ) {
         return;
     }
+    const RefBranch* branch = static_cast<const RefBranch*>(item);
 
     if ( !askToGoOn( trUtf8("Delete reference \'%1\'?").arg(branch->reference().shorthand()) ) )
         return;
@@ -194,6 +199,7 @@ bool BranchesView::checkRemoveRef( const Git::Reference& ref )
 
         bool goOn = askToGoOn( trUtf8( "You are about to remove the last reference '%1'."
                                        "\nThis will move all commits in this branch to the \"lost-found\" area." )
+                               // What is a LOST-FOUND area???
                                .arg( ref.shorthand() ) );
         if ( !goOn ) return false;
     }
@@ -204,15 +210,16 @@ bool BranchesView::checkRemoveRef( const Git::Reference& ref )
 void BranchesView::onRenameRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action ) return;
+    if ( !action ) return; // FIXME: What is this TEST good for?
 
-    QModelIndex srcIndex = mTree->currentIndex();
-    if ( !srcIndex.isValid() ) {
+    RefItem* item = indexToItem(mTree->currentIndex());
+    if (!item || item->data(0, RefItem::TypeRole) != RefItem::Reference ) {
         return;
     }
+    RefBranch* branch = static_cast<RefBranch*>(item);
 
     RefRenameDialog* dlg = new RefRenameDialog;
-    dlg->init( static_cast<RefBranch*>(srcIndex.internalPointer()) );
+    dlg->init(branch);
 
     if ( dlg->exec() != QDialog::Accepted )
     {

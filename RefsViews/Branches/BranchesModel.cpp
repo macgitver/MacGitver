@@ -46,19 +46,19 @@ BranchesModel::~BranchesModel()
     delete mRoot;
 }
 
+RefItem* BranchesModel::indexToItem(const QModelIndex& index, RefItem* defaultItem) const
+{
+    return index.isValid() ? static_cast< RefItem* >( index.internalPointer() ) : defaultItem;
+}
+
 int BranchesModel::rowCount( const QModelIndex& parent ) const
 {
-    RefItem* parentItem;
     if( parent.column() > 0 )
     {
         return 0;
     }
 
-    if( !parent.isValid() )
-        parentItem = mRoot;
-    else
-        parentItem = static_cast< RefItem* >( parent.internalPointer() );
-
+    RefItem* parentItem = indexToItem(parent, mRoot);
     return parentItem->children.count();
 }
 
@@ -69,13 +69,8 @@ int BranchesModel::columnCount( const QModelIndex& parent ) const
 
 QVariant BranchesModel::data( const QModelIndex& index, int role ) const
 {
-    if( !index.isValid() )
-    {
-        return QVariant();
-    }
-
-    RefItem* item = static_cast< RefItem* >( index.internalPointer() );
-    return item->data( index.column(), role );
+    RefItem* item = indexToItem(index);
+    return item ? item->data( index.column(), role ) : QVariant();
 }
 
 Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
@@ -84,7 +79,7 @@ Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
         return Qt::NoItemFlags;
 
     Qt::ItemFlags result = Qt::ItemIsEnabled;
-    const RefItem *item = static_cast<const RefItem *>( index.internalPointer() );
+    const RefItem *item = indexToItem(index);
 
     RefItem::ItemType t = static_cast<RefItem::ItemType>(
                 item->data( 0, RefItem::TypeRole ).toInt() );
@@ -101,18 +96,10 @@ QModelIndex BranchesModel::index( int row, int column, const QModelIndex& parent
         return QModelIndex();
     }
 
-    RefItem* parentItem;
-
-    if( !parent.isValid() )
-        parentItem = mRoot;
-    else
-        parentItem = static_cast< RefItem* >( parent.internalPointer() );
-
+    RefItem* parentItem = indexToItem(parent, mRoot);
     RefItem* childItem = parentItem->children.at( row );
-    if( childItem )
-        return createIndex( row, column, childItem );
-    else
-        return QModelIndex();
+
+    return childItem ? createIndex( row, column, childItem ) : QModelIndex();
 }
 
 QModelIndex BranchesModel::parent( const QModelIndex& child ) const
@@ -122,7 +109,7 @@ QModelIndex BranchesModel::parent( const QModelIndex& child ) const
         return QModelIndex();
     }
 
-    RefItem* childItem = static_cast< RefItem* >( child.internalPointer() );
+    RefItem* childItem = indexToItem(child);
     RefItem* parentItem = childItem->parent;
 
     if( parentItem == mRoot )
@@ -134,17 +121,12 @@ QModelIndex BranchesModel::parent( const QModelIndex& child ) const
 
 bool BranchesModel::hasChildren( const QModelIndex& parent ) const
 {
-    RefItem* parentItem;
     if( parent.column() > 0 )
     {
         return 0;
     }
 
-    if( !parent.isValid() )
-        parentItem = mRoot;
-    else
-        parentItem = static_cast< RefItem* >( parent.internalPointer() );
-
+    RefItem* parentItem = indexToItem(parent, mRoot);
     return parentItem->children.count() > 0;
 }
 

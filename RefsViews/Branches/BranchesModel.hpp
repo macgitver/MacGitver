@@ -44,6 +44,9 @@ public:
     ~BranchesModel();
 
 public:
+    RefItem* indexToItem(const QModelIndex& index, RefItem* defaultItem = NULL) const;
+
+public:
     int rowCount( const QModelIndex& parent ) const;
     int columnCount( const QModelIndex& parent ) const;
     QVariant data( const QModelIndex& index, int role ) const;

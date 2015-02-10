@@ -34,7 +34,7 @@ namespace Git
     class Result;
 }
 
-
+class RefItem;
 class BranchesViewData;
 
 class BranchesView : public BlueSky::ContextView, private BranchesViewActions
@@ -66,6 +66,8 @@ private:
 
     bool askToGoOn(const QString& message);
     inline bool checkRemoveRef(const Git::Reference &ref);
+
+    RefItem* indexToItem(const QModelIndex& index) const;
 
 private:
     RefsViewDelegate    mRefDelegate;

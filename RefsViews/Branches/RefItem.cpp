@@ -66,7 +66,6 @@ QVariant RefItem::data(int col, int role) const
     return QVariant();
 }
 
-
 QString RefItem::text() const
 {
     return QString();
@@ -79,6 +78,11 @@ RefScope::RefScope(RefItem *p, const QString &t)
 {
 }
 
+RefItem::ItemType RefScope::type() const
+{
+    return Scope;
+}
+
 QVariant RefScope::data(int col, int role) const
 {
     switch( role )
@@ -89,9 +93,6 @@ QVariant RefScope::data(int col, int role) const
     case RefItem::RowBgRole:
         return QColor(216, 233, 255);
     }
-
-    if ( role == RefItem::TypeRole )
-        return RefItem::Scope;
 
     return QVariant();
 }
@@ -107,6 +108,11 @@ RefNameSpace::RefNameSpace(RefItem *p, const QString &t)
 {
 }
 
+RefItem::ItemType RefNameSpace::type() const
+{
+    return Namespace;
+}
+
 QVariant RefNameSpace::data(int col, int role) const
 {
     switch( role )
@@ -117,9 +123,6 @@ QVariant RefNameSpace::data(int col, int role) const
     case Qt::DecorationRole:
         return QFileIconProvider().icon( QFileIconProvider::Folder );
     }
-
-    if ( role == RefItem::TypeRole )
-        return RefItem::Namespace;
 
     return QVariant();
 }
@@ -155,6 +158,11 @@ bool RefBranch::sameReference(const RM::Ref* ref) const
     return ref && mRef.name() == ref->fullName();
 }
 
+RefItem::ItemType RefBranch::type() const
+{
+    return Branch;
+}
+
 QVariant RefBranch::data(int col, int role) const
 {
     if ( role == Qt::DisplayRole )
@@ -183,14 +191,13 @@ QVariant RefBranch::data(int col, int role) const
         }
     }
 
-    else if ( role == RefItem::TypeRole )
-        return RefItem::Reference;
-
     else if ( role == Qt::EditRole)
         return mRef.name();
 
     return QVariant();
 }
 
-
-
+RefItem::ItemType RefRoot::type() const
+{
+    return Root;
+}

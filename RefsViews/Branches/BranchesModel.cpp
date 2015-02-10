@@ -81,8 +81,7 @@ Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
     Qt::ItemFlags result = Qt::ItemIsEnabled;
     const RefItem *item = indexToItem(index);
 
-    RefItem::ItemType t = static_cast<RefItem::ItemType>(
-                item->data( 0, RefItem::TypeRole ).toInt() );
+    RefItem::ItemType t = item->type();
     if ( (t == RefItem::Reference) || (t == RefItem::Namespace) )
         result |= Qt::ItemIsSelectable;
 

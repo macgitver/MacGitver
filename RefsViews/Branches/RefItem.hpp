@@ -16,8 +16,7 @@
  *
  */
 
-#ifndef REF_ITEM_HPP
-#define REF_ITEM_HPP
+#pragma once
 
 #include "libGitWrap/Reference.hpp"
 
@@ -35,7 +34,6 @@ class RefItem
 public:
     enum Role
     {
-        TypeRole = Qt::UserRole,
         RowBgRole = Qt::UserRole + 1,
         RowBgGradientRole = Qt::UserRole + 2
     };
@@ -45,7 +43,8 @@ public:
         Root = 1,
         Scope,
         Namespace,
-        Reference
+        Reference,
+        Branch = Reference
     };
 
 public:
@@ -55,6 +54,7 @@ public:
 
 public:
     virtual bool isValid() const;
+    virtual ItemType type() const = 0;
     virtual bool sameReference(const RM::Ref* ref) const { return false; }
 
 public:
@@ -82,6 +82,7 @@ public:
 protected:
     virtual QVariant data( int col, int role ) const;
     QString text() const;
+    ItemType type() const;
 
 public:
     QString mText;
@@ -94,6 +95,7 @@ public:
     RefNameSpace( RefItem* p, const QString& t );
 
     QVariant data( int col, int role ) const;
+    ItemType type() const;
 };
 
 
@@ -107,6 +109,7 @@ public:
     bool sameReference(const RM::Ref* ref) const;
 
     QVariant data( int col, int role ) const;
+    ItemType type() const;
 
     Git::Reference reference() const
     {
@@ -116,5 +119,3 @@ public:
 private:
     Git::Reference  mRef;
 };
-
-#endif // REF_ITEM_HPP

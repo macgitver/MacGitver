@@ -88,7 +88,7 @@ void BranchesView::showContextMenu(const QModelIndex& index, const QPoint& globa
     }
 
     Heaven::Menu* menu = 0;
-    if (item->data(0, RefItem::TypeRole) == RefItem::Reference) {
+    if (item->type() == RefItem::Branch) {
         menu = menuCtxMenuRefsView;
         //menu->setActivationContext( item );
     }
@@ -104,7 +104,7 @@ void BranchesView::onCheckoutRef()
         return;
 
     const RefItem* item = indexToItem(mTree->currentIndex());
-    if (!item || item->data(0, RefItem::TypeRole) != RefItem::Reference ) {
+    if (!item || item->type() != RefItem::Branch ) {
         return;
     }
     const RefBranch* branch = static_cast<const RefBranch*>(item);
@@ -131,7 +131,7 @@ void BranchesView::onRemoveRef()
     if ( !action ) return; // FIXME: What is this TEST good for?
 
     const RefItem* item = indexToItem(mTree->currentIndex());
-    if (!item || item->data(0, RefItem::TypeRole) != RefItem::Reference ) {
+    if (!item || item->type() != RefItem::Branch ) {
         return;
     }
     const RefBranch* branch = static_cast<const RefBranch*>(item);
@@ -213,7 +213,7 @@ void BranchesView::onRenameRef()
     if ( !action ) return; // FIXME: What is this TEST good for?
 
     RefItem* item = indexToItem(mTree->currentIndex());
-    if (!item || item->data(0, RefItem::TypeRole) != RefItem::Reference ) {
+    if (!item || item->type() != RefItem::Branch ) {
         return;
     }
     RefBranch* branch = static_cast<RefBranch*>(item);

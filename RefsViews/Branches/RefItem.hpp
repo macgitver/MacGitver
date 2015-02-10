@@ -61,7 +61,7 @@ public:
     RefItem* parent;
     QList< RefItem* > children;
 
-    virtual QVariant data( int col, int role ) const;
+    virtual QVariant data(int role) const;
     virtual QString text() const;
 };
 
@@ -80,7 +80,7 @@ public:
     RefScope( RefItem* p, const QString& t );
 
 protected:
-    virtual QVariant data( int col, int role ) const;
+    virtual QVariant data(int role) const;
     QString text() const;
     ItemType type() const;
 
@@ -94,7 +94,7 @@ class RefNameSpace : public RefScope
 public:
     RefNameSpace( RefItem* p, const QString& t );
 
-    QVariant data( int col, int role ) const;
+    QVariant data(int role) const;
     ItemType type() const;
 };
 
@@ -108,7 +108,7 @@ public:
     bool isValid() const;
     bool sameReference(const RM::Ref* ref) const;
 
-    QVariant data( int col, int role ) const;
+    QVariant data(int role) const;
     ItemType type() const;
 
     Git::Reference reference() const

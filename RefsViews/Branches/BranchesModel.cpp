@@ -70,7 +70,10 @@ int BranchesModel::columnCount( const QModelIndex& parent ) const
 QVariant BranchesModel::data( const QModelIndex& index, int role ) const
 {
     RefItem* item = indexToItem(index);
-    return item ? item->data( index.column(), role ) : QVariant();
+    if (index.column() != 0) {
+        return QVariant();
+    }
+    return item ? item->data(role) : QVariant();
 }
 
 Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const

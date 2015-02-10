@@ -59,9 +59,8 @@ bool RefItem::isValid() const
     return true;
 }
 
-QVariant RefItem::data(int col, int role) const
+QVariant RefItem::data(int role) const
 {
-    Q_UNUSED( col )
     Q_UNUSED( role )
     return QVariant();
 }
@@ -83,7 +82,7 @@ RefItem::ItemType RefScope::type() const
     return Scope;
 }
 
-QVariant RefScope::data(int col, int role) const
+QVariant RefScope::data(int role) const
 {
     switch( role )
     {
@@ -113,7 +112,7 @@ RefItem::ItemType RefNameSpace::type() const
     return Namespace;
 }
 
-QVariant RefNameSpace::data(int col, int role) const
+QVariant RefNameSpace::data(int role) const
 {
     switch( role )
     {
@@ -163,7 +162,7 @@ RefItem::ItemType RefBranch::type() const
     return Branch;
 }
 
-QVariant RefBranch::data(int col, int role) const
+QVariant RefBranch::data(int role) const
 {
     if ( role == Qt::DisplayRole )
         return mRef.shorthand().section( QChar(L'/'), -1 );

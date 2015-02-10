@@ -30,7 +30,7 @@
 BranchesModel::BranchesModel( BranchesViewData* parent )
     : QAbstractItemModel( parent )
     , mData( parent )
-    , mRoot( new RefItem )
+    , mRoot(new RefRoot)
     , mHeaderLocal( NULL )
     , mHeaderRemote( NULL )
     , mHeaderTags( NULL )

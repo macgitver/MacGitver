@@ -42,7 +42,8 @@ public:
 
     enum ItemType
     {
-        Scope = 1,
+        Root = 1,
+        Scope,
         Namespace,
         Reference
     };
@@ -64,6 +65,14 @@ public:
     virtual QString text() const;
 };
 
+class RefRoot : public RefItem
+{
+public:
+    RefRoot() {}
+
+public:
+    ItemType type() const;
+};
 
 class RefScope : public RefItem
 {

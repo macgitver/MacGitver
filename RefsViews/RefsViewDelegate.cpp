@@ -45,3 +45,14 @@ void RefsViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     QStyledItemDelegate::paint( painter, option, index );
 }
 
+
+QSize RefsViewDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex& index) const
+{
+    QSize s = QStyledItemDelegate::sizeHint(option, index);
+
+    if (!index.parent().isValid()) {
+        s.setHeight(25);
+    }
+
+    return s;
+}

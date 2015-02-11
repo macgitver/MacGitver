@@ -33,10 +33,8 @@ class RefRenameDialog
 {
     Q_OBJECT
 public:
-    RefRenameDialog();
-    ~RefRenameDialog();
+    RefRenameDialog(RefBranch* ref);
 
-    void init(RefBranch *refInfo);
     const Git::Result &gitResult() const;
 
 private slots:
@@ -45,9 +43,6 @@ private slots:
 private:
     RefBranch*              mRefInfo;
     Git::Result             mGitResult;
-
-private:
-    void updateValues();
 };
 
 #endif // REF_RENAME_DIALOG_HPP

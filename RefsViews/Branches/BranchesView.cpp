@@ -22,6 +22,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Branch.hpp"
 
 #include "RefItem.hpp"
 #include "RefRenameDialog.hpp"
@@ -103,24 +104,28 @@ void BranchesView::onCheckoutRef()
     if ( !action ) // FIXME: What is this TEST good for?
         return;
 
-    const RefItem* item = indexToItem(mTree->currentIndex());
-    if (!item || item->type() != RefItem::Branch ) {
-        return;
+    RefBranch* branch = indexToItemChecked<RefBranch>(mTree->currentIndex());
+
+    Git::Result r;
+    RM::Ref* ref = branch->object();
+    Git::Reference gitRef = ref->load(r);
+
+    if (r) {
+        Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation(gitRef);
+
+        op->setMode( Git::CheckoutSafe );
+        op->setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts );
+        // TODO: setBackgroundMode( true );
+        op->execute();
+
+        r = op->result();
     }
-    const RefBranch* branch = static_cast<const RefBranch*>(item);
 
-    Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( branch->reference() );
-    op->setMode( Git::CheckoutSafe );
-    op->setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts );
-    // TODO: setBackgroundMode( true );
-    op->execute();
-
-    Git::Result r = op->result();
     if ( !r )
     {
         QMessageBox::warning( this, trUtf8("Error while checking out reference."),
                               trUtf8("Failed to checkout reference (%1).\nGit message: %2")
-                              .arg(branch->reference().shorthand())
+                              .arg(ref->name())
                               .arg(r.errorText()) );
     }
 }
@@ -130,19 +135,18 @@ void BranchesView::onRemoveRef()
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action ) return; // FIXME: What is this TEST good for?
 
-    const RefItem* item = indexToItem(mTree->currentIndex());
-    if (!item || item->type() != RefItem::Branch ) {
-        return;
-    }
-    const RefBranch* branch = static_cast<const RefBranch*>(item);
+    RefBranch* branch = indexToItemChecked<RefBranch>(mTree->currentIndex());
+    RM::Branch* rmBranch = branch->object();
 
-    if ( !askToGoOn( trUtf8("Delete reference \'%1\'?").arg(branch->reference().shorthand()) ) )
+    if ( !askToGoOn( trUtf8("Delete reference \'%1\'?").arg(rmBranch->name()) ) )
         return;
 
     Git::Result r;
-    Git::Reference ref = branch->reference();
+    Git::Reference ref = rmBranch->load(r);
 
-    if ( !checkRemoveRef( ref ) ) return;
+    if ( !checkRemoveRef( ref ) ) {
+        return;
+    }
 
     ref.destroy(r);
 
@@ -150,7 +154,7 @@ void BranchesView::onRemoveRef()
     {
         QMessageBox::warning( this, trUtf8("Error while removing reference."),
                               trUtf8("Failed to remove reference (%1).\nGit message: %2")
-                              .arg(branch->reference().shorthand())
+                              .arg(rmBranch->name())
                               .arg(r.errorText()) );
     }
 }
@@ -218,12 +222,11 @@ void BranchesView::onRenameRef()
     }
     RefBranch* branch = static_cast<RefBranch*>(item);
 
-    RefRenameDialog* dlg = new RefRenameDialog;
-    dlg->init(branch);
+    RefRenameDialog dlg(branch);
 
-    if ( dlg->exec() != QDialog::Accepted )
+    if ( dlg.exec() != QDialog::Accepted )
     {
-        const Git::Result& dlgResult = dlg->gitResult();
+        const Git::Result& dlgResult = dlg.gitResult();
         if ( !dlgResult )
         {
             QMessageBox::warning( this, trUtf8("Failed to rename reference"),

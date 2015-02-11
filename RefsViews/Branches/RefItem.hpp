@@ -20,14 +20,28 @@
 
 #include "libGitWrap/Reference.hpp"
 
+#include "libHeavenIcons/Icon.hpp"
+
+#include "libMacGitverCore/RepoMan/RefTreeNode.hpp"
+#include "libMacGitverCore/RepoMan/Ref.hpp"
+#include "libMacGitverCore/RepoMan/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Tag.hpp"
+#include "libMacGitverCore/RepoMan/Remote.hpp"
+
 #include <QList>
 #include <QVariant>
+#include <QPixmap>
 
 namespace RM
 {
+    class Base;
     class Ref;
+    class Branch;
+    class RefTreeNode;
+    class Namespace;
 }
 
+class BranchesModel;
 
 class RefItem
 {
@@ -41,32 +55,38 @@ public:
     enum ItemType
     {
         Root = 1,
+        Headline,
         Scope,
         Namespace,
+        Remote,
         Reference,
-        Branch = Reference
+        Branch = Reference,
+        Tag
     };
 
-public:
+protected:
     RefItem();
-    RefItem( RefItem* p );
+    RefItem(RefItem* parent);
+
+public:
     virtual ~RefItem();
 
 public:
-    virtual bool isValid() const;
+    int itemPosition();
     virtual ItemType type() const = 0;
-    virtual bool sameReference(const RM::Ref* ref) const { return false; }
+    virtual RM::Base* object();
 
 public:
     RefItem* parent;
     QList< RefItem* > children;
 
     virtual QVariant data(int role) const;
-    virtual QString text() const;
 };
 
 class RefRoot : public RefItem
 {
+public:
+    enum { StaticType = Root };
 public:
     RefRoot() {}
 
@@ -74,48 +94,132 @@ public:
     ItemType type() const;
 };
 
-class RefScope : public RefItem
+class RefHeadline : public RefItem
 {
 public:
-    RefScope( RefItem* p, const QString& t );
+    enum { StaticType = Headline };
 
-protected:
+public:
+    RefHeadline(RefItem* parent, const QString& t)
+        : RefItem(parent)
+        , mText(t)
+    {}
+
+public:
+    int itemPosition();
     virtual QVariant data(int role) const;
-    QString text() const;
     ItemType type() const;
 
 public:
     QString mText;
 };
 
+template<class T>
+class RefItemObject : public RefItem
+{
+protected:
+    RefItemObject(RefItem* parent, T* object)
+        : RefItem(parent)
+        , mObject(object)
+    {}
+
+public:
+    const T* object() const {
+        return mObject;
+    }
+
+    T* object() {
+        return mObject;
+    }
+
+    QVariant data(int role) const {
+        if (mObject) {
+            switch (role) {
+            case Qt::DisplayRole:
+                return mObject->displayName();
+
+            case Qt::DecorationRole:
+                Heaven::IconRef iref = mObject->icon(true);
+                Heaven::Icon icon = iref.icon();
+                return icon.pixmap();
+            }
+        }
+        return RefItem::data(role);
+    }
+
+protected:
+    T* mObject;
+};
+
+class RefScope : public RefItemObject<RM::RefTreeNode>
+{
+public:
+    enum { StaticType = Scope };
+
+public:
+    RefScope(RefItem* parent, RM::RefTreeNode* obj)
+        : RefItemObject(parent, obj)
+    {}
+
+protected:
+    ItemType type() const;
+};
+
 
 class RefNameSpace : public RefScope
 {
 public:
+    enum { StaticType = Namespace };
+public:
     RefNameSpace( RefItem* p, const QString& t );
 
+    ItemType type() const;
+};
+
+class RefRemote : public RefItemObject<RM::Remote>
+{
+public:
+    enum { StaticType = Remote };
+
+public:
+    RefRemote(RefItem* parent, RM::Remote* remote)
+        : RefItemObject(parent, remote)
+    {
+    }
+
+public:
+    ItemType type() const;
+};
+
+class RefBranch : public RefItemObject<RM::Branch>
+{
+public:
+    enum { StaticType = Branch };
+
+public:
+    RefBranch(RefItem* parent, RM::Branch* branch)
+        : RefItemObject(parent, branch)
+    {
+    }
+
+public:
     QVariant data(int role) const;
     ItemType type() const;
 };
 
 
-class RefBranch : public RefItem
+class RefTag : public RefItemObject<RM::Tag>
 {
 public:
-    explicit RefBranch(RefItem* p, const Git::Reference &ref);
+    enum { StaticType = Tag };
 
 public:
-    bool isValid() const;
-    bool sameReference(const RM::Ref* ref) const;
-
-    QVariant data(int role) const;
-    ItemType type() const;
-
-    Git::Reference reference() const
+    RefTag(RefItem* parent, RM::Tag* tag)
+        : RefItemObject(parent, tag)
     {
-        return mRef;
     }
 
-private:
-    Git::Reference  mRef;
+public:
+    QVariant data(int role) const;
+    ItemType type() const;
 };

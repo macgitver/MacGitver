@@ -32,9 +32,11 @@ BranchesViewData::BranchesViewData()
 
 void BranchesViewData::attachedToContext(BlueSky::ViewContext* context)
 {
-    Q_UNUSED( context );
+    IRepositoryContext* ctx = qobject_cast< IRepositoryContext* >(context);
+
     mModel = new BranchesModel( this );
-    mModel->rereadBranches();
+
+    mModel->setRepository(ctx ? ctx->repository() : NULL);
 }
 
 void BranchesViewData::detachedFromContext()

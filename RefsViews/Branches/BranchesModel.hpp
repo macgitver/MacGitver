@@ -31,6 +31,7 @@ namespace RM
 {
     class Ref;
     class Repo;
+    class CollectionNode;
 }
 
 class RefItem;
@@ -40,10 +41,11 @@ class BranchesModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    BranchesModel( BranchesViewData* parent );
+    BranchesModel(BranchesViewData* parent);
     ~BranchesModel();
 
 public:
+    void setRepository(RM::Repo* repo);
     RefItem* indexToItem(const QModelIndex& index, RefItem* defaultItem = NULL) const;
 
 public:
@@ -55,9 +57,6 @@ public:
     QModelIndex parent( const QModelIndex& child ) const;
     bool hasChildren( const QModelIndex& parent ) const;
 
-public:
-    void rereadBranches();
-
 signals:
     void gitError( const Git::Result& error );
 
@@ -65,26 +64,34 @@ private slots:
     void onRefCreated(RM::Repo* repo, RM::Ref* ref);
     void onRefDestroyed(RM::Repo* repo, RM::Ref* ref);
     void onRefMoved(RM::Repo* repo, RM::Ref* ref);
+    void onRefTreeNodeAboutToBeDeleted(RM::Repo* repo, RM::RefTreeNode* obj);
 
 private:
-    QModelIndex index(RefItem* item) const;
+    QModelIndex itemToIndex(RefItem* item) const;
+    QModelIndex objectToIndex(RM::Base* obj) const;
 
-    void insertRef(bool notify, const Git::Reference& ref);
-    RefItem* insertNamespace(const bool notify, RefItem* parent, const QString& name);
-    void insertBranch(const bool notify, RefItem *parent, const Git::Reference& ref);
+    RefItem* link(bool notify, RefItem* it);
+    void insertCollection(RM::CollectionNode* coll);
+    RefItem* insertObject(bool notify, RM::Base* obj);
+    RefItem* createBranchItem(bool notify, RefItem* parent, RM::Branch* obj);
+    RefItem* createTagItem(bool notify, RefItem* parent, RM::Tag* obj);
+    RefItem* createScopeItem(bool notify, RefItem* parent, RM::RefTreeNode* obj);
+    RefItem* createRemoteItem(bool notify, RefItem* parent, RM::Remote* obj);
 
-    RefScope* scopeForRef( const Git::Reference& ref ) const;
+    void updatedObject(RM::Base* obj);
+    void deletedObject(RM::Base* obj);
+    void deleteItem(RefItem* it);
 
 private:
-    BranchesViewData*   mData;
-    RefItem*            mRoot;
+    RM::Repo*           mRepo;
+    RefRoot*            mRoot;
 
-    RefScope*           mHeaderLocal;
-    RefScope*           mHeaderRemote;
-    RefScope*           mHeaderTags;
+    RefHeadline*        mHeaderLocal;
+    RefHeadline*        mHeaderRemote;
+    RefHeadline*        mHeaderTags;
 
-private:
-    static void findInvalidRefItems(QVector<RefItem*>& invalidItems, RefItem* item, const RM::Ref* ref);
+    QHash<RM::Base*, RefItem*>  mObjToItems;
+    QHash<RefItem*, RM::Base*>  mItemToObjs;
 };
 
 #endif

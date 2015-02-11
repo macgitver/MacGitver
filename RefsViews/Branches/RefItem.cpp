@@ -17,12 +17,11 @@
  */
 
 #include "RefItem.hpp"
+#include "BranchesModel.hpp"
 
 #include "libGitWrap/Reference.hpp"
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Result.hpp"
-
-#include "libMacGitverCore/RepoMan/Ref.hpp"
 
 #include <QFont>
 #include <QLinearGradient>
@@ -33,11 +32,10 @@ RefItem::RefItem()
 {
 }
 
-RefItem::RefItem(RefItem *p)
-    : parent( p )
+RefItem::RefItem(RefItem* parent)
+    : parent(parent)
 {
-    Q_ASSERT( p );
-    p->children.append( this );
+    Q_ASSERT(parent);
 }
 
 RefItem::~RefItem()
@@ -49,14 +47,23 @@ RefItem::~RefItem()
     qDeleteAll( children );
 }
 
-/**
- * @brief   Checks the validity of internal data.
- *
- * @return  the default implementation returns always true
- */
-bool RefItem::isValid() const
+RM::Base* RefItem::object()
 {
-    return true;
+    return NULL;
+}
+
+int RefItem::itemPosition()
+{
+    int i = 0;
+    while (i < parent->children.count()) {
+        RefItem* sibling = parent->children.at(i);
+        if (sibling->data(Qt::DisplayRole).toString() > data(Qt::DisplayRole).toString()) {
+            break;
+        }
+        i++;
+    }
+
+    return i;
 }
 
 QVariant RefItem::data(int role) const
@@ -65,16 +72,29 @@ QVariant RefItem::data(int role) const
     return QVariant();
 }
 
-QString RefItem::text() const
+int RefHeadline::itemPosition()
 {
-    return QString();
+    int i = parent->children.indexOf(this);
+    return (i == -1) ? parent->children.count() : i;
 }
 
-
-RefScope::RefScope(RefItem *p, const QString &t)
-    : RefItem( p )
-    , mText ( t )
+QVariant RefHeadline::data(int role) const
 {
+    switch (role) {
+    case Qt::DisplayRole:
+        return mText;
+
+    case RefItem::RowBgRole:
+        return QColor(216, 233, 255);
+
+    default:
+        return QVariant();
+    }
+}
+
+RefItem::ItemType RefHeadline::type() const
+{
+    return Headline;
 }
 
 RefItem::ItemType RefScope::type() const
@@ -82,26 +102,7 @@ RefItem::ItemType RefScope::type() const
     return Scope;
 }
 
-QVariant RefScope::data(int role) const
-{
-    switch( role )
-    {
-    case Qt::DisplayRole:
-        return mText;
-
-    case RefItem::RowBgRole:
-        return QColor(216, 233, 255);
-    }
-
-    return QVariant();
-}
-
-QString RefScope::text() const
-{
-    return mText;
-}
-
-
+#if 0
 RefNameSpace::RefNameSpace(RefItem *p, const QString &t)
     : RefScope( p, t )
 {
@@ -125,37 +126,7 @@ QVariant RefNameSpace::data(int role) const
 
     return QVariant();
 }
-
-
-RefBranch::RefBranch(RefItem *p, const Git::Reference &ref)
-    : RefItem( p )
-    , mRef( ref )
-{
-}
-
-/**
- * @brief   Am I pointing to a valid Git::Reference object?
- *
- * @return  true, if the owned reference is valid; false otherwise
- */
-bool RefBranch::isValid() const
-{
-    return (mRef.isValid() && !mRef.wasDestroyed());
-}
-
-/**
- * @brief   Workaround to compare the reference name.
- *
- *          This method will be deleted when migrating to RM::RepoMan.
- *
- * @param   ref the RM::Ref to compare with
- *
- * @return  true when both names match; false otherwise
- */
-bool RefBranch::sameReference(const RM::Ref* ref) const
-{
-    return ref && mRef.name() == ref->fullName();
-}
+#endif
 
 RefItem::ItemType RefBranch::type() const
 {
@@ -164,23 +135,23 @@ RefItem::ItemType RefBranch::type() const
 
 QVariant RefBranch::data(int role) const
 {
-    if ( role == Qt::DisplayRole )
-        return mRef.shorthand().section( QChar(L'/'), -1 );
+    Git::Result r;
+    Q_ASSERT(mObject);
 
-    else if ( role == Qt::FontRole )
-    {
+    switch (role) {
+    case Qt::FontRole:
+        #if 0
         if( mRef.isCurrentBranch() )
         {
             QFont f;
             f.setBold( true );
             return f;
         }
-    }
+        #endif
+        break;
 
-    else if ( role == RefItem::RowBgGradientRole )
-    {
-        Git::Result r;
-
+    case RefItem::RowBgGradientRole:
+        #if 0
         if ( mRef.compare( mRef.repository().HEAD(r) ) == 0 )
         {
             QColor back = mRef.isCurrentBranch()
@@ -188,15 +159,41 @@ QVariant RefBranch::data(int role) const
                           : QColor::fromHsl(35, 255, 190).lighter(130);
             return back;
         }
+        #endif
+        break;
+
+    case Qt::EditRole:
+        return object()->name();
     }
 
-    else if ( role == Qt::EditRole)
-        return mRef.name();
+    return RefItemObject::data(role);
+}
 
-    return QVariant();
+RefItem::ItemType RefTag::type() const
+{
+    return Tag;
+}
+
+QVariant RefTag::data(int role) const
+{
+    Git::Result r;
+    Q_ASSERT(mObject);
+
+    switch (role) {
+    case Qt::EditRole:
+        return object()->name();
+    }
+
+    return RefItemObject::data(role);
 }
 
 RefItem::ItemType RefRoot::type() const
 {
     return Root;
+}
+
+
+RefItem::ItemType RefRemote::type() const
+{
+    return Remote;
 }

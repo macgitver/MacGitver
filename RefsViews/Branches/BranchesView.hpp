@@ -24,6 +24,7 @@
 #include "libBlueSky/Contexts.hpp"
 
 #include "RefsViewDelegate.h"
+#include "Branches/RefItem.hpp"
 
 class QTreeView;
 class QModelIndex;
@@ -34,7 +35,6 @@ namespace Git
     class Result;
 }
 
-class RefItem;
 class BranchesViewData;
 
 class BranchesView : public BlueSky::ContextView, private BranchesViewActions
@@ -68,6 +68,16 @@ private:
     inline bool checkRemoveRef(const Git::Reference &ref);
 
     RefItem* indexToItem(const QModelIndex& index) const;
+
+    template<class T>
+    T* indexToItemChecked(const QModelIndex& index) const
+    {
+        RefItem* it = indexToItem(index);
+        if (it && it->type() == T::StaticType) {
+            return static_cast<T*>(it);
+        }
+        return NULL;
+    }
 
 private:
     RefsViewDelegate    mRefDelegate;

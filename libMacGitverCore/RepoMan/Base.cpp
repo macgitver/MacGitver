@@ -285,10 +285,10 @@ namespace RM
      * @return      A iconRef for this object
      *
      */
-    Heaven::IconRef Base::icon() const
+    Heaven::IconRef Base::icon(bool small) const
     {
         RM_D(Base);
-        return d->icon();
+        return d->icon(small);
     }
 
     bool Base::inheritsRepoManType(ObjTypes type) const
@@ -644,9 +644,10 @@ namespace RM
         return NULL;
     }
 
-    Heaven::IconRef BasePrivate::icon() const
+    Heaven::IconRef BasePrivate::icon(bool small) const
     {
-        return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % QStringLiteral("@24"));
+        QString size = small ? QStringLiteral("@16") : QStringLiteral("@24");
+        return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % size);
     }
 
     bool BasePrivate::inherits(ObjTypes type) const

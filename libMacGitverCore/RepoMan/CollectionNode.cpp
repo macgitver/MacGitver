@@ -103,8 +103,9 @@ namespace RM
         return QLatin1String("CollectionNode");
     }
 
-    Heaven::IconRef CollectionNodePrivate::icon() const
+    Heaven::IconRef CollectionNodePrivate::icon(bool small) const
     {
+        QString size = small ? QStringLiteral("@16") : QStringLiteral("@24");
         QString s;
 
         switch (ctype) {
@@ -115,7 +116,7 @@ namespace RM
         default:            return Heaven::IconRef();
         }
 
-        return Heaven::IconRef::fromString(QChar(L'#') % s % QStringLiteral("@24"));
+        return Heaven::IconRef::fromString(QChar(L'#') % s % size);
     }
 
     bool CollectionNodePrivate::inherits(ObjTypes type) const

@@ -121,7 +121,7 @@ namespace RM
 
         bool inheritsRepoManType(ObjTypes type) const;
 
-        Heaven::IconRef icon() const;
+        Heaven::IconRef icon(bool small = false) const;
 
         QString typeName() const;
         QString displayName() const;

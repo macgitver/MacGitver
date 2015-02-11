@@ -92,6 +92,11 @@ namespace RM
         return true;
     }
 
+    bool RefTreeNodePrivate::refreshCheckDispensable()
+    {
+        return mChildren.isEmpty();
+    }
+
     QString RefTreeNodePrivate::objectTypeName() const
     {
         return QLatin1String("RefTreeNode");

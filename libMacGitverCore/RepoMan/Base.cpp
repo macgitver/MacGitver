@@ -437,6 +437,10 @@ namespace RM
         }
 
         postRefreshChildren();
+
+        if (refreshCheckDispensable()) {
+            terminateObject();
+        }
     }
 
     bool BasePrivate::preRefresh()
@@ -446,6 +450,23 @@ namespace RM
 
     void BasePrivate::postRefresh()
     {
+    }
+
+    /**
+     * @brief       Check if this object is dispensable
+     *
+     * @return      @c true to dispense this object
+     *
+     * During the refresh cycle, this is the last method called for each object. If it returns
+     * @c true, the object will be terminated.
+     *
+     * This can be used for container objects that shall actually get dispensed once they have no
+     * more children (i.e. RefTreeNode).
+     *
+     */
+    bool BasePrivate::refreshCheckDispensable()
+    {
+        return false;
     }
 
     /**

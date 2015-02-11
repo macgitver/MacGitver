@@ -80,6 +80,18 @@ namespace RM
         return id().toString(8);
     }
 
+    Git::Reference Ref::load(Git::Result& r)
+    {
+        RM_D(Ref);
+        Git::Reference gitRef;
+
+        if (r) {
+            Git::Repository repo = repository()->gitRepo();
+            gitRef = repo.reference(r, d->mFullQualifiedName);
+        }
+
+        return gitRef;
+    }
 
     namespace Internal
     {

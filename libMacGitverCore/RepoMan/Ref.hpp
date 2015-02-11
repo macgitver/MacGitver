@@ -1,6 +1,6 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
  * (C) Sascha Cunz <sascha@macgitver.org>
  * (C) Cunz RaD Ltd.
@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_REF_HPP
-#define MGV_CORE_REPOMAN_REF_HPP
+#pragma once
 
 #include "libGitWrap/ObjectId.hpp"
 
@@ -59,6 +58,8 @@ namespace RM
     public:
         Ref(Base* parent, RefTypes type, const Git::Reference& ref);
 
+        Git::Reference load(Git::Result& r);
+
     public:
         RefTypes type() const;
         QString name() const;
@@ -71,5 +72,3 @@ namespace RM
     };
 
 }
-
-#endif

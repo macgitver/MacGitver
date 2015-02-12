@@ -39,8 +39,10 @@ RefRenameDialog::RefRenameDialog(RefBranch* ref)
 
     Git::RefName nameParser(ref->object()->fullName());
     QString name = nameParser.shorthand();
+    QString localName = nameParser.name();
 
     textRefName->setText(name);
+    textRefName->setSelection(name.length() - localName.length(), localName.length());
 }
 
 const Git::Result &RefRenameDialog::gitResult() const

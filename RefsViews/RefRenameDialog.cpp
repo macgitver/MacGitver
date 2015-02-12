@@ -16,6 +16,8 @@
  *
  */
 
+#include <QStringBuilder>
+
 #include "RefRenameDialog.hpp"
 
 #include "Branches/RefItem.hpp"
@@ -24,6 +26,7 @@
 #include "libGitWrap/RefName.hpp"
 
 #include "libMacGitverCore/RepoMan/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Repo.hpp"
 
 RefRenameDialog::RefRenameDialog(RefBranch* ref)
     : BlueSky::Dialog()
@@ -59,16 +62,20 @@ void RefRenameDialog::accept()
     }
 
     const QString oldRefName = ref.name();
-    const QString prefix = oldRefName.left( oldRefName.length() - ref.shorthand().length() );
+    const QString prefix = oldRefName.left(oldRefName.length() - ref.shorthand().length());
 
-    QString newRefName = prefix + textRefName->text();
-    if ( !newRefName.isEmpty() && (oldRefName != newRefName) )
-    {
-        ref.rename( mGitResult, newRefName );
+    QString newRefName = prefix % textRefName->text();
+
+    if (!newRefName.isEmpty() && oldRefName != newRefName) {
+
+        ref.rename(mGitResult, newRefName);
+
+        if (mGitResult) {
+            mRefInfo->object()->repository()->refresh();
+            QDialog::accept();
+            return;
+        }
     }
 
-    if ( mGitResult )
-        QDialog::accept();
-    else
-        reject();
+    reject();
 }

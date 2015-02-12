@@ -21,6 +21,7 @@
 #include "Branches/RefItem.hpp"
 
 #include "libGitWrap/BranchRef.hpp"
+#include "libGitWrap/RefName.hpp"
 
 #include "libMacGitverCore/RepoMan/Branch.hpp"
 
@@ -35,7 +36,11 @@ RefRenameDialog::RefRenameDialog(RefBranch* ref)
 
     setupUi( this );
     setFixedSize( size() ); // Why?
-    textRefName->setText(ref->object()->name());
+
+    Git::RefName nameParser(ref->object()->fullName());
+    QString name = nameParser.shorthand();
+
+    textRefName->setText(name);
 }
 
 const Git::Result &RefRenameDialog::gitResult() const

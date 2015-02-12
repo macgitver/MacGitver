@@ -40,25 +40,31 @@ namespace RM
     {
         InvalidObject,
 
-        RepoManagerObject,
-        RepoObject,
-        RefObject,
-        RemoteObject,
-        TagObject,
-        BranchObject,
-        RefTreeNodeObject,
+        CollectionNodeObject,
         NamespaceObject,
+        RepoManagerObject,
+
+        // repositories
+        RepoObject,
+        RemoteObject,
         SubmoduleObject,
-        RefLogObject,
-        CollectionNodeObject
+
+        // references
+        BranchObject,
+        RefObject,
+        RefTreeNodeObject,
+        TagObject,
+
+        RefLogObject
     };
 
     enum CollectionTypes
     {
         ctBranches,
-        ctTags,
+        ctHeads,
         ctNamespaces,
-        ctNotes
+        ctNotes,
+        ctTags
     };
 
     class Repo;

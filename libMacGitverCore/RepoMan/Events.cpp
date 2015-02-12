@@ -91,27 +91,13 @@ namespace RM
      *
      *
      * @fn          EventsInterface::refMoved(Repo* repo, Ref* ref)
-     * @brief       Sent when the target oid of a reference is about to be moved
+     * @brief       Sent when either the target id or the symbolic target of a reference changed.
      *
      * The reference is most probably already physically moved. This event is sent when the change
      * is discovered by the RepoMan.
      *
      * @param[in]   repo    The affected repository
      * @param[in]   ref     The reference that will move
-     *
-     *
-     * @fn          EventsInterface::refLinkChanged(Repo* repo, Ref* ref)
-     * @brief       Sent when the symbolic target of a reference is about to be changed
-     *
-     * The change has most probably already happened physically. The event is sent when the change
-     * is discovered by the RepoMan.
-     *
-     * You will most likely receive this event after switching the currently checked out branch. The
-     * HEAD reference is the most prominent example of a linked reference. Thus, this event can be
-     * used to detect changes of the current branch.
-     *
-     * @param[in]   repo    The affected repository
-     * @param[in]   ref     The reference whose symbolic link will change
      *
      *
      * @fn          EventsInterface::refHeadDetached(Repo* repo, Ref* ref)
@@ -226,13 +212,6 @@ namespace RM
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->refMoved(repo, ref);
-        }
-    }
-
-    void Events::refLinkChanged(Repo* repo, Ref* ref)
-    {
-        foreach (EventsInterface* ei, mEvents) {
-            ei->refLinkChanged(repo, ref);
         }
     }
 

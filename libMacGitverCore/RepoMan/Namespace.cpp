@@ -39,28 +39,27 @@ namespace RM
     {
         RM_D(Namespace);
 
-        return d->getOrCreateCollection(ctBranches);
+        return d->getOrCreateCollection( ctBranches );
     }
 
     CollectionNode* Namespace::tags()
     {
         RM_D(Namespace);
-
-        return d->getOrCreateCollection(ctTags);
+        return d->getOrCreateCollection( ctTags );
     }
 
     CollectionNode* Namespace::namespaces()
     {
         RM_D(Namespace);
 
-        return d->getOrCreateCollection(ctNamespaces);
+        return d->getOrCreateCollection( ctNamespaces );
     }
 
     CollectionNode* Namespace::notes()
     {
         RM_D(Namespace);
 
-        return d->getOrCreateCollection(ctNotes);
+        return d->getOrCreateCollection( ctNotes );
     }
 
     QString Namespace::name() const
@@ -92,8 +91,9 @@ namespace RM
 
     void NamespacePrivate::postCreation()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->namespaceCreated(repository(), pub<Namespace>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->namespaceCreated( repo, pub<Namespace>() );
         }
 
         BasePrivate::postCreation();
@@ -101,8 +101,9 @@ namespace RM
 
     void NamespacePrivate::preTerminate()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->namespaceAboutToBeDeleted(repository(), pub<Namespace>());
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->namespaceAboutToBeDeleted( repo, pub<Namespace>() );
         }
 
         BasePrivate::preTerminate();

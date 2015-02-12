@@ -56,7 +56,7 @@ namespace RM
         Repo(Internal::RepoPrivate& _d);
 
     public:
-        Repo(const Git::Repository& _repo, Base* _parent);
+        Repo(const Git::Repository& repo, Base* parent);
         ~Repo();
 
     public:
@@ -89,9 +89,10 @@ namespace RM
         Namespace*  findNamespace(  const QString&          nsFullName);
 
         CollectionNode* branches();
-        CollectionNode* tags();
+        CollectionNode* heads();
         CollectionNode* namespaces();
         CollectionNode* notes();
+        CollectionNode* tags();
 
     private:
         void activated();

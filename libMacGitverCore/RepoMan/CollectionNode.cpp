@@ -115,7 +115,7 @@ namespace RM
         default:            return Heaven::IconRef();
         }
 
-        return Heaven::IconRef::fromString(QChar(L'#') % s % QLatin1Literal("@24"));
+        return Heaven::IconRef::fromString(QChar(L'#') % s % QStringLiteral("@24"));
     }
 
     bool CollectionNodePrivate::inherits(ObjTypes type) const

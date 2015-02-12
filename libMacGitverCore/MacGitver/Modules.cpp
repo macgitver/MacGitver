@@ -78,12 +78,12 @@ void Modules::initialize()
     QDir binDir( qApp->applicationDirPath() );
     search( binDir );
 
-    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/modules" ) );
+    binDir = QDir( qApp->applicationDirPath() % QStringLiteral( "/modules" ) );
     search( binDir );
     binDir.cdUp();
 
     #ifdef Q_OS_UNIX
-    binDir = QDir( qApp->applicationDirPath() % QLatin1Literal( "/../libexec/MacGitver" ) );
+    binDir = QDir( qApp->applicationDirPath() % QStringLiteral( "/../libexec/MacGitver" ) );
     search( binDir );
     #endif
 

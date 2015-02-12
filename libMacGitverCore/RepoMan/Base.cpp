@@ -405,7 +405,7 @@ namespace RM
      * @brief       Refresh this object
      *
      * Refreshes this object and all its children. First calls to refreshSelf() expecting it to
-     * update this object and send out events. If refreshSelf() returnes `false`, this object is
+     * update this object and send out events. If refreshSelf() returns `false`, this object is
      * removed from the tree. In this case all children should already have been removed from the
      * tree.
      *
@@ -507,13 +507,10 @@ namespace RM
      * During the construction of a repository and its initial seeding with objects, no events will
      * be send to any listeners. This method must be used to query whether we're currently in that
      * phase or not.
-     *
      */
-    bool BasePrivate::repoEventsBlocked() const
+    bool BasePrivate::repoEventsBlocked( const Repo* repo )
     {
-        const Repo* repo = mPub->repository();
-        Q_ASSERT(repo);
-        return repo->isInitializing();
+        return repo && repo->isInitializing();
     }
 
     /**
@@ -526,7 +523,10 @@ namespace RM
      */
     void BasePrivate::preTerminate()
     {
-        Events::self()->objectAboutToBeDeleted(repository(), mPub);
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->objectAboutToBeDeleted( repo, mPub );
+        }
     }
 
     /**
@@ -543,8 +543,9 @@ namespace RM
      */
     void BasePrivate::postCreation()
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->objectCreated(repository(), mPub);
+        Repo* repo = repository();
+        if ( !repoEventsBlocked( repo ) ) {
+            Events::self()->objectCreated( repo, mPub );
         }
     }
 
@@ -645,7 +646,7 @@ namespace RM
 
     Heaven::IconRef BasePrivate::icon() const
     {
-        return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % QLatin1Literal("@24"));
+        return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % QStringLiteral("@24"));
     }
 
     bool BasePrivate::inherits(ObjTypes type) const

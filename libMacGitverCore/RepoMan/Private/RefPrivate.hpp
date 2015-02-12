@@ -30,25 +30,44 @@ namespace RM
         class RefPrivate : public BasePrivate
         {
         public:
-            RefPrivate(Ref* pub, RefTypes _type, const Git::Reference& _ref);
+            RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref);
 
         public:
             ObjTypes objType() const;
             QString displayName() const;
-            bool refreshSelf();
-            void postCreation();
-            void preTerminate();
+            virtual bool refreshSelf();
+            virtual void postCreation();
+            virtual void preTerminate();
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
-            bool inherits(ObjTypes type) const;
+            virtual bool inherits(ObjTypes type) const;
 
         public:
-            RefTypes            type;
-            QString             fullQualifiedName;
-            QString             name;
-            Git::ObjectId       id;
+            RefTypes            mType;
+            QString             mFullQualifiedName;
+            QString             mName;
+            Git::ObjectId       mId;
+            QString             mSymbolicTarget;
+
+        private:
+            inline bool setId(const Git::ObjectId& id);
+            inline bool setSymbolicTarget(const QString& target);
         };
 
+
+        // -- INLINED PRIVATE METHODS BEGIN --8>
+
+        bool RefPrivate::setId(const Git::ObjectId& id)
+        {
+            return ( id != mId ) ? mId = id, true : false;
+        }
+
+        bool RefPrivate::setSymbolicTarget(const QString &target)
+        {
+            return ( target != mSymbolicTarget ) ? mSymbolicTarget = target, true : false;
+        }
+
+        // <8-- INLINED PRIVATE METHODS END --
     }
 
 }

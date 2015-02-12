@@ -161,9 +161,6 @@ QVariant RefBranch::data(int role) const
         }
         #endif
         break;
-
-    case Qt::EditRole:
-        return object()->name();
     }
 
     return RefItemObject::data(role);

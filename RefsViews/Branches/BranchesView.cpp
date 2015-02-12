@@ -44,7 +44,6 @@ BranchesView::BranchesView()
     mTree->setAttribute( Qt::WA_MacShowFocusRect, false );
 #endif
     mTree->setFrameStyle( QFrame::NoFrame );
-    mTree->setIndentation( 12 );
     mTree->setHeaderHidden( true );
     mTree->setRootIsDecorated( false );
     mTree->setItemDelegate( &mRefDelegate );

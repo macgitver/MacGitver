@@ -222,7 +222,10 @@ void BranchesView::onRenameRef()
     }
     RefBranch* branch = static_cast<RefBranch*>(item);
 
-    RefRenameDialog dlg(branch);
+    Git::Result r;
+    Git::Reference gitRef(branch->object()->load(r));
+
+    RefRenameDialog dlg(gitRef, branch->object()->repository());
 
     if ( dlg.exec() != QDialog::Accepted )
     {

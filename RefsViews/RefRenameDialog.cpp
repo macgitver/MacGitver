@@ -22,25 +22,24 @@
 
 #include "Branches/RefItem.hpp"
 
-#include "libGitWrap/BranchRef.hpp"
 #include "libGitWrap/RefName.hpp"
 
 #include "libMacGitverCore/RepoMan/Branch.hpp"
 #include "libMacGitverCore/RepoMan/Repo.hpp"
 
-RefRenameDialog::RefRenameDialog(RefBranch* ref)
+RefRenameDialog::RefRenameDialog(const Git::Reference &ref, RM::Repo* repo)
     : BlueSky::Dialog()
-    , mRefInfo(ref)
+    , mRef(ref)
+    , mRepo(repo)
 {
-    if (!mRefInfo) {
+    if (!mRef.isValid()) {
         reject();
         return;
     }
 
     setupUi( this );
-    setFixedSize( size() ); // Why?
 
-    Git::RefName nameParser(ref->object()->fullName());
+    Git::RefName nameParser = ref.nameAnalyzer();
     QString name = nameParser.shorthand();
     QString localName = nameParser.name();
 
@@ -55,23 +54,17 @@ const Git::Result &RefRenameDialog::gitResult() const
 
 void RefRenameDialog::accept()
 {
-    Git::Reference ref = mRefInfo->object()->load(mGitResult);
-    if (!mGitResult) {
-        reject();
-        return;
-    }
-
-    const QString oldRefName = ref.name();
-    const QString prefix = oldRefName.left(oldRefName.length() - ref.shorthand().length());
+    const QString oldRefName = mRef.name();
+    const QString prefix = oldRefName.left(oldRefName.length() - mRef.shorthand().length());
 
     QString newRefName = prefix % textRefName->text();
 
     if (!newRefName.isEmpty() && oldRefName != newRefName) {
 
-        ref.rename(mGitResult, newRefName);
+        mRef.rename(mGitResult, newRefName);
 
         if (mGitResult) {
-            mRefInfo->object()->repository()->refresh();
+            mRepo->refresh();
             QDialog::accept();
             return;
         }

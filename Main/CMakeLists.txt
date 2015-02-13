@@ -29,6 +29,18 @@ SET(MACOSX_BUNDLE_BUNDLE_NAME       "MacGitver")
 #SET(MACOSX_BUNDLE_NSMAIN_NIB_FILE   "MainMenu")
 SET(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "NSApplication")
 
+IF(APPLE)
+    SET(RES_DIR ${CMAKE_BINARY_DIR}/MacGitver.app/Contents/Resources)
+    FILE(MAKE_DIRECTORY ${RES_DIR})
+    SET(ICNS_FILE ${RES_DIR}/MacGitver.icns)
+
+    ADD_CUSTOM_COMMAND(
+	OUTPUT       ${ICNS_FILE}
+	COMMAND      iconutil -c icns -o ${ICNS_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/MGV.iconset
+    )
+ENDIF()
+
+
 ADD_QT_EXECUTABLE(
     MacGitver
 
@@ -39,6 +51,7 @@ ADD_QT_EXECUTABLE(
     ${QRC_FILES}
     ${RCC_DATA}
     Info-CMake.plist
+    ${ICNS_FILE}
 )
 
 SET_TARGET_PROPERTIES(

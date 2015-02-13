@@ -76,7 +76,6 @@ namespace RM
          *
          * @see     RM::EventInterface
          */
-        ///@{
         void repositoryOpened(RM::Repo* repo);
         void repositoryAboutToClose(RM::Repo* repo);
         void repositoryActivated(RM::Repo* repo);
@@ -110,7 +109,6 @@ namespace RM
         void repositoryStateChanged(RM::Repo* repo);
         void indexUpdated(RM::Repo* repo);
         void workTreeUpdated(RM::Repo* repo);
-        ///@}
     };
 
 }

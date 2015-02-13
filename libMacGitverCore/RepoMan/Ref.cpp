@@ -96,8 +96,6 @@ namespace RM
     namespace Internal
     {
 
-        //-- Internal::RefPrivate --8>
-
         RefPrivate::RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref)
             : BasePrivate( pub )
             , mType( type )
@@ -159,24 +157,46 @@ namespace RM
             BasePrivate::preTerminate();
         }
 
+        bool RefPrivate::refreshDetails(const Git::Reference& ref)
+        {
+            Git::ObjectId   id;
+            QString         target;
+            bool            moved       = false;
+            Repo*           repo        = repository();          Q_ASSERT( repo );
+
+            id = ref.objectId();
+            if (id != mId) {
+                mId = id;
+                moved = true;
+            }
+
+            target = ref.target();
+            if (target != mSymbolicTarget) {
+                mSymbolicTarget = target;
+                moved = true;
+            }
+
+            if (moved && !repoEventsBlocked(repo)) {
+                // send events after all values are set
+                Events::self()->refMoved(repo, pub<Ref>());
+            }
+
+            return true;
+        }
+
         bool RefPrivate::refreshSelf()
         {
-            Git::Result r;
+            Git::Result     r;
+            Repo*           repo        = repository();          Q_ASSERT( repo );
+            Git::Repository gr          = repo->gitLoadedRepo();
+            Git::Reference  ref         = gr.reference(r, mFullQualifiedName);
 
-            Repo* repo = repository();
-            Q_ASSERT( repo );
-            Git::Repository gr = repo->gitRepo();
-
-            Git::Reference ref = gr.reference(r, mFullQualifiedName);
-            if ( !ref.isValid() || ref.wasDestroyed() ) {
+            if (!ref.isValid() || ref.wasDestroyed()) {
                 return false;
             }
 
-            bool moved = setId( ref.objectId() ) || setSymbolicTarget( ref.target() );
-            if ( moved && !repoEventsBlocked( repo ) )
-            {
-                // send events after all values are set
-                Events::self()->refMoved(repo, pub<Ref>());
+            if (!refreshDetails(ref)) {
+                return false;
             }
 
             return true;

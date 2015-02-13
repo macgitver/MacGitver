@@ -40,6 +40,7 @@ namespace RM
             bool refreshSelf();
             void postCreation();
             void preTerminate();
+            bool refreshDetails(const Git::Reference& ref);
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;

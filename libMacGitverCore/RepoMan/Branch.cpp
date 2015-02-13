@@ -118,6 +118,12 @@ namespace RM
         return QLatin1String("Branch");
     }
 
+    bool BranchPrivate::refreshDetails(const Git::Reference& ref)
+    {
+
+        return RefPrivate::refreshDetails(ref);
+    }
+
     bool BranchPrivate::inherits(ObjTypes type) const
     {
         return type == BranchObject || RefPrivate::inherits(type);

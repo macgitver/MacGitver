@@ -35,12 +35,13 @@ namespace RM
         public:
             ObjTypes objType() const;
             QString displayName() const;
-            virtual bool refreshSelf();
-            virtual void postCreation();
-            virtual void preTerminate();
+            bool refreshSelf();
+            void postCreation();
+            void preTerminate();
+            virtual bool refreshDetails(const Git::Reference& ref);
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
-            virtual bool inherits(ObjTypes type) const;
+            bool inherits(ObjTypes type) const;
 
         public:
             RefTypes            mType;
@@ -48,26 +49,8 @@ namespace RM
             QString             mName;
             Git::ObjectId       mId;
             QString             mSymbolicTarget;
-
-        private:
-            inline bool setId(const Git::ObjectId& id);
-            inline bool setSymbolicTarget(const QString& target);
         };
 
-
-        // -- INLINED PRIVATE METHODS BEGIN --8>
-
-        bool RefPrivate::setId(const Git::ObjectId& id)
-        {
-            return ( id != mId ) ? mId = id, true : false;
-        }
-
-        bool RefPrivate::setSymbolicTarget(const QString &target)
-        {
-            return ( target != mSymbolicTarget ) ? mSymbolicTarget = target, true : false;
-        }
-
-        // <8-- INLINED PRIVATE METHODS END --
     }
 
 }

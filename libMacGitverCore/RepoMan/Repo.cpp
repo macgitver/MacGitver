@@ -309,7 +309,7 @@ namespace RM
      *              HEADs are references matching the regular expression `^.*HEAD$`.
      *              They are special references and cannot be scoped.
      */
-    CollectionNode*Repo::heads()
+    CollectionNode* Repo::heads()
     {
         RM_D( Repo );
         return d->getOrCreateCollection( ctHeads );

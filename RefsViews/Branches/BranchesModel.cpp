@@ -113,15 +113,14 @@ Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
         return Qt::NoItemFlags;
     }
 
-    Qt::ItemFlags result = Qt::ItemIsEnabled;
-    const RefItem* item = indexToItem(index);
-
+    RefItem* item = indexToItem(index);
     RefItem::ItemType t = item->type();
-    if (t != RefItem::Scope) {
-        result |= Qt::ItemIsSelectable;
+
+    if (t == RefItem::Headline) {
+        return Qt::NoItemFlags;
     }
 
-    return result;
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
 QModelIndex BranchesModel::index( int row, int column, const QModelIndex& parent ) const

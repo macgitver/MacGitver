@@ -69,12 +69,6 @@ namespace RM
         return d->mId;
     }
 
-    QString Ref::symbolicTarget() const
-    {
-        RM_CD( Ref );
-        return d->mSymbolicTarget;
-    }
-
     QString Ref::displaySha1() const
     {
         return id().toString(8);
@@ -102,7 +96,6 @@ namespace RM
             , mFullQualifiedName( ref.name() )
             , mName( ref.nameAnalyzer().name() )
             , mId( ref.objectId() )
-            , mSymbolicTarget( ref.target() )
         {
         }
 
@@ -155,7 +148,7 @@ namespace RM
             BasePrivate::preTerminate();
         }
 
-        void RefPrivate::emitMoved(Repo* repo)
+        void RefPrivate::emitMoved()
         {
             if (!repoEventsBlocked()) {
                 Events::self()->refMoved(repository(), pub<Ref>());
@@ -164,27 +157,13 @@ namespace RM
 
         bool RefPrivate::refreshDetails(const Git::Reference& ref)
         {
-            Git::ObjectId   id;
-            QString         target;
-            bool            moved       = false;
-            Repo*           repo        = repository();
+            Git::ObjectId id = ref.objectId();
 
-            Q_ASSERT( repo );
-
-            id = ref.objectId();
             if (id != mId) {
                 mId = id;
-                moved = true;
-            }
-
-            target = ref.target();
-            if (target != mSymbolicTarget) {
-                mSymbolicTarget = target;
-                moved = true;
-            }
-
-            if (moved && !repoEventsBlocked()) {
-                emitMoved(repository());
+                if (!repoEventsBlocked()) {
+                    emitMoved();
+                }
             }
 
             return true;

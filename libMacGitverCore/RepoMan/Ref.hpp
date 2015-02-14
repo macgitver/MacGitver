@@ -58,9 +58,6 @@ namespace RM
         QString name() const;
         QString fullName() const;
         Git::ObjectId id() const;
-        QString symbolicTarget() const;
-
-    public:
         QString displaySha1() const;
     };
 

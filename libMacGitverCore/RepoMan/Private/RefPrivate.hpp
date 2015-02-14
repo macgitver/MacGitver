@@ -39,7 +39,7 @@ namespace RM
             void postCreation();
             void preTerminate();
             virtual bool refreshDetails(const Git::Reference& ref);
-            virtual void emitMoved(Repo *repo);
+            virtual void emitMoved();
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
@@ -49,7 +49,6 @@ namespace RM
             QString             mFullQualifiedName;
             QString             mName;
             Git::ObjectId       mId;
-            QString             mSymbolicTarget;
         };
 
     }

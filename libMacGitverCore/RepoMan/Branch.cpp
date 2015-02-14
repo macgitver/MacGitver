@@ -110,11 +110,11 @@ namespace RM
         return QLatin1String("Branch");
     }
 
-    void BranchPrivate::emitMoved(Repo* repo)
+    void BranchPrivate::emitMoved()
     {
         if (!repoEventsBlocked()) {
-            Events::self()->refMoved(repo, pub<Ref>());
-            Events::self()->branchMoved(repo, pub<Branch>());
+            Events::self()->refMoved(mRepo, pub<Ref>());
+            Events::self()->branchMoved(mRepo, pub<Branch>());
         }
     }
 

@@ -61,7 +61,6 @@ namespace RM
     enum CollectionTypes
     {
         ctBranches,
-        ctHeads,
         ctNamespaces,
         ctNotes,
         ctTags

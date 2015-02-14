@@ -302,20 +302,6 @@ namespace RM
     }
 
     /**
-     * @brief       Get this repository's collection of heads
-     *
-     * @return      A CollectionNode whose children are the heads included in this repository.
-     *
-     *              HEADs are references matching the regular expression `^.*HEAD$`.
-     *              They are special references and cannot be scoped.
-     */
-    CollectionNode*Repo::heads()
-    {
-        RM_D( Repo );
-        return d->getOrCreateCollection( ctHeads );
-    }
-
-    /**
      * @brief       Get this repository's collection of tags
      *
      * @return      A CollectionNode whose children are the tags included in this repository.
@@ -528,13 +514,8 @@ namespace RM
             }
         }
 
-        Git::ReferenceList refs = mRepo.allReferences( r );
+        Git::ReferenceList refs = mRepo.allReferences(r);
         if (r) {
-            Git::Reference headRef = mRepo.reference( r, QStringLiteral( "HEAD" ) );
-            if ( r && headRef.isValid() ) {
-                refs << headRef;
-            }
-
             foreach (Git::Reference ref, refs) {
                 findReference(ref, true);
             }
@@ -619,9 +600,6 @@ namespace RM
             parent = cnp->findRefParent(rn.scopes(), create);
         }
         else {
-            if ( rn.isHead() ) {
-                cn = getOrCreateCollection( ctHeads );
-            }
             if (rn.isBranch()) {
                 cn = getOrCreateCollection(ctBranches);
             }
@@ -653,14 +631,9 @@ namespace RM
             else if( rn.isTag() ) {
                 return new Tag( parent, ref );
             }
-            else if ( rn.isHead() ) {
-                return new Ref( parent, HEADRefType, ref );
-            }
-            else if ( rn.isMergeHead() ) {
-                return new Ref( parent, MERGE_HEADRefType, ref );
-            }
             else {
-                return new Ref( parent, UnknownRefType, ref );
+                qDebug() << "Do not know how to deal with reference:" << rn.fullName();
+                return NULL;
             }
         }
 

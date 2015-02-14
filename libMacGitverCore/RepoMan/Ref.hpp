@@ -33,15 +33,8 @@ namespace RM
 
     enum RefTypes
     {
-        UnknownRefType,
-
         BranchType,
-        TagType,
-        RootStageType,
-
-        // Very special refs:
-        HEADRefType,
-        MERGE_HEADRefType
+        TagType
     };
 
     class MGV_CORE_API Ref : public Base

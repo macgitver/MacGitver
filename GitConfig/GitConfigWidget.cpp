@@ -18,6 +18,8 @@
 #include <QVBoxLayout>
 #include <QFileSystemWatcher>
 
+#include "libGitWrap/Result.hpp"
+
 #include "GitConfigWidget.h"
 
 GitConfigWidget::GitConfigWidget()
@@ -39,11 +41,12 @@ void GitConfigWidget::setConfig( const QString& fileName )
 
 void GitConfigWidget::setConfigs( const QStringList& fileNames )
 {
+    Git::Result r;
     mConfigFiles = fileNames;
 
     QString flat;
 
-    Git::Config cfg = Git::Config::create();
+    Git::Config cfg = Git::Config::create(r);
     for( int i = 0; i < mConfigFiles.count(); i++ )
     {
         if( mConfigFiles[ i ].isEmpty() )
@@ -52,7 +55,7 @@ void GitConfigWidget::setConfigs( const QStringList& fileNames )
             --i;
             continue;
         }
-        cfg.addFile( mConfigFiles[ i ], i + 1 );
+        cfg.addFile(r, mConfigFiles[ i ], i + 1);
 
         if( !flat.isEmpty() )
             flat += L'\n';
@@ -101,7 +104,8 @@ void GitConfigWidget::syncConfig()
     QSet< QTreeWidgetItem* > current;
     allItems( current, mTree->invisibleRootItem() );
 
-    Git::ConfigValues values = mConfig.values();
+    Git::Result r;
+    Git::ConfigValues values = mConfig.values(r);
 
     foreach( QString key, values.keys() )
     {

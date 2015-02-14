@@ -522,18 +522,22 @@ namespace RM
 
         Git::Result r;
         Git::Remote::List remotes = mRepo.allRemotes(r);
-        foreach (const Git::Remote& remote, remotes) {
-            findRemote(remote, true);
+        if (r) {
+            foreach (const Git::Remote& remote, remotes) {
+                findRemote(remote, true);
+            }
         }
 
         Git::ReferenceList refs = mRepo.allReferences( r );
-        Git::Reference headRef = mRepo.reference( r, QStringLiteral( "HEAD" ) );
-        if ( r && headRef.isValid() ) {
-            refs << headRef;
-        }
+        if (r) {
+            Git::Reference headRef = mRepo.reference( r, QStringLiteral( "HEAD" ) );
+            if ( r && headRef.isValid() ) {
+                refs << headRef;
+            }
 
-        foreach (Git::Reference ref, refs) {
-            findReference(ref, true);
+            foreach (Git::Reference ref, refs) {
+                findReference(ref, true);
+            }
         }
 
         scanSubmodules();
@@ -642,21 +646,25 @@ namespace RM
             }
         }
 
-        if ( rn.isBranch() ) {
-            return new Branch( parent, ref );
+        if (create) {
+            if ( rn.isBranch() ) {
+                return new Branch( parent, ref );
+            }
+            else if( rn.isTag() ) {
+                return new Tag( parent, ref );
+            }
+            else if ( rn.isHead() ) {
+                return new Ref( parent, HEADRefType, ref );
+            }
+            else if ( rn.isMergeHead() ) {
+                return new Ref( parent, MERGE_HEADRefType, ref );
+            }
+            else {
+                return new Ref( parent, UnknownRefType, ref );
+            }
         }
-        else if( rn.isTag() ) {
-            return new Tag( parent, ref );
-        }
-        else if ( rn.isHead() ) {
-            return new Ref( parent, HEADRefType, ref );
-        }
-        else if ( rn.isMergeHead() ) {
-            return new Ref( parent, MERGE_HEADRefType, ref );
-        }
-        else {
-            return new Ref( parent, UnknownRefType, ref );
-        }
+
+        return NULL;
     }
 
     Remote* RepoPrivate::findRemote(const QString &remoteName, bool create)

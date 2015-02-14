@@ -157,12 +157,21 @@ namespace RM
             BasePrivate::preTerminate();
         }
 
+        void RefPrivate::emitMoved(Repo* repo)
+        {
+            if (!repoEventsBlocked(repo)) {
+                Events::self()->refMoved(repo, pub<Ref>());
+            }
+        }
+
         bool RefPrivate::refreshDetails(const Git::Reference& ref)
         {
             Git::ObjectId   id;
             QString         target;
             bool            moved       = false;
-            Repo*           repo        = repository();          Q_ASSERT( repo );
+            Repo*           repo        = repository();
+
+            Q_ASSERT( repo );
 
             id = ref.objectId();
             if (id != mId) {
@@ -177,8 +186,7 @@ namespace RM
             }
 
             if (moved && !repoEventsBlocked(repo)) {
-                // send events after all values are set
-                Events::self()->refMoved(repo, pub<Ref>());
+                emitMoved(repo);
             }
 
             return true;

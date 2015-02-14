@@ -39,6 +39,7 @@ namespace RM
             void postCreation();
             void preTerminate();
             virtual bool refreshDetails(const Git::Reference& ref);
+            virtual void emitMoved(Repo *repo);
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;

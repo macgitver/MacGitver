@@ -118,6 +118,14 @@ namespace RM
         return QLatin1String("Branch");
     }
 
+    void BranchPrivate::emitMoved(Repo* repo)
+    {
+        if (!repoEventsBlocked(repo)) {
+            Events::self()->refMoved(repo, pub<Ref>());
+            Events::self()->branchMoved(repo, pub<Branch>());
+        }
+    }
+
     bool BranchPrivate::refreshDetails(const Git::Reference& ref)
     {
 

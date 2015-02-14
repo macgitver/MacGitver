@@ -69,6 +69,27 @@ namespace RM
         return d->mId;
     }
 
+    /**
+     * @brief       Resolves a symbolic reference´s target id.
+     *
+     *              If the reference is direct, the returned id is the same as @ref Ref::id().
+     *
+     * @return      the resolved id of the target
+     */
+    Git::ObjectId Ref::resolvedId()
+    {
+        RM_CD( Ref );
+        if ( d->mId.isNull() ) {
+            Ref* targetRef = repository()->findReference( d->mSymbolicTarget );
+            if ( targetRef ) {
+                return targetRef->resolvedId();
+            }
+        }
+
+        // this is a direct or invalid reference
+        return d->mId;
+    }
+
     QString Ref::symbolicTarget() const
     {
         RM_CD( Ref );

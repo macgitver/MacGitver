@@ -615,11 +615,8 @@ namespace RM
             parent = cnp->findRefParent(rn.scopes(), create);
         }
         else {
-            if ( rn.isHead() ) {
-                cn = getOrCreateCollection( ctHeads );
-            }
             if (rn.isBranch()) {
-                cn = getOrCreateCollection(ctBranches);
+                cn = getOrCreateCollection( rn.isHead() ? ctHeads : ctBranches );
             }
             else if (rn.isTag()) {
                 cn = getOrCreateCollection(ctTags);

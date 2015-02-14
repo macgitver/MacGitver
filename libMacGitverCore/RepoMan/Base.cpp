@@ -413,8 +413,6 @@ namespace RM
      */
     void BasePrivate::refresh()
     {
-        preRefresh();
-
         if (!refreshSelf()) {
             // If refresh self returned false, we are no longer valid and will now destroy
             // ourselves. We just terminateObject().
@@ -434,11 +432,6 @@ namespace RM
         if (refreshCheckDispensable()) {
             terminateObject();
         }
-    }
-
-    bool BasePrivate::preRefresh()
-    {
-        return true;
     }
 
     void BasePrivate::postRefresh()

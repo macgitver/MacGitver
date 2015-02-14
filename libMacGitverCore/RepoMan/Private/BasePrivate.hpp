@@ -101,7 +101,6 @@ namespace RM
             virtual QString objectTypeName() const = 0;
             virtual Heaven::IconRef icon(bool small) const;
             virtual bool refreshSelf() = 0;
-            virtual bool preRefresh();
             virtual void postRefresh();
             virtual void preRefreshChildren();
             virtual void postRefreshChildren();

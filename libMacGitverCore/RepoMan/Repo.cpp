@@ -642,21 +642,44 @@ namespace RM
             }
         }
 
+        return create ? createRef( parent, ref, rn ) : NULL;
+    }
+
+    /**
+     * @internal
+     *
+     * @brief           Creates a @ref RM::Ref instance from an existing @see Git::Reference.
+     * @param           parent  the parent node, this reference belongs to.
+     *
+     * @param           ref     the existing reference
+     *
+     * @param           rn      the reference name analyzer
+     *
+     * @return          the created @ref RM::Ref or NULL, if the reference is invalid
+     */
+    Ref* RepoPrivate::createRef(Base* parent, const Git::Reference& ref, Git::RefName& rn)
+    {
+        if ( !ref.isValid() ) {
+            return NULL;
+        }
+
         if ( rn.isBranch() ) {
             return new Branch( parent, ref );
         }
-        else if( rn.isTag() ) {
+
+        if( rn.isTag() ) {
             return new Tag( parent, ref );
         }
-        else if ( rn.isHead() ) {
+
+        if ( rn.isHead() ) {
             return new Ref( parent, HEADRefType, ref );
         }
-        else if ( rn.isMergeHead() ) {
+
+        if ( rn.isMergeHead() ) {
             return new Ref( parent, MERGE_HEADRefType, ref );
         }
-        else {
-            return new Ref( parent, UnknownRefType, ref );
-        }
+
+        return new Ref( parent, UnknownRefType, ref );
     }
 
     Remote* RepoPrivate::findRemote(const QString &remoteName, bool create)

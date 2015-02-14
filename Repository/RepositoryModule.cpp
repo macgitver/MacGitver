@@ -116,15 +116,14 @@ void RepositoryModule::onRepositoryOpenHelper()
 
     //! @todo error handling
     Git::Result r;
-    QString repoDir = Git::Repository::discover( fd->selectedFiles().first(), false,
-                                                 QStringList(), r );
+    QString repoDir = Git::Repository::discover(r, fd->selectedFiles().first());
     if( repoDir.isEmpty() )
     {
         return;
     }
 
     //! @todo error handling
-    Git::Repository repo = Git::Repository::open( repoDir, r );
+    Git::Repository repo = Git::Repository::open(r, repoDir);
     if( !repo.isValid() )
         return;
 

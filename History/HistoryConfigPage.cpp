@@ -96,5 +96,5 @@ QString HistoryConfigPage::groupName() const
 
 void HistoryConfigPage::onDiffPosChanged( int newPos )
 {
-    setModified( this );
+    setModified();
 }

@@ -84,9 +84,8 @@ namespace RM
 
     void RemotePrivate::postCreation()
     {
-        Repo* repo = repository();
-        if ( !repoEventsBlocked( repo ) ) {
-            Events::self()->remoteCreated( repo, pub<Remote>() );
+        if (!repoEventsBlocked()) {
+            Events::self()->remoteCreated(repository(), pub<Remote>());
         }
 
         BasePrivate::postCreation();
@@ -94,9 +93,8 @@ namespace RM
 
     void RemotePrivate::preTerminate()
     {
-        Repo* repo = repository();
-        if ( !repoEventsBlocked( repo ) ) {
-            Events::self()->remoteAboutToBeDeleted( repo, pub<Remote>() );
+        if (!repoEventsBlocked()) {
+            Events::self()->remoteAboutToBeDeleted(repository(), pub<Remote>());
         }
 
         BasePrivate::preTerminate();

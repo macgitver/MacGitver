@@ -137,9 +137,8 @@ namespace RM
         {
             RM_P(Ref);
 
-            Repo* repo = repository();
-            if ( !repoEventsBlocked( repo ) ) {
-                Events::self()->refCreated( repo, p );
+            if (!repoEventsBlocked()) {
+                Events::self()->refCreated(repository(), p);
             }
 
             BasePrivate::postCreation();
@@ -149,9 +148,8 @@ namespace RM
         {
             RM_P(Ref);
 
-            Repo* repo = repository();
-            if ( !repoEventsBlocked( repo ) ) {
-                Events::self()->refAboutToBeDeleted( repo, p );
+            if ( !repoEventsBlocked() ) {
+                Events::self()->refAboutToBeDeleted(repository(), p);
             }
 
             BasePrivate::preTerminate();
@@ -159,8 +157,8 @@ namespace RM
 
         void RefPrivate::emitMoved(Repo* repo)
         {
-            if (!repoEventsBlocked(repo)) {
-                Events::self()->refMoved(repo, pub<Ref>());
+            if (!repoEventsBlocked()) {
+                Events::self()->refMoved(repository(), pub<Ref>());
             }
         }
 
@@ -185,8 +183,8 @@ namespace RM
                 moved = true;
             }
 
-            if (moved && !repoEventsBlocked(repo)) {
-                emitMoved(repo);
+            if (moved && !repoEventsBlocked()) {
+                emitMoved(repository());
             }
 
             return true;

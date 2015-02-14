@@ -63,9 +63,8 @@ namespace RM
 
     void RefTreeNodePrivate::postCreation()
     {
-        Repo* repo = repository();
-        if ( !repoEventsBlocked( repo ) ) {
-            Events::self()->refTreeNodeCreated( repo, pub<RefTreeNode>() );
+        if (!repoEventsBlocked()) {
+            Events::self()->refTreeNodeCreated(repository(), pub<RefTreeNode>());
         }
 
         BasePrivate::postCreation();
@@ -73,9 +72,8 @@ namespace RM
 
     void RefTreeNodePrivate::preTerminate()
     {
-        Repo* repo = repository();
-        if ( !repoEventsBlocked( repo ) ) {
-            Events::self()->refTreeNodeAboutToBeDeleted( repo, pub<RefTreeNode>() );
+        if (!repoEventsBlocked()) {
+            Events::self()->refTreeNodeAboutToBeDeleted(repository(), pub<RefTreeNode>());
         }
 
         BasePrivate::preTerminate();

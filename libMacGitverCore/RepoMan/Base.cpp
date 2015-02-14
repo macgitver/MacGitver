@@ -528,11 +528,13 @@ namespace RM
      * During the construction of a repository and its initial seeding with objects, no events will
      * be send to any listeners. This method must be used to query whether we're currently in that
      * phase or not.
+     *
      */
-    bool BasePrivate::repoEventsBlocked(const Repo* repo)
+    bool BasePrivate::repoEventsBlocked()
     {
+        Repo* repo = repository();
         Q_ASSERT(repo);
-        return repo && repo->isInitializing();
+        return repo->isInitializing();
     }
 
     /**
@@ -545,9 +547,8 @@ namespace RM
      */
     void BasePrivate::preTerminate()
     {
-        Repo* repo = repository();
-        if ( !repoEventsBlocked( repo ) ) {
-            Events::self()->objectAboutToBeDeleted( repo, mPub );
+        if ( !repoEventsBlocked() ) {
+            Events::self()->objectAboutToBeDeleted( repository(), mPub );
         }
     }
 
@@ -565,9 +566,8 @@ namespace RM
      */
     void BasePrivate::postCreation()
     {
-        Repo* repo = repository();
-        if ( !repoEventsBlocked( repo ) ) {
-            Events::self()->objectCreated( repo, mPub );
+        if (!repoEventsBlocked()) {
+            Events::self()->objectCreated(repository(), mPub);
         }
     }
 

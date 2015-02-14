@@ -287,6 +287,23 @@ namespace RM
     }
 
     /**
+     * @brief       Get this repository's HEAD reference.
+     *
+     * @return      the pointer to the valid "HEAD" @ref RM::Ref or NULL
+     */
+    Ref* Repo::HEAD()
+    {
+        const QString headName = QStringLiteral( "HEAD" );
+        foreach ( Ref* ref, heads()->childObjects<Ref>() ) {
+            if ( ref->fullName() == headName ) {
+                return ref;
+            }
+        }
+
+        return NULL;
+    }
+
+    /**
      * @brief       Get this repository's collection of branches
      *
      * @return      A CollectionNode whose children are the branches included in this repository.

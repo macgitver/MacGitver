@@ -37,7 +37,6 @@ namespace RM
 
         public:
             ObjTypes objType() const;
-            bool refreshSelf();
             void postCreation();
             void preTerminate();
             bool refreshDetails(const Git::Reference& ref);

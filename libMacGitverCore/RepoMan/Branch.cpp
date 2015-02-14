@@ -107,12 +107,6 @@ namespace RM
                        .arg(mName));
     }
 
-    bool BranchPrivate::refreshSelf()
-    {
-        // TODO: Update "upstream" and "divergence"
-        return RefPrivate::refreshSelf();
-    }
-
     QString BranchPrivate::objectTypeName() const
     {
         return QLatin1String("Branch");

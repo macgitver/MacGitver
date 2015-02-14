@@ -529,8 +529,9 @@ namespace RM
      * be send to any listeners. This method must be used to query whether we're currently in that
      * phase or not.
      */
-    bool BasePrivate::repoEventsBlocked( const Repo* repo )
+    bool BasePrivate::repoEventsBlocked(const Repo* repo)
     {
+        Q_ASSERT(repo);
         return repo && repo->isInitializing();
     }
 

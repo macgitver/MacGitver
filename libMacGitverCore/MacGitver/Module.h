@@ -25,10 +25,6 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/Config/Ui/ConfigPageProvider.hpp"
 
-#if QT_VERSION < 0x050000
-#define Q_PLUGIN_METADATA(x)
-#endif
-
 namespace BlueSky {
     class Mode;
 }

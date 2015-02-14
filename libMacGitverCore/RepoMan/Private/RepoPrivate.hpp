@@ -54,6 +54,9 @@ namespace RM
         private:
             Ref* findReference(Git::RefName &rn, Git::Reference ref, bool create);
 
+        private:
+            static Ref* createRef(RM::Base* parent, const Git::Reference& ref, Git::RefName& rn);
+
         public:
             void load();
             void unload();

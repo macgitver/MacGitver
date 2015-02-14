@@ -65,6 +65,7 @@ namespace RM
         QString name() const;
         QString fullName() const;
         Git::ObjectId id() const;
+        Git::ObjectId resolvedId();
         QString symbolicTarget() const;
 
     public:

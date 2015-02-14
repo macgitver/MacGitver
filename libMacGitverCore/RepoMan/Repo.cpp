@@ -287,6 +287,23 @@ namespace RM
     }
 
     /**
+     * @brief       Get this repository's HEAD reference.
+     *
+     * @return      the pointer to the valid "HEAD" @ref RM::Ref or NULL
+     */
+    Ref* Repo::HEAD()
+    {
+        const QString headName = QStringLiteral( "HEAD" );
+        foreach ( Ref* ref, heads()->childObjects<Ref>() ) {
+            if ( ref->fullName() == headName ) {
+                return ref;
+            }
+        }
+
+        return NULL;
+    }
+
+    /**
      * @brief       Get this repository's collection of branches
      *
      * @return      A CollectionNode whose children are the branches included in this repository.
@@ -309,7 +326,7 @@ namespace RM
      *              HEADs are references matching the regular expression `^.*HEAD$`.
      *              They are special references and cannot be scoped.
      */
-    CollectionNode*Repo::heads()
+    CollectionNode* Repo::heads()
     {
         RM_D( Repo );
         return d->getOrCreateCollection( ctHeads );
@@ -615,11 +632,8 @@ namespace RM
             parent = cnp->findRefParent(rn.scopes(), create);
         }
         else {
-            if ( rn.isHead() ) {
-                cn = getOrCreateCollection( ctHeads );
-            }
             if (rn.isBranch()) {
-                cn = getOrCreateCollection(ctBranches);
+                cn = getOrCreateCollection( rn.isHead() ? ctHeads : ctBranches );
             }
             else if (rn.isTag()) {
                 cn = getOrCreateCollection(ctTags);
@@ -642,21 +656,44 @@ namespace RM
             }
         }
 
+        return create ? createRef( parent, ref, rn ) : NULL;
+    }
+
+    /**
+     * @internal
+     *
+     * @brief           Creates a @ref RM::Ref instance from an existing @see Git::Reference.
+     * @param           parent  the parent node, this reference belongs to.
+     *
+     * @param           ref     the existing reference
+     *
+     * @param           rn      the reference name analyzer
+     *
+     * @return          the created @ref RM::Ref or NULL, if the reference is invalid
+     */
+    Ref* RepoPrivate::createRef(Base* parent, const Git::Reference& ref, Git::RefName& rn)
+    {
+        if ( !ref.isValid() ) {
+            return NULL;
+        }
+
         if ( rn.isBranch() ) {
             return new Branch( parent, ref );
         }
-        else if( rn.isTag() ) {
+
+        if( rn.isTag() ) {
             return new Tag( parent, ref );
         }
-        else if ( rn.isHead() ) {
+
+        if ( rn.isHead() ) {
             return new Ref( parent, HEADRefType, ref );
         }
-        else if ( rn.isMergeHead() ) {
+
+        if ( rn.isMergeHead() ) {
             return new Ref( parent, MERGE_HEADRefType, ref );
         }
-        else {
-            return new Ref( parent, UnknownRefType, ref );
-        }
+
+        return new Ref( parent, UnknownRefType, ref );
     }
 
     Remote* RepoPrivate::findRemote(const QString &remoteName, bool create)

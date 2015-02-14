@@ -41,9 +41,6 @@ namespace RM
     class MGV_CORE_API Repo : public QObject, public Base
     {
         friend class RepoMan;
-        #if QT_VERSION < 0x050000
-        friend class Internal::RepoPrivate;
-        #endif
 
         Q_OBJECT
     public:
@@ -87,6 +84,8 @@ namespace RM
         Remote*     findRemote(     const QString&          remoteName);
         Namespace*  findNamespace(  const QStringList&      namespaces);
         Namespace*  findNamespace(  const QString&          nsFullName);
+
+        RM::Ref* HEAD();
 
         CollectionNode* branches();
         CollectionNode* heads();

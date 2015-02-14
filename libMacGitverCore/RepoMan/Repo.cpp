@@ -771,4 +771,8 @@ namespace RM
         return type == RepoObject || BasePrivate::inherits(type);
     }
 
+    Repo* RepoPrivate::repository()
+    {
+        return static_cast<Repo*>(mPub);
+    }
 }

@@ -301,6 +301,7 @@ namespace RM
 
     BasePrivate::BasePrivate(Base* pub)
         : mPub(pub)
+        , mRepo(NULL)
         , mParentObj(NULL)
     {
         Q_ASSERT(mPub);
@@ -313,6 +314,7 @@ namespace RM
         // from its parent. Otherwise, events cannot be triggered correctly.
         Q_ASSERT(mChildren.count() == 0);
         Q_ASSERT(mParentObj == NULL);
+        Q_ASSERT(mRepo == NULL);
     }
 
     /**
@@ -345,6 +347,7 @@ namespace RM
         if (mParentObj) {
             mParentObj->removeChildObject(mPub);
             mParentObj = NULL;
+            mRepo = NULL;
         }
     }
 
@@ -654,16 +657,15 @@ namespace RM
 
     Repo* BasePrivate::repository()
     {
-        BasePrivate* cur = this;
-
-        while (cur) {
-            if (cur->inherits(RepoObject)) {
-                return static_cast<Repo*>(cur->pub<Repo>());
+        if (!mRepo) {
+            if (mParentObj) {
+                mRepo = mParentObj->repository();
             }
-            cur = cur->mParentObj;
+            else {
+                return NULL;
+            }
         }
-
-        return NULL;
+        return mRepo;
     }
 
     Heaven::IconRef BasePrivate::icon(bool small) const

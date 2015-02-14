@@ -52,6 +52,7 @@ namespace RM
 
         public:
             Base*           mPub;
+            Repo*           mRepo;
             BasePrivate*    mParentObj;
             Base::Set       mChildren;
 
@@ -75,7 +76,7 @@ namespace RM
             void addChildObject(Base *object);
             void removeChildObject(Base* object);
 
-            Repo* repository();
+            virtual Repo* repository();
 
             void refresh();
             bool repoEventsBlocked();

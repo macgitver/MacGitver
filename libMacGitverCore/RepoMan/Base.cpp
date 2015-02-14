@@ -177,24 +177,13 @@ namespace RM
     /**
      * @brief       Find the repository for this object
      *
-     * Walks up the hierarchy of objects to find the repository. Since objects can never be
-     * reparented, the result of this method never changes.
-     *
-     * @return      The first repository in hierarchy that is found
+     * @return      The first repository in hierarchy (Repo or Submodule)
      *
      */
     const Repo* Base::repository() const
     {
-        const Base* cur = this;
-
-        while (cur) {
-            if (cur->objType() == RepoObject) {
-                return static_cast< const Repo* >(cur);
-            }
-            cur = cur->parentObject();
-        }
-
-        return NULL;
+        RM_CD(Base);
+        return d->mRepo;
     }
 
     /**
@@ -209,7 +198,7 @@ namespace RM
     Repo* Base::repository()
     {
         RM_D(Base);
-        return d->repository();
+        return d->mRepo;
     }
 
     /**
@@ -331,6 +320,7 @@ namespace RM
         if (parent) {
             mParentObj = parent->mData;
             mParentObj->addChildObject(mPub);
+            mRepo = searchRepository();
             refreshSelf();
             postCreation();
         }
@@ -535,9 +525,8 @@ namespace RM
      */
     bool BasePrivate::repoEventsBlocked()
     {
-        Repo* repo = repository();
-        Q_ASSERT(repo);
-        return repo->isInitializing();
+        Q_ASSERT(mRepo);
+        return mRepo->isInitializing();
     }
 
     /**
@@ -550,8 +539,8 @@ namespace RM
      */
     void BasePrivate::preTerminate()
     {
-        if ( !repoEventsBlocked() ) {
-            Events::self()->objectAboutToBeDeleted( repository(), mPub );
+        if (!repoEventsBlocked()) {
+            Events::self()->objectAboutToBeDeleted(repository(), mPub);
         }
     }
 
@@ -655,7 +644,7 @@ namespace RM
         return new CollectionNode(ctype, mPub);
     }
 
-    Repo* BasePrivate::repository()
+    Repo* BasePrivate::searchRepository()
     {
         if (!mRepo) {
             if (mParentObj) {

@@ -75,8 +75,9 @@ namespace RM
             void unlinkFromParent();
             void addChildObject(Base *object);
             void removeChildObject(Base* object);
+            Repo* repository();
 
-            virtual Repo* repository();
+            virtual Repo* searchRepository();
 
             void refresh();
             bool repoEventsBlocked();
@@ -111,6 +112,11 @@ namespace RM
             virtual ObjTypes objType() const = 0;
             virtual void dumpSelf(Dumper& dumper) const = 0;
         };
+
+        inline Repo* BasePrivate::repository()
+        {
+            return mRepo;
+        }
 
     }
 

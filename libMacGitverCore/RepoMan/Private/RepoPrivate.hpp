@@ -42,7 +42,7 @@ namespace RM
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
-            Repo* repository();
+            Repo* searchRepository();
 
         public:
             Ref*        findReference(  const Git::Reference& ref,          bool create = false);

@@ -247,15 +247,15 @@ void HistoryDiff::createPatch()
         break;
 
     case DTT_HEAD:
-        dl = makePatchTo( QLatin1String( "HEAD" ) );
+        dl = makePatchTo( QStringLiteral( "HEAD" ) );
         break;
 
     case DTT_Branch:
-        dl = makePatchTo( QLatin1String( "refs/heads/" ) % mDiffToBranch->currentText() );
+        dl = makePatchTo( QStringLiteral( "refs/heads/" ) % mDiffToBranch->currentText() );
         break;
 
     case DTT_Tag:
-        dl = makePatchTo( QLatin1String( "refs/tags/" ) % mDiffToTag->currentText() );
+        dl = makePatchTo( QStringLiteral( "refs/tags/" ) % mDiffToTag->currentText() );
         break;
 
     default:

@@ -206,7 +206,7 @@ Git::DiffList HistoryDiff::makePatchTo( const QString& ref )
         return Git::DiffList();
     }
 
-    return mRepo.diffCommitToCommit( r, mCommit, commit );
+    return mCommit.diffFrom( r, commit );
 }
 
 void HistoryDiff::createPatch()
@@ -219,19 +219,16 @@ void HistoryDiff::createPatch()
     int index = mDiffTo->currentIndex();
     DiffToTypes dtt = DiffToTypes( mDiffTo->itemData( index ).toInt() );
     Git::Result r;
-    Git::DiffList dl, dl2;
-    Git::Tree tree = mCommit.tree( r );
+    Git::DiffList dl;
 
     switch( dtt )
     {
     case DTT_WT:
-        dl = tree.diffToWorkingDir( r );
+        dl = Git::Diff( r ).treeToWorkDir( r, mCommit.tree( r ) );
         break;
 
     case DTT_WT_and_Index:
-        dl = tree.diffToWorkingDir( r );
-        dl2 = tree.diffToIndex( r );
-        dl2.mergeOnto( r, dl );
+        dl = Git::Diff( r ).treeToWorkDirWithIndex( r, mCommit.tree( r ) );
         break;
 
     case DTT_AllParents:

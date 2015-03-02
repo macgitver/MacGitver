@@ -143,7 +143,7 @@ void IndexWidget::updateDiff()
 
     if (mRepo) {
         Git::Result r;
-        Git::DiffList dl = mRepo->gitRepo().diffIndexToWorkingDir(r);
+        Git::DiffList dl = Git::Diff( r ).indexToWorkDir( r, mRepo->gitRepo() );
         dl.consumePatch(r, &p);
     }
 

@@ -109,15 +109,8 @@ void MgvPrimaryWindow::showLater()
     }
     else
     {
-        QRect r = Config::self().get( "Geometry" ).toRect();
-        if( r.isEmpty() )
-        {
+        if (!restoreGeometry(Config::self().get("Geometry").toByteArray())) {
             moveToCenter();
-        }
-        else
-        {
-            resize( r.size() );
-            move( r.topLeft() );
         }
         show();
     }
@@ -127,7 +120,7 @@ void MgvPrimaryWindow::savePosition()
 {
     Config& c = Config::self();
     c.set( "FullScreen", isFullScreen() );
-    c.set( "Geometry", geometry() );
+    c.set( "Geometry", saveGeometry() );
     c.saveSettings();
 }
 

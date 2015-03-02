@@ -166,7 +166,7 @@ void HistoryList::onCheckout()
 
 void HistoryList::checkout(Git::Result& result, const Git::Reference& ref)
 {
-    GW_CHECK_RESULT( result, void() )
+    GW_CHECK_RESULT(result, void());
 
     Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( ref );
     op->setMode( Git::CheckoutSafe );

@@ -55,7 +55,7 @@ namespace DiffViews
                 virtual DiffView* create( QWidget* parent ) \
                     { return new Name( parent ); } \
                 virtual QString name() const \
-                    { return QLatin1String( #Name ); } \
+                    { return QStringLiteral( #Name ); } \
             }; \
             ::DiffViews::DiffViews::self().registerCreator( new Local ); \
         }

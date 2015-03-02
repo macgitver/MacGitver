@@ -32,10 +32,10 @@ namespace DiffViews
         registerDiffView_RawView();
         registerDiffView_SequentialView();
 
-        setDefaultCreatorName( QLatin1String( "SequentialView" ) );
+        setDefaultCreatorName( QStringLiteral( "SequentialView" ) );
 
-        mFixedFont = QFont( QLatin1String( "Courier New" ), 10 );
-        mVariableFont = QFont( QLatin1String( "Arial" ), 10 );
+        mFixedFont = QFont( QStringLiteral( "Courier New" ), 10 );
+        mVariableFont = QFont( QStringLiteral( "Arial" ), 10 );
     }
 
     DiffViews::~DiffViews()

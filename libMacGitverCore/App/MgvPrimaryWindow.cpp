@@ -99,28 +99,29 @@ void MgvPrimaryWindow::setupUi()
 
 void MgvPrimaryWindow::showLater()
 {
-    if( Config::self().get( "FullScreen" ).toBool() )
-    {
-        // Useless on MacOSX with Qt < 5.0
-        // should add a .mm file to enable the full-screen feature
-        // Since: showFullScreen() at least _looks_ like clicking the full-screen icon. Maybe it's
-        //        even working the same way.
+    if (!restoreGeometry(Config::self().get("Geometry").toByteArray())) {
+        moveToCenter();
+    }
+
+    // Having the internal geometry calculated in advance seems to help Mac OS X a little bit to
+    // avoid unwanted resize-animations.
+    updateGeometry();
+
+    if (Config::self().get("FullScreen").toBool()) {
         showFullScreen();
     }
-    else
-    {
-        if (!restoreGeometry(Config::self().get("Geometry").toByteArray())) {
-            moveToCenter();
-        }
+    else {
         show();
     }
 }
 
 void MgvPrimaryWindow::savePosition()
 {
-    Config& c = Config::self();
-    c.set( "FullScreen", isFullScreen() );
-    c.set( "Geometry", saveGeometry() );
+    Config& c(Config::self());
+
+    c.set("FullScreen", isFullScreen());
+    c.set("Geometry", saveGeometry());
+
     c.saveSettings();
 }
 

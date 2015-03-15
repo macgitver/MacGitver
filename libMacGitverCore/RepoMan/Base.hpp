@@ -99,8 +99,6 @@ namespace RM
         const Repo* repository() const;
         Repo* repository();
 
-        bool repoEventsBlocked() const;
-
         Base* parentObject() const;
 
         Set childObjects() const;
@@ -136,7 +134,7 @@ namespace RM
     template< class T >
     inline bool Base::isA() const
     {
-        return objType() == int(T::StaticObjectType);
+        return objType() == ObjTypes(T::StaticObjectType);
     }
 
     template< class T >

@@ -61,12 +61,6 @@ namespace RM
     private slots:
         void reactivateWorkaround();
 
-    private:
-        bool refreshSelf();
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
-        ObjTypes objType() const;
-
     signals:
         void firstRepositoryOpened();
         void lastRepositoryClosed();

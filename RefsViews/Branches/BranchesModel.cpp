@@ -67,8 +67,7 @@ RefItem* BranchesModel::indexToItem(const QModelIndex& index, RefItem* defaultIt
 
 QModelIndex BranchesModel::itemToIndex(RefItem* item) const
 {
-    if ( !item || (item == mRoot) )
-    {
+    if (!item || (item == mRoot)) {
         return QModelIndex();
     }
 
@@ -125,8 +124,7 @@ Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
 
 QModelIndex BranchesModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    if( !hasIndex( row, column, parent ) )
-    {
+    if (!hasIndex(row, column, parent)) {
         return QModelIndex();
     }
 
@@ -138,25 +136,24 @@ QModelIndex BranchesModel::index( int row, int column, const QModelIndex& parent
 
 QModelIndex BranchesModel::parent( const QModelIndex& child ) const
 {
-    if( !child.isValid() )
-    {
+    if (!child.isValid()) {
         return QModelIndex();
     }
 
     RefItem* childItem = indexToItem(child);
     RefItem* parentItem = childItem->parent;
 
-    if( parentItem == mRoot )
+    if (parentItem == mRoot) {
         return QModelIndex();
+    }
 
     int row = parentItem->parent->children.indexOf( parentItem );
     return createIndex( row, 0, parentItem );
 }
 
-bool BranchesModel::hasChildren( const QModelIndex& parent ) const
+bool BranchesModel::hasChildren(const QModelIndex& parent) const
 {
-    if( parent.column() > 0 )
-    {
+    if (parent.column() > 0) {
         return 0;
     }
 

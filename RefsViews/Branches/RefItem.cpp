@@ -140,14 +140,11 @@ QVariant RefBranch::data(int role) const
 
     switch (role) {
     case Qt::FontRole:
-        #if 0
-        if( mRef.isCurrentBranch() )
-        {
+        if (object()->isHead()) {
             QFont f;
             f.setBold( true );
             return f;
         }
-        #endif
         break;
 
     case RefItem::RowBgGradientRole:

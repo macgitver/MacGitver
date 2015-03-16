@@ -39,6 +39,7 @@ namespace RM
             : BasePrivate(_pub)
             , symbolicName()
             , isDetached(repo.isHeadDetached())
+            , isUnborn(repo.isHeadUnborn())
         {
             Git::Result r;
 
@@ -109,6 +110,12 @@ namespace RM
         return d->isDetached;
     }
 
+    bool Head::isUnborn() const
+    {
+        RM_CD(Head);
+        return d->isUnborn;
+    }
+
     Git::ObjectId Head::detachedId() const
     {
         RM_CD(Head);
@@ -119,7 +126,8 @@ namespace RM
     {
         RM_CD(Head);
 
-        if (d->isDetached) {
+        if (d->isDetached || d->isUnborn) {
+            /* If it's unborn, it cannot match an existing branch anyway */
             return false;
         }
 

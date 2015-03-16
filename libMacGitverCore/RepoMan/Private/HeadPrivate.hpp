@@ -44,8 +44,9 @@ namespace RM
 
         public:
             QString         symbolicName;
-            bool            isDetached;
             Git::ObjectId   detachedId;
+            bool            isDetached      : 1;
+            bool            isUnborn        : 1;
         };
 
     }

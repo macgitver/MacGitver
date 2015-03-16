@@ -50,6 +50,7 @@ SET( SRC_FILES
     RepoMan/Submodule.cpp
     RepoMan/RefTreeNode.cpp
     RepoMan/Namespace.cpp
+    RepoMan/Head.cpp
 
     RepoMan/Private/Dumper.cpp
 
@@ -105,6 +106,7 @@ SET( PUB_HDR_FILES
     RepoMan/Submodule.hpp
     RepoMan/RefTreeNode.hpp
     RepoMan/Namespace.hpp
+    RepoMan/Head.hpp
 
     SHMParser/ShellExpand.hpp
 
@@ -143,6 +145,7 @@ SET( PRI_HDR_FILES
     RepoMan/Private/SubmodulePrivate.hpp
     RepoMan/Private/TagPrivate.hpp
     RepoMan/Private/Dumper.hpp
+    RepoMan/Private/HeadPrivate.hpp
 
     RepoMan/Config/RepoManConfigPage.hpp
 

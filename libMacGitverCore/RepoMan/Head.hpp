@@ -1,6 +1,6 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
  * (C) Sascha Cunz <sascha@macgitver.org>
  * (C) Cunz RaD Ltd.
@@ -17,33 +17,38 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_BRANCH_HPP
-#define MGV_CORE_REPOMAN_BRANCH_HPP
+#pragma once
 
-#include "Ref.hpp"
+#include "RepoMan/Base.hpp"
+#include "RepoMan/CollectionNode.hpp"
+#include "RepoMan/Branch.hpp"
 
 namespace RM
 {
 
-    class MGV_CORE_API Branch : public Ref
+    namespace Internal
+    {
+        class HeadPrivate;
+    }
+
+    class MGV_CORE_API Head : public Base
     {
     public:
-        enum { StaticObjectType = BranchObject };
-        typedef QVector< Branch* > List;
-        typedef QSet< Branch* > Set;
+        enum { StaticObjectType = HeadObject };
+        typedef Internal::HeadPrivate Private;
+        typedef QSet< Head* > Set;
+        typedef QVector< Head* > List;
 
     public:
-        Branch(Base* parent, const Git::Reference& ref);
+        Head(const Git::Repository& repo, Base* parent);
 
     public:
-        bool hasUpstream() const;
-        QString upstreamRefName() const;
-        Ref* upstream();
-        int aheadCount() const;
-        int behindCount() const;
-        bool isHead() const;
+        bool isDetached() const;
+        Git::ObjectId detachedId() const;
+        QString symbolicName() const;
+
+    public:
+        bool is(const Branch* ref) const;
     };
 
 }
-
-#endif

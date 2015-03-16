@@ -24,6 +24,8 @@
 namespace RM
 {
 
+    class Head;
+
     namespace Internal
     {
 
@@ -73,7 +75,7 @@ namespace RM
             bool            mIsActive       : 1;   //!< This is MGV's current active repo?
             bool            mIsInitializing : 1;   //!< True, while this repository is initializing
             QTimer*         mUnloadTimer;          //!< NULL or a timer to unload this repository
-
+            Head*           mHead;                 //!< The HEAD
         };
 
     }

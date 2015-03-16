@@ -48,6 +48,7 @@ namespace RM
         RepoObject,
         RemoteObject,
         SubmoduleObject,
+        HeadObject,
 
         // references
         BranchObject,

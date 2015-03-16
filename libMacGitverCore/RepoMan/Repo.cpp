@@ -30,6 +30,7 @@
 #include "RepoMan/Events.hpp"
 #include "RepoMan/Repo.hpp"
 #include "RepoMan/RepoMan.hpp"
+#include "RepoMan/Head.hpp"
 #include "RepoMan/Remote.hpp"
 #include "RepoMan/Namespace.hpp"
 #include "RepoMan/Ref.hpp"
@@ -286,6 +287,12 @@ namespace RM
         return d->findNamespace(nsFullName);
     }
 
+    Head* Repo::head() const
+    {
+        RM_CD(Repo);
+        return d->mHead;
+    }
+
     /**
      * @brief       Get this repository's collection of branches
      *
@@ -350,6 +357,7 @@ namespace RM
         : BasePrivate( pub )
     {
         mRepo = repo;
+        mHead = NULL;
         mPath = mRepo.basePath();
         mIsLoaded = mRepo.isValid();
         mIsActive = false;
@@ -494,6 +502,11 @@ namespace RM
         if (!mIsLoaded) {
             // In case we're not loaded, just return and do nothing.
             return true;
+        }
+
+        if (!mHead) {
+            RM_P(Repo);
+            mHead = new Head(mRepo, p);
         }
 
         return true;

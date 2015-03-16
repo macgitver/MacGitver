@@ -32,6 +32,7 @@ namespace RM
 {
 
     class RepoMan;
+    class Head;
 
     namespace Internal
     {
@@ -89,6 +90,7 @@ namespace RM
         CollectionNode* namespaces();
         CollectionNode* notes();
         CollectionNode* tags();
+        Head*           head() const;
 
     private:
         void activated();

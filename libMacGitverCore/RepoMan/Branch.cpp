@@ -17,9 +17,10 @@
  *
  */
 
-#include "Branch.hpp"
-#include "Repo.hpp"
-#include "Events.hpp"
+#include "RepoMan/Branch.hpp"
+#include "RepoMan/Repo.hpp"
+#include "RepoMan/Events.hpp"
+#include "RepoMan/Head.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 #include "RepoMan/Private/BranchPrivate.hpp"
@@ -63,6 +64,13 @@ namespace RM
     {
         RM_CD(Branch);
         return d->mBehindCount;
+    }
+
+    bool Branch::isHead() const
+    {
+        const Repo* r = repository();
+        const Head* h = r ? r->head() : NULL;
+        return h && h->is(this);
     }
 
     //-- BranchPrivate -----------------------------------------------------------------------------

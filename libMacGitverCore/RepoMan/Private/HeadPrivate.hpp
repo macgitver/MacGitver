@@ -1,6 +1,6 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
  * (C) Sascha Cunz <sascha@macgitver.org>
  * (C) Cunz RaD Ltd.
@@ -17,43 +17,37 @@
  *
  */
 
-#ifndef REPOMAN_REMOTE_PRIVATE_HPP
-#define REPOMAN_REMOTE_PRIVATE_HPP
+#pragma once
 
 #include "RepoMan/Private/BasePrivate.hpp"
 
-#include "RepoMan/Remote.hpp"
+#include "RepoMan/Head.hpp"
 
 namespace RM
 {
 
-    class Head;
-
     namespace Internal
     {
 
-        class RemotePrivate : public BasePrivate
+        class HeadPrivate : public BasePrivate
         {
         public:
-            RemotePrivate(Remote* _pub, const Git::Remote& _obj);
+            HeadPrivate(Head* pub, const Git::Repository& ref);
 
         public:
             ObjTypes objType() const;
             bool refreshSelf();
-            void postCreation();
-            void preTerminate();
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 
         public:
-            QString         name;
-            Head*           mHead;                 //!< The HEAD
+            QString         symbolicName;
+            bool            isDetached;
+            Git::ObjectId   detachedId;
         };
 
     }
 
 }
-
-#endif

@@ -231,22 +231,18 @@ namespace RM
         // TODO: This method is totally wrong placed here
         RM_D(Repo);
 
-        if (d->mIsLoaded) {
-            Git::Result r;
-            Git::Reference HEAD = d->mRepo.HEAD(r);
+        if (d->mIsLoaded && d->mHead) {
 
-            if (HEAD.isValid()) {
-                if (HEAD.name() != QLatin1String("HEAD")) {
-                    return tr("<b style=\"background-color: #FFB54F;"
-                                  "\">%1</b>" ).arg(HEAD.name().mid(11));
-                }
-                else {
-                    return tr("detached at <b>%1</b>" ).arg(HEAD.objectId().toString());
-                }
+            if (d->mHead->isDetached()) {
+                return tr("detached at <b>%1</b>" ).arg(d->mHead->detachedId().toString());
             }
-            else {
+
+            if (d->mHead->isUnborn()) {
                 return tr("<b style=\"color: red;\">Branch yet to be born</b>");
             }
+
+            return tr("<b style=\"background-color: #FFB54F;"
+                      "\">%1</b>" ).arg(d->mHead->symbolicName().mid(11));
         }
         return tr("&lt;unknown&gt;");
     }

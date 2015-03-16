@@ -23,6 +23,7 @@
 #include "RepoMan/Private/Dumper.hpp"
 #include "RepoMan/Private/HeadPrivate.hpp"
 #include "RepoMan/Branch.hpp"
+#include "RepoMan/Repo.hpp"
 
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/BranchRef.hpp"
@@ -65,7 +66,18 @@ namespace RM
 
         bool HeadPrivate::refreshSelf()
         {
+            Git::Repository repo = repository()->gitLoadedRepo();
+            Git::Result r;
 
+            isUnborn = repo.isHeadUnborn();
+            isDetached = repo.isHeadDetached();
+
+            if (isDetached) {
+                detachedId = repo.HEAD(r).objectId();
+            }
+            else {
+                symbolicName = repo.headBranchName(r);
+            }
             return true;
         }
 

@@ -78,11 +78,6 @@ namespace RM
         RepoPrivate::preTerminate();
     }
 
-    bool SubmodulePrivate::refreshSelf()
-    {
-        return true;
-    }
-
     QString SubmodulePrivate::objectTypeName() const
     {
         return QLatin1String("Submodule");

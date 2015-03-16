@@ -46,7 +46,7 @@ namespace RM
                 detachedId = repo.HEAD(r).objectId();
             }
             else {
-                symbolicName = repo.HEAD(r).target();
+                symbolicName = repo.headBranchName(r);
             }
         }
 

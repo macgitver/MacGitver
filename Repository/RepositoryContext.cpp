@@ -28,7 +28,7 @@ void RepositoryContext::setRepository(RM::Repo* repo)
     mRepo = repo;
 }
 
-RM::Repo* RepositoryContext::repository()
+RM::Repo* RepositoryContext::repository() const
 {
     return mRepo;
 }

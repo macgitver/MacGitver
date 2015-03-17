@@ -33,7 +33,7 @@ public:
 
 public:
     void setRepository(RM::Repo* repo);
-    RM::Repo* repository();
+    RM::Repo* repository() const;
 
 private:
     RM::Repo*       mRepo;

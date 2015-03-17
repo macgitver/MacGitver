@@ -7,9 +7,6 @@
 [submodule "MacGitverModules"]
 	path = MacGitverModules
 	url = https://github.com/macgitver/MacGitverModules.git
-[submodule "MacGitverMain"]
-	path = MacGitverMain
-	url = https://github.com/macgitver/MacGitverMain.git
 [submodule "scripts/includes"]
 	path = scripts/includes
 	url = https://github.com/macgitver/sh-modules.git

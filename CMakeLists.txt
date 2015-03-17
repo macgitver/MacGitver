@@ -33,5 +33,8 @@ INCLUDE(cmake/CfgComp.cmake)
 
 ADD_SUBDIRECTORY(libDiffViews)
 ADD_SUBDIRECTORY(libMacGitverCore)
+ADD_SUBDIRECTORY(Main)
 
 ADD_SUBDIRECTORY(testMacGitverCore)
+
+INCLUDE(InstallRequiredSystemLibraries)

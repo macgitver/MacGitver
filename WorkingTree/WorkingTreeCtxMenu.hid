@@ -19,12 +19,16 @@ Ui WorkingTreeCtxMenu {
     Action Stage {
         Text            "&Stage";
         StatusToolTip   "Mark this file ready to commit.";
+        Shortcut        "Ctrl+T";
+        ShortcutContext WidgetShortcut;
         ConnectTo       onWtCtxStage();
     };
 
     Action Reset {
         Text            "&Discard changes";
         StatusToolTip   "Discard unstaged changes to this file.";
+        Shortcut        "Ctrl+J";
+        ShortcutContext WidgetShortcut;
         ConnectTo       onWtCtxDiscard();
     };
 

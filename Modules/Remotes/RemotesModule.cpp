@@ -36,6 +36,7 @@ void RemotesModule::initialize()
 {
     setupActions( this );
 
+     acRemotesAC->mergeInto( "RemotesMP" );
      acRemotesFetchAC->mergeInto( "RemotesFetchMP" );
 
     MacGitver::self().registerView( "Remotes", tr( "Remotes" ),
@@ -47,9 +48,17 @@ void RemotesModule::deinitialize()
     MacGitver::self().unregisterView( "Remotes" );
 }
 
-void RemotesModule::onRemoteCreate()
+/**
+ * @brief       Menu action to create a remote and add it to a repository.
+ */
+void RemotesModule::onRemoteCreateEdit()
 {
-    RemoteCreateEditDlg().exec();
+    // TODO: requires a repository context (the repo to add the remote to)
+    // To edit an existing remote, the remote context is required
+    RemoteCreateEditDlg dlg;
+    //TODO: dlg.setContext( ctx );
+    dlg.exec();
+}
 }
 
 /**

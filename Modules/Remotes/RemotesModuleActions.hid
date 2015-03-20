@@ -16,10 +16,19 @@
 
 Ui RemotesModuleActions {
 
+    Container RemotesAC {
+
+        Menu MnuRemotes {
+            Text    "Remotes";
+
+            Action RemoteAdd {
+                Text        "Add Remote ...";
+                _ConnectTo  onRemoteCreateEdit();
+            };
 
 
-
-
+        };
+    };
 
     Container RemotesFetchAC {
 

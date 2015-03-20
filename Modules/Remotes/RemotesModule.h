@@ -40,10 +40,14 @@ private:
 private slots:
     // RemotesAC
     void onRemoteCreateEdit();
+    void onRemoteDelete();
 
 private slots:
     // RemotesFetchAC
     void onRemotesFetchAll();
+
+private slots:
+    void onOperationFinished();
 };
 
 #endif

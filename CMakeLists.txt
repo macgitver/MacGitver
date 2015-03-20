@@ -24,11 +24,8 @@ INCLUDE(cmake/Utils.cmake)
 INCLUDE(cmake/GoogleTest.cmake)
 INCLUDE(cmake/MacGitver.cmake)
 
-IF(USE_CPP11)
-    ADD_DEFINITIONS(-DGW_CPP11)
-    IF(NOT MSVC)
-        GCC_ADD_FLAG("-std=c\\\\+\\\\+11")
-    ENDIF()
+IF(NOT MSVC)
+    GCC_ADD_FLAG("-std=c\\\\+\\\\+11")
 ENDIF()
 
 IF(UNIX)

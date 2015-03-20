@@ -35,7 +35,6 @@ BlueSky::View* RemotesModule::createRemotesView()
 void RemotesModule::initialize()
 {
     setupActions( this );
-    acRemotesAC->mergeInto( "RemotesMP" );
 
     MacGitver::self().registerView( "Remotes", tr( "Remotes" ),
                                     &RemotesModule::createRemotesView );

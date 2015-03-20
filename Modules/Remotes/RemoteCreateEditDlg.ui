@@ -6,75 +6,58 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>428</width>
-    <height>307</height>
+    <width>438</width>
+    <height>340</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
-   <item row="0" column="0">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Remote Server</string>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>URL</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Url</string>
-        </property>
-        <property name="buddy">
-         <cstring>txtUrl</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="LineEdit" name="txtUrl">
-        <property name="mandatory" stdset="0">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Name</string>
-        </property>
-        <property name="buddy">
-         <cstring>txtName</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="LineEdit" name="txtName">
-        <property name="mandatory" stdset="0">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="chkPushUrl">
-        <property name="text">
-         <string>Push Url</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="LineEdit" name="txtPushUrl">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="mandatory" stdset="0">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>txtUrl</cstring>
+     </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="1">
+    <widget class="LineEdit" name="txtUrl">
+     <property name="placeholderText">
+      <string>Enter the full URI to the remote repository</string>
+     </property>
+     <property name="mandatory" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="LineEdit" name="txtPushUrl">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="mandatory" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
     <widget class="QGroupBox" name="chkRefSpecs">
      <property name="title">
-      <string>Custom refspec for Fetch</string>
+      <string>Custom refspecs for Fetch</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -139,13 +122,36 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Alias</string>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>txtName</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="LineEdit" name="txtName">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>Enter an alias for the Git Remote ...</string>
+     </property>
+     <property name="mandatory" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="chkPushUrl">
+     <property name="text">
+      <string>Push URL</string>
      </property>
     </widget>
    </item>
@@ -159,10 +165,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>txtName</tabstop>
-  <tabstop>txtUrl</tabstop>
-  <tabstop>chkPushUrl</tabstop>
-  <tabstop>txtPushUrl</tabstop>
   <tabstop>chkRefSpecs</tabstop>
   <tabstop>treeRefSpecs</tabstop>
   <tabstop>txtEditRefSpec</tabstop>

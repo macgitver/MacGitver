@@ -21,7 +21,18 @@ Ui RemotesModuleActions {
 
 
 
+    Container RemotesFetchAC {
 
+        Menu MnuFetch {
+            Text    "Fetch";
 
+            Action RemotesFetchAll {
+                Text        "All Remotes";
+                _ConnectTo  onRemotesFetchAll();
+            };
+            Separator;
+        };
+
+    };
 
 };

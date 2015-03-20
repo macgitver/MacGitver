@@ -36,6 +36,8 @@ void RemotesModule::initialize()
 {
     setupActions( this );
 
+     acRemotesFetchAC->mergeInto( "RemotesFetchMP" );
+
     MacGitver::self().registerView( "Remotes", tr( "Remotes" ),
                                     &RemotesModule::createRemotesView );
 }
@@ -49,3 +51,13 @@ void RemotesModule::onRemoteCreate()
 {
     RemoteCreateEditDlg().exec();
 }
+
+/**
+ * @brief       Menu action to fetch all remotes of a repository.
+ */
+void RemotesModule::onRemotesFetchAll()
+{
+    // TODO: requires a RepositoryContext (the repo to fetch all remotes from)
+    // A sub-context (i.e. a branch) can further restrict, what is fetched
+}
+

@@ -39,6 +39,10 @@ private:
 
 private slots:
     void onRemoteCreate();
+
+private slots:
+    // RemotesFetchAC
+    void onRemotesFetchAll();
 };
 
 #endif

@@ -5,6 +5,8 @@ QT_PREPARE(Core Gui Widgets)    # We need QtGui in order to pull libMacGitverCor
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${GITWRAP_INCLUDE_DIRS}
+    ${MACGITVER_LIBS_SOURCE_DIR}
 )
 
 SET(SRC_FILES

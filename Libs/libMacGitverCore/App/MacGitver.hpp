@@ -22,7 +22,6 @@
 #include "libMacGitverCore/MacGitverApi.hpp"
 #include "libMacGitverCore/Log/LogManager.hpp"
 
-#include "libGitWrap/Repository.hpp"
 #include "libGitWrap/Result.hpp"
 
 #include "libBlueSky/Views.hpp"
@@ -67,9 +66,6 @@ public:
     static void log( Log::Type type, const QString& logMessage );
     static void log( Log::Type type, const char* logMessage );
     static void log( Log::Type type, const Git::Result& r, const char* logMessage = NULL );
-
-signals:
-    void repositoryChanged( const Git::Repository& repo ); /* deprecated */
 
 private:
     MacGitverPrivate* d;

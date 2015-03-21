@@ -2,8 +2,7 @@
 INCLUDE_DIRECTORIES(
     ${GITWRAP_INCLUDE_DIRS}
     ${HEAVEN_INCLUDE_DIRS}
-    ${libDiffViews_includes}
-    ${libMacGitverCore_includes}
+    ${MACGITVER_LIBS_SOURCE_DIR}
 )
 
 ADD_SUBDIRECTORY(History)

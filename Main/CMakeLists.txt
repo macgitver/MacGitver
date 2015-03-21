@@ -6,7 +6,6 @@ QT_PREPARE( Core Gui Widgets Xml WinMain )
 INCLUDE_DIRECTORIES(
     ${HEAVEN_INCLUDE_DIRS}
     ${GITWRAP_INCLUDE_DIRS}
-    ${libMacGitverCore_includes}
 
     ${MACGITVER_SOURCE_DIR}
     ${MACGITVER_BINARY_DIR}

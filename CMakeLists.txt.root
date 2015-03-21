@@ -1,0 +1,22 @@
+
+PROJECT(MacGitver)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+
+CMAKE_POLICY( SET CMP0009 NEW )
+
+FIND_PACKAGE(RAD-Tools REQUIRED)
+RAD_INIT(
+    FEATURES
+        QtMacros
+        DoxygenTarget
+        SplitSources
+        Installation
+)
+
+INCLUDE(cmake/Utils.cmake)
+INCLUDE(cmake/GoogleTest.cmake)
+INCLUDE(cmake/MacGitver.cmake)
+
+ADD_SUBDIRECTORY(libMacGitverCore)
+
+ADD_SUBDIRECTORY(AddOns)

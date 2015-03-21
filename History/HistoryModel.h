@@ -25,12 +25,20 @@
 
 #include "libGitWrap/Repository.hpp"
 
-class HistoryEntry;
+#include "HistoryEntry.h"
+
+
+namespace RM
+{
+    class Ref;
+    class Repo;
+}
 
 class HistoryModel : public QAbstractTableModel
 {
     friend class HistoryBuilder;
     Q_OBJECT
+
 public:
     enum Columns
     {
@@ -88,12 +96,14 @@ public:
 public:
     void setShowRoots( Roots roots );
     void changeDisplays(InlineRefDisplays displays, bool activate);
-    void append( HistoryEntry* entry );
     void buildHistory();
 
 private:
+    void append( HistoryEntry* entry );
     void updateRows( int firstRow, int lastRow );
+
     void scanInlineReferences();
+    inline void updateInlineRefs(const QHash< Git::ObjectId, HistoryInlineRefs >& refsById);
 
 public slots:
     void ensurePopulated( int row );
@@ -103,6 +113,10 @@ private slots:
     void afterClear();
     void beforeAppend();
     void afterAppend();
+
+    void onRefCreated(RM::Repo* repo, RM::Ref* ref);
+    void onRefDestroyed(RM::Repo* repo, RM::Ref* ref);
+    void onRefMoved(RM::Repo*repo, RM::Ref*ref);
 
 private:
     InlineRefDisplays           mDisplays;

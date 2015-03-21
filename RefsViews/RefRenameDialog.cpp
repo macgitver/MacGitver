@@ -16,29 +16,35 @@
  *
  */
 
+#include <QStringBuilder>
+
 #include "RefRenameDialog.hpp"
 
-#include "RefItem.hpp"
+#include "Branches/RefItem.hpp"
 
-#include "libGitWrap/Reference.hpp"
+#include "libGitWrap/RefName.hpp"
 
-RefRenameDialog::RefRenameDialog()
+#include "libMacGitverCore/RepoMan/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Repo.hpp"
+
+RefRenameDialog::RefRenameDialog(const Git::Reference &ref, RM::Repo* repo)
     : BlueSky::Dialog()
-    , mRefInfo( 0 )
+    , mRef(ref)
+    , mRepo(repo)
 {
+    if (!mRef.isValid()) {
+        reject();
+        return;
+    }
+
     setupUi( this );
-    setFixedSize( size() ); // Why?
-}
 
-RefRenameDialog::~RefRenameDialog()
-{
-}
+    Git::RefName nameParser = ref.nameAnalyzer();
+    QString name = nameParser.shorthand();
+    QString localName = nameParser.name();
 
-void RefRenameDialog::init( RefBranch* refInfo )
-{
-    mRefInfo = refInfo;
-
-    updateValues();
+    textRefName->setText(name);
+    textRefName->setSelection(name.length() - localName.length(), localName.length());
 }
 
 const Git::Result &RefRenameDialog::gitResult() const
@@ -48,32 +54,21 @@ const Git::Result &RefRenameDialog::gitResult() const
 
 void RefRenameDialog::accept()
 {
-    if (!mRefInfo) {
-        reject();
-        return;
+    const QString oldRefName = mRef.name();
+    const QString prefix = oldRefName.left(oldRefName.length() - mRef.shorthand().length());
+
+    QString newRefName = prefix % textRefName->text();
+
+    if (!newRefName.isEmpty() && oldRefName != newRefName) {
+
+        mRef.rename(mGitResult, newRefName);
+
+        if (mGitResult) {
+            mRepo->refresh();
+            QDialog::accept();
+            return;
+        }
     }
 
-    Git::Reference ref = mRefInfo->reference();
-    const QString oldRefName = ref.name();
-    const QString prefix = oldRefName.left( oldRefName.length() - ref.shorthand().length() );
-
-    QString newRefName = prefix + textRefName->text();
-    if ( !newRefName.isEmpty() && (oldRefName != newRefName) )
-    {
-        ref.rename( mGitResult, newRefName );
-    }
-
-    if ( mGitResult )
-        QDialog::accept();
-    else
-        reject();
-}
-
-void RefRenameDialog::updateValues()
-{
-    if ( !mRefInfo ) return;
-
-    const Git::Reference& ref = mRefInfo->reference();
-    Q_ASSERT( ref.isValid() );
-    textRefName->setText( ref.shorthand() );
+    reject();
 }

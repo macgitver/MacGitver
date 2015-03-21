@@ -22,9 +22,9 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Branch.hpp"
 
 #include "RefItem.hpp"
-#include "RefsSortProxy.hpp"
 #include "RefRenameDialog.hpp"
 
 #include "Branches/BranchesModel.hpp"
@@ -37,16 +37,16 @@
 
 BranchesView::BranchesView()
     : ContextView( "Branches" )
+    , mTree( new QTreeView )
     , mData( NULL )
 {
-    mTree = new QTreeView;
 #ifdef Q_OS_MACX
     mTree->setAttribute( Qt::WA_MacShowFocusRect, false );
 #endif
     mTree->setFrameStyle( QFrame::NoFrame );
-    mTree->setIndentation( 12 );
     mTree->setHeaderHidden( true );
     mTree->setRootIsDecorated( false );
+    mTree->setItemDelegate( &mRefDelegate );
 
     setupActions( this );
 
@@ -56,6 +56,17 @@ BranchesView::BranchesView()
 
     setFlags( ConsumesContexts | DataPerContext );
     setContextProvider( "RepoTreeView" );
+}
+
+RefItem* BranchesView::indexToItem(const QModelIndex& index) const
+{
+    if (mData) {
+        if (mData->mModel) {
+            return mData->mModel->indexToItem(index);
+        }
+    }
+
+    return NULL;
 }
 
 BlueSky::ViewContextData* BranchesView::createContextData() const
@@ -68,17 +79,16 @@ QSize BranchesView::sizeHint() const
     return QSize( 120, 100 );
 }
 
-void BranchesView::showContextMenu(const QModelIndex &index, const QPoint &globalPos)
+void BranchesView::showContextMenu(const QModelIndex& index, const QPoint& globalPos)
 {
-    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( index );
-    if ( !srcIndex.isValid() )
-        return;
+    const RefItem* item = indexToItem(index);
 
-    const RefItem *item = static_cast<const RefItem*>(srcIndex.internalPointer());
+    if (!item) {
+        return;
+    }
 
     Heaven::Menu* menu = 0;
-    if ( item && (item->data(0, RefItem::TypeRole) == RefItem::Reference) )
-    {
+    if (item->type() == RefItem::Branch) {
         menu = menuCtxMenuRefsView;
         //menu->setActivationContext( item );
     }
@@ -90,53 +100,52 @@ void BranchesView::showContextMenu(const QModelIndex &index, const QPoint &globa
 void BranchesView::onCheckoutRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action )
+    if ( !action ) // FIXME: What is this TEST good for?
         return;
 
-    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
-    if ( !srcIndex.isValid() )
-        return;
+    RefBranch* branch = indexToItemChecked<RefBranch>(mTree->currentIndex());
 
-    const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
-    if ( !branch ) return;
+    Git::Result r;
+    RM::Ref* ref = branch->object();
+    Git::Reference gitRef = ref->load(r);
 
-    Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( branch->reference() );
-    op->setMode( Git::CheckoutSafe );
-    op->setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts );
-    // TODO: setBackgroundMode( true );
-    op->execute();
+    if (r) {
+        Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation(gitRef);
 
-    Git::Result r = op->result();
+        op->setMode( Git::CheckoutSafe );
+        op->setStrategy( Git::CheckoutUpdateHEAD | Git::CheckoutAllowConflicts );
+        // TODO: setBackgroundMode( true );
+        op->execute();
+
+        r = op->result();
+    }
+
     if ( !r )
     {
         QMessageBox::warning( this, trUtf8("Error while checking out reference."),
                               trUtf8("Failed to checkout reference (%1).\nGit message: %2")
-                              .arg(branch->reference().shorthand())
+                              .arg(ref->name())
                               .arg(r.errorText()) );
     }
-
-    // TODO: workaround to update the views
-    update();
 }
 
 void BranchesView::onRemoveRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action ) return;
+    if ( !action ) return; // FIXME: What is this TEST good for?
 
-    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
-    if ( !srcIndex.isValid() ) return;
+    RefBranch* branch = indexToItemChecked<RefBranch>(mTree->currentIndex());
+    RM::Branch* rmBranch = branch->object();
 
-    const RefBranch *branch = static_cast<const RefBranch *>( srcIndex.internalPointer() );
-    if ( !branch ) return;
-
-    if ( !askToGoOn( trUtf8("Delete reference \'%1\'?").arg(branch->reference().shorthand()) ) )
+    if ( !askToGoOn( trUtf8("Delete reference \'%1\'?").arg(rmBranch->name()) ) )
         return;
 
     Git::Result r;
-    Git::Reference ref = branch->reference();
+    Git::Reference ref = rmBranch->load(r);
 
-    if ( !checkRemoveRef( ref ) ) return;
+    if ( !checkRemoveRef( ref ) ) {
+        return;
+    }
 
     ref.destroy(r);
 
@@ -144,12 +153,9 @@ void BranchesView::onRemoveRef()
     {
         QMessageBox::warning( this, trUtf8("Error while removing reference."),
                               trUtf8("Failed to remove reference (%1).\nGit message: %2")
-                              .arg(branch->reference().shorthand())
+                              .arg(rmBranch->name())
                               .arg(r.errorText()) );
     }
-
-    // TODO: workaround to update the views
-    mData->mModel->rereadBranches();
 }
 
 bool BranchesView::checkRemoveRef( const Git::Reference& ref )
@@ -196,6 +202,7 @@ bool BranchesView::checkRemoveRef( const Git::Reference& ref )
 
         bool goOn = askToGoOn( trUtf8( "You are about to remove the last reference '%1'."
                                        "\nThis will move all commits in this branch to the \"lost-found\" area." )
+                               // What is a LOST-FOUND area???
                                .arg( ref.shorthand() ) );
         if ( !goOn ) return false;
     }
@@ -206,17 +213,22 @@ bool BranchesView::checkRemoveRef( const Git::Reference& ref )
 void BranchesView::onRenameRef()
 {
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if ( !action ) return;
+    if ( !action ) return; // FIXME: What is this TEST good for?
 
-    QModelIndex srcIndex = mData->mSortProxy->deeplyMapToSource( mTree->currentIndex() );
-    if ( !srcIndex.isValid() ) return;
+    RefItem* item = indexToItem(mTree->currentIndex());
+    if (!item || item->type() != RefItem::Branch ) {
+        return;
+    }
+    RefBranch* branch = static_cast<RefBranch*>(item);
 
-    RefRenameDialog* dlg = new RefRenameDialog;
-    dlg->init( static_cast<RefBranch*>(srcIndex.internalPointer()) );
+    Git::Result r;
+    Git::Reference gitRef(branch->object()->load(r));
 
-    if ( dlg->exec() != QDialog::Accepted )
+    RefRenameDialog dlg(gitRef, branch->object()->repository());
+
+    if ( dlg.exec() != QDialog::Accepted )
     {
-        const Git::Result& dlgResult = dlg->gitResult();
+        const Git::Result& dlgResult = dlg.gitResult();
         if ( !dlgResult )
         {
             QMessageBox::warning( this, trUtf8("Failed to rename reference"),
@@ -260,10 +272,11 @@ void BranchesView::attachedToContext(BlueSky::ViewContext* ctx, BlueSky::ViewCon
     delete mData;
     mData = myData;
 
-    connect( mData->mModel, SIGNAL(gitError(const Git::Result&))
-             , this, SLOT(actionFailed(const Git::Result&)) );
+    connect( mData->mModel, SIGNAL(gitError(const Git::Result&)),
+             this, SLOT(actionFailed(const Git::Result&)) );
 
-    mTree->setModel( mData->mSortProxy );
+    mTree->setModel( mData->mModel );
+    mTree->expandAll();
 }
 
 void BranchesView::detachedFromContext(BlueSky::ViewContext* ctx )

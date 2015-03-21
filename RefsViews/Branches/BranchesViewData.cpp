@@ -24,48 +24,30 @@
 #include "Branches/BranchesViewData.hpp"
 #include "Branches/BranchesModel.hpp"
 
-#include "RefsSortProxy.hpp"
-
 BranchesViewData::BranchesViewData()
     : BlueSky::ViewContextData()
     , mModel( NULL )
-    , mSortProxy( NULL )
 {
 }
 
 void BranchesViewData::attachedToContext(BlueSky::ViewContext* context)
 {
-    Q_UNUSED( context );
+    IRepositoryContext* ctx = qobject_cast< IRepositoryContext* >(context);
+
     mModel = new BranchesModel( this );
-    mModel->rereadBranches();
 
-    // sort references
-    mSortProxy = new RefsSortProxy( this );
-    mSortProxy->setSourceModel( mModel );
-    mSortProxy->setSortCaseSensitivity( Qt::CaseInsensitive );
-
-    mSortProxy->sort( 0 );
+    mModel->setRepository(ctx ? ctx->repository() : NULL);
 }
 
 void BranchesViewData::detachedFromContext()
 {
-    delete mSortProxy;
-    mSortProxy = NULL;
-
     delete mModel;
     mModel = NULL;
 }
 
-Git::Repository BranchesViewData::repository() const
+RM::Repo* BranchesViewData::repository() const
 {
     IRepositoryContext* ctx = qobject_cast< IRepositoryContext* >( attachedContext() );
-
-    if( !ctx )
-    {
-        return Git::Repository();
-    }
-
-    RM::Repo* repo = ctx->repository();
-    return repo ? repo->gitRepo() : Git::Repository();
+    return ctx ? ctx->repository() : NULL;
 }
 

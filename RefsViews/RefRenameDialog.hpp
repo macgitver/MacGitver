@@ -16,16 +16,16 @@
  *
  */
 
-#ifndef REF_RENAME_DIALOG_HPP
-#define REF_RENAME_DIALOG_HPP
+#pragma once
 
 #include "libBlueSky/Dialog.hpp"
 
 #include "libGitWrap/Result.hpp"
+#include "libGitWrap/Reference.hpp"
+
+#include "libMacGitverCore/RepoMan/Repo.hpp"
 
 #include "ui_RefRenameDialog.h"
-
-class RefBranch;
 
 class RefRenameDialog
         : public BlueSky::Dialog
@@ -33,21 +33,15 @@ class RefRenameDialog
 {
     Q_OBJECT
 public:
-    RefRenameDialog();
-    ~RefRenameDialog();
+    RefRenameDialog(const Git::Reference& ref, RM::Repo* repo);
 
-    void init(RefBranch *refInfo);
     const Git::Result &gitResult() const;
 
 private slots:
     void accept();
 
 private:
-    RefBranch*              mRefInfo;
-    Git::Result             mGitResult;
-
-private:
-    void updateValues();
+    Git::Result     mGitResult;
+    Git::Reference  mRef;
+    RM::Repo*       mRepo;
 };
-
-#endif // REF_RENAME_DIALOG_HPP

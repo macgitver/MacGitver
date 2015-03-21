@@ -1,6 +1,6 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2015 The MacGitver-Developers <dev@macgitver.org>
  *
  * (C) Sascha Cunz <sascha@macgitver.org>
  *
@@ -17,20 +17,42 @@
  */
 
 #include <QFont>
+#include <QDebug>
+
+#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/Ref.hpp"
+#include "libMacGitverCore/RepoMan/RefTreeNode.hpp"
+#include "libMacGitverCore/RepoMan/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Remote.hpp"
+#include "libMacGitverCore/RepoMan/CollectionNode.hpp"
 
 #include "libGitWrap/Result.hpp"
-#include "libGitWrap/Reference.hpp"
 
 #include "BranchesModel.hpp"
-
-#include "RefItem.hpp"
 
 
 BranchesModel::BranchesModel( BranchesViewData* parent )
     : QAbstractItemModel( parent )
-    , mData( parent )
-    , mRoot( new RefItem )
+    , mRepo(NULL)
+    , mRoot(new RefRoot)
+    , mHeaderLocal( NULL )
+    , mHeaderRemote( NULL )
+    , mHeaderTags( NULL )
 {
+    RM::RepoMan& rm = MacGitver::repoMan();
+
+    connect(&rm,  SIGNAL(refCreated(RM::Repo*,RM::Ref*)),
+            this, SLOT(onRefCreated(RM::Repo*,RM::Ref*)));
+
+    connect(&rm,  SIGNAL(refAboutToBeDeleted(RM::Repo*,RM::Ref*)),
+            this, SLOT(onRefDestroyed(RM::Repo*,RM::Ref*)));
+
+    connect(&rm,  SIGNAL(refMoved(RM::Repo*,RM::Ref*)),
+            this, SLOT(onRefMoved(RM::Repo*,RM::Ref*)));
+
+    connect(&rm,  SIGNAL(refTreeNodeAboutToBeDeleted(RM::Repo*,RM::RefTreeNode*)),
+            this, SLOT(onRefTreeNodeAboutToBeDeleted(RM::Repo*,RM::RefTreeNode*)));
 }
 
 BranchesModel::~BranchesModel()
@@ -38,19 +60,35 @@ BranchesModel::~BranchesModel()
     delete mRoot;
 }
 
+RefItem* BranchesModel::indexToItem(const QModelIndex& index, RefItem* defaultItem) const
+{
+    return index.isValid() ? static_cast< RefItem* >( index.internalPointer() ) : defaultItem;
+}
+
+QModelIndex BranchesModel::itemToIndex(RefItem* item) const
+{
+    if (!item || (item == mRoot)) {
+        return QModelIndex();
+    }
+
+    RefItem* parent = item->parent ? item->parent : mRoot;
+    int row = parent->children.indexOf( item );
+    return createIndex( row, 0, item );
+}
+
+QModelIndex BranchesModel::objectToIndex(RM::Base* obj) const
+{
+    return itemToIndex(mObjToItems.value(obj, NULL));
+}
+
 int BranchesModel::rowCount( const QModelIndex& parent ) const
 {
-    RefItem* parentItem;
     if( parent.column() > 0 )
     {
         return 0;
     }
 
-    if( !parent.isValid() )
-        parentItem = mRoot;
-    else
-        parentItem = static_cast< RefItem* >( parent.internalPointer() );
-
+    RefItem* parentItem = indexToItem(parent, mRoot);
     return parentItem->children.count();
 }
 
@@ -61,176 +99,320 @@ int BranchesModel::columnCount( const QModelIndex& parent ) const
 
 QVariant BranchesModel::data( const QModelIndex& index, int role ) const
 {
-    if( !index.isValid() )
-    {
+    RefItem* item = indexToItem(index);
+    if (index.column() != 0) {
         return QVariant();
     }
-
-    RefItem* item = static_cast< RefItem* >( index.internalPointer() );
-    return item->data( index.column(), role );
-}
-
-bool BranchesModel::setData( const QModelIndex& index, const QVariant& value, int role )
-{
-    if ( !index.isValid() || (role != Qt::EditRole) )
-        return false;
-
-    RefItem *item = static_cast<RefItem *>( index.internalPointer() );
-    if ( !item )
-        return false;
-
-    Git::Result result;
-    if ( !item->setData( result, value, role, index.column() ) )
-    {
-        if( !result )
-            emit gitError( result );
-
-        return false;
-    }
-
-    emit dataChanged(index, index);
-    return true;
+    return item ? item->data(role) : QVariant();
 }
 
 Qt::ItemFlags BranchesModel::flags( const QModelIndex& index ) const
 {
-    if ( !index.isValid() )
+    if (!index.isValid()) {
         return Qt::NoItemFlags;
+    }
 
-    Qt::ItemFlags result = Qt::ItemIsEnabled;
-    const RefItem *item = static_cast<const RefItem *>( index.internalPointer() );
+    RefItem* item = indexToItem(index);
+    RefItem::ItemType t = item->type();
 
-    RefItem::ItemType t = static_cast<RefItem::ItemType>(
-                item->data( 0, RefItem::TypeRole ).toInt() );
-    if ( (t == RefItem::Reference) || (t == RefItem::Namespace) )
-        result |= Qt::ItemIsSelectable;
+    if (t == RefItem::Headline) {
+        return Qt::NoItemFlags;
+    }
 
-    if ( item->isEditable() )
-        result |= Qt::ItemIsEditable;
-
-    return result;
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
 QModelIndex BranchesModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    if( !hasIndex( row, column, parent ) )
-    {
+    if (!hasIndex(row, column, parent)) {
         return QModelIndex();
     }
 
-    RefItem* parentItem;
-
-    if( !parent.isValid() )
-        parentItem = mRoot;
-    else
-        parentItem = static_cast< RefItem* >( parent.internalPointer() );
-
+    RefItem* parentItem = indexToItem(parent, mRoot);
     RefItem* childItem = parentItem->children.at( row );
-    if( childItem )
-        return createIndex( row, column, childItem );
-    else
-        return QModelIndex();
+
+    return childItem ? createIndex( row, column, childItem ) : QModelIndex();
 }
 
 QModelIndex BranchesModel::parent( const QModelIndex& child ) const
 {
-    if( !child.isValid() )
-    {
+    if (!child.isValid()) {
         return QModelIndex();
     }
 
-    RefItem* childItem = static_cast< RefItem* >( child.internalPointer() );
+    RefItem* childItem = indexToItem(child);
     RefItem* parentItem = childItem->parent;
 
-    if( parentItem == mRoot )
+    if (parentItem == mRoot) {
         return QModelIndex();
+    }
 
     int row = parentItem->parent->children.indexOf( parentItem );
     return createIndex( row, 0, parentItem );
 }
 
-bool BranchesModel::hasChildren( const QModelIndex& parent ) const
+bool BranchesModel::hasChildren(const QModelIndex& parent) const
 {
-    RefItem* parentItem;
-    if( parent.column() > 0 )
-    {
+    if (parent.column() > 0) {
         return 0;
     }
 
-    if( !parent.isValid() )
-        parentItem = mRoot;
-    else
-        parentItem = static_cast< RefItem* >( parent.internalPointer() );
-
+    RefItem* parentItem = indexToItem(parent, mRoot);
     return parentItem->children.count() > 0;
 }
 
-void BranchesModel::rereadBranches()
+RefItem* BranchesModel::link(bool notify, RefItem* it)
 {
-    beginResetModel();
+    int pos = it->itemPosition();
 
-    Git::Repository repo = mData->repository();
+    if (notify) {
+        beginInsertRows(itemToIndex(it->parent), pos, pos);
+    }
 
-    qDeleteAll( mRoot->children );
-    Q_ASSERT( mRoot->children.isEmpty() );
+    it->parent->children.insert(pos, it);
 
-    if( repo.isValid() )
-    {
-        Git::Result r;
-        Git::ReferenceList sl = repo.allReferences( r );
-        if( !sl.isEmpty() )
-        {
-            RefScope* scopeLocal = new RefScope( mRoot, tr( "Local" ) );
-            RefScope* scopeRemote = new RefScope( mRoot, tr( "Remote" ) );
-            RefScope* scopeOther = new RefScope( mRoot, tr( "Tags" ) );
+    if (notify) {
+        endInsertRows();
+    }
 
-            for( int i = 0; i < sl.count(); ++i )
-            {
-                const Git::Reference &currentRef = sl[ i ];
-                RefScope* parentScope = NULL;
-                if ( currentRef.isLocal() )
-                    parentScope = scopeLocal;
-                else if ( currentRef.isRemote() )
-                    parentScope = scopeRemote;
-                else
-                    parentScope = scopeOther;
+    return it;
+}
 
-                QStringList parts = currentRef.shorthand().split( QChar( L'/' ) );
-                if ( parts.count() == 1 )
-                {
-                    new RefBranch( parentScope, parts.last(), currentRef );
-                }
-                else
-                {
-                    RefItem* ns = parentScope;
-                    QString totPart;
-                    for( int j = 0; j < parts.count() - 1; j++ )
-                    {
-                        RefItem* next = NULL;
-                        QString partName = parts[ j ];
-                        totPart += partName + QChar( L'/' );
-                        foreach( RefItem* nsChild, ns->children )
-                        {
-                            if( nsChild->text() == partName ) // + Type
-                            {
-                                next = nsChild;
-                                break;
-                            }
-                        }
-                        if( !next )
-                        {
-                            next = new RefNameSpace( ns, partName );
-                        }
-                        ns = next;
-                    }
+RefItem* BranchesModel::createBranchItem(bool notify, RefItem* parent, RM::Branch* obj)
+{
+    if (obj->name() == QStringLiteral("HEAD")) {
+        return NULL;
+    }
 
-                    Q_ASSERT( ns );
-                    new RefBranch( ns, parts.last(), currentRef );
-                }
+    if (!parent && obj->parentObject()->objType() != RM::CollectionNodeObject) {
+        parent = insertObject(notify, obj->parentObject());
+        return NULL;
+    }
+
+    if (!parent) {
+        parent = mHeaderLocal;
+    }
+
+    return link(notify, new RefBranch(parent, obj));
+}
+
+RefItem* BranchesModel::createTagItem(bool notify, RefItem* parent, RM::Tag* obj)
+{
+    if (!parent && obj->parentObject()->objType() != RM::CollectionNodeObject) {
+        parent = insertObject(notify, obj->parentObject());
+        return NULL;
+    }
+
+    if (!parent) {
+        parent = mHeaderTags;
+    }
+
+    return link(notify, new RefTag(parent, obj));
+}
+
+RefItem* BranchesModel::createScopeItem(bool notify, RefItem* parent, RM::RefTreeNode* obj)
+{
+    if (!parent) {
+        RM::Base* parObj = obj->parentObject();
+
+        if (parObj->objType() != RM::CollectionNodeObject) {
+            parent = insertObject(notify, parObj);
+            return NULL;
+        }
+
+        RM::CollectionNode* cn = static_cast<RM::CollectionNode*>(parObj);
+        switch (cn->collectionType()) {
+        case RM::ctTags:
+            parent = mHeaderTags;
+            break;
+
+        case RM::ctBranches:
+            parent = mHeaderLocal;
+            break;
+
+        default:
+            // Should we assert here?
+            return NULL;
+        }
+    }
+
+    return link(notify, new RefScope(parent, obj));
+}
+
+RefItem* BranchesModel::createRemoteItem(bool notify, RefItem* parent, RM::Remote* obj)
+{
+    if (!parent) {
+        parent = mHeaderRemote;
+    }
+
+    return link(notify, new RefRemote(parent, obj));
+}
+
+RefItem* BranchesModel::insertObject(bool notify, RM::Base* obj)
+{
+    if (!obj) {
+        return NULL;
+    }
+
+    qDebug() << obj->displayName();
+
+    bool     doChildren = false;
+    RefItem* parent = mObjToItems.value(obj->parentObject(), NULL);
+    RefItem* it     = mObjToItems.value(obj, NULL);
+
+    if (!it) {
+        switch (obj->objType()) {
+        case RM::BranchObject:
+            it = createBranchItem(notify, parent, static_cast<RM::Branch*>(obj));
+            break;
+
+        case RM::TagObject:
+            it = createTagItem(notify, parent, static_cast<RM::Tag*>(obj));
+            break;
+
+        case RM::RefTreeNodeObject:
+            it = createScopeItem(notify, parent, static_cast<RM::RefTreeNode*>(obj));
+            doChildren = true;
+            break;
+
+        case RM::RemoteObject:
+            it = createRemoteItem(notify, parent, static_cast<RM::Remote*>(obj));
+            doChildren = true;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    if (it) {
+        mObjToItems.insert(obj, it);
+        mItemToObjs.insert(it, obj);
+
+        if (doChildren) {
+            foreach(RM::Base* child, obj->childObjects()) {
+                insertObject(notify, child);
             }
         }
+    }
+
+    return it;
+}
+
+void BranchesModel::insertCollection(RM::CollectionNode* coll)
+{
+    foreach(RM::Base* obj, coll->childObjects()) {
+        insertObject(false, obj);
+    }
+}
+
+void BranchesModel::updatedObject(RM::Base* obj)
+{
+    RefItem* it = mObjToItems.value(obj, NULL);
+    if (!it) {
+        return;
+    }
+
+    QModelIndex i = itemToIndex(it);
+    dataChanged(i, i);
+}
+
+void BranchesModel::deleteItem(RefItem* it)
+{
+    if (!it) {
+        return;
+    }
+
+    // Do a depth-first traversal, so we're sure everything's removed correctly
+
+    foreach (RefItem* sub, it->children) {
+        deleteItem(sub);
+    }
+
+    RefItem* parent = it->parent;
+    int pos = parent->children.indexOf(it);
+
+    beginRemoveRows(itemToIndex(parent), pos, pos);
+
+    RM::Base* obj = it->object();
+    if (obj) {
+        mObjToItems.remove(obj);
+        mItemToObjs.remove(it);
+    }
+
+    delete it;
+
+    endRemoveRows();
+}
+
+void BranchesModel::deletedObject(RM::Base* obj)
+{
+    deleteItem(mObjToItems.value(obj, NULL));
+}
+
+void BranchesModel::setRepository(RM::Repo* repo)
+{
+    if (mRepo == repo) {
+        return;
+    }
+
+    beginResetModel();
+
+    if (mRepo) {
+        qDeleteAll(mRoot->children);
+        mObjToItems.clear();
+        mItemToObjs.clear();
+        mHeaderLocal = mHeaderRemote = mHeaderTags = NULL;
+    }
+
+    mRepo = repo;
+
+    mHeaderLocal    = new RefHeadline(mRoot, tr("Local branches")); link(false, mHeaderLocal);
+    mHeaderRemote   = new RefHeadline(mRoot, tr("Remotes"));        link(false, mHeaderRemote);
+    mHeaderTags     = new RefHeadline(mRoot, tr("Tags"));           link(false, mHeaderTags);
+
+    insertCollection(mRepo->branches());
+    insertCollection(mRepo->tags());
+
+    foreach (RM::Remote* rmRemote, repo->childObjects<RM::Remote>()) {
+        insertObject(false, rmRemote);
     }
 
     endResetModel();
 }
 
+void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
+{
+    if (repo != mRepo) {
+        return;
+    }
+
+    insertObject(true, ref);
+}
+
+void BranchesModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
+{
+    if (repo != mRepo) {
+        return;
+    }
+
+    deletedObject(ref);
+}
+
+void BranchesModel::onRefTreeNodeAboutToBeDeleted(RM::Repo* repo, RM::RefTreeNode* obj)
+{
+    if (repo != mRepo) {
+        return;
+    }
+
+    deletedObject(obj);
+}
+
+void BranchesModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)
+{
+    if (repo != mRepo) {
+        return;
+    }
+
+    updatedObject(ref);
+}

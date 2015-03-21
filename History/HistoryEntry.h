@@ -61,9 +61,82 @@ struct HistoryInlineRef
     bool        mIsRemote   : 1;
     bool        mIsTag      : 1;
     bool        mIsStash    : 1;
+    bool        mIsDetached : 1;
+
+    bool operator ==(const HistoryInlineRef& other) const
+    {
+        if ( this == &other ) {
+            return true;
+        }
+
+        return  mRefName    == other.mRefName       &&
+                mIsBranch   == other.mIsBranch      &&
+                mIsCurrent  == other.mIsCurrent     &&
+                mIsRemote   == other.mIsRemote      &&
+                mIsTag      == other.mIsTag         &&
+                mIsStash    == other.mIsStash       &&
+                mIsDetached == other.mIsDetached    ;
+    }
+
+    inline bool operator !=(const HistoryInlineRef& other) const {
+        return !( *this == other );
+    }
+
+    inline bool detachedHEAD() const
+    {
+        return mIsDetached && !(mIsTag || mIsBranch || mIsStash);
+    }
+
+    inline bool nameLessThan(const HistoryInlineRef& other) const
+    {
+        return mRefName < other.mRefName;
+    }
+
+    bool operator <(const HistoryInlineRef& other) const
+    {
+        // sort order:
+        // - tag
+        // - detached HEAD
+        // - current branch
+        // - local branch
+        // - remote branch
+        // - stash
+        // - Everything else is sorted by mRefName
+
+        if ( mIsTag ) {
+            // tags have highest priority
+            return other.mIsTag ? nameLessThan(other) : true;
+        }
+
+        if ( detachedHEAD() )
+        {
+            // a detached HEAD comes right after tag ? -> There can only be one!
+            return !other.mIsTag;
+        }
+
+        if ( mIsBranch )
+        {
+            if ( other.mIsTag || other.mIsCurrent || other.detachedHEAD() )
+                return false;
+
+            if ( mIsCurrent ) {
+                // a is the current branch
+                return true;
+            }
+
+            return ( mIsRemote == other.mIsRemote ) ? nameLessThan( other ) : !mIsRemote;
+        }
+
+        if ( mIsStash ) {
+            return other.mIsStash ? nameLessThan( other )
+                                  : !(other.mIsTag || other.mIsBranch || other.detachedHEAD());
+        }
+
+        return !(other.mIsTag || other.mIsBranch || other.mIsStash || other.detachedHEAD()) ? nameLessThan( other ) : false;
+    }
 };
 
-typedef QVector< HistoryInlineRef > HistoryInlineRefs;
+typedef QList< HistoryInlineRef > HistoryInlineRefs;
 
 class HistoryEntry
 {

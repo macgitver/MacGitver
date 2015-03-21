@@ -19,12 +19,15 @@
 #ifndef MGV_BRANCHES_VIEW_HPP
 #define MGV_BRANCHES_VIEW_HPP
 
+#include "hic_BranchesViewActions.h"
+
 #include "libBlueSky/Contexts.hpp"
+
+#include "RefsViewDelegate.h"
+#include "Branches/RefItem.hpp"
 
 class QTreeView;
 class QModelIndex;
-
-#include "hic_BranchesViewActions.h"
 
 namespace Git
 {
@@ -64,7 +67,20 @@ private:
     bool askToGoOn(const QString& message);
     inline bool checkRemoveRef(const Git::Reference &ref);
 
+    RefItem* indexToItem(const QModelIndex& index) const;
+
+    template<class T>
+    T* indexToItemChecked(const QModelIndex& index) const
+    {
+        RefItem* it = indexToItem(index);
+        if (it && it->type() == T::StaticType) {
+            return static_cast<T*>(it);
+        }
+        return NULL;
+    }
+
 private:
+    RefsViewDelegate    mRefDelegate;
     QTreeView*          mTree;
     BranchesViewData*   mData;
 };

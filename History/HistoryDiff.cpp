@@ -52,6 +52,8 @@ HistoryDiff::HistoryDiff()
     mToolbar = new QToolBar;
 
     mDiffTo = new QComboBox;
+    mDiffTo->addItem( trUtf8( "All parents" ), DTT_AllParents );
+    mDiffTo->addItem( trUtf8( "Parent" ), DTT_Parent );
     mDiffTo->addItem( trUtf8( "Workingtree" ), DTT_WT );
     mDiffTo->addItem( trUtf8( "Index" ), DTT_Index );
     mDiffTo->addItem( trUtf8( "Workingtree + Index" ), DTT_WT_and_Index );
@@ -59,8 +61,6 @@ HistoryDiff::HistoryDiff()
     //mDiffTo->addItem( trUtf8( "SHA-1" ), DTT_AnySHA1 );
     mDiffTo->addItem( trUtf8( "Branch" ), DTT_Branch );
     mDiffTo->addItem( trUtf8( "Tag" ), DTT_Tag );
-    mDiffTo->addItem( trUtf8( "All parents" ), DTT_AllParents );
-    mDiffTo->addItem( trUtf8( "Parent" ), DTT_Parent );
 
     mToolbar->addWidget( new QLabel( trUtf8( "Diff to:" ) ) );
     mToolbar->addWidget( mDiffTo );

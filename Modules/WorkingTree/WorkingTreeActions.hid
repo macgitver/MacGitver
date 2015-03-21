@@ -1,0 +1,62 @@
+
+Ui WorkingTreeActions {
+
+    ToolBar WorkingTree {
+
+        Menu ToggleFilter {
+
+            Text            "Filter";
+        //  Checkable       true;
+        //  Checked         true;
+
+            Action ShowAll {
+                Text        "Check all";
+                _ConnectTo  onShowAll();
+            };
+
+            Action HideAll {
+                Text        "Uncheck all";
+                _ConnectTo  onHideAll();
+            };
+
+            Separator;
+
+            Action ShowUnchanged {
+                Text        "Unchanged";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowUnchanged(bool);
+            };
+
+            Action ShowModified {
+                Text        "Modified";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowModified(bool);
+            };
+
+            Action ShowMissing {
+                Text        "Missing";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowMissing(bool);
+            };
+
+            Action ShowIgnored {
+                Text        "Ignored";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowIgnored(bool);
+            };
+
+            Action ShowUntracked {
+                Text        "Untracked";
+                Checkable   true;
+                Checked     true;
+                _ConnectTo  onShowUntracked(bool);
+            };
+        };
+
+    };
+
+};

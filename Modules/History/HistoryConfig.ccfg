@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CCfg ConfigPath="History" Class="HistoryConfig">
+
+    <Setting    Name="SplitLayout"
+                Type="UInt"
+                Validate="% &lt; 3"
+                Default="0"
+    />
+
+    <SubSection	Name="Details">
+
+        <Setting    Name="List"
+                    Type="String"
+                    Default="#"
+                    Notify="yes"
+        />
+
+    </SubSection>
+
+</CCfg>

@@ -1,0 +1,87 @@
+/*
+ * MacGitver
+ * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Cunz RaD Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License (Version 2) as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+Ui HistoryViewActions {
+
+    Action HistoryViewShowLocalBranches {
+        Text        "Local";
+        Checkable   true;
+        Checked     true;
+        ConnectTo   onChangeShowLocal(bool);
+    };
+
+    Action HistoryViewShowRemoteBranches {
+        Text        "Remote";
+        Checkable   true;
+        Checked     true;
+        ConnectTo   onChangeShowRemote(bool);
+    };
+
+    Action HistoryViewShowTags {
+        Text        "Tags";
+        Checkable   true;
+        Checked     true;
+        ConnectTo   onChangeShowTags(bool);
+    };
+
+    ActionGroup ShowRootGroup {
+
+        Action HistoryShowAllRefs {
+            Text        "All references";
+            Checkable   true;
+            ConnectTo   onChangeShowAllRefs(bool);
+        };
+
+        Action HistoryShowLocalBranches {
+            Text        "Local branches";
+            Checkable   true;
+            ConnectTo   onChangeShowLocalBranches(bool);
+        };
+
+        Action HistoryShowAllBranches {
+            Text        "All branches";
+            Checkable   true;
+            ConnectTo   onChangeShowAllBranches(bool);
+        };
+
+        Action HistoryShowHEADonly {
+            Text        "Head only";
+            Checkable   true;
+            ConnectTo   onChangeShowHeadOnly(bool);
+        };
+
+    };
+
+    ToolBar HistoryViewToolBar {
+
+        Menu History {
+            Text        "History";
+            ActionGroup ShowRootGroup;
+        };
+
+        Menu Display {
+            Text        "Display";
+
+            Action      HistoryViewShowLocalBranches;
+            Action      HistoryViewShowRemoteBranches;
+            Action      HistoryViewShowTags;
+        };
+    };
+
+};

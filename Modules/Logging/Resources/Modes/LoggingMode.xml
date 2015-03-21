@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sky:Layout>
+    <Sky:Id>Logging</Sky:Id>
+    <Sky:Window>
+        <Sky:Id>97302003-c519-43b6-aea1-26db56e99941</Sky:Id>
+        <Sky:Splitter>
+           <Sky:Horizontal/>
+           <Sky:Id>758c6df6-8153-4382-aae7-0f5603302b05</Sky:Id>
+           <Sky:Splitter>
+                <Sky:Vertical/>
+                <Sky:Id>550c094d-b8e9-4761-a92e-2e715f775d6c</Sky:Id>
+                <Sky:Tab>
+                    <Sky:Left/>
+                    <Sky:Id>c9e000f4-9fa3-4e42-a3c7-cc77d604096f</Sky:Id>
+                    <Sky:View>
+                         <Sky:Id>RepoTreeView</Sky:Id>
+                    </Sky:View>
+                </Sky:Tab>
+            </Sky:Splitter>
+            <Sky:Tab>
+                <Sky:Top/>
+                <Sky:Id>a942b497-d7f0-42c5-a1ae-748eea9bfa0f</Sky:Id>
+                <Sky:View>
+                    <Sky:Id>LoggingView</Sky:Id>
+                </Sky:View>
+            </Sky:Tab>
+        </Sky:Splitter>
+    </Sky:Window>
+</Sky:Layout>

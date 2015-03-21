@@ -23,7 +23,8 @@
 #include "RepoMan/Head.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Private/BranchPrivate.hpp"
+
+#include "RepoMan/Data/BranchData.hpp"
 
 namespace RM
 {

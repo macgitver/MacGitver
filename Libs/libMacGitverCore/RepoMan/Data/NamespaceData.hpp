@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "RepoMan/Private/RefPrivate.hpp"
+#include "RepoMan/Data/BaseData.hpp"
 
-#include "RepoMan/Tag.hpp"
+#include "RepoMan/Namespace.hpp"
 
 namespace RM
 {
@@ -29,18 +29,23 @@ namespace RM
     namespace Internal
     {
 
-        class TagPrivate : public RefPrivate
+        class NamespacePrivate : public BasePrivate
         {
         public:
-            TagPrivate(Tag* pub, const Git::Reference& _ref);
+            NamespacePrivate(Namespace* _pub, const QString& _name);
 
         public:
             ObjTypes objType() const;
+            bool refreshSelf();
             void postCreation();
             void preTerminate();
+            QString displayName() const;
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
+
+        public:
+            QString name;
         };
 
     }

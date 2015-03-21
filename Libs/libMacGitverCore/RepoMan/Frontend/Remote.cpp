@@ -19,12 +19,14 @@
 
 #include "libGitWrap/Result.hpp"
 
-#include "Repo.hpp"
-#include "Remote.hpp"
-#include "Events.hpp"
+#include "RepoMan/Events.hpp"
+
+#include "RepoMan/Repo.hpp"
+#include "RepoMan/Remote.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Private/RemotePrivate.hpp"
+
+#include "RepoMan/Data/RemoteData.hpp"
 
 namespace RM
 {

@@ -39,8 +39,9 @@
 #include "RepoMan/Submodule.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Private/RepoPrivate.hpp"
-#include "RepoMan/Private/RemotePrivate.hpp"
+
+#include "RepoMan/Data/RepoData.hpp"
+#include "RepoMan/Data/RemoteData.hpp"
 
 namespace RM
 {

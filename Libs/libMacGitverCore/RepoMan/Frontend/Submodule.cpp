@@ -17,11 +17,12 @@
  *
  */
 
-#include "Submodule.hpp"
-#include "Events.hpp"
+#include "RepoMan/Events.hpp"
+
+#include "RepoMan/Submodule.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Private/SubmodulePrivate.hpp"
+#include "RepoMan/Data/SubmoduleData.hpp"
 
 namespace RM
 {

@@ -27,19 +27,20 @@ SET( SRC_FILES
     MacGitver/GitPatchConsumer.cpp
     MacGitver/AutoRefresher.cpp
 
-    RepoMan/Base.cpp
-    RepoMan/Ref.cpp
-    RepoMan/Branch.cpp
     RepoMan/Events.cpp
-    RepoMan/Repo.cpp
     RepoMan/RepoMan.cpp
-    RepoMan/Remote.cpp
-    RepoMan/Tag.cpp
-    RepoMan/RefLog.cpp
-    RepoMan/Submodule.cpp
-    RepoMan/RefTreeNode.cpp
-    RepoMan/Namespace.cpp
-    RepoMan/Head.cpp
+
+    RepoMan/Frontend/Base.cpp
+    RepoMan/Frontend/Branch.cpp
+    RepoMan/Frontend/Namespace.cpp
+    RepoMan/Frontend/Ref.cpp
+    RepoMan/Frontend/RefLog.cpp
+    RepoMan/Frontend/RefTreeNode.cpp
+    RepoMan/Frontend/Remote.cpp
+    RepoMan/Frontend/Repo.cpp
+    RepoMan/Frontend/Submodule.cpp
+    RepoMan/Frontend/Tag.cpp
+    RepoMan/Frontend/Head.cpp
 
     RepoMan/Private/Dumper.cpp
 
@@ -116,19 +117,21 @@ SET( PRI_HDR_FILES
     Config/Ui/GeneralConfigPage.hpp
     Config/Ui/RepoManConfigPage.hpp
 
-    RepoMan/Private/BasePrivate.hpp
-    RepoMan/Private/BranchPrivate.hpp
-    RepoMan/Private/NamespacePrivate.hpp
-    RepoMan/Private/RefPrivate.hpp
-    RepoMan/Private/RefLogPrivate.hpp
-    RepoMan/Private/RefTreeNodePrivate.hpp
-    RepoMan/Private/RemotePrivate.hpp
-    RepoMan/Private/RepoPrivate.hpp
-    RepoMan/Private/RepoManPrivate.hpp
-    RepoMan/Private/SubmodulePrivate.hpp
-    RepoMan/Private/TagPrivate.hpp
     RepoMan/Private/Dumper.hpp
-    RepoMan/Private/HeadPrivate.hpp
+
+    RepoMan/Data/BaseData.hpp
+    RepoMan/Data/BranchData.hpp
+    RepoMan/Data/NamespaceData.hpp
+    RepoMan/Data/RefData.hpp
+    RepoMan/Data/RefLogData.hpp
+    RepoMan/Data/RefTreeNodeData.hpp
+    RepoMan/Data/RemoteData.hpp
+    RepoMan/Data/RepoData.hpp
+    RepoMan/Data/RepoManData.hpp
+    RepoMan/Data/SubmoduleData.hpp
+    RepoMan/Data/TagData.hpp
+    RepoMan/Data/HeadData.hpp
+
 
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h

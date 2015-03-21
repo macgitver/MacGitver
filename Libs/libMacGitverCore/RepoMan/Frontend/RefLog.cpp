@@ -17,10 +17,10 @@
  *
  */
 
-#include "RefLog.hpp"
+#include "RepoMan/RefLog.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Private/RefLogPrivate.hpp"
+#include "RepoMan/Data/RefLogData.hpp"
 
 namespace RM
 {

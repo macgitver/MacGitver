@@ -17,10 +17,13 @@
  *
  */
 
-#include "RefTreeNode.hpp"
-#include "Events.hpp"
+#include "RepoMan/Events.hpp"
+
+#include "RepoMan/RefTreeNode.hpp"
+
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Private/RefTreeNodePrivate.hpp"
+
+#include "RepoMan/Data/RefTreeNodeData.hpp"
 
 namespace RM
 {

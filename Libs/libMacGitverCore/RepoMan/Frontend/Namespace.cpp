@@ -17,11 +17,12 @@
  *
  */
 
-#include "Namespace.hpp"
-#include "Events.hpp"
+#include "RepoMan/Events.hpp"
+
+#include "RepoMan/Namespace.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Private/NamespacePrivate.hpp"
+#include "RepoMan/Data/NamespaceData.hpp"
 
 namespace RM
 {

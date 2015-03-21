@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "RepoMan/Data/BaseData.hpp"
 
-#include "RepoMan/Namespace.hpp"
+#include "RepoMan/RefLog.hpp"
 
 namespace RM
 {
@@ -29,23 +29,19 @@ namespace RM
     namespace Internal
     {
 
-        class NamespacePrivate : public BasePrivate
+        class RefLogPrivate : public BasePrivate
         {
         public:
-            NamespacePrivate(Namespace* _pub, const QString& _name);
+            RefLogPrivate(RefLog* _pub);
 
         public:
             ObjTypes objType() const;
             bool refreshSelf();
             void postCreation();
             void preTerminate();
-            QString displayName() const;
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
-
-        public:
-            QString name;
         };
 
     }

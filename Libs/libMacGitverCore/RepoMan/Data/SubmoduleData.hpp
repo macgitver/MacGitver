@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "RepoMan/Private/RepoPrivate.hpp"
+#include "RepoMan/Data/RepoData.hpp"
 
 #include "RepoMan/Submodule.hpp"
 

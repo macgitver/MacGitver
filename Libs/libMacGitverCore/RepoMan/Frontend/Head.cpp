@@ -17,11 +17,14 @@
  *
  */
 
-#include "Head.hpp"
-#include "Events.hpp"
+#include "RepoMan/Events.hpp"
+
+#include "RepoMan/Head.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Private/HeadPrivate.hpp"
+
+#include "RepoMan/Data/HeadData.hpp"
+
 #include "RepoMan/Branch.hpp"
 #include "RepoMan/Repo.hpp"
 

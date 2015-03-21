@@ -19,36 +19,36 @@
 
 #pragma once
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "RepoMan/Data/RefData.hpp"
 
-#include "RepoMan/Remote.hpp"
+#include "RepoMan/Branch.hpp"
 
 namespace RM
 {
 
-    class Head;
-
     namespace Internal
     {
 
-        class RemotePrivate : public BasePrivate
+        class BranchPrivate : public RefPrivate
         {
         public:
-            RemotePrivate(Remote* _pub, const Git::Remote& _obj);
+            BranchPrivate(Branch* pub, const Git::Reference& ref);
 
         public:
             ObjTypes objType() const;
-            bool refreshSelf();
             void postCreation();
             void preTerminate();
-            QString displayName() const;
+            bool refreshDetails(const Git::Reference& ref);
+            void emitMoved();
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 
         public:
-            QString         name;
-            Head*           mHead;                 //!< The HEAD
+            bool    mHasUpstream;
+            int     mAheadCount;
+            int     mBehindCount;
+            QString mUpstreamRefName;
         };
 
     }

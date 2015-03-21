@@ -21,12 +21,13 @@
 #include "libGitWrap/Reference.hpp"
 #include "libGitWrap/RefName.hpp"
 
-#include "Ref.hpp"
-#include "Repo.hpp"
-#include "Events.hpp"
+#include "RepoMan/Events.hpp"
 
-#include "Private/Dumper.hpp"
-#include "Private/RefPrivate.hpp"
+#include "RepoMan/Ref.hpp"
+#include "RepoMan/Repo.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Data/RefData.hpp"
 
 namespace RM
 {

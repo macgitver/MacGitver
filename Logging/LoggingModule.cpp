@@ -116,7 +116,3 @@ void LoggingModule::viewUpdate() {
 }
 
 LoggingModule* LoggingModule::sSelf = NULL;
-
-#if QT_VERSION < 0x050000
-Q_EXPORT_PLUGIN2( Logging, LoggingModule )
-#endif

@@ -27,25 +27,25 @@ namespace RM
 {
     using namespace Internal;
 
-    Submodule::Submodule(const Git::Repository& _repo, Repo *_parent)
-        : Repo(*new SubmodulePrivate(this, _repo))
+    Submodule::Submodule(const Git::Repository& repo, Repo* parent)
+        : Repo( *new SubmodulePrivate( this, repo ) )
     {
         RM_D(Submodule);
 
-        d->isSubModule = true;
+        d->mIsSubModule = true;
 
-        setDisplayAlias(_repo.name());
+        setDisplayAlias( repo.name() );
 
-        d->linkToParent(_parent);
+        d->linkToParent( parent );
         d->refresh();
 
-        d->isInitializing = false;
+        d->mIsInitializing = false;
     }
 
     //-- SubmodulePrivate --------------------------------------------------------------------------
 
-    SubmodulePrivate::SubmodulePrivate(Submodule* _pub, const Git::Repository& _repo)
-        : RepoPrivate(_pub, _repo)
+    SubmodulePrivate::SubmodulePrivate(Submodule* pub, const Git::Repository& repo)
+        : RepoPrivate( pub, repo )
     {
     }
 
@@ -76,11 +76,6 @@ namespace RM
         }
 
         RepoPrivate::preTerminate();
-    }
-
-    bool SubmodulePrivate::refreshSelf()
-    {
-        return true;
     }
 
     QString SubmodulePrivate::objectTypeName() const

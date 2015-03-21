@@ -93,7 +93,7 @@ void MgvPrimaryWindow::setupUi()
 
     setWindowTitle( trUtf8( "MacGitver" ) );
 
-    footer()->addWidget( new RepoStateWidget );
+    footer()->addWidget(new RepoStateWidget);
     QMetaObject::invokeMethod(this, "showLater", Qt::QueuedConnection);
 }
 

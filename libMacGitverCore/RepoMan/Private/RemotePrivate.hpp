@@ -27,6 +27,8 @@
 namespace RM
 {
 
+    class Head;
+
     namespace Internal
     {
 
@@ -46,7 +48,8 @@ namespace RM
             bool inherits(ObjTypes type) const;
 
         public:
-            QString name;
+            QString         name;
+            Head*           mHead;                 //!< The HEAD
         };
 
     }

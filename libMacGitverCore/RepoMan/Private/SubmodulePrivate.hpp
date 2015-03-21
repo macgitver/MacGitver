@@ -33,11 +33,10 @@ namespace RM
         class SubmodulePrivate : public RepoPrivate
         {
         public:
-            SubmodulePrivate(Submodule* _pub, const Git::Repository& _repo);
+            SubmodulePrivate(Submodule* pub, const Git::Repository& repo);
 
         public:
             ObjTypes objType() const;
-            bool refreshSelf();
             void postCreation();
             void preTerminate();
             void dumpSelf(Dumper& dumper) const;

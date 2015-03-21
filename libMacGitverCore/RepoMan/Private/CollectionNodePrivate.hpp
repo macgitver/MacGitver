@@ -43,7 +43,7 @@ namespace RM
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
-            Heaven::IconRef icon() const;
+            Heaven::IconRef icon(bool small) const;
             bool inherits(ObjTypes type) const;
 
         public:

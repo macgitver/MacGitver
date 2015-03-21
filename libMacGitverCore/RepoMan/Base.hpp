@@ -40,25 +40,31 @@ namespace RM
     {
         InvalidObject,
 
-        RepoManagerObject,
-        RepoObject,
-        RefObject,
-        RemoteObject,
-        TagObject,
-        BranchObject,
-        RefTreeNodeObject,
+        CollectionNodeObject,
         NamespaceObject,
+        RepoManagerObject,
+
+        // repositories
+        RepoObject,
+        RemoteObject,
         SubmoduleObject,
-        RefLogObject,
-        CollectionNodeObject
+        HeadObject,
+
+        // references
+        BranchObject,
+        RefObject,
+        RefTreeNodeObject,
+        TagObject,
+
+        RefLogObject
     };
 
     enum CollectionTypes
     {
         ctBranches,
-        ctTags,
         ctNamespaces,
-        ctNotes
+        ctNotes,
+        ctTags
     };
 
     class Repo;
@@ -115,7 +121,7 @@ namespace RM
 
         bool inheritsRepoManType(ObjTypes type) const;
 
-        Heaven::IconRef icon() const;
+        Heaven::IconRef icon(bool small = false) const;
 
         QString typeName() const;
         QString displayName() const;

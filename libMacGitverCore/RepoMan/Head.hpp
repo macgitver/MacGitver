@@ -1,6 +1,6 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
  * (C) Sascha Cunz <sascha@macgitver.org>
  * (C) Cunz RaD Ltd.
@@ -17,34 +17,39 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_TAG_HPP
-#define MGV_CORE_REPOMAN_TAG_HPP
+#pragma once
 
-#include "Ref.hpp"
+#include "RepoMan/Base.hpp"
+#include "RepoMan/CollectionNode.hpp"
+#include "RepoMan/Branch.hpp"
 
 namespace RM
 {
 
-    class MGV_CORE_API Tag : public Ref
+    namespace Internal
+    {
+        class HeadPrivate;
+    }
+
+    class MGV_CORE_API Head : public Base
     {
     public:
-        enum { StaticObjectType = TagObject };
-        typedef QVector< Tag* > List;
-        typedef QSet< Tag* > Set;
+        enum { StaticObjectType = HeadObject };
+        typedef Internal::HeadPrivate Private;
+        typedef QSet< Head* > Set;
+        typedef QVector< Head* > List;
 
     public:
-        Tag(Base* _parent, const Git::Reference& _ref);
+        Head(const Git::Repository& repo, Base* parent);
 
     public:
+        bool isDetached() const;
+        bool isUnborn() const;
+        Git::ObjectId detachedId() const;
+        QString symbolicName() const;
 
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
-
-    private:
+    public:
+        bool is(const Branch* ref) const;
     };
 
 }
-
-#endif

@@ -40,6 +40,7 @@ namespace RM
             bool refreshSelf();
             void postCreation();
             void preTerminate();
+            bool refreshCheckDispensable();
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;

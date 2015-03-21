@@ -30,6 +30,7 @@
 #include "RepoMan/Events.hpp"
 #include "RepoMan/Repo.hpp"
 #include "RepoMan/RepoMan.hpp"
+#include "RepoMan/Head.hpp"
 #include "RepoMan/Remote.hpp"
 #include "RepoMan/Namespace.hpp"
 #include "RepoMan/Ref.hpp"
@@ -52,15 +53,15 @@ namespace RM
     {
     }
 
-    Repo::Repo(const Git::Repository& _repo, Base* _parent)
-        : Base(*new RepoPrivate(this, _repo))
+    Repo::Repo(const Git::Repository& repo, Base* parent)
+        : Base( *new RepoPrivate(this, repo) )
     {
         RM_D(Repo);
 
-        d->linkToParent(_parent);
+        d->linkToParent(parent);
         d->refresh();
 
-        d->isInitializing = false;
+        d->mIsInitializing = false;
     }
 
     Repo::~Repo()
@@ -72,7 +73,7 @@ namespace RM
         RM_D(Repo);
 
         if (d->ensureIsLoaded()) {
-            return d->repo;
+            return d->mRepo;
         }
 
         return Git::Repository();
@@ -82,42 +83,42 @@ namespace RM
     {
         RM_CD(Repo);
 
-        return d->isLoaded ? d->repo : Git::Repository();
+        return d->mIsLoaded ? d->mRepo : Git::Repository();
     }
 
     QString Repo::path() const
     {
         RM_CD(Repo);
 
-        return d->path;
+        return d->mPath;
     }
 
     bool Repo::isSubModule() const
     {
         RM_CD(Repo);
 
-        return d->isSubModule;
+        return d->mIsSubModule;
     }
 
     bool Repo::isBare() const
     {
         RM_CD(Repo);
 
-        return d->isBare;
+        return d->mIsBare;
     }
 
     bool Repo::isLoaded() const
     {
         RM_CD(Repo);
 
-        return d->isLoaded;
+        return d->mIsLoaded;
     }
 
     bool Repo::isActive() const
     {
         RM_CD(Repo);
 
-        return d->isActive;
+        return d->mIsActive;
     }
 
     /**
@@ -131,7 +132,7 @@ namespace RM
     {
         RM_CD(Repo);
 
-        return d->isInitializing;
+        return d->mIsInitializing;
     }
 
     Repo* Repo::parentRepository()
@@ -158,45 +159,45 @@ namespace RM
     {
         // ### Should be very private
         RM_D(Repo);
-        Q_ASSERT(!d->isActive);
+        Q_ASSERT(!d->mIsActive);
 
-        if (d->unloadTimer) {
-            d->unloadTimer->stop();
-            d->unloadTimer->deleteLater();
-            d->unloadTimer = NULL;
+        if (d->mUnloadTimer) {
+            d->mUnloadTimer->stop();
+            d->mUnloadTimer->deleteLater();
+            d->mUnloadTimer = NULL;
         }
 
-        d->isActive = true;
+        d->mIsActive = true;
     }
 
     void Repo::deactivated()
     {
         // ### Should be very private
         RM_D(Repo);
-        Q_ASSERT(d->isActive);
+        Q_ASSERT(d->mIsActive);
 
-        Q_ASSERT(!d->unloadTimer);
-        d->unloadTimer = new QTimer(this);
-        connect(d->unloadTimer, SIGNAL(timeout()), this, SLOT(unloadTimer()));
-        d->unloadTimer->setInterval(15 * 60 * 1000); // quarter of an hour
-        d->unloadTimer->start();
+        Q_ASSERT(!d->mUnloadTimer);
+        d->mUnloadTimer = new QTimer(this);
+        connect(d->mUnloadTimer, SIGNAL(timeout()), this, SLOT(unloadTimer()));
+        d->mUnloadTimer->setInterval(15 * 60 * 1000); // quarter of an hour
+        d->mUnloadTimer->start();
 
-        d->isActive = false;
+        d->mIsActive = false;
     }
 
     QString Repo::displayAlias() const
     {
         RM_CD(Repo);
 
-        return d->displayAlias;
+        return d->mDisplayAlias;
     }
 
     void Repo::setDisplayAlias(const QString& alias)
     {
         RM_D(Repo);
 
-        if (d->displayAlias != alias) {
-            d->displayAlias = alias;
+        if (d->mDisplayAlias != alias) {
+            d->mDisplayAlias = alias;
             emit aliasChanged(alias);
         }
     }
@@ -211,7 +212,7 @@ namespace RM
     {
         RM_D(Repo);
 
-        if (d->isActive) {
+        if (d->mIsActive) {
             MacGitver::repoMan().activate(NULL);
         }
 
@@ -227,25 +228,21 @@ namespace RM
 
     QString Repo::branchDisplay() const
     {
-        // ### This method is totally wrong placed here
+        // TODO: This method is totally wrong placed here
         RM_D(Repo);
 
-        if (d->isLoaded) {
-            Git::Result r;
-            Git::Reference HEAD = d->repo.HEAD(r);
+        if (d->mIsLoaded && d->mHead) {
 
-            if (HEAD.isValid()) {
-                if (HEAD.name() != QLatin1String("HEAD")) {
-                    return trUtf8("<b style=\"background-color: #FFB54F;"
-                                  "\">%1</b>" ).arg(HEAD.name().mid(11));
-                }
-                else {
-                    return trUtf8("detached at <b>%1</b>" ).arg(HEAD.objectId().toString());
-                }
+            if (d->mHead->isDetached()) {
+                return tr("detached at <b>%1</b>" ).arg(d->mHead->detachedId().toString());
             }
-            else {
-                return trUtf8("<b style=\"color: red;\">Branch yet to be born</b>");
+
+            if (d->mHead->isUnborn()) {
+                return tr("<b style=\"color: red;\">Branch yet to be born</b>");
             }
+
+            return tr("<b style=\"background-color: #FFB54F;"
+                      "\">%1</b>" ).arg(d->mHead->symbolicName().mid(11));
         }
         return tr("&lt;unknown&gt;");
     }
@@ -276,14 +273,20 @@ namespace RM
 
     Namespace* Repo::findNamespace(const QStringList& namespaces)
     {
-        RM_D(Repo);
+        RM_D( Repo );
         return d->findNamespace(namespaces);
     }
 
     Namespace* Repo::findNamespace(const QString& nsFullName)
     {
-        RM_D(Repo);
+        RM_D( Repo );
         return d->findNamespace(nsFullName);
+    }
+
+    Head* Repo::head() const
+    {
+        RM_CD(Repo);
+        return d->mHead;
     }
 
     /**
@@ -297,8 +300,8 @@ namespace RM
      */
     CollectionNode* Repo::branches()
     {
-        RM_D(Repo);
-        return d->getOrCreateCollection(ctBranches);
+        RM_D( Repo );
+        return d->getOrCreateCollection( ctBranches );
     }
 
     /**
@@ -312,8 +315,8 @@ namespace RM
      */
     CollectionNode* Repo::tags()
     {
-        RM_D(Repo);
-        return d->getOrCreateCollection(ctTags);
+        RM_D( Repo );
+        return d->getOrCreateCollection( ctTags );
     }
 
     /**
@@ -346,32 +349,33 @@ namespace RM
 
     //-- RepoPrivate -------------------------------------------------------------------------------
 
-    RepoPrivate::RepoPrivate(Repo* _pub, const Git::Repository& _repo)
-        : BasePrivate(_pub)
+    RepoPrivate::RepoPrivate(Repo* pub, const Git::Repository& repo)
+        : BasePrivate( pub )
     {
-        repo = _repo;
-        path = repo.basePath();
-        isLoaded = repo.isValid();
-        isActive = false;
-        isBare = repo.isValid() && repo.isBare();
-        isSubModule = false;
-        isInitializing = true;
-        displayAlias = QString();
-        unloadTimer = NULL;
+        mRepo = repo;
+        mHead = NULL;
+        mPath = mRepo.basePath();
+        mIsLoaded = mRepo.isValid();
+        mIsActive = false;
+        mIsBare = mRepo.isValid() && mRepo.isBare();
+        mIsSubModule = false;
+        mIsInitializing = true;
+        mDisplayAlias = QString();
+        mUnloadTimer = NULL;
 
-        if (path.endsWith(L'/')) {
-            path = path.left(path.length() - 1);
+        if (mPath.endsWith(L'/')) {
+            mPath = mPath.left(mPath.length() - 1);
         }
 
         findAlias();
 
-        if (displayAlias.isEmpty()) {
-            if (path.isEmpty()) {
-                displayAlias = Repo::trUtf8("Unknown Repository");
+        if (mDisplayAlias.isEmpty()) {
+            if (mPath.isEmpty()) {
+                mDisplayAlias = Repo::tr("Unknown Repository");
             }
             else {
-                QStringList sl = path.split(QChar(L'/'), QString::SkipEmptyParts);
-                displayAlias = sl.last();
+                QStringList sl = mPath.split(QChar(L'/'), QString::SkipEmptyParts);
+                mDisplayAlias = sl.last();
             }
         }
     }
@@ -380,7 +384,7 @@ namespace RM
     {
         RM_P(Repo);
 
-        if (isLoaded) {
+        if (mIsLoaded) {
             unload();
         }
 
@@ -389,38 +393,38 @@ namespace RM
 
     bool RepoPrivate::ensureIsLoaded()
     {
-        if (!isLoaded) {
+        if (!mIsLoaded) {
             load();
         }
 
-        return isLoaded;
+        return mIsLoaded;
     }
 
     void RepoPrivate::load()
     {
         // ### Unimplemented: RepoPrivate::load()
-        Q_ASSERT(!isLoaded);
+        Q_ASSERT(!mIsLoaded);
     }
 
     void RepoPrivate::unload()
     {
-        if (isActive) {
+        if (mIsActive) {
             qDebug() << "Unloading active RepoInfo. Will deactivate it first.";
             MacGitver::repoMan().activate(NULL);
         }
-        Q_ASSERT(!isActive);
+        Q_ASSERT(!mIsActive);
 
-        if (unloadTimer) {
-            unloadTimer->stop();
-            unloadTimer->deleteLater();
-            unloadTimer = NULL;
+        if (mUnloadTimer) {
+            mUnloadTimer->stop();
+            mUnloadTimer->deleteLater();
+            mUnloadTimer = NULL;
         }
 
         Repo* r = pub<Repo>();
         emit r->aboutToUnload(r);
 
-        isLoaded = false;
-        repo = Git::Repository();
+        mIsLoaded = false;
+        mRepo = Git::Repository();
 
         emit r->unloaded(r);
     }
@@ -428,7 +432,7 @@ namespace RM
 
     QString RepoPrivate::displayName() const
     {
-        return displayAlias;
+        return mDisplayAlias;
     }
 
     void RepoPrivate::preTerminate()
@@ -445,7 +449,7 @@ namespace RM
         }
 
         Git::Result r;
-        Git::Submodule::List subs = repo.submodules( r );
+        Git::Submodule::List subs = mRepo.submodules( r );
         if (!r) {
             return;
         }
@@ -491,9 +495,14 @@ namespace RM
 
     bool RepoPrivate::refreshSelf()
     {
-        if (!isLoaded) {
+        if (!mIsLoaded) {
             // In case we're not loaded, just return and do nothing.
             return true;
+        }
+
+        if (!mHead) {
+            RM_P(Repo);
+            mHead = new Head(mRepo, p);
         }
 
         return true;
@@ -501,20 +510,24 @@ namespace RM
 
     void RepoPrivate::postRefreshChildren()
     {
-        if (!isLoaded) {
+        if (!mIsLoaded) {
             // In case we're not loaded, just return and do nothing.
             return;
         }
 
         Git::Result r;
-        Git::Remote::List remotes = repo.allRemotes(r);
-        foreach (const Git::Remote& remote, remotes) {
-            findRemote(remote, true);
+        Git::Remote::List remotes = mRepo.allRemotes(r);
+        if (r) {
+            foreach (const Git::Remote& remote, remotes) {
+                findRemote(remote, true);
+            }
         }
 
-        Git::ReferenceList refs = repo.allReferences(r);
-        foreach (Git::Reference ref, refs) {
-            findReference(ref, true);
+        Git::ReferenceList refs = mRepo.allReferences(r);
+        if (r) {
+            foreach (Git::Reference ref, refs) {
+                findReference(ref, true);
+            }
         }
 
         scanSubmodules();
@@ -535,8 +548,8 @@ namespace RM
     {
         dumper.addLine(QString(QLatin1String("Repository 0x%1 - %02"))
                        .arg(quintptr(mPub),0,16)
-                       .arg(isLoaded ? pub<Repo>()->gitLoadedRepo().name()
-                                     : QLatin1String("<not loaded>")));
+                       .arg(mIsLoaded ? pub<Repo>()->gitLoadedRepo().name()
+                                      : QLatin1String("<not loaded>")));
     }
 
 
@@ -620,15 +633,20 @@ namespace RM
             }
         }
 
-        if (rn.isBranch()) {
-            return new Branch(parent, ref);
+        if (create) {
+            if ( rn.isBranch() ) {
+                return new Branch( parent, ref );
+            }
+            else if( rn.isTag() ) {
+                return new Tag( parent, ref );
+            }
+            else {
+                qDebug() << "Do not know how to deal with reference:" << rn.fullName();
+                return NULL;
+            }
         }
-        else if(rn.isTag()) {
-            return new Tag(parent, ref);
-        }
-        else {
-            return new Ref(parent, UnknownRefType, ref);
-        }
+
+        return NULL;
     }
 
     Remote* RepoPrivate::findRemote(const QString &remoteName, bool create)
@@ -656,7 +674,7 @@ namespace RM
 
     Remote* RepoPrivate::findRemote(const Git::Remote &remote, bool create)
     {
-        RM_P(Repo);
+        RM_P( Repo );
 
         if (!remote.isValid()) {
             return NULL;
@@ -743,4 +761,8 @@ namespace RM
         return type == RepoObject || BasePrivate::inherits(type);
     }
 
+    Repo* RepoPrivate::searchRepository()
+    {
+        return static_cast<Repo*>(mPub);
+    }
 }

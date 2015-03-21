@@ -30,7 +30,7 @@ namespace RM
         class RefPrivate : public BasePrivate
         {
         public:
-            RefPrivate(Ref* pub, RefTypes _type, const Git::Reference& _ref);
+            RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref);
 
         public:
             ObjTypes objType() const;
@@ -38,15 +38,17 @@ namespace RM
             bool refreshSelf();
             void postCreation();
             void preTerminate();
+            virtual bool refreshDetails(const Git::Reference& ref);
+            virtual void emitMoved();
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 
         public:
-            RefTypes            type;
-            QString             fullQualifiedName;
-            QString             name;
-            Git::ObjectId       id;
+            RefTypes            mType;
+            QString             mFullQualifiedName;
+            QString             mName;
+            Git::ObjectId       mId;
         };
 
     }

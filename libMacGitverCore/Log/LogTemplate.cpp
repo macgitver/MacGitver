@@ -206,11 +206,11 @@ namespace Log
 
         return s;
         /* We're adding these later:
-            QLatin1Literal("<a id=\"") %
+            QStringLiteral("<a id=\"") %
             QString::number(event.uniqueId()) %
-            QLatin1Literal("\">") %
+            QStringLiteral("\">") %
             s %
-            QLatin1Literal("</a>");
+            QStringLiteral("</a>");
         */
     }
 

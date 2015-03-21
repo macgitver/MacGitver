@@ -17,9 +17,10 @@
  *
  */
 
-#include "Branch.hpp"
-#include "Repo.hpp"
-#include "Events.hpp"
+#include "RepoMan/Branch.hpp"
+#include "RepoMan/Repo.hpp"
+#include "RepoMan/Events.hpp"
+#include "RepoMan/Head.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 #include "RepoMan/Private/BranchPrivate.hpp"
@@ -29,17 +30,17 @@ namespace RM
 
     using namespace Internal;
 
-    Branch::Branch(Base* _parent, const Git::Reference &_ref)
-        : Ref(*new BranchPrivate(this, _ref))
+    Branch::Branch(Base* parent, const Git::Reference &ref)
+        : Ref( *new BranchPrivate(this, ref) )
     {
         RM_D(Branch);
-        d->linkToParent(_parent);
+        d->linkToParent( parent );
     }
 
     QString Branch::upstreamRefName() const
     {
         RM_CD(Branch);
-        return d->upstreamRefName;
+        return d->mUpstreamRefName;
     }
 
     Ref* Branch::upstream()
@@ -50,28 +51,35 @@ namespace RM
     bool Branch::hasUpstream() const
     {
         RM_CD(Branch);
-        return d->hasUpstream;
+        return d->mHasUpstream;
     }
 
     int Branch::aheadCount() const
     {
         RM_CD(Branch);
-        return d->aheadCount;
+        return d->mAheadCount;
     }
 
     int Branch::behindCount() const
     {
         RM_CD(Branch);
-        return d->behindCount;
+        return d->mBehindCount;
+    }
+
+    bool Branch::isHead() const
+    {
+        const Repo* r = repository();
+        const Head* h = r ? r->head() : NULL;
+        return h && h->is(this);
     }
 
     //-- BranchPrivate -----------------------------------------------------------------------------
 
-    BranchPrivate::BranchPrivate(Branch* _pub, const Git::Reference& _ref)
-        : RefPrivate(_pub, BranchType, _ref)
-        , hasUpstream(false)
-        , aheadCount(0)
-        , behindCount(0)
+    BranchPrivate::BranchPrivate(Branch* pub, const Git::Reference& ref)
+        : RefPrivate(pub, BranchType, ref)
+        , mHasUpstream(false)
+        , mAheadCount(0)
+        , mBehindCount(0)
     {
     }
 
@@ -102,18 +110,26 @@ namespace RM
     {
         dumper.addLine(QString(QLatin1String("Branch 0x%1 - %2"))
                        .arg(quintptr(mPub),0,16)
-                       .arg(name));
-    }
-
-    bool BranchPrivate::refreshSelf()
-    {
-        // ### Update "upstream" and "divergence"
-        return RefPrivate::refreshSelf();
+                       .arg(mName));
     }
 
     QString BranchPrivate::objectTypeName() const
     {
         return QLatin1String("Branch");
+    }
+
+    void BranchPrivate::emitMoved()
+    {
+        if (!repoEventsBlocked()) {
+            Events::self()->refMoved(mRepo, pub<Ref>());
+            Events::self()->branchMoved(mRepo, pub<Branch>());
+        }
+    }
+
+    bool BranchPrivate::refreshDetails(const Git::Reference& ref)
+    {
+
+        return RefPrivate::refreshDetails(ref);
     }
 
     bool BranchPrivate::inherits(ObjTypes type) const

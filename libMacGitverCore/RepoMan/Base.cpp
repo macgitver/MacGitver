@@ -177,24 +177,13 @@ namespace RM
     /**
      * @brief       Find the repository for this object
      *
-     * Walks up the hierarchy of objects to find the repository. Since objects can never be
-     * reparented, the result of this method never changes.
-     *
-     * @return      The first repository in hierarchy that is found
+     * @return      The first repository in hierarchy (Repo or Submodule)
      *
      */
     const Repo* Base::repository() const
     {
-        const Base* cur = this;
-
-        while (cur) {
-            if (cur->objType() == RepoObject) {
-                return static_cast< const Repo* >(cur);
-            }
-            cur = cur->parentObject();
-        }
-
-        return NULL;
+        RM_CD(Base);
+        return d->mRepo;
     }
 
     /**
@@ -209,7 +198,7 @@ namespace RM
     Repo* Base::repository()
     {
         RM_D(Base);
-        return d->repository();
+        return d->mRepo;
     }
 
     /**
@@ -285,10 +274,10 @@ namespace RM
      * @return      A iconRef for this object
      *
      */
-    Heaven::IconRef Base::icon() const
+    Heaven::IconRef Base::icon(bool small) const
     {
         RM_D(Base);
-        return d->icon();
+        return d->icon(small);
     }
 
     bool Base::inheritsRepoManType(ObjTypes type) const
@@ -301,6 +290,7 @@ namespace RM
 
     BasePrivate::BasePrivate(Base* pub)
         : mPub(pub)
+        , mRepo(NULL)
         , mParentObj(NULL)
     {
         Q_ASSERT(mPub);
@@ -313,6 +303,7 @@ namespace RM
         // from its parent. Otherwise, events cannot be triggered correctly.
         Q_ASSERT(mChildren.count() == 0);
         Q_ASSERT(mParentObj == NULL);
+        Q_ASSERT(mRepo == NULL);
     }
 
     /**
@@ -329,6 +320,7 @@ namespace RM
         if (parent) {
             mParentObj = parent->mData;
             mParentObj->addChildObject(mPub);
+            mRepo = searchRepository();
             refreshSelf();
             postCreation();
         }
@@ -345,6 +337,7 @@ namespace RM
         if (mParentObj) {
             mParentObj->removeChildObject(mPub);
             mParentObj = NULL;
+            mRepo = NULL;
         }
     }
 
@@ -405,7 +398,7 @@ namespace RM
      * @brief       Refresh this object
      *
      * Refreshes this object and all its children. First calls to refreshSelf() expecting it to
-     * update this object and send out events. If refreshSelf() returnes `false`, this object is
+     * update this object and send out events. If refreshSelf() returns `false`, this object is
      * removed from the tree. In this case all children should already have been removed from the
      * tree.
      *
@@ -420,8 +413,6 @@ namespace RM
      */
     void BasePrivate::refresh()
     {
-        preRefresh();
-
         if (!refreshSelf()) {
             // If refresh self returned false, we are no longer valid and will now destroy
             // ourselves. We just terminateObject().
@@ -437,15 +428,31 @@ namespace RM
         }
 
         postRefreshChildren();
-    }
 
-    bool BasePrivate::preRefresh()
-    {
-        return true;
+        if (refreshCheckDispensable()) {
+            terminateObject();
+        }
     }
 
     void BasePrivate::postRefresh()
     {
+    }
+
+    /**
+     * @brief       Check if this object is dispensable
+     *
+     * @return      @c true to dispense this object
+     *
+     * During the refresh cycle, this is the last method called for each object. If it returns
+     * @c true, the object will be terminated.
+     *
+     * This can be used for container objects that shall actually get dispensed once they have no
+     * more children (i.e. RefTreeNode).
+     *
+     */
+    bool BasePrivate::refreshCheckDispensable()
+    {
+        return false;
     }
 
     /**
@@ -509,11 +516,10 @@ namespace RM
      * phase or not.
      *
      */
-    bool BasePrivate::repoEventsBlocked() const
+    bool BasePrivate::repoEventsBlocked()
     {
-        const Repo* repo = mPub->repository();
-        Q_ASSERT(repo);
-        return repo->isInitializing();
+        Q_ASSERT(mRepo);
+        return mRepo->isInitializing();
     }
 
     /**
@@ -526,7 +532,9 @@ namespace RM
      */
     void BasePrivate::preTerminate()
     {
-        Events::self()->objectAboutToBeDeleted(repository(), mPub);
+        if (!repoEventsBlocked()) {
+            Events::self()->objectAboutToBeDeleted(repository(), mPub);
+        }
     }
 
     /**
@@ -629,23 +637,23 @@ namespace RM
         return new CollectionNode(ctype, mPub);
     }
 
-    Repo* BasePrivate::repository()
+    Repo* BasePrivate::searchRepository()
     {
-        BasePrivate* cur = this;
-
-        while (cur) {
-            if (cur->inherits(RepoObject)) {
-                return static_cast<Repo*>(cur->pub<Repo>());
+        if (!mRepo) {
+            if (mParentObj) {
+                mRepo = mParentObj->repository();
             }
-            cur = cur->mParentObj;
+            else {
+                return NULL;
+            }
         }
-
-        return NULL;
+        return mRepo;
     }
 
-    Heaven::IconRef BasePrivate::icon() const
+    Heaven::IconRef BasePrivate::icon(bool small) const
     {
-        return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % QLatin1Literal("@24"));
+        QString size = small ? QStringLiteral("@16") : QStringLiteral("@24");
+        return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % size);
     }
 
     bool BasePrivate::inherits(ObjTypes type) const

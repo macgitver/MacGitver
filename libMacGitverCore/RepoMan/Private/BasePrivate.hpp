@@ -52,6 +52,7 @@ namespace RM
 
         public:
             Base*           mPub;
+            Repo*           mRepo;
             BasePrivate*    mParentObj;
             Base::Set       mChildren;
 
@@ -74,11 +75,12 @@ namespace RM
             void unlinkFromParent();
             void addChildObject(Base *object);
             void removeChildObject(Base* object);
-
             Repo* repository();
 
+            virtual Repo* searchRepository();
+
             void refresh();
-            bool repoEventsBlocked() const;
+            bool repoEventsBlocked();
 
             Base* findRefParent(const QStringList& scopes, bool create);
             RefTreeNode* findRefTreeNode(const QStringList& scopes, bool create);
@@ -97,18 +99,23 @@ namespace RM
         public:
             virtual QString displayName() const;
             virtual QString objectTypeName() const = 0;
-            virtual Heaven::IconRef icon() const;
+            virtual Heaven::IconRef icon(bool small) const;
             virtual bool refreshSelf() = 0;
-            virtual bool preRefresh();
             virtual void postRefresh();
             virtual void preRefreshChildren();
             virtual void postRefreshChildren();
             virtual void postCreation();
             virtual void preTerminate();
+            virtual bool refreshCheckDispensable();
             virtual bool inherits(ObjTypes type) const;
             virtual ObjTypes objType() const = 0;
             virtual void dumpSelf(Dumper& dumper) const = 0;
         };
+
+        inline Repo* BasePrivate::repository()
+        {
+            return mRepo;
+        }
 
     }
 

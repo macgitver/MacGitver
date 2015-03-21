@@ -1,6 +1,6 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
  * (C) Sascha Cunz <sascha@macgitver.org>
  * (C) Cunz RaD Ltd.
@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_REF_HPP
-#define MGV_CORE_REPOMAN_REF_HPP
+#pragma once
 
 #include "libGitWrap/ObjectId.hpp"
 
@@ -34,15 +33,8 @@ namespace RM
 
     enum RefTypes
     {
-        UnknownRefType,
-
         BranchType,
-        TagType,
-        RootStageType,
-
-        // Very special refs:
-        HEADRefType,
-        MERGE_HEADRefType
+        TagType
     };
 
     class MGV_CORE_API Ref : public Base
@@ -54,22 +46,19 @@ namespace RM
         typedef QList< Ref* > List;
 
     protected:
-        Ref(Internal::RefPrivate& _data);
+        Ref(Internal::RefPrivate& data);
 
     public:
-        Ref(Base* _parent, RefTypes _type, const Git::Reference& _ref);
-        ~Ref();
+        Ref(Base* parent, RefTypes type, const Git::Reference& ref);
+
+        Git::Reference load(Git::Result& r);
 
     public:
         RefTypes type() const;
         QString name() const;
         QString fullName() const;
         Git::ObjectId id() const;
-
-    public:
         QString displaySha1() const;
     };
 
 }
-
-#endif

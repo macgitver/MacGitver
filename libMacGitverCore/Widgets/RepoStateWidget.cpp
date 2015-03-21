@@ -22,6 +22,7 @@
 #include "libHeavenIcons/IconRef.hpp"
 #include "libHeavenIcons/Icon.hpp"
 
+#include "RepoMan/Ref.hpp"
 #include "RepoMan/RepoMan.hpp"
 #include "RepoMan/Repo.hpp"
 
@@ -32,11 +33,16 @@ RepoStateWidget::RepoStateWidget()
     repo = NULL;
     setupUi();
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RM::Repo*)),
-             this,                  SLOT(repositoryActivated(RM::Repo*)) );
+    RM::RepoMan& rm = MacGitver::repoMan();
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryDeactivated(RM::Repo*)),
-             this,                  SLOT(repositoryDeactivated(RM::Repo*)) );
+    connect(&rm,    SIGNAL(refMoved(RM::Repo*,RM::Ref*)),
+            this,   SLOT(onUpdateHEAD(RM::Repo*,RM::Ref*)));
+
+    connect(&rm,    SIGNAL(repositoryActivated(RM::Repo*)),
+            this,   SLOT(repositoryActivated(RM::Repo*)) );
+
+    connect(&rm,    SIGNAL(repositoryDeactivated(RM::Repo*)),
+            this,   SLOT(repositoryDeactivated(RM::Repo*)) );
 }
 
 void RepoStateWidget::repositoryActivated(RM::Repo* info)
@@ -62,6 +68,20 @@ void RepoStateWidget::setRepoState()
     txtState->hide();
 
     txtRepo->setText( repo ? repo->displayAlias() : QString() );
+    onUpdateHEAD( repo, NULL );
+}
+
+void RepoStateWidget::onUpdateHEAD(RM::Repo* ownerRepo, RM::Ref* ref)
+{
+    if ( ownerRepo != repo ) {
+        return;
+    }
+
+    if ( ref && ref->name() != QStringLiteral("HEAD") ) {
+        return;
+    }
+
+    // TODO: implement a HTML formatter to highlight HEAD
     txtBranch->setText( repo ? repo->branchDisplay() : QString() );
 }
 

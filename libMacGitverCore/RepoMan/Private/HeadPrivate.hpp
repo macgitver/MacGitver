@@ -1,6 +1,6 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
  * (C) Sascha Cunz <sascha@macgitver.org>
  * (C) Cunz RaD Ltd.
@@ -17,12 +17,11 @@
  *
  */
 
-#ifndef REPOMAN_BRANCH_PRIVATE_HPP
-#define REPOMAN_BRANCH_PRIVATE_HPP
+#pragma once
 
-#include "RepoMan/Private/RefPrivate.hpp"
+#include "RepoMan/Private/BasePrivate.hpp"
 
-#include "RepoMan/Branch.hpp"
+#include "RepoMan/Head.hpp"
 
 namespace RM
 {
@@ -30,30 +29,26 @@ namespace RM
     namespace Internal
     {
 
-        class BranchPrivate : public RefPrivate
+        class HeadPrivate : public BasePrivate
         {
         public:
-            BranchPrivate(Branch* pub, const Git::Reference& ref);
+            HeadPrivate(Head* pub, const Git::Repository& ref);
 
         public:
             ObjTypes objType() const;
-            void postCreation();
-            void preTerminate();
-            bool refreshDetails(const Git::Reference& ref);
-            void emitMoved();
+            bool refreshSelf();
+            QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 
         public:
-            bool    mHasUpstream;
-            int     mAheadCount;
-            int     mBehindCount;
-            QString mUpstreamRefName;
+            QString         symbolicName;
+            Git::ObjectId   detachedId;
+            bool            isDetached      : 1;
+            bool            isUnborn        : 1;
         };
 
     }
 
 }
-
-#endif

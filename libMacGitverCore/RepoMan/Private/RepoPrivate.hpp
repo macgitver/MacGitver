@@ -24,13 +24,15 @@
 namespace RM
 {
 
+    class Head;
+
     namespace Internal
     {
 
         class RepoPrivate : public BasePrivate
         {
         public:
-            RepoPrivate(Repo* _pub, const Git::Repository& repo);
+            RepoPrivate(Repo* pub, const Git::Repository& repo);
             ~RepoPrivate();
 
         public:
@@ -42,6 +44,7 @@ namespace RM
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
+            Repo* searchRepository();
 
         public:
             Ref*        findReference(  const Git::Reference& ref,          bool create = false);
@@ -63,16 +66,16 @@ namespace RM
             Repo* repoByPath(const QString& basePath, bool searchSubmodules);
 
         public:
-            Git::Repository repo;                  //!< GitWrap-Repo, if loaded
-            QString         path;                  //!< Full, absolute path to this repository
-            QString         displayAlias;          //!< An alias for display (Default to last path comp.)
-            bool            isSubModule    : 1;    //!< This is a submodule of another repo
-            bool            isBare         : 1;    //!< This is a bare repo
-            bool            isLoaded       : 1;    //!< This repo is currently loaded (by gitWrap)
-            bool            isActive       : 1;    //!< This is MGV's current active repo?
-            bool            isInitializing : 1;    //!< True, while this repository is initializing
-            QTimer*         unloadTimer;           //!< NULL or a timer to unload this repository
-
+            Git::Repository mRepo;                 //!< GitWrap-Repo, if loaded
+            QString         mPath;                 //!< Full, absolute path to this repository
+            QString         mDisplayAlias;         //!< An alias for display (Default to last path comp.)
+            bool            mIsSubModule    : 1;   //!< This is a submodule of another repo
+            bool            mIsBare         : 1;   //!< This is a bare repo
+            bool            mIsLoaded       : 1;   //!< This repo is currently loaded (by gitWrap)
+            bool            mIsActive       : 1;   //!< This is MGV's current active repo?
+            bool            mIsInitializing : 1;   //!< True, while this repository is initializing
+            QTimer*         mUnloadTimer;          //!< NULL or a timer to unload this repository
+            Head*           mHead;                 //!< The HEAD
         };
 
     }

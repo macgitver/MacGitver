@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "RepoMan/Data/RefData.hpp"
 
-#include "RepoMan/CollectionNode.hpp"
+#include "RepoMan/Branch.hpp"
 
 namespace RM
 {
@@ -29,24 +29,26 @@ namespace RM
     namespace Internal
     {
 
-        class CollectionNodePrivate : public BasePrivate
+        class BranchPrivate : public RefPrivate
         {
         public:
-            CollectionNodePrivate(CollectionNode* _pub, CollectionTypes _ctype);
+            BranchPrivate(Branch* pub, const Git::Reference& ref);
 
         public:
             ObjTypes objType() const;
-            bool refreshSelf();
             void postCreation();
             void preTerminate();
-            QString displayName() const;
+            bool refreshDetails(const Git::Reference& ref);
+            void emitMoved();
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
-            Heaven::IconRef icon(bool small) const;
             bool inherits(ObjTypes type) const;
 
         public:
-            CollectionTypes ctype;
+            bool    mHasUpstream;
+            int     mAheadCount;
+            int     mBehindCount;
+            QString mUpstreamRefName;
         };
 
     }

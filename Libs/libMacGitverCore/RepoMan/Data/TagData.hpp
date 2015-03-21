@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "RepoMan/Data/RefData.hpp"
 
-#include "RepoMan/RefLog.hpp"
+#include "RepoMan/Tag.hpp"
 
 namespace RM
 {
@@ -29,14 +29,13 @@ namespace RM
     namespace Internal
     {
 
-        class RefLogPrivate : public BasePrivate
+        class TagPrivate : public RefPrivate
         {
         public:
-            RefLogPrivate(RefLog* _pub);
+            TagPrivate(Tag* pub, const Git::Reference& _ref);
 
         public:
             ObjTypes objType() const;
-            bool refreshSelf();
             void postCreation();
             void preTerminate();
             void dumpSelf(Dumper& dumper) const;

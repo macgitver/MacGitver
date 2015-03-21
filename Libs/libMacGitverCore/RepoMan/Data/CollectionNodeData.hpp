@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "RepoMan/Data/BaseData.hpp"
 
-#include "RepoMan/RefTreeNode.hpp"
+#include "RepoMan/CollectionNode.hpp"
 
 namespace RM
 {
@@ -29,24 +29,24 @@ namespace RM
     namespace Internal
     {
 
-        class RefTreeNodePrivate : public BasePrivate
+        class CollectionNodePrivate : public BasePrivate
         {
         public:
-            RefTreeNodePrivate(RefTreeNode* _pub, const QString& _name);
+            CollectionNodePrivate(CollectionNode* _pub, CollectionTypes _ctype);
 
         public:
             ObjTypes objType() const;
             bool refreshSelf();
             void postCreation();
             void preTerminate();
-            bool refreshCheckDispensable();
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
+            Heaven::IconRef icon(bool small) const;
             bool inherits(ObjTypes type) const;
 
         public:
-            QString name;
+            CollectionTypes ctype;
         };
 
     }

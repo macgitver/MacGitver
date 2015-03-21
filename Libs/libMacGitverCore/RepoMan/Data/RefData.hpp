@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "RepoMan/Data/BaseData.hpp"
 
-#include "RepoMan/Head.hpp"
+#include "RepoMan/Ref.hpp"
 
 namespace RM
 {
@@ -29,24 +29,28 @@ namespace RM
     namespace Internal
     {
 
-        class HeadPrivate : public BasePrivate
+        class RefPrivate : public BasePrivate
         {
         public:
-            HeadPrivate(Head* pub, const Git::Repository& ref);
+            RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref);
 
         public:
             ObjTypes objType() const;
-            bool refreshSelf();
             QString displayName() const;
+            bool refreshSelf();
+            void postCreation();
+            void preTerminate();
+            virtual bool refreshDetails(const Git::Reference& ref);
+            virtual void emitMoved();
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 
         public:
-            QString         symbolicName;
-            Git::ObjectId   detachedId;
-            bool            isDetached      : 1;
-            bool            isUnborn        : 1;
+            RefTypes            mType;
+            QString             mFullQualifiedName;
+            QString             mName;
+            Git::ObjectId       mId;
         };
 
     }

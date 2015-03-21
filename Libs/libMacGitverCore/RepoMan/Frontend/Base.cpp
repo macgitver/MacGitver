@@ -24,16 +24,17 @@
 
 #include "App/MacGitver.hpp"
 
-#include "Base.hpp"
-#include "Repo.hpp"
-#include "RepoMan.hpp"
-#include "RefTreeNode.hpp"
-#include "CollectionNode.hpp"
-#include "Events.hpp"
+#include "RepoMan/Base.hpp"
+#include "RepoMan/Repo.hpp"
+#include "RepoMan/RepoMan.hpp"
+#include "RepoMan/RefTreeNode.hpp"
+#include "RepoMan/CollectionNode.hpp"
+#include "RepoMan/Events.hpp"
 
-#include "Private/RepoManPrivate.hpp"
-#include "Private/Dumper.hpp"
-#include "Private/BasePrivate.hpp"
+#include "RepoMan/Data/RepoManData.hpp"
+#include "RepoMan/Data/BaseData.hpp"
+
+#include "RepoMan/Private/Dumper.hpp"
 
 namespace RM
 {

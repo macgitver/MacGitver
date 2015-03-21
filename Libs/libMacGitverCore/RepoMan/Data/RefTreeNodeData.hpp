@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "RepoMan/Private/RepoPrivate.hpp"
+#include "RepoMan/Data/BaseData.hpp"
 
-#include "RepoMan/Submodule.hpp"
+#include "RepoMan/RefTreeNode.hpp"
 
 namespace RM
 {
@@ -29,18 +29,24 @@ namespace RM
     namespace Internal
     {
 
-        class SubmodulePrivate : public RepoPrivate
+        class RefTreeNodePrivate : public BasePrivate
         {
         public:
-            SubmodulePrivate(Submodule* pub, const Git::Repository& repo);
+            RefTreeNodePrivate(RefTreeNode* _pub, const QString& _name);
 
         public:
             ObjTypes objType() const;
+            bool refreshSelf();
             void postCreation();
             void preTerminate();
+            bool refreshCheckDispensable();
+            QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
+
+        public:
+            QString name;
         };
 
     }

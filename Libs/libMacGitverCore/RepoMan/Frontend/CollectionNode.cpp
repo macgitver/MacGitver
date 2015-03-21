@@ -21,10 +21,10 @@
 
 #include "libHeavenIcons/IconRef.hpp"
 
-#include "CollectionNode.hpp"
+#include "RepoMan/CollectionNode.hpp"
 
-#include "Private/Dumper.hpp"
-#include "Private/CollectionNodePrivate.hpp"
+#include "RepoMan/Private/Dumper.hpp"
+#include "RepoMan/Data/CollectionNodeData.hpp"
 
 namespace RM
 {

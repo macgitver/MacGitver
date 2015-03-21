@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "RepoMan/Data/BaseData.hpp"
 
-#include "RepoMan/Ref.hpp"
+#include "RepoMan/Namespace.hpp"
 
 namespace RM
 {
@@ -29,28 +29,23 @@ namespace RM
     namespace Internal
     {
 
-        class RefPrivate : public BasePrivate
+        class NamespacePrivate : public BasePrivate
         {
         public:
-            RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref);
+            NamespacePrivate(Namespace* _pub, const QString& _name);
 
         public:
             ObjTypes objType() const;
-            QString displayName() const;
             bool refreshSelf();
             void postCreation();
             void preTerminate();
-            virtual bool refreshDetails(const Git::Reference& ref);
-            virtual void emitMoved();
+            QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 
         public:
-            RefTypes            mType;
-            QString             mFullQualifiedName;
-            QString             mName;
-            Git::ObjectId       mId;
+            QString name;
         };
 
     }

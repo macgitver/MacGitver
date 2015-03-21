@@ -19,20 +19,22 @@
 
 #pragma once
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "RepoMan/Data/BaseData.hpp"
 
-#include "RepoMan/Namespace.hpp"
+#include "RepoMan/Remote.hpp"
 
 namespace RM
 {
 
+    class Head;
+
     namespace Internal
     {
 
-        class NamespacePrivate : public BasePrivate
+        class RemotePrivate : public BasePrivate
         {
         public:
-            NamespacePrivate(Namespace* _pub, const QString& _name);
+            RemotePrivate(Remote* _pub, const Git::Remote& _obj);
 
         public:
             ObjTypes objType() const;
@@ -45,7 +47,8 @@ namespace RM
             bool inherits(ObjTypes type) const;
 
         public:
-            QString name;
+            QString         name;
+            Head*           mHead;                 //!< The HEAD
         };
 
     }

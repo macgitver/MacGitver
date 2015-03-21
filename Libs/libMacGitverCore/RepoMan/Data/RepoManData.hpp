@@ -19,36 +19,38 @@
 
 #pragma once
 
-#include "RepoMan/Private/BasePrivate.hpp"
+#include "libMacGitverCore/RepoMan/Data/BaseData.hpp"
 
-#include "RepoMan/Remote.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libMacGitverCore/RepoMan/AutoRefresher.hpp"
+
+#include "hic_RepoManActions.h"
 
 namespace RM
 {
 
-    class Head;
-
     namespace Internal
     {
 
-        class RemotePrivate : public BasePrivate
+        class RepoManPrivate : public BasePrivate, private RepoManActions
         {
         public:
-            RemotePrivate(Remote* _pub, const Git::Remote& _obj);
+            RepoManPrivate(RepoMan* _pub);
 
         public:
             ObjTypes objType() const;
             bool refreshSelf();
-            void postCreation();
             void preTerminate();
             QString displayName() const;
             void dumpSelf(Dumper& dumper) const;
             QString objectTypeName() const;
-            bool inherits(ObjTypes type) const;
+
+            Heaven::Menu* contextMenuFor(Base* object);
 
         public:
-            QString         name;
-            Head*           mHead;                 //!< The HEAD
+            Repo::List      repos;
+            Repo*           activeRepo;
+            AutoRefresher*  refresher;
         };
 
     }

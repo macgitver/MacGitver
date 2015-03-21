@@ -24,8 +24,9 @@
 #include "RepoMan/Events.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Private/RepoManPrivate.hpp"
-#include "RepoMan/Private/RepoPrivate.hpp"
+
+#include "RepoMan/Data/RepoManData.hpp"
+#include "RepoMan/Data/RepoData.hpp"
 
 #include "libBlueSky/Application.hpp"
 

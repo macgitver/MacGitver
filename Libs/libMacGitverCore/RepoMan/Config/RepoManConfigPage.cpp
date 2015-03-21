@@ -18,7 +18,7 @@
  */
 
 #include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
-#include "libMacGitverCore/RepoMan/Private/RepoManPrivate.hpp"
+#include "libMacGitverCore/RepoMan/Data/RepoManData.hpp"
 #include "libMacGitverCore/RepoMan/AutoRefresher.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 

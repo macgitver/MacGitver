@@ -16,9 +16,10 @@ RAD_INIT(
         Installation
 )
 
-#INCLUDE(cmake/Utils.cmake)
-#INCLUDE(cmake/GoogleTest.cmake)
-#INCLUDE(cmake/MacGitver.cmake)
+INCLUDE(cmake/Utils.cmake)
+INCLUDE(cmake/GoogleTest.cmake)
+INCLUDE(cmake/MacGitver.cmake)
+INCLUDE(cmake/CfgComp.cmake)
 
 IF(NOT MSVC)
     GCC_ADD_FLAG("-std=c\\\\+\\\\+11")
@@ -41,12 +42,14 @@ SET(UTILS_APP_NAME MacGitver)
 RAD_DEFINE_VERSION(MACGITVER_CORE 0 0 1)
 
 ADD_SUBDIRECTORY(CfgComp)
-INCLUDE(cmake/CfgComp.cmake)
 
 ADD_SUBDIRECTORY(Libs)
 ADD_SUBDIRECTORY(Main)
 ADD_SUBDIRECTORY(Modules)
 
+ADD_SUBDIRECTORY(AddOns)
+
 ADD_SUBDIRECTORY(testMacGitverCore)
 
 INCLUDE(InstallRequiredSystemLibraries)
+

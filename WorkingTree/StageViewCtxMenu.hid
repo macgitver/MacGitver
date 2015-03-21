@@ -19,6 +19,8 @@ Ui StageViewCtxMenu {
     Action Unstage {
         Text            "&Unstage";
         StatusToolTip   "Unmark this file from committing.";
+        Shortcut        "Ctrl+U";
+        ShortcutContext WidgetShortcut;
         ConnectTo       onWtCtxUnstage();
     };
 

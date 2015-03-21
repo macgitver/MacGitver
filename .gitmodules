@@ -4,9 +4,6 @@
 [submodule "libMacGitverCore"]
 	path = libMacGitverCore
 	url = https://github.com/macgitver/libMacGitverCore.git
-[submodule "MacGitverModules"]
-	path = MacGitverModules
-	url = https://github.com/macgitver/MacGitverModules.git
 [submodule "scripts/includes"]
 	path = scripts/includes
 	url = https://github.com/macgitver/sh-modules.git

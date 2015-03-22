@@ -31,8 +31,9 @@ LoggingMode::LoggingMode(QObject *parent)
     setEnabled(false);
     setDisplayOrder(100);
 
-    connect(&MacGitver::self().repoMan(), SIGNAL(hasActiveRepositoryChanged(bool)),
-            this, SLOT(setEnabled(bool)));
+    connect(&MacGitver::self().repoMan(),
+            &RM::RepoMan::hasActiveRepositoryChanged,
+            this, &LoggingMode::setEnabled);
 }
 
 QString LoggingMode::createDefaultState() const {

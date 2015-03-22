@@ -27,14 +27,14 @@ RepoInfoModel::RepoInfoModel()
 {
     mRepoMan = &MacGitver::repoMan();
 
-    connect( mRepoMan, SIGNAL(repositoryDeactivated(RM::Repo*)),
-             this,     SLOT(invalidateRepository(RM::Repo*)) );
+    connect( mRepoMan, &RM::RepoMan::repositoryDeactivated,
+             this,     &RepoInfoModel::invalidateRepository);
 
-    connect( mRepoMan, SIGNAL(repositoryActivated(RM::Repo*)),
-             this,     SLOT(invalidateRepository(RM::Repo*)) );
+    connect( mRepoMan, &RM::RepoMan::repositoryActivated,
+             this,     &RepoInfoModel::invalidateRepository);
 
-    connect( mRepoMan, SIGNAL(repositoryOpened(RM::Repo*)),
-             this,     SLOT(repositoryOpened(RM::Repo*)));
+    connect( mRepoMan, &RM::RepoMan::repositoryOpened,
+             this,     &RepoInfoModel::invalidateRepository);
 }
 
 int RepoInfoModel::rowCount( const QModelIndex& parent ) const
@@ -197,8 +197,11 @@ void RepoInfoModel::repositoryOpened(RM::Repo *info)
         return;
     }
 
-    connect(info, SIGNAL(childAdded(RM::Repo*,RM::Repo*)),
-            this, SLOT(repositoryChildAdded(RM::Repo*,RM::Repo*)));
+    // This connection is wrong. There could be any children added below the repository (i.e.
+    // HEAD, SubModule, CollectionNode). But the slot will unconditionally reserve a new space
+    // for a submodule...
+    connect(info, &RM::Repo::childAdded,
+            this, &RepoInfoModel::repositoryChildAdded);
 
     // we add a row just at the end of the root. This is stupid. But that's the way it works when
     // a model actually isn't a model...

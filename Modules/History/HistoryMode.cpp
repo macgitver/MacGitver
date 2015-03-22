@@ -31,8 +31,8 @@ HistoryMode::HistoryMode(QObject *parent)
     setEnabled(false);
     setDisplayOrder(5);
 
-    connect(&MacGitver::self().repoMan(), SIGNAL(hasActiveRepositoryChanged(bool)),
-            this, SLOT(setEnabled(bool)));
+    connect(&MacGitver::self().repoMan(), &RM::RepoMan::hasActiveRepositoryChanged,
+            this, &HistoryMode::setEnabled);
 }
 
 QString HistoryMode::createDefaultState() const {

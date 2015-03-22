@@ -69,8 +69,8 @@ HistoryView::HistoryView()
 
     initSplitters();
 
-    connect( &MacGitver::repoMan(), SIGNAL(repositoryActivated(RM::Repo*)),
-             this,                  SLOT(repoActivated(RM::Repo*)));
+    connect( &MacGitver::repoMan(), &RM::RepoMan::repositoryActivated,
+             this,                  &HistoryView::repoActivated);
 
     #if 0 // Missing feature in libHeaven:
 

@@ -35,14 +35,14 @@ RepoStateWidget::RepoStateWidget()
 
     RM::RepoMan& rm = MacGitver::repoMan();
 
-    connect(&rm,    SIGNAL(refMoved(RM::Repo*,RM::Ref*)),
-            this,   SLOT(onUpdateHEAD(RM::Repo*,RM::Ref*)));
+    connect(&rm,    &RM::RepoMan::refMoved,
+            this,   &RepoStateWidget::onUpdateHEAD);
 
-    connect(&rm,    SIGNAL(repositoryActivated(RM::Repo*)),
-            this,   SLOT(repositoryActivated(RM::Repo*)) );
+    connect(&rm,    &RM::RepoMan::repositoryActivated,
+            this,   &RepoStateWidget::repositoryActivated);
 
-    connect(&rm,    SIGNAL(repositoryDeactivated(RM::Repo*)),
-            this,   SLOT(repositoryDeactivated(RM::Repo*)) );
+    connect(&rm,    &RM::RepoMan::repositoryDeactivated,
+            this,   &RepoStateWidget::repositoryDeactivated);
 }
 
 void RepoStateWidget::repositoryActivated(RM::Repo* info)

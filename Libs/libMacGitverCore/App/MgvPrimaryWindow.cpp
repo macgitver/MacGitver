@@ -64,11 +64,11 @@ MgvPrimaryWindow::MgvPrimaryWindow()
     w->show();
     #endif
 
-    connect(&MacGitver::repoMan(), SIGNAL(firstRepositoryOpened()),
-            this, SLOT(activateModeForRepo()));
+    connect(&MacGitver::repoMan(), &RM::RepoMan::firstRepositoryOpened,
+            this, &MgvPrimaryWindow::activateModeForRepo);
 
-    connect(&MacGitver::repoMan(), SIGNAL(lastRepositoryClosed()),
-            this, SLOT(activateModeForRepo()));
+    connect(&MacGitver::repoMan(), &RM::RepoMan::lastRepositoryClosed,
+            this, &MgvPrimaryWindow::activateModeForRepo);
 
     setupFonts();
 

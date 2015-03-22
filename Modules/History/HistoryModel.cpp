@@ -41,9 +41,9 @@ HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
     mDisplays = 0;
 
     RM::RepoMan &rm = MacGitver::repoMan();
-    connect( &rm, SIGNAL(refCreated(RM::Repo*,RM::Ref*)), this, SLOT(onRefCreated(RM::Repo*,RM::Ref*)) );
-    connect( &rm, SIGNAL(refAboutToBeDeleted(RM::Repo*,RM::Ref*)), this, SLOT(onRefDestroyed(RM::Repo*,RM::Ref*)) );
-    connect( &rm, SIGNAL(refMoved(RM::Repo*,RM::Ref*)), this, SLOT(onRefMoved(RM::Repo*,RM::Ref*)) );
+    connect(&rm, &RM::RepoMan::refCreated,          this, &HistoryModel::onRefCreated);
+    connect(&rm, &RM::RepoMan::refAboutToBeDeleted, this, &HistoryModel::onRefDestroyed);
+    connect(&rm, &RM::RepoMan::refMoved,            this, &HistoryModel::onRefMoved);
 }
 
 HistoryModel::~HistoryModel()

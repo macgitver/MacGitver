@@ -35,7 +35,6 @@ namespace RM
     public:
         enum { StaticObjectType = NamespaceObject };
         typedef Internal::NamespacePrivate Private;
-        typedef QSet< Namespace* > Set;
         typedef QVector< Namespace* > List;
 
     public:

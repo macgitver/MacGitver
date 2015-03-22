@@ -170,11 +170,8 @@ QModelIndex RepoInfoModel::info2Index(RM::Repo* info) const
 
     if( info->parentRepository() )
     {
-        RM::Repo::Set sms = info->parentRepository()->submodules();
-        RM::Repo::List list;
-        foreach (RM::Repo* r, sms) {
-            list.append(r);
-        }
+        RM::Repo::List list = info->parentRepository()->submodules();
+        // ###REPOMAN Shouldn't this be sorted?
         row = list.indexOf(info);
     }
     else

@@ -53,7 +53,7 @@ namespace RM
             Base*           mPub;
             Repo*           mRepo;
             BasePrivate*    mParentObj;
-            Base::Set       mChildren;
+            Base::List      mChildren;
 
         public:
             template< class T > T* pub()

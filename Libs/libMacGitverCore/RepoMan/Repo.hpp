@@ -46,7 +46,6 @@ namespace RM
     public:
         enum { StaticObjectType = RepoObject };
         typedef Internal::RepoPrivate Private;
-        typedef QSet< Repo* > Set;
         typedef QVector< Repo* > List;
 
     protected:
@@ -67,7 +66,7 @@ namespace RM
         bool isInitializing() const;
 
         Repo* parentRepository();
-        Set submodules() const;
+        List submodules() const;
 
         QString path() const;
 

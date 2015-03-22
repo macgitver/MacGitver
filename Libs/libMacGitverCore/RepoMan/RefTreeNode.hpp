@@ -36,7 +36,6 @@ namespace RM
     public:
         enum { StaticObjectType = RefTreeNodeObject };
         typedef Internal::RefTreeNodePrivate Private;
-        typedef QSet< RefTreeNode* > Set;
         typedef QList< RefTreeNode* > List;
 
     public:

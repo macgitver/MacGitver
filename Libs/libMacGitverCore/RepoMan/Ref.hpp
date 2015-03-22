@@ -42,7 +42,6 @@ namespace RM
     public:
         enum { StaticObjectType = RefObject };
 
-        typedef QSet< Ref* > Set;
         typedef QList< Ref* > List;
 
     protected:

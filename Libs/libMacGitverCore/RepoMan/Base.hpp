@@ -89,7 +89,6 @@ namespace RM
 
     public:
         typedef QVector< Base* > List;
-        typedef QSet< Base* > Set;
 
     protected:
         Base(Internal::BasePrivate& _d);
@@ -106,11 +105,11 @@ namespace RM
 
         Base* parentObject() const;
 
-        Set childObjects() const;
-        Set childObjects(ObjTypes type) const;
+        List childObjects() const;
+        List childObjects(ObjTypes type) const;
 
         template< class T >
-        typename T::Set childObjects() const;
+        typename T::List childObjects() const;
 
         template< class T >
         bool isA() const;
@@ -149,24 +148,13 @@ namespace RM
     }
 
     template< class T >
-    inline typename T::Set Base::childObjects() const
+    inline typename T::List Base::childObjects() const
     {
-        /*
-        Set children = childObjects(T::StaticObjType);
-        typename T::Set typedChildren;
-
-        foreach(Base* child, children) {
-            typedChildren.insert(static_cast<T*>(child));
-        }
-
-        return typedChildren;
-        */
-        // Equivalent, but faster:
-        typename T::Set children;
+        typename T::List children;
 
         foreach(Base* child, childObjects()) {
             if (child->inheritsRepoManType<T>()) {
-                children.insert(static_cast<T*>(child));
+                children.append(static_cast<T*>(child));
             }
         }
 

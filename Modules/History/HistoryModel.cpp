@@ -229,11 +229,6 @@ void HistoryModel::afterAppend()
     endInsertRows();
 }
 
-/**
- * @internal
- * @see RM::EventInterface
- */
-///@{
 void HistoryModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
 {
     Q_UNUSED( ref )
@@ -266,7 +261,6 @@ void HistoryModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)
 
     scanInlineReferences();
 }
-///@}
 
 void HistoryModel::ensurePopulated( int row )
 {

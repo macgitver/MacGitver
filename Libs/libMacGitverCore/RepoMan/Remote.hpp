@@ -36,7 +36,6 @@ namespace RM
     public:
         enum { StaticObjectType = RemoteObject };
         typedef Internal::RemotePrivate Private;
-        typedef QSet< Remote* > Set;
         typedef QVector< Remote* > List;
 
     public:

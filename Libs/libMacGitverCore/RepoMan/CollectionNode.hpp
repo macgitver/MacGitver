@@ -38,7 +38,6 @@ namespace RM
     public:
         enum { StaticObjectType = CollectionNodeObject };
         typedef Internal::CollectionNodePrivate Private;
-        typedef QSet< CollectionNode* > Set;
         typedef QVector< CollectionNode* > List;
 
     public:

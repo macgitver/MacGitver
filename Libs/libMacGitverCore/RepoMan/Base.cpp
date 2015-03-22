@@ -117,7 +117,7 @@ namespace RM
      *
      * @return      A set of all children of this object (unfiltered).
      */
-    Base::Set Base::childObjects() const
+    Base::List Base::childObjects() const
     {
         RM_CD(Base);
 
@@ -132,15 +132,15 @@ namespace RM
      * @return      A set of children of this object filtered by object type.
      *
      */
-    Base::Set Base::childObjects(ObjTypes type) const
+    Base::List Base::childObjects(ObjTypes type) const
     {
         RM_CD(Base);
 
-        Set children;
+        List children;
 
         foreach(Base* child, d->mChildren) {
             if (child->objType() == type) {
-                children.insert(child);
+                children.append(child);
             }
         }
 
@@ -354,7 +354,7 @@ namespace RM
     {
         Q_ASSERT(object);
         Q_ASSERT(!mChildren.contains(object));
-        mChildren.insert(object);
+        mChildren.append(object);
     }
 
     /**
@@ -366,7 +366,7 @@ namespace RM
     void BasePrivate::removeChildObject(Base* object)
     {
         Q_ASSERT(mChildren.contains(object));
-        mChildren.remove(object);
+        mChildren.removeOne(object);
     }
 
     /**
@@ -597,7 +597,7 @@ namespace RM
         Base* current = mPub;
 
         foreach (QString scope, scopes) {
-            RefTreeNode::Set nodes = current->childObjects<RefTreeNode>();
+            RefTreeNode::List nodes = current->childObjects<RefTreeNode>();
             RefTreeNode* next = NULL;
 
             foreach(RefTreeNode* child, nodes) {

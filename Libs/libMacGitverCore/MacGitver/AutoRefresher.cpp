@@ -21,9 +21,9 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "libMacGitverCore/RepoMan/AutoRefresher.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
+#include "MacGitver/AutoRefresher.hpp"
 #include "AutoRefresherCfg.hpp"
 
 AutoRefresher::AutoRefresher(QObject* parent)

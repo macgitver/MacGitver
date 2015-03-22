@@ -18,10 +18,11 @@
  */
 
 #include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
+
 #include "libMacGitverCore/RepoMan/Private/RepoManPrivate.hpp"
-#include "libMacGitverCore/RepoMan/AutoRefresher.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
+#include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 IMPLEMENT_NESTED_PAGE_CREATOR(RepoManConfigPage, 210)

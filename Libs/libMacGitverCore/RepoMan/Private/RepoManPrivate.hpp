@@ -22,7 +22,8 @@
 #include "libMacGitverCore/RepoMan/Private/BasePrivate.hpp"
 
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/AutoRefresher.hpp"
+
+#include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
 
 #include "hic_RepoManActions.h"
 

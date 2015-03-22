@@ -3,8 +3,7 @@ PROJECT( libDiffViews )
 
 QT_PREPARE( Core Gui Widgets )
 
-INCLUDE_DIRECTORIES(
-    ${DIFFVIEWS_SOURCE_DIR}
+INCLUDE_DIRECTORIES( BEFORE
     ${libDiffViews_SOURCE_DIR}
     ${libDiffViews_BINARY_DIR}
 )

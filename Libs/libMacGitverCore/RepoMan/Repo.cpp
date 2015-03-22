@@ -71,19 +71,13 @@ namespace RM
     Git::Repository Repo::gitRepo()
     {
         RM_D(Repo);
-
-        if (d->ensureIsLoaded()) {
-            return d->mRepo;
-        }
-
-        return Git::Repository();
+        return d->gitRepo(true);
     }
 
-    Git::Repository Repo::gitLoadedRepo() const
+    Git::Repository Repo::gitLoadedRepo()
     {
-        RM_CD(Repo);
-
-        return d->mIsLoaded ? d->mRepo : Git::Repository();
+        RM_D(Repo);
+        return d->gitRepo();
     }
 
     QString Repo::path() const
@@ -391,15 +385,6 @@ namespace RM
         MacGitver::repoMan().internalClosedRepo(p);
     }
 
-    bool RepoPrivate::ensureIsLoaded()
-    {
-        if (!mIsLoaded) {
-            load();
-        }
-
-        return mIsLoaded;
-    }
-
     void RepoPrivate::load()
     {
         // ### Unimplemented: RepoPrivate::load()
@@ -441,12 +426,13 @@ namespace RM
     {
         RM_P(Repo);
 
-        if (!ensureIsLoaded()) {
+        Git::Repository repo = gitRepo(true);
+        if (!repo.isValid()) {
             return;
         }
 
         Git::Result r;
-        Git::Submodule::List subs = mRepo.submodules( r );
+        Git::Submodule::List subs = repo.submodules( r );
         if (!r) {
             return;
         }
@@ -542,7 +528,7 @@ namespace RM
     {
         dumper.addLine(QString(QStringLiteral("Repository 0x%1 - %02"))
                        .arg(quintptr(mPub),0,16)
-                       .arg(mIsLoaded ? pub<Repo>()->gitLoadedRepo().name()
+                       .arg(mIsLoaded ? mRepo.name()
                                       : QStringLiteral("<not loaded>")));
     }
 
@@ -759,4 +745,14 @@ namespace RM
     {
         return static_cast<Repo*>(mPub);
     }
+
+    Git::Repository RepoPrivate::gitRepo(bool doLoad)
+    {
+        if (!mIsLoaded && doLoad) {
+            load();
+        }
+
+        return mRepo;
+    }
+
 }

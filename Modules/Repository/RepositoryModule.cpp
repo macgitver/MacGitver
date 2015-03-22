@@ -122,17 +122,17 @@ void RepositoryModule::onRepositoryOpenHelper()
         return;
     }
 
-    //! @todo error handling
-    Git::Repository repo = Git::Repository::open(r, repoDir);
-    if( !repo.isValid() )
-        return;
+    MacGitver::repoMan().open(repoDir);
+
+    // ###REPOMAN This should move to an eventlistener, which is invoked by RepoMan for every
+    //            opened repository. This will then also boost the priority in the LRU menu for
+    //            repositories opened through it.
 
     // If we successfully loaded the repository at that directory,
     // we store the repository's work dir as "lastUsedDir".
     // If it is a bare repository, we store the repository's directory.
-    Config::self().set( "Repository/lastUsedDir", repo.isBare() ? repoDir : repo.basePath() );
-
-    MacGitver::repoMan().open( repo );
+    Config::self().set("Repository/lastUsedDir", repoDir);
+                    // repo.isBare() ? repoDir : repo.basePath() );
 }
 
 void RepositoryModule::onRepositoryClone()

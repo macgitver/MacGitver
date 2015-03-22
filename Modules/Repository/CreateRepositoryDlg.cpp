@@ -87,6 +87,11 @@ void CreateRepositoryDlg::accept()
 {
     QString fn = QDir::toNativeSeparators( txtPath->text() );
     bool makeBare = chkMakeBare->isChecked() && chkMakeBare->isEnabled();
+
+    // ###REPOMAN We should make a RM::Services::InitialiseRepository, so that we can use
+    //            the Git::Repository object that was used to create the repository to stick it
+    //            into the RepoMan.
+
     Git::Result r;
     Git::Repository repo = Git::Repository::create(r, fn, makeBare);
 
@@ -101,7 +106,7 @@ void CreateRepositoryDlg::accept()
 
     MacGitver::log(Log::Normal, trUtf8("Created a new repository at %1").arg(fn));
 
-    MacGitver::repoMan().open( repo );
+    MacGitver::repoMan().open(fn);
 
     QDialog::accept();
 }

@@ -32,7 +32,10 @@ namespace RM
         class RepoManPrivate;
     }
 
-    class MGV_CORE_API RepoMan : public QObject, public Base, private EventsInterface
+    class MGV_CORE_API RepoMan
+            : public QObject
+            , public Base
+            , private EventsInterface
     {
         Q_OBJECT
     public:
@@ -45,7 +48,6 @@ namespace RM
 
     public:
         Repo* open(const QString& path);
-        Repo* open(const Git::Repository& repo);
 
         void closeAll();
 
@@ -57,6 +59,9 @@ namespace RM
         Repo* repoByPath(const QString& basePath, bool searchSubmodules);
 
         void internalClosedRepo(Repo* repository);
+
+    private:
+        Repo* open(const Git::Repository& repo);
 
     private slots:
         void reactivateWorkaround();

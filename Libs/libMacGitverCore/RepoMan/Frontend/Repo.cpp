@@ -199,7 +199,8 @@ namespace RM
 
         if (d->mDisplayAlias != alias) {
             d->mDisplayAlias = alias;
-            emit aliasChanged(alias);
+            // ###REPOMAN Create new Event "RepoAliasChanged"
+            // emit aliasChanged(alias);
         }
     }
 
@@ -218,7 +219,6 @@ namespace RM
         }
 
         Events::self()->repositoryAboutToClose(this);
-        emit aboutToClose(this);
 
         foreach (Repo* child, submodules()) {
             child->close();
@@ -421,13 +421,10 @@ namespace RM
             mUnloadTimer = NULL;
         }
 
-        Repo* r = pub<Repo>();
-        emit r->aboutToUnload(r);
-
+        // ####REPOMAN Do we really need to send out events for Unload/Load? If yes, create
+        //             real events for that!
         mIsLoaded = false;
         mRepo = Git::Repository();
-
-        emit r->unloaded(r);
     }
 
 
@@ -474,10 +471,7 @@ namespace RM
 
             subInfo = repoByPath(path, true);
             if (!subInfo) {
-
                 subInfo = new Submodule(subRepo, p);
-                emit p->childAdded(p, subInfo);
-
             }
             else {
                 oldSubmodules.remove(subInfo);

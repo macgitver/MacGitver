@@ -97,14 +97,6 @@ namespace RM
 
     private slots:
         void unloadTimer();
-
-    signals:
-        void aboutToClose   (RM::Repo* repo);
-        void aboutToUnload  (RM::Repo* repo);
-        void unloaded       (RM::Repo* repo);
-        void loaded         (RM::Repo* repo);
-        void childAdded     (RM::Repo* parent, RM::Repo* child);
-        void aliasChanged   (const QString& newAlias);
     };
 
 }

@@ -204,11 +204,13 @@ void RepoInfoModel::repositoryOpened(RM::Repo *info)
         return;
     }
 
+    // ###REPOMAN Instead of this, listen to SubmoduleCreated events
+
     // This connection is wrong. There could be any children added below the repository (i.e.
     // HEAD, SubModule, CollectionNode). But the slot will unconditionally reserve a new space
     // for a submodule...
-    connect(info, &RM::Repo::childAdded,
-            this, &RepoInfoModel::repositoryChildAdded);
+    //connect(info, &RM::Repo::childAdded,
+    //        this, &RepoInfoModel::repositoryChildAdded);
 
     // we add a row just at the end of the root. This is stupid. But that's the way it works when
     // a model actually isn't a model...

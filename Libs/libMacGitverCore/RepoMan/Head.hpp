@@ -36,7 +36,6 @@ namespace RM
     public:
         enum { StaticObjectType = HeadObject };
         typedef Internal::HeadPrivate Private;
-        typedef QSet< Head* > Set;
         typedef QVector< Head* > List;
 
     public:

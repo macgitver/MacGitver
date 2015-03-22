@@ -29,7 +29,6 @@ namespace RM
     public:
         enum { StaticObjectType = BranchObject };
         typedef QVector< Branch* > List;
-        typedef QSet< Branch* > Set;
 
     public:
         Branch(Base* parent, const Git::Reference& ref);

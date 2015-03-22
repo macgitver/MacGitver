@@ -144,7 +144,7 @@ namespace RM
         return NULL;
     }
 
-    Repo::Set Repo::submodules() const
+    Repo::List Repo::submodules() const
     {
         return childObjects<Repo>();
     }
@@ -437,7 +437,7 @@ namespace RM
             return;
         }
 
-        Repo::Set oldSubmodules = pub<Repo>()->submodules();
+        Repo::List oldSubmodules = pub<Repo>()->submodules();
 
         foreach (Git::Submodule sub, subs) {
             Git::Result child;
@@ -459,7 +459,7 @@ namespace RM
                 subInfo = new Submodule(subRepo, p);
             }
             else {
-                oldSubmodules.remove(subInfo);
+                oldSubmodules.removeOne(subInfo);
             }
         }
 

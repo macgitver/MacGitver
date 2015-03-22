@@ -51,6 +51,7 @@ namespace RM
     public:
         Ref(Base* parent, RefTypes type, const Git::Reference& ref);
 
+        GW_DEPRECATED
         Git::Reference load(Git::Result& r);
 
     public:

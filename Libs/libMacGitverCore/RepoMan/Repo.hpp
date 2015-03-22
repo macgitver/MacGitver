@@ -58,8 +58,8 @@ namespace RM
         ~Repo();
 
     public:
-        Git::Repository gitRepo();
-        Git::Repository gitLoadedRepo() const;
+        GW_DEPRECATED Git::Repository gitRepo();
+        GW_DEPRECATED Git::Repository gitLoadedRepo() const;
 
         bool isSubModule() const;
         bool isBare() const;

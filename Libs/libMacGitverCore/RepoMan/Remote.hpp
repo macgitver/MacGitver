@@ -44,6 +44,7 @@ namespace RM
         Remote(const Git::Remote& gitObj, Base* parent);
 
     public:
+        GW_DEPRECATED
         Git::Remote gitObject();
         QString name() const;
         CollectionNode* branches();

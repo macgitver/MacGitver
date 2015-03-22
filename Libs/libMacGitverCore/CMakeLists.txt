@@ -24,8 +24,8 @@ SET( SRC_FILES
     MacGitver/Module.cpp
     MacGitver/Modules.cpp
     MacGitver/GitPatchConsumer.cpp
+    MacGitver/AutoRefresher.cpp
 
-    RepoMan/AutoRefresher.cpp
     RepoMan/Events.cpp
     RepoMan/RepoMan.cpp
 
@@ -113,10 +113,10 @@ SET( PRI_HDR_FILES
     App/MacGitverPrivate.hpp
     App/MgvPrimaryWindowPrivate.hpp
 
+    MacGitver/AutoRefresher.hpp
+
     Config/Ui/ConfigDialog.hpp
     Config/Ui/GeneralConfigPage.hpp
-
-    RepoMan/AutoRefresher.hpp
 
     RepoMan/Private/Dumper.hpp
 
@@ -168,7 +168,7 @@ SET(RCC_FILES
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
 SET(CCFG_FILES
-    RepoMan/AutoRefresherCfg.ccfg
+    MacGitver/AutoRefresherCfg.ccfg
 )
 
 CFGCOMP(CFG_FILES ${CCFG_FILES})

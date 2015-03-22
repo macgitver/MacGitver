@@ -57,7 +57,7 @@ namespace RM
 
     public:
         GW_DEPRECATED Git::Repository gitRepo();
-        GW_DEPRECATED Git::Repository gitLoadedRepo() const;
+        GW_DEPRECATED Git::Repository gitLoadedRepo();
 
         bool isSubModule() const;
         bool isBare() const;

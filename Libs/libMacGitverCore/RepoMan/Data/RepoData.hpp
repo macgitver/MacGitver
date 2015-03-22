@@ -62,13 +62,14 @@ namespace RM
         public:
             void load();
             void unload();
-            bool ensureIsLoaded();
             void findAlias();
             void scanSubmodules();
             Repo* repoByPath(const QString& basePath, bool searchSubmodules);
 
         public:
-            Git::Repository mRepo;                 //!< GitWrap-Repo, if loaded
+            Git::Repository gitRepo(bool doLoad = false);
+
+        public:
             QString         mPath;                 //!< Full, absolute path to this repository
             QString         mDisplayAlias;         //!< An alias for display (Default to last path comp.)
             bool            mIsSubModule    : 1;   //!< This is a submodule of another repo
@@ -78,6 +79,9 @@ namespace RM
             bool            mIsInitializing : 1;   //!< True, while this repository is initializing
             QTimer*         mUnloadTimer;          //!< NULL or a timer to unload this repository
             Head*           mHead;                 //!< The HEAD
+
+        private:
+            Git::Repository mRepo;                 //!< GitWrap-Repo, if loaded
         };
 
     }

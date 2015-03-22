@@ -71,21 +71,6 @@ HistoryView::HistoryView()
 
     connect( &MacGitver::repoMan(), &RM::RepoMan::repositoryActivated,
              this,                  &HistoryView::repoActivated);
-
-    #if 0 // Missing feature in libHeaven:
-
-    // We cannot use QActionGroup, as we don't know for which widget we should ask a QAction for.
-    // Thus, we cannot change the checkboxes into radio buttons. IIRC we already have other places
-    // where we simulate Radios with Checks...
-    //
-    // Seems like this wants to be my next topic :)
-
-    QActionGroup* g = new QActionGroup(this);
-    g->addAction(actHistoryShowHEADonly);
-    g->addAction(actHistoryShowAllBranches);
-    g->addAction(actHistoryShowLocalBranches);
-    g->addAction(actHistoryShowAllRefs);
-    #endif
 }
 
 void HistoryView::repoActivated(RM::Repo* repo)

@@ -233,7 +233,7 @@ void WorkingTreeModel::update()
             file = (WorkingTreeFileItem*) fileBase;
         }
 
-        QFileInfo fi( mRepo.basePath() + L'/' + it.key() );
+        QFileInfo fi( mRepo.workTreePath() + L'/' + it.key() );
 
 #ifdef Q_OS_WIN
         file->setIcon( getWindowsIcon( fi.absoluteFilePath() ) );

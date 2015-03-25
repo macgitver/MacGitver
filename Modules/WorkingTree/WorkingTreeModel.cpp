@@ -23,15 +23,6 @@
 #include "WorkingTreeDirItem.h"
 #include "WorkingTreeFileItem.h"
 
-#ifdef Q_OS_WIN
-
-#include <windows.h>
-
-QIcon getWindowsIcon( const QString& pathName )
-{
-    return QIcon();
-}
-#endif
 
 WorkingTreeModel::WorkingTreeModel(QObject* parent )
     : QAbstractItemModel( parent )
@@ -225,7 +216,7 @@ void WorkingTreeModel::update()
         QFileInfo fi( mRepo.basePath() + L'/' + it.key() );
 
 #ifdef Q_OS_WIN
-        file->setIcon( getWindowsIcon( fi.absoluteFilePath() ) );
+        file->setIcon( QIcon() );
 #else
         file->setIcon( ip.icon( fi ) );
 #endif

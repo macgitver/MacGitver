@@ -79,10 +79,9 @@ HistoryDiff::HistoryDiff()
     mParentsList->setHeaderHidden( true );
     mParentsList->setRootIsDecorated( false );
 
-    #if QT_VERSION < 0x050000
-    // QT5: Recheck this.
-    mParentsList->header()->setResizeMode( QHeaderView::ResizeToContents );
-    #endif
+    // TODO: This has to be revisited. The "hidden date column" will be
+    // completely shown, when moving the mouse pointer to the right edge.
+    mParentsList->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
 
     mParentsList->setModel( mParentsModel );
     mDiffToParent->setView( mParentsList );

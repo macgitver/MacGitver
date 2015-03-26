@@ -24,6 +24,25 @@
 #include "WorkingTreeFileItem.h"
 
 
+#ifdef Q_OS_WIN
+
+#include <QtWin>
+
+QIcon getWindowsIcon( const QString& pathName )
+{
+    SHFILEINFOW shfi;
+    memset( &shfi, 0, sizeof(shfi) );
+    DWORD flags = SHGFI_ICON | SHGFI_USEFILEATTRIBUTES | SHGFI_SMALLICON;
+    SHGetFileInfoW( (LPCWSTR) pathName.utf16(), FILE_ATTRIBUTE_NORMAL, &shfi, sizeof(shfi), flags );
+
+    QPixmap pm = QtWin::fromHICON( shfi.hIcon );
+    DestroyIcon( shfi.hIcon );
+
+    return QIcon( pm );
+}
+#endif
+
+
 WorkingTreeModel::WorkingTreeModel(QObject* parent )
     : QAbstractItemModel( parent )
     , mRootItem( NULL )
@@ -216,7 +235,7 @@ void WorkingTreeModel::update()
         QFileInfo fi( mRepo.basePath() + L'/' + it.key() );
 
 #ifdef Q_OS_WIN
-        file->setIcon( QIcon() );
+        file->setIcon( getWindowsIcon( fi.absoluteFilePath() ) );
 #else
         file->setIcon( ip.icon( fi ) );
 #endif

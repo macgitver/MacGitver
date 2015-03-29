@@ -14,8 +14,7 @@
  *
  */
 
-#ifndef MGV_REMOTE_CREATE_EDIT_DLG_H
-#define MGV_REMOTE_CREATE_EDIT_DLG_H
+#pragma once
 
 #include "ui_RemoteCreateEditDlg.h"
 
@@ -43,5 +42,3 @@ private slots:
 private:
     Git::Remote mRemote;
 };
-
-#endif

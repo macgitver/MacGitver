@@ -14,8 +14,7 @@
  *
  */
 
-#ifndef MGV_MODULE_REMOTES_H
-#define MGV_MODULE_REMOTES_H
+#pragma once
 
 #include "libMacGitverCore/MacGitver/Module.h"
 
@@ -49,5 +48,3 @@ private slots:
 private slots:
     void onOperationFinished();
 };
-
-#endif

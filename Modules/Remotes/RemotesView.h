@@ -14,8 +14,7 @@
  *
  */
 
-#ifndef MGV_REMOTES_VIEW_H
-#define MGV_REMOTES_VIEW_H
+#pragma once
 
 #include "libBlueSky/Views.hpp"
 
@@ -37,5 +36,3 @@ private:
     RemotesViewContext* mCtx;
     QTreeView*          mTreeView;
 };
-
-#endif

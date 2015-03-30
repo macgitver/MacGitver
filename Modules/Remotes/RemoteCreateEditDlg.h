@@ -18,27 +18,55 @@
 
 #include "ui_RemoteCreateEditDlg.h"
 
-#include "libGitWrap/Remote.hpp"
+namespace RM
+{
+    class Repo;
+}
 
 class RemoteCreateEditDlg : public QDialog, private Ui::RemoteCreateEditDlg
 {
     Q_OBJECT
+
 public:
-    RemoteCreateEditDlg();
-    RemoteCreateEditDlg( Git::Remote remote );
+    enum EditMode
+    {
+        Edit = 0,
+        Create,
+        Rename
+    };
+
+public:
+    RemoteCreateEditDlg(RM::Repo* repo);
 
 private:
     void init();
 
 private:
+    // virtual slots
     void accept();
-
-private slots:
-    void onNameChanged( const QString& newName );
-    void onUrlChanged( const QString& newUrl );
-
-    void checkValid();
+    void reject();
 
 private:
-    Git::Remote mRemote;
+    bool eventFilter(QObject* o, QEvent* e);
+
+    void updateValues(const QString &remoteAlias);
+    void clear();
+
+    bool modeCanEnter(EditMode mode) const;
+    void modeEnter(EditMode mode);
+    void modeLeave(bool accept);
+
+private slots:
+    void checkValid();
+
+private slots:
+    // auto-connected ui slots
+    void on_btnAddRemote_clicked();
+    void on_btnDeleteRemote_clicked();
+    void on_txtRemotes_currentIndexChanged(const QString &remoteAlias);
+    void on_txtUrl_textChanged(const QString& newUrl);
+
+private:
+    RM::Repo*       mRepoContext = nullptr;
+    EditMode        mMode = EditMode::Edit;
 };

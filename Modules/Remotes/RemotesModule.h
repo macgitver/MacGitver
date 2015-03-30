@@ -35,12 +35,15 @@ public:
 
 private slots:
     // RemotesAC
-    void onRemoteCreateEdit();
-    void onRemoteDelete();
+    void onManageRemotes();
 
 private slots:
-    // RemotesFetchAC
-    void onRemotesFetchAll();
+    // FetchAC
+    void onFetchAllRemotes();
+
+private slots:
+    // PushAC
+    void onPushToAllRemotes();
 
 private slots:
     void onOperationFinished();

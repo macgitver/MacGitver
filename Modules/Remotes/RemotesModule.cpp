@@ -21,7 +21,7 @@
 #include "libGitWrap/Operations/RemoteOperations.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
 #include "RemoteCreateEditDlg.h"
 #include "RemotesModule.h"
@@ -47,24 +47,23 @@ void RemotesModule::deinitialize()
 /**
  * @brief       Menu action to create a remote and add it to a repository.
  */
-void RemotesModule::onRemoteCreateEdit()
+void RemotesModule::onManageRemotes()
 {
-    // TODO: requires a repository context (the repo to add the remote to)
-    // To edit an existing remote, the remote context is required
-    RemoteCreateEditDlg dlg;
-    //TODO: dlg.setContext( ctx );
-    dlg.exec();
-}
+    Heaven::Action* a = qobject_cast<Heaven::Action*>( sender() );
+    Q_ASSERT(a);
 
-void RemotesModule::onRemoteDelete()
-{
-    // TODO: requires the remote context (the remote to delete)
+    // TODO: reliably determine the repository context
+    QObject* actionCtx = a->activatedBy();
+    RM::Repo* repoCtx = actionCtx ? static_cast<RM::Repo*>( actionCtx )
+                                  : MacGitver::repoMan().activeRepository();
+
+    RemoteCreateEditDlg( repoCtx ).exec();
 }
 
 /**
  * @brief       Menu action to fetch all remotes of a repository.
  */
-void RemotesModule::onRemotesFetchAll()
+void RemotesModule::onFetchAllRemotes()
 {
     // TODO: requires a repository context (the repo to fetch all remotes from)
     // A sub-context (i.e. a branch) can further restrict, what is fetched
@@ -96,11 +95,17 @@ void RemotesModule::onRemotesFetchAll()
             Git::FetchOperation* op = new Git::FetchOperation( repo->gitRepo() );
             op->setRemoteAlias( alias );
             op->setBackgroundMode( true );
-            connect( op, SIGNAL(finished()), this, SLOT(fetchOperationFinished()) );
+            connect( op, &Git::FetchOperation::finished,
+                     this, &RemotesModule::onOperationFinished );
             // TODO: create a central dialog to show progress of parallel operations
             op->execute();
         }
     }
+}
+
+void RemotesModule::onPushToAllRemotes()
+{
+    // TODO: implementation
 }
 
 /**

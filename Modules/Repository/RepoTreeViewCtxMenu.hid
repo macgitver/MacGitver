@@ -32,9 +32,11 @@ Ui RepoTreeViewCtxMenu {
 
         Action      Activate;
         Separator;
+
         MergePlace  RemotesMP;
-        MergePlace  RemotesFetchMP;
+        MergePlace  FetchMP;
         Separator;
+
         Action      Close;
 
     };
@@ -42,7 +44,11 @@ Ui RepoTreeViewCtxMenu {
     Menu CtxMenuSMRepo {
 
         Action      Activate;
+        Separator;
 
+        MergePlace  RemotesMP;
+        MergePlace  FetchMP;
+        Separator;
     };
 
 };

@@ -40,8 +40,9 @@ void RemotesModule::initialize()
 {
     setupActions( this );
 
-     acRemotesAC->mergeInto( "RemotesMP" );
-     acRemotesFetchAC->mergeInto( "RemotesFetchMP" );
+    acRemotesAC->mergeInto( "RemotesMP" );
+    acFetchAC->mergeInto( "FetchMP" );
+    acPushAC->mergeInto( "PushMP" );
 
     MacGitver::self().registerView( "Remotes", tr( "Remotes" ),
                                     &RemotesModule::createRemotesView );

@@ -48,6 +48,9 @@ Ui RepositoryActions {
 
         MergePlace  RemotesMP;
         Separator;
+
+        MergePlace  FetchMP;
+        MergePlace  PushMP;
     };
 
     Container RepositoryMenuAC {

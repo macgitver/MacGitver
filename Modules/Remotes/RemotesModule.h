@@ -33,9 +33,6 @@ public:
     void initialize();
     void deinitialize();
 
-private:
-    static BlueSky::View* createRemotesView();
-
 private slots:
     // RemotesAC
     void onRemoteCreateEdit();

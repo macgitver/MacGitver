@@ -25,15 +25,9 @@
 
 #include "RemoteCreateEditDlg.h"
 #include "RemotesModule.h"
-#include "RemotesView.h"
 
 RemotesModule::RemotesModule()
 {
-}
-
-BlueSky::View* RemotesModule::createRemotesView()
-{
-    return new RemotesView;
 }
 
 void RemotesModule::initialize()
@@ -43,9 +37,6 @@ void RemotesModule::initialize()
     acRemotesAC->mergeInto( "RemotesMP" );
     acFetchAC->mergeInto( "FetchMP" );
     acPushAC->mergeInto( "PushMP" );
-
-    MacGitver::self().registerView( "Remotes", tr( "Remotes" ),
-                                    &RemotesModule::createRemotesView );
 }
 
 void RemotesModule::deinitialize()

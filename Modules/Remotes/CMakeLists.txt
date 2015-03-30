@@ -11,16 +11,12 @@ INCLUDE_DIRECTORIES( BEFORE
 SET( SRC_FILES
 
     RemotesModule.cpp
-    RemotesView.cpp
-    RemotesViewContext.cpp
     RemoteCreateEditDlg.cpp
 )
 
 SET( HDR_FILES
 
     RemotesModule.h
-    RemotesView.h
-    RemotesViewContext.h
     RemoteCreateEditDlg.h
 )
 

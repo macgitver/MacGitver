@@ -93,7 +93,7 @@ void RepositoryModule::onRepositoryOpen()
         fd->setDirectory( lastUsedDir );
     }
 
-    fd->setWindowTitle( trUtf8("Open a git repository") );
+    fd->setWindowTitle( tr("Open a Git repository") );
 
     fd->open( this, SLOT(onRepositoryOpenHelper()) );
 

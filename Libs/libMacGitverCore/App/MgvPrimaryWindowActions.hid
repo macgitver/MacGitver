@@ -48,7 +48,6 @@ Ui MgvPrimaryWindowActions {
             MergePlace      ViewsListMP;
         };
 
-        MergePlace RemotesMP;
         MergePlace WorkingTreeMP;
 
         Menu ToolsMenu {

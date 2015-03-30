@@ -45,6 +45,9 @@ Ui RepositoryActions {
 
     Menu MnuActiveRepo {
         Text        "Active repository";
+
+        MergePlace  RemotesMP;
+        Separator;
     };
 
     Container RepositoryMenuAC {

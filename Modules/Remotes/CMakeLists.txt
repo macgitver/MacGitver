@@ -32,7 +32,6 @@ SET( UI_FILES
 SET( HID_FILES
 
     RemotesModuleActions.hid
-    RemotesViewActions.hid
 )
 
 QT_MOC( MOC_FILES ${HDR_FILES} )

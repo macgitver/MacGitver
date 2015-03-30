@@ -23,12 +23,9 @@ RemotesView::RemotesView()
     : View( "Remotes" )
     , mCtx( NULL )
 {
-    setupActions( this );
-
     mTreeView = new QTreeView();
     mTreeView->setFrameShape( QFrame::NoFrame );
 
-    setToolBar( tbRemotesTB );
     setWidget( mTreeView );
 
     setViewName( trUtf8( "Remotes" ) );

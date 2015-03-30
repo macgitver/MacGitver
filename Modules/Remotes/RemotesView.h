@@ -19,13 +19,11 @@
 
 #include "libBlueSky/Views.hpp"
 
-#include "hic_RemotesViewActions.h"
-
 class QTreeView;
 
 class RemotesViewContext;
 
-class RemotesView : public BlueSky::View, private RemotesViewActions
+class RemotesView : public BlueSky::View
 {
     Q_OBJECT
 public:

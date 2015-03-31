@@ -155,7 +155,6 @@ void RemoteCreateEditDlg::checkValid()
     okay &= !txtUrl->text().isEmpty();
 
     buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
-    buttonBox->button( QDialogButtonBox::Apply )->setEnabled( okay );
 }
 
 void RemoteCreateEditDlg::accept()

@@ -51,7 +51,7 @@ BranchesView::BranchesView()
     setupActions( this );
 
     setViewName( tr( "References" ) );
-    setToolBar( tbBranchesTB );
+    setToolBar( tbRefsViewTB );
     setWidget( mTree );
 
     setFlags( ConsumesContexts | DataPerContext );

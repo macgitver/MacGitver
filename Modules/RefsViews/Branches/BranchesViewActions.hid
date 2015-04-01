@@ -34,7 +34,7 @@ Ui BranchesViewActions {
         ConnectTo       onRenameRef();
     };
 
-    ToolBar BranchesTB {
+    ToolBar RefsViewTB {
         // placeholder for the real toolbar
     };
 

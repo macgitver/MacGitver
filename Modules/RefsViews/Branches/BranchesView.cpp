@@ -50,7 +50,7 @@ BranchesView::BranchesView()
 
     setupActions( this );
 
-    setViewName( trUtf8( "References" ) );
+    setViewName( tr( "References" ) );
     setToolBar( tbBranchesTB );
     setWidget( mTree );
 

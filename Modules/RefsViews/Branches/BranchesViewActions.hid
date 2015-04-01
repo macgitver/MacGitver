@@ -43,17 +43,27 @@ Ui BranchesViewActions {
         Action      RenameRef;
         Separator;
 
+        MergePlace  FetchMP;
+        MergePlace  PushMP;
+        Separator;
+
         Action      RemoveRef;
     };
 
     Menu MnuRemote {
         Action      RenameRef;
         Separator;
+        MergePlace  FetchThisMP;
+        Separator;
+
         Action      RemoveRef;
     };
 
     Menu MnuRemoteBranch {
         Action      CheckoutRef;
+        Separator;
+
+        MergePlace  FetchThisMP;
         Separator;
 
         Action      RemoveRef;

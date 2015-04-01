@@ -46,4 +46,24 @@ Ui BranchesViewActions {
         Action      RemoveRef;
     };
 
+    Menu MnuRemote {
+        Action      RenameRef;
+        Separator;
+        Action      RemoveRef;
+    };
+
+    Menu MnuRemoteBranch {
+        Action      CheckoutRef;
+        Separator;
+
+        Action      RemoveRef;
+    };
+
+    Menu MnuTag {
+        Action      CheckoutRef;
+        Separator;
+
+        Action      RemoveRef;
+    };
+
 };

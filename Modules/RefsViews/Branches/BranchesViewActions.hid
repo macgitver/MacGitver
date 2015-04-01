@@ -38,10 +38,11 @@ Ui BranchesViewActions {
         // placeholder for the real toolbar
     };
 
-    Menu CtxMenuRefsView {
+    Menu MnuBranch {
         Action      CheckoutRef;
         Action      RenameRef;
         Separator;
+
         Action      RemoveRef;
     };
 

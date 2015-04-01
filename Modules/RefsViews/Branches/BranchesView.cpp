@@ -88,13 +88,19 @@ void BranchesView::showContextMenu(const QModelIndex& index, const QPoint& globa
     }
 
     Heaven::Menu* menu = 0;
-    if (item->type() == RefItem::Branch) {
-        menu = menuCtxMenuRefsView;
-        //menu->setActivationContext( item );
+    switch (item->type()) {
+    case RefItem::Branch:
+        menu = menuMnuBranch;
+        break;
+
+    default:
+        break;
     }
 
-    if ( menu )
+    if ( menu ) {
+        //menu->setActivationContext( item );
         menu->showPopup( globalPos );
+    }
 }
 
 void BranchesView::onCheckoutRef()

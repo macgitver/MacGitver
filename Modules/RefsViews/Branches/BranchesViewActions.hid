@@ -35,7 +35,24 @@ Ui BranchesViewActions {
     };
 
     ToolBar RefsViewTB {
-        // placeholder for the real toolbar
+        Action ShowLocalBranches {
+            Text        "Branches";
+            ConnectTo   onShowBranches();
+            Checkable   true;
+            Checked     true;
+        };
+        Action ShowRemotes {
+            Text        "Remotes";
+            ConnectTo   onShowRemotes();
+            Checkable   true;
+            Checked     true;
+        };
+        Action ShowTags {
+            Text        "Tags";
+            ConnectTo   onShowTags();
+            Checkable   true;
+            Checked     true;
+        };
     };
 
     Menu MnuBranch {

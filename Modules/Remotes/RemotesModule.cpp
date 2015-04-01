@@ -36,6 +36,7 @@ void RemotesModule::initialize()
 
     acRemotesAC->mergeInto( "RemotesMP" );
     acFetchAC->mergeInto( "FetchMP" );
+    acFetchThisAC->mergeInto( "FetchThisMP" );
     acPushAC->mergeInto( "PushMP" );
 }
 
@@ -101,6 +102,12 @@ void RemotesModule::onFetchAllRemotes()
             op->execute();
         }
     }
+}
+
+void RemotesModule::onFetchThis()
+{
+    // TODO: implementation
+    // Requires a "remote" or "remote branch" context.
 }
 
 void RemotesModule::onPushToAllRemotes()

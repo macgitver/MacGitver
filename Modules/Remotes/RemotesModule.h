@@ -41,6 +41,9 @@ private slots:
     // FetchAC
     void onFetchAllRemotes();
 
+    // FetchThisAC
+    void onFetchThis();
+
 private slots:
     // PushAC
     void onPushToAllRemotes();

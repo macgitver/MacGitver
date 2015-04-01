@@ -42,6 +42,15 @@ Ui RemotesModuleActions {
 
     };
 
+    Container FetchThisAC {
+
+        Action FetchThis {
+            Text        "Fetch This";
+            _ConnectTo  onFetchThis();
+        };
+
+    };
+
     Container PushAC {
 
         Menu MnuPush {

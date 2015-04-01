@@ -53,6 +53,7 @@ Ui BranchesViewActions {
     Menu MnuRemote {
         Action      RenameRef;
         Separator;
+
         MergePlace  FetchThisMP;
         Separator;
 

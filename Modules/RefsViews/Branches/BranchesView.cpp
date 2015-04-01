@@ -87,10 +87,18 @@ void BranchesView::showContextMenu(const QModelIndex& index, const QPoint& globa
         return;
     }
 
-    Heaven::Menu* menu = 0;
+    Heaven::Menu* menu = nullptr;
     switch (item->type()) {
     case RefItem::Branch:
         menu = menuMnuBranch;
+        break;
+
+    case RefItem::Remote:
+        menu = menuMnuRemote;
+        break;
+
+    case RefItem::Tag:
+        menu = menuMnuTag;
         break;
 
     default:

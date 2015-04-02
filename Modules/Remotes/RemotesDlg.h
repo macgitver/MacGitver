@@ -16,14 +16,14 @@
 
 #pragma once
 
-#include "ui_RemoteCreateEditDlg.h"
+#include "ui_RemotesDlg.h"
 
 namespace RM
 {
     class Repo;
 }
 
-class RemoteCreateEditDlg : public QDialog, private Ui::RemoteCreateEditDlg
+class RemotesDlg : public QDialog, private Ui::RemotesDlg
 {
     Q_OBJECT
 
@@ -36,7 +36,7 @@ public:
     };
 
 public:
-    RemoteCreateEditDlg(RM::Repo* repo);
+    RemotesDlg(RM::Repo* repo);
 
 private:
     void init();

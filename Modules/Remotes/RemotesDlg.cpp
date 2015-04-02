@@ -14,7 +14,7 @@
  *
  */
 
-#include "RemoteCreateEditDlg.h"
+#include "RemotesDlg.h"
 
 #include "libMacGitverCore/RepoMan/Remote.hpp"
 #include "libMacGitverCore/RepoMan/Repo.hpp"
@@ -22,7 +22,7 @@
 #include <QMessageBox>
 
 
-RemoteCreateEditDlg::RemoteCreateEditDlg(RM::Repo* repo)
+RemotesDlg::RemotesDlg(RM::Repo* repo)
 {
     setupUi(this);
     init();
@@ -39,13 +39,13 @@ RemoteCreateEditDlg::RemoteCreateEditDlg(RM::Repo* repo)
     txtRemotes->installEventFilter(this);
 }
 
-void RemoteCreateEditDlg::init()
+void RemotesDlg::init()
 {
     connect( txtPushUrl, &QLineEdit::textChanged,
-             this, &RemoteCreateEditDlg::checkValid );
+             this, &RemotesDlg::checkValid );
 }
 
-void RemoteCreateEditDlg::updateValues(const QString& remoteAlias)
+void RemotesDlg::updateValues(const QString& remoteAlias)
 {    
     // TODO: implement dialog update
     //RM::Remote* remote = mRepoContext->remotes(remoteName);
@@ -58,7 +58,7 @@ void RemoteCreateEditDlg::updateValues(const QString& remoteAlias)
  * @internal
  * @brief       Clear the fields for the current selected Remote.
  */
-void RemoteCreateEditDlg::clear()
+void RemotesDlg::clear()
 {
     txtEditRefSpec->clear();
     txtUrl->clear();
@@ -66,7 +66,7 @@ void RemoteCreateEditDlg::clear()
     treeRefSpecs->setModel(nullptr);
 }
 
-bool RemoteCreateEditDlg::modeCanEnter(RemoteCreateEditDlg::EditMode mode) const
+bool RemotesDlg::modeCanEnter(RemotesDlg::EditMode mode) const
 {
     if (mode == EditMode::Rename) {
         return txtRemotes->currentIndex() > -1;
@@ -75,7 +75,7 @@ bool RemoteCreateEditDlg::modeCanEnter(RemoteCreateEditDlg::EditMode mode) const
     return true;
 }
 
-void RemoteCreateEditDlg::modeEnter(EditMode mode)
+void RemotesDlg::modeEnter(EditMode mode)
 {
     Q_ASSERT(mMode == EditMode::Edit);
     if (!modeCanEnter(mode)) {
@@ -112,7 +112,7 @@ void RemoteCreateEditDlg::modeEnter(EditMode mode)
     txtRemotes->setFocus();
 }
 
-void RemoteCreateEditDlg::modeLeave(bool accept)
+void RemotesDlg::modeLeave(bool accept)
 {
     if (accept) {
         switch (mMode) {
@@ -149,7 +149,7 @@ void RemoteCreateEditDlg::modeLeave(bool accept)
     mMode = EditMode::Edit;
 }
 
-void RemoteCreateEditDlg::checkValid()
+void RemotesDlg::checkValid()
 {
     bool okay = !txtRemotes->currentText().isEmpty();
     okay &= !txtUrl->text().isEmpty();
@@ -157,7 +157,7 @@ void RemoteCreateEditDlg::checkValid()
     buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
 }
 
-void RemoteCreateEditDlg::accept()
+void RemotesDlg::accept()
 {
     if (mMode == EditMode::Edit) {
         QDialog::accept();
@@ -167,12 +167,12 @@ void RemoteCreateEditDlg::accept()
     }
 }
 
-void RemoteCreateEditDlg::on_btnAddRemote_clicked()
+void RemotesDlg::on_btnAddRemote_clicked()
 {
     modeEnter(EditMode::Create);
 }
 
-void RemoteCreateEditDlg::on_btnDeleteRemote_clicked()
+void RemotesDlg::on_btnDeleteRemote_clicked()
 {
     int r = QMessageBox::question(this, tr("Delete selected Remote?"),
                                   tr("Delete the Remote \"%1\" from the repository \"%2\"?")
@@ -182,13 +182,13 @@ void RemoteCreateEditDlg::on_btnDeleteRemote_clicked()
     }
 }
 
-void RemoteCreateEditDlg::on_txtRemotes_currentIndexChanged(const QString &remoteAlias)
+void RemotesDlg::on_txtRemotes_currentIndexChanged(const QString &remoteAlias)
 {
     btnDeleteRemote->setEnabled( txtRemotes->currentIndex() > -1 );
     updateValues(remoteAlias);
 }
 
-void RemoteCreateEditDlg::on_txtUrl_textChanged( const QString& newUrl )
+void RemotesDlg::on_txtUrl_textChanged( const QString& newUrl )
 {
     if( !chkPushUrl->isChecked() ) {
         txtPushUrl->setText( newUrl );
@@ -196,7 +196,7 @@ void RemoteCreateEditDlg::on_txtUrl_textChanged( const QString& newUrl )
     checkValid();
 }
 
-void RemoteCreateEditDlg::reject()
+void RemotesDlg::reject()
 {
     if (mMode != EditMode::Edit) {
         modeLeave(false);
@@ -217,7 +217,7 @@ void RemoteCreateEditDlg::reject()
  *
  * @return
  */
-bool RemoteCreateEditDlg::eventFilter(QObject* o, QEvent* e)
+bool RemotesDlg::eventFilter(QObject* o, QEvent* e)
 {
     if (Q_LIKELY(o == txtRemotes)) {
         if (e->type() == QEvent::MouseButtonDblClick) {

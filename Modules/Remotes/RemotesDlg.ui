@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RemoteCreateEditDlg</class>
- <widget class="QDialog" name="RemoteCreateEditDlg">
+ <class>RemotesDlg</class>
+ <widget class="QDialog" name="RemotesDlg">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -204,7 +204,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>RemoteCreateEditDlg</receiver>
+   <receiver>RemotesDlg</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -220,7 +220,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>RemoteCreateEditDlg</receiver>
+   <receiver>RemotesDlg</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

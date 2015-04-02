@@ -23,7 +23,7 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
-#include "RemoteCreateEditDlg.h"
+#include "RemotesDlg.h"
 #include "RemotesModule.h"
 
 RemotesModule::RemotesModule()
@@ -58,7 +58,7 @@ void RemotesModule::onManageRemotes()
     RM::Repo* repoCtx = actionCtx ? static_cast<RM::Repo*>( actionCtx )
                                   : MacGitver::repoMan().activeRepository();
 
-    RemoteCreateEditDlg( repoCtx ).exec();
+    RemotesDlg( repoCtx ).exec();
 }
 
 /**

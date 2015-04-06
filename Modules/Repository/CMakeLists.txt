@@ -18,7 +18,6 @@ SET( SRC_FILES
 
     CloneRepositoryDlg.cpp
     CreateRepositoryDlg.cpp
-    ProgressDlg.cpp
 )
 
 SET( HDR_FILES
@@ -31,13 +30,11 @@ SET( HDR_FILES
 
     CloneRepositoryDlg.hpp
     CreateRepositoryDlg.h
-    ProgressDlg.hpp
 )
 
 SET( UI_FILES
 
     CloneOptionsWdgt.ui
-    CloneRepositoryDlg.ui
     CreateRepositoryDlg.ui
 )
 
@@ -60,4 +57,3 @@ ADD_MGV_MODULE(
     ${UIC_FILES} ${UI_FILES}
     ${HIC_FILES} ${HID_FILES}
 )
-

@@ -1,19 +1,20 @@
 
-#ifndef MODREPO_PROGRESS_DLG_HPP
-#define MODREPO_PROGRESS_DLG_HPP
+#pragma once
 
+#include "libMacGitverCore/MacGitverApi.hpp"
 #include "libBlueSky/Dialog.hpp"
 
-#include "ui_ProgressDlg.h"
+namespace Ui
+{
+    class ProgressDlg;
+};
 
-
-class ProgressDlg
-        : public BlueSky::Dialog
-        , private Ui::ProgressDlg
+class MGV_CORE_API ProgressDlg : public BlueSky::Dialog
 {
     Q_OBJECT
 public:
     ProgressDlg();
+    ~ProgressDlg();
 
 public:
     void setAction( const QString& action, const QStringList& open,
@@ -34,10 +35,11 @@ protected:
     void closeEvent( QCloseEvent* ev );
 
 private:
+    Ui::ProgressDlg*    ui;
+
+private:
     bool            mDone;
     QString         mBaseLog;
     QObject*        mCurrent;
     QString         mRawRemoteMessage;
 };
-
-#endif

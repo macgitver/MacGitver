@@ -1,28 +1,34 @@
 
+#include "ProgressDlg.hpp"
+#include "ui_ProgressDlg.h"
+
 #include <QStringBuilder>
 #include <QCloseEvent>
 #include <QDebug>
 #include <QPushButton>
 #include <QString>
 
-#include "ProgressDlg.hpp"
-
 
 ProgressDlg::ProgressDlg()
     : BlueSky::Dialog()
+    , ui( new Ui::ProgressDlg )
     , mDone( false )
 {
-    setupUi( this );
+    ui->setupUi( this );
 
-    QPushButton* close = buttonBox->button( QDialogButtonBox::Close );
+    QPushButton* close = ui->buttonBox->button( QDialogButtonBox::Close );
     close->setEnabled( false );
-    connect( close, SIGNAL(clicked()), this, SLOT(close ()) );
+    connect( close, &QPushButton::clicked, this, &ProgressDlg::close );
 
     QPalette p;
     p.setColor( QPalette::Base, p.color( QPalette::Window ) );
     p.setColor( QPalette::Text, p.color( QPalette::WindowText ) );
-    txtLog->setPalette( p );
+    ui->txtLog->setPalette( p );
+}
 
+ProgressDlg::~ProgressDlg()
+{
+    delete ui;
 }
 
 void ProgressDlg::setAction( const QString& action,
@@ -47,7 +53,7 @@ void ProgressDlg::setAction( const QString& action,
         act += QStringLiteral( " (<font color=\"red\">" ) % s % QStringLiteral( "</font>)" );
     }
 
-    lblAction->setText( act );
+    ui->lblAction->setText( act );
 }
 
 void ProgressDlg::setCurrent(QObject* current)
@@ -93,10 +99,10 @@ void ProgressDlg::transportProgress( quint32 totalObjects,
     {
         recv = QString::number( receivedBytes );
     }
-    lblTransferSize->setText( recv );
+    ui->lblTransferSize->setText( recv );
 
-    progressBar->setRange( 0, totalObjects * 2 );
-    progressBar->setValue( indexedObjects + receivedObjects );
+    ui->progressBar->setRange( 0, totalObjects * 2 );
+    ui->progressBar->setValue( indexedObjects + receivedObjects );
 }
 
 void ProgressDlg::remoteMessage( const QString& msg )
@@ -133,25 +139,25 @@ void ProgressDlg::remoteMessage( const QString& msg )
     QString log = mBaseLog % QStringLiteral( "<br/>" ) %
             output.replace( QChar( L'\n' ), QLatin1String("<br/>") ).simplified();
 
-    txtLog->setHtml( log );
+    ui->txtLog->setHtml( log );
 }
 
 void ProgressDlg::beginStep( const QString& step )
 {
     mBaseLog += tr( "<font color=\"blue\">%1</font><br/>" ).arg( step );
-    txtLog->setHtml( mBaseLog );
+    ui->txtLog->setHtml( mBaseLog );
 }
 
 void ProgressDlg::finalizeStep()
 {
-    mBaseLog = txtLog->toHtml() % QStringLiteral( "<br/>" );
+    mBaseLog = ui->txtLog->toHtml() % QStringLiteral( "<br/>" );
     mRawRemoteMessage = QString();
 
-    txtLog->setHtml( mBaseLog );
+    ui->txtLog->setHtml( mBaseLog );
 }
 
 void ProgressDlg::setDone()
 {
     mDone = true;
-    buttonBox->button( QDialogButtonBox::Close )->setEnabled( true );
+    ui->buttonBox->button( QDialogButtonBox::Close )->setEnabled( true );
 }

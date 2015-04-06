@@ -14,11 +14,8 @@
  *
  */
 
-#include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QPushButton>
-#include <QStringBuilder>
 
 #include "libMacGitverCore/Config/Config.h"
 

@@ -151,12 +151,13 @@ SET( PRI_HDR_FILES
 
 SET( UI_FILES
 
+    App/AboutDlg.ui
+
     Config/Ui/ConfigDialog.ui
     Config/Ui/GeneralConfigPage.ui
 
     RepoMan/Config/RepoManConfigPage.ui
 
-    App/AboutDlg.ui
 )
 
 SET( HID_FILES

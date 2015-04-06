@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include "libBlueSky/Dialog.hpp"
+
 #include "ui_RemotesDlg.h"
 
 namespace RM
@@ -23,7 +25,7 @@ namespace RM
     class Repo;
 }
 
-class RemotesDlg : public QDialog, private Ui::RemotesDlg
+class RemotesDlg : public BlueSky::Dialog, private Ui::RemotesDlg
 {
     Q_OBJECT
 

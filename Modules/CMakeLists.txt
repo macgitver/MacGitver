@@ -16,8 +16,3 @@ ADD_SUBDIRECTORY(Welcome)
 ADD_SUBDIRECTORY(WorkingTree)
 ADD_SUBDIRECTORY(Logging)
 ADD_SUBDIRECTORY(RepoManLogger)
-
-# Disabled to not loose the code. The code makes use of deprecated stuff and
-# won't be compiling.
-#
-# ADD_SUBDIRECTORY( Submodules )

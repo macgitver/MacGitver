@@ -19,9 +19,8 @@
 #ifndef MGV_MODULE_REPOSITORY_H
 #define MGV_MODULE_REPOSITORY_H
 
-#include "libMacGitverCore/MacGitver/Module.h"
-
 #include "libMacGitverCore/Config/ConfigUser.h"
+#include "libMacGitverCore/MacGitver/Module.h"
 
 #include "hic_RepositoryModule.h"
 
@@ -63,6 +62,7 @@ private slots:
     void onRepositoryClose();
     void onRecentRepositoryOpen( const QVariant& path );
 
+private slots:
     void onRepositoryOpenHelper();
     void onCoreRepoOpen(RM::Repo* repo);
 

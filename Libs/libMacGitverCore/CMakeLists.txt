@@ -53,6 +53,7 @@ SET( SRC_FILES
 
     SHMParser/ShellExpand.cpp
 
+    Widgets/ExpandableDlg.cpp
     Widgets/FontSelectWidget.cpp
     Widgets/LineEdit.cpp
     Widgets/StringSelectorWidget.cpp
@@ -105,6 +106,7 @@ SET( PUB_HDR_FILES
 
     SHMParser/ShellExpand.hpp
 
+    Widgets/ExpandableDlg.hpp
     Widgets/FontSelectWidget.h
     Widgets/LineEdit.h
     Widgets/StringSelectorWidget.h
@@ -158,6 +160,7 @@ SET( UI_FILES
 
     RepoMan/Config/RepoManConfigPage.ui
 
+    Widgets/ExpandableDlg.ui
 )
 
 SET( HID_FILES

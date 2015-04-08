@@ -14,10 +14,6 @@
  *
  */
 
-#include <QtPlugin>
-#include <QFileDialog>
-#include <QMessageBox>
-
 #include "libGitWrap/Operations/RemoteOperations.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
@@ -25,6 +21,10 @@
 
 #include "RemotesDlg.h"
 #include "RemotesModule.h"
+
+#include <QtPlugin>
+#include <QFileDialog>
+#include <QMessageBox>
 
 RemotesModule::RemotesModule()
 {
@@ -34,9 +34,9 @@ void RemotesModule::initialize()
 {
     setupActions( this );
 
-    acRemotesAC->mergeInto( "RemotesMP" );
     acFetchAC->mergeInto( "FetchMP" );
     acFetchThisAC->mergeInto( "FetchThisMP" );
+    acRemotesAC->mergeInto( "RemotesMP" );
     acPushAC->mergeInto( "PushMP" );
 }
 

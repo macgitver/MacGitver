@@ -31,7 +31,8 @@ Ui RepositoryActions {
     };
 
     Action RepositoryCreate {
-        Text        "C&reate...";
+        Text        "&New...";
+        Shortcut    "Ctrl+N";
         ConnectTo   onRepositoryCreate();
     };
 

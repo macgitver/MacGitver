@@ -38,6 +38,10 @@ private:
     static BlueSky::View* createRemotesView();
 
 private slots:
+    // CloneAC
+    void onClone();
+
+private slots:
     void onRemoteCreate();
 };
 

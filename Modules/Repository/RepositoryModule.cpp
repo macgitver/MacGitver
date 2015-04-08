@@ -28,7 +28,6 @@
 
 #include "RepositoryModule.h"
 #include "RepoTreeView.hpp"
-#include "CloneRepositoryDlg.hpp"
 #include "CreateRepositoryDlg.h"
 
 RepositoryModule::RepositoryModule()
@@ -128,11 +127,6 @@ void RepositoryModule::onRepositoryOpenHelper()
     // If it is a bare repository, we store the repository's directory.
     Config::self().set("Repository/lastUsedDir", repoDir);
                     // repo.isBare() ? repoDir : repo.basePath() );
-}
-
-void RepositoryModule::onRepositoryClone()
-{
-    CloneDlg().exec();
 }
 
 void RepositoryModule::onRecentRepositoryOpen( const QVariant& path )

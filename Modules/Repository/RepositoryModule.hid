@@ -53,11 +53,4 @@ Ui RepositoryActions {
 
     };
 
-    Container RepositoryToolBarAC {
-
-        Action      RepositoryOpen;
-        Action      RepositoryClone;
-
-    };
-
 };

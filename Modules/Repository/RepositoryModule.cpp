@@ -48,7 +48,6 @@ void RepositoryModule::initialize()
 {
     setupActions( this );
     acRepositoryMenuAC->mergeInto( "RepositoryMenuMP" );
-    acRepositoryToolBarAC->mergeInto( "RepositoryToolBarMP" );
 
     connect( damRecentlyUsed, SIGNAL(entryTriggered(QVariant)),
              this, SLOT(onRecentRepositoryOpen(QVariant)) );

@@ -21,11 +21,31 @@
 
 #include <QMessageBox>
 
+RemotesOptionsWdgt::RemotesOptionsWdgt()
+{
+    setupUi(this);
+}
+
+
+RemotesWdgt::RemotesWdgt()
+{
+    setupUi(this);
+}
+
 
 RemotesDlg::RemotesDlg(RM::Repo* repo)
 {
-    setupUi(this);
-    init();
+    setDialogWidgets(mRemotesWdgt, mRemotesOptsWdgt);
+
+    connect(mRemotesWdgt->btnAddRemote, &QAbstractButton::clicked,
+            this,                       &RemotesDlg::onAddRemote);
+    connect(mRemotesWdgt->btnDeleteRemote,  &QAbstractButton::clicked,
+            this,                           &RemotesDlg::onDeleteRemote);
+    connect(mRemotesWdgt->txtUrl,   &QLineEdit::textChanged,
+            this,                   &RemotesDlg::onUrlChanged);
+
+    connect( mRemotesOptsWdgt->txtPushUrl,  &QLineEdit::textChanged,
+             this,                          &RemotesDlg::checkValid );
 
     if (!repo) {
         // TODO: this should never happen and we should assert out here.
@@ -36,13 +56,7 @@ RemotesDlg::RemotesDlg(RM::Repo* repo)
 
     setWindowTitle( tr("Manage the Remotes in \"%1\"").arg(repo->displayName()) );
 
-    txtRemotes->installEventFilter(this);
-}
-
-void RemotesDlg::init()
-{
-    connect( txtPushUrl, &QLineEdit::textChanged,
-             this, &RemotesDlg::checkValid );
+    mRemotesWdgt->txtRemotes->installEventFilter(this);
 }
 
 void RemotesDlg::updateValues(const QString& remoteAlias)
@@ -60,16 +74,17 @@ void RemotesDlg::updateValues(const QString& remoteAlias)
  */
 void RemotesDlg::clear()
 {
-    txtEditRefSpec->clear();
-    txtUrl->clear();
-    txtPushUrl->clear();
-    treeRefSpecs->setModel(nullptr);
+    mRemotesWdgt->txtUrl->clear();
+
+    mRemotesOptsWdgt->txtEditRefSpec->clear();
+    mRemotesOptsWdgt->txtPushUrl->clear();
+    mRemotesOptsWdgt->treeRefSpecs->setModel(nullptr);
 }
 
 bool RemotesDlg::modeCanEnter(RemotesDlg::EditMode mode) const
 {
     if (mode == EditMode::Rename) {
-        return txtRemotes->currentIndex() > -1;
+        return mRemotesWdgt->txtRemotes->currentIndex() > -1;
     }
 
     return true;
@@ -84,23 +99,23 @@ void RemotesDlg::modeEnter(EditMode mode)
 
     mMode = mode;
 
-    btnAddRemote->setEnabled(false);
-    btnDeleteRemote->setEnabled(false);
-    txtRemotes->setEditable(true);
+    mRemotesWdgt->btnAddRemote->setEnabled(false);
+    mRemotesWdgt->btnDeleteRemote->setEnabled(false);
+    mRemotesWdgt->txtRemotes->setEditable(true);
 
     switch (mMode) {
     case EditMode::Create:
 
-        txtRemotes->lineEdit()->setPlaceholderText(tr("Enter a name ..."));
+        mRemotesWdgt->txtRemotes->lineEdit()->setPlaceholderText(tr("Enter a name ..."));
         //txtRemotes->lineEdit()->clear();
-        txtUrl->setPlaceholderText(tr("Enter a URL for the new Remote ..."));
+        mRemotesWdgt->txtUrl->setPlaceholderText(tr("Enter a URL for the new Remote ..."));
         clear();
 
         break;
 
     case EditMode::Rename:
-        txtRemotes->lineEdit()->setText(txtRemotes->currentText());
-        txtRemotes->lineEdit()->selectAll();
+        mRemotesWdgt->txtRemotes->lineEdit()->setText(mRemotesWdgt->txtRemotes->currentText());
+        mRemotesWdgt->txtRemotes->lineEdit()->selectAll();
 
         break;
 
@@ -109,7 +124,7 @@ void RemotesDlg::modeEnter(EditMode mode)
         break;
     }
 
-    txtRemotes->setFocus();
+    mRemotesWdgt->txtRemotes->setFocus();
 }
 
 void RemotesDlg::modeLeave(bool accept)
@@ -118,7 +133,7 @@ void RemotesDlg::modeLeave(bool accept)
         switch (mMode) {
         case EditMode::Create:
         {
-            QString remoteAlias = txtRemotes->lineEdit()->text();
+            QString remoteAlias = mRemotesWdgt->txtRemotes->lineEdit()->text();
             // TODO: implementation to create an RM::Remote
             qCritical("Not implemented yet: Create a Remote via RepoMan.");
             break;
@@ -126,8 +141,8 @@ void RemotesDlg::modeLeave(bool accept)
 
         case EditMode::Rename:
         {
-            QString oldRemoteAlias = txtRemotes->currentText();
-            QString newRemoteAlias = txtRemotes->lineEdit()->text();
+            QString oldRemoteAlias = mRemotesWdgt->txtRemotes->currentText();
+            QString newRemoteAlias = mRemotesWdgt->txtRemotes->lineEdit()->text();
             // TODO: implementation to rename an RM::Remote
             qCritical("Not implemented yet: Rename a Remote via RepoMan.");
             break;
@@ -139,11 +154,11 @@ void RemotesDlg::modeLeave(bool accept)
         }
     }
 
-    txtUrl->setPlaceholderText(QString());
-    btnAddRemote->setEnabled(true);
-    btnDeleteRemote->setEnabled(true);
-    txtRemotes->setEditable(false);
-    txtRemotes->update();
+    mRemotesWdgt->txtUrl->setPlaceholderText(QString());
+    mRemotesWdgt->btnAddRemote->setEnabled(true);
+    mRemotesWdgt->btnDeleteRemote->setEnabled(true);
+    mRemotesWdgt->txtRemotes->setEditable(false);
+    mRemotesWdgt->txtRemotes->update();
 
     // switch to default mode
     mMode = EditMode::Edit;
@@ -151,10 +166,10 @@ void RemotesDlg::modeLeave(bool accept)
 
 void RemotesDlg::checkValid()
 {
-    bool okay = !txtRemotes->currentText().isEmpty();
-    okay &= !txtUrl->text().isEmpty();
+    bool okay = !mRemotesWdgt->txtRemotes->currentText().isEmpty();
+    okay &= !mRemotesWdgt->txtUrl->text().isEmpty();
 
-    buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
+    setAcceptable(okay);
 }
 
 void RemotesDlg::accept()
@@ -167,31 +182,33 @@ void RemotesDlg::accept()
     }
 }
 
-void RemotesDlg::on_btnAddRemote_clicked()
+void RemotesDlg::onAddRemote()
 {
     modeEnter(EditMode::Create);
 }
 
-void RemotesDlg::on_btnDeleteRemote_clicked()
+void RemotesDlg::onDeleteRemote()
 {
     int r = QMessageBox::question(this, tr("Delete selected Remote?"),
-                                  tr("Delete the Remote \"%1\" from the repository \"%2\"?")
-                                  .arg(txtRemotes->currentText()).arg(mRepoContext->displayName()));
+                                  tr("Delete the Remote \"%1\" from the "
+                                     "repository \"%2\"?")
+                                  .arg(mRemotesWdgt->txtRemotes->currentText())
+                                  .arg(mRepoContext->displayName()));
     if (r == QMessageBox::Yes) {
         // TODO: implement deletion of selected Remote
     }
 }
 
-void RemotesDlg::on_txtRemotes_currentIndexChanged(const QString &remoteAlias)
+void RemotesDlg::onCurrentRemoteChanged(const QString &alias)
 {
-    btnDeleteRemote->setEnabled( txtRemotes->currentIndex() > -1 );
-    updateValues(remoteAlias);
+    mRemotesWdgt->btnDeleteRemote->setEnabled(mRemotesWdgt->txtRemotes->currentIndex() > -1);
+    updateValues(alias);
 }
 
-void RemotesDlg::on_txtUrl_textChanged( const QString& newUrl )
+void RemotesDlg::onUrlChanged(const QString& newUrl)
 {
-    if( !chkPushUrl->isChecked() ) {
-        txtPushUrl->setText( newUrl );
+    if( !mRemotesOptsWdgt->chkPushUrl->isChecked() ) {
+        mRemotesOptsWdgt->txtPushUrl->setText( newUrl );
     }
     checkValid();
 }
@@ -219,7 +236,7 @@ void RemotesDlg::reject()
  */
 bool RemotesDlg::eventFilter(QObject* o, QEvent* e)
 {
-    if (Q_LIKELY(o == txtRemotes)) {
+    if (Q_LIKELY(o == mRemotesWdgt->txtRemotes)) {
         if (e->type() == QEvent::MouseButtonDblClick) {
             modeEnter(EditMode::Rename);
             return true;

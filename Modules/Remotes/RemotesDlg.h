@@ -16,16 +16,39 @@
 
 #pragma once
 
-#include "libBlueSky/Dialog.hpp"
+#include "libMacGitverCore/Widgets/ExpandableDlg.hpp"
 
-#include "ui_RemotesDlg.h"
+#include "ui_RemotesOptionsWdgt.h"
+#include "ui_RemotesWdgt.h"
+
+#include <QPointer>
 
 namespace RM
 {
     class Repo;
 }
 
-class RemotesDlg : public BlueSky::Dialog, private Ui::RemotesDlg
+class RemotesOptionsWdgt : public QWidget, Ui::RemotesOptionsWdgt
+{
+    Q_OBJECT
+
+    friend class RemotesDlg;
+
+public:
+    RemotesOptionsWdgt();
+};
+
+class RemotesWdgt : public QWidget, Ui::RemotesWdgt
+{
+    Q_OBJECT
+
+    friend class RemotesDlg;
+
+public:
+    RemotesWdgt();
+};
+
+class RemotesDlg : public ExpandableDlg
 {
     Q_OBJECT
 
@@ -61,12 +84,14 @@ private:
 private slots:
     void checkValid();
 
-private slots:
-    // auto-connected ui slots
-    void on_btnAddRemote_clicked();
-    void on_btnDeleteRemote_clicked();
-    void on_txtRemotes_currentIndexChanged(const QString &remoteAlias);
-    void on_txtUrl_textChanged(const QString& newUrl);
+    void onAddRemote();
+    void onDeleteRemote();
+    void onCurrentRemoteChanged(const QString& alias);
+    void onUrlChanged(const QString& newUrl);
+
+private:
+    QPointer<RemotesOptionsWdgt>    mRemotesOptsWdgt = new RemotesOptionsWdgt;
+    QPointer<RemotesWdgt>           mRemotesWdgt = new RemotesWdgt;
 
 private:
     RM::Repo*       mRepoContext = nullptr;

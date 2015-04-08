@@ -22,7 +22,8 @@ SET( HDR_FILES
 
 SET( UI_FILES
 
-    RemotesDlg.ui
+    RemotesOptionsWdgt.ui
+    RemotesWdgt.ui
 )
 
 SET( HID_FILES

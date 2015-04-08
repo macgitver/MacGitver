@@ -59,7 +59,6 @@ private slots:
     void onRepositoryCreate();
     void onRepositoryClone();
     void onRepositoryOpen();
-    void onRepositoryClose();
     void onRecentRepositoryOpen( const QVariant& path );
 
 private slots:

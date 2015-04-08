@@ -67,10 +67,6 @@ void RepositoryModule::deinitialize()
     unregisterView<RepoTreeView>();
 }
 
-void RepositoryModule::onRepositoryClose()
-{
-}
-
 void RepositoryModule::onRepositoryCreate()
 {
     CreateRepositoryDlg().exec();

@@ -17,10 +17,10 @@
  *
  */
 
-#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Tag.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Branch.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Submodule.hpp"
+#include "libRepoMan/RepoMan.hpp"
+#include "libRepoMan/Frontend/Tag.hpp"
+#include "libRepoMan/Frontend/Branch.hpp"
+#include "libRepoMan/Frontend/Submodule.hpp"
 
 #include "Listener.hpp"
 #include "TemplateNames.hpp"

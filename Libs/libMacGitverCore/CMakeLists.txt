@@ -20,44 +20,12 @@ SET( SRC_FILES
     Config/Ui/ConfigPage.cpp
     Config/Ui/GeneralConfigPage.cpp
     Config/Ui/ConfigPageProvider.cpp
+    Config/Ui/RepoManConfigPage.cpp
 
     MacGitver/Module.cpp
     MacGitver/Modules.cpp
     MacGitver/GitPatchConsumer.cpp
     MacGitver/AutoRefresher.cpp
-
-    RepoMan/Events.cpp
-    RepoMan/RepoMan.cpp
-
-    RepoMan/Frontend/Base.cpp
-    RepoMan/Frontend/Branch.cpp
-    RepoMan/Frontend/Namespace.cpp
-    RepoMan/Frontend/Reference.cpp
-    RepoMan/Frontend/RefLog.cpp
-    RepoMan/Frontend/RefTreeNode.cpp
-    RepoMan/Frontend/Remote.cpp
-    RepoMan/Frontend/Repo.cpp
-    RepoMan/Frontend/Submodule.cpp
-    RepoMan/Frontend/Tag.cpp
-    RepoMan/Frontend/Head.cpp
-
-    RepoMan/Data/Base.cpp
-    RepoMan/Data/Branch.cpp
-    RepoMan/Data/Namespace.cpp
-    RepoMan/Data/Reference.cpp
-    RepoMan/Data/RefLog.cpp
-    RepoMan/Data/RefTreeNode.cpp
-    RepoMan/Data/Remote.cpp
-    RepoMan/Data/Repo.cpp
-    RepoMan/Data/Submodule.cpp
-    RepoMan/Data/Tag.cpp
-    RepoMan/Data/Head.cpp
-
-    RepoMan/Private/Dumper.cpp
-
-    RepoMan/Config/RepoManConfigPage.cpp
-
-    RepoMan/Backend/RepoMan.cpp
 
     SHMParser/ShellExpand.cpp
 
@@ -91,22 +59,6 @@ SET( PUB_HDR_FILES
     MacGitver/GitPatchConsumer.hpp
     MacGitver/IRepositoryContext.hpp
 
-    RepoMan/Core.hpp
-    RepoMan/Events.hpp
-    RepoMan/RepoMan.hpp
-
-    RepoMan/Frontend/Base.hpp
-    RepoMan/Frontend/Reference.hpp
-    RepoMan/Frontend/Repo.hpp
-    RepoMan/Frontend/Remote.hpp
-    RepoMan/Frontend/Tag.hpp
-    RepoMan/Frontend/Branch.hpp
-    RepoMan/Frontend/RefLog.hpp
-    RepoMan/Frontend/Submodule.hpp
-    RepoMan/Frontend/RefTreeNode.hpp
-    RepoMan/Frontend/Namespace.hpp
-    RepoMan/Frontend/Head.hpp
-
     SHMParser/ShellExpand.hpp
 
     Widgets/ExpandableDlg.hpp
@@ -131,32 +83,13 @@ SET( PRI_HDR_FILES
 
     Config/Ui/ConfigDialog.hpp
     Config/Ui/GeneralConfigPage.hpp
-
-    RepoMan/Private/Dumper.hpp
-
-    RepoMan/Data/Base.hpp
-    RepoMan/Data/Branch.hpp
-    RepoMan/Data/Namespace.hpp
-    RepoMan/Data/Reference.hpp
-    RepoMan/Data/RefLog.hpp
-    RepoMan/Data/RefTreeNode.hpp
-    RepoMan/Data/Remote.hpp
-    RepoMan/Data/Repo.hpp
-    RepoMan/Data/RepoMan.hpp
-    RepoMan/Data/Submodule.hpp
-    RepoMan/Data/Tag.hpp
-    RepoMan/Data/Head.hpp
-
-    RepoMan/Frontend/BaseInternal.hpp
-
-    RepoMan/Backend/RepoMan.hpp
-    RepoMan/Backend/RepoLocker.hpp
-
-    RepoMan/Config/RepoManConfigPage.hpp
+    Config/Ui/RepoManConfigPage.hpp
 
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h
     Widgets/RepoStateWidget.hpp
+
+    MacGitver/AutoRefresher.hpp
 )
 
 SET( UI_FILES
@@ -165,8 +98,7 @@ SET( UI_FILES
 
     Config/Ui/ConfigDialog.ui
     Config/Ui/GeneralConfigPage.ui
-
-    RepoMan/Config/RepoManConfigPage.ui
+    Config/Ui/RepoManConfigPage.ui
 
     Widgets/ExpandableDlg.ui
 )
@@ -174,7 +106,6 @@ SET( UI_FILES
 SET( HID_FILES
 
     App/MgvPrimaryWindowActions.hid
-    RepoMan/Private/RepoManActions.hid
 
 )
 
@@ -215,6 +146,7 @@ TARGET_LINK_LIBRARIES(
         HeavenIcons
         BlueSky
         Logger
+        RepoMan
 
     LINK_PRIVATE
         GitWrap

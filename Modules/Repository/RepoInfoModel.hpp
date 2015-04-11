@@ -18,7 +18,7 @@
 
 #include <QAbstractItemModel>
 
-#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/RepoMan.hpp"
 
 class RepoInfoModel : public QAbstractItemModel
 {

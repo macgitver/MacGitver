@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "RepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Frontend/Repo.hpp"
 
 class QLabel;
 

@@ -18,8 +18,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/Config/Config.h"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
+#include "libRepoMan/RepoMan.hpp"
 #include "libHeavenIcons/IconRef.hpp"
 #include "libHeavenIcons/Icon.hpp"
 

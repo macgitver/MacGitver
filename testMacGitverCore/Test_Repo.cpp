@@ -17,8 +17,7 @@
  *
  */
 
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/RepoMan.hpp"
 
 #include "Infra/TempRepo.hpp"
 

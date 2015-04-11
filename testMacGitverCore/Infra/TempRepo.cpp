@@ -19,9 +19,7 @@
 
 #include <QDir>
 
-#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
+#include "libRepoMan/RepoMan.hpp"
 #include "Infra/Fixture.hpp"
 #include "Infra/TempDirProvider.hpp"
 #include "Infra/TempRepo.hpp"

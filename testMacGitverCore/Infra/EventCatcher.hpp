@@ -21,10 +21,8 @@
 
 #pragma once
 
-#include "libMacGitverCore/RepoMan/Frontend/Base.hpp"
-#include "libMacGitverCore/RepoMan/Events.hpp"
-
-namespace RM
+#include "libRepoMan.hpp"
+#include "libRepoMannamespace RM
 {
     class Repo;
 }

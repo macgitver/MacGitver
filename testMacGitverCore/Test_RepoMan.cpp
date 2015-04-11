@@ -19,7 +19,7 @@
 
 #include "Test_RepoMan.hpp"
 
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libRepoMan/RepoMan.hpp"
 
 void RepoManFixture::expectSignal(QObject* sender, const char * const signature)
 {

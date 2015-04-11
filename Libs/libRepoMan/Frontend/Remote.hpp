@@ -1,0 +1,58 @@
+/*
+ * MacGitver
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
+ * (C) Cunz RaD Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License (Version 2) as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#pragma once
+
+#include "libGitWrap/Remote.hpp"
+
+#include "libRepoman/Frontend/Base.hpp"
+
+namespace RM
+{
+
+    namespace Data
+    {
+        class Remote;
+    }
+
+    namespace Frontend
+    {
+
+        class REPOMAN_API Remote : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Remote;
+            typedef Data::Remote Private;
+            typedef QVector<Remote> List;
+
+        public:
+            Remote(const Git::Remote& gitObj, Base* parent);
+
+        public:
+            GW_DEPRECATED
+            Git::Remote gitObject();
+            QString name() const;
+            #if 0 // ###DEAD
+            CollectionNode* branches();
+            #endif
+        };
+
+    }
+
+}

@@ -19,18 +19,17 @@
 
 #if 0
 
-#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Remote.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Reference.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Tag.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Branch.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/RefLog.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Submodule.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Namespace.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/RefTreeNode.hpp"
+#include "libRepoMan.hpp"
+#include "libRepoMante.hpp"
+#include "libRepoManrence.hpp"
+#include "libRepoManhpp"
+#include "libRepoManch.hpp"
+#include "libRepoManog.hpp"
+#include "libRepoManodule.hpp"
+#include "libRepoManspace.hpp"
+#include "libRepoManreeNode.hpp"
 
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
+#include "libRepoMan
 #include "Infra/EventCatcher.hpp"
 
 EventCatcher::EventCatcher()

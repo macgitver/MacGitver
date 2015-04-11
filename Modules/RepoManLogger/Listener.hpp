@@ -21,7 +21,7 @@
 
 #include <QCoreApplication>
 
-#include "libMacGitverCore/RepoMan/Events.hpp"
+#include "libRepoMan/Events.hpp"
 
 #include "libLogger/Channel.hpp"
 #include "libLogger/Event.hpp"

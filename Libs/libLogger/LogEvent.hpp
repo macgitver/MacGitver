@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -18,10 +18,9 @@
  */
 
 #pragma once
-#ifndef MGV_LOG_LOG_EVENT_HPP
-#define MGV_LOG_LOG_EVENT_HPP
 
-#include <QtGlobal>
+#include "libLogger/LogChannel.hpp"
+
 #include <QSharedData>
 #include <QVector>
 
@@ -29,14 +28,12 @@ class QString;
 class QStringList;
 class QDateTime;
 
-#include "libMacGitverCore/Log/LogChannel.hpp"
-
 namespace Log
 {
 
     class Template;
 
-    class MGV_CORE_API Event
+    class LOGGER_API Event
     {
         friend class Channel;
 
@@ -81,4 +78,3 @@ namespace Log
 
 }
 
-#endif

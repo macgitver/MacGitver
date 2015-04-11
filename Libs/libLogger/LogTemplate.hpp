@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -18,21 +18,20 @@
  */
 
 #pragma once
-#ifndef MGV_LOG_LOG_TEMPLATE_HPP
-#define MGV_LOG_LOG_TEMPLATE_HPP
+
+#include "libLogger/Api.hpp"
 
 #include <QSharedData>
 
-class QString;
 
-#include "libMacGitverCore/MacGitverApi.hpp"
+class QString;
 
 namespace Log
 {
 
     class Event;
 
-    class MGV_CORE_API Template
+    class LOGGER_API Template
     {
     public:
         Template(const Template& other);
@@ -58,5 +57,3 @@ namespace Log
     };
 
 }
-
-#endif

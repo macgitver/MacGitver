@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -18,21 +18,17 @@
  */
 
 #pragma once
-#ifndef MGV_LOG_LOG_CHANNEL_HPP
-#define MGV_LOG_LOG_CHANNEL_HPP
+
+#include "libLogger/Api.hpp"
 
 #include <QSharedData>
 #include <QVector>
 
 class QString;
 
-#include "libMacGitverCore/MacGitverApi.hpp"
-
 namespace Heaven
 {
-
     class IconRef;
-
 }
 
 namespace Log
@@ -41,7 +37,7 @@ namespace Log
     class Event;
     class Template;
 
-    class MGV_CORE_API Channel
+    class LOGGER_API Channel
     {
     public:
         typedef QVector<Channel> List;
@@ -75,5 +71,3 @@ namespace Log
     };
 
 }
-
-#endif

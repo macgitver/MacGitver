@@ -17,16 +17,17 @@
 #ifndef MGV_MACGITVER_H
 #define MGV_MACGITVER_H
 
-#include <QObject>
-
 #include "libMacGitverCore/MacGitverApi.hpp"
-#include "libMacGitverCore/Log/LogManager.hpp"
 
 #include "libGitWrap/Result.hpp"
 
 #include "libBlueSky/Views.hpp"
 #include "libBlueSky/Containers.hpp"
 #include "libBlueSky/ViewDescriptor.hpp"
+
+#include "libLogger/LogManager.hpp"
+
+#include <QObject>
 
 namespace RM
 {
@@ -47,7 +48,8 @@ public:
 public:
     static MacGitver&   self();
     static RM::RepoMan& repoMan();
-    static Log::Manager log();
+    GW_DEPRECATED
+    static Log::Manager& log();
 
 public:
     static int exec();

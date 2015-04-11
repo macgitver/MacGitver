@@ -17,36 +17,17 @@
  *
  */
 
-#pragma once
+#include "libLogger/LogConsumer.hpp"
 
-#include "libMacGitverCore/MacGitver/Module.h"
-
-#include "libLogger/LogTemplate.hpp"
-#include "libLogger/LogChannel.hpp"
-
-class Listener;
-
-class RepoManLoggerModule : public Module
+namespace Log
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.macgitver.Module/0.1" FILE "Module.json")
-    Q_INTERFACES(Module)
 
-public:
-    RepoManLoggerModule();
-    ~RepoManLoggerModule();
+    Consumer::Consumer()
+    {
+    }
 
-public:
-    void initialize();
-    void deinitialize();
+    Consumer::~Consumer()
+    {
+    }
 
-private:
-    void setupTemplates();
-    void setupChannel();
-    void setupListener();
-
-private:
-    Log::Template defTemplate;
-    Log::Channel repoManChannel;
-    Listener* listener;
-};
+}

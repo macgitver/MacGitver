@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -17,15 +17,15 @@
  *
  */
 
+#include "LoggingView.hpp"
+#include "LoggingModule.hpp"
+
 #include <QStringBuilder>
 #include <QWebView>
 #include <QWebPage>
 #include <QWebFrame>
 
-#include "LoggingView.hpp"
-#include "LoggingModule.hpp"
-
-#include "libMacGitverCore/Log/LogEvent.hpp"
+#include "libLogger//LogEvent.hpp"
 
 #include "libMacGitverCore/Config/Config.h"
 

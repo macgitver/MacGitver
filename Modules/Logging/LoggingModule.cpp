@@ -19,7 +19,7 @@
 
 #include <QtPlugin>
 
-#include "libMacGitverCore/Log/LogEvent.hpp"
+#include "libLogger/LogEvent.hpp"
 
 #include "LoggingModule.hpp"
 #include "LoggingView.hpp"

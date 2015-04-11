@@ -32,7 +32,6 @@
 #include "libMacGitverCore/MacGitver/Modules.h"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
-#include "libMacGitverCore/Log/LogManager.hpp"
 
 /**
  * @class   MacGitver
@@ -71,7 +70,6 @@ void MacGitverPrivate::init()
         QApplication::setApplicationName( QLatin1String( "MacGitver_NonGui" ) );
     }
 
-    sLog        = Log::Manager::create();
     sRepoMan    = new RM::RepoMan;
     sModules    = new Modules;
 
@@ -87,7 +85,6 @@ MacGitverPrivate::~MacGitverPrivate()
 
     delete sRepoMan;    sRepoMan    = NULL;
     delete sModules;    sModules    = NULL;
-    sLog    = Log::Manager();
 
     sSelf = NULL;
 }
@@ -103,7 +100,6 @@ void MacGitverPrivate::bootGui()
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
 RM::RepoMan*    MacGitverPrivate::sRepoMan      = NULL;
-Log::Manager    MacGitverPrivate::sLog;
 Modules*        MacGitverPrivate::sModules      = NULL;
 
 MacGitver& MacGitver::self()
@@ -121,9 +117,9 @@ RM::RepoMan& MacGitver::repoMan()
     return *MacGitverPrivate::sRepoMan;
 }
 
-Log::Manager MacGitver::log()
+Log::Manager& MacGitver::log()
 {
-    return MacGitverPrivate::sLog;
+    return Log::log();
 }
 
 MacGitver::MacGitver(bool runGui)

@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -21,12 +21,10 @@
 
 #include "libHeavenIcons/IconRef.hpp"
 
-#include "libMacGitverCore/App/MacGitver.hpp"
-
-#include "libMacGitverCore/Log/LogChannel.hpp"
-#include "libMacGitverCore/Log/LogEvent.hpp"
-#include "libMacGitverCore/Log/LogManager.hpp"
-#include "libMacGitverCore/Log/LogTemplate.hpp"
+#include "libLogger/LogChannel.hpp"
+#include "libLogger/LogEvent.hpp"
+#include "libLogger/LogManager.hpp"
+#include "libLogger/LogTemplate.hpp"
 
 namespace Log
 {
@@ -176,7 +174,7 @@ namespace Log
             event.setChannel(d.data());
             d->events.append(event);
 
-            MacGitver::log().eventAdded(event);
+            log().eventAdded(event);
         }
     }
 

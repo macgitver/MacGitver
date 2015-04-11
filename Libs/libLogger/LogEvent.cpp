@@ -19,14 +19,13 @@
 
 #include <QHash>
 #include <QString>
+#include <QStringList>
 #include <QDateTime>
 
-#include "libMacGitverCore/Log/LogEvent.hpp"
-#include "libMacGitverCore/Log/LogChannel.hpp"
-#include "libMacGitverCore/Log/LogManager.hpp"
-#include "libMacGitverCore/Log/LogTemplate.hpp"
-
-#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libLogger/LogEvent.hpp"
+#include "libLogger/LogChannel.hpp"
+#include "libLogger/LogManager.hpp"
+#include "libLogger/LogTemplate.hpp"
 
 namespace Log
 {
@@ -169,7 +168,7 @@ namespace Log
      */
     Event Event::create(const QString& templ)
     {
-        Template t = MacGitver::log().findTemplate(templ);
+        Template t = log().findTemplate(templ);
 
         if (!t.isValid()) {
             return Event();
@@ -342,7 +341,7 @@ namespace Log
     {
         channel = NULL;
         timeStamp = QDateTime::currentDateTime();
-        id = MacGitver::log().nextLogEventId();
+        id = log().nextLogEventId();
     }
 
 }

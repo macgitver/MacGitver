@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -17,21 +17,20 @@
  *
  */
 
+#include "libLogger/LogManager.hpp"
+#include "libLogger/LogTemplate.hpp"
+#include "libLogger/LogConsumer.hpp"
+#include "libLogger/LogEvent.hpp"
+
 #include <QString>
 #include <QHash>
+#include <QObject>
 
-#include "libMacGitverCore/App/MacGitver.hpp"
-
-#include "libMacGitverCore/Log/LogManager.hpp"
-#include "libMacGitverCore/Log/LogTemplate.hpp"
-#include "libMacGitverCore/Log/LogConsumer.hpp"
-#include "libMacGitverCore/Log/LogEvent.hpp"
-
-#define CHNAME_DEBUG        QLatin1String("Debug")
-#define CHNAME_NORMAL       QLatin1String("Normal")
-#define CHNAME_ERROR        QLatin1String("Error")
-#define CHNAME_INFO         QLatin1String("Info")
-#define CHNAME_WARNING      QLatin1String("Warning")
+#define CHNAME_DEBUG        QStringLiteral("Debug")
+#define CHNAME_NORMAL       QStringLiteral("Normal")
+#define CHNAME_ERROR        QStringLiteral("Error")
+#define CHNAME_INFO         QStringLiteral("Info")
+#define CHNAME_WARNING      QStringLiteral("Warning")
 
 namespace Log
 {
@@ -160,50 +159,50 @@ namespace Log
     void Manager::createDefaultChannels()
     {
         Channel ch = Channel::create(CHNAME_ERROR);
-        ch.setDisplayName(MacGitver::trUtf8("Errors", "Channelname"));
+        ch.setDisplayName(QObject::trUtf8("Errors", "Channelname"));
 
         Template t = Template::create(CHNAME_ERROR);
-        t.setTransformation(QLatin1String("<span style=\"color: red;\">$$</span>"));
+        t.setTransformation(QStringLiteral("<span style=\"color: red;\">$$</span>"));
         ch.setDefaultTemplate(t);
         addTemplate(t);
 
         addChannel(ch);
 
         ch = Channel::create(CHNAME_WARNING);
-        ch.setDisplayName(MacGitver::trUtf8("Warnings", "Channelname"));
+        ch.setDisplayName(QObject::trUtf8("Warnings", "Channelname"));
 
         t = Template::create(CHNAME_WARNING);
-        t.setTransformation(QLatin1String("<span style=\"color: yellow;\">$$</span>"));
+        t.setTransformation(QStringLiteral("<span style=\"color: yellow;\">$$</span>"));
         addTemplate(t);
         ch.setDefaultTemplate(t);
 
         addChannel(ch);
 
         ch = Channel::create(CHNAME_INFO);
-        ch.setDisplayName(MacGitver::trUtf8("Infos", "Channelname"));
+        ch.setDisplayName(QObject::trUtf8("Infos", "Channelname"));
 
         t = Template::create(CHNAME_INFO);
-        t.setTransformation(QLatin1String("<span style=\"color: blue;\">$$</span>"));
+        t.setTransformation(QStringLiteral("<span style=\"color: blue;\">$$</span>"));
         addTemplate(t);
         ch.setDefaultTemplate(t);
 
         addChannel(ch);
 
         ch = Channel::create(CHNAME_DEBUG);
-        ch.setDisplayName(MacGitver::trUtf8("Debug", "Channelname"));
+        ch.setDisplayName(QObject::trUtf8("Debug", "Channelname"));
 
         t = Template::create(CHNAME_DEBUG);
-        t.setTransformation(QLatin1String("<span style=\"color: navy;\">$$</span>"));
+        t.setTransformation(QStringLiteral("<span style=\"color: navy;\">$$</span>"));
         addTemplate(t);
         ch.setDefaultTemplate(t);
 
         addChannel(ch);
 
         ch = Channel::create(CHNAME_NORMAL);
-        ch.setDisplayName(MacGitver::trUtf8("Default output", "Channelname"));
+        ch.setDisplayName(QObject::trUtf8("Default output", "Channelname"));
 
         t = Template::create(CHNAME_NORMAL);
-        t.setTransformation(QLatin1String("$$"));
+        t.setTransformation(QStringLiteral("$$"));
         addTemplate(t);
         ch.setDefaultTemplate(t);
 
@@ -425,4 +424,10 @@ namespace Log
         consumer = NULL;
     }
 
+    Manager& log()
+    {
+        // This leaks, but next refactor-iteration will remove it
+        static Manager m = Manager::create();
+        return m;
+    }
 }

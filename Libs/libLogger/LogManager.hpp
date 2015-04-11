@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -18,19 +18,12 @@
  */
 
 #pragma once
-#ifndef MGV_LOG_LOG_MANAGER_HPP
-#define MGV_LOG_LOG_MANAGER_HPP
 
-#include <QtGlobal>
+#include "libLogger/LogChannel.hpp"
+
 #include <QSharedData>
 
 class QString;
-
-#include "libMacGitverCore/MacGitverApi.hpp"
-
-#include "libMacGitverCore/Log/LogChannel.hpp"
-
-class MacGitverPrivate;
 
 namespace Log
 {
@@ -48,9 +41,8 @@ namespace Log
     class Event;
     class Consumer;
 
-    class MGV_CORE_API Manager
+    class LOGGER_API Manager
     {
-        friend class ::MacGitverPrivate;
         friend class Channel;
         friend class Event;
 
@@ -60,6 +52,7 @@ namespace Log
         ~Manager();
         Manager& operator=(const Manager& other);
         bool isValid() const;
+        static Manager create();
 
     public:
         void addMessage(const QString& message, Type t = Normal);
@@ -82,12 +75,11 @@ namespace Log
         void eventAdded(Event event);
 
     private:
-        static Manager create();
         class Data;
         Manager(Data* _d);
         QExplicitlySharedDataPointer<Data> d;
     };
 
-}
+    LOGGER_API Manager& log();
 
-#endif
+}

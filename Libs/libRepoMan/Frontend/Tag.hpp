@@ -19,32 +19,35 @@
 
 #pragma once
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Frontend/Reference.hpp"
 
-class QLabel;
-
-#include <QWidget>
-
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Frontend
+    {
 
-private:
-    void setupUi();
-    void setRepoState();
+        class REPOMAN_API Tag
+                : public Reference
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Tag;
+            typedef QVector<Tag> List;
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+        public:
+            Tag(Base* _parent, const Git::Reference& _ref);
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+        public:
+
+        private:
+            ObjTypes objType() const;
+            void preTerminate();
+            void dumpSelf(Internal::Dumper& dumper) const;
+
+        private:
+        };
+
+    }
+
+}
+

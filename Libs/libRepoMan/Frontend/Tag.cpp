@@ -17,34 +17,29 @@
  *
  */
 
-#pragma once
+#include "libRepoMan/Events.hpp"
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Frontend/Tag.hpp"
 
-class QLabel;
+#include "libRepoMan/Private/Dumper.hpp"
 
-#include <QWidget>
+#include "libRepoMan/Data/Tag.hpp"
 
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Frontend
+    {
 
-private:
-    void setupUi();
-    void setRepoState();
+        #if 0
+        Tag::Tag(Base* _parent, const Git::Reference& _ref)
+            : Ref(*new Data::Tag(this, _ref))
+        {
+            RM_D(Tag);
+            d->linkToParent(_parent);
+        }
+        #endif
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+    }
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+}

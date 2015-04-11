@@ -25,7 +25,7 @@ class QModelIndex;
 class RepoInfoModel;
 class TreeViewCtxMenu;
 
-#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/RepoMan.hpp"
 
 class RepoTreeView
         : public BlueSky::ContextView

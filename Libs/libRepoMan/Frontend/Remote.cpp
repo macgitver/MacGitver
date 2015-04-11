@@ -17,34 +17,47 @@
  *
  */
 
-#pragma once
+#include "libGitWrap/Result.hpp"
+
+#include "libRepoMan/Events.hpp"
 
 #include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Frontend/Remote.hpp"
 
-class QLabel;
+#include "libRepoMan/Private/Dumper.hpp"
 
-#include <QWidget>
+#include "libRepoMan/Data/Remote.hpp"
 
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Frontend
+    {
 
-private:
-    void setupUi();
-    void setRepoState();
+        #if 0
+        Remote::Remote(const Git::Remote& gitObj, Base* _parent)
+            : Base(*new Data::Remote(this, gitObj))
+        {
+            RM_D(Remote);
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+            d->linkToParent(_parent);
+        }
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+        Git::Remote Remote::gitObject()
+        {
+            Git::Result r;
+            return repository()->gitRepo().remote(r, name());
+        }
+
+        QString Remote::name() const
+        {
+            RM_D(Remote);
+
+            return d->name;
+        }
+        #endif
+
+    }
+
+}
+

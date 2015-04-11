@@ -17,34 +17,33 @@
  *
  */
 
-#pragma once
+#include "libRepoMan/Events.hpp"
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Data/Submodule.hpp"
 
-class QLabel;
+#include "libRepoMan/Private/Dumper.hpp"
 
-#include <QWidget>
-
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Frontend
+    {
 
-private:
-    void setupUi();
-    void setRepoState();
+        #if 0
+        Submodule::Submodule(const Git::Repository& repo, Repo* parent)
+            : Repo( *new Data::Submodule( this, repo ) )
+        {
+            RM_D(Submodule);
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+            d->mIsSubModule = true;
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+            setDisplayAlias( repo.name() );
+
+            d->linkToParent( parent );
+            d->refresh();
+        }
+        #endif
+
+    }
+
+}

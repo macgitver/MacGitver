@@ -20,7 +20,7 @@
 #include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
 #include "AutoRefresherCfg.hpp"
 
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+#include "libRepoMan/RepoMan.hpp"
 
 #include <QTimer>
 #include <QDebug>

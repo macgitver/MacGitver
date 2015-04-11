@@ -17,34 +17,35 @@
  *
  */
 
-#pragma once
+#include "libRepoMan/Events.hpp"
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Frontend/Namespace.hpp"
 
-class QLabel;
+#include "libRepoMan/Private/Dumper.hpp"
+#include "libRepoMan/Data/Namespace.hpp"
 
-#include <QWidget>
-
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Frontend
+    {
 
-private:
-    void setupUi();
-    void setRepoState();
+        #if 0
+        Namespace::Namespace(Base* _parent, const QString& _name)
+            : Base(*new Data::Namespace(this, _name))
+        {
+            RM_D(Namespace);
+            d->linkToParent(_parent);
+        }
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+        QString Namespace::name() const
+        {
+            RM_D(Namespace);
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+            return d->name;
+        }
+        #endif
+
+    }
+
+}

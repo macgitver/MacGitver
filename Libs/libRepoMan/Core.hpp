@@ -19,32 +19,55 @@
 
 #pragma once
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include <QVector>
+#include <QSet>
+#include <QStringList>
+#include <QStringBuilder>
 
-class QLabel;
+#include <qglobal.h>
 
-#include <QWidget>
+#ifdef RepoMan_EXPORTS
+#   define REPOMAN_API Q_DECL_EXPORT
+#else
+#   define REPOMAN_API Q_DECL_IMPORT
+#endif
 
-class RepoStateWidget : public QWidget
+namespace Heaven {
+
+    class Menu;
+    class IconRef;
+
+}
+
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    enum class ObjTypes
+    {
+        Invalid,
 
-private:
-    void setupUi();
-    void setRepoState();
+        Namespace,
+        Repo,
+        Remote,
+        Submodule,
+        Head,
+        Branch,
+        Reference,
+        RefTreeNode,
+        Tag,
+        RefLog
+    };
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+    namespace Frontend
+    {
+        class Repo;
+        class RefTreeNode;
+        class Namespace;
+        class Reference;
+        class Remote;
+        class RefLog;
+        class Submodule;
+        class Tag;
+    }
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+}

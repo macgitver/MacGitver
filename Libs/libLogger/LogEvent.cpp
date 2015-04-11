@@ -27,6 +27,8 @@
 #include "libLogger/LogManager.hpp"
 #include "libLogger/LogTemplate.hpp"
 
+#include "libLogger/Internal.hpp"
+
 namespace Log
 {
 
@@ -168,7 +170,7 @@ namespace Log
      */
     Event Event::create(const QString& templ)
     {
-        Template t = log().findTemplate(templ);
+        Template t = System::self()->findTemplate(templ);
 
         if (!t.isValid()) {
             return Event();
@@ -341,7 +343,7 @@ namespace Log
     {
         channel = NULL;
         timeStamp = QDateTime::currentDateTime();
-        id = log().nextLogEventId();
+        id = System::self()->nextLogEventId();
     }
 
 }

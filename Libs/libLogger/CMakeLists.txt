@@ -15,6 +15,7 @@ SET( SRC_FILES
     LogTemplate.cpp
     LogManager.cpp
     LogConsumer.cpp
+    Internal.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -29,7 +30,7 @@ SET( PUB_HDR_FILES
 )
 
 SET( PRI_HDR_FILES
-
+    Internal.hpp
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

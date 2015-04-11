@@ -86,6 +86,8 @@ MacGitverPrivate::~MacGitverPrivate()
     delete sRepoMan;    sRepoMan    = NULL;
     delete sModules;    sModules    = NULL;
 
+    Log::Manager::release();
+
     sSelf = NULL;
 }
 
@@ -115,11 +117,6 @@ RM::RepoMan& MacGitver::repoMan()
     Q_ASSERT(MacGitverPrivate::sRepoMan);
 
     return *MacGitverPrivate::sRepoMan;
-}
-
-Log::Manager& MacGitver::log()
-{
-    return Log::log();
 }
 
 MacGitver::MacGitver(bool runGui)
@@ -168,24 +165,22 @@ void MacGitver::unregisterView(const BlueSky::ViewIdentifier& identifier)
 
 void MacGitver::log( Log::Type type, const QString& logMessage )
 {
-    log().addMessage(logMessage, type);
+    Log::Manager().addMessage(logMessage, type);
 }
 
 void MacGitver::log( Log::Type type, const char* logMessage )
 {
-    log().addMessage(QString::fromUtf8(logMessage), type);
+    Log::Manager().addMessage(QString::fromUtf8(logMessage), type);
 }
 
 void MacGitver::log( Log::Type type, const Git::Result& r, const char* logMessage )
 {
-    if( logMessage )
-    {
-        log().addMessage(QString::fromUtf8("GitWrap-Error: %1\n(%2)")
-                         .arg(r.errorText()).arg(QLatin1String(logMessage)), type);
+    if (logMessage) {
+        Log::Manager().addMessage(tr("GitWrap-Error: %1\n(%2)")
+                                  .arg(r.errorText()).arg(QString::fromUtf8(logMessage)), type);
     }
-    else
-    {
-        log().addMessage(QString::fromUtf8("GitWrap-Error: %1").arg(r.errorText()), type);
+    else {
+        Log::Manager().addMessage(tr("GitWrap-Error: %1").arg(r.errorText()), type);
     }
 }
 

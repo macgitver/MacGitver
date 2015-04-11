@@ -48,8 +48,6 @@ public:
 public:
     static MacGitver&   self();
     static RM::RepoMan& repoMan();
-    GW_DEPRECATED
-    static Log::Manager& log();
 
 public:
     static int exec();

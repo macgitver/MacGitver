@@ -43,43 +43,23 @@ namespace Log
 
     class LOGGER_API Manager
     {
-        friend class Channel;
-        friend class Event;
-
     public:
-        Manager(const Manager& other);
-        Manager();
-        ~Manager();
-        Manager& operator=(const Manager& other);
-        bool isValid() const;
-        static Manager create();
+        static void release();
 
     public:
         void addMessage(const QString& message, Type t = Normal);
         void addEvent(Channel ch, Event event);
 
-        void addTemplate(Template t);
+        void addTemplate(const Template& t);
         Template findTemplate(const QString& name) const;
 
-        void addChannel(Channel ch);
+        void addChannel(const Channel& ch);
         Channel findChannel(const QString& name) const;
 
         Channel::List channels() const;
 
         void setLogConsumer(Consumer* consumer);
         Consumer* logConsumer() const;
-
-    private:
-        quint64 nextLogEventId();
-        void createDefaultChannels();
-        void eventAdded(Event event);
-
-    private:
-        class Data;
-        Manager(Data* _d);
-        QExplicitlySharedDataPointer<Data> d;
     };
-
-    LOGGER_API Manager& log();
 
 }

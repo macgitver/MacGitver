@@ -56,27 +56,27 @@ void RepoManLoggerModule::setupTemplates()
 {
     Log::Template t = Log::Template::create(TMPL_REPO_ACTIVITY);
     t.setTransformation(tr("Repository <code>$RepoName$</code> was <em>$Action$</em>."));
-    MacGitver::log().addTemplate(t);
+    Log::Manager().addTemplate(t);
 
     t = Log::Template::create(TMPL_FOUND_NEW_OBJ);
     t.setTransformation(tr("Found the $Type$ <em>$ObjName</em> in <code>$RepoName$</code>."));
-    MacGitver::log().addTemplate(t);
+    Log::Manager().addTemplate(t);
 
     t = Log::Template::create(TMPL_FOUND_NEW_REF);
     t.setTransformation(tr("Found the $Type$ <em>$ObjName$</em> at <code>$SHA$</code> "
                            "in repository <code>$RepoName$</code>."));
-    MacGitver::log().addTemplate(t);
+    Log::Manager().addTemplate(t);
 
     t = Log::Template::create(TMPL_BRANCH_MOVED);
     t.setTransformation(tr("Branch <em>$ObjName$</em> "
                            "in repository <code>$RepoName$</code> "
                            "moved to <code>$SHA$</code>."));
-    MacGitver::log().addTemplate(t);
+    Log::Manager().addTemplate(t);
 
     t = Log::Template::create(TMPL_FOUND_NEW_SM);
     t.setTransformation(tr("Found submodule <em>$ObjName$</em> "
                            "in repository <code>$RepoName$</code>."));
-    MacGitver::log().addTemplate(t);
+    Log::Manager().addTemplate(t);
 }
 
 void RepoManLoggerModule::setupChannel()
@@ -84,7 +84,7 @@ void RepoManLoggerModule::setupChannel()
     repoManChannel = Log::Channel::create(QLatin1String("RepoMan"));
     repoManChannel.setDisplayName(trUtf8("Repository Log"));
     repoManChannel.setDefaultTemplate(defTemplate);
-    MacGitver::log().addChannel(repoManChannel);
+    Log::Manager().addChannel(repoManChannel);
 }
 
 void RepoManLoggerModule::setupListener()

@@ -21,16 +21,7 @@
 #include "libLogger/LogTemplate.hpp"
 #include "libLogger/LogConsumer.hpp"
 #include "libLogger/LogEvent.hpp"
-
-#include <QString>
-#include <QHash>
-#include <QObject>
-
-#define CHNAME_DEBUG        QStringLiteral("Debug")
-#define CHNAME_NORMAL       QStringLiteral("Normal")
-#define CHNAME_ERROR        QStringLiteral("Error")
-#define CHNAME_INFO         QStringLiteral("Info")
-#define CHNAME_WARNING      QStringLiteral("Warning")
+#include "libLogger/Internal.hpp"
 
 namespace Log
 {
@@ -47,167 +38,6 @@ namespace Log
      * rendering the parameters into HTML, which is then viewed by the consumer.
      *
      */
-
-    class Manager::Data : public QSharedData
-    {
-    public:
-        Data();
-
-    public:
-        quint64 nextId;
-        Consumer* consumer;
-        QHash< QString, Template > templates;
-        QHash< QString, Channel > channels;
-    };
-
-    /**
-     * @brief       Copy constructor
-     *
-     * @param[in]   other   Manager to create a copy of
-     *
-     * Actually, there exists only one Manager. This method is to keep it possible to use the
-     * Manager as a value class.
-     */
-    Manager::Manager(const Manager& other)
-        : d(other.d)
-    {
-    }
-
-    /**
-     * @internal
-     * @brief       Constructor
-     *
-     * @param[in]   _d  The internally associated data.
-     *
-     * Creates a manager internally.
-     *
-     */
-    Manager::Manager(Data* _d)
-        : d(_d)
-    {
-    }
-
-    /**
-     * @brief       Default constructor
-     *
-     * Required, but should not be used. Creates an invalid Manager object.
-     *
-     */
-    Manager::Manager()
-    {
-    }
-
-    /**
-     * @brief       Destructor
-     *
-     * Does nothing but release the internal data.
-     *
-     */
-    Manager::~Manager()
-    {
-    }
-
-    /**
-     * @brief       Assignment operator
-     *
-     * @param[in]   other   The Manager object to assign from.
-     *
-     * @return      A reference to this.
-     *
-     * Just implemented to gain value class semantics.
-     *
-     */
-    Manager& Manager::operator=(const Manager& other)
-    {
-        d = other.d;
-        return *this;
-    }
-
-    /**
-     * @brief       Test for validiy
-     *
-     * @return      `true`, if this is the global singleton and is valid; `false` otherwise.
-     *
-     */
-    bool Manager::isValid() const
-    {
-        return d;
-    }
-
-    /**
-     * @internal
-     *
-     * @brief       Creator function
-     *
-     * @return      Returns a new Manager
-     *
-     */
-    Manager Manager::create()
-    {
-        Manager m(new Data);
-        m.createDefaultChannels();
-        return m;
-    }
-
-    /**
-     * @internal
-     * @brief       create the default channels
-     *
-     * This method sets up the default channels that are used for convenience logging.
-     *
-     */
-    void Manager::createDefaultChannels()
-    {
-        Channel ch = Channel::create(CHNAME_ERROR);
-        ch.setDisplayName(QObject::trUtf8("Errors", "Channelname"));
-
-        Template t = Template::create(CHNAME_ERROR);
-        t.setTransformation(QStringLiteral("<span style=\"color: red;\">$$</span>"));
-        ch.setDefaultTemplate(t);
-        addTemplate(t);
-
-        addChannel(ch);
-
-        ch = Channel::create(CHNAME_WARNING);
-        ch.setDisplayName(QObject::trUtf8("Warnings", "Channelname"));
-
-        t = Template::create(CHNAME_WARNING);
-        t.setTransformation(QStringLiteral("<span style=\"color: yellow;\">$$</span>"));
-        addTemplate(t);
-        ch.setDefaultTemplate(t);
-
-        addChannel(ch);
-
-        ch = Channel::create(CHNAME_INFO);
-        ch.setDisplayName(QObject::trUtf8("Infos", "Channelname"));
-
-        t = Template::create(CHNAME_INFO);
-        t.setTransformation(QStringLiteral("<span style=\"color: blue;\">$$</span>"));
-        addTemplate(t);
-        ch.setDefaultTemplate(t);
-
-        addChannel(ch);
-
-        ch = Channel::create(CHNAME_DEBUG);
-        ch.setDisplayName(QObject::trUtf8("Debug", "Channelname"));
-
-        t = Template::create(CHNAME_DEBUG);
-        t.setTransformation(QStringLiteral("<span style=\"color: navy;\">$$</span>"));
-        addTemplate(t);
-        ch.setDefaultTemplate(t);
-
-        addChannel(ch);
-
-        ch = Channel::create(CHNAME_NORMAL);
-        ch.setDisplayName(QObject::trUtf8("Default output", "Channelname"));
-
-        t = Template::create(CHNAME_NORMAL);
-        t.setTransformation(QStringLiteral("$$"));
-        addTemplate(t);
-        ch.setDefaultTemplate(t);
-
-        addChannel(ch);
-    }
 
     /**
      * @brief       Add a message to a default channel
@@ -255,30 +85,14 @@ namespace Log
     }
 
     /**
-     * @internal
-     * @brief       Get tne next event id
-     *
-     * @return      The next available unique id for events.
-     *
-     */
-    quint64 Manager::nextLogEventId()
-    {
-        return d ? d->nextId++ : 0;
-    }
-
-    /**
      * @brief       Add a template
      *
      * @param[in]   t       The template to add.
      *
      */
-    void Manager::addTemplate(Template t)
+    void Manager::addTemplate(const Template& t)
     {
-        Q_ASSERT(d && t.isValid());
-
-        if (d && t.isValid()) {
-            d->templates.insert(t.name(), t);
-        }
+        System::self()->addTemplate(t);
     }
 
     /**
@@ -292,12 +106,7 @@ namespace Log
      */
     Template Manager::findTemplate(const QString& name) const
     {
-        Q_ASSERT(d);
-        if (d) {
-            return d->templates.value(name, Template());
-        }
-
-        return Template();
+        return System::self()->findTemplate(name);
     }
 
     /**
@@ -309,16 +118,9 @@ namespace Log
      * created.
      *
      */
-    void Manager::addChannel(Channel ch)
+    void Manager::addChannel(const Channel& ch)
     {
-        Q_ASSERT(d);
-        if (d) {
-            d->channels.insert(ch.name(), ch);
-
-            if (d->consumer) {
-                d->consumer->channelAdded(ch);
-            }
-        }
+        System::self()->addChannel(ch);
     }
 
     /**
@@ -332,8 +134,7 @@ namespace Log
      */
     Channel Manager::findChannel(const QString& name) const
     {
-        Q_ASSERT(d);
-        return d ? d->channels.value(name, Channel()) : Channel();
+        return System::self()->findChannel(name);
     }
 
     /**
@@ -344,16 +145,7 @@ namespace Log
      */
     Channel::List Manager::channels() const
     {
-        Q_ASSERT(d);
-        Channel::List l;
-
-        if (d) {
-            foreach (Channel c, d->channels) {
-                l << c;
-            }
-        }
-
-        return l;
+        return System::self()->channels();
     }
 
     /**
@@ -364,70 +156,28 @@ namespace Log
      * There can only be one consumer at a time. If one is already set, a warning will be output to
      * the debugging log.
      *
-     * If @a consumer is `NULL` the consumer will be removed.
+     * If @a consumer is `nullptr` the current consumer will be removed.
      *
      */
     void Manager::setLogConsumer(Consumer* consumer)
     {
-        Q_ASSERT(d);
-        if (d) {
-            if (consumer) {
-                if (d->consumer != consumer) {
-                    if (d->consumer) {
-                        qDebug("A Log-Consumer was already set...");
-                    }
-                    d->consumer = consumer;
-                }
-            }
-            else {
-                d->consumer = NULL;
-            }
-        }
+        System::self()->setConsumer(consumer);
     }
 
     /**
      * @brief       Get the log consumer
      *
-     * @return      The currently installed log consumer or `NULL` if no consumer is installed.
+     * @return      The currently installed log consumer or `nullptr` if no consumer is installed.
      *
      */
     Consumer* Manager::logConsumer() const
     {
-        return d ? d->consumer : NULL;
+        return System::self()->consumer();
     }
 
-    /**
-     * @internal
-     * @brief       Inform log consumer of new event
-     *
-     * @param[in]   event   The new event that was added to a channel.
-     *
-     * This method is internally called from the Channel when a new Event was added to it. If a
-     * Consumer is installed, it will be informed about the new event.
-     *
-     */
-    void Manager::eventAdded(Event event)
+    void Manager::release()
     {
-        Q_ASSERT(d);
-        if (d) {
-            if (d->consumer) {
-                d->consumer->eventAdded(event);
-            }
-        }
+        System::self()->release();
     }
 
-    //-- Manager::Data -------------------------------------------------------------------------- >8
-
-    Manager::Data::Data()
-    {
-        nextId = 1;
-        consumer = NULL;
-    }
-
-    Manager& log()
-    {
-        // This leaks, but next refactor-iteration will remove it
-        static Manager m = Manager::create();
-        return m;
-    }
 }

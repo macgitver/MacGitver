@@ -41,18 +41,19 @@ LoggingModule* LoggingModule::self() {
     return sSelf;
 }
 
-void LoggingModule::initialize() {
-
+void LoggingModule::initialize()
+{
     mMode = new LoggingMode(this);
 
     registerView<LoggingView>(tr("Logbook"));
     registerMode(mMode);
 
-    MacGitver::log().setLogConsumer(this);
+    Log::Manager().setLogConsumer(this);
 }
 
-void LoggingModule::deinitialize() {
-    MacGitver::log().setLogConsumer(NULL);
+void LoggingModule::deinitialize()
+{
+    Log::Manager().setLogConsumer(nullptr);
 
     unregisterView<LoggingView>();
     unregisterMode(mMode);
@@ -61,14 +62,16 @@ void LoggingModule::deinitialize() {
     mMode = NULL;
 }
 
-void LoggingModule::setView(LoggingView* view) {
+void LoggingModule::setView(LoggingView* view)
+{
     mView = view;
     if (view) {
         queueViewUpdate();
     }
 }
 
-void LoggingModule::channelAdded(Log::Channel channel) {
+void LoggingModule::channelAdded(Log::Channel channel)
+{
     queueViewUpdate();
 }
 

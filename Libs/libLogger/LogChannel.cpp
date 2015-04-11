@@ -26,6 +26,8 @@
 #include "libLogger/LogManager.hpp"
 #include "libLogger/LogTemplate.hpp"
 
+#include "libLogger/Internal.hpp"
+
 namespace Log
 {
 
@@ -174,7 +176,7 @@ namespace Log
             event.setChannel(d.data());
             d->events.append(event);
 
-            log().eventAdded(event);
+            System::self()->eventAdded(event);
         }
     }
 

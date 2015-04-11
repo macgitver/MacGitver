@@ -54,7 +54,7 @@ RemotesDlg::RemotesDlg(RM::Repo* repo)
         return;
     }
 
-    setWindowTitle( tr("Manage the Remotes in \"%1\"").arg(repo->displayName()) );
+    setWindowTitle( tr("Remotes in \"%1\"").arg(repo->displayName()) );
 
     mRemotesWdgt->txtRemotes->installEventFilter(this);
 }

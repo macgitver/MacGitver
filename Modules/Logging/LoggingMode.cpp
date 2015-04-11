@@ -20,8 +20,7 @@
 #include <QFile>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
+#include "libRepoMan/RepoMan.hpp"
 #include "LoggingMode.hpp"
 
 LoggingMode::LoggingMode(QObject *parent)

@@ -19,32 +19,40 @@
 
 #pragma once
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libGitWrap/Remote.hpp"
 
-class QLabel;
+#include "libRepoman/Frontend/Base.hpp"
 
-#include <QWidget>
-
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Data
+    {
+        class Remote;
+    }
 
-private:
-    void setupUi();
-    void setRepoState();
+    namespace Frontend
+    {
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+        class REPOMAN_API Remote : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Remote;
+            typedef Data::Remote Private;
+            typedef QVector<Remote> List;
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+        public:
+            Remote(const Git::Remote& gitObj, Base* parent);
+
+        public:
+            GW_DEPRECATED
+            Git::Remote gitObject();
+            QString name() const;
+            #if 0 // ###DEAD
+            CollectionNode* branches();
+            #endif
+        };
+
+    }
+
+}

@@ -19,32 +19,34 @@
 
 #pragma once
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Data/Repo.hpp"
 
-class QLabel;
+#include "libRepoMan/Frontend/Submodule.hpp"
 
-#include <QWidget>
-
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Data
+    {
 
-private:
-    void setupUi();
-    void setRepoState();
+        class Submodule
+                : public Repo
+        {
+        public:
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Submodule;
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+        public:
+            Submodule(Submodule* pub, const Git::Repository& repo);
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+        public:
+            ObjTypes objType() const;
+            void postCreation();
+            void preTerminate();
+            void dumpSelf(Internal::Dumper& dumper) const;
+            QString objectTypeName() const;
+            bool inherits(ObjTypes type) const;
+        };
+
+    }
+
+}

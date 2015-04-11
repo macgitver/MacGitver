@@ -19,32 +19,40 @@
 
 #pragma once
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Frontend/Base.hpp"
 
-class QLabel;
-
-#include <QWidget>
-
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Data
+    {
+        class Namespace;
+    }
 
-private:
-    void setupUi();
-    void setRepoState();
+    namespace Frontend
+    {
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+        class REPOMAN_API Namespace : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Namespace;
+            typedef Data::Namespace Private;
+            typedef QVector<Namespace> List;
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+        public:
+            Namespace(Base* parent, const QString& _name);
+
+        public:
+            QString name() const;
+
+        #if 0 // ###DEAD
+        public:
+            CollectionNode* branches();
+            CollectionNode* namespaces();
+            CollectionNode* notes();
+            CollectionNode* tags();
+        #endif
+        };
+    }
+
+}

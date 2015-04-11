@@ -19,32 +19,34 @@
 
 #pragma once
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Data/Base.hpp"
 
-class QLabel;
+#include "libRepoMan/RepoMan.hpp"
 
-#include <QWidget>
+#include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
 
-class RepoStateWidget : public QWidget
+#include "hic_RepoManActions.h"
+
+#if 0 // ###DEAD
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Data
+    {
 
-private:
-    void setupUi();
-    void setRepoState();
+        class RepoMan : private RepoManActions
+        {
+        public:
+            RepoMan(RepoMan* _pub);
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+            Heaven::Menu* contextMenuFor(Base* object);
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+        public:
+            Repo::List      repos;
+            Repo*           activeRepo;
+        };
+
+    }
+
+}
+#endif

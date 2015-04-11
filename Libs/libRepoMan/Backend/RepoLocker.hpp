@@ -19,32 +19,39 @@
 
 #pragma once
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Data/Repo.hpp"
 
-class QLabel;
-
-#include <QWidget>
-
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Backend
+    {
 
-private:
-    void setupUi();
-    void setRepoState();
+        class RepoLocker
+        {
+        public:
+            RepoLocker() = delete;
+            RepoLocker(const RepoLocker&) = delete;
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+            inline RepoLocker(const Data::Repo::SPtr& p)
+                : d(p)
+            {
+                if (d) {
+                    d->mutex().lock();
+                }
+            }
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+            inline ~RepoLocker()
+            {
+                if (d) {
+                    d->mutex().unlock();
+                }
+            }
+
+        private:
+            Data::Repo::SPtr d;
+        };
+
+    }
+
+}

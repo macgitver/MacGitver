@@ -22,11 +22,11 @@
 #include "libMacGitverCore/App/MgvPrimaryWindowPrivate.hpp"
 #include "libMacGitverCore/MacGitver/Modules.h"
 
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
 #include "libMacGitverCore/Widgets/RepoStateWidget.hpp"
+
+#include "libRepoMan/RepoMan.hpp"
 
 #include "libBlueSky/Application.hpp"
 #include "libBlueSky/FooterWidget.hpp"

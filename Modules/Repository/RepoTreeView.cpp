@@ -20,8 +20,7 @@
 #include "libMacGitverCore/Widgets/TreeViewCtxMenu.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/RepoMan.hpp"
 
 #include "RepoTreeView.hpp"
 #include "RepoInfoModel.hpp"

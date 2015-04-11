@@ -19,32 +19,37 @@
 
 #pragma once
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Data/Repo.hpp"
 
-class QLabel;
+#include <QObject>
+#include <QMutex>
 
-#include <QWidget>
-
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Backend
+    {
 
-private:
-    void setupUi();
-    void setRepoState();
+        class RepoMan
+                : public QObject
+        {
+            Q_OBJECT
+        public:
+            RepoMan();
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+        public:
+            static RepoMan& instance();
+            static QThread* workerThread();
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+        public:
+            Data::Repo::SPtr findRepo(const QString& workTreePath) const;
+
+        private:
+            QThread*            mWorkerThread;
+            mutable QMutex      mRepoMan;
+            Data::Repo::SList   mRepos;
+        };
+
+    }
+
+}

@@ -19,32 +19,38 @@
 
 #pragma once
 
-#include "libRepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Frontend/Branch.hpp"
 
-class QLabel;
-
-#include <QWidget>
-
-class RepoStateWidget : public QWidget
+namespace RM
 {
-    Q_OBJECT
-public:
-    RepoStateWidget();
 
-private slots:
-    void repositoryActivated(const RM::Frontend::Repo& repo);
-    void repositoryDeactivated(const RM::Frontend::Repo& repo);
+    namespace Data
+    {
+        class Head;
+    }
 
-private:
-    void setupUi();
-    void setRepoState();
+    namespace Frontend
+    {
+        class REPOMAN_API Head : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Head;
+            typedef Data::Head Private;
+            typedef QVector<Head> List;
 
-public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+        public:
+            Head(const Git::Repository& repo, Base* parent);
 
-private:
-    RM::Frontend::Repo  repo;
-    QLabel*             txtRepo;
-    QLabel*             txtState;
-    QLabel*             txtBranch;
-};
+        public:
+            bool isDetached() const;
+            bool isUnborn() const;
+            Git::ObjectId detachedId() const;
+            QString symbolicName() const;
+
+        public:
+            bool is(const Branch* ref) const;
+        };
+
+    }
+
+}

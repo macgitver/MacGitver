@@ -25,10 +25,10 @@
 #include "libHeavenIcons/IconRef.hpp"
 #include "libHeavenIcons/Icon.hpp"
 
-#include "RepoMan/Frontend/Reference.hpp"
-#include "RepoMan/Frontend/Repo.hpp"
+#include "libRepoMan/Frontend/Reference.hpp"
+#include "libRepoMan/Frontend/Repo.hpp"
 
-#include "RepoMan/RepoMan.hpp"
+#include "libRepoMan/RepoMan.hpp"
 
 #include "RepoStateWidget.hpp"
 

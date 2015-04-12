@@ -17,8 +17,7 @@
  *
  */
 
-#include "libLogger/LogTemplate.hpp"
-#include "libLogger/LogEvent.hpp"
+#include "libLogger/Internal.hpp"
 
 #include <QHash>
 #include <QString>
@@ -54,16 +53,6 @@ namespace Log
      *
      */
 
-    class Template::Data : public QSharedData
-    {
-    public:
-        Data();
-
-    public:
-        QString         name;
-        QString         transformation;
-    };
-
     /**
      * @brief       Copy constructor
      *
@@ -75,15 +64,20 @@ namespace Log
     {
     }
 
+    Template::Template(Template&& other)
+        : d(std::move(other.d))
+    {
+    }
+
     /**
      * @internal
      * @brief       Create constructor
      *
-     * @param[in]   _d      Creates a template with private data
+     * @param[in]   d       Creates a template with private data
      *
      */
-    Template::Template(Data *_d)
-        : d(_d)
+    Template::Template(const std::shared_ptr<Internal::TemplateData>& d)
+        : d(d)
     {
     }
 
@@ -117,15 +111,10 @@ namespace Log
         return *this;
     }
 
-    /**
-     * @brief       Validity check
-     *
-     * @return      `true`, if this is a valid template object, `false` otherwise.
-     *
-     */
-    bool Template::isValid() const
+    Template& Template::operator=(Template&& other)
     {
-        return d;
+        std::swap(d, other.d);
+        return * this;
     }
 
     /**
@@ -138,8 +127,25 @@ namespace Log
      */
     Template Template::create(const QString& name)
     {
-        Data* d = new Data;
+        std::shared_ptr<Internal::TemplateData> d(new Internal::TemplateData);
+
         d->name = name;
+        return d;
+    }
+
+    /**
+     * @brief       Static creator
+     *
+     * @param[in]   name    The name of the template to create
+     *
+     * @return      A new template.
+     *
+     */
+    Template Template::create(QString&& name)
+    {
+        std::shared_ptr<Internal::TemplateData> d(new Internal::TemplateData);
+
+        d->name = std::move(name);
         return d;
     }
 
@@ -170,6 +176,21 @@ namespace Log
     }
 
     /**
+     * @brief       Set the transformation for this template
+     *
+     * @param[in]   transformText   The transformation to be used with this template.
+     *
+     */
+    void Template::setTransformation(QString&& transformText)
+    {
+        Q_ASSERT(d);
+
+        if (d) {
+            d->transformation = std::move(transformText);
+        }
+    }
+
+    /**
      * @brief       Apply this template to an event
      *
      * @param[in]   event   The event to apply to
@@ -177,7 +198,7 @@ namespace Log
      * @return      The transformed template text filled with parameters from the event.
      *
      */
-    QString Template::apply(Event event) const
+    QString Template::apply(const Event& event) const
     {
         if (!d) {
             return QString();
@@ -212,12 +233,6 @@ namespace Log
             s %
             QStringLiteral("</a>");
         */
-    }
-
-    //-- Template::Data ------------------------------------------------------------------------- >8
-
-    Template::Data::Data()
-    {
     }
 
 }

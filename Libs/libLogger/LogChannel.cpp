@@ -17,15 +17,6 @@
  *
  */
 
-#include <QString>
-
-#include "libHeavenIcons/IconRef.hpp"
-
-#include "libLogger/LogChannel.hpp"
-#include "libLogger/LogEvent.hpp"
-#include "libLogger/LogManager.hpp"
-#include "libLogger/LogTemplate.hpp"
-
 #include "libLogger/Internal.hpp"
 
 namespace Log
@@ -40,19 +31,6 @@ namespace Log
      *
      */
 
-    class Channel::Data : public QSharedData
-    {
-    public:
-        Data();
-
-    public:
-        Template        defaultTemplate;
-        QString         name;
-        QString         displayName;
-        Heaven::IconRef icon;
-        Event::List     events;
-    };
-
     /**
      * @brief       Copy constructor
      *
@@ -61,6 +39,11 @@ namespace Log
      */
     Channel::Channel(const Channel& other)
         : d(other.d)
+    {
+    }
+
+    Channel::Channel(Channel&& o)
+        : d(std::move(o.d))
     {
     }
 
@@ -81,8 +64,8 @@ namespace Log
      * @param[in]   _d  Channel data
      *
      */
-    Channel::Channel(Channel::Data* _d)
-        : d(_d)
+    Channel::Channel(const std::shared_ptr<Data>& d)
+        : d(d)
     {
     }
 
@@ -98,7 +81,8 @@ namespace Log
      */
     Channel Channel::create(const QString& name)
     {
-        Data* d = new Data;
+        std::shared_ptr<Data> d(new Data);
+
         d->name = name;
         return d;
     }
@@ -125,15 +109,10 @@ namespace Log
         return *this;
     }
 
-    /**
-     * @brief       Check for validity
-     *
-     * @return      `true`, if this is a valid Channel object, `false` otherwise.
-     *
-     */
-    bool Channel::isValid() const
+    Channel& Channel::operator=(Channel&& other)
     {
-        return d;
+        std::swap(d, other.d);
+        return * this;
     }
 
     /**
@@ -173,10 +152,10 @@ namespace Log
     {
         Q_ASSERT(d);
         if (d) {
-            event.setChannel(d.data());
-            d->events.append(event);
+            event.setChannel(d);
+            d->events.push_back(event);
 
-            System::self()->eventAdded(event);
+            Internal::System::self()->eventAdded(event);
         }
     }
 
@@ -191,6 +170,20 @@ namespace Log
         Q_ASSERT(d);
         if (d) {
             d->displayName = name;
+        }
+    }
+
+    /**
+     * @brief       Set a user visible display name for this channel
+     *
+     * @param[in]   name    The name to set as display name
+     *
+     */
+    void Channel::setDisplayName(QString&& name)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->displayName = std::move(name);
         }
     }
 
@@ -228,12 +221,6 @@ namespace Log
         if (d) {
             d->defaultTemplate = t;
         }
-    }
-
-    //-- Channel::Data -------------------------------------------------------------------------- >8
-
-    Channel::Data::Data()
-    {
     }
 
 }

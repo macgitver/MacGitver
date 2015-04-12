@@ -54,7 +54,7 @@ void RepoManLoggerModule::deinitialize()
 
 void RepoManLoggerModule::setupTemplates()
 {
-    Log::Template t = Log::Template::create(TMPL_REPO_ACTIVITY);
+    Log::Template&& t = Log::Template::create(TMPL_REPO_ACTIVITY);
     t.setTransformation(tr("Repository <code>$RepoName$</code> was <em>$Action$</em>."));
     Log::Manager().addTemplate(t);
 

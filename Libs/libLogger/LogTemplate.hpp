@@ -21,7 +21,7 @@
 
 #include "libLogger/Api.hpp"
 
-#include <QSharedData>
+#include <memory>
 
 
 class QString;
@@ -31,29 +31,37 @@ namespace Log
 
     class Event;
 
+    namespace Internal
+    {
+        class TemplateData;
+    }
+
     class LOGGER_API Template
     {
     public:
         Template(const Template& other);
+        Template(Template&& other);
         Template();
         ~Template();
         Template& operator=(const Template& other);
-        bool isValid() const;
+        Template& operator=(Template&& other);
+        operator bool() const { return (bool) d; }
 
     public:
         static Template create(const QString& name);
+        static Template create(QString&& name);
 
     public:
         QString name() const;
         void setTransformation(const QString& transformText);
+        void setTransformation(QString&& transformationText);
 
     public:
-        QString apply(Event event) const;
+        QString apply(const Event& event) const;
 
     private:
-        class Data;
-        Template(Data* _d);
-        QExplicitlySharedDataPointer<Data> d;
+        Template(const std::shared_ptr<Internal::TemplateData>& d);
+        std::shared_ptr<Internal::TemplateData> d;
     };
 
 }

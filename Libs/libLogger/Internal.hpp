@@ -19,10 +19,21 @@
 
 #pragma once
 
+#include "libLogger/LogEvent.hpp"
+#include "libLogger/LogChannel.hpp"
+#include "libLogger/LogManager.hpp"
+#include "libLogger/LogTemplate.hpp"
+
+#include "libHeavenIcons/IconRef.hpp"
+
+#include <QDateTime>
 #include <QHash>
 #include <QString>
 #include <QSharedData>
 #include <QMutex>
+#include <QObject>
+
+#include <memory>
 
 #define CHNAME_DEBUG        QStringLiteral("Debug")
 #define CHNAME_NORMAL       QStringLiteral("Normal")
@@ -38,45 +49,101 @@ namespace Log
     class Event;
     class Consumer;
 
-    class System
-            : public QSharedData
+    namespace Internal
     {
-    public:
-        using Ptr           = QExplicitlySharedDataPointer<System>;
-        using Templates     = QHash<QString, Template>;
-        using Channels      = QHash<QString, Channel>;
-        using ChannelList   = QVector<Channel>;
 
-    public:
-        System();
-        ~System();
+        class ThreadMover : public QObject
+        {
+            Q_OBJECT
+        public slots:
+            void newEvent(const Log::Event& e);
+        };
 
-    public:
-        void release();
-        static Ptr self();
+        class System
+                : public std::enable_shared_from_this<System>
+        {
+        public:
+            using Ptr           = std::shared_ptr<System>;
+            using Templates     = std::vector<Template>;
+            using Channels      = std::vector<Channel>;
 
-    public:
-        quint64 nextLogEventId();
-        void createDefaultChannels();
-        void eventAdded(const Event& event);
+        public:
+            System();
+            ~System();
 
-        void addTemplate(const Template& t);
-        Template findTemplate(const QString& name) const;
+        public:
+            void release();
+            static Ptr self();
 
-        void addChannel(const Channel& ch);
-        Channel findChannel(const QString& name) const;
-        ChannelList channels() const;
+        public:
+            quint64 nextLogEventId();
+            void createDefaultChannels();
+            void eventAdded(const Event& event);
+            void emitEventAdded(const Event& event);
 
-        void setConsumer(Consumer* consumer);
-        Consumer* consumer() const;
+            void addTemplate(const Template& t);
+            void addTemplate(Template&& t);
+            Template findTemplate(const QString& name) const;
 
-    private:
-        static Ptr      sSelf;
-        mutable QMutex  mMtx;
-        quint64         mNextId;
-        Consumer*       mConsumer;
-        Templates       mTemplates;
-        Channels        mChannels;
-    };
+            void addChannel(const Channel& ch);
+            Channel findChannel(const QString& name) const;
+            const Channels& channels() const;
+
+            void setConsumer(Consumer* consumer);
+            Consumer* consumer() const;
+
+        private:
+            static Ptr      sSelf;
+            mutable QMutex  mMtx;
+            quint64         mNextId;
+            Consumer*       mConsumer;
+            Templates       mTemplates;
+            Channels        mChannels;
+            ThreadMover     mMover;
+        };
+
+        class ChannelData
+                : public std::enable_shared_from_this<ChannelData>
+        {
+        public:
+            ChannelData() {}
+
+        public:
+            Template        defaultTemplate;
+            QString         name;
+            QString         displayName;
+            Heaven::IconRef icon;
+            Event::List     events;
+        };
+
+        class TemplateData
+                : public std::enable_shared_from_this<TemplateData>
+        {
+        public:
+            TemplateData() {}
+
+        public:
+            QString         name;
+            QString         transformation;
+        };
+
+        class EventData
+                : public std::enable_shared_from_this<EventData>
+        {
+        public:
+            EventData()
+                : id(System::self()->nextLogEventId())
+                , timeStamp(QDateTime::currentDateTime())
+            {}
+
+        public:
+            std::weak_ptr<Channel::Data>    channel;
+            Template                        htmlTemplate;
+            quint64                         id;
+            QDateTime                       timeStamp;
+            QHash< QString, QString >       parameters;
+        };
+
+    }
 
 }

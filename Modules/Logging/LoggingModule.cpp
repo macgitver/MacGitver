@@ -77,14 +77,15 @@ void LoggingModule::channelAdded(Log::Channel channel)
 
 void LoggingModule::logCleaned(quint64 upToId)
 {
-    Log::Event::List old = mEvents;
-    mEvents.clear();
+    Log::Event::List newEvents = mEvents;
 
-    foreach (Log::Event e, old) {
+    for (const Log::Event& e : mEvents) {
         if (e.uniqueId() > upToId) {
-            mEvents.append(e);
+            newEvents.push_back(e);
         }
     }
+
+    std::swap(mEvents, newEvents);
 
     if (mView) {
         mView->clearCache();
@@ -95,23 +96,25 @@ void LoggingModule::logCleaned(quint64 upToId)
 
 void LoggingModule::eventAdded(Log::Event e)
 {
-    mEvents.append(e);
+    mEvents.push_back(e);
     queueViewUpdate();
 }
 
-void LoggingModule::queueViewUpdate() {
-
+void LoggingModule::queueViewUpdate()
+{
     if (!mQueuedUpdate) {
         mQueuedUpdate = true;
         QMetaObject::invokeMethod(this, "viewUpdate", Qt::QueuedConnection);
     }
 }
 
-Log::Event::List LoggingModule::currentEvents() const {
+const Log::Event::List& LoggingModule::currentEvents() const
+{
     return mEvents;
 }
 
-void LoggingModule::viewUpdate() {
+void LoggingModule::viewUpdate()
+{
     if (mView) {
         mView->regenerate();
     }

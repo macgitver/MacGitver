@@ -53,7 +53,7 @@ public:
 public:
     void queueViewUpdate();
     void setView(LoggingView* view);
-    Log::Event::List currentEvents() const;
+    const Log::Event::List& currentEvents() const;
 
 private:
     void channelAdded(Log::Channel channel);

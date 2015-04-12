@@ -61,7 +61,7 @@ namespace Log
         }
 
         Channel channel = findChannel(channelName);
-        if (!channel.isValid()) {
+        if (!channel) {
             qDebug("Should have logged: %s - but got no valid channel.", qPrintable(message));
             return;
         }
@@ -92,8 +92,19 @@ namespace Log
      */
     void Manager::addTemplate(const Template& t)
     {
-        System::self()->addTemplate(t);
+        Internal::System::self()->addTemplate(t);
     }
+
+    /**
+     * @brief       Add a template
+     *
+     * @param[in]   t       The template to add.
+     *
+     *
+    void Manager::addTemplate(Template&& t)
+    {
+        Internal::System::self()->addTemplate(t);
+    }*/
 
     /**
      * @brief       Search for a template by its name
@@ -106,7 +117,7 @@ namespace Log
      */
     Template Manager::findTemplate(const QString& name) const
     {
-        return System::self()->findTemplate(name);
+        return Internal::System::self()->findTemplate(name);
     }
 
     /**
@@ -120,7 +131,7 @@ namespace Log
      */
     void Manager::addChannel(const Channel& ch)
     {
-        System::self()->addChannel(ch);
+        Internal::System::self()->addChannel(ch);
     }
 
     /**
@@ -134,7 +145,7 @@ namespace Log
      */
     Channel Manager::findChannel(const QString& name) const
     {
-        return System::self()->findChannel(name);
+        return Internal::System::self()->findChannel(name);
     }
 
     /**
@@ -143,9 +154,9 @@ namespace Log
      * @return      A Channel::List containing all registered channels.
      *
      */
-    Channel::List Manager::channels() const
+    const Channel::List& Manager::channels() const
     {
-        return System::self()->channels();
+        return Internal::System::self()->channels();
     }
 
     /**
@@ -161,7 +172,7 @@ namespace Log
      */
     void Manager::setLogConsumer(Consumer* consumer)
     {
-        System::self()->setConsumer(consumer);
+        Internal::System::self()->setConsumer(consumer);
     }
 
     /**
@@ -172,12 +183,12 @@ namespace Log
      */
     Consumer* Manager::logConsumer() const
     {
-        return System::self()->consumer();
+        return Internal::System::self()->consumer();
     }
 
     void Manager::release()
     {
-        System::self()->release();
+        Internal::System::self()->release();
     }
 
 }

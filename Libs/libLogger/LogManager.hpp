@@ -51,12 +51,13 @@ namespace Log
         void addEvent(Channel ch, Event event);
 
         void addTemplate(const Template& t);
+        void addTemplate(Template&& t);
         Template findTemplate(const QString& name) const;
 
         void addChannel(const Channel& ch);
         Channel findChannel(const QString& name) const;
 
-        Channel::List channels() const;
+        const Channel::List& channels() const;
 
         void setLogConsumer(Consumer* consumer);
         Consumer* logConsumer() const;

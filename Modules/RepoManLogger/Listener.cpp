@@ -39,7 +39,7 @@ Listener::~Listener()
 void Listener::repositoryOpened(RM::Repo* repo)
 {
     Log::Event e = Log::Event::create(TMPL_REPO_ACTIVITY);
-    Q_ASSERT(e.isValid());
+    Q_ASSERT(e);
 
     e.setParam(QStringLiteral("Action"),     tr("opened"));
     e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
@@ -50,7 +50,7 @@ void Listener::repositoryOpened(RM::Repo* repo)
 void Listener::repositoryAboutToClose(RM::Repo* repo)
 {
     Log::Event e = Log::Event::create(TMPL_REPO_ACTIVITY);
-    Q_ASSERT(e.isValid());
+    Q_ASSERT(e);
 
     e.setParam(QStringLiteral("Action"),     tr("closed"));
     e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
@@ -61,7 +61,7 @@ void Listener::repositoryAboutToClose(RM::Repo* repo)
 void Listener::repositoryActivated(RM::Repo* repo)
 {
     Log::Event e = Log::Event::create(TMPL_REPO_ACTIVITY);
-    Q_ASSERT(e.isValid());
+    Q_ASSERT(e);
 
     e.setParam(QStringLiteral("Action"),     tr("activated"));
     e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
@@ -109,7 +109,7 @@ void Listener::refHeadDetached(RM::Repo* repo, RM::Ref* ref)
 void Listener::tagCreated(RM::Repo* repo, RM::Tag* tag)
 {
     Log::Event e = Log::Event::create(TMPL_FOUND_NEW_REF);
-    Q_ASSERT(e.isValid());
+    Q_ASSERT(e);
 
     e.setParam(QStringLiteral("Type"),       tr("tag"));
     e.setParam(QStringLiteral("ObjName"),    tag->displayName());
@@ -134,7 +134,7 @@ void Listener::branchAboutToBeDeleted(RM::Repo* repo, RM::Branch* branch)
 void Listener::branchMoved(RM::Repo* repo, RM::Branch* branch)
 {
     Log::Event e = Log::Event::create(TMPL_BRANCH_MOVED);
-    Q_ASSERT(e.isValid());
+    Q_ASSERT(e);
 
     e.setParam(QStringLiteral("ObjName"),    branch->displayName());
     e.setParam(QStringLiteral("SHA"),        branch->displaySha1());
@@ -186,7 +186,7 @@ void Listener::remoteModified(RM::Repo* repo, RM::Remote* remote)
 void Listener::submoduleCreated(RM::Repo* repo, RM::Submodule* submodule)
 {
     Log::Event e = Log::Event::create(TMPL_FOUND_NEW_SM);
-    Q_ASSERT(e.isValid());
+    Q_ASSERT(e);
 
     e.setParam(QStringLiteral("ObjName"),    submodule->displayName());
     e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());

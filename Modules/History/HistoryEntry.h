@@ -19,7 +19,7 @@
 
 #include "libGitWrap/Signature.hpp"
 #include "libGitWrap/ObjectId.hpp"
-#include "libGitWrap/ObjectCommit.hpp"
+#include "libGitWrap/Commit.hpp"
 
 enum GraphGlyphs
 {

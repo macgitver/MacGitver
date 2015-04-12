@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QMap>
 
-#include "libGitWrap/ObjectCommit.hpp"
+#include "libGitWrap/Commit.hpp"
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/RevisionWalker.hpp"
 

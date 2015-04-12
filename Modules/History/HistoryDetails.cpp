@@ -16,7 +16,7 @@
 
 #include "libMacGitverCore/Config/Config.h"
 
-#include "libGitWrap/ObjectCommit.hpp"
+#include "libGitWrap/Commit.hpp"
 #include "libGitWrap/Result.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"

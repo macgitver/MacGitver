@@ -21,7 +21,7 @@
 
 #include <QAbstractItemModel>
 
-#include "libGitWrap/ObjectCommit.hpp"
+#include "libGitWrap/Commit.hpp"
 
 class MGV_CORE_API ShortCommitModel : public QAbstractTableModel
 {

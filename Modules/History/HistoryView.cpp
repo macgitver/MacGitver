@@ -24,7 +24,7 @@
 #include <QToolBar>
 
 #include "libGitWrap/Reference.hpp"
-#include "libGitWrap/ObjectCommit.hpp"
+#include "libGitWrap/Commit.hpp"
 
 #include "libDiffViews/Views/Raw/RawView.hpp"
 

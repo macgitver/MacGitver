@@ -20,7 +20,7 @@
 #include <QWidget>
 
 #include "libGitWrap/ObjectId.hpp"
-#include "libGitWrap/ObjectCommit.hpp"
+#include "libGitWrap/Commit.hpp"
 #include "libGitWrap/Repository.hpp"
 
 #include "libDiffViews/Model/Patch.hpp"

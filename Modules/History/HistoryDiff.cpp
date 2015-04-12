@@ -26,7 +26,7 @@
 #include "libGitWrap/Result.hpp"
 #include "libGitWrap/Index.hpp"
 #include "libGitWrap/Reference.hpp"
-#include "libGitWrap/ObjectTree.hpp"
+#include "libGitWrap/Tree.hpp"
 #include "libGitWrap/DiffList.hpp"
 
 #include "libDiffViews/Views/Interfaces/DiffViews.hpp"

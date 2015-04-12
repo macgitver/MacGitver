@@ -13,6 +13,7 @@ RAD_INIT(
         QtMacros
         DoxygenTarget
         SplitSources
+        SingleBinDir
         Installation
 )
 

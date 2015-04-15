@@ -17,7 +17,7 @@
  *
  */
 
-#include "libLogger/LogConsumer.hpp"
+#include "libLogger/Consumer.hpp"
 
 namespace Log
 {

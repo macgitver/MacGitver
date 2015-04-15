@@ -19,11 +19,6 @@
 
 #include "libLogger/Internal.hpp"
 
-#include "libLogger/LogChannel.hpp"
-#include "libLogger/LogConsumer.hpp"
-#include "libLogger/LogEvent.hpp"
-#include "libLogger/LogTemplate.hpp"
-
 #include <QObject>
 #include <QCoreApplication>
 #include <QThread>

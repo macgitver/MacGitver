@@ -21,8 +21,8 @@
 
 #include "libMacGitverCore/MacGitver/Module.h"
 
-#include "libLogger/LogTemplate.hpp"
-#include "libLogger/LogChannel.hpp"
+#include "libLogger/Template.hpp"
+#include "libLogger/Channel.hpp"
 
 class Listener;
 

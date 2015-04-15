@@ -17,10 +17,6 @@
  *
  */
 
-#include "libLogger/LogManager.hpp"
-#include "libLogger/LogTemplate.hpp"
-#include "libLogger/LogConsumer.hpp"
-#include "libLogger/LogEvent.hpp"
 #include "libLogger/Internal.hpp"
 
 namespace Log

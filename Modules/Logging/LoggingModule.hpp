@@ -21,8 +21,8 @@
 
 #include "libMacGitverCore/MacGitver/Module.h"
 
-#include "libLogger/LogConsumer.hpp"
-#include "libLogger/LogEvent.hpp"
+#include "libLogger/Consumer.hpp"
+#include "libLogger/Event.hpp"
 
 class LoggingView;
 class LoggingMode;

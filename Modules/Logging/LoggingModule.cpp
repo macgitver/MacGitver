@@ -19,8 +19,6 @@
 
 #include <QtPlugin>
 
-#include "libLogger/LogEvent.hpp"
-
 #include "LoggingModule.hpp"
 #include "LoggingView.hpp"
 #include "LoggingMode.hpp"

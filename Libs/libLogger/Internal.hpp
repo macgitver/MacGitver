@@ -19,10 +19,11 @@
 
 #pragma once
 
-#include "libLogger/LogEvent.hpp"
-#include "libLogger/LogChannel.hpp"
-#include "libLogger/LogManager.hpp"
-#include "libLogger/LogTemplate.hpp"
+#include "libLogger/Event.hpp"
+#include "libLogger/Channel.hpp"
+#include "libLogger/Manager.hpp"
+#include "libLogger/Template.hpp"
+#include "libLogger/Consumer.hpp"
 
 #include "libHeavenIcons/IconRef.hpp"
 

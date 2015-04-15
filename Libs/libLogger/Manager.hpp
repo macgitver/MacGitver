@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "libLogger/LogChannel.hpp"
+#include "libLogger/Channel.hpp"
 
 #include <QSharedData>
 

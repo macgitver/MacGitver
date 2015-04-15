@@ -23,8 +23,8 @@
 
 #include "libMacGitverCore/RepoMan/Events.hpp"
 
-#include "libLogger/LogChannel.hpp"
-#include "libLogger/LogEvent.hpp"
+#include "libLogger/Channel.hpp"
+#include "libLogger/Event.hpp"
 
 class Listener : public RM::EventsInterface
 {

@@ -25,7 +25,7 @@
 #include <QWebPage>
 #include <QWebFrame>
 
-#include "libLogger//LogEvent.hpp"
+#include "libLogger/Event.hpp"
 
 #include "libMacGitverCore/Config/Config.h"
 

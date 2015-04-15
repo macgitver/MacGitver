@@ -25,7 +25,7 @@
 #include "libBlueSky/Containers.hpp"
 #include "libBlueSky/ViewDescriptor.hpp"
 
-#include "libLogger/LogManager.hpp"
+#include "libLogger/Manager.hpp"
 
 #include <QObject>
 

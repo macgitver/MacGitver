@@ -10,22 +10,22 @@ INCLUDE_DIRECTORIES( BEFORE
 
 SET( SRC_FILES
 
-    LogEvent.cpp
-    LogChannel.cpp
-    LogTemplate.cpp
-    LogManager.cpp
-    LogConsumer.cpp
+    Event.cpp
+    Channel.cpp
+    Template.cpp
+    Manager.cpp
+    Consumer.cpp
     Internal.cpp
 )
 
 SET( PUB_HDR_FILES
 
     Api.hpp
-    LogEvent.hpp
-    LogChannel.hpp
-    LogTemplate.hpp
-    LogManager.hpp
-    LogConsumer.hpp
+    Event.hpp
+    Channel.hpp
+    Template.hpp
+    Manager.hpp
+    Consumer.hpp
 
 )
 

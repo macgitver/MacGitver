@@ -27,6 +27,7 @@
 class QDir;
 
 class Modules;
+class AutoRefresher;
 
 struct MgvViewInfo
 {
@@ -62,6 +63,7 @@ public:
     Git::GitWrap        mGitWrap;
     bool                isGui;
     MgvApp              bsApp;
+    AutoRefresher*      refresher;
     static MacGitver*   sSelf;
     static Modules*     sModules;
 };

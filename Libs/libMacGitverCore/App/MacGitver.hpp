@@ -38,6 +38,7 @@ namespace RM
 
 typedef BlueSky::ViewDescriptor::CreatorFunc MgvViewCreator;
 
+class AutoRefresher;
 class MacGitverPrivate;
 
 class MGV_CORE_API MacGitver
@@ -66,6 +67,8 @@ public:
                                           const QString& displayName,
                                           MgvViewCreator creator);
     void unregisterView(const BlueSky::ViewIdentifier& identifier);
+
+    AutoRefresher *refresher() const;
 
     static void log(Log::Type type, const QString& logMessage);
     static void log(Log::Type type, const char* logMessage);

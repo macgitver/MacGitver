@@ -35,6 +35,7 @@
 #include "libMacGitverCore/MacGitver/Modules.h"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
+#include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
 
 /**
  * @class   MacGitver
@@ -55,6 +56,7 @@
 
 MacGitverPrivate::MacGitverPrivate(MacGitver* owner, bool runGui)
     : isGui(runGui)
+    , refresher(nullptr)
 {
     sSelf = owner;
 }
@@ -66,6 +68,9 @@ void MacGitverPrivate::init()
     if (isGui) {
         QApplication::setOrganizationName(QStringLiteral("MacGitver"));
         QApplication::setApplicationName(QStringLiteral("MacGitver"));
+
+        // only start the auto refresher if we're running a GUI
+        refresher = new AutoRefresher;
 
         Heaven::IconManager::self().defaultProvider()->addSearchPath(QStringLiteral(":/Images"));
     } else {
@@ -206,4 +211,9 @@ int MacGitver::exec()
 bool MacGitver::isRunningGui() const
 {
     return d->isGui;
+}
+
+AutoRefresher* MacGitver::refresher() const
+{
+    return d->refresher;
 }

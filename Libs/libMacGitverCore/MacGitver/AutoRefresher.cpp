@@ -17,20 +17,19 @@
  *
  */
 
-#include <QTimer>
-
-#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
+#include "AutoRefresherCfg.hpp"
 
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
-#include "MacGitver/AutoRefresher.hpp"
-#include "AutoRefresherCfg.hpp"
+#include <QTimer>
+#include <QDebug>
 
-AutoRefresher::AutoRefresher(QObject* parent)
-    : QObject(parent)
-    , refreshGitTimer(NULL)
-    , refreshIndexTimer(NULL)
-    , refreshWorktreeTimer(NULL)
+AutoRefresher::AutoRefresher()
+    : QObject()
+    , refreshGitTimer(nullptr)
+    , refreshIndexTimer(nullptr)
+    , refreshWorktreeTimer(nullptr)
 {
     new AutoRefresherCfg(this);
 
@@ -190,14 +189,15 @@ int AutoRefresher::worktreeRefreshInterval() const
 
 void AutoRefresher::onRefreshGit()
 {
-    Log::Manager().addMessage(trUtf8("Refreshing git repositories..."));
-    RM::RepoMan::instance().refresh();
+    qDebug() << "Refresh Repository currently not implemented.";
 }
 
 void AutoRefresher::onRefreshIndex()
 {
+    qDebug() << "Refresh Index currently not implemented.";
 }
 
 void AutoRefresher::onRefreshWorktree()
 {
+    qDebug() << "Refresh Worktree currently not implemented.";
 }

@@ -249,14 +249,8 @@ namespace RM
     RepoManPrivate::RepoManPrivate(RepoMan* _pub)
         : BasePrivate(_pub)
         , activeRepo(NULL)
-        , refresher(NULL)
     {
         setupActions(_pub);
-
-        // only start the auto refresher if we're running a GUI
-        if (MacGitver::self().isRunningGui()) {
-            refresher = new AutoRefresher(_pub);
-        }
     }
 
     bool RepoManPrivate::refreshSelf()
@@ -320,7 +314,7 @@ namespace RM
             break;
         }
 
-        return NULL;
+        return nullptr;
     }
 
 }

@@ -30,7 +30,7 @@ class AutoRefresher
 {
     Q_OBJECT
 public:
-    AutoRefresher(QObject* parent);
+    AutoRefresher();
     ~AutoRefresher();
 
 public:

@@ -29,7 +29,7 @@ IMPLEMENT_NESTED_PAGE_CREATOR(RepoManConfigPage, 210)
 
 RepoManConfigPage::RepoManConfigPage(ConfigDialog* dlg)
     : ConfigPage(dlg)
-    , refresher(NULL)
+    , refresher(MacGitver::self().refresher())
 {
     setupUi(this);
 
@@ -72,10 +72,7 @@ void RepoManConfigPage::apply()
 
 void RepoManConfigPage::init()
 {
-    RM::RepoMan* rm = &RM::RepoMan::instance();
-
-    RM::Internal::RepoManPrivate* rmp = RM::Internal::BasePrivate::dataOf<RM::RepoMan>(rm);
-    refresher = rmp->refresher;
+    Q_ASSERT(refresher);
 
     grpEnableAutoRefresh->setChecked(refresher->refreshEnabled());
 

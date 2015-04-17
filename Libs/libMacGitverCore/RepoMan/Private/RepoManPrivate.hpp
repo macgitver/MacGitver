@@ -51,7 +51,6 @@ namespace RM
         public:
             Repo::List      repos;
             Repo*           activeRepo;
-            AutoRefresher*  refresher;
         };
 
     }

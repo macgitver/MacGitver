@@ -40,10 +40,10 @@ private:
     void setRepoState();
 
 public slots:
-    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
+    void onUpdateHEAD(const RM::Frontend::Reference& ref);
 
 private:
-    RM::Frontend::Repo  repo;
+    RM::Frontend::Repo  mRepo;
     QLabel*             txtRepo;
     QLabel*             txtState;
     QLabel*             txtBranch;

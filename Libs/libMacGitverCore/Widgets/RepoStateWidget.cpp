@@ -48,18 +48,18 @@ RepoStateWidget::RepoStateWidget()
             this,   &RepoStateWidget::repositoryDeactivated);
 }
 
-void RepoStateWidget::repositoryActivated(const RM::Frontend::Repo& info)
+void RepoStateWidget::repositoryActivated(const RM::Frontend::Repo& repo)
 {
-    if (repo != info) {
-        repo = info;
+    if (mRepo != repo) {
+        mRepo = repo;
         setRepoState();
     }
 }
 
-void RepoStateWidget::repositoryDeactivated(const RM::Frontend::Repo& info)
+void RepoStateWidget::repositoryDeactivated(const RM::Frontend::Repo& repo)
 {
-    if (repo == info) {
-        repo = RM::Frontend::Repo();
+    if (mRepo == repo) {
+        mRepo = RM::Frontend::Repo();
         setRepoState();
     }
 }
@@ -68,15 +68,16 @@ void RepoStateWidget::setRepoState()
 {
     txtState->hide();
 
-    txtRepo->setText(repo ? repo.displayAlias() : QString());
-    onUpdateHEAD(repo, RM::Frontend::Reference());
+    txtRepo->setText(mRepo ? mRepo.displayAlias() : QString());
+    onUpdateHEAD(RM::Frontend::Reference());
 }
 
 void RepoStateWidget::onUpdateHEAD(
-        const RM::Frontend::Repo& ownerRepo,
         const RM::Frontend::Reference& ref)
 {
-    if (ownerRepo != repo) {
+    RM::Frontend::Repo repo = ref.repository();
+
+    if (repo != mRepo) {
         return;
     }
 

@@ -22,7 +22,6 @@
 #include "libGitWrap/RefName.hpp"
 #include "libGitWrap/Submodule.hpp"
 
-#include "libRepoMan/Events.hpp"
 #include "libRepoMan/RepoMan.hpp"
 
 #include "libRepoMan/Frontend/BaseInternal.hpp"

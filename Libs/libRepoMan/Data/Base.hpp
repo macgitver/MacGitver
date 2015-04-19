@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "libRepoMan/Core.hpp"
+#include "libRepoMan/Events/Event.hpp"
 
 #include <functional>
 #include <vector>
@@ -76,6 +76,9 @@ namespace RM
             SPtr parent() const;
 
         public:
+            SPtr getPtr() { return shared_from_this(); }
+
+        public:
             virtual QString displayName() const;
             virtual QString objectTypeName() const = 0;
             virtual Heaven::IconRef icon(bool small) const;
@@ -92,6 +95,9 @@ namespace RM
             template<typename T>
             std::shared_ptr<T> as();
 
+        protected:
+            void emitEvent(EventType type);
+
         private:
             std::weak_ptr<Repo> mRepo;
             std::weak_ptr<Base> mParent;
@@ -101,7 +107,7 @@ namespace RM
         inline std::shared_ptr<const T> Base::as() const
         {
             if (inherits(T::StaticObjectType)) {
-                return std::shared_ptr<const T>(static_cast<const T*>(this));
+                return std::static_pointer_cast<const T>(shared_from_this());
             }
             return std::shared_ptr<const T>();
         }
@@ -110,7 +116,7 @@ namespace RM
         inline std::shared_ptr<T> Base::as()
         {
             if (inherits(T::StaticObjectType)) {
-                return std::shared_ptr<T>(static_cast<T*>(this));
+                return std::static_pointer_cast<T>(shared_from_this());
             }
             return std::shared_ptr<T>();
         }

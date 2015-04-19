@@ -18,7 +18,6 @@
  */
 
 #include "libRepoMan/RepoMan.hpp"
-#include "libRepoMan/Events.hpp"
 
 #include "libRepoMan/Private/Dumper.hpp"
 
@@ -46,8 +45,6 @@ namespace RM
      */
     RepoMan::RepoMan()
     {
-        Events::addReceiver(this);
-
         connect(BlueSky::Application::instance(),
                 &BlueSky::Application::activeModeChanged,
                 this,
@@ -63,7 +60,6 @@ namespace RM
     RepoMan::~RepoMan()
     {
         closeAll();
-        Events::delReceiver(this);
     }
 
     RepoMan& RepoMan::instance()

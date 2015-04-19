@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include <QCoreApplication>
-
-#include "libRepoMan/Events.hpp"
+#include "libRepoMan/Events/Compat.hpp"
 
 #include "libLogger/Channel.hpp"
 #include "libLogger/Event.hpp"
 
-class Listener : public RM::EventsInterface
+#include <QCoreApplication>
+
+class Listener : public RM::CompatEventsInterface
 {
     Q_DECLARE_TR_FUNCTIONS(RepoManLogger)
 
@@ -39,35 +39,35 @@ public:
     void repositoryAboutToClose(const RM::Frontend::Repo& repo);
     void repositoryActivated(const RM::Frontend::Repo& repo);
     void repositoryDeactivated(const RM::Frontend::Repo& repo);
-    void objectCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Base& object);
-    void objectAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Base& object);
-    void refTreeNodeCreated(const RM::Frontend::Repo& repo, const RM::Frontend::RefTreeNode& node);
-    void refTreeNodeAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::RefTreeNode& node);
-    void refCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-    void refAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-    void refMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-    void refHeadDetached(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-    void tagCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Tag& tag);
-    void tagAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Tag& tag);
-    void branchCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch);
-    void branchAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch);
-    void branchMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch);
-    void branchUpstreamChanged(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch);
-    void namespaceCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Namespace& nameSpace);
-    void namespaceAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Namespace& nameSpace);
-    void refLogChanged(const RM::Frontend::Repo& repo, const RM::Frontend::RefLog& reflog);
-    void refLogNewEntry(const RM::Frontend::Repo& repo, const RM::Frontend::RefLog& reflog);
-    void stageCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-    void stageAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-    void remoteCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote);
-    void remoteAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote);
-    void remoteModified(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote);
-    void submoduleCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule);
-    void submoduleAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule);
-    void submoduleMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule);
+    void objectCreated(const RM::Frontend::Base& object);
+    void objectAboutToBeDeleted(const RM::Frontend::Base& object);
+    void refTreeNodeCreated(const RM::Frontend::RefTreeNode& node);
+    void refTreeNodeAboutToBeDeleted(const RM::Frontend::RefTreeNode& node);
+    void refCreated(const RM::Frontend::Reference& ref);
+    void refAboutToBeDeleted(const RM::Frontend::Reference& ref);
+    void refMoved(const RM::Frontend::Reference& ref);
+    void refHeadDetached(const RM::Frontend::Reference& ref);
+    void tagCreated(const RM::Frontend::Tag& tag);
+    void tagAboutToBeDeleted(const RM::Frontend::Tag& tag);
+    void branchCreated(const RM::Frontend::Branch& branch);
+    void branchAboutToBeDeleted(const RM::Frontend::Branch& branch);
+    void branchMoved(const RM::Frontend::Branch& branch);
+    void branchUpstreamChanged(const RM::Frontend::Branch& branch);
+    void namespaceCreated(const RM::Frontend::Namespace& nameSpace);
+    void namespaceAboutToBeDeleted(const RM::Frontend::Namespace& nameSpace);
+    void refLogChanged(const RM::Frontend::RefLog& reflog);
+    void refLogNewEntry(const RM::Frontend::RefLog& reflog);
+    void stageCreated(const RM::Frontend::Reference& ref);
+    void stageAboutToBeDeleted(const RM::Frontend::Reference& ref);
+    void remoteCreated(const RM::Frontend::Remote& remote);
+    void remoteAboutToBeDeleted(const RM::Frontend::Remote& remote);
+    void remoteModified(const RM::Frontend::Remote& remote);
+    void submoduleCreated(const RM::Frontend::Submodule& submodule);
+    void submoduleAboutToBeDeleted(const RM::Frontend::Submodule& submodule);
+    void submoduleMoved(const RM::Frontend::Submodule& submodule);
     void repositoryStateChanged(const RM::Frontend::Repo& repo);
-    void indexUpdated(const RM::Frontend::Repo& repo);
-    void workTreeUpdated(const RM::Frontend::Repo& repo);
+    void indexUpdated();
+    void workTreeUpdated();
 
 private:
     Log::Channel repoManChannel;

@@ -10,8 +10,12 @@ INCLUDE_DIRECTORIES( BEFORE
 
 SET( SRC_FILES
 
-    Events.cpp
     RepoMan.cpp
+
+    Events/Event.cpp
+    Events/EventData.cpp
+    Events/Manager.cpp
+    Events/Compat.cpp
 
     Frontend/Base.cpp
     Frontend/Branch.cpp
@@ -45,8 +49,11 @@ SET( SRC_FILES
 SET( PUB_HDR_FILES
 
     Core.hpp
-    Events.hpp
     RepoMan.hpp
+
+    Events/Event.hpp
+    Events/Manager.hpp
+    Events/Compat.hpp
 
     Frontend/Base.hpp
     Frontend/Reference.hpp
@@ -64,6 +71,8 @@ SET( PUB_HDR_FILES
 SET( PRI_HDR_FILES
 
     Private/Dumper.hpp
+
+    Events/EventData.hpp
 
     Data/Base.hpp
     Data/Branch.hpp

@@ -21,8 +21,6 @@
 #include "libRepoMan/Frontend/Repo.hpp"
 #include "libRepoMan/Frontend/Head.hpp"
 
-#include "libRepoMan/Events.hpp"
-
 #include "libRepoMan/Private/Dumper.hpp"
 
 #include "libRepoMan/Data/Branch.hpp"

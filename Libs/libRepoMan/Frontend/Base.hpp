@@ -44,8 +44,8 @@ namespace RM
             using DPtrType  = Data::Base;
 
         public:
-            Base(const std::shared_ptr<Data::Base>& _d);
-            Base(std::shared_ptr<Data::Base>&& _d);
+            Base(const std::shared_ptr<Data::Base>& d);
+            Base(std::shared_ptr<Data::Base>&& d);
             virtual ~Base();
             Base();
 

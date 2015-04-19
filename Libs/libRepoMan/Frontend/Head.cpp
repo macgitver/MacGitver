@@ -17,8 +17,6 @@
  *
  */
 
-#include "libRepoMan/Events.hpp"
-
 #include "libRepoMan/Private/Dumper.hpp"
 
 #include "libRepoMan/Data/Head.hpp"

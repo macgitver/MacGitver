@@ -30,7 +30,6 @@
 #include <QDateTime>
 #include <QHash>
 #include <QString>
-#include <QSharedData>
 #include <QMutex>
 #include <QObject>
 

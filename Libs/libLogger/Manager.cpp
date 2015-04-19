@@ -96,11 +96,11 @@ namespace Log
      *
      * @param[in]   t       The template to add.
      *
-     *
+     */
     void Manager::addTemplate(Template&& t)
     {
         Internal::System::self()->addTemplate(t);
-    }*/
+    }
 
     /**
      * @brief       Search for a template by its name

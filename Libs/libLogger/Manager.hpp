@@ -21,8 +21,6 @@
 
 #include "libLogger/Channel.hpp"
 
-#include <QSharedData>
-
 class QString;
 
 namespace Log

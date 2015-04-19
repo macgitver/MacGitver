@@ -141,7 +141,8 @@ namespace Log
                     emitEventAdded(event);
                 }
                 else {
-                    QMetaObject::invokeMethod(&mMover, "newEvent", Qt::QueuedConnection, Q_ARG(Event, event));
+                    QMetaObject::invokeMethod(&mMover, "newEvent",
+                                              Qt::QueuedConnection, Q_ARG(Event, event));
                 }
             }
         }

@@ -21,16 +21,18 @@
 
 #include "libRepoMan/Frontend/Repo.hpp"
 
-#include "libRepoMan/Events.hpp"
+#include "libRepoMan/Events/Event.hpp"
 
 #include <QObject>
 
 namespace RM
 {
 
+    namespace Frontend { class Branch; }
+
     class REPOMAN_API RepoMan
             : public QObject
-            , private EventsInterface
+            //, private EventsInterface
     {
         Q_OBJECT
     private:
@@ -61,6 +63,7 @@ namespace RM
         void repositoryClosed();
         void hasActiveRepositoryChanged(bool hasActiveRepo);
 
+    #ifndef REPOMAN_NO_COMPAT
     signals:
         void repositoryOpened(const RM::Frontend::Repo& repo);
         void repositoryAboutToClose(const RM::Frontend::Repo& repo);
@@ -95,6 +98,7 @@ namespace RM
         void repositoryStateChanged(const RM::Frontend::Repo& repo);
         void indexUpdated(const RM::Frontend::Repo& repo);
         void workTreeUpdated(const RM::Frontend::Repo& repo);
+    #endif
     };
 
 }

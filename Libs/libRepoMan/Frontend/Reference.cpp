@@ -21,8 +21,6 @@
 #include "libGitWrap/Reference.hpp"
 #include "libGitWrap/RefName.hpp"
 
-#include "libRepoMan/Events.hpp"
-
 #include "libRepoMan/Frontend/BaseInternal.hpp"
 #include "libRepoMan/Frontend/Reference.hpp"
 #include "libRepoMan/Frontend/Repo.hpp"

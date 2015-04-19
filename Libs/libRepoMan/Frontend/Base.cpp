@@ -24,7 +24,7 @@
 #include "libRepoMan/RepoMan.hpp"
 #include "libRepoMan/Frontend/RefTreeNode.hpp"
 
-#include "libRepoMan/Events.hpp"
+#include "libRepoMan/Events/Event.hpp"
 
 #include "libRepoMan/Data/Base.hpp"
 
@@ -66,13 +66,13 @@ namespace RM
          * @param[in]   parent      The parent to whom we shall link this new child to.
          *
          */
-        Base::Base(const std::shared_ptr<Data::Base>& o)
-            : mData(o)
+        Base::Base(const std::shared_ptr<Data::Base>& d)
+            : mData(d)
         {
         }
 
-        Base::Base(std::shared_ptr<Data::Base>&& o)
-            : mData(std::move(o))
+        Base::Base(std::shared_ptr<Data::Base>&& d)
+            : mData(std::move(d))
         {
         }
 

@@ -17,8 +17,6 @@
  *
  */
 
-#include "libRepoMan/Events.hpp"
-
 #include "libRepoMan/Frontend/RefTreeNode.hpp"
 
 #include "libRepoMan/Private/Dumper.hpp"

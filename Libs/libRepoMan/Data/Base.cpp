@@ -18,6 +18,8 @@
  */
 
 #include "libRepoMan/Data/Base.hpp"
+#include "libRepoMan/Events/Manager.hpp"
+#include "libRepoMan/Events/EventData.hpp"
 #include "libRepoMan/Frontend/Base.hpp"
 #include "libRepoMan/Private/Dumper.hpp"
 
@@ -66,6 +68,12 @@ namespace RM
         QString Base::displayName() const
         {
             return QStringLiteral("<Unknown>");
+        }
+
+        void Base::emitEvent(EventType type)
+        {
+            Event ev(Internal::EventData::create(type, this));
+            EventManager::self().sendEvent(ev);
         }
 
         #if 0 // ###REPOMAN

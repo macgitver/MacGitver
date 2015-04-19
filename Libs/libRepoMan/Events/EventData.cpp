@@ -17,59 +17,33 @@
  *
  */
 
-#pragma once
-
-#include <QVector>
-#include <QSet>
-#include <QStringList>
-#include <QStringBuilder>
-
-#include <qglobal.h>
-
-#ifdef RepoMan_EXPORTS
-#   define REPOMAN_API Q_DECL_EXPORT
-#else
-#   define REPOMAN_API Q_DECL_IMPORT
-#endif
-
-namespace Heaven {
-
-    class Menu;
-    class IconRef;
-
-}
+#include "libRepoMan/Events/EventData.hpp"
 
 namespace RM
 {
 
-    enum class ObjTypes
+    namespace Internal
     {
-        Invalid,
 
-        Namespace,
-        Repo,
-        Remote,
-        Submodule,
-        Head,
-        Branch,
-        Reference,
-        RefTreeNode,
-        Tag,
-        RefLog
-    };
+        EventData::EventData(EventType type, Data::Base* context)
+            : mType(type)
+            , mContext(context ? context->getPtr() : Data::Base::SPtr())
+        {
+        }
 
-    namespace Frontend
-    {
-        class Base;
-        class Repo;
-        class RefTreeNode;
-        class Namespace;
-        class Reference;
-        class Remote;
-        class RefLog;
-        class Submodule;
-        class Tag;
-        class Branch;
+        std::shared_ptr<const EventData> EventData::create(EventType type, Data::Base* context)
+        {
+            return std::make_shared<const EventData>(type, context);
+        }
+
+        Data::Repo::WPtr EventData::repo() const
+        {
+            if (!mContext) {
+                return Data::Repo::WPtr();
+            }
+            return mContext->repository();
+        }
+
     }
 
 }

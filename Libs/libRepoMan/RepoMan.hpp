@@ -22,6 +22,7 @@
 #include "libRepoMan/Frontend/Repo.hpp"
 
 #include "libRepoMan/Events/Event.hpp"
+#include "libRepoMan/Events/Compat.hpp"
 
 #include <QObject>
 
@@ -32,7 +33,7 @@ namespace RM
 
     class REPOMAN_API RepoMan
             : public QObject
-            //, private EventsInterface
+            , private CompatEventsInterface
     {
         Q_OBJECT
     private:
@@ -63,42 +64,40 @@ namespace RM
         void repositoryClosed();
         void hasActiveRepositoryChanged(bool hasActiveRepo);
 
-    #ifndef REPOMAN_NO_COMPAT
     signals:
         void repositoryOpened(const RM::Frontend::Repo& repo);
         void repositoryAboutToClose(const RM::Frontend::Repo& repo);
         void repositoryActivated(const RM::Frontend::Repo& repo);
         void repositoryDeactivated(const RM::Frontend::Repo& repo);
-        void objectCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Base& object);
-        void objectAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Base& object);
-        void refTreeNodeCreated(const RM::Frontend::Repo& repo, const RM::Frontend::RefTreeNode& node);
-        void refTreeNodeAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::RefTreeNode& node);
-        void refCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-        void refAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-        void refMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-        void refHeadDetached(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-        void tagCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Tag& tag);
-        void tagAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Tag& tag);
-        void branchCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch);
-        void branchAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch);
-        void branchMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch);
-        void branchUpstreamChanged(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch);
-        void namespaceCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Namespace& nameSpace);
-        void namespaceAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Namespace& nameSpace);
-        void refLogChanged(const RM::Frontend::Repo& repo, const RM::Frontend::RefLog& reflog);
-        void refLogNewEntry(const RM::Frontend::Repo& repo, const RM::Frontend::RefLog& reflog);
-        void stageCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-        void stageAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
-        void remoteCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote);
-        void remoteAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote);
-        void remoteModified(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote);
-        void submoduleCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule);
-        void submoduleAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule);
-        void submoduleMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule);
+        void objectCreated(const RM::Frontend::Base& object);
+        void objectAboutToBeDeleted(const RM::Frontend::Base& object);
+        void refTreeNodeCreated(const RM::Frontend::RefTreeNode& node);
+        void refTreeNodeAboutToBeDeleted(const RM::Frontend::RefTreeNode& node);
+        void refCreated(const RM::Frontend::Reference& ref);
+        void refAboutToBeDeleted(const RM::Frontend::Reference& ref);
+        void refMoved(const RM::Frontend::Reference& ref);
+        void refHeadDetached(const RM::Frontend::Reference& ref);
+        void tagCreated(const RM::Frontend::Tag& tag);
+        void tagAboutToBeDeleted(const RM::Frontend::Tag& tag);
+        void branchCreated(const RM::Frontend::Branch& branch);
+        void branchAboutToBeDeleted(const RM::Frontend::Branch& branch);
+        void branchMoved(const RM::Frontend::Branch& branch);
+        void branchUpstreamChanged(const RM::Frontend::Branch& branch);
+        void namespaceCreated(const RM::Frontend::Namespace& nameSpace);
+        void namespaceAboutToBeDeleted(const RM::Frontend::Namespace& nameSpace);
+        void refLogChanged(const RM::Frontend::RefLog& reflog);
+        void refLogNewEntry(const RM::Frontend::RefLog& reflog);
+        void stageCreated(const RM::Frontend::Reference& ref);
+        void stageAboutToBeDeleted(const RM::Frontend::Reference& ref);
+        void remoteCreated(const RM::Frontend::Remote& remote);
+        void remoteAboutToBeDeleted(const RM::Frontend::Remote& remote);
+        void remoteModified(const RM::Frontend::Remote& remote);
+        void submoduleCreated(const RM::Frontend::Submodule& submodule);
+        void submoduleAboutToBeDeleted(const RM::Frontend::Submodule& submodule);
+        void submoduleMoved(const RM::Frontend::Submodule& submodule);
         void repositoryStateChanged(const RM::Frontend::Repo& repo);
-        void indexUpdated(const RM::Frontend::Repo& repo);
-        void workTreeUpdated(const RM::Frontend::Repo& repo);
-    #endif
+        void indexUpdated();
+        void workTreeUpdated();
     };
 
 }

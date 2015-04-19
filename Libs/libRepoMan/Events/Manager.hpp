@@ -19,57 +19,44 @@
 
 #pragma once
 
-#include <QVector>
-#include <QSet>
-#include <QStringList>
-#include <QStringBuilder>
-
-#include <qglobal.h>
-
-#ifdef RepoMan_EXPORTS
-#   define REPOMAN_API Q_DECL_EXPORT
-#else
-#   define REPOMAN_API Q_DECL_IMPORT
-#endif
-
-namespace Heaven {
-
-    class Menu;
-    class IconRef;
-
-}
+#include "libRepoMan/Events/Event.hpp"
 
 namespace RM
 {
 
-    enum class ObjTypes
+    namespace Internal
     {
-        Invalid,
 
-        Namespace,
-        Repo,
-        Remote,
-        Submodule,
-        Head,
-        Branch,
-        Reference,
-        RefTreeNode,
-        Tag,
-        RefLog
-    };
+        class ThreadMover : public QObject
+        {
+            Q_OBJECT
+        public:
+            using QObject::QObject;
 
-    namespace Frontend
-    {
-        class Base;
-        class Repo;
-        class RefTreeNode;
-        class Namespace;
-        class Reference;
-        class Remote;
-        class RefLog;
-        class Submodule;
-        class Tag;
-        class Branch;
+        public slots:
+            void sendMovedEvent(const RM::Event& e);
+        };
+
     }
+
+    class REPOMAN_API EventManager
+            : public QObject
+    {
+        Q_OBJECT
+    public:
+        static EventManager& self();
+
+    private:
+        EventManager();
+
+    public:
+        void sendEvent(const Event& ev);
+
+    signals:
+        void repoEvent(const Event& ev);
+
+    private:
+        Internal::ThreadMover* mMover;
+    };
 
 }

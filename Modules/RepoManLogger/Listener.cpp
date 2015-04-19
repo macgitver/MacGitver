@@ -28,12 +28,12 @@
 Listener::Listener(Log::Channel channel)
     : repoManChannel(channel)
 {
-    RM::Events::addReceiver(this);
+    RM::CompatEvents::addReceiver(this);
 }
 
 Listener::~Listener()
 {
-    RM::Events::delReceiver(this);
+    RM::CompatEvents::delReceiver(this);
 }
 
 void Listener::repositoryOpened(const RM::Frontend::Repo& repo)
@@ -74,39 +74,39 @@ void Listener::repositoryDeactivated(const RM::Frontend::Repo& repo)
     // We don't want to report deactivation
 }
 
-void Listener::objectCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Base& object)
+void Listener::objectCreated(const RM::Frontend::Base& object)
 {
 }
 
-void Listener::objectAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Base& object)
+void Listener::objectAboutToBeDeleted(const RM::Frontend::Base& object)
 {
 }
 
-void Listener::refTreeNodeCreated(const RM::Frontend::Repo& repo, const RM::Frontend::RefTreeNode& node)
+void Listener::refTreeNodeCreated(const RM::Frontend::RefTreeNode& node)
 {
 }
 
-void Listener::refTreeNodeAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::RefTreeNode& node)
+void Listener::refTreeNodeAboutToBeDeleted(const RM::Frontend::RefTreeNode& node)
 {
 }
 
-void Listener::refCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
+void Listener::refCreated(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::refAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
+void Listener::refAboutToBeDeleted(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::refMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
+void Listener::refMoved(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::refHeadDetached(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
+void Listener::refHeadDetached(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::tagCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Tag& tag)
+void Listener::tagCreated(const RM::Frontend::Tag& tag)
 {
     Log::Event e = Log::Event::create(TMPL_FOUND_NEW_REF);
     Q_ASSERT(e);
@@ -114,91 +114,91 @@ void Listener::tagCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Ta
     e.setParam(QStringLiteral("Type"),       tr("tag"));
     e.setParam(QStringLiteral("ObjName"),    tag.displayName());
     e.setParam(QStringLiteral("SHA"),        tag.displaySha1());
-    e.setParam(QStringLiteral("RepoName"),   repo.displayAlias());
+    e.setParam(QStringLiteral("RepoName"),   tag.repository().displayAlias());
 
     repoManChannel.addEvent(e);
 }
 
-void Listener::tagAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Tag& tag)
+void Listener::tagAboutToBeDeleted(const RM::Frontend::Tag& tag)
 {
 }
 
-void Listener::branchCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch)
+void Listener::branchCreated(const RM::Frontend::Branch& branch)
 {
 }
 
-void Listener::branchAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch)
+void Listener::branchAboutToBeDeleted(const RM::Frontend::Branch& branch)
 {
 }
 
-void Listener::branchMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch)
+void Listener::branchMoved(const RM::Frontend::Branch& branch)
 {
     Log::Event e = Log::Event::create(TMPL_BRANCH_MOVED);
     Q_ASSERT(e);
 
     e.setParam(QStringLiteral("ObjName"),    branch.displayName());
     e.setParam(QStringLiteral("SHA"),        branch.displaySha1());
-    e.setParam(QStringLiteral("RepoName"),   repo.displayAlias());
+    e.setParam(QStringLiteral("RepoName"),   branch.repository().displayAlias());
 
     repoManChannel.addEvent(e);
 }
 
-void Listener::branchUpstreamChanged(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch)
+void Listener::branchUpstreamChanged(const RM::Frontend::Branch& branch)
 {
 }
 
-void Listener::namespaceCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Namespace& nameSpace)
+void Listener::namespaceCreated(const RM::Frontend::Namespace& nameSpace)
 {
 }
 
-void Listener::namespaceAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Namespace& nameSpace)
+void Listener::namespaceAboutToBeDeleted(const RM::Frontend::Namespace& nameSpace)
 {
 }
 
-void Listener::refLogChanged(const RM::Frontend::Repo& repo, const RM::Frontend::RefLog& reflog)
+void Listener::refLogChanged(const RM::Frontend::RefLog& reflog)
 {
 }
 
-void Listener::refLogNewEntry(const RM::Frontend::Repo& repo, const RM::Frontend::RefLog& reflog)
+void Listener::refLogNewEntry(const RM::Frontend::RefLog& reflog)
 {
 }
 
-void Listener::stageCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
+void Listener::stageCreated(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::stageAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
+void Listener::stageAboutToBeDeleted(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::remoteCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote)
+void Listener::remoteCreated(const RM::Frontend::Remote& remote)
 {
 }
 
-void Listener::remoteAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote)
+void Listener::remoteAboutToBeDeleted(const RM::Frontend::Remote& remote)
 {
 }
 
-void Listener::remoteModified(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote)
+void Listener::remoteModified(const RM::Frontend::Remote& remote)
 {
 }
 
-void Listener::submoduleCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule)
+void Listener::submoduleCreated(const RM::Frontend::Submodule& submodule)
 {
     Log::Event e = Log::Event::create(TMPL_FOUND_NEW_SM);
     Q_ASSERT(e);
 
     e.setParam(QStringLiteral("ObjName"),    submodule.displayName());
-    e.setParam(QStringLiteral("RepoName"),   repo.displayAlias());
+    e.setParam(QStringLiteral("RepoName"),   submodule.repository().displayAlias());
 
     repoManChannel.addEvent(e);
 }
 
-void Listener::submoduleAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule)
+void Listener::submoduleAboutToBeDeleted(const RM::Frontend::Submodule& submodule)
 {
 }
 
-void Listener::submoduleMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule)
+void Listener::submoduleMoved(const RM::Frontend::Submodule& submodule)
 {
 }
 
@@ -206,10 +206,10 @@ void Listener::repositoryStateChanged(const RM::Frontend::Repo& repo)
 {
 }
 
-void Listener::indexUpdated(const RM::Frontend::Repo& repo)
+void Listener::indexUpdated()
 {
 }
 
-void Listener::workTreeUpdated(const RM::Frontend::Repo& repo)
+void Listener::workTreeUpdated()
 {
 }

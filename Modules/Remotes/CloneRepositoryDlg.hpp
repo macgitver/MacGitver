@@ -89,6 +89,14 @@ private slots:
     void doneCheckout();
     void rootCloneFinished();
 
+    void onCheckoutProgress(const QString& fileName,
+                            quint64 totalFiles,
+                            quint64 completedFiles);
+
+    void onTransportProgress(quint32 totalObjects,
+                             quint32 indexedObjects,
+                             quint32 receivedObjects,
+                             quint64 receivedBytes);
 
 private:
     ProgressDlg*                mProgress = nullptr;

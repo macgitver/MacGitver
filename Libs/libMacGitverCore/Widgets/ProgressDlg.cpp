@@ -1,12 +1,41 @@
 
 #include "ProgressDlg.hpp"
 #include "ui_ProgressDlg.h"
+#include "ui_ProgressWdgt.h"
 
 #include <QStringBuilder>
 #include <QCloseEvent>
 #include <QDebug>
 #include <QPushButton>
 #include <QString>
+
+namespace Private
+{
+
+    class ProgressWdgt : public QWidget, public Ui::ProgressWdgt
+    {
+    public:
+        typedef QMap< QString, QPointer<ProgressWdgt> > Steps;
+
+        enum Status { Running = 0, Stopped };
+
+    public:
+        ProgressWdgt(const QString& description)
+        {
+            setupUi(this);
+            progressBar->setMinimum(0);
+            progressBar->setMaximum(100);
+            txtHeader->setText( description );
+        }
+
+    public:
+        Steps   mSteps;
+        Status  mStatus     = Running;
+
+        qreal   mPercentage = 0.;
+    };
+
+}
 
 
 ProgressDlg::ProgressDlg()

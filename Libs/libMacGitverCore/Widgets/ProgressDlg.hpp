@@ -4,6 +4,14 @@
 #include "libMacGitverCore/MacGitverApi.hpp"
 #include "libBlueSky/Dialog.hpp"
 
+#include <QMap>
+#include <QPointer>
+
+namespace Private
+{
+    class ProgressWdgt;
+};
+
 namespace Ui
 {
     class ProgressDlg;
@@ -12,6 +20,10 @@ namespace Ui
 class MGV_CORE_API ProgressDlg : public BlueSky::Dialog
 {
     Q_OBJECT
+
+public:
+    typedef QMap< QPointer<QObject>, QPointer<Private::ProgressWdgt> > Activities;
+
 public:
     ProgressDlg();
     ~ProgressDlg();

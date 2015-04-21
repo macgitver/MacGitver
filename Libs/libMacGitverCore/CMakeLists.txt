@@ -152,6 +152,8 @@ SET( UI_FILES
 
     Widgets/ExpandableDlg.ui
     Widgets/ProgressDlg.ui
+
+    Widgets/ProgressWdgt.ui
 )
 
 SET( HID_FILES

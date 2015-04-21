@@ -158,7 +158,6 @@ void CloneDlg::accept()
 
     mProgress = new ProgressDlg;
     mProgress->show();
-    mProgress->setCurrent( clone );
 
     if( repoName.endsWith( QLatin1String( ".git" ) ) )
         repoName = repoName.left( repoName.length() - 4 );
@@ -166,55 +165,21 @@ void CloneDlg::accept()
     if( repoName.lastIndexOf( QChar( L'/' ) ) != -1 )
         repoName.remove( 0, repoName.lastIndexOf( QChar( L'/' ) ) + 1 );
 
-    mAction = tr( "Cloning <b>%1</b>" ).arg( repoName );
-    mProgress->beginStep( mAction );
-    mStates.clear();
-    mStates[ Prepare ] = Current;
-    mStates[ Download ] = Open;
-    mStates[ Index ] = Open;
-    mStates[ Checkout ] = Open;
-    updateAction();
 
-    connect( clone, SIGNAL(finished()), this, SLOT(rootCloneFinished()) );
-    connect( clone, SIGNAL(transportProgress(quint32,quint32,quint32,quint64)),
-             this, SLOT(beginDownloading()) );
-    connect( clone, SIGNAL(doneDownloading()), this, SLOT(doneDownload()) );
-    connect( clone, SIGNAL(doneIndexing()), this, SLOT(doneIndexing()) );
-    connect( clone, SIGNAL(doneCheckout()), this, SLOT(doneCheckout()) );
+
     clone->execute();
-}
-
-void CloneDlg::beginDownloading()
-{
-    disconnect( sender(), SIGNAL(transportProgress(quint32,quint32,quint32,quint64)),
-                this, SLOT(beginDownloading()) );
-
-    mStates[ Prepare ] = Done;
-    mStates[ Download ] = Current;
-    mStates[ Index ] = Current;
-    updateAction();
 }
 
 void CloneDlg::doneDownload()
 {
-    mStates[ Download ] = Done;
-    updateAction();
 }
 
 void CloneDlg::doneIndexing()
 {
-    mStates[ Index ] = Done;
-
-    if( mStates.contains( Checkout ) )
-        mStates[ Checkout ] = Current;
-
-    updateAction();
 }
 
 void CloneDlg::doneCheckout()
 {
-    mStates[ Checkout ] = Done;
-    updateAction();
 }
 
 void CloneDlg::rootCloneFinished()
@@ -224,7 +189,6 @@ void CloneDlg::rootCloneFinished()
 
     if ( operation->result() )
     {
-        mProgress->setDone();
         return;
     }
 
@@ -233,27 +197,9 @@ void CloneDlg::rootCloneFinished()
     mProgress->reject();
 }
 
-void CloneDlg::updateAction()
 {
-    QStringList open, current, done;
 
-    QHash< Tasks, QString > t;
-    t.insert( Prepare, tr( "Prepare" ) );
-    t.insert( Index, tr( "Indexing" ) );
-    t.insert( Download, tr( "Downloading" ) );
-    t.insert( Checkout, tr( "Check out" ) );
-
-    foreach( Tasks task, mStates.keys() )
     {
-        QStringList* sl = NULL;
-
-        if( mStates[ task ] == Open ) sl = &open;
-        else if( mStates[ task ] == Done ) sl = &done;
-        else if( mStates[ task ] == Current ) sl = &current;
-
-        if( sl )
-            sl->append( t[ task ] );
     }
 
-    mProgress->setAction( mAction, open, current, done );
 }

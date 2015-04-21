@@ -274,6 +274,27 @@ namespace Log
         }
     }
 
+    void Event::setText(const QString& text)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->parameters[QString()] = text;
+        }
+    }
+
+    void Event::setText(QString&& text)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->parameters[QString()] = text;
+        }
+    }
+
+    QString Event::text() const
+    {
+        return param(QString());
+    }
+
     /**
      * @brief       Get a parameter
      *

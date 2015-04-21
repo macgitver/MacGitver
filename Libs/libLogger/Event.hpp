@@ -74,6 +74,10 @@ namespace Log
         void setParam(const QString& param, const QString& text);
         QString param(const QString& param) const;
 
+        void setText(const QString& text);
+        void setText(QString&& text);
+        QString text() const;
+
         QStringList paramNames() const;
 
     private:

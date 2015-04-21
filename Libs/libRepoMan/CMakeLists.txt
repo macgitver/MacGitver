@@ -116,6 +116,7 @@ TARGET_LINK_LIBRARIES(
         BlueSky
 
     LINK_PRIVATE
+        Logger
         GitWrap
 )
 

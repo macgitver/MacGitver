@@ -41,8 +41,8 @@ void Listener::repositoryOpened(RM::Repo* repo)
     Log::Event e = Log::Event::create(TMPL_REPO_ACTIVITY);
     Q_ASSERT(e.isValid());
 
-    e.setParam(QLatin1String("Action"),     tr("opened"));
-    e.setParam(QLatin1String("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("Action"),     tr("opened"));
+    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
 
     repoManChannel.addEvent(e);
 }
@@ -52,8 +52,8 @@ void Listener::repositoryAboutToClose(RM::Repo* repo)
     Log::Event e = Log::Event::create(TMPL_REPO_ACTIVITY);
     Q_ASSERT(e.isValid());
 
-    e.setParam(QLatin1String("Action"),     tr("closed"));
-    e.setParam(QLatin1String("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("Action"),     tr("closed"));
+    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
 
     repoManChannel.addEvent(e);
 }
@@ -63,8 +63,8 @@ void Listener::repositoryActivated(RM::Repo* repo)
     Log::Event e = Log::Event::create(TMPL_REPO_ACTIVITY);
     Q_ASSERT(e.isValid());
 
-    e.setParam(QLatin1String("Action"),     tr("activated"));
-    e.setParam(QLatin1String("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("Action"),     tr("activated"));
+    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
 
     repoManChannel.addEvent(e);
 }
@@ -111,10 +111,10 @@ void Listener::tagCreated(RM::Repo* repo, RM::Tag* tag)
     Log::Event e = Log::Event::create(TMPL_FOUND_NEW_REF);
     Q_ASSERT(e.isValid());
 
-    e.setParam(QLatin1String("Type"),       tr("tag"));
-    e.setParam(QLatin1String("ObjName"),    tag->displayName());
-    e.setParam(QLatin1String("SHA"),        tag->displaySha1());
-    e.setParam(QLatin1String("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("Type"),       tr("tag"));
+    e.setParam(QStringLiteral("ObjName"),    tag->displayName());
+    e.setParam(QStringLiteral("SHA"),        tag->displaySha1());
+    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
 
     repoManChannel.addEvent(e);
 }
@@ -136,9 +136,9 @@ void Listener::branchMoved(RM::Repo* repo, RM::Branch* branch)
     Log::Event e = Log::Event::create(TMPL_BRANCH_MOVED);
     Q_ASSERT(e.isValid());
 
-    e.setParam(QLatin1String("ObjName"),    branch->displayName());
-    e.setParam(QLatin1String("SHA"),        branch->displaySha1());
-    e.setParam(QLatin1String("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("ObjName"),    branch->displayName());
+    e.setParam(QStringLiteral("SHA"),        branch->displaySha1());
+    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
 
     repoManChannel.addEvent(e);
 }
@@ -188,8 +188,8 @@ void Listener::submoduleCreated(RM::Repo* repo, RM::Submodule* submodule)
     Log::Event e = Log::Event::create(TMPL_FOUND_NEW_SM);
     Q_ASSERT(e.isValid());
 
-    e.setParam(QLatin1String("ObjName"),    submodule->displayName());
-    e.setParam(QLatin1String("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("ObjName"),    submodule->displayName());
+    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
 
     repoManChannel.addEvent(e);
 }

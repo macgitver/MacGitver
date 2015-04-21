@@ -25,15 +25,15 @@
 #include "libHeavenIcons/IconRef.hpp"
 #include "libHeavenIcons/Icon.hpp"
 
-#include "RepoMan/Ref.hpp"
+#include "RepoMan/Frontend/Reference.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
+
 #include "RepoMan/RepoMan.hpp"
-#include "RepoMan/Repo.hpp"
 
 #include "RepoStateWidget.hpp"
 
 RepoStateWidget::RepoStateWidget()
 {
-    repo = NULL;
     setupUi();
 
     RM::RepoMan& rm = RM::RepoMan::instance();
@@ -48,20 +48,18 @@ RepoStateWidget::RepoStateWidget()
             this,   &RepoStateWidget::repositoryDeactivated);
 }
 
-void RepoStateWidget::repositoryActivated(RM::Repo* info)
+void RepoStateWidget::repositoryActivated(const RM::Frontend::Repo& info)
 {
-    if( repo != info )
-    {
+    if (repo != info) {
         repo = info;
         setRepoState();
     }
 }
 
-void RepoStateWidget::repositoryDeactivated(RM::Repo* info)
+void RepoStateWidget::repositoryDeactivated(const RM::Frontend::Repo& info)
 {
-    if( repo == info )
-    {
-        repo = NULL;
+    if (repo == info) {
+        repo = RM::Frontend::Repo();
         setRepoState();
     }
 }
@@ -70,22 +68,24 @@ void RepoStateWidget::setRepoState()
 {
     txtState->hide();
 
-    txtRepo->setText( repo ? repo->displayAlias() : QString() );
-    onUpdateHEAD( repo, NULL );
+    txtRepo->setText(repo ? repo.displayAlias() : QString());
+    onUpdateHEAD(repo, RM::Frontend::Reference());
 }
 
-void RepoStateWidget::onUpdateHEAD(RM::Repo* ownerRepo, RM::Ref* ref)
+void RepoStateWidget::onUpdateHEAD(
+        const RM::Frontend::Repo& ownerRepo,
+        const RM::Frontend::Reference& ref)
 {
-    if ( ownerRepo != repo ) {
+    if (ownerRepo != repo) {
         return;
     }
 
-    if ( ref && ref->name() != QStringLiteral("HEAD") ) {
+    if (ref && ref.name() != QStringLiteral("HEAD")) {
         return;
     }
 
     // TODO: implement a HTML formatter to highlight HEAD
-    txtBranch->setText( repo ? repo->branchDisplay() : QString() );
+    txtBranch->setText(repo ? repo.branchDisplay() : QString());
 }
 
 static inline QLabel* pixmapLabel(const char* name)

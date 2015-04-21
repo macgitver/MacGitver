@@ -156,231 +156,231 @@ namespace RM
         self()->mEvents.remove(ev);
     }
 
-    void Events::repositoryOpened(Repo* repo)
+    void Events::repositoryOpened(const RM::Frontend::Repo& repo)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->repositoryOpened(repo);
         }
     }
 
-    void Events::repositoryAboutToClose(Repo* repo)
+    void Events::repositoryAboutToClose(const RM::Frontend::Repo& repo)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->repositoryAboutToClose(repo);
         }
     }
 
-    void Events::repositoryActivated(Repo* repo)
+    void Events::repositoryActivated(const RM::Frontend::Repo& repo)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->repositoryActivated(repo);
         }
     }
 
-    void Events::repositoryDeactivated(Repo* repo)
+    void Events::repositoryDeactivated(const RM::Frontend::Repo& repo)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->repositoryDeactivated(repo);
         }
     }
 
-    void Events::objectCreated(Repo* repo, Base* object)
+    void Events::objectCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Base& object)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->objectCreated(repo, object);
         }
     }
 
-    void Events::objectAboutToBeDeleted(Repo* repo, Base* object)
+    void Events::objectAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Base& object)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->objectAboutToBeDeleted(repo, object);
         }
     }
 
-    void Events::refTreeNodeCreated(Repo* repo, RefTreeNode* node)
+    void Events::refTreeNodeCreated(const RM::Frontend::Repo& repo, const RM::Frontend::RefTreeNode& node)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->refTreeNodeCreated(repo, node);
         }
     }
 
-    void Events::refTreeNodeAboutToBeDeleted(Repo* repo, RefTreeNode* node)
+    void Events::refTreeNodeAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::RefTreeNode& node)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->refTreeNodeAboutToBeDeleted(repo, node);
         }
     }
 
-    void Events::refCreated(Repo* repo, Ref* ref)
+    void Events::refCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->refCreated(repo, ref);
         }
     }
 
-    void Events::refAboutToBeDeleted(Repo* repo, Ref* ref)
+    void Events::refAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->refAboutToBeDeleted(repo, ref);
         }
     }
 
-    void Events::refMoved(Repo* repo, Ref* ref)
+    void Events::refMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->refMoved(repo, ref);
         }
     }
 
-    void Events::refHeadDetached(Repo* repo, Ref* ref)
+    void Events::refHeadDetached(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->refHeadDetached(repo, ref);
         }
     }
 
-    void Events::tagCreated(Repo* repo, Tag* tag)
+    void Events::tagCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Tag& tag)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->tagCreated(repo, tag);
         }
     }
 
-    void Events::tagAboutToBeDeleted(Repo* repo, Tag* tag)
+    void Events::tagAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Tag& tag)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->tagAboutToBeDeleted(repo, tag);
         }
     }
 
-    void Events::branchCreated(Repo* repo, Branch* branch)
+    void Events::branchCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->branchCreated(repo, branch);
         }
     }
 
-    void Events::branchAboutToBeDeleted(Repo* repo, Branch* branch)
+    void Events::branchAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->branchAboutToBeDeleted(repo, branch);
         }
     }
 
-    void Events::branchMoved(Repo* repo, Branch* branch)
+    void Events::branchMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->branchMoved(repo, branch);
         }
     }
 
-    void Events::branchUpstreamChanged(Repo* repo, Branch* branch)
+    void Events::branchUpstreamChanged(const RM::Frontend::Repo& repo, const RM::Frontend::Branch& branch)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->branchUpstreamChanged(repo, branch);
         }
     }
 
-    void Events::namespaceCreated(Repo* repo, Namespace* nameSpace)
+    void Events::namespaceCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Namespace& nameSpace)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->namespaceCreated(repo, nameSpace);
         }
     }
 
-    void Events::namespaceAboutToBeDeleted(Repo* repo, Namespace* nameSpace)
+    void Events::namespaceAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Namespace& nameSpace)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->namespaceAboutToBeDeleted(repo, nameSpace);
         }
     }
 
-    void Events::refLogChanged(Repo* repo, RefLog* reflog)
+    void Events::refLogChanged(const RM::Frontend::Repo& repo, const RM::Frontend::RefLog& reflog)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->refLogChanged(repo, reflog);
         }
     }
 
-    void Events::refLogNewEntry(Repo* repo, RefLog* reflog)
+    void Events::refLogNewEntry(const RM::Frontend::Repo& repo, const RM::Frontend::RefLog& reflog)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->refLogNewEntry(repo, reflog);
         }
     }
 
-    void Events::stageCreated(Repo* repo, Ref* ref)
+    void Events::stageCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->stageCreated(repo, ref);
         }
     }
 
-    void Events::stageAboutToBeDeleted(Repo* repo, Ref* ref)
+    void Events::stageAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->stageAboutToBeDeleted(repo, ref);
         }
     }
 
-    void Events::remoteCreated(Repo* repo, Remote* remote)
+    void Events::remoteCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->remoteCreated(repo, remote);
         }
     }
 
-    void Events::remoteAboutToBeDeleted(Repo* repo, Remote* remote)
+    void Events::remoteAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->remoteAboutToBeDeleted(repo, remote);
         }
     }
 
-    void Events::remoteModified(Repo* repo, Remote* remote)
+    void Events::remoteModified(const RM::Frontend::Repo& repo, const RM::Frontend::Remote& remote)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->remoteModified(repo, remote);
         }
     }
 
-    void Events::submoduleCreated(Repo* repo, Submodule* submodule)
+    void Events::submoduleCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->submoduleCreated(repo, submodule);
         }
     }
 
-    void Events::submoduleAboutToBeDeleted(Repo* repo, Submodule* submodule)
+    void Events::submoduleAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->submoduleAboutToBeDeleted(repo, submodule);
         }
     }
 
-    void Events::submoduleMoved(Repo* repo, Submodule* submodule)
+    void Events::submoduleMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Submodule& submodule)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->submoduleMoved(repo, submodule);
         }
     }
 
-    void Events::repositoryStateChanged(Repo* repo)
+    void Events::repositoryStateChanged(const RM::Frontend::Repo& repo)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->repositoryStateChanged(repo);
         }
     }
 
-    void Events::indexUpdated(Repo* repo)
+    void Events::indexUpdated(const RM::Frontend::Repo& repo)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->indexUpdated(repo);
         }
     }
 
-    void Events::workTreeUpdated(Repo* repo)
+    void Events::workTreeUpdated(const RM::Frontend::Repo& repo)
     {
         foreach (EventsInterface* ei, mEvents) {
             ei->workTreeUpdated(repo);

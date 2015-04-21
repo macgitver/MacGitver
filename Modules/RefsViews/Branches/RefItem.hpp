@@ -22,24 +22,15 @@
 
 #include "libHeavenIcons/Icon.hpp"
 
-#include "libMacGitverCore/RepoMan/RefTreeNode.hpp"
-#include "libMacGitverCore/RepoMan/Ref.hpp"
-#include "libMacGitverCore/RepoMan/Branch.hpp"
-#include "libMacGitverCore/RepoMan/Tag.hpp"
-#include "libMacGitverCore/RepoMan/Remote.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/RefTreeNode.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Reference.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Tag.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Remote.hpp"
 
 #include <QList>
 #include <QVariant>
 #include <QPixmap>
-
-namespace RM
-{
-    class Base;
-    class Ref;
-    class Branch;
-    class RefTreeNode;
-    class Namespace;
-}
 
 class BranchesModel;
 
@@ -74,7 +65,7 @@ public:
 public:
     int itemPosition();
     virtual ItemType type() const = 0;
-    virtual RM::Base* object();
+    virtual RM::Frontend::Base object();
 
 public:
     RefItem* parent;
@@ -118,28 +109,30 @@ template<class T>
 class RefItemObject : public RefItem
 {
 protected:
-    RefItemObject(RefItem* parent, T* object)
+    RefItemObject(RefItem* parent, const T& object)
         : RefItem(parent)
         , mObject(object)
     {}
 
 public:
-    const T* object() const {
+    const T& object() const {
         return mObject;
     }
 
-    T* object() {
+    #if 0 // ###REPOMAN got unsafe now, right?
+    T& object() {
         return mObject;
     }
+    #endif
 
     QVariant data(int role) const {
         if (mObject) {
             switch (role) {
             case Qt::DisplayRole:
-                return mObject->displayName();
+                return mObject.displayName();
 
             case Qt::DecorationRole:
-                Heaven::IconRef iref = mObject->icon(true);
+                Heaven::IconRef iref = mObject.icon(true);
                 Heaven::Icon icon = iref.icon();
                 return icon.pixmap();
             }
@@ -148,16 +141,16 @@ public:
     }
 
 protected:
-    T* mObject;
+    T mObject;
 };
 
-class RefScope : public RefItemObject<RM::RefTreeNode>
+class RefScope : public RefItemObject<RM::Frontend::RefTreeNode>
 {
 public:
     enum { StaticType = Scope };
 
 public:
-    RefScope(RefItem* parent, RM::RefTreeNode* obj)
+    RefScope(RefItem* parent, const RM::Frontend::RefTreeNode& obj)
         : RefItemObject(parent, obj)
     {}
 
@@ -176,13 +169,13 @@ public:
     ItemType type() const;
 };
 
-class RefRemote : public RefItemObject<RM::Remote>
+class RefRemote : public RefItemObject<RM::Frontend::Remote>
 {
 public:
     enum { StaticType = Remote };
 
 public:
-    RefRemote(RefItem* parent, RM::Remote* remote)
+    RefRemote(RefItem* parent, const RM::Frontend::Remote& remote)
         : RefItemObject(parent, remote)
     {
     }
@@ -191,13 +184,13 @@ public:
     ItemType type() const;
 };
 
-class RefBranch : public RefItemObject<RM::Branch>
+class RefBranch : public RefItemObject<RM::Frontend::Branch>
 {
 public:
     enum { StaticType = Branch };
 
 public:
-    RefBranch(RefItem* parent, RM::Branch* branch)
+    RefBranch(RefItem* parent, const RM::Frontend::Branch& branch)
         : RefItemObject(parent, branch)
     {
     }
@@ -208,13 +201,13 @@ public:
 };
 
 
-class RefTag : public RefItemObject<RM::Tag>
+class RefTag : public RefItemObject<RM::Frontend::Tag>
 {
 public:
     enum { StaticType = Tag };
 
 public:
-    RefTag(RefItem* parent, RM::Tag* tag)
+    RefTag(RefItem* parent, const RM::Frontend::Tag& tag)
         : RefItemObject(parent, tag)
     {
     }

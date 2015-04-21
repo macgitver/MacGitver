@@ -26,7 +26,9 @@
 
 namespace RM
 {
-    class Repo;
+    namespace Frontend {
+       class Repo;
+    }
 }
 
 class RepositoryModule
@@ -63,7 +65,7 @@ private slots:
 
 private slots:
     void onRepositoryOpenHelper();
-    void onCoreRepoOpen(RM::Repo* repo);
+    void onCoreRepoOpen(const RM::Frontend::Repo& repo);
 
 private:
     void updateMostRecentlyUsedMenu();

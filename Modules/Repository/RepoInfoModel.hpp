@@ -14,22 +14,18 @@
  *
  */
 
-#ifndef MGV_REPO_INFO_MODEL_HPP
-#define MGV_REPO_INFO_MODEL_HPP
+#pragma once
 
 #include <QAbstractItemModel>
 
-namespace RM
-{
-    class Repo;
-    class RepoMan;
-}
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
 
 class RepoInfoModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
     RepoInfoModel();
+    ~RepoInfoModel();
 
     enum ExtraRoles
     {
@@ -37,23 +33,28 @@ public:
     };
 
 public:
-    int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-    QModelIndex parent( const QModelIndex& child ) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex& child) const;
 
 public:
-    RM::Repo* index2Info( const QModelIndex& index ) const;
-    QModelIndex info2Index( RM::Repo* info ) const;
-
-public slots:
-    void invalidateRepository(RM::Repo* info);
-    void repositoryOpened(RM::Repo* info);
-    void repositoryChildAdded(RM::Repo* parent, RM::Repo* child);
+    RM::Frontend::Repo index2Repo(const QModelIndex& index) const;
+    QModelIndex repo2Index(const RM::Frontend::Repo& repo) const;
 
 private:
-    RM::RepoMan*    mRepoMan;
-};
+    struct RepoInfo;
+    using RepoInfos = QVector<RepoInfo*>;
 
-#endif
+private:
+    RepoInfo* index2info(const QModelIndex& index) const;
+
+private slots:
+    void invalidateRepository(const RM::Frontend::Repo& repo);
+    void repositoryOpened(const RM::Frontend::Repo& repo);
+    void repositoryChildAdded(const RM::Frontend::Repo& parent, const RM::Frontend::Repo& child);
+
+private:
+    RepoInfos mRoots;
+};

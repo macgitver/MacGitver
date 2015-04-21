@@ -19,7 +19,7 @@
 
 #include <QDir>
 
-#include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
 #include "Infra/Fixture.hpp"
@@ -39,10 +39,9 @@ TempRepo::~TempRepo()
 TempRepoOpener::TempRepoOpener(Fixture* fixture, const char* name)
     : mTempRepo(fixture, name)
 {
-    mRepo = MacGitver::repoMan().open(mTempRepo);
+    RM::RepoMan::instance().open(mTempRepo);
 }
 
 TempRepoOpener::~TempRepoOpener()
 {
-    mRepo->close();
 }

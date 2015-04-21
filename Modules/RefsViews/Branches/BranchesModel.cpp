@@ -16,21 +16,19 @@
  *
  */
 
-#include <QFont>
-#include <QDebug>
+#include "BranchesModel.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Ref.hpp"
-#include "libMacGitverCore/RepoMan/RefTreeNode.hpp"
-#include "libMacGitverCore/RepoMan/Branch.hpp"
-#include "libMacGitverCore/RepoMan/Remote.hpp"
-#include "libMacGitverCore/RepoMan/CollectionNode.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Reference.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/RefTreeNode.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Remote.hpp"
 
 #include "libGitWrap/Result.hpp"
 
-#include "BranchesModel.hpp"
-
+#include <QFont>
+#include <QDebug>
 
 BranchesModel::BranchesModel( BranchesViewData* parent )
     : QAbstractItemModel( parent )
@@ -40,7 +38,7 @@ BranchesModel::BranchesModel( BranchesViewData* parent )
     , mHeaderRemote( NULL )
     , mHeaderTags( NULL )
 {
-    RM::RepoMan& rm = MacGitver::repoMan();
+    RM::RepoMan& rm = RM::RepoMan::instance();
 
     connect(&rm,  &RM::RepoMan::refCreated,
             this, &BranchesModel::onRefCreated);
@@ -76,15 +74,14 @@ QModelIndex BranchesModel::itemToIndex(RefItem* item) const
     return createIndex( row, 0, item );
 }
 
-QModelIndex BranchesModel::objectToIndex(RM::Base* obj) const
+QModelIndex BranchesModel::objectToIndex(const RM::Frontend::Base& obj) const
 {
     return itemToIndex(mObjToItems.value(obj, NULL));
 }
 
-int BranchesModel::rowCount( const QModelIndex& parent ) const
+int BranchesModel::rowCount(const QModelIndex& parent) const
 {
-    if( parent.column() > 0 )
-    {
+    if (parent.column() > 0) {
         return 0;
     }
 
@@ -92,17 +89,19 @@ int BranchesModel::rowCount( const QModelIndex& parent ) const
     return parentItem->children.count();
 }
 
-int BranchesModel::columnCount( const QModelIndex& parent ) const
+int BranchesModel::columnCount(const QModelIndex& parent) const
 {
     return 1;
 }
 
-QVariant BranchesModel::data( const QModelIndex& index, int role ) const
+QVariant BranchesModel::data(const QModelIndex& index, int role) const
 {
     RefItem* item = indexToItem(index);
+
     if (index.column() != 0) {
         return QVariant();
     }
+
     return item ? item->data(role) : QVariant();
 }
 
@@ -178,15 +177,15 @@ RefItem* BranchesModel::link(bool notify, RefItem* it)
     return it;
 }
 
-RefItem* BranchesModel::createBranchItem(bool notify, RefItem* parent, RM::Branch* obj)
+RefItem* BranchesModel::createBranchItem(bool notify, RefItem* parent, const RM::Frontend::Branch& obj)
 {
-    if (obj->name() == QStringLiteral("HEAD")) {
-        return NULL;
+    if (obj.name() == QStringLiteral("HEAD")) {
+        return nullptr;
     }
 
-    if (!parent && obj->parentObject()->objType() != RM::CollectionNodeObject) {
-        parent = insertObject(notify, obj->parentObject());
-        return NULL;
+    if (!parent /* && obj.parent().objType() != RM::Frontend::CollectionNodeObject */) { // ###REPOMAN
+        parent = insertObject(notify, obj.parent());
+        return nullptr;
     }
 
     if (!parent) {
@@ -196,10 +195,10 @@ RefItem* BranchesModel::createBranchItem(bool notify, RefItem* parent, RM::Branc
     return link(notify, new RefBranch(parent, obj));
 }
 
-RefItem* BranchesModel::createTagItem(bool notify, RefItem* parent, RM::Tag* obj)
+RefItem* BranchesModel::createTagItem(bool notify, RefItem* parent, const RM::Frontend::Tag& obj)
 {
-    if (!parent && obj->parentObject()->objType() != RM::CollectionNodeObject) {
-        parent = insertObject(notify, obj->parentObject());
+    if (!parent /* && obj->parentObject()->objType() != RM::Frontend::CollectionNodeObject*/) { // ###REPOMAN
+        parent = insertObject(notify, obj.parent());
         return NULL;
     }
 
@@ -210,23 +209,24 @@ RefItem* BranchesModel::createTagItem(bool notify, RefItem* parent, RM::Tag* obj
     return link(notify, new RefTag(parent, obj));
 }
 
-RefItem* BranchesModel::createScopeItem(bool notify, RefItem* parent, RM::RefTreeNode* obj)
+RefItem* BranchesModel::createScopeItem(bool notify, RefItem* parent, const RM::Frontend::RefTreeNode& obj)
 {
     if (!parent) {
-        RM::Base* parObj = obj->parentObject();
+        RM::Frontend::Base parObj = obj.parent();
 
-        if (parObj->objType() != RM::CollectionNodeObject) {
+        #if 0 // ###REPOMAN
+        if (parObj->objType() != RM::Frontend::CollectionNodeObject) {
             parent = insertObject(notify, parObj);
-            return NULL;
+            return nullptr;
         }
 
-        RM::CollectionNode* cn = static_cast<RM::CollectionNode*>(parObj);
+        RM::Frontend::CollectionNode* cn = static_cast<RM::Frontend::CollectionNode*>(parObj);
         switch (cn->collectionType()) {
-        case RM::ctTags:
+        case RM::Frontend::ctTags:
             parent = mHeaderTags;
             break;
 
-        case RM::ctBranches:
+        case RM::Frontend::ctBranches:
             parent = mHeaderLocal;
             break;
 
@@ -234,12 +234,13 @@ RefItem* BranchesModel::createScopeItem(bool notify, RefItem* parent, RM::RefTre
             // Should we assert here?
             return NULL;
         }
+        #endif
     }
 
     return link(notify, new RefScope(parent, obj));
 }
 
-RefItem* BranchesModel::createRemoteItem(bool notify, RefItem* parent, RM::Remote* obj)
+RefItem* BranchesModel::createRemoteItem(bool notify, RefItem* parent, const RM::Frontend::Remote& obj)
 {
     if (!parent) {
         parent = mHeaderRemote;
@@ -248,35 +249,35 @@ RefItem* BranchesModel::createRemoteItem(bool notify, RefItem* parent, RM::Remot
     return link(notify, new RefRemote(parent, obj));
 }
 
-RefItem* BranchesModel::insertObject(bool notify, RM::Base* obj)
+RefItem* BranchesModel::insertObject(bool notify, const RM::Frontend::Base& obj)
 {
     if (!obj) {
         return NULL;
     }
 
-    qDebug() << obj->displayName();
+    qDebug() << obj.displayName();
 
     bool     doChildren = false;
-    RefItem* parent = mObjToItems.value(obj->parentObject(), NULL);
+    RefItem* parent = mObjToItems.value(obj.parent(), NULL);
     RefItem* it     = mObjToItems.value(obj, NULL);
 
     if (!it) {
-        switch (obj->objType()) {
-        case RM::BranchObject:
-            it = createBranchItem(notify, parent, static_cast<RM::Branch*>(obj));
+        switch (obj.objType()) {
+        case RM::ObjTypes::Branch:
+            it = createBranchItem(notify, parent, obj.as<RM::Frontend::Branch>());
             break;
 
-        case RM::TagObject:
-            it = createTagItem(notify, parent, static_cast<RM::Tag*>(obj));
+        case RM::ObjTypes::Tag:
+            it = createTagItem(notify, parent, obj.as<RM::Frontend::Tag>());
             break;
 
-        case RM::RefTreeNodeObject:
-            it = createScopeItem(notify, parent, static_cast<RM::RefTreeNode*>(obj));
+        case RM::ObjTypes::RefTreeNode:
+            it = createScopeItem(notify, parent, obj.as<RM::Frontend::RefTreeNode>());
             doChildren = true;
             break;
 
-        case RM::RemoteObject:
-            it = createRemoteItem(notify, parent, static_cast<RM::Remote*>(obj));
+        case RM::ObjTypes::Remote:
+            it = createRemoteItem(notify, parent, obj.as<RM::Frontend::Remote>());
             doChildren = true;
             break;
 
@@ -290,7 +291,7 @@ RefItem* BranchesModel::insertObject(bool notify, RM::Base* obj)
         mItemToObjs.insert(it, obj);
 
         if (doChildren) {
-            foreach(RM::Base* child, obj->childObjects()) {
+            foreach(RM::Frontend::Base child, obj.children()) {
                 insertObject(notify, child);
             }
         }
@@ -299,14 +300,14 @@ RefItem* BranchesModel::insertObject(bool notify, RM::Base* obj)
     return it;
 }
 
-void BranchesModel::insertCollection(RM::CollectionNode* coll)
+void BranchesModel::insertCollection(RM::Frontend::CollectionNode* coll)
 {
-    foreach(RM::Base* obj, coll->childObjects()) {
+    foreach(RM::Frontend::Base* obj, coll->childObjects()) {
         insertObject(false, obj);
     }
 }
 
-void BranchesModel::updatedObject(RM::Base* obj)
+void BranchesModel::updatedObject(RM::Frontend::Base* obj)
 {
     RefItem* it = mObjToItems.value(obj, NULL);
     if (!it) {
@@ -334,7 +335,7 @@ void BranchesModel::deleteItem(RefItem* it)
 
     beginRemoveRows(itemToIndex(parent), pos, pos);
 
-    RM::Base* obj = it->object();
+    RM::Frontend::Base* obj = it->object();
     if (obj) {
         mObjToItems.remove(obj);
         mItemToObjs.remove(it);
@@ -345,12 +346,12 @@ void BranchesModel::deleteItem(RefItem* it)
     endRemoveRows();
 }
 
-void BranchesModel::deletedObject(RM::Base* obj)
+void BranchesModel::deletedObject(RM::Frontend::Base* obj)
 {
     deleteItem(mObjToItems.value(obj, NULL));
 }
 
-void BranchesModel::setRepository(RM::Repo* repo)
+void BranchesModel::setRepository(RM::Frontend::Repo* repo)
 {
     if (mRepo == repo) {
         return;
@@ -374,14 +375,14 @@ void BranchesModel::setRepository(RM::Repo* repo)
     insertCollection(mRepo->branches());
     insertCollection(mRepo->tags());
 
-    foreach (RM::Remote* rmRemote, repo->childObjects<RM::Remote>()) {
+    foreach (RM::Frontend::Remote* rmRemote, repo->childObjects<RM::Frontend::Remote>()) {
         insertObject(false, rmRemote);
     }
 
     endResetModel();
 }
 
-void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
+void BranchesModel::onRefCreated(RM::Frontend::Repo* repo, RM::Frontend::Ref* ref)
 {
     if (repo != mRepo) {
         return;
@@ -390,7 +391,7 @@ void BranchesModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
     insertObject(true, ref);
 }
 
-void BranchesModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
+void BranchesModel::onRefDestroyed(RM::Frontend::Repo* repo, RM::Frontend::Ref* ref)
 {
     if (repo != mRepo) {
         return;
@@ -399,7 +400,7 @@ void BranchesModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
     deletedObject(ref);
 }
 
-void BranchesModel::onRefTreeNodeAboutToBeDeleted(RM::Repo* repo, RM::RefTreeNode* obj)
+void BranchesModel::onRefTreeNodeAboutToBeDeleted(RM::Frontend::Repo* repo, RM::Frontend::RefTreeNode* obj)
 {
     if (repo != mRepo) {
         return;
@@ -408,7 +409,7 @@ void BranchesModel::onRefTreeNodeAboutToBeDeleted(RM::Repo* repo, RM::RefTreeNod
     deletedObject(obj);
 }
 
-void BranchesModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)
+void BranchesModel::onRefMoved(RM::Frontend::Repo* repo, RM::Frontend::Ref* ref)
 {
     if (repo != mRepo) {
         return;

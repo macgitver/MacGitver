@@ -17,17 +17,13 @@
  *
  */
 
-#ifndef TEST_MGV_TEMP_REPO_HPP
-#define TEST_MGV_TEMP_REPO_HPP
+#pragma once
+
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
 
 #include <QString>
 
 class Fixture;
-
-namespace RM
-{
-    class Repo;
-}
 
 /**
  * @brief   Copy a Test-Repository and remove it after usage
@@ -59,19 +55,17 @@ public:
     ~TempRepoOpener();
 
 public:
-    operator RM::Repo*() const
+    operator RM::Frontend::Repo() const
     {
         return mRepo;
     }
 
-    RM::Repo* operator->() const
+    RM::Frontend::Repo operator->() const
     {
         return mRepo;
     }
 
 private:
     TempRepo mTempRepo;
-    RM::Repo* mRepo;
+    RM::Frontend::Repo mRepo;
 };
-
-#endif

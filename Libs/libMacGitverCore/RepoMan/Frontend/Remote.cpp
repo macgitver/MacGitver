@@ -21,106 +21,117 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Repo.hpp"
-#include "RepoMan/Remote.hpp"
-#include "RepoMan/CollectionNode.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
+#include "RepoMan/Frontend/Remote.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Data/RemoteData.hpp"
+#include "RepoMan/Data/Remote.hpp"
 
 namespace RM
 {
 
-    using namespace Internal;
-
-    Remote::Remote(const Git::Remote& gitObj, Base* _parent)
-        : Base(*new RemotePrivate(this, gitObj))
+    namespace Frontend
     {
-        RM_D(Remote);
 
-        d->linkToParent(_parent);
-    }
+        #if 0
 
-    Git::Remote Remote::gitObject()
-    {
-        Git::Result r;
-        return repository()->gitRepo().remote(r, name());
-    }
+        Remote::Remote(const Git::Remote& gitObj, Base* _parent)
+            : Base(*new RemotePrivate(this, gitObj))
+        {
+            RM_D(Remote);
 
-    QString Remote::name() const
-    {
-        RM_D(Remote);
-
-        return d->name;
-    }
-
-    CollectionNode* Remote::branches()
-    {
-        RM_D(Remote);
-
-
-        // ### We don't use this when filling up the branches, yet.
-        return d->getOrCreateCollection(ctBranches);
-    }
-
-    //-- RemotePrivate -----------------------------------------------------------------------------
-
-    RemotePrivate::RemotePrivate(Remote* _pub, const Git::Remote& _obj)
-        : BasePrivate(_pub)
-    {
-        name = _obj.name();
-    }
-
-    ObjTypes RemotePrivate::objType() const
-    {
-        return RemoteObject;
-    }
-
-    void RemotePrivate::dumpSelf(Internal::Dumper& dumper) const
-    {
-        dumper.addLine(QString(QStringLiteral("Remote %2 0x%1"))
-                       .arg(quintptr(mPub),0,16)
-                       .arg(name));
-    }
-
-    void RemotePrivate::postCreation()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->remoteCreated(repository(), pub<Remote>());
+            d->linkToParent(_parent);
         }
 
-        BasePrivate::postCreation();
-    }
-
-    void RemotePrivate::preTerminate()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->remoteAboutToBeDeleted(repository(), pub<Remote>());
+        Git::Remote Remote::gitObject()
+        {
+            Git::Result r;
+            return repository()->gitRepo().remote(r, name());
         }
 
-        BasePrivate::preTerminate();
+        QString Remote::name() const
+        {
+            RM_D(Remote);
+
+            return d->name;
+        }
+
+        CollectionNode* Remote::branches()
+        {
+            RM_D(Remote);
+
+
+            // ### We don't use this when filling up the branches, yet.
+            return d->getOrCreateCollection(ctBranches);
+        }
+
+        #endif
+
     }
 
-    QString RemotePrivate::displayName() const
+    namespace Data
     {
-        return name;
-    }
 
+        #if 0
 
-    bool RemotePrivate::refreshSelf()
-    {
-        return true;
-    }
+        RemotePrivate::RemotePrivate(Remote* _pub, const Git::Remote& _obj)
+            : BasePrivate(_pub)
+        {
+            name = _obj.name();
+        }
 
-    QString RemotePrivate::objectTypeName() const
-    {
-        return QStringLiteral("Remote");
-    }
+        ObjTypes RemotePrivate::objType() const
+        {
+            return RemoteObject;
+        }
 
-    bool RemotePrivate::inherits(ObjTypes type) const
-    {
-        return type == RemoteObject || BasePrivate::inherits(type);
+        void RemotePrivate::dumpSelf(Internal::Dumper& dumper) const
+        {
+            dumper.addLine(QString(QLatin1String("Remote %2 0x%1"))
+                           .arg(quintptr(mPub),0,16)
+                           .arg(name));
+        }
+
+        void RemotePrivate::postCreation()
+        {
+            if (!repoEventsBlocked()) {
+                Events::self()->remoteCreated(repository(), pub<Remote>());
+            }
+
+            BasePrivate::postCreation();
+        }
+
+        void RemotePrivate::preTerminate()
+        {
+            if (!repoEventsBlocked()) {
+                Events::self()->remoteAboutToBeDeleted(repository(), pub<Remote>());
+            }
+
+            BasePrivate::preTerminate();
+        }
+
+        QString RemotePrivate::displayName() const
+        {
+            return name;
+        }
+
+        bool RemotePrivate::refreshSelf()
+        {
+            return true;
+        }
+
+        QString RemotePrivate::objectTypeName() const
+        {
+            return QLatin1String("Remote");
+        }
+
+        bool RemotePrivate::inherits(ObjTypes type) const
+        {
+            return type == RemoteObject || BasePrivate::inherits(type);
+        }
+
+        #endif
     }
 
 }

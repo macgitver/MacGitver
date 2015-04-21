@@ -23,7 +23,7 @@
 #include "libGitWrap/Result.hpp"
 #include "libGitWrap/Reference.hpp"
 
-#include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
 
 #include "ui_RefRenameDialog.h"
 
@@ -33,7 +33,7 @@ class RefRenameDialog
 {
     Q_OBJECT
 public:
-    RefRenameDialog(const Git::Reference& ref, RM::Repo* repo);
+    RefRenameDialog(const Git::Reference& ref, const RM::Frontend::Repo& repo);
 
     const Git::Result &gitResult() const;
 
@@ -41,7 +41,7 @@ private slots:
     void accept();
 
 private:
-    Git::Result     mGitResult;
-    Git::Reference  mRef;
-    RM::Repo*       mRepo;
+    Git::Result         mGitResult;
+    Git::Reference      mRef;
+    RM::Frontend::Repo  mRepo;
 };

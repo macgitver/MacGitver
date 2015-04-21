@@ -17,16 +17,19 @@
  *
  */
 
-#include "libMacGitverCore/RepoMan/Repo.hpp"
-#include "libMacGitverCore/RepoMan/Remote.hpp"
-#include "libMacGitverCore/RepoMan/Ref.hpp"
+#if 0
+
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Remote.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Reference.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Tag.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/RefLog.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Submodule.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Namespace.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/RefTreeNode.hpp"
+
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Tag.hpp"
-#include "libMacGitverCore/RepoMan/Branch.hpp"
-#include "libMacGitverCore/RepoMan/RefLog.hpp"
-#include "libMacGitverCore/RepoMan/Submodule.hpp"
-#include "libMacGitverCore/RepoMan/Namespace.hpp"
-#include "libMacGitverCore/RepoMan/RefTreeNode.hpp"
 
 #include "Infra/EventCatcher.hpp"
 
@@ -266,3 +269,4 @@ void EventCatcher::workTreeUpdated(RM::Repo* repo)
     recordEvent(ecWorkTreeUpdated, repo);
 }
 
+#endif

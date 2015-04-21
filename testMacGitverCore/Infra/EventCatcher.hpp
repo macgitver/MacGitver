@@ -17,10 +17,11 @@
  *
  */
 
-#ifndef TEST_MGV_CORE_EVENT_CATCHER_HPP
-#define TEST_MGV_CORE_EVENT_CATCHER_HPP
+#if 0
 
-#include "libMacGitverCore/RepoMan/Base.hpp"
+#pragma once
+
+#include "libMacGitverCore/RepoMan/Frontend/Base.hpp"
 #include "libMacGitverCore/RepoMan/Events.hpp"
 
 namespace RM

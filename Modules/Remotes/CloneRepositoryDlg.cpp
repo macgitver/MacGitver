@@ -157,6 +157,8 @@ void CloneDlg::accept()
     }
 
     mProgress = new ProgressDlg;
+
+    // TODO: implement a ProgressDlg::minimumDuration
     mProgress->show();
 
     if( repoName.endsWith( QLatin1String( ".git" ) ) )
@@ -165,21 +167,47 @@ void CloneDlg::accept()
     if( repoName.lastIndexOf( QChar( L'/' ) ) != -1 )
         repoName.remove( 0, repoName.lastIndexOf( QChar( L'/' ) ) + 1 );
 
+    ProgressDlg::StepInfo::List steps;
+    steps << ProgressDlg::StepInfo{ QStringLiteral("transfer"), tr("Download Git objects.") }
+          << ProgressDlg::StepInfo{ QStringLiteral("index"), tr("Add objects to Git index.") };
 
+    if (!clone->bare()) {
+          steps << ProgressDlg::StepInfo{ QStringLiteral("checkout"),
+                   tr("Checkout the worktree.") };
+          connect( clone, &Git::CloneOperation::doneCheckout,
+                   this,  &CloneDlg::doneCheckout );
+    }
+
+    mProgress->addActivity(tr("Cloning <b>%1</b> to <b>%2</b>")
+                           .arg(repoName).arg(targetDir), clone, steps);
+
+    connect( clone, &Git::CloneOperation::finished,
+             this,  &CloneDlg::rootCloneFinished );
+    connect( clone, &Git::CloneOperation::transportProgress,
+             this,  &CloneDlg::onTransportProgress );
+    connect( clone, &Git::CloneOperation::checkoutProgress,
+             this,  &CloneDlg::onCheckoutProgress );
+    connect( clone, &Git::CloneOperation::doneDownloading,
+             this,  &CloneDlg::doneDownload );
+    connect( clone, &Git::CloneOperation::doneIndexing,
+             this,  &CloneDlg::doneIndexing );
 
     clone->execute();
 }
 
 void CloneDlg::doneDownload()
 {
+    mProgress->finished(sender(), QStringLiteral("transfer"));
 }
 
 void CloneDlg::doneIndexing()
 {
+    mProgress->finished(sender(), QStringLiteral("index"));
 }
 
 void CloneDlg::doneCheckout()
 {
+    mProgress->finished(sender(), QStringLiteral("checkout"));
 }
 
 void CloneDlg::rootCloneFinished()
@@ -189,6 +217,7 @@ void CloneDlg::rootCloneFinished()
 
     if ( operation->result() )
     {
+        mProgress->finished(sender());
         return;
     }
 
@@ -197,9 +226,56 @@ void CloneDlg::rootCloneFinished()
     mProgress->reject();
 }
 
+void CloneDlg::onCheckoutProgress(const QString& fileName, quint64 totalFiles,
+                                  quint64 completedFiles)
 {
+    QObject* s = sender();
 
+    const QString stepCheckout( QStringLiteral("checkout") );
+    mProgress->setPercentage( s, stepCheckout,
+                              (qreal)completedFiles / totalFiles );
+    mProgress->setStatusInfo( s, stepCheckout,
+                              tr("Checked out %1 of %2 files (last file: %3).")
+                              .arg(completedFiles).arg(totalFiles).arg(fileName) );
+}
+
+void CloneDlg::onTransportProgress(quint32 totalObjects,
+                                   quint32 indexedObjects,
+                                   quint32 receivedObjects,
+                                   quint64 receivedBytes)
+{
+    QString recv;
+    if( receivedBytes > 1024 * 1024 * 950 ) /* 950 is so we get 0.9 gb */
     {
+        recv = QString::number( receivedBytes / (1024*1024*1024.0), 'f', 2 ) + QStringLiteral(" Gb");
+    }
+    else if( receivedBytes > 1024 * 950 )
+    {
+        recv = QString::number( receivedBytes / (1024*1024.0), 'f', 2 ) + QStringLiteral(" Mb");
+    }
+    else if( receivedBytes > 950 )
+    {
+        recv = QString::number( receivedBytes / 1024.0, 'f', 2 ) + QStringLiteral(" Kb");
+    }
+    else
+    {
+        recv = QString::number( receivedBytes );
     }
 
+    QObject* s = sender();
+    const QString stepTransfer(QStringLiteral("transfer"));
+    mProgress->setPercentage( s, stepTransfer,
+                              (qreal)receivedObjects / totalObjects );
+    mProgress->setStatusInfo( s, stepTransfer,
+                              tr("Received %1 of %2 objects (%3).")
+                              .arg(receivedObjects)
+                              .arg(totalObjects)
+                              .arg(recv) );
+
+    const QString stepIndex(QStringLiteral("index"));
+    mProgress->setPercentage( s, stepIndex,
+                              (qreal)indexedObjects / totalObjects );
+    mProgress->setStatusInfo( s, stepIndex, tr("Indexed %1 of %2 objects.")
+                              .arg(indexedObjects)
+                              .arg(totalObjects) );
 }

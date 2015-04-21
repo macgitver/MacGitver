@@ -21,6 +21,9 @@
 
 #include "libRepoMan/Data/Repo.hpp"
 
+#include "libLogger/Channel.hpp"
+#include "libLogger/Template.hpp"
+
 #include <QObject>
 #include <QMutex>
 
@@ -44,10 +47,19 @@ namespace RM
         public:
             Data::Repo::SPtr findRepo(const QString& workTreePath) const;
 
+        public:
+            Log::Channel gitErrorChannel() const;
+            Log::Template gitErrorTemplate() const;
+
+        private:
+            void setupLogging();
+
         private:
             QThread*            mWorkerThread;
             mutable QMutex      mRepoMan;
             Data::Repo::SList   mRepos;
+            Log::Channel        mGitErrorChannel;
+            Log::Template       mGitErrorTemplate;
         };
 
     }

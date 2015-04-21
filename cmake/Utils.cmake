@@ -8,7 +8,8 @@ IF( UNIX )
         ENDIF()
 
         IF( NOT "${CMAKE_CXX_FLAGS}" MATCHES ".*${_flag}.*" )
-            SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_flag}" CACHE STRING "C++ Build Flags" FORCE )
+            STRING(REPLACE "\\" "" _flag2 ${_flag})
+            SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_flag2}" CACHE STRING "C++ Build Flags" FORCE )
         ENDIF()
 
     ENDMACRO()

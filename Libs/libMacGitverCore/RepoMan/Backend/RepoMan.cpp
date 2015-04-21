@@ -17,30 +17,43 @@
  *
  */
 
-#pragma once
+#include "RepoMan/Backend/RepoMan.hpp"
 
-#include "Ref.hpp"
+#include <QThread>
+#include <QPointer>
 
 namespace RM
 {
 
-    class MGV_CORE_API Tag : public Ref
+    namespace Backend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Tag;
-        typedef QVector< Tag* > List;
 
-    public:
-        Tag(Base* _parent, const Git::Reference& _ref);
+        static RepoMan* repoMan()
+        {
+            static QPointer< RepoMan > sInstance;
+            if (sInstance.isNull()) {
+                sInstance = new RepoMan;
+            }
+            return sInstance;
+        }
 
-    public:
+        RepoMan::RepoMan()
+            : mWorkerThread(new QThread)
+        {
+            moveToThread(mWorkerThread);
+            mWorkerThread->start();
+        }
 
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
+        RepoMan& RepoMan::instance()
+        {
+            return *repoMan();
+        }
 
-    private:
-    };
+        QThread* RepoMan::workerThread()
+        {
+            return repoMan()->mWorkerThread;
+        }
+
+    }
 
 }

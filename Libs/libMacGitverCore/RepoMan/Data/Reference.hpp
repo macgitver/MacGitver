@@ -19,35 +19,46 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Head.hpp"
+#include "RepoMan/Frontend/Reference.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class HeadPrivate : public BasePrivate
+        class Reference
+                : public Base
         {
         public:
-            HeadPrivate(Head* pub, const Git::Repository& ref);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Reference;
+
+        public:
+            Reference(Frontend::Reference* pub, RefTypes type, const Git::Reference& ref);
 
         public:
             ObjTypes objType() const;
-            bool refreshSelf();
             QString displayName() const;
+            bool refreshSelf();
+            void postCreation();
+            void preTerminate();
+            virtual bool refreshDetails(const Git::Reference& ref);
+            virtual void emitMoved();
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 
         public:
-            QString         symbolicName;
-            Git::ObjectId   detachedId;
-            bool            isDetached      : 1;
-            bool            isUnborn        : 1;
+            RefTypes            mType;
+            QString             mFullQualifiedName;
+            QString             mName;
+            Git::ObjectId       mId;
         };
+
+        GW_DEPRECATED
+        typedef Reference Ref;
 
     }
 

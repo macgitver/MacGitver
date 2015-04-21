@@ -19,33 +19,38 @@
 
 #pragma once
 
-#include "libGitWrap/Remote.hpp"
-
-#include "Base.hpp"
+#include "RepoMan/Frontend/Branch.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
-        class RemotePrivate;
+        class Head;
     }
 
-    class MGV_CORE_API Remote : public Base
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Remote;
-        typedef Internal::RemotePrivate Private;
-        typedef QVector< Remote* > List;
+        class MGV_CORE_API Head : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Head;
+            typedef Data::Head Private;
+            typedef QVector<Head> List;
 
-    public:
-        Remote(const Git::Remote& gitObj, Base* parent);
+        public:
+            Head(const Git::Repository& repo, Base* parent);
 
-    public:
-        GW_DEPRECATED
-        Git::Remote gitObject();
-        QString name() const;
-        CollectionNode* branches();
-    };
+        public:
+            bool isDetached() const;
+            bool isUnborn() const;
+            Git::ObjectId detachedId() const;
+            QString symbolicName() const;
+
+        public:
+            bool is(const Branch* ref) const;
+        };
+
+    }
 
 }

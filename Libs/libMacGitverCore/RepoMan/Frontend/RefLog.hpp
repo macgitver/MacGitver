@@ -19,46 +19,30 @@
 
 #pragma once
 
-#include "libGitWrap/ObjectId.hpp"
-
-#include "Base.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Base.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
-        class RefPrivate;
+        class RefLog;
     }
 
-    enum RefTypes
+    namespace Frontend
     {
-        BranchType,
-        TagType
-    };
 
-    class MGV_CORE_API Ref : public Base
-    {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Reference;
+        class MGV_CORE_API RefLog
+                : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::RefLog;
+            typedef Data::RefLog Private;
 
-        typedef QList< Ref* > List;
+        public:
+            RefLog(Base* _parent);
+        };
 
-    protected:
-        Ref(Internal::RefPrivate& data);
-
-    public:
-        Ref(Base* parent, RefTypes type, const Git::Reference& ref);
-
-        GW_DEPRECATED
-        Git::Reference load(Git::Result& r);
-
-    public:
-        RefTypes type() const;
-        QString name() const;
-        QString fullName() const;
-        Git::ObjectId id() const;
-        QString displaySha1() const;
-    };
+    }
 
 }

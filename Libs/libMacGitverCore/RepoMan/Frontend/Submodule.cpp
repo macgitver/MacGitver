@@ -19,74 +19,85 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Submodule.hpp"
+#include "RepoMan/Data/Submodule.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Data/SubmoduleData.hpp"
 
 namespace RM
 {
-    using namespace Internal;
 
-    Submodule::Submodule(const Git::Repository& repo, Repo* parent)
-        : Repo( *new SubmodulePrivate( this, repo ) )
+    namespace Frontend
     {
-        RM_D(Submodule);
 
-        d->mIsSubModule = true;
+        #if 0
+        Submodule::Submodule(const Git::Repository& repo, Repo* parent)
+            : Repo( *new RM::Data::Submodule( this, repo ) )
+        {
+            RM_D(Submodule);
 
-        setDisplayAlias( repo.name() );
+            d->mIsSubModule = true;
 
-        d->linkToParent( parent );
-        d->refresh();
+            setDisplayAlias( repo.name() );
 
-        d->mIsInitializing = false;
+            d->linkToParent( parent );
+            d->refresh();
+
+            d->mIsInitializing = false;
+        }
+        #endif
+
     }
 
-    //-- SubmodulePrivate --------------------------------------------------------------------------
-
-    SubmodulePrivate::SubmodulePrivate(Submodule* pub, const Git::Repository& repo)
-        : RepoPrivate( pub, repo )
+    namespace Data
     {
-    }
+        #if 0
 
-    ObjTypes SubmodulePrivate::objType() const
-    {
-        return ObjTypes::Submodule;
-    }
-
-    void SubmodulePrivate::dumpSelf(Dumper& dumper) const
-    {
-        dumper.addLine(QString(QStringLiteral("Submodule 0x%1"))
-                       .arg(quintptr(mPub),0,16));
-    }
-
-    void SubmodulePrivate::postCreation()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->submoduleCreated(repository(), pub<Submodule>());
+        SubmodulePrivate::SubmodulePrivate(Submodule* pub, const Git::Repository& repo)
+            : RepoPrivate( pub, repo )
+        {
         }
 
-        RepoPrivate::postCreation();
-    }
-
-    void SubmodulePrivate::preTerminate()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->submoduleAboutToBeDeleted(repository(), pub<Submodule>());
+        ObjTypes SubmodulePrivate::objType() const
+        {
+            return SubmoduleObject;
         }
 
-        RepoPrivate::preTerminate();
-    }
+        void SubmodulePrivate::dumpSelf(Dumper& dumper) const
+        {
+            dumper.addLine(QString(QLatin1String("Submodule 0x%1"))
+                           .arg(quintptr(mPub),0,16));
+        }
 
-    QString SubmodulePrivate::objectTypeName() const
-    {
-        return QStringLiteral("Submodule");
-    }
+        void SubmodulePrivate::postCreation()
+        {
+            if (!repoEventsBlocked()) {
+                Events::self()->submoduleCreated(repository(), pub<Submodule>());
+            }
 
-    bool SubmodulePrivate::inherits(ObjTypes type) const
-    {
-        return type == ObjTypes::Submodule || RepoPrivate::inherits(type);
+            RepoPrivate::postCreation();
+        }
+
+        void SubmodulePrivate::preTerminate()
+        {
+            if (!repoEventsBlocked()) {
+                Events::self()->submoduleAboutToBeDeleted(repository(), pub<Submodule>());
+            }
+
+            RepoPrivate::preTerminate();
+        }
+
+        QString SubmodulePrivate::objectTypeName() const
+        {
+            return QLatin1String("Submodule");
+        }
+
+        bool SubmodulePrivate::inherits(ObjTypes type) const
+        {
+            return type == SubmoduleObject || RepoPrivate::inherits(type);
+        }
+
+        #endif
+
     }
 
 }

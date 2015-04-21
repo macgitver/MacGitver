@@ -19,27 +19,36 @@
 
 #pragma once
 
-#include "Ref.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Base.hpp"
+
+#include <QString>
 
 namespace RM
 {
 
-    class MGV_CORE_API Branch : public Ref
+    namespace Internal
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Branch;
-        typedef QVector< Branch* > List;
+        class RefTreeNodePrivate;
+    }
 
-    public:
-        Branch(Base* parent, const Git::Reference& ref);
+    namespace Frontend
+    {
 
-    public:
-        bool hasUpstream() const;
-        QString upstreamRefName() const;
-        Ref* upstream();
-        int aheadCount() const;
-        int behindCount() const;
-        bool isHead() const;
-    };
+        class MGV_CORE_API RefTreeNode
+                : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::RefTreeNode;
+            typedef Internal::RefTreeNodePrivate Private;
+            typedef QList< RefTreeNode* > List;
+
+        public:
+            RefTreeNode(Base* _parent, const QString& _name);
+
+        public:
+            QString name() const;
+        };
+
+    }
 
 }

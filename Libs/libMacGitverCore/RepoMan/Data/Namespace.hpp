@@ -19,38 +19,37 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Ref.hpp"
+#include "RepoMan/Frontend/Namespace.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class RefPrivate : public BasePrivate
+        class Namespace
+                : public Base
         {
         public:
-            RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Namespace;
+
+        public:
+            Namespace(Namespace* _pub, const QString& _name);
 
         public:
             ObjTypes objType() const;
-            QString displayName() const;
             bool refreshSelf();
             void postCreation();
             void preTerminate();
-            virtual bool refreshDetails(const Git::Reference& ref);
-            virtual void emitMoved();
+            QString displayName() const;
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 
         public:
-            RefTypes            mType;
-            QString             mFullQualifiedName;
-            QString             mName;
-            Git::ObjectId       mId;
+            QString name;
         };
 
     }

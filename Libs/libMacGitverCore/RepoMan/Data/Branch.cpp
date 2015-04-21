@@ -17,40 +17,42 @@
  *
  */
 
-#include "RepoMan/Data/BranchData.hpp"
 #include "RepoMan/Events.hpp"
+
+#include "RepoMan/Data/Branch.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        BranchPrivate::BranchPrivate(Branch* pub, const Git::Reference& ref)
-            : RefPrivate(pub, BranchType, ref)
+        Branch::Branch(Frontend::Branch* pub, const Git::Reference& ref)
+            : Reference(pub, BranchType, ref)
             , mHasUpstream(false)
             , mAheadCount(0)
             , mBehindCount(0)
         {
         }
 
-        ObjTypes BranchPrivate::objType() const
+        ObjTypes Branch::objType() const
         {
             return ObjTypes::Branch;
         }
 
-        void BranchPrivate::postCreation()
+        #if 0 // ###DEAD
+        void Branch::postCreation()
         {
-            if (!repoEventsBlocked()) {
+            jif (!repoEventsBlocked()) {
                 Events::self()->branchCreated(repository(), pub<Branch>());
             }
 
             RefPrivate::postCreation();
         }
 
-        void BranchPrivate::preTerminate()
+        void Branch::preTerminate()
         {
             if (!repoEventsBlocked()) {
                 Events::self()->branchAboutToBeDeleted(repository(), pub<Branch>());
@@ -59,35 +61,35 @@ namespace RM
             RefPrivate::preTerminate();
         }
 
-        void BranchPrivate::dumpSelf(Internal::Dumper& dumper) const
+        void Branch::dumpSelf(Internal::Dumper& dumper) const
         {
             dumper.addLine(QString(QStringLiteral("Branch 0x%1 - %2"))
                            .arg(quintptr(mPub),0,16)
                            .arg(mName));
         }
 
-        QString BranchPrivate::objectTypeName() const
+        QString Branch::objectTypeName() const
         {
             return QStringLiteral("Branch");
         }
 
-        void BranchPrivate::emitMoved()
+        void Branch::emitMoved()
         {
             if (!repoEventsBlocked()) {
                 Events::self()->refMoved(mRepo, pub<Ref>());
                 Events::self()->branchMoved(mRepo, pub<Branch>());
             }
         }
+        #endif
 
-        bool BranchPrivate::refreshDetails(const Git::Reference& ref)
+        bool Branch::refreshDetails(const Git::Reference& ref)
         {
-
-            return RefPrivate::refreshDetails(ref);
+            return Reference::refreshDetails(ref);
         }
 
-        bool BranchPrivate::inherits(ObjTypes type) const
+        bool Branch::inherits(ObjTypes type) const
         {
-            return type == ObjTypes::Branch || RefPrivate::inherits(type);
+            return type == ObjTypes::Branch || Reference::inherits(type);
         }
 
     }

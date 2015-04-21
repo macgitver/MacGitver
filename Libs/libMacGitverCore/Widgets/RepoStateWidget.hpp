@@ -19,15 +19,11 @@
 
 #pragma once
 
+#include "RepoMan/Frontend/Repo.hpp"
+
 class QLabel;
 
 #include <QWidget>
-
-namespace RM
-{
-    class Ref;
-    class Repo;
-}
 
 class RepoStateWidget : public QWidget
 {
@@ -36,19 +32,19 @@ public:
     RepoStateWidget();
 
 private slots:
-    void repositoryActivated(RM::Repo* info);
-    void repositoryDeactivated(RM::Repo* info);
+    void repositoryActivated(const RM::Frontend::Repo& repo);
+    void repositoryDeactivated(const RM::Frontend::Repo& repo);
 
 private:
     void setupUi();
     void setRepoState();
 
 public slots:
-    void onUpdateHEAD(RM::Repo* ownerRepo, RM::Ref* ref);
+    void onUpdateHEAD(const RM::Frontend::Repo& ownerRepo, const RM::Frontend::Reference& ref);
 
 private:
-    RM::Repo*       repo;
-    QLabel*         txtRepo;
-    QLabel*         txtState;
-    QLabel*         txtBranch;
+    RM::Frontend::Repo  repo;
+    QLabel*             txtRepo;
+    QLabel*             txtState;
+    QLabel*             txtBranch;
 };

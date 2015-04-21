@@ -19,62 +19,70 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Head.hpp"
+#include "RepoMan/Frontend/Head.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
 
-#include "RepoMan/Data/HeadData.hpp"
+#include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Branch.hpp"
-#include "RepoMan/Repo.hpp"
+#include "RepoMan/Data/Head.hpp"
 
 #include "libGitWrap/Repository.hpp"
 
 namespace RM
 {
 
-    Head::Head(const Git::Repository& repo, Base* parent)
-        : Base(*new Internal::HeadPrivate(this, repo))
+    namespace Frontend
     {
-        RM_D(Head);
-        d->linkToParent(parent);
-    }
 
-    QString Head::symbolicName() const
-    {
-        RM_CD(Head);
-        if (d->isDetached) {
-            return QString();
-        }
-        return d->symbolicName;
-    }
-
-    bool Head::isDetached() const
-    {
-        RM_CD(Head);
-        return d->isDetached;
-    }
-
-    bool Head::isUnborn() const
-    {
-        RM_CD(Head);
-        return d->isUnborn;
-    }
-
-    Git::ObjectId Head::detachedId() const
-    {
-        RM_CD(Head);
-        return d->detachedId;
-    }
-
-    bool Head::is(const Branch* ref) const
-    {
-        RM_CD(Head);
-
-        if (d->isDetached || d->isUnborn) {
-            /* If it's unborn, it cannot match an existing branch anyway */
-            return false;
+        #if 0
+        Head::Head(const Git::Repository& repo, Base* parent)
+            : Base(*new Internal::HeadPrivate(this, repo))
+        {
+            RM_D(Head);
+            d->linkToParent(parent);
         }
 
-        return ref && d->symbolicName == ref->fullName();
+        QString Head::symbolicName() const
+        {
+            RM_CD(Head);
+            if (d->isDetached) {
+                return QString();
+            }
+            return d->symbolicName;
+        }
+
+        bool Head::isDetached() const
+        {
+            RM_CD(Head);
+            return d->isDetached;
+        }
+
+        bool Head::isUnborn() const
+        {
+            RM_CD(Head);
+            return d->isUnborn;
+        }
+
+        Git::ObjectId Head::detachedId() const
+        {
+            RM_CD(Head);
+            return d->detachedId;
+        }
+
+        bool Head::is(const Branch* ref) const
+        {
+            RM_CD(Head);
+
+            if (d->isDetached || d->isUnborn) {
+                /* If it's unborn, it cannot match an existing branch anyway */
+                return false;
+            }
+
+            return ref && d->symbolicName == ref->fullName();
+        }
+
+        #endif
+
     }
 
 }

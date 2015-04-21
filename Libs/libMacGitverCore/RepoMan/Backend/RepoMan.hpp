@@ -19,36 +19,37 @@
 
 #pragma once
 
-#include "RepoMan/Base.hpp"
-#include "RepoMan/CollectionNode.hpp"
-#include "RepoMan/Branch.hpp"
+#include "RepoMan/Data/Repo.hpp"
+
+#include <QObject>
+#include <QMutex>
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Backend
     {
-        class HeadPrivate;
+
+        class RepoMan
+                : public QObject
+        {
+            Q_OBJECT
+        public:
+            RepoMan();
+
+        public:
+            static RepoMan& instance();
+            static QThread* workerThread();
+
+        public:
+            Data::Repo::SPtr findRepo(const QString& workTreePath) const;
+
+        private:
+            QThread*            mWorkerThread;
+            mutable QMutex      mRepoMan;
+            Data::Repo::SList   mRepos;
+        };
+
     }
-
-    class MGV_CORE_API Head : public Base
-    {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Head;
-        typedef Internal::HeadPrivate Private;
-        typedef QVector< Head* > List;
-
-    public:
-        Head(const Git::Repository& repo, Base* parent);
-
-    public:
-        bool isDetached() const;
-        bool isUnborn() const;
-        Git::ObjectId detachedId() const;
-        QString symbolicName() const;
-
-    public:
-        bool is(const Branch* ref) const;
-    };
 
 }

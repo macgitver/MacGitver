@@ -19,14 +19,9 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Head.hpp"
+#include "RepoMan/Data/Head.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-
-#include "RepoMan/Data/HeadData.hpp"
-
-#include "RepoMan/Branch.hpp"
-#include "RepoMan/Repo.hpp"
 
 #include "libGitWrap/Repository.hpp"
 #include "libGitWrap/BranchRef.hpp"
@@ -34,11 +29,12 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        HeadPrivate::HeadPrivate(Head* _pub, const Git::Repository& repo)
-            : BasePrivate(_pub)
+        #if 0
+        Head::Head(Frontend::Head* _pub, const Git::Repository& repo)
+            : Base(_pub)
             , symbolicName()
             , isDetached(repo.isHeadDetached())
             , isUnborn(repo.isHeadUnborn())
@@ -53,19 +49,19 @@ namespace RM
             }
         }
 
-        ObjTypes HeadPrivate::objType() const
+        ObjTypes Head::objType() const
         {
             return ObjTypes::Head;
         }
 
-        void HeadPrivate::dumpSelf(Internal::Dumper& dumper) const
+        void Head::dumpSelf(Internal::Dumper& dumper) const
         {
             dumper.addLine(QString(QStringLiteral("Head 0x%1 - %2"))
                            .arg(quintptr(mPub),0,16)
                            .arg(symbolicName));
         }
 
-        bool HeadPrivate::refreshSelf()
+        bool Head::refreshSelf()
         {
             Git::Repository repo = repository()->gitLoadedRepo();
             Git::Result r;
@@ -81,20 +77,21 @@ namespace RM
             }
             return true;
         }
+        #endif
 
-        QString HeadPrivate::displayName() const
+        QString Head::displayName() const
         {
-            return symbolicName;
+            return mSymbolicName;
         }
 
-        QString HeadPrivate::objectTypeName() const
+        QString Head::objectTypeName() const
         {
             return QStringLiteral("Head");
         }
 
-        bool HeadPrivate::inherits(ObjTypes type) const
+        bool Head::inherits(ObjTypes type) const
         {
-            return type == ObjTypes::Head || BasePrivate::inherits(type);
+            return type == ObjTypes::Head || Base::inherits(type);
         }
 
     }

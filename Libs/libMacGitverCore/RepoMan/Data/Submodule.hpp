@@ -19,34 +19,32 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Repo.hpp"
 
-#include "RepoMan/RefTreeNode.hpp"
+#include "RepoMan/Frontend/Submodule.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class RefTreeNodePrivate : public BasePrivate
+        class Submodule
+                : public Repo
         {
         public:
-            RefTreeNodePrivate(RefTreeNode* _pub, const QString& _name);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Submodule;
+
+        public:
+            Submodule(Submodule* pub, const Git::Repository& repo);
 
         public:
             ObjTypes objType() const;
-            bool refreshSelf();
             void postCreation();
             void preTerminate();
-            bool refreshCheckDispensable();
-            QString displayName() const;
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
-
-        public:
-            QString name;
         };
 
     }

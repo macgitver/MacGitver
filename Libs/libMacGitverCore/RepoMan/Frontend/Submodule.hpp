@@ -19,36 +19,28 @@
 
 #pragma once
 
-#include "RepoMan/Data/RefData.hpp"
-
-#include "RepoMan/Branch.hpp"
+#include "libMacGitverCore/Repoman/Frontend/Repo.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Frontend
     {
 
-        class BranchPrivate : public RefPrivate
+        class MGV_CORE_API Submodule : public Repo
         {
         public:
-            BranchPrivate(Branch* pub, const Git::Reference& ref);
+            static const ObjTypes StaticObjectType = ObjTypes::Submodule;
 
         public:
+            Submodule(const Git::Repository& repo, Repo* parent);
+
+        public:
+
+        private:
             ObjTypes objType() const;
-            void postCreation();
             void preTerminate();
-            bool refreshDetails(const Git::Reference& ref);
-            void emitMoved();
             void dumpSelf(Internal::Dumper& dumper) const;
-            QString objectTypeName() const;
-            bool inherits(ObjTypes type) const;
-
-        public:
-            bool    mHasUpstream;
-            int     mAheadCount;
-            int     mBehindCount;
-            QString mUpstreamRefName;
         };
 
     }

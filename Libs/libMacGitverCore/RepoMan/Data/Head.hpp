@@ -19,34 +19,65 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Namespace.hpp"
+#include "RepoMan/Frontend/Head.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class NamespacePrivate : public BasePrivate
+        class Head
+                : public Base
         {
         public:
-            NamespacePrivate(Namespace* _pub, const QString& _name);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Head;
+
+        public:
+            Head(Frontend::Head* pub, const Git::Repository& ref);
 
         public:
             ObjTypes objType() const;
             bool refreshSelf();
-            void postCreation();
-            void preTerminate();
             QString displayName() const;
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 
         public:
-            QString name;
+            bool isDetached() const;
+            bool isUnborn() const;
+            Git::ObjectId detachedId() const;
+            QString symbolicName() const;
+
+        private:
+            QString         mSymbolicName;
+            Git::ObjectId   mDetachedId;
+            bool            mIsDetached      : 1;
+            bool            mIsUnborn        : 1;
         };
+
+        inline bool Head::isDetached() const
+        {
+            return mIsDetached;
+        }
+
+        inline bool Head::isUnborn() const
+        {
+            return mIsUnborn;
+        }
+
+        inline Git::ObjectId Head::detachedId() const
+        {
+            return mDetachedId;
+        }
+
+        inline QString Head::symbolicName() const
+        {
+            return mSymbolicName;
+        }
 
     }
 

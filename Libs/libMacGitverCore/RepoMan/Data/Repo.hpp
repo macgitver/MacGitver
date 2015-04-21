@@ -19,23 +19,39 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Repo.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
+
+class QTimer;
 
 namespace RM
 {
 
-    class Head;
-
-    namespace Internal
+    namespace Data
     {
 
-        class RepoPrivate : public BasePrivate
+        class Reference;
+        class Remote;
+        class Namespace;
+        class Head;
+
+        class Repo
+                : public Base
         {
         public:
-            RepoPrivate(Repo* pub, const Git::Repository& repo);
-            ~RepoPrivate();
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Repo;
+
+        public:
+            using FrontendT = Frontend::Repo;
+            using SPtr      = std::shared_ptr<Repo>;
+            using WPtr      = std::weak_ptr<Repo>;
+            using SList     = std::vector<SPtr>;
+            using WList     = std::vector<WPtr>;
+
+        public:
+            Repo(const Git::Repository& repo);
+            ~Repo();
 
         public:
             ObjTypes objType() const;
@@ -46,43 +62,59 @@ namespace RM
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
-            Repo* searchRepository();
 
         public:
-            Ref*        findReference(  const Git::Reference& ref,          bool create = false);
-            Ref*        findReference(  const QString& fqrn,                bool create = false);
-            Remote*     findRemote(     const Git::Remote& remote,          bool create = false);
+            Reference*  findReference(  const QString& fqrn,                bool create = false);
+
             Remote*     findRemote(     const QString& remoteName,          bool create = false);
+
             Namespace*  findNamespace(  const QStringList& _namespaces,     bool create = false);
             Namespace*  findNamespace(  const QString& nsFullName,          bool create = false);
 
         private:
-            Ref* findReference(Git::RefName &rn, Git::Reference ref, bool create);
+            GW_DEPRECATED
+            Reference* findReference(Git::RefName &rn, Git::Reference ref, bool create);
 
         public:
-            void load();
-            void unload();
-            void findAlias();
-            void scanSubmodules();
-            Repo* repoByPath(const QString& basePath, bool searchSubmodules);
+            SPtr repoByPath(const QString& basePath, bool searchSubmodules);
+            WList submodules() const;
 
         public:
+            QMutex& mutex() const;
+            QString path() const;
             Git::Repository gitRepo(bool doLoad = false);
 
         public:
-            QString         mPath;                 //!< Full, absolute path to this repository
             QString         mDisplayAlias;         //!< An alias for display (Default to last path comp.)
             bool            mIsSubModule    : 1;   //!< This is a submodule of another repo
             bool            mIsBare         : 1;   //!< This is a bare repo
             bool            mIsLoaded       : 1;   //!< This repo is currently loaded (by gitWrap)
             bool            mIsActive       : 1;   //!< This is MGV's current active repo?
-            bool            mIsInitializing : 1;   //!< True, while this repository is initializing
-            QTimer*         mUnloadTimer;          //!< NULL or a timer to unload this repository
+          //bool            mIsInitializing : 1;   //!< True, while this repository is initializing
+          //QTimer*         mUnloadTimer;          //!< NULL or a timer to unload this repository
             Head*           mHead;                 //!< The HEAD
 
         private:
             Git::Repository mRepo;                 //!< GitWrap-Repo, if loaded
+            QString         mPath;                 //!< Full, absolute path to this repository
+            mutable QMutex  mMutex;                //!< One mutex to protect them all (inside this Repo)
+            SList           mSubmodules;
         };
+
+        inline QMutex& Repo::mutex() const
+        {
+            return mMutex;
+        }
+
+        inline Repo::WList Repo::submodules() const
+        {
+            return weakFromSharedList<Repo>(mSubmodules);
+        }
+
+        inline QString Repo::path() const
+        {
+            return mPath;
+        }
 
     }
 

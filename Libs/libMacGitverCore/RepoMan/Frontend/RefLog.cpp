@@ -17,65 +17,79 @@
  *
  */
 
-#include "RepoMan/RefLog.hpp"
+#include "RepoMan/Frontend/RefLog.hpp"
+
+#include "RepoMan/Data/RefLog.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Data/RefLogData.hpp"
 
 namespace RM
 {
 
-    using namespace Internal;
-
-    RefLog::RefLog(Base* _parent)
-        : Base(*new RefLogPrivate(this))
+    namespace Frontend
     {
-        RM_D(RefLog);
-        d->linkToParent(_parent);
+
+        #if 0
+
+        RefLog::RefLog(Base* _parent)
+            : Base(*new RefLogPrivate(this))
+        {
+            RM_D(RefLog);
+            d->linkToParent(_parent);
+        }
+
+        #endif
+
     }
 
-    //-- RefLogPrivate -----------------------------------------------------------------------------
-
-    RefLogPrivate::RefLogPrivate(RefLog* _pub)
-        : BasePrivate(_pub)
+    namespace Data
     {
-    }
 
-    ObjTypes RefLogPrivate::objType() const
-    {
-        return ObjTypes::RefLog;
-    }
+        #if 0
 
-    void RefLogPrivate::dumpSelf(Internal::Dumper& dumper) const
-    {
-        dumper.addLine(QString(QStringLiteral("RefLog 0x%1"))
-                       .arg(quintptr(mPub),0,16));
-    }
+        RefLogPrivate::RefLogPrivate(RefLog* _pub)
+            : BasePrivate(_pub)
+        {
+        }
 
-    void RefLogPrivate::postCreation()
-    {
-        BasePrivate::postCreation();
-    }
+        ObjTypes RefLogPrivate::objType() const
+        {
+            return RefLogObject;
+        }
 
-    void RefLogPrivate::preTerminate()
-    {
-        // What to do? We don't send Ref-Log-Deleted events
-        BasePrivate::preTerminate();
-    }
+        void RefLogPrivate::dumpSelf(Internal::Dumper& dumper) const
+        {
+            dumper.addLine(QString(QLatin1String("RefLog 0x%1"))
+                           .arg(quintptr(mPub),0,16));
+        }
 
-    bool RefLogPrivate::refreshSelf()
-    {
-        return true;
-    }
+        void RefLogPrivate::postCreation()
+        {
+            BasePrivate::postCreation();
+        }
 
-    QString RefLogPrivate::objectTypeName() const
-    {
-        return QStringLiteral("RefLog");
-    }
+        void RefLogPrivate::preTerminate()
+        {
+            // What to do? We don't send Ref-Log-Deleted events
+            BasePrivate::preTerminate();
+        }
 
-    bool RefLogPrivate::inherits(ObjTypes type) const
-    {
-        return type == ObjTypes::RefLog || BasePrivate::inherits(type);
+        bool RefLogPrivate::refreshSelf()
+        {
+            return true;
+        }
+
+        QString RefLogPrivate::objectTypeName() const
+        {
+            return QLatin1String("RefLog");
+        }
+
+        bool RefLogPrivate::inherits(ObjTypes type) const
+        {
+            return type == RefLogObject || BasePrivate::inherits(type);
+        }
+
+        #endif
     }
 
 }

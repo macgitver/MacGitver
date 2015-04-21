@@ -32,9 +32,8 @@ SET( SRC_FILES
 
     RepoMan/Frontend/Base.cpp
     RepoMan/Frontend/Branch.cpp
-    RepoMan/Frontend/CollectionNode.cpp
     RepoMan/Frontend/Namespace.cpp
-    RepoMan/Frontend/Ref.cpp
+    RepoMan/Frontend/Reference.cpp
     RepoMan/Frontend/RefLog.cpp
     RepoMan/Frontend/RefTreeNode.cpp
     RepoMan/Frontend/Remote.cpp
@@ -46,8 +45,18 @@ SET( SRC_FILES
     RepoMan/Data/Base.cpp
     RepoMan/Data/Branch.cpp
     RepoMan/Data/Head.cpp
+    RepoMan/Data/Namespace.cpp
+    RepoMan/Data/Reference.cpp
+    RepoMan/Data/RefLog.cpp
+    RepoMan/Data/RefTreeNode.cpp
+    RepoMan/Data/Remote.cpp
+    RepoMan/Data/Repo.cpp
+    RepoMan/Data/Submodule.cpp
+    RepoMan/Data/Tag.cpp
 
     RepoMan/Private/Dumper.cpp
+
+    RepoMan/Backend/RepoMan.cpp
 
     SHMParser/ShellExpand.cpp
 
@@ -82,20 +91,20 @@ SET( PUB_HDR_FILES
     MacGitver/IRepositoryContext.hpp
 
     RepoMan/Core.hpp
-    RepoMan/Base.hpp
     RepoMan/Events.hpp
-    RepoMan/CollectionNode.hpp
-    RepoMan/Ref.hpp
-    RepoMan/Repo.hpp
     RepoMan/RepoMan.hpp
-    RepoMan/Remote.hpp
-    RepoMan/Tag.hpp
-    RepoMan/Branch.hpp
-    RepoMan/RefLog.hpp
-    RepoMan/Submodule.hpp
-    RepoMan/RefTreeNode.hpp
-    RepoMan/Namespace.hpp
-    RepoMan/Head.hpp
+
+    RepoMan/Frontend/Base.hpp
+    RepoMan/Frontend/Reference.hpp
+    RepoMan/Frontend/Repo.hpp
+    RepoMan/Frontend/Remote.hpp
+    RepoMan/Frontend/Tag.hpp
+    RepoMan/Frontend/Branch.hpp
+    RepoMan/Frontend/RefLog.hpp
+    RepoMan/Frontend/Submodule.hpp
+    RepoMan/Frontend/RefTreeNode.hpp
+    RepoMan/Frontend/Namespace.hpp
+    RepoMan/Frontend/Head.hpp
 
     SHMParser/ShellExpand.hpp
 
@@ -125,20 +134,23 @@ SET( PRI_HDR_FILES
 
     RepoMan/Private/Dumper.hpp
 
-    RepoMan/Data/BaseData.hpp
-    RepoMan/Data/BranchData.hpp
-    RepoMan/Data/CollectionNodeData.hpp
-    RepoMan/Data/NamespaceData.hpp
-    RepoMan/Data/RefData.hpp
-    RepoMan/Data/RefLogData.hpp
-    RepoMan/Data/RefTreeNodeData.hpp
-    RepoMan/Data/RemoteData.hpp
-    RepoMan/Data/RepoData.hpp
-    RepoMan/Data/RepoManData.hpp
-    RepoMan/Data/SubmoduleData.hpp
-    RepoMan/Data/TagData.hpp
-    RepoMan/Data/HeadData.hpp
+    RepoMan/Data/Base.hpp
+    RepoMan/Data/Branch.hpp
+    RepoMan/Data/Namespace.hpp
+    RepoMan/Data/Reference.hpp
+    RepoMan/Data/RefLog.hpp
+    RepoMan/Data/RefTreeNode.hpp
+    RepoMan/Data/Remote.hpp
+    RepoMan/Data/Repo.hpp
+    RepoMan/Data/RepoMan.hpp
+    RepoMan/Data/Submodule.hpp
+    RepoMan/Data/Tag.hpp
+    RepoMan/Data/Head.hpp
 
+    RepoMan/Frontend/BaseInternal.hpp
+
+    RepoMan/Backend/RepoMan.hpp
+    RepoMan/Backend/RepoLocker.hpp
 
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h

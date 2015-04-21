@@ -19,27 +19,34 @@
 
 #pragma once
 
-#include "Repo.hpp"
+#include "RepoMan/Data/Reference.hpp"
+
+#include "RepoMan/Frontend/Tag.hpp"
 
 namespace RM
 {
 
-    class MGV_CORE_API Submodule : public Repo
+    namespace Data
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Submodule;
 
-    public:
-        Submodule(const Git::Repository& repo, Repo* parent);
+        class Tag
+                : public Reference
+        {
+        public:
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Tag;
 
-    public:
+        public:
+            Tag(Tag* pub, const Git::Reference& _ref);
 
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
+        public:
+            ObjTypes objType() const;
+            void postCreation();
+            void preTerminate();
+            void dumpSelf(Internal::Dumper& dumper) const;
+            QString objectTypeName() const;
+            bool inherits(ObjTypes type) const;
+        };
 
-    private:
-    };
+    }
 
 }

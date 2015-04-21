@@ -19,23 +19,28 @@
 
 #pragma once
 
-#include "RepoMan/Data/RepoData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Submodule.hpp"
+#include "RepoMan/Frontend/RefLog.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class SubmodulePrivate : public RepoPrivate
+        class RefLog
+                : public Base
         {
         public:
-            SubmodulePrivate(Submodule* pub, const Git::Repository& repo);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::RefLog;
+
+        public:
+            RefLog(RefLog* _pub);
 
         public:
             ObjTypes objType() const;
+            bool refreshSelf();
             void postCreation();
             void preTerminate();
             void dumpSelf(Internal::Dumper& dumper) const;

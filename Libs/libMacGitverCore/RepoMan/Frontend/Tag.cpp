@@ -19,69 +19,80 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Tag.hpp"
+#include "RepoMan/Frontend/Tag.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Data/TagData.hpp"
+#include "RepoMan/Data/Tag.hpp"
 
 namespace RM
 {
 
-    using namespace Internal;
-
-    Tag::Tag(Base* _parent, const Git::Reference& _ref)
-        : Ref(*new TagPrivate(this, _ref))
+    namespace Frontend
     {
-        RM_D(Tag);
-        d->linkToParent(_parent);
-    }
 
-    //-- TagPrivate --------------------------------------------------------------------------------
-
-    TagPrivate::TagPrivate(Tag* _pub, const Git::Reference& _ref)
-        : RefPrivate(_pub, TagType, _ref)
-    {
-    }
-
-    ObjTypes TagPrivate::objType() const
-    {
-        return ObjTypes::Tag;
-    }
-
-    void TagPrivate::postCreation()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->tagCreated(repository(), pub<Tag>());
+        #if 0
+        Tag::Tag(Base* _parent, const Git::Reference& _ref)
+            : Ref(*new TagPrivate(this, _ref))
+        {
+            RM_D(Tag);
+            d->linkToParent(_parent);
         }
 
-        RefPrivate::postCreation();
+        #endif
+
     }
 
-    void TagPrivate::preTerminate()
+    namespace Data
     {
-        if (!repoEventsBlocked()) {
-            Events::self()->tagAboutToBeDeleted(repository(), pub<Tag>());
+
+        #if 0
+
+        TagPrivate::TagPrivate(Tag* _pub, const Git::Reference& _ref)
+            : RefPrivate(_pub, TagType, _ref)
+        {
         }
 
-        RefPrivate::preTerminate();
-    }
+        ObjTypes TagPrivate::objType() const
+        {
+            return TagObject;
+        }
 
-    void TagPrivate::dumpSelf(Internal::Dumper& dumper) const
-    {
-        dumper.addLine(QString(QStringLiteral("Tag 0x%1 - %2"))
-                       .arg(quintptr(mPub),0,16)
-                       .arg(mName));
-    }
+        void TagPrivate::postCreation()
+        {
+            if (!repoEventsBlocked()) {
+                Events::self()->tagCreated(repository(), pub<Tag>());
+            }
 
-    QString TagPrivate::objectTypeName() const
-    {
-        return QStringLiteral("Tag");
-    }
+            RefPrivate::postCreation();
+        }
 
-    bool TagPrivate::inherits(ObjTypes type) const
-    {
-        return type == ObjTypes::Tag || RefPrivate::inherits(type);
+        void TagPrivate::preTerminate()
+        {
+            if (!repoEventsBlocked()) {
+                Events::self()->tagAboutToBeDeleted(repository(), pub<Tag>());
+            }
+            RefPrivate::preTerminate();
+        }
+
+        void TagPrivate::dumpSelf(Internal::Dumper& dumper) const
+        {
+            dumper.addLine(QString(QLatin1String("Tag 0x%1 - %2"))
+                           .arg(quintptr(mPub),0,16)
+                           .arg(mName));
+        }
+
+        QString TagPrivate::objectTypeName() const
+        {
+            return QLatin1String("Tag");
+        }
+
+        bool TagPrivate::inherits(ObjTypes type) const
+        {
+            return type == TagObject || RefPrivate::inherits(type);
+        }
+        #endif
+
     }
 
 }

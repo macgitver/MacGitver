@@ -19,28 +19,40 @@
 
 #pragma once
 
-#include "RepoMan/Data/RefData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Tag.hpp"
+#include "RepoMan/Frontend/Remote.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class TagPrivate : public RefPrivate
+        class Head;
+
+        class Remote
+                : public Base
         {
         public:
-            TagPrivate(Tag* pub, const Git::Reference& _ref);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Remote;
+
+        public:
+            Remote(Remote* _pub, const Git::Remote& _obj);
 
         public:
             ObjTypes objType() const;
+            bool refreshSelf();
             void postCreation();
             void preTerminate();
+            QString displayName() const;
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
+
+        public:
+            QString         name;
+            Head*           mHead;                 //!< The HEAD
         };
 
     }

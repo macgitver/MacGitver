@@ -19,30 +19,40 @@
 
 #pragma once
 
-#include <QString>
+#include "libGitWrap/Remote.hpp"
 
-#include "Base.hpp"
+#include "libMacGitverCore/Repoman/Frontend/Base.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
-        class RefTreeNodePrivate;
+        class Remote;
     }
 
-    class MGV_CORE_API RefTreeNode : public Base
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::RefTreeNode;
-        typedef Internal::RefTreeNodePrivate Private;
-        typedef QList< RefTreeNode* > List;
 
-    public:
-        RefTreeNode(Base* _parent, const QString& _name);
+        class MGV_CORE_API Remote : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Remote;
+            typedef Data::Remote Private;
+            typedef QVector<Remote> List;
 
-    public:
-        QString name() const;
-    };
+        public:
+            Remote(const Git::Remote& gitObj, Base* parent);
+
+        public:
+            GW_DEPRECATED
+            Git::Remote gitObject();
+            QString name() const;
+            #if 0 // ###DEAD
+            CollectionNode* branches();
+            #endif
+        };
+
+    }
 
 }

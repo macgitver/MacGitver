@@ -20,13 +20,12 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "RepoMan/RepoMan.hpp"
-#include "RepoMan/CollectionNode.hpp"
 #include "RepoMan/Events.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Data/RepoManData.hpp"
-#include "RepoMan/Data/RepoData.hpp"
+#include "RepoMan/Data/RepoMan.hpp"
+#include "RepoMan/Data/Repo.hpp"
 
 #include "libBlueSky/Application.hpp"
 
@@ -34,8 +33,6 @@
 
 namespace RM
 {
-
-    using namespace Internal;
 
     /**
      * @class       RepoMan
@@ -49,14 +46,13 @@ namespace RM
      *
      */
     RepoMan::RepoMan()
-        : Base(*new RepoManPrivate(this))
     {
         Events::addReceiver(this);
 
         connect(BlueSky::Application::instance(),
-                SIGNAL(activeModeChanged(BlueSky::Mode*)),
+                &BlueSky::Application::activeModeChanged,
                 this,
-                SLOT(reactivateWorkaround()));
+                &RepoMan::reactivateWorkaround);
     }
 
     /**
@@ -105,24 +101,29 @@ namespace RM
      */
     void RepoMan::closeAll()
     {
+        #if 0 // ###DEAD
         RM_D(RepoMan);
 
         foreach(Repo* repo, d->repos) {
             repo->close();
         }
+        #endif
     }
 
     void RepoMan::reactivateWorkaround()
     {
+        #if 0 // ###DEAD
         RM_D(RepoMan);
         if (d->activeRepo) {
             Events::self()->repositoryDeactivated(d->activeRepo);
             Events::self()->repositoryActivated(d->activeRepo);
         }
+        #endif
     }
 
-    void RepoMan::activate(Repo* repository)
+    void RepoMan::activate(const Frontend::Repo& repository)
     {
+        #if 0 // ###DEAD
         RM_D(RepoMan);
 
         if(repository != d->activeRepo) {
@@ -145,8 +146,10 @@ namespace RM
                 emit hasActiveRepositoryChanged(d->activeRepo != NULL);
             }
         }
+        #endif
     }
 
+    #if 0 // ###DEAD
     void RepoMan::internalClosedRepo(Repo* repository)
     {
         RM_D(RepoMan);
@@ -169,19 +172,29 @@ namespace RM
             }
         }
     }
+    #endif
 
-    Repo* RepoMan::activeRepository()
+    Frontend::Repo RepoMan::activeRepository()
     {
+        #if 0 // ###DEAD
         RM_D(RepoMan);
         return d->activeRepo;
+        #else
+        return Frontend::Repo();
+        #endif
     }
 
-    Repo::List RepoMan::repositories() const
+    Frontend::Repo::List RepoMan::repositories() const
     {
+        #if 0 // ###DEAD
         RM_CD(RepoMan);
         return d->repos;
+        #else
+        return Frontend::Repo::List();
+        #endif
     }
 
+    #if 0 // ###DEAD
     //-- RepoManPrivate ----------------------------------------------------------------------------
 
     RepoManPrivate::RepoManPrivate(RepoMan* _pub)
@@ -211,20 +224,9 @@ namespace RM
         // Do we need to do smth?
     }
 
-    QString RepoManPrivate::displayName() const
-    {
-        return QStringLiteral("RepoMan");
-    }
-
-    QString RepoManPrivate::objectTypeName() const
-    {
-        return QStringLiteral("RepoMan");
-    }
-
     Heaven::Menu* RepoManPrivate::contextMenuFor(Base* object)
     {
         switch (object->objType()) {
-
         case ObjTypes::Branch:      return menuCtxBranch;
         case ObjTypes::Tag:         return menuCtxTag;
         case ObjTypes::Repo:        return menuCtxRepo;
@@ -232,27 +234,9 @@ namespace RM
         case ObjTypes::Namespace:   return menuCtxNamespace;
         case ObjTypes::RefLog:      return menuCtxRefLog;
         case ObjTypes::Remote:      return menuCtxRemote;
-
-        //case ObjTypes::Reference:                 return menuCtxRef;
-        //case ObjTypes::RefTreeNode:         return menuCtxRefTreeNode;
-
-        case ObjTypes::CollectionNode:
-            switch (static_cast<CollectionNode*>(object)->collectionType()) {
-
-            case ctBranches:    return menuCtxBranches;
-            case ctTags:        return menuCtxTags;
-            case ctNotes:       return menuCtxNotes;
-            case ctNamespaces:  return menuCtxNamespaces;
-
-            default:            break;
-            }
-            break;
-
-        default:
-            break;
+        default:                    return nullptr;
         }
-
-        return nullptr;
     }
+    #endif
 
 }

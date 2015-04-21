@@ -17,61 +17,66 @@
  *
  */
 
-#include "RepoMan/Branch.hpp"
-#include "RepoMan/Repo.hpp"
+#include "RepoMan/Frontend/Branch.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
+#include "RepoMan/Frontend/Head.hpp"
+
 #include "RepoMan/Events.hpp"
-#include "RepoMan/Head.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Data/BranchData.hpp"
+#include "RepoMan/Data/Branch.hpp"
 
 namespace RM
 {
 
-    using namespace Internal;
-
-    Branch::Branch(Base* parent, const Git::Reference &ref)
-        : Ref( *new BranchPrivate(this, ref) )
+    namespace Frontend
     {
-        RM_D(Branch);
-        d->linkToParent( parent );
-    }
 
-    QString Branch::upstreamRefName() const
-    {
-        RM_CD(Branch);
-        return d->mUpstreamRefName;
-    }
+        #if 0
+        Branch::Branch(Base* parent, const Git::Reference &ref)
+            : Reference( *new Data::Branch(this, ref) )
+        {
+            RM_D(Branch);
+            d->linkToParent( parent );
+        }
 
-    Ref* Branch::upstream()
-    {
-        return repository()->findReference(upstreamRefName());
-    }
+        QString Branch::upstreamRefName() const
+        {
+            RM_CD(Branch);
+            return d->mUpstreamRefName;
+        }
 
-    bool Branch::hasUpstream() const
-    {
-        RM_CD(Branch);
-        return d->mHasUpstream;
-    }
+        Reference Branch::upstream()
+        {
+            return repository().findReference(upstreamRefName());
+        }
 
-    int Branch::aheadCount() const
-    {
-        RM_CD(Branch);
-        return d->mAheadCount;
-    }
+        bool Branch::hasUpstream() const
+        {
+            RM_CD(Branch);
+            return d->mHasUpstream;
+        }
 
-    int Branch::behindCount() const
-    {
-        RM_CD(Branch);
-        return d->mBehindCount;
-    }
+        int Branch::aheadCount() const
+        {
+            RM_CD(Branch);
+            return d->mAheadCount;
+        }
 
-    bool Branch::isHead() const
-    {
-        const Repo* r = repository();
-        const Head* h = r ? r->head() : NULL;
-        return h && h->is(this);
+        int Branch::behindCount() const
+        {
+            RM_CD(Branch);
+            return d->mBehindCount;
+        }
+
+        bool Branch::isHead() const
+        {
+            const Repo* r = repository();
+            const Head* h = r ? r->head() : NULL;
+            return h && h->is(this);
+        }
+        #endif
     }
 
 }

@@ -19,36 +19,34 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "libMacGitverCore/RepoMan/Data/Base.hpp"
 
-#include "RepoMan/CollectionNode.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
+#include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
+
+#include "hic_RepoManActions.h"
+
+#if 0 // ###DEAD
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class CollectionNodePrivate : public BasePrivate
+        class RepoMan : private RepoManActions
         {
         public:
-            CollectionNodePrivate(CollectionNode* _pub, CollectionTypes _ctype);
+            RepoMan(RepoMan* _pub);
+
+            Heaven::Menu* contextMenuFor(Base* object);
 
         public:
-            ObjTypes objType() const;
-            bool refreshSelf();
-            void postCreation();
-            void preTerminate();
-            QString displayName() const;
-            void dumpSelf(Dumper& dumper) const;
-            QString objectTypeName() const;
-            Heaven::IconRef icon(bool small) const;
-            bool inherits(ObjTypes type) const;
-
-        public:
-            CollectionTypes ctype;
+            Repo::List      repos;
+            Repo*           activeRepo;
         };
 
     }
 
 }
+#endif

@@ -17,14 +17,11 @@
  *
  */
 
-#include "RepoMan/Data/BaseData.hpp"
-#include "RepoMan/Data/RefTreeNodeData.hpp"
-#include "RepoMan/Data/CollectionNodeData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Base.hpp"
-#include "RepoMan/Repo.hpp"
+#include "RepoMan/Frontend/Base.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
 
-#include "RepoMan/Events.hpp"
 #include "RepoMan/Private/Dumper.hpp"
 
 #include "libHeavenIcons/IconRef.hpp"
@@ -32,88 +29,17 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        BasePrivate::BasePrivate(Base* pub)
-            : mPub(pub)
-            , mRepo(NULL)
-            , mParentObj(NULL)
+        Base::Base()
+            : mRepo()
+            , mParent()
         {
-            Q_ASSERT(mPub);
         }
 
-        BasePrivate::~BasePrivate()
+        Base::~Base()
         {
-            // THIS _IS_ IMPORTANT
-            // We forbid by definition that any RM::* object may be destroyed _before_ it is unlinked
-            // from its parent. Otherwise, events cannot be triggered correctly.
-            Q_ASSERT(mChildren.count() == 0);
-            Q_ASSERT(mParentObj == NULL);
-            Q_ASSERT(mRepo == NULL);
-        }
-
-        /**
-         * @brief       Child-part of linking into the tree
-         *
-         * @param[in]   parent  The parent to link into
-         *
-         * This method is called directly from the constructor. It establishes a relationship with the
-         * parent object. This relationship can never be altered.
-         *
-         */
-        void BasePrivate::linkToParent(Base* parent)
-        {
-            if (parent) {
-                mParentObj = parent->mData;
-                mParentObj->addChildObject(mPub);
-                mRepo = searchRepository();
-                refreshSelf();
-                postCreation();
-            }
-        }
-
-        /**
-         * @internal
-         * @brief       Child-Part of unlinking from the tree
-         *
-         * Invokes the parent part on the parent side and then cleans up the reference to the parent.
-         */
-        void BasePrivate::unlinkFromParent()
-        {
-            if (mParentObj) {
-                mParentObj->removeChildObject(mPub);
-                mParentObj = NULL;
-                mRepo = NULL;
-            }
-        }
-
-        /**
-         * @internal
-         * @brief       Parent-part of linking a new child
-         *
-         * We cannot do any special processing, since the child object is not yet fully constructed. We
-         * just fill the internal structure.
-         *
-         * @param[in]   object  The new child object that shall be linked in.
-         */
-        void BasePrivate::addChildObject(Base* object)
-        {
-            Q_ASSERT(object);
-            Q_ASSERT(!mChildren.contains(object));
-            mChildren.append(object);
-        }
-
-        /**
-         * @internal
-         * @brief       Parent-part of unlinking a child from the parent
-         *
-         * @param[in]   object  The child that is to be removed from the parent
-         */
-        void BasePrivate::removeChildObject(Base* object)
-        {
-            Q_ASSERT(mChildren.contains(object));
-            mChildren.removeOne(object);
         }
 
         /**
@@ -125,22 +51,27 @@ namespace RM
          * @param[in]   dumper  The dumper to output to
          *
          */
-        void BasePrivate::dumpRecursive(Dumper& dumper) const
+        void Base::dumpRecursive(Internal::Dumper& dumper) const
         {
             dumpSelf(dumper);
 
             dumper.indent();
-            foreach(Base* child, mChildren) {
-                child->mData->dumpRecursive(dumper);
-            }
+            dumpChildren(dumper);
             dumper.dedent();
         }
 
-        QString BasePrivate::displayName() const
+        void Base::dumpChildren(Internal::Dumper& dumper) const
+        {
+            Q_UNUSED(dumper);
+            /* Nothinng to do for base class */
+        }
+
+        QString Base::displayName() const
         {
             return QStringLiteral("<Unknown>");
         }
 
+        #if 0 // ###REPOMAN
         /**
          * @brief       Refresh this object
          *
@@ -158,7 +89,7 @@ namespace RM
          * probably never have to return `false`.
          *
          */
-        void BasePrivate::refresh()
+        void Base::refresh()
         {
             if (!refreshSelf()) {
                 // If refresh self returned false, we are no longer valid and will now destroy
@@ -181,7 +112,7 @@ namespace RM
             }
         }
 
-        void BasePrivate::postRefresh()
+        void Base::postRefresh()
         {
         }
 
@@ -197,7 +128,7 @@ namespace RM
          * more children (i.e. RefTreeNode).
          *
          */
-        bool BasePrivate::refreshCheckDispensable()
+        bool Base::refreshCheckDispensable()
         {
             return false;
         }
@@ -213,7 +144,7 @@ namespace RM
          * The base implementation simply does nothing.
          *
          */
-        void BasePrivate::preRefreshChildren()
+        void Base::preRefreshChildren()
         {
         }
 
@@ -226,7 +157,7 @@ namespace RM
          * The base implementation simply does nothing.
          *
          */
-        void BasePrivate::postRefreshChildren()
+        void Base::postRefreshChildren()
         {
         }
 
@@ -241,7 +172,7 @@ namespace RM
          * 4. finally it deletes itself. Deleting is not defered; the object is gone immediately.
          *
          */
-        void BasePrivate::terminateObject()
+        void Base::terminateObject()
         {
             foreach (Base* child, mChildren) {
                 child->mData->terminateObject();
@@ -263,7 +194,7 @@ namespace RM
          * phase or not.
          *
          */
-        bool BasePrivate::repoEventsBlocked()
+        bool Base::repoEventsBlocked()
         {
             Q_ASSERT(mRepo);
             return mRepo->isInitializing();
@@ -277,7 +208,7 @@ namespace RM
          *
          * The base implementation will send out a objectAboutToDelete() event.
          */
-        void BasePrivate::preTerminate()
+        void Base::preTerminate()
         {
             if (!repoEventsBlocked()) {
                 Events::self()->objectAboutToBeDeleted(repository(), mPub);
@@ -296,25 +227,27 @@ namespace RM
          * Note that no events should be sent out, if repoEventsBlocked() returns `true`.
          *
          */
-        void BasePrivate::postCreation()
+        void Base::postCreation()
         {
             if (!repoEventsBlocked()) {
                 Events::self()->objectCreated(repository(), mPub);
             }
         }
+        #endif
 
+        #if 0   // ###REPOMAN move to RefreshService
         /**
          * @brief       Find the parent for a Ref.
          *
          * @param[in]   scopes  List of scopes to search for or to create.
          *
          * @param[in]   create  If `true` and @a path is not empty, a reference tree node will be
-         *                      created, if none is found. If `false`, `NULL` will be returned.
+         *                      created, if none is found. If `false`, `nullptr` will be returned.
          *
          * @return      If @a scopes is empty, `this` is returned. Otherwise findRefTreeNode() is called
          *              to either find or create a RefTreeNode, which will be returned.
          */
-        Base* BasePrivate::findRefParent(const QStringList& scopes, bool create)
+        Base* Base::findRefParent(const QStringList& scopes, bool create)
         {
             if (scopes.isEmpty()) {
                 return mPub;
@@ -330,22 +263,22 @@ namespace RM
          * @param[in]   scopes  List of scopes to search for or to create. Must not be empty.
          *
          * @param[in]   create  If `true` and a part of the tree node cannot be found, it will be
-         *                      created. If `false`, `NULL` will be returned in that case.
+         *                      created. If `false`, `nullptr` will be returned in that case.
          *
          * @return      If @a create is `true`, a valid RefTreeNode is returned. If @a create is
-         *              `false`, `NULL` will be returned in case the path cannot be found.
+         *              `false`, `nullptr` will be returned in case the path cannot be found.
          */
-        RefTreeNode* BasePrivate::findRefTreeNode(const QStringList &scopes, bool create)
+        RefTreeNode* Base::findRefTreeNode(const QStringList &scopes, bool create)
         {
             if (scopes.isEmpty()) {
-                return NULL;
+                return nullptr;
             }
 
             Base* current = mPub;
 
             foreach (QString scope, scopes) {
                 RefTreeNode::List nodes = current->childObjects<RefTreeNode>();
-                RefTreeNode* next = NULL;
+                RefTreeNode* next = nullptr;
 
                 foreach(RefTreeNode* child, nodes) {
                     if (child->name() == scope) {
@@ -360,7 +293,7 @@ namespace RM
                         next = new RefTreeNode(current, scope);
                     }
                     else {
-                        return NULL;
+                        return nullptr;
                     }
                 }
 
@@ -370,8 +303,7 @@ namespace RM
             return static_cast< RefTreeNode* >(current);
         }
 
-
-        CollectionNode* BasePrivate::getOrCreateCollection(CollectionTypes ctype)
+        CollectionNode* Base::getOrCreateCollection(CollectionTypes ctype)
         {
             CollectionNode* cn;
 
@@ -383,29 +315,32 @@ namespace RM
 
             return new CollectionNode(ctype, mPub);
         }
+        #endif
 
-        Repo* BasePrivate::searchRepository()
-        {
-            if (!mRepo) {
-                if (mParentObj) {
-                    mRepo = mParentObj->repository();
-                }
-                else {
-                    return NULL;
-                }
-            }
-            return mRepo;
-        }
-
-        Heaven::IconRef BasePrivate::icon(bool small) const
+        Heaven::IconRef Base::icon(bool small) const
         {
             QString size = small ? QStringLiteral("@16") : QStringLiteral("@24");
             return Heaven::IconRef::fromString(QChar(L'#') % objectTypeName() % size);
         }
 
-        bool BasePrivate::inherits(ObjTypes type) const
+        bool Base::inherits(ObjTypes type) const
         {
             return false;
+        }
+
+        Base::WList Base::children() const
+        {
+            return Base::WList();
+        }
+
+        std::weak_ptr<Repo> Base::repository() const
+        {
+            return mRepo;
+        }
+
+        std::shared_ptr<Base> Base::parent() const
+        {
+            return mParent.lock();
         }
 
     }

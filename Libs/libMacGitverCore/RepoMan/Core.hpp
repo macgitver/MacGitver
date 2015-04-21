@@ -40,23 +40,28 @@ namespace RM
     {
         Invalid,
 
-        CollectionNode,
         Namespace,
-        RepoManager,
-
-        // repositories
         Repo,
         Remote,
         Submodule,
         Head,
-
-        // references
         Branch,
         Reference,
         RefTreeNode,
         Tag,
-
         RefLog
     };
+
+    namespace Frontend
+    {
+        class Repo;
+        class RefTreeNode;
+        class Namespace;
+        class Reference;
+        class Remote;
+        class RefLog;
+        class Submodule;
+        class Tag;
+    }
 
 }

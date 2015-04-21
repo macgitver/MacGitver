@@ -19,35 +19,39 @@
 
 #pragma once
 
-#include "Base.hpp"
-#include "CollectionNode.hpp"
+#include "RepoMan/Data/Repo.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Backend
     {
-        class NamespacePrivate;
+
+        class RepoLocker
+        {
+        public:
+            RepoLocker() = delete;
+            RepoLocker(const RepoLocker&) = delete;
+
+            inline RepoLocker(const Data::Repo::SPtr& p)
+                : d(p)
+            {
+                if (d) {
+                    d->mutex().lock();
+                }
+            }
+
+            inline ~RepoLocker()
+            {
+                if (d) {
+                    d->mutex().unlock();
+                }
+            }
+
+        private:
+            Data::Repo::SPtr d;
+        };
+
     }
-
-    class MGV_CORE_API Namespace : public Base
-    {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Namespace;
-        typedef Internal::NamespacePrivate Private;
-        typedef QVector< Namespace* > List;
-
-    public:
-        Namespace(Base* parent, const QString& _name);
-
-    public:
-        QString name() const;
-
-    public:
-        CollectionNode* branches();
-        CollectionNode* namespaces();
-        CollectionNode* notes();
-        CollectionNode* tags();
-    };
 
 }

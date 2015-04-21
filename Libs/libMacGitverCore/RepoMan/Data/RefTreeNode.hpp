@@ -19,29 +19,38 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/RefLog.hpp"
+#include "RepoMan/Frontend/RefTreeNode.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class RefLogPrivate : public BasePrivate
+        class RefTreeNode
+                : public Base
         {
         public:
-            RefLogPrivate(RefLog* _pub);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::RefTreeNode;
+
+        public:
+            RefTreeNode(RefTreeNode* _pub, const QString& _name);
 
         public:
             ObjTypes objType() const;
             bool refreshSelf();
             void postCreation();
             void preTerminate();
+            bool refreshCheckDispensable();
+            QString displayName() const;
             void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
+
+        public:
+            QString name;
         };
 
     }

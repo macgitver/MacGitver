@@ -23,75 +23,90 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Ref.hpp"
-#include "RepoMan/Repo.hpp"
+#include "RepoMan/Frontend/BaseInternal.hpp"
+#include "RepoMan/Frontend/Reference.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
+
+#include "RepoMan/Data/Reference.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Data/RefData.hpp"
 
 namespace RM
 {
 
-    //-- Ref --8>
-
-    Ref::Ref(Internal::RefPrivate& data)
-        : Base( data )
+    namespace Frontend
     {
-    }
 
-    Ref::Ref(Base* parent, RefTypes type, const Git::Reference& ref)
-        : Base( *new Internal::RefPrivate( this, type, ref ) )
-    {
-        RM_D( Ref );
-        d->linkToParent( parent );
-    }
+        #if 0
 
-    RefTypes Ref::type() const
-    {
-        RM_CD(Ref);
-        return d->mType;
-    }
-
-    QString Ref::name() const
-    {
-        RM_CD(Ref);
-        return d->mName;
-    }
-
-    QString Ref::fullName() const
-    {
-        RM_CD(Ref);
-        return d->mFullQualifiedName;
-    }
-
-    Git::ObjectId Ref::id() const
-    {
-        RM_CD(Ref);
-        return d->mId;
-    }
-
-    QString Ref::displaySha1() const
-    {
-        return id().toString(8);
-    }
-
-    Git::Reference Ref::load(Git::Result& r)
-    {
-        RM_D(Ref);
-        Git::Reference gitRef;
-
-        if (r) {
-            Git::Repository repo = repository()->gitRepo();
-            gitRef = repo.reference(r, d->mFullQualifiedName);
+        Reference::Reference(Data::Reference* data)
+            : Base(data)
+        {
         }
 
-        return gitRef;
+        Reference::Reference(Base* parent, RefTypes type, const Git::Reference& ref)
+            : Base( *new Internal::RefPrivate( this, type, ref ) )
+        {
+            RM_D(Reference);
+            d->linkToParent( parent );
+        }
+        #endif
+
+        RefTypes Reference::type() const
+        {
+            DPtrT<const Reference> d(this);
+            return d->mType;
+        }
+
+        QString Reference::name() const
+        {
+            DPtrT<const Reference> d(this);
+            return d->mName;
+        }
+
+        QString Reference::fullName() const
+        {
+            DPtrT<const Reference> d(this);
+            return d->mFullQualifiedName;
+        }
+
+        Git::ObjectId Reference::id() const
+        {
+            DPtrT<const Reference> d(this);
+            return d->mId;
+        }
+
+        QString Reference::displaySha1() const
+        {
+            return id().toString(8);
+        }
+
+        #if 0
+
+        Git::Reference Reference::load(Git::Result& r)
+        {
+            RM_D(Ref);
+            Git::Reference gitRef;
+
+            if (r) {
+                Git::Repository repo = repository()->gitRepo();
+                gitRef = repo.reference(r, d->mFullQualifiedName);
+            }
+
+            return gitRef;
+        }
+
+        #endif
+
     }
 
-    namespace Internal
+
+    namespace Data
     {
 
-        RefPrivate::RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref)
+        #if 0
+
+        ReferencePrivate::ReferencePrivate(Reference* pub, RefTypes type, const Git::Reference& ref)
             : BasePrivate( pub )
             , mType( type )
             , mFullQualifiedName( ref.name() )
@@ -100,36 +115,36 @@ namespace RM
         {
         }
 
-        void RefPrivate::dumpSelf(Internal::Dumper& dumper) const
+        void ReferencePrivate::dumpSelf(Internal::Dumper& dumper) const
         {
             dumper.addLine(QString(QStringLiteral("Ref 0x%1 [%2]"))
                            .arg(quintptr(mPub),0,16)
                            .arg(mName));
         }
 
-        ObjTypes RefPrivate::objType() const
+        ObjTypes ReferencePrivate::objType() const
         {
             return ObjTypes::Reference;
         }
 
-        QString RefPrivate::displayName() const
+        QString ReferencePrivate::displayName() const
         {
             return mName;
         }
 
-        QString RefPrivate::objectTypeName() const
+        QString ReferencePrivate::objectTypeName() const
         {
             return QStringLiteral("Ref");
         }
 
-        bool RefPrivate::inherits(ObjTypes type) const
+        bool ReferencePrivate::inherits(ObjTypes type) const
         {
             return type == ObjTypes::Reference || BasePrivate::inherits(type);
         }
 
-        void RefPrivate::postCreation()
+        void ReferencePrivate::postCreation()
         {
-            RM_P(Ref);
+            RM_P(Reference);
 
             if (!repoEventsBlocked()) {
                 Events::self()->refCreated(repository(), p);
@@ -138,9 +153,9 @@ namespace RM
             BasePrivate::postCreation();
         }
 
-        void RefPrivate::preTerminate()
+        void ReferencePrivate::preTerminate()
         {
-            RM_P(Ref);
+            RM_P(Reference);
 
             if ( !repoEventsBlocked() ) {
                 Events::self()->refAboutToBeDeleted(repository(), p);
@@ -149,14 +164,14 @@ namespace RM
             BasePrivate::preTerminate();
         }
 
-        void RefPrivate::emitMoved()
+        void ReferencePrivate::emitMoved()
         {
             if (!repoEventsBlocked()) {
                 Events::self()->refMoved(repository(), pub<Ref>());
             }
         }
 
-        bool RefPrivate::refreshDetails(const Git::Reference& ref)
+        bool ReferencePrivate::refreshDetails(const Git::Reference& ref)
         {
             Git::ObjectId id = ref.objectId();
 
@@ -170,7 +185,7 @@ namespace RM
             return true;
         }
 
-        bool RefPrivate::refreshSelf()
+        bool ReferencePrivate::refreshSelf()
         {
             Git::Result     r;
             Repo*           repo        = repository();          Q_ASSERT( repo );
@@ -187,6 +202,8 @@ namespace RM
 
             return true;
         }
+
+        #endif
 
     }
 

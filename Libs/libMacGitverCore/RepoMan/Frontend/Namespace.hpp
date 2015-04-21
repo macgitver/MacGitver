@@ -19,33 +19,40 @@
 
 #pragma once
 
-#include <QCoreApplication>
-
-#include "Base.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Base.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
-        class CollectionNodePrivate;
+        class Namespace;
     }
 
-    class MGV_CORE_API CollectionNode : public Base
+    namespace Frontend
     {
-        Q_DECLARE_TR_FUNCTIONS(RM_CollectionNode)
 
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::CollectionNode;
-        typedef Internal::CollectionNodePrivate Private;
-        typedef QVector< CollectionNode* > List;
+        class MGV_CORE_API Namespace : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Namespace;
+            typedef Data::Namespace Private;
+            typedef QVector<Namespace> List;
 
-    public:
-        CollectionNode(CollectionTypes _ctype, Base* parent);
+        public:
+            Namespace(Base* parent, const QString& _name);
 
-    public:
-        CollectionTypes collectionType() const;
-        QString collectionTypeName() const;
-    };
+        public:
+            QString name() const;
+
+        #if 0 // ###DEAD
+        public:
+            CollectionNode* branches();
+            CollectionNode* namespaces();
+            CollectionNode* notes();
+            CollectionNode* tags();
+        #endif
+        };
+    }
 
 }

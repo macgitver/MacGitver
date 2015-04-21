@@ -19,38 +19,31 @@
 
 #pragma once
 
-#include "libMacGitverCore/RepoMan/Data/BaseData.hpp"
-
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
-#include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
-
-#include "hic_RepoManActions.h"
+#include "libMacGitverCore/RepoMan/Frontend/Reference.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Frontend
     {
 
-        class RepoManPrivate : public BasePrivate, private RepoManActions
+        class MGV_CORE_API Tag : public Reference
         {
         public:
-            RepoManPrivate(RepoMan* _pub);
+            static const ObjTypes StaticObjectType = ObjTypes::Tag;
+            typedef QVector<Tag> List;
 
         public:
+            Tag(Base* _parent, const Git::Reference& _ref);
+
+        public:
+
+        private:
             ObjTypes objType() const;
-            bool refreshSelf();
             void preTerminate();
-            QString displayName() const;
             void dumpSelf(Internal::Dumper& dumper) const;
-            QString objectTypeName() const;
 
-            Heaven::Menu* contextMenuFor(Base* object);
-
-        public:
-            Repo::List      repos;
-            Repo*           activeRepo;
+        private:
         };
 
     }

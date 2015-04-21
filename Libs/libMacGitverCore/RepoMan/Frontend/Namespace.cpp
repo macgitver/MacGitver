@@ -19,57 +19,63 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Namespace.hpp"
+#include "RepoMan/Frontend/Namespace.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Data/NamespaceData.hpp"
+#include "RepoMan/Data/Namespace.hpp"
 
 namespace RM
 {
 
-    using namespace Internal;
-
-    Namespace::Namespace(Base* _parent, const QString& _name)
-        : Base(*new NamespacePrivate(this, _name))
+    namespace Frontend
     {
-        RM_D(Namespace);
-        d->linkToParent(_parent);
+
+        #if 0
+        Namespace::Namespace(Base* _parent, const QString& _name)
+            : Base(*new NamespacePrivate(this, _name))
+        {
+            RM_D(Namespace);
+            d->linkToParent(_parent);
+        }
+
+        CollectionNode* Namespace::branches()
+        {
+            RM_D(Namespace);
+
+            return d->getOrCreateCollection( ctBranches );
+        }
+
+        CollectionNode* Namespace::tags()
+        {
+            RM_D(Namespace);
+            return d->getOrCreateCollection( ctTags );
+        }
+
+        CollectionNode* Namespace::namespaces()
+        {
+            RM_D(Namespace);
+
+            return d->getOrCreateCollection( ctNamespaces );
+        }
+
+        CollectionNode* Namespace::notes()
+        {
+            RM_D(Namespace);
+
+            return d->getOrCreateCollection( ctNotes );
+        }
+
+        QString Namespace::name() const
+        {
+            RM_D(Namespace);
+
+            return d->name;
+        }
+        #endif
+
     }
 
-    CollectionNode* Namespace::branches()
-    {
-        RM_D(Namespace);
-
-        return d->getOrCreateCollection( ctBranches );
-    }
-
-    CollectionNode* Namespace::tags()
-    {
-        RM_D(Namespace);
-        return d->getOrCreateCollection( ctTags );
-    }
-
-    CollectionNode* Namespace::namespaces()
-    {
-        RM_D(Namespace);
-
-        return d->getOrCreateCollection( ctNamespaces );
-    }
-
-    CollectionNode* Namespace::notes()
-    {
-        RM_D(Namespace);
-
-        return d->getOrCreateCollection( ctNotes );
-    }
-
-    QString Namespace::name() const
-    {
-        RM_D(Namespace);
-
-        return d->name;
-    }
-
+#if 0
     //-- NamespacePrivate --------------------------------------------------------------------------
 
     NamespacePrivate::NamespacePrivate(Namespace* _pub, const QString& _name)
@@ -127,5 +133,7 @@ namespace RM
     {
         return type == ObjTypes::Namespace || BasePrivate::inherits(type);
     }
+
+    #endif
 
 }

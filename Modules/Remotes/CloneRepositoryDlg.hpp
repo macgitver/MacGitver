@@ -89,13 +89,9 @@ private slots:
     void doneCheckout();
     void rootCloneFinished();
 
-private:
-    void updateAction();
 
 private:
     ProgressDlg*                mProgress = nullptr;
-    QString                     mAction;
-    QHash< Tasks, State >       mStates;
 
     QPointer<CloneWdgt>         mCloneWdgt;
     QPointer<CloneOptionsWdgt>  mCloneOptsWdgt;

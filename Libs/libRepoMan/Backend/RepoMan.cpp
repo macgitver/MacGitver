@@ -19,6 +19,8 @@
 
 #include "libRepoMan/Backend/RepoMan.hpp"
 
+#include "libLogger/Manager.hpp"
+
 #include <QThread>
 #include <QPointer>
 
@@ -42,6 +44,8 @@ namespace RM
         {
             moveToThread(mWorkerThread);
             mWorkerThread->start();
+
+            setupLogging();
         }
 
         RepoMan& RepoMan::instance()
@@ -52,6 +56,27 @@ namespace RM
         QThread* RepoMan::workerThread()
         {
             return repoMan()->mWorkerThread;
+        }
+
+        void RepoMan::setupLogging()
+        {
+            mGitErrorChannel = Log::Channel::create(tr("Git Errors"));
+
+            Log::Manager().addChannel(mGitErrorChannel);
+
+            mGitErrorTemplate = Log::Template::create(tr("Git Errors"));
+            mGitErrorTemplate.setTransformation(tr("$$ caused a git error: $gwerror$"));
+            Log::Manager().addTemplate(mGitErrorTemplate);
+        }
+
+        Log::Channel RepoMan::gitErrorChannel() const
+        {
+            return mGitErrorChannel;
+        }
+
+        Log::Template RepoMan::gitErrorTemplate() const
+        {
+            return mGitErrorTemplate;
         }
 
     }

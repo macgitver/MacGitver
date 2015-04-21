@@ -24,6 +24,7 @@ INCLUDE(cmake/CfgComp.cmake)
 
 IF(NOT MSVC)
     GCC_ADD_FLAG("-std=c\\\\+\\\\+11")
+    GCC_ADD_FLAG("-stdlib=libc\\\\+\\\\+")
 ENDIF()
 
 IF(UNIX)

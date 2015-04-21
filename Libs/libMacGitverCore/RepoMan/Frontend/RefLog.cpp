@@ -17,10 +17,11 @@
  *
  */
 
-#include "RepoMan/RefLog.hpp"
+#include "RepoMan/Frontend/RefLog.hpp"
+
+#include "RepoMan/Data/RefLog.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Data/RefLogData.hpp"
 
 namespace RM
 {
@@ -28,12 +29,14 @@ namespace RM
     namespace Frontend
     {
 
+        #if 0
         RefLog::RefLog(Base* _parent)
-            : Base(*new Internal::RefLogPrivate(this))
+            : Base(*new Data::RefLog(this))
         {
             RM_D(RefLog);
             d->linkToParent(_parent);
         }
+        #endif
 
     }
 

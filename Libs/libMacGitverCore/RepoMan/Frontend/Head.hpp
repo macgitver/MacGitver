@@ -19,26 +19,24 @@
 
 #pragma once
 
-#include "RepoMan/Base.hpp"
-#include "RepoMan/Branch.hpp"
+#include "RepoMan/Frontend/Branch.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
-        class HeadPrivate;
+        class Head;
     }
 
     namespace Frontend
     {
-
         class MGV_CORE_API Head : public Base
         {
         public:
             static const ObjTypes StaticObjectType = ObjTypes::Head;
-            typedef Internal::HeadPrivate Private;
-            typedef QVector< Head* > List;
+            typedef Data::Head Private;
+            typedef QVector<Head> List;
 
         public:
             Head(const Git::Repository& repo, Base* parent);
@@ -54,7 +52,5 @@ namespace RM
         };
 
     }
-
-    using Head = Frontend::Head;
 
 }

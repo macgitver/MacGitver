@@ -19,22 +19,26 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Remote.hpp"
+#include "RepoMan/Frontend/Remote.hpp"
 
 namespace RM
 {
 
-    class Head;
-
-    namespace Internal
+    namespace Data
     {
 
-        class RemotePrivate : public BasePrivate
+        class Head;
+
+        class Remote
+                : public Base
         {
         public:
-            RemotePrivate(Remote* _pub, const Git::Remote& _obj);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Remote;
+
+        public:
+            Remote(Remote* _pub, const Git::Remote& _obj);
 
         public:
             ObjTypes objType() const;

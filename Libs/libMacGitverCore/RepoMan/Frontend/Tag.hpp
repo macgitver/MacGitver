@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "Ref.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Reference.hpp"
 
 namespace RM
 {
@@ -27,11 +27,11 @@ namespace RM
     namespace Frontend
     {
 
-        class MGV_CORE_API Tag : public Ref
+        class MGV_CORE_API Tag : public Reference
         {
         public:
             static const ObjTypes StaticObjectType = ObjTypes::Tag;
-            typedef QVector< Tag* > List;
+            typedef QVector<Tag> List;
 
         public:
             Tag(Base* _parent, const Git::Reference& _ref);
@@ -49,3 +49,4 @@ namespace RM
     }
 
 }
+

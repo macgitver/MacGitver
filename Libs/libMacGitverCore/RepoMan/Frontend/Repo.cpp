@@ -17,24 +17,29 @@
  *
  */
 
-#include <QDebug>
-#include <QTimer>
-
-#include "libMacGitverCore/App/MacGitver.hpp"
+#include "libGitWrap/Reference.hpp"
+#include "libGitWrap/ObjectId.hpp"
+#include "libGitWrap/RefName.hpp"
+#include "libGitWrap/Submodule.hpp"
 
 #include "RepoMan/Events.hpp"
-#include "RepoMan/Repo.hpp"
 #include "RepoMan/RepoMan.hpp"
-#include "RepoMan/Head.hpp"
-#include "RepoMan/Remote.hpp"
-#include "RepoMan/Namespace.hpp"
-#include "RepoMan/Ref.hpp"
-#include "RepoMan/Tag.hpp"
-#include "RepoMan/Branch.hpp"
-#include "RepoMan/Submodule.hpp"
 
-#include "RepoMan/Data/RepoData.hpp"
-#include "RepoMan/Data/RemoteData.hpp"
+#include "RepoMan/Frontend/BaseInternal.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
+#include "RepoMan/Frontend/Head.hpp"
+#include "RepoMan/Frontend/Remote.hpp"
+#include "RepoMan/Frontend/Namespace.hpp"
+#include "RepoMan/Frontend/Reference.hpp"
+#include "RepoMan/Frontend/Tag.hpp"
+#include "RepoMan/Frontend/Branch.hpp"
+#include "RepoMan/Frontend/Submodule.hpp"
+
+#include "RepoMan/Data/Repo.hpp"
+#include "RepoMan/Data/Head.hpp"
+#include "RepoMan/Data/Remote.hpp"
+
+#include <QDebug>
 
 namespace RM
 {
@@ -42,26 +47,17 @@ namespace RM
     namespace Frontend
     {
 
-        Repo::Repo(Internal::RepoPrivate& _d)
-            : Base(_d)
+        Repo::Repo(const std::shared_ptr<Data::Repo>& d)
+            : Base(std::move(std::shared_ptr<Data::Base>(d)))
         {
         }
 
-        Repo::Repo(const Git::Repository& repo, Base* parent)
-            : Base( *new Internal::RepoPrivate(this, repo) )
-        {
-            RM_D(Repo);
-
-            d->linkToParent(parent);
-            d->refresh();
-
-            d->mIsInitializing = false;
-        }
-
-        Repo::~Repo()
+        Repo::Repo(std::shared_ptr<Data::Repo>&& d)
+            : Base(std::shared_ptr<Data::Base>(std::move(d)))
         {
         }
 
+#if 0
         Git::Repository Repo::gitRepo()
         {
             RM_D(Repo);
@@ -73,115 +69,92 @@ namespace RM
             RM_D(Repo);
             return d->gitRepo();
         }
+#endif
 
         QString Repo::path() const
         {
-            RM_CD(Repo);
-
-            return d->mPath;
+            DPtrT<const Repo> d(this);
+            return d->path();
         }
 
         bool Repo::isSubModule() const
         {
-            RM_CD(Repo);
-
+            DPtrT<const Repo> d(this);
             return d->mIsSubModule;
         }
 
         bool Repo::isBare() const
         {
-            RM_CD(Repo);
-
+            DPtrT<const Repo> d(this);
             return d->mIsBare;
         }
 
         bool Repo::isLoaded() const
         {
-            RM_CD(Repo);
-
+            DPtrT<const Repo> d(this);
             return d->mIsLoaded;
         }
 
         bool Repo::isActive() const
         {
-            RM_CD(Repo);
-
-            return d->mIsActive;
+            DPtrT<const Repo> d(this);
+            return d && d->mIsActive;
         }
 
-        /**
-         * @brief       Are we in initialization phase?
-         *
-         * @return      `true` if we're still doing an initial seed with repository objects. In this
-         *              case no events for new or changed objects shall be sent out to any listeners.
-         *
-         */
-        bool Repo::isInitializing() const
+        Repo Repo::parentRepository()
         {
-            RM_CD(Repo);
-
-            return d->mIsInitializing;
-        }
-
-        Repo* Repo::parentRepository()
-        {
-            Base* p = parentObject();
-
-            if (!p) {
-                return NULL;
-            }
-
-            if (p->inheritsRepoManType(ObjTypes::Repo)) {
-                return static_cast<Repo*>(p);
-            }
-
-            return NULL;
+            DPtrT<Repo> d(this);
+            return d->parent()->as<Data::Repo>();
         }
 
         Repo::List Repo::submodules() const
         {
-            return childObjects<Repo>();
+            DPtrT<const Repo> d(this);
+            return toFrontend<Repo>(d->submodules());
         }
 
         void Repo::activated()
         {
-            // ### Should be very private
-            RM_D(Repo);
+            DPtrT<Repo> d(this);
+
             Q_ASSERT(!d->mIsActive);
 
+#if 0
             if (d->mUnloadTimer) {
                 d->mUnloadTimer->stop();
                 d->mUnloadTimer->deleteLater();
                 d->mUnloadTimer = NULL;
             }
-
+#endif
             d->mIsActive = true;
         }
 
         void Repo::deactivated()
         {
-            // ### Should be very private
-            RM_D(Repo);
-            Q_ASSERT(d->mIsActive);
+            DPtrT<Repo> d(this);
 
+            Q_ASSERT(d->mIsActive);
+#if 0
             Q_ASSERT(!d->mUnloadTimer);
+
             d->mUnloadTimer = new QTimer(this);
             connect(d->mUnloadTimer, SIGNAL(timeout()), this, SLOT(unloadTimer()));
             d->mUnloadTimer->setInterval(15 * 60 * 1000); // quarter of an hour
             d->mUnloadTimer->start();
+#endif
 
             d->mIsActive = false;
         }
 
         QString Repo::displayAlias() const
         {
-            RM_CD(Repo);
-
+            DPtrT<const Repo> d(this);
             return d->mDisplayAlias;
         }
 
         void Repo::setDisplayAlias(const QString& alias)
         {
+#if 0
             RM_D(Repo);
 
             if (d->mDisplayAlias != alias) {
@@ -189,16 +162,20 @@ namespace RM
                 // ###REPOMAN Create new Event "RepoAliasChanged"
                 // emit aliasChanged(alias);
             }
+#endif
         }
 
+#if 0
         void Repo::unloadTimer()
         {
             RM_D(Repo);
             d->unload();
         }
+#endif
 
         void Repo::close()
         {
+            #if 0
             RM_D(Repo);
 
             if (d->mIsActive) {
@@ -212,29 +189,31 @@ namespace RM
             }
 
             d->terminateObject();
+            #endif
         }
 
         QString Repo::branchDisplay() const
         {
             // TODO: This method is totally wrong placed here
-            RM_D(Repo);
+            DPtrT<const Repo> d(this);
 
             if (d->mIsLoaded && d->mHead) {
 
                 if (d->mHead->isDetached()) {
-                    return tr("detached at <b>%1</b>" ).arg(d->mHead->detachedId().toString());
+                    return QObject::tr("detached at <b>%1</b>" ).arg(d->mHead->detachedId().toString());
                 }
 
                 if (d->mHead->isUnborn()) {
-                    return tr("<b style=\"color: red;\">Branch yet to be born</b>");
+                    return QObject::tr("<b style=\"color: red;\">Branch yet to be born</b>");
                 }
 
-                return tr("<b style=\"background-color: #FFB54F;"
+                return QObject::tr("<b style=\"background-color: #FFB54F;"
                           "\">%1</b>" ).arg(d->mHead->symbolicName().mid(11));
             }
-            return tr("&lt;unknown&gt;");
+            return QObject::tr("&lt;unknown&gt;");
         }
 
+        #if 0
         Ref* Repo::findReference(const Git::Reference& ref)
         {
             RM_D(Repo);
@@ -276,6 +255,7 @@ namespace RM
             RM_CD(Repo);
             return d->mHead;
         }
+        #endif
 
     }
 

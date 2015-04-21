@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <QString>
+#include "libMacGitverCore/RepoMan/Frontend/Base.hpp"
 
-#include "Base.hpp"
+#include <QString>
 
 namespace RM
 {

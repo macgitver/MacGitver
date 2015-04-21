@@ -19,12 +19,12 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Head.hpp"
+#include "RepoMan/Frontend/Head.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
 
-#include "RepoMan/Data/HeadData.hpp"
+#include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Branch.hpp"
-#include "RepoMan/Repo.hpp"
+#include "RepoMan/Data/Head.hpp"
 
 #include "libGitWrap/Repository.hpp"
 
@@ -34,6 +34,7 @@ namespace RM
     namespace Frontend
     {
 
+        #if 0
         Head::Head(const Git::Repository& repo, Base* parent)
             : Base(*new Internal::HeadPrivate(this, repo))
         {
@@ -79,6 +80,8 @@ namespace RM
 
             return ref && d->symbolicName == ref->fullName();
         }
+
+        #endif
 
     }
 

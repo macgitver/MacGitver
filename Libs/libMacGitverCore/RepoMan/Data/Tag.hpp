@@ -19,20 +19,24 @@
 
 #pragma once
 
-#include "RepoMan/Data/RefData.hpp"
+#include "RepoMan/Data/Reference.hpp"
 
-#include "RepoMan/Tag.hpp"
+#include "RepoMan/Frontend/Tag.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class TagPrivate : public RefPrivate
+        class Tag
+                : public Reference
         {
         public:
-            TagPrivate(Tag* pub, const Git::Reference& _ref);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Tag;
+
+        public:
+            Tag(Tag* pub, const Git::Reference& _ref);
 
         public:
             ObjTypes objType() const;

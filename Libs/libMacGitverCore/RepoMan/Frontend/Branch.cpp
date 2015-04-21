@@ -17,14 +17,15 @@
  *
  */
 
-#include "RepoMan/Branch.hpp"
-#include "RepoMan/Repo.hpp"
+#include "RepoMan/Frontend/Branch.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
+#include "RepoMan/Frontend/Head.hpp"
+
 #include "RepoMan/Events.hpp"
-#include "RepoMan/Head.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Data/BranchData.hpp"
+#include "RepoMan/Data/Branch.hpp"
 
 namespace RM
 {
@@ -32,8 +33,9 @@ namespace RM
     namespace Frontend
     {
 
+        #if 0
         Branch::Branch(Base* parent, const Git::Reference &ref)
-            : Ref( *new Internal::BranchPrivate(this, ref) )
+            : Reference( *new Data::Branch(this, ref) )
         {
             RM_D(Branch);
             d->linkToParent( parent );
@@ -45,9 +47,9 @@ namespace RM
             return d->mUpstreamRefName;
         }
 
-        Ref* Branch::upstream()
+        Reference Branch::upstream()
         {
-            return repository()->findReference(upstreamRefName());
+            return repository().findReference(upstreamRefName());
         }
 
         bool Branch::hasUpstream() const
@@ -74,6 +76,7 @@ namespace RM
             const Head* h = r ? r->head() : NULL;
             return h && h->is(this);
         }
+        #endif
 
     }
 

@@ -17,7 +17,7 @@
  *
  */
 
-#include "RepoMan/Data/NamespaceData.hpp"
+#include "RepoMan/Data/Namespace.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
@@ -26,9 +26,10 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
+        #if 0
         NamespacePrivate::NamespacePrivate(Namespace* _pub, const QString& _name)
             : BasePrivate(_pub)
             , name(_name)
@@ -84,6 +85,7 @@ namespace RM
         {
             return type == ObjTypes::Namespace || BasePrivate::inherits(type);
         }
+        #endif
 
     }
 

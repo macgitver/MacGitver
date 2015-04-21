@@ -19,19 +19,11 @@
 
 #pragma once
 
-#include "RepoMan/Base.hpp"
+#include "RepoMan/Core.hpp"
 
-#define RM_D(CLASS)     Internal::CLASS##Private* d = \
-                            static_cast<Internal::CLASS##Private*>(mData)
-
-#define RM_CD(CLASS)    const Internal::CLASS##Private* d = \
-                            static_cast<const Internal::CLASS##Private*>(mData)
-
-#define RM_P(CLASS)     CLASS* p = \
-                            static_cast<CLASS*>(mPub)
-
-#define RM_CP(CLASS)    const CLASS* p = \
-                            static_cast<const CLASS*>(mPub)
+#include <functional>
+#include <vector>
+#include <memory>
 
 #ifdef _MSVC
 #define const_or_constexpr const
@@ -47,80 +39,102 @@ namespace RM
         class Dumper;
     }
 
-    namespace Internal
+    namespace Frontend
+    {
+        class Base;
+    }
+
+    namespace Data
     {
 
-        class BasePrivate
+        class Repo;
+
+        class Base
+                : public std::enable_shared_from_this<Base>
         {
+        public:
+            using FrontendT = Frontend::Base;
+            using SPtr      = std::shared_ptr<Base>;
+            using WPtr      = std::weak_ptr<Base>;
+            using SList     = std::vector<SPtr>;
+            using WList     = std::vector<WPtr>;
+
+        private:
+            Base(const Base&) = delete;
+            Base& operator=(const Base&) = delete;
+
         protected:
-            BasePrivate(Base* pub);
+            Base();
 
         public:
-            virtual ~BasePrivate();
+            virtual ~Base();
 
         public:
-            Base*           mPub;
-            Repo*           mRepo;
-            BasePrivate*    mParentObj;
-            Base::List      mChildren;
+            void dumpRecursive(Internal::Dumper& dumper) const;
 
-        public:
-            template< class T > T* pub()
-            {
-                return static_cast<T*>(mPub);
-            }
-
-            template< class T > const T* pub() const
-            {
-                return static_cast<const T*>(mPub);
-            }
-
-        public:
-            void dumpRecursive(Dumper& dumper) const;
-
-            void terminateObject();
-            void linkToParent(Base* parent);
-            void unlinkFromParent();
-            void addChildObject(Base *object);
-            void removeChildObject(Base* object);
-            Repo* repository();
-
-            virtual Repo* searchRepository();
-
-            void refresh();
-            bool repoEventsBlocked();
-
-            Base* findRefParent(const QStringList& scopes, bool create);
-            RefTreeNode* findRefTreeNode(const QStringList& scopes, bool create);
-
-            template< class T > static typename T::Private* dataOf(Base* b)
-            {
-                BasePrivate* p = b->mData;
-                if (p->objType() != ObjTypes(T::StaticObjectType)) {
-                    return NULL;
-                }
-                return static_cast<typename T::Private*>(p);
-            }
+            std::weak_ptr<Repo> repository() const;
+            SPtr parent() const;
 
         public:
             virtual QString displayName() const;
             virtual QString objectTypeName() const = 0;
             virtual Heaven::IconRef icon(bool small) const;
-            virtual bool refreshSelf() = 0;
-            virtual void postRefresh();
-            virtual void preRefreshChildren();
-            virtual void postRefreshChildren();
-            virtual void postCreation();
-            virtual void preTerminate();
-            virtual bool refreshCheckDispensable();
             virtual bool inherits(ObjTypes type) const;
             virtual ObjTypes objType() const = 0;
             virtual void dumpSelf(Internal::Dumper& dumper) const = 0;
+            void dumpChildren(Internal::Dumper& dumper) const;
+
+            virtual WList children() const;
+
+            template<typename T>
+            std::shared_ptr<const T> as() const;
+
+            template<typename T>
+            std::shared_ptr<T> as();
+
+        private:
+            std::weak_ptr<Repo> mRepo;
+            std::weak_ptr<Base> mParent;
         };
 
-        inline Repo* BasePrivate::repository()
+        template<typename T>
+        inline std::shared_ptr<const T> Base::as() const
         {
-            return mRepo;
+            if (inherits(T::StaticObjectType)) {
+                return std::shared_ptr<const T>(static_cast<const T*>(this));
+            }
+            return std::shared_ptr<const T>();
+        }
+
+        template<typename T>
+        inline std::shared_ptr<T> Base::as()
+        {
+            if (inherits(T::StaticObjectType)) {
+                return std::shared_ptr<T>(static_cast<T*>(this));
+            }
+            return std::shared_ptr<T>();
+        }
+
+        template<typename T>
+        typename T::SList sharedFromWeakList(const typename T::WList& wlist)
+        {
+            typename T::SList slist;
+            for (const typename T::WPtr& wptr : wlist) {
+                if (auto sptr = wptr.lock()) {
+                    slist.push_back(sptr);
+                }
+            }
+            return slist;
+        }
+
+        template<typename T>
+        typename T::WList weakFromSharedList(const typename T::SList& slist)
+        {
+            typename T::WList wlist;
+            for (const typename T::SPtr& sptr : slist) {
+                wlist.push_back(sptr);
+            }
+            return wlist;
         }
 
     }

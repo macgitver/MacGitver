@@ -19,20 +19,23 @@
 
 #pragma once
 
-#include "RepoMan/Data/RefData.hpp"
+#include "RepoMan/Data/Reference.hpp"
 
-#include "RepoMan/Branch.hpp"
+#include "RepoMan/Frontend/Branch.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class BranchPrivate : public RefPrivate
+        class Branch
+                : public Reference
         {
         public:
-            BranchPrivate(Branch* pub, const Git::Reference& ref);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Branch;
+        public:
+            Branch(Frontend::Branch* pub, const Git::Reference& ref);
 
         public:
             ObjTypes objType() const;

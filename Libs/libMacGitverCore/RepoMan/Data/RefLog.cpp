@@ -17,7 +17,7 @@
  *
  */
 
-#include "RepoMan/Data/RefLogData.hpp"
+#include "RepoMan/Data/RefLog.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
@@ -26,9 +26,10 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
+        #if 0
         RefLogPrivate::RefLogPrivate(RefLog* _pub)
             : BasePrivate(_pub)
         {
@@ -70,6 +71,7 @@ namespace RM
         {
             return type == ObjTypes::RefLog || BasePrivate::inherits(type);
         }
+        #endif
 
     }
 

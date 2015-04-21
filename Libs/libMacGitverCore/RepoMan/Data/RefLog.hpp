@@ -19,20 +19,24 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/RefLog.hpp"
+#include "RepoMan/Frontend/RefLog.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class RefLogPrivate : public BasePrivate
+        class RefLog
+                : public Base
         {
         public:
-            RefLogPrivate(RefLog* _pub);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::RefLog;
+
+        public:
+            RefLog(RefLog* _pub);
 
         public:
             ObjTypes objType() const;

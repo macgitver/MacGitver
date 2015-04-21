@@ -19,20 +19,24 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Head.hpp"
+#include "RepoMan/Frontend/Head.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class HeadPrivate : public BasePrivate
+        class Head
+                : public Base
         {
         public:
-            HeadPrivate(Head* pub, const Git::Repository& ref);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Head;
+
+        public:
+            Head(Frontend::Head* pub, const Git::Repository& ref);
 
         public:
             ObjTypes objType() const;
@@ -43,11 +47,37 @@ namespace RM
             bool inherits(ObjTypes type) const;
 
         public:
-            QString         symbolicName;
-            Git::ObjectId   detachedId;
-            bool            isDetached      : 1;
-            bool            isUnborn        : 1;
+            bool isDetached() const;
+            bool isUnborn() const;
+            Git::ObjectId detachedId() const;
+            QString symbolicName() const;
+
+        private:
+            QString         mSymbolicName;
+            Git::ObjectId   mDetachedId;
+            bool            mIsDetached      : 1;
+            bool            mIsUnborn        : 1;
         };
+
+        inline bool Head::isDetached() const
+        {
+            return mIsDetached;
+        }
+
+        inline bool Head::isUnborn() const
+        {
+            return mIsUnborn;
+        }
+
+        inline Git::ObjectId Head::detachedId() const
+        {
+            return mDetachedId;
+        }
+
+        inline QString Head::symbolicName() const
+        {
+            return mSymbolicName;
+        }
 
     }
 

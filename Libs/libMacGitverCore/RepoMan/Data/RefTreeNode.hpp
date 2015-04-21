@@ -19,20 +19,24 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/RefTreeNode.hpp"
+#include "RepoMan/Frontend/RefTreeNode.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class RefTreeNodePrivate : public BasePrivate
+        class RefTreeNode
+                : public Base
         {
         public:
-            RefTreeNodePrivate(RefTreeNode* _pub, const QString& _name);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::RefTreeNode;
+
+        public:
+            RefTreeNode(RefTreeNode* _pub, const QString& _name);
 
         public:
             ObjTypes objType() const;

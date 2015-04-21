@@ -17,9 +17,9 @@
  *
  */
 
-#include "RepoMan/Data/RefData.hpp"
+#include "RepoMan/Data/Reference.hpp"
 
-#include "RepoMan/Repo.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
 
 #include "RepoMan/Events.hpp"
 
@@ -32,11 +32,12 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        RefPrivate::RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref)
-            : BasePrivate( pub )
+        #if 0
+        Reference::Reference(Ref* pub, RefTypes type, const Git::Reference& ref)
+            : Base( pub )
             , mType( type )
             , mFullQualifiedName( ref.name() )
             , mName( ref.nameAnalyzer().name() )
@@ -44,34 +45,34 @@ namespace RM
         {
         }
 
-        void RefPrivate::dumpSelf(Internal::Dumper& dumper) const
+        void Reference::dumpSelf(Internal::Dumper& dumper) const
         {
             dumper.addLine(QString(QStringLiteral("Ref 0x%1 [%2]"))
                            .arg(quintptr(mPub),0,16)
                            .arg(mName));
         }
 
-        ObjTypes RefPrivate::objType() const
+        ObjTypes Reference::objType() const
         {
             return ObjTypes::Reference;
         }
 
-        QString RefPrivate::displayName() const
+        QString Reference::displayName() const
         {
             return mName;
         }
 
-        QString RefPrivate::objectTypeName() const
+        QString Reference::objectTypeName() const
         {
             return QStringLiteral("Ref");
         }
 
-        bool RefPrivate::inherits(ObjTypes type) const
+        bool Reference::inherits(ObjTypes type) const
         {
             return type == ObjTypes::Reference || BasePrivate::inherits(type);
         }
 
-        void RefPrivate::postCreation()
+        void Reference::postCreation()
         {
             RM_P(Ref);
 
@@ -82,7 +83,7 @@ namespace RM
             BasePrivate::postCreation();
         }
 
-        void RefPrivate::preTerminate()
+        void Reference::preTerminate()
         {
             RM_P(Ref);
 
@@ -93,14 +94,14 @@ namespace RM
             BasePrivate::preTerminate();
         }
 
-        void RefPrivate::emitMoved()
+        void Reference::emitMoved()
         {
             if (!repoEventsBlocked()) {
                 Events::self()->refMoved(repository(), pub<Ref>());
             }
         }
 
-        bool RefPrivate::refreshDetails(const Git::Reference& ref)
+        bool Reference::refreshDetails(const Git::Reference& ref)
         {
             Git::ObjectId id = ref.objectId();
 
@@ -114,7 +115,7 @@ namespace RM
             return true;
         }
 
-        bool RefPrivate::refreshSelf()
+        bool Reference::refreshSelf()
         {
             Git::Result     r;
             Repo*           repo        = repository();          Q_ASSERT( repo );
@@ -131,6 +132,7 @@ namespace RM
 
             return true;
         }
+        #endif
 
     }
 

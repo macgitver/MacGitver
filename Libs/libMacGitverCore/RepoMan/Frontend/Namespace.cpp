@@ -19,10 +19,10 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Namespace.hpp"
+#include "RepoMan/Frontend/Namespace.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Data/NamespaceData.hpp"
+#include "RepoMan/Data/Namespace.hpp"
 
 namespace RM
 {
@@ -30,8 +30,9 @@ namespace RM
     namespace Frontend
     {
 
+        #if 0
         Namespace::Namespace(Base* _parent, const QString& _name)
-            : Base(*new Internal::NamespacePrivate(this, _name))
+            : Base(*new Data::Namespace(this, _name))
         {
             RM_D(Namespace);
             d->linkToParent(_parent);
@@ -43,6 +44,7 @@ namespace RM
 
             return d->name;
         }
+        #endif
 
     }
 

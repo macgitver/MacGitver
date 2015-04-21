@@ -24,19 +24,14 @@
 namespace RM
 {
 
-    class Repo;
-    class RefTreeNode;
-    class Namespace;
-    class Ref;
-    class Remote;
-    class RefLog;
-    class Submodule;
-    class Tag;
-
     namespace Internal
     {
         class Dumper;
-        class BasePrivate;
+    }
+
+    namespace Data
+    {
+        class Base;
     }
 
     namespace Frontend
@@ -44,40 +39,33 @@ namespace RM
 
         class MGV_CORE_API Base
         {
-            friend class Repo;
-            friend class Internal::BasePrivate;
+        public:
+            using List      = std::vector<Base>;
+            using DPtrType  = Data::Base;
 
         public:
-            typedef QVector< Base* > List;
-
-        protected:
-            Base(Internal::BasePrivate& _d);
+            Base(const std::shared_ptr<Data::Base>& _d);
+            Base(std::shared_ptr<Data::Base>&& _d);
             virtual ~Base();
+            Base();
+
+        public:
+            Base(const Base& other);
+            Base(Base&& other);
+            Base& operator=(const Base& other);
+            Base& operator=(Base&& other);
+
+            bool operator==(const Base& other) const;
+
+            operator bool() const;
 
         public:
             ObjTypes objType() const;
+            bool inherits(ObjTypes type) const;
 
         public:
-            void refresh();
-
-            const Repo* repository() const;
-            Repo* repository();
-
-            Base* parentObject() const;
-
-            List childObjects() const;
-            List childObjects(ObjTypes type) const;
-
-            template< class T >
-            typename T::List childObjects() const;
-
-            template< class T >
-            bool isA() const;
-
-            template< class T >
-            bool inheritsRepoManType() const;
-
-            bool inheritsRepoManType(ObjTypes type) const;
+            Repo repository() const;
+            Base parent() const;
 
             Heaven::IconRef icon(bool small = false) const;
 
@@ -87,38 +75,34 @@ namespace RM
 
             Heaven::Menu* contextMenu();
 
+            std::shared_ptr<Data::Base> data() const;
+
+            template<typename T>
+            T as() const;
+
+            List children() const;
+
         protected:
-            Internal::BasePrivate* mData;
+            std::shared_ptr<Data::Base> mData;
+
+        protected:
+            enum LockingMechanism { Locked, NotLocked };
 
         private:
-            Base(const Base& other);
-            Base& operator=(const Base& other);
+            template<LockingMechanism LOCKED>
+            struct Locker;
+
+        protected:
+            template<typename T, LockingMechanism LOCKED = Locked>
+            class DPtrT;
         };
 
-        template< class T >
-        inline bool Base::isA() const
+        template<typename T>
+        inline T Base::as() const
         {
-            return objType() == ObjTypes(T::StaticObjectType);
-        }
-
-        template< class T >
-        inline bool Base::inheritsRepoManType() const
-        {
-            return inheritsRepoManType(ObjTypes(T::StaticObjectType));
-        }
-
-        template< class T >
-        inline typename T::List Base::childObjects() const
-        {
-            typename T::List children;
-
-            foreach(Base* child, childObjects()) {
-                if (child->inheritsRepoManType<T>()) {
-                    children.append(static_cast<T*>(child));
-                }
-            }
-
-            return children;
+            using Dest = typename T::DPtrType;
+            const Dest* p = std::static_pointer_cast<T, Data::Base>(mData);
+            return T(p);
         }
 
     }

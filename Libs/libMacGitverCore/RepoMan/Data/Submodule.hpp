@@ -19,20 +19,24 @@
 
 #pragma once
 
-#include "RepoMan/Data/RepoData.hpp"
+#include "RepoMan/Data/Repo.hpp"
 
-#include "RepoMan/Submodule.hpp"
+#include "RepoMan/Frontend/Submodule.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class SubmodulePrivate : public RepoPrivate
+        class Submodule
+                : public Repo
         {
         public:
-            SubmodulePrivate(Submodule* pub, const Git::Repository& repo);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Submodule;
+
+        public:
+            Submodule(Submodule* pub, const Git::Repository& repo);
 
         public:
             ObjTypes objType() const;

@@ -19,11 +19,11 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/RefTreeNode.hpp"
+#include "RepoMan/Frontend/RefTreeNode.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Data/RefTreeNodeData.hpp"
+#include "RepoMan/Data/RefTreeNode.hpp"
 
 namespace RM
 {
@@ -31,8 +31,9 @@ namespace RM
     namespace Frontend
     {
 
+        #if 0
         RefTreeNode::RefTreeNode(Base* _parent, const QString& _name)
-            : Base(*new Internal::RefTreeNodePrivate(this, _name))
+            : Base(*new Data::RefTreeNode(this, _name))
         {
             RM_D(RefTreeNode);
             d->linkToParent(_parent);
@@ -44,6 +45,7 @@ namespace RM
 
             return d->name;
         }
+        #endif
 
     }
 

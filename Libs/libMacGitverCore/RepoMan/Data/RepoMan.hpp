@@ -19,40 +19,34 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "libMacGitverCore/RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Ref.hpp"
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
 
+#include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
+
+#include "hic_RepoManActions.h"
+
+#if 0 // ###DEAD
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class RefPrivate : public BasePrivate
+        class RepoMan : private RepoManActions
         {
         public:
-            RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref);
+            RepoMan(RepoMan* _pub);
+
+            Heaven::Menu* contextMenuFor(Base* object);
 
         public:
-            ObjTypes objType() const;
-            QString displayName() const;
-            bool refreshSelf();
-            void postCreation();
-            void preTerminate();
-            virtual bool refreshDetails(const Git::Reference& ref);
-            virtual void emitMoved();
-            void dumpSelf(Internal::Dumper& dumper) const;
-            QString objectTypeName() const;
-            bool inherits(ObjTypes type) const;
-
-        public:
-            RefTypes            mType;
-            QString             mFullQualifiedName;
-            QString             mName;
-            Git::ObjectId       mId;
+            Repo::List      repos;
+            Repo*           activeRepo;
         };
 
     }
 
 }
+#endif

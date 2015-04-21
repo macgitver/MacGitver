@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include "Base.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Base.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
-        class NamespacePrivate;
+        class Namespace;
     }
 
     namespace Frontend
@@ -37,8 +37,8 @@ namespace RM
         {
         public:
             static const ObjTypes StaticObjectType = ObjTypes::Namespace;
-            typedef Internal::NamespacePrivate Private;
-            typedef QVector< Namespace* > List;
+            typedef Data::Namespace Private;
+            typedef QVector<Namespace> List;
 
         public:
             Namespace(Base* parent, const QString& _name);

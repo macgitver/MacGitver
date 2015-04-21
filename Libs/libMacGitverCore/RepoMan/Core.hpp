@@ -41,7 +41,6 @@ namespace RM
         Invalid,
 
         Namespace,
-        RepoManager,
         Repo,
         Remote,
         Submodule,
@@ -52,5 +51,17 @@ namespace RM
         Tag,
         RefLog
     };
+
+    namespace Frontend
+    {
+        class Repo;
+        class RefTreeNode;
+        class Namespace;
+        class Reference;
+        class Remote;
+        class RefLog;
+        class Submodule;
+        class Tag;
+    }
 
 }

@@ -19,13 +19,9 @@
 
 #pragma once
 
-#include <QObject>
-
-class QTimer;
-
 #include "libGitWrap/Repository.hpp"
 
-#include "libMacGitverCore/RepoMan/Base.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Base.hpp"
 
 namespace RM
 {
@@ -33,32 +29,30 @@ namespace RM
     class RepoMan;
     class Head;
 
-    namespace Internal
+    namespace Data
     {
-        class RepoPrivate;
+        class Repo;
     }
 
     namespace Frontend
     {
 
         class MGV_CORE_API Repo
-                : public QObject
-                , public Base
+                : public Base
         {
             friend class RepoMan;
-
-            Q_OBJECT
         public:
             static const ObjTypes StaticObjectType = ObjTypes::Repo;
-            typedef Internal::RepoPrivate Private;
-            typedef QVector< Repo* > List;
-
-        protected:
-            Repo(Internal::RepoPrivate& _d);
+            typedef Data::Repo DPtrType;
+            typedef QVector<Repo> List;
 
         public:
-            Repo(const Git::Repository& repo, Base* parent);
-            ~Repo();
+            Repo() = default;
+            Repo(const std::shared_ptr<Data::Repo>& o);
+            Repo(std::shared_ptr<Data::Repo>&& o);
+            ~Repo() = default;
+
+            bool operator==(const Repo& other) const;
 
         public:
             GW_DEPRECATED Git::Repository gitRepo();
@@ -70,7 +64,7 @@ namespace RM
             bool isActive() const;
             bool isInitializing() const;
 
-            Repo* parentRepository();
+            Repo parentRepository();
             List submodules() const;
 
             QString path() const;
@@ -82,22 +76,36 @@ namespace RM
 
             void close();
 
-            Ref*        findReference(  const Git::Reference&   ref);
-            Ref*        findReference(  const QString&          fqrn);
-            Remote*     findRemote(     const Git::Remote&      remote);
-            Remote*     findRemote(     const QString&          remoteName);
-            Namespace*  findNamespace(  const QStringList&      namespaces);
-            Namespace*  findNamespace(  const QString&          nsFullName);
+            GW_DEPRECATED
+            Reference   findReference(  const Git::Reference&   ref);
+            Reference   findReference(  const QString&          fqrn);
 
+            GW_DEPRECATED
+            Remote      findRemote(     const Git::Remote&      remote);
+            Remote      findRemote(     const QString&          remoteName);
+
+            Namespace   findNamespace(  const QStringList&      namespaces);
+            Namespace   findNamespace(  const QString&          nsFullName);
+
+            #if 0 // ###DEAD
             Head*           head() const;
+            #endif
 
         private:
             void activated();
             void deactivated();
 
+        #if 0 // ###DEAD
         private slots:
             void unloadTimer();
+        #endif
         };
+
+
+        inline bool Repo::operator==(const Repo& other) const
+        {
+            return Base::operator==(other);
+        }
 
     }
 

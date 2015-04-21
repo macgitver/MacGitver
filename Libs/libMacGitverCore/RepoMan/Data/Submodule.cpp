@@ -17,7 +17,7 @@
  *
  */
 
-#include "RepoMan/Data/SubmoduleData.hpp"
+#include "RepoMan/Data/Submodule.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
@@ -26,9 +26,10 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
+        #if 0
         SubmodulePrivate::SubmodulePrivate(Submodule* pub, const Git::Repository& repo)
             : RepoPrivate( pub, repo )
         {
@@ -72,6 +73,7 @@ namespace RM
         {
             return type == ObjTypes::Submodule || RepoPrivate::inherits(type);
         }
+        #endif
 
     }
 

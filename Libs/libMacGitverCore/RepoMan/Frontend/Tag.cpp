@@ -19,11 +19,11 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Tag.hpp"
+#include "RepoMan/Frontend/Tag.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Data/TagData.hpp"
+#include "RepoMan/Data/Tag.hpp"
 
 namespace RM
 {
@@ -31,12 +31,14 @@ namespace RM
     namespace Frontend
     {
 
+        #if 0
         Tag::Tag(Base* _parent, const Git::Reference& _ref)
-            : Ref(*new Internal::TagPrivate(this, _ref))
+            : Ref(*new Data::Tag(this, _ref))
         {
             RM_D(Tag);
             d->linkToParent(_parent);
         }
+        #endif
 
     }
 

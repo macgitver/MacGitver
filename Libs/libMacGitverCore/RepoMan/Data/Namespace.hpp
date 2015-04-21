@@ -19,20 +19,24 @@
 
 #pragma once
 
-#include "RepoMan/Data/BaseData.hpp"
+#include "RepoMan/Data/Base.hpp"
 
-#include "RepoMan/Namespace.hpp"
+#include "RepoMan/Frontend/Namespace.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        class NamespacePrivate : public BasePrivate
+        class Namespace
+                : public Base
         {
         public:
-            NamespacePrivate(Namespace* _pub, const QString& _name);
+            static const_or_constexpr ObjTypes StaticObjectType = ObjTypes::Namespace;
+
+        public:
+            Namespace(Namespace* _pub, const QString& _name);
 
         public:
             ObjTypes objType() const;

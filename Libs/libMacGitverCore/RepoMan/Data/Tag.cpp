@@ -17,7 +17,7 @@
  *
  */
 
-#include "RepoMan/Data/TagData.hpp"
+#include "RepoMan/Data/Tag.hpp"
 
 #include "RepoMan/Events.hpp"
 
@@ -26,20 +26,21 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
-        TagPrivate::TagPrivate(Tag* _pub, const Git::Reference& _ref)
-            : RefPrivate(_pub, TagType, _ref)
+        #if 0
+        Tag::Tag(Frontend::Tag* _pub, const Git::Reference& _ref)
+            : Reference(_pub, TagType, _ref)
         {
         }
 
-        ObjTypes TagPrivate::objType() const
+        ObjTypes Tag::objType() const
         {
             return ObjTypes::Tag;
         }
 
-        void TagPrivate::postCreation()
+        void Tag::postCreation()
         {
             if (!repoEventsBlocked()) {
                 Events::self()->tagCreated(repository(), pub<Tag>());
@@ -48,7 +49,7 @@ namespace RM
             RefPrivate::postCreation();
         }
 
-        void TagPrivate::preTerminate()
+        void Tag::preTerminate()
         {
             if (!repoEventsBlocked()) {
                 Events::self()->tagAboutToBeDeleted(repository(), pub<Tag>());
@@ -57,22 +58,23 @@ namespace RM
             RefPrivate::preTerminate();
         }
 
-        void TagPrivate::dumpSelf(Internal::Dumper& dumper) const
+        void Tag::dumpSelf(Internal::Dumper& dumper) const
         {
             dumper.addLine(QString(QStringLiteral("Tag 0x%1 - %2"))
                            .arg(quintptr(mPub),0,16)
                            .arg(mName));
         }
 
-        QString TagPrivate::objectTypeName() const
+        QString Tag::objectTypeName() const
         {
             return QStringLiteral("Tag");
         }
 
-        bool TagPrivate::inherits(ObjTypes type) const
+        bool Tag::inherits(ObjTypes type) const
         {
             return type == ObjTypes::Tag || RefPrivate::inherits(type);
         }
+        #endif
 
     }
 

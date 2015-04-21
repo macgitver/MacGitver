@@ -19,10 +19,9 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Submodule.hpp"
+#include "RepoMan/Data/Submodule.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Data/SubmoduleData.hpp"
 
 namespace RM
 {
@@ -30,8 +29,9 @@ namespace RM
     namespace Frontend
     {
 
+        #if 0
         Submodule::Submodule(const Git::Repository& repo, Repo* parent)
-            : Repo( *new Internal::SubmodulePrivate( this, repo ) )
+            : Repo( *new Data::Submodule( this, repo ) )
         {
             RM_D(Submodule);
 
@@ -41,9 +41,8 @@ namespace RM
 
             d->linkToParent( parent );
             d->refresh();
-
-            d->mIsInitializing = false;
         }
+        #endif
 
     }
 

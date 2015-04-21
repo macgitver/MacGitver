@@ -17,7 +17,7 @@
  *
  */
 
-#include "RepoMan/Data/RefTreeNodeData.hpp"
+#include "RepoMan/Data/RefTreeNode.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
@@ -26,9 +26,10 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
+        #if 0
         RefTreeNodePrivate::RefTreeNodePrivate(RefTreeNode* _pub, const QString& _name)
             : BasePrivate(_pub)
             , name(_name)
@@ -90,6 +91,7 @@ namespace RM
         {
             return type == ObjTypes::RefTreeNode || BasePrivate::inherits(type);
         }
+        #endif
 
     }
 

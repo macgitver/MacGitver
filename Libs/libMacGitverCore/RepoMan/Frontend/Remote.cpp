@@ -21,12 +21,12 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Repo.hpp"
-#include "RepoMan/Remote.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
+#include "RepoMan/Frontend/Remote.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
-#include "RepoMan/Data/RemoteData.hpp"
+#include "RepoMan/Data/Remote.hpp"
 
 namespace RM
 {
@@ -34,8 +34,9 @@ namespace RM
     namespace Frontend
     {
 
+        #if 0
         Remote::Remote(const Git::Remote& gitObj, Base* _parent)
-            : Base(*new Internal::RemotePrivate(this, gitObj))
+            : Base(*new Data::Remote(this, gitObj))
         {
             RM_D(Remote);
 
@@ -54,6 +55,7 @@ namespace RM
 
             return d->name;
         }
+        #endif
 
     }
 

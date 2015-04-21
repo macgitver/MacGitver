@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "Repo.hpp"
+#include "libMacGitverCore/Repoman/Frontend/Repo.hpp"
 
 namespace RM
 {
@@ -27,8 +27,7 @@ namespace RM
     namespace Frontend
     {
 
-        class MGV_CORE_API Submodule
-                : public Repo
+        class MGV_CORE_API Submodule : public Repo
         {
         public:
             static const ObjTypes StaticObjectType = ObjTypes::Submodule;
@@ -42,8 +41,6 @@ namespace RM
             ObjTypes objType() const;
             void preTerminate();
             void dumpSelf(Internal::Dumper& dumper) const;
-
-        private:
         };
 
     }

@@ -17,7 +17,7 @@
  *
  */
 
-#include "RepoMan/Data/RemoteData.hpp"
+#include "RepoMan/Data/Remote.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 
@@ -26,9 +26,10 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
 
+        #if 0
         RemotePrivate::RemotePrivate(Remote* _pub, const Git::Remote& _obj)
             : BasePrivate(_pub)
         {
@@ -85,6 +86,7 @@ namespace RM
         {
             return type == ObjTypes::Remote || BasePrivate::inherits(type);
         }
+        #endif
 
     }
 

@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include "Base.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Base.hpp"
 
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
-        class RefLogPrivate;
+        class RefLog;
     }
 
     namespace Frontend
@@ -37,8 +37,8 @@ namespace RM
         {
         public:
             static const ObjTypes StaticObjectType = ObjTypes::RefLog;
-            typedef Internal::RefLogPrivate Private;
-
+            typedef Data::RefLog Private;
+
         public:
             RefLog(Base* _parent);
         };

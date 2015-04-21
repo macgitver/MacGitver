@@ -23,11 +23,13 @@
 
 #include "RepoMan/Events.hpp"
 
+#include "RepoMan/Frontend/BaseInternal.hpp"
 #include "RepoMan/Frontend/Reference.hpp"
-#include "RepoMan/Repo.hpp"
+#include "RepoMan/Frontend/Repo.hpp"
+
+#include "RepoMan/Data/Reference.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
-#include "RepoMan/Data/RefData.hpp"
 
 namespace RM
 {
@@ -35,39 +37,42 @@ namespace RM
     namespace Frontend
     {
 
-        Reference::Reference(Internal::ReferencePrivate& data)
-            : Base( data )
+        #if 0
+
+        Reference::Reference(Data::Reference* data)
+            : Base(data)
         {
         }
 
-        Reference::Reference(Base* parent, ReferenceTypes type, const Git::Reference& Reference)
-            : Base( *new Internal::ReferencePrivate( this, type, Reference ) )
+        Reference::Reference(Base* parent, RefTypes type, const Git::Reference& ref)
+            : Base( *new Data::Reference( this, type, ref ) )
         {
-            RM_D( Reference );
+            RM_D(Reference);
             d->linkToParent( parent );
         }
+        #endif
 
-        ReferenceTypes Reference::type() const
+        RefTypes Reference::type() const
         {
-            RM_CD(Reference);
+            DPtrT<const Reference> d(this);
             return d->mType;
         }
 
         QString Reference::name() const
         {
-            RM_CD(Reference);
+            DPtrT<const Reference> d(this);
             return d->mName;
         }
 
         QString Reference::fullName() const
         {
-            RM_CD(Reference);
+            DPtrT<const Reference> d(this);
             return d->mFullQualifiedName;
         }
 
         Git::ObjectId Reference::id() const
         {
-            RM_CD(Reference);
+            DPtrT<const Reference> d(this);
             return d->mId;
         }
 
@@ -76,6 +81,7 @@ namespace RM
             return id().toString(8);
         }
 
+        #if 0
         Git::Reference Reference::load(Git::Result& r)
         {
             RM_D(Reference);
@@ -88,6 +94,8 @@ namespace RM
 
             return gitReference;
         }
+
+        #endif
 
     }
 

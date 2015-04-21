@@ -26,32 +26,37 @@
 namespace RM
 {
 
-    namespace Internal
+    namespace Data
     {
-        class RefPrivate;
+        class Reference;
     }
+
+    enum RefTypes
+    {
+        BranchType,
+        TagType
+    };
 
     namespace Frontend
     {
-
-        enum RefTypes
-        {
-            BranchType,
-            TagType
-        };
 
         class MGV_CORE_API Reference
                 : public Base
         {
         public:
             static const ObjTypes StaticObjectType = ObjTypes::Reference;
-
-            typedef QList< Ref* > List;
+            using DPtrType  = Data::Reference;
+            using List      = QList<Reference>;
 
         protected:
-            Reference(Internal::RefPrivate& data);
+
+            Reference(Data::Reference* data);
 
         public:
+            Reference();
+
+        public:
+            GW_DEPRECATED
             Reference(Base* parent, RefTypes type, const Git::Reference& ref);
 
             GW_DEPRECATED
@@ -64,6 +69,14 @@ namespace RM
             Git::ObjectId id() const;
             QString displaySha1() const;
         };
+
+        inline Reference::Reference()
+            : Base()
+        {
+        }
+
+        GW_DEPRECATED
+        typedef Reference Ref;
 
     }
 

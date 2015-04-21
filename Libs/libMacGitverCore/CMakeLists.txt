@@ -51,6 +51,15 @@ SET( SRC_FILES
     RepoMan/Data/RefTreeNode.cpp
     RepoMan/Data/Remote.cpp
     RepoMan/Data/Repo.cpp
+
+    RepoMan/Data/Branch.cpp
+    RepoMan/Data/Head.cpp
+    RepoMan/Data/Namespace.cpp
+    RepoMan/Data/Reference.cpp
+    RepoMan/Data/RefLog.cpp
+    RepoMan/Data/RefTreeNode.cpp
+    RepoMan/Data/Remote.cpp
+    RepoMan/Data/Repo.cpp
     RepoMan/Data/Submodule.cpp
     RepoMan/Data/Tag.cpp
 
@@ -136,14 +145,16 @@ SET( PRI_HDR_FILES
     RepoMan/Data/Branch.hpp
     RepoMan/Data/Head.hpp
     RepoMan/Data/Namespace.hpp
-    RepoMan/Data/Ref.hpp
+    RepoMan/Data/Reference.hpp
     RepoMan/Data/RefLog.hpp
     RepoMan/Data/RefTreeNode.hpp
     RepoMan/Data/Remote.hpp
     RepoMan/Data/Repo.hpp
-    RepoMan/Data/RepoManData.hpp
-    RepoMan/Data/Submodule.hpp
+    RepoMan/Data/RepoMan.hpp
     RepoMan/Data/Tag.hpp
+    RepoMan/Data/Submodule.hpp
+
+    RepoMan/Frontend/BaseInternal.hpp
 
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h

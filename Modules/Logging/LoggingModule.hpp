@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -17,13 +17,12 @@
  *
  */
 
-#ifndef MGV_MODULE_LOGGING_H
-#define MGV_MODULE_LOGGING_H
+#pragma once
 
 #include "libMacGitverCore/MacGitver/Module.h"
 
-#include "libMacGitverCore/Log/LogConsumer.hpp"
-#include "libMacGitverCore/Log/LogEvent.hpp"
+#include "libLogger/Consumer.hpp"
+#include "libLogger/Event.hpp"
 
 class LoggingView;
 class LoggingMode;
@@ -54,7 +53,7 @@ public:
 public:
     void queueViewUpdate();
     void setView(LoggingView* view);
-    Log::Event::List currentEvents() const;
+    const Log::Event::List& currentEvents() const;
 
 private:
     void channelAdded(Log::Channel channel);
@@ -74,4 +73,3 @@ private:
     static LoggingModule* sSelf;
 };
 
-#endif

@@ -17,16 +17,10 @@
  *
  */
 
-#include <QHash>
-#include <QString>
-#include <QDateTime>
+#include "libLogger/Internal.hpp"
 
-#include "libMacGitverCore/Log/LogEvent.hpp"
-#include "libMacGitverCore/Log/LogChannel.hpp"
-#include "libMacGitverCore/Log/LogManager.hpp"
-#include "libMacGitverCore/Log/LogTemplate.hpp"
-
-#include "libMacGitverCore/App/MacGitver.hpp"
+#include <QStringList>
+#include <QObject>
 
 namespace Log
 {
@@ -46,19 +40,6 @@ namespace Log
      *
      */
 
-    class Event::Data : public QSharedData
-    {
-    public:
-        Data();
-
-    public:
-        Channel::Data*              channel;
-        Template                    htmlTemplate;
-        quint64                     id;
-        QDateTime                   timeStamp;
-        QHash< QString, QString >   parameters;
-    };
-
     /**
      * @brief       Copy constructor
      *
@@ -72,6 +53,11 @@ namespace Log
     {
     }
 
+    Event::Event(Event&& other)
+        : d(std::move(other.d))
+    {
+    }
+
     /**
      * @internal
      * @brief       Creating constructor
@@ -79,8 +65,8 @@ namespace Log
      * @param[in]   _d      Data to create the event with
      *
      */
-    Event::Event(Data *_d)
-        : d(_d)
+    Event::Event(const std::shared_ptr<Internal::EventData>& d)
+        : d(d)
     {
     }
 
@@ -131,7 +117,8 @@ namespace Log
      */
     Event Event::create(Template tmpl, const QString& text)
     {
-        Data* d = new Data;
+        std::shared_ptr<Internal::EventData> d(new Internal::EventData);
+
         d->htmlTemplate = tmpl;
         d->parameters[QString()] = text;
         return d;
@@ -150,7 +137,8 @@ namespace Log
      */
     Event Event::create(Template tmpl)
     {
-        Data* d = new Data;
+        std::shared_ptr<Internal::EventData> d(new Internal::EventData);
+
         d->htmlTemplate = tmpl;
         return d;
     }
@@ -169,9 +157,9 @@ namespace Log
      */
     Event Event::create(const QString& templ)
     {
-        Template t = MacGitver::log().findTemplate(templ);
+        Template t = Internal::System::self()->findTemplate(templ);
 
-        if (!t.isValid()) {
+        if (!t) {
             return Event();
         }
 
@@ -199,17 +187,6 @@ namespace Log
     }
 
     /**
-     * @brief       Check for validity
-     *
-     * @return      `true` if this event object is valid, `false` otherwise.
-     *
-     */
-    bool Event::isValid() const
-    {
-        return d;
-    }
-
-    /**
      * @internal
      * @brief       Set the channel
      *
@@ -219,7 +196,7 @@ namespace Log
      * Event is owned by a Channel as soon as it is added to the channel.
      *
      */
-    void Event::setChannel(Channel::Data* channel)
+    void Event::setChannel(const std::shared_ptr<Internal::ChannelData>& channel)
     {
         Q_ASSERT(d);
         if (d) {
@@ -234,7 +211,7 @@ namespace Log
      */
     Channel Event::channel() const
     {
-        return d->channel;
+        return d->channel.lock();
     }
 
     /**
@@ -273,11 +250,11 @@ namespace Log
             return QString();
         }
 
-        if (d->htmlTemplate.isValid()) {
+        if (d->htmlTemplate) {
             return d->htmlTemplate.apply(*this);
         }
 
-        return QLatin1String("Missing template");
+        return QObject::tr("Missing template");
     }
 
     /**
@@ -295,6 +272,27 @@ namespace Log
         if (d) {
             d->parameters[param] = text;
         }
+    }
+
+    void Event::setText(const QString& text)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->parameters[QString()] = text;
+        }
+    }
+
+    void Event::setText(QString&& text)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->parameters[QString()] = text;
+        }
+    }
+
+    QString Event::text() const
+    {
+        return param(QString());
     }
 
     /**
@@ -334,15 +332,6 @@ namespace Log
     quint64 Event::uniqueId() const
     {
         return d ? d->id : 0;
-    }
-
-    //-- Event::Data ---------------------------------------------------------------------------- >8
-
-    Event::Data::Data()
-    {
-        channel = NULL;
-        timeStamp = QDateTime::currentDateTime();
-        id = MacGitver::log().nextLogEventId();
     }
 
 }

@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -17,15 +17,14 @@
  *
  */
 
-#ifndef MGV_MOD_REPO_MAN_LOGGER_LISTENER_HPP
-#define MGV_MOD_REPO_MAN_LOGGER_LISTENER_HPP
+#pragma once
 
 #include <QCoreApplication>
 
 #include "libMacGitverCore/RepoMan/Events.hpp"
 
-#include "libMacGitverCore/Log/LogChannel.hpp"
-#include "libMacGitverCore/Log/LogEvent.hpp"
+#include "libLogger/Channel.hpp"
+#include "libLogger/Event.hpp"
 
 class Listener : public RM::EventsInterface
 {
@@ -73,5 +72,3 @@ public:
 private:
     Log::Channel repoManChannel;
 };
-
-#endif

@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -17,17 +17,26 @@
  *
  */
 
-#include "libMacGitverCore/Log/LogConsumer.hpp"
+#pragma once
+
+#include "libLogger/Api.hpp"
 
 namespace Log
 {
 
-    Consumer::Consumer()
-    {
-    }
+    class Channel;
+    class Event;
 
-    Consumer::~Consumer()
+    class LOGGER_API Consumer
     {
-    }
+    public:
+        Consumer();
+        virtual ~Consumer();
+
+    public:
+        virtual void channelAdded(Channel channel) = 0;
+        virtual void logCleaned(quint64 upToId) = 0;
+        virtual void eventAdded(Event e) = 0;
+    };
 
 }

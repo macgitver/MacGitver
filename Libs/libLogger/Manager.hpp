@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -18,19 +18,10 @@
  */
 
 #pragma once
-#ifndef MGV_LOG_LOG_MANAGER_HPP
-#define MGV_LOG_LOG_MANAGER_HPP
 
-#include <QtGlobal>
-#include <QSharedData>
+#include "libLogger/Channel.hpp"
 
 class QString;
-
-#include "libMacGitverCore/MacGitverApi.hpp"
-
-#include "libMacGitverCore/Log/LogChannel.hpp"
-
-class MacGitverPrivate;
 
 namespace Log
 {
@@ -48,46 +39,26 @@ namespace Log
     class Event;
     class Consumer;
 
-    class MGV_CORE_API Manager
+    class LOGGER_API Manager
     {
-        friend class ::MacGitverPrivate;
-        friend class Channel;
-        friend class Event;
-
     public:
-        Manager(const Manager& other);
-        Manager();
-        ~Manager();
-        Manager& operator=(const Manager& other);
-        bool isValid() const;
+        static void release();
 
     public:
         void addMessage(const QString& message, Type t = Normal);
         void addEvent(Channel ch, Event event);
 
-        void addTemplate(Template t);
+        void addTemplate(const Template& t);
+        void addTemplate(Template&& t);
         Template findTemplate(const QString& name) const;
 
-        void addChannel(Channel ch);
+        void addChannel(const Channel& ch);
         Channel findChannel(const QString& name) const;
 
-        Channel::List channels() const;
+        const Channel::List& channels() const;
 
         void setLogConsumer(Consumer* consumer);
         Consumer* logConsumer() const;
-
-    private:
-        quint64 nextLogEventId();
-        void createDefaultChannels();
-        void eventAdded(Event event);
-
-    private:
-        static Manager create();
-        class Data;
-        Manager(Data* _d);
-        QExplicitlySharedDataPointer<Data> d;
     };
 
 }
-
-#endif

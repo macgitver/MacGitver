@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -18,21 +18,17 @@
  */
 
 #pragma once
-#ifndef MGV_LOG_LOG_CHANNEL_HPP
-#define MGV_LOG_LOG_CHANNEL_HPP
 
-#include <QSharedData>
-#include <QVector>
+#include "libLogger/Api.hpp"
+
+#include <memory>
+#include <vector>
 
 class QString;
 
-#include "libMacGitverCore/MacGitverApi.hpp"
-
 namespace Heaven
 {
-
     class IconRef;
-
 }
 
 namespace Log
@@ -41,19 +37,28 @@ namespace Log
     class Event;
     class Template;
 
-    class MGV_CORE_API Channel
+    namespace Internal
+    {
+        class ChannelData;
+    }
+
+    class LOGGER_API Channel
     {
     public:
-        typedef QVector<Channel> List;
+        using Data      = Internal::ChannelData;
+        using List      = std::vector<Channel>;
 
     public:
-        class Data;
-        Channel(Data* _d);
+        Channel(const std::shared_ptr<Data>& d);
         Channel(const Channel& other);
+        Channel(Channel&& other);
         Channel();
         ~Channel();
         Channel& operator=(const Channel& other);
-        bool isValid() const;
+        Channel& operator=(Channel&& other);
+
+    public:
+        operator bool() const { return (bool) d; }
 
     public:
         static Channel create(const QString& name);
@@ -61,6 +66,7 @@ namespace Log
     public:
         void setDefaultTemplate(Template t);
         void setDisplayName(const QString& name);
+        void setDisplayName(QString&& name);
 
     public:
         QString name() const;
@@ -71,9 +77,7 @@ namespace Log
         void addEvent(Event event);
 
     private:
-        QExplicitlySharedDataPointer<Data> d;
+        std::shared_ptr<Internal::ChannelData> d;
     };
 
 }
-
-#endif

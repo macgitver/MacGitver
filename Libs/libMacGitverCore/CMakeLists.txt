@@ -13,12 +13,6 @@ SET( SRC_FILES
     App/MacGitver.cpp
     App/MgvPrimaryWindow.cpp
 
-    Log/LogEvent.cpp
-    Log/LogChannel.cpp
-    Log/LogTemplate.cpp
-    Log/LogManager.cpp
-    Log/LogConsumer.cpp
-
     Config/Config.cpp
     Config/ConfigUser.cpp
 
@@ -77,12 +71,6 @@ SET( PUB_HDR_FILES
     Config/Config.h
     Config/ConfigUser.h
     Config/Ui/ConfigPage.hpp
-
-    Log/LogEvent.hpp
-    Log/LogChannel.hpp
-    Log/LogTemplate.hpp
-    Log/LogManager.hpp
-    Log/LogConsumer.hpp
 
     MacGitver/Module.h
     MacGitver/Modules.h
@@ -206,6 +194,7 @@ TARGET_LINK_LIBRARIES(
         HeavenActions
         HeavenIcons
         BlueSky
+        Logger
 
     LINK_PRIVATE
         GitWrap

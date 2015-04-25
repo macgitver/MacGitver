@@ -21,7 +21,7 @@
 #define MGV_MOD_REPO_MAN_LOGGER_TMPL_NAMES_HPP
 
 #define TEMPLATE_NAME(name) \
-    QLatin1String(#name)
+    QStringLiteral(#name)
 
 #define TMPL_REPO_ACTIVITY              TEMPLATE_NAME(RepoActivity)
 #define TMPL_FOUND_NEW_OBJ              TEMPLATE_NAME(FoundNewObj)

@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -18,31 +18,11 @@
  */
 
 #pragma once
-#ifndef MGV_LOG_LOG_CONSUMER_HPP
-#define MGV_LOG_LOG_CONSUMER_HPP
 
 #include <QtGlobal>
 
-#include "libMacGitverCore/MacGitverApi.hpp"
-
-namespace Log
-{
-
-    class Channel;
-    class Event;
-
-    class MGV_CORE_API Consumer
-    {
-    public:
-        Consumer();
-        virtual ~Consumer();
-
-    public:
-        virtual void channelAdded(Channel channel) = 0;
-        virtual void logCleaned(quint64 upToId) = 0;
-        virtual void eventAdded(Event e) = 0;
-    };
-
-}
-
+#ifdef Logger_EXPORTS
+#   define LOGGER_API Q_DECL_EXPORT
+#else
+#   define LOGGER_API Q_DECL_IMPORT
 #endif

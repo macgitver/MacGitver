@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -17,16 +17,7 @@
  *
  */
 
-#include <QString>
-
-#include "libHeavenIcons/IconRef.hpp"
-
-#include "libMacGitverCore/App/MacGitver.hpp"
-
-#include "libMacGitverCore/Log/LogChannel.hpp"
-#include "libMacGitverCore/Log/LogEvent.hpp"
-#include "libMacGitverCore/Log/LogManager.hpp"
-#include "libMacGitverCore/Log/LogTemplate.hpp"
+#include "libLogger/Internal.hpp"
 
 namespace Log
 {
@@ -40,19 +31,6 @@ namespace Log
      *
      */
 
-    class Channel::Data : public QSharedData
-    {
-    public:
-        Data();
-
-    public:
-        Template        defaultTemplate;
-        QString         name;
-        QString         displayName;
-        Heaven::IconRef icon;
-        Event::List     events;
-    };
-
     /**
      * @brief       Copy constructor
      *
@@ -61,6 +39,11 @@ namespace Log
      */
     Channel::Channel(const Channel& other)
         : d(other.d)
+    {
+    }
+
+    Channel::Channel(Channel&& o)
+        : d(std::move(o.d))
     {
     }
 
@@ -81,8 +64,8 @@ namespace Log
      * @param[in]   _d  Channel data
      *
      */
-    Channel::Channel(Channel::Data* _d)
-        : d(_d)
+    Channel::Channel(const std::shared_ptr<Data>& d)
+        : d(d)
     {
     }
 
@@ -98,7 +81,8 @@ namespace Log
      */
     Channel Channel::create(const QString& name)
     {
-        Data* d = new Data;
+        std::shared_ptr<Data> d(new Data);
+
         d->name = name;
         return d;
     }
@@ -125,15 +109,10 @@ namespace Log
         return *this;
     }
 
-    /**
-     * @brief       Check for validity
-     *
-     * @return      `true`, if this is a valid Channel object, `false` otherwise.
-     *
-     */
-    bool Channel::isValid() const
+    Channel& Channel::operator=(Channel&& other)
     {
-        return d;
+        std::swap(d, other.d);
+        return * this;
     }
 
     /**
@@ -173,10 +152,10 @@ namespace Log
     {
         Q_ASSERT(d);
         if (d) {
-            event.setChannel(d.data());
-            d->events.append(event);
+            event.setChannel(d);
+            d->events.push_back(event);
 
-            MacGitver::log().eventAdded(event);
+            Internal::System::self()->eventAdded(event);
         }
     }
 
@@ -191,6 +170,20 @@ namespace Log
         Q_ASSERT(d);
         if (d) {
             d->displayName = name;
+        }
+    }
+
+    /**
+     * @brief       Set a user visible display name for this channel
+     *
+     * @param[in]   name    The name to set as display name
+     *
+     */
+    void Channel::setDisplayName(QString&& name)
+    {
+        Q_ASSERT(d);
+        if (d) {
+            d->displayName = std::move(name);
         }
     }
 
@@ -228,12 +221,6 @@ namespace Log
         if (d) {
             d->defaultTemplate = t;
         }
-    }
-
-    //-- Channel::Data -------------------------------------------------------------------------- >8
-
-    Channel::Data::Data()
-    {
     }
 
 }

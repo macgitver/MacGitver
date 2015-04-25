@@ -36,7 +36,7 @@ GitConfigDialog::GitConfigDialog( Git::Repository& repo )
 
     if( mRepo.isValid() )
     {
-        fnRepo = mRepo.gitPath() + QLatin1String( "/config" );
+        fnRepo = mRepo.path() + QLatin1String( "/config" );
         cfgRepository->setConfig( fnRepo );
         cfgs << fnRepo;
     }

@@ -32,7 +32,6 @@
 #include "libMacGitverCore/MacGitver/Modules.h"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
 #include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
-#include "libMacGitverCore/Log/LogManager.hpp"
 
 /**
  * @class   MacGitver
@@ -71,7 +70,6 @@ void MacGitverPrivate::init()
         QApplication::setApplicationName( QLatin1String( "MacGitver_NonGui" ) );
     }
 
-    sLog        = Log::Manager::create();
     sRepoMan    = new RM::RepoMan;
     sModules    = new Modules;
 
@@ -87,7 +85,8 @@ MacGitverPrivate::~MacGitverPrivate()
 
     delete sRepoMan;    sRepoMan    = NULL;
     delete sModules;    sModules    = NULL;
-    sLog    = Log::Manager();
+
+    Log::Manager::release();
 
     sSelf = NULL;
 }
@@ -103,7 +102,6 @@ void MacGitverPrivate::bootGui()
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
 RM::RepoMan*    MacGitverPrivate::sRepoMan      = NULL;
-Log::Manager    MacGitverPrivate::sLog;
 Modules*        MacGitverPrivate::sModules      = NULL;
 
 MacGitver& MacGitver::self()
@@ -119,11 +117,6 @@ RM::RepoMan& MacGitver::repoMan()
     Q_ASSERT(MacGitverPrivate::sRepoMan);
 
     return *MacGitverPrivate::sRepoMan;
-}
-
-Log::Manager MacGitver::log()
-{
-    return MacGitverPrivate::sLog;
 }
 
 MacGitver::MacGitver(bool runGui)
@@ -172,24 +165,22 @@ void MacGitver::unregisterView(const BlueSky::ViewIdentifier& identifier)
 
 void MacGitver::log( Log::Type type, const QString& logMessage )
 {
-    log().addMessage(logMessage, type);
+    Log::Manager().addMessage(logMessage, type);
 }
 
 void MacGitver::log( Log::Type type, const char* logMessage )
 {
-    log().addMessage(QString::fromUtf8(logMessage), type);
+    Log::Manager().addMessage(QString::fromUtf8(logMessage), type);
 }
 
 void MacGitver::log( Log::Type type, const Git::Result& r, const char* logMessage )
 {
-    if( logMessage )
-    {
-        log().addMessage(QString::fromUtf8("GitWrap-Error: %1\n(%2)")
-                         .arg(r.errorText()).arg(QLatin1String(logMessage)), type);
+    if (logMessage) {
+        Log::Manager().addMessage(tr("GitWrap-Error: %1\n(%2)")
+                                  .arg(r.errorText()).arg(QString::fromUtf8(logMessage)), type);
     }
-    else
-    {
-        log().addMessage(QString::fromUtf8("GitWrap-Error: %1").arg(r.errorText()), type);
+    else {
+        Log::Manager().addMessage(tr("GitWrap-Error: %1").arg(r.errorText()), type);
     }
 }
 

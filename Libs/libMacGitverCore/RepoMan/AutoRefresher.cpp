@@ -193,7 +193,7 @@ namespace RM
 
     void AutoRefresher::onRefreshGit()
     {
-        MacGitver::log().addMessage(trUtf8("Refreshing git repositories..."));
+        Log::Manager().addMessage(trUtf8("Refreshing git repositories..."));
         MacGitver::repoMan().refresh();
     }
 

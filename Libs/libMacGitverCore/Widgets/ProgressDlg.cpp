@@ -76,7 +76,7 @@ void ProgressDlg::addActivity(const QString& description, QObject* activity,
 {
     Q_ASSERT(activity);
 
-    Private::ProgressWdgt* a( new Private::ProgressWdgt(description) );
+    Private::ProgressWdgt* a = new Private::ProgressWdgt(description);
     mActivities[activity] = a;
 
     QTreeWidgetItem* activityItem(new QTreeWidgetItem);

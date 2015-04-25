@@ -16,9 +16,8 @@ SET( SRC_FILES
     RepoTreeView.cpp
     RepositoryContext.cpp
 
-    CreateRepositoryDlg.cpp
     CloneRepositoryDlg.cpp
-    CloneOptionsWdgt.cpp
+    CreateRepositoryDlg.cpp
     ProgressDlg.cpp
 )
 
@@ -30,18 +29,17 @@ SET( HDR_FILES
     RepoTreeView.hpp
     RepositoryContext.hpp
 
+    CloneRepositoryDlg.hpp
     CreateRepositoryDlg.h
-    CloneRepositoryDlg.h
-    CloneOptionsWdgt.hpp
     ProgressDlg.hpp
 )
 
 SET( UI_FILES
 
-    CreateRepositoryDlg.ui
-    CloneRepositoryDlg.ui
     CloneOptionsWdgt.ui
     ProgressDlg.ui
+    CloneRepositoryDlg.ui
+    CreateRepositoryDlg.ui
 )
 
 SET( HID_FILES

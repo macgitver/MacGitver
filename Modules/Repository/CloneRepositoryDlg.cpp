@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2015 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Nils Fenner <nils@macgitver.org>
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,8 +17,7 @@
  *
  */
 
-#include <QFileDialog>
-#include <QMessageBox>
+#include "CloneRepositoryDlg.hpp"
 
 #include "libMacGitverCore/Config/Config.h"
 
@@ -23,22 +25,42 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
-#include "CloneRepositoryDlg.h"
-#include "CloneOptionsWdgt.hpp"
+#include <QFileDialog>
+#include <QMessageBox>
 #include "ProgressDlg.hpp"
 
-CloneRepositoryDlg::CloneRepositoryDlg()
-    : mProgress( NULL )
+
+CloneOptionsWdgt::CloneOptionsWdgt()
+{
+    setupUi(this);
+}
+
+void CloneOptionsWdgt::on_txtCloneMode_currentIndexChanged(int index)
+{
+    // Note: clone modes are fixed
+    mCloneMode = static_cast<CloneMode>( index );
+    grpSubmodules->setEnabled( mCloneMode == cmCheckout );
+}
+
+void CloneOptionsWdgt::on_chkInitSubmodules_toggled(bool checked)
+{
+    chkSubmodulesRecursive->setEnabled( checked );
+    if( !checked )
+    {
+        chkSubmodulesRecursive->setChecked( false );
+    }
+}
+
+
+CloneWdgt::CloneWdgt()
 {
     setupUi( this );
 
-    connect( btnBrowseTo, SIGNAL(clicked()), SLOT(onBrowse()) );
-    connect( txtPath, SIGNAL(textChanged(QString)), SLOT(checkValid()) );
-
-    checkValid();
+    connect(btnBrowseTo,    &QAbstractButton::clicked,
+            this,           &CloneWdgt::onBrowse);
 }
 
-void CloneRepositoryDlg::onBrowse()
+void CloneWdgt::onBrowse()
 {
     QString fn = txtPath->text();
     if( fn.isEmpty() )
@@ -59,7 +81,7 @@ void CloneRepositoryDlg::onBrowse()
     fd->open( this, SLOT(onBrowseHelper(QString)) );
 }
 
-void CloneRepositoryDlg::onBrowseHelper( const QString& directory )
+void CloneWdgt::onBrowseHelper( const QString& directory )
 {
     if( directory.isEmpty() )
     {
@@ -70,12 +92,30 @@ void CloneRepositoryDlg::onBrowseHelper( const QString& directory )
     txtPath->setText( directory );
 }
 
-void CloneRepositoryDlg::checkValid()
-{
-    bool okay = !txtPath->text().isEmpty() &&
-                !txtUrl->text().isEmpty();
 
-    QDir wanted( QDir::toNativeSeparators( txtPath->text() ) );
+CloneDlg::CloneDlg()
+    : mCloneWdgt(new CloneWdgt)
+    , mCloneOptsWdgt(new CloneOptionsWdgt)
+{
+    setDialogWidgets(mCloneWdgt, mCloneOptsWdgt);
+
+    connect(mCloneWdgt->txtPath,    &QLineEdit::textChanged,
+            this,                   &CloneDlg::checkValid);
+
+    checkValid();
+}
+
+void CloneDlg::checkValid()
+{
+    if (!mCloneWdgt) {
+        setAcceptable(false);
+        return;
+    }
+
+    bool okay = !mCloneWdgt->txtPath->text().isEmpty() &&
+                !mCloneWdgt->txtUrl->text().isEmpty();
+
+    QDir wanted( QDir::toNativeSeparators( mCloneWdgt->txtPath->text() ) );
     if( wanted.exists() )
     {
         QStringList sl = wanted.entryList( QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot );
@@ -85,16 +125,20 @@ void CloneRepositoryDlg::checkValid()
         }
     }
 
-    buttonBox->button( QDialogButtonBox::Ok )->setEnabled( okay );
+    setAcceptable( okay );
 }
 
-void CloneRepositoryDlg::accept()
+void CloneDlg::accept()
 {
     Git::CloneOperation* clone = new Git::CloneOperation( this );
-    QString repoName  = QUrl( txtUrl->text() ).adjusted( QUrl::NormalizePathSegments | QUrl::StripTrailingSlash ).toString();
-    QString targetDir = QUrl( txtPath->text() ).adjusted( QUrl::NormalizePathSegments | QUrl::StripTrailingSlash ).toString();
+    QString repoName  = QUrl(mCloneWdgt->txtUrl->text() )
+                        .adjusted(QUrl::NormalizePathSegments |
+                                  QUrl::StripTrailingSlash ).toString();
+    QString targetDir = QUrl(mCloneWdgt->txtPath->text() )
+                        .adjusted(QUrl::NormalizePathSegments |
+                                  QUrl::StripTrailingSlash ).toString();
 
-    if ( chkAppendRepoName->isChecked() )
+    if ( mCloneWdgt->chkAppendRepoName->isChecked() )
     {
         targetDir += QString::fromUtf8("/%1")
                     .arg( QUrl( repoName ).fileName() );
@@ -103,13 +147,13 @@ void CloneRepositoryDlg::accept()
     clone->setBackgroundMode( true );
     clone->setUrl( repoName );
     clone->setPath( targetDir );
-    clone->setRemoteAlias( txtRemoteAlias->text() );
+    clone->setRemoteAlias( mCloneWdgt->txtRemoteAlias->text() );
 
-    if ( mCloneOpts )
+    if ( mCloneOptsWdgt )
     {
-        clone->setBare( mCloneOpts->mCloneMode == CloneOptionsWdgt::cmBare );
-        clone->setReference( mCloneOpts->txtBranch->text() );
-        clone->setDepth( mCloneOpts->txtCloneDepth->value() );
+        clone->setBare( mCloneOptsWdgt->mCloneMode == CloneOptionsWdgt::cmBare );
+        clone->setReference( mCloneOptsWdgt->txtBranch->text() );
+        clone->setDepth( mCloneOptsWdgt->txtCloneDepth->value() );
     }
 
     mProgress = new ProgressDlg;
@@ -140,7 +184,7 @@ void CloneRepositoryDlg::accept()
     clone->execute();
 }
 
-void CloneRepositoryDlg::beginDownloading()
+void CloneDlg::beginDownloading()
 {
     disconnect( sender(), SIGNAL(transportProgress(quint32,quint32,quint32,quint64)),
                 this, SLOT(beginDownloading()) );
@@ -151,13 +195,13 @@ void CloneRepositoryDlg::beginDownloading()
     updateAction();
 }
 
-void CloneRepositoryDlg::doneDownload()
+void CloneDlg::doneDownload()
 {
     mStates[ Download ] = Done;
     updateAction();
 }
 
-void CloneRepositoryDlg::doneIndexing()
+void CloneDlg::doneIndexing()
 {
     mStates[ Index ] = Done;
 
@@ -167,13 +211,13 @@ void CloneRepositoryDlg::doneIndexing()
     updateAction();
 }
 
-void CloneRepositoryDlg::doneCheckout()
+void CloneDlg::doneCheckout()
 {
     mStates[ Checkout ] = Done;
     updateAction();
 }
 
-void CloneRepositoryDlg::rootCloneFinished()
+void CloneDlg::rootCloneFinished()
 {
     Git::BaseOperation* operation = static_cast<Git::BaseOperation*>( sender() );
     Q_ASSERT( operation );
@@ -189,7 +233,7 @@ void CloneRepositoryDlg::rootCloneFinished()
     mProgress->reject();
 }
 
-void CloneRepositoryDlg::updateAction()
+void CloneDlg::updateAction()
 {
     QStringList open, current, done;
 
@@ -212,28 +256,4 @@ void CloneRepositoryDlg::updateAction()
     }
 
     mProgress->setAction( mAction, open, current, done );
-}
-
-void CloneRepositoryDlg::on_btnCloneopts_toggled(bool checked)
-{
-    if ( checked )
-    {
-        if ( !mCloneOpts )
-        {
-            mCloneOpts = new CloneOptionsWdgt();
-        }
-
-        optsLayout->addWidget( mCloneOpts );
-        mCloneOpts->show();
-    }
-    else
-    {
-        optsLayout->removeWidget( mCloneOpts );
-        if ( mCloneOpts )
-        {
-            mCloneOpts->hide();
-        }
-        layout()->activate();
-        resize( width(), minimumSizeHint().height() );
-    }
 }

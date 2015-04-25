@@ -28,7 +28,7 @@
 
 #include "RepositoryModule.h"
 #include "RepoTreeView.hpp"
-#include "CloneRepositoryDlg.h"
+#include "CloneRepositoryDlg.hpp"
 #include "CreateRepositoryDlg.h"
 
 RepositoryModule::RepositoryModule()
@@ -132,7 +132,7 @@ void RepositoryModule::onRepositoryOpenHelper()
 
 void RepositoryModule::onRepositoryClone()
 {
-    CloneRepositoryDlg().exec();
+    CloneDlg().exec();
 }
 
 void RepositoryModule::onRecentRepositoryOpen( const QVariant& path )

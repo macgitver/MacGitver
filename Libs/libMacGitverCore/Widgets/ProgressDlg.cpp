@@ -97,6 +97,8 @@ void ProgressDlg::addActivity(const QString& description, QObject* activity,
         activityItem->addChild(stepItem);
         ui->treeProgress->setItemWidget(stepItem, 0, s);
     }
+
+    a->txtStatusInfo->setText(tr("Running..."));
 }
 
 void ProgressDlg::setStatusInfo(QObject* activity, const QString& step,
@@ -167,7 +169,9 @@ void ProgressDlg::remoteMessage(const QString& msg)
 
 void ProgressDlg::finished(QObject* activity)
 {
-    mActivities[activity]->mStatus = Private::ProgressWdgt::Stopped;
+    Private::ProgressWdgt* a = mActivities[activity];
+    a->mStatus = Private::ProgressWdgt::Stopped;
+    a->txtStatusInfo->setText(tr("Finished!"));
 
     bool done = true;
     foreach (Private::ProgressWdgt* a, mActivities) {

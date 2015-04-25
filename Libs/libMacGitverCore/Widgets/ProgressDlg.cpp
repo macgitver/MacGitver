@@ -5,9 +5,7 @@
 
 #include <QStringBuilder>
 #include <QCloseEvent>
-#include <QDebug>
 #include <QPushButton>
-#include <QString>
 
 namespace Private
 {
@@ -53,6 +51,9 @@ ProgressDlg::ProgressDlg()
     p.setColor( QPalette::Base, p.color( QPalette::Window ) );
     p.setColor( QPalette::Text, p.color( QPalette::WindowText ) );
     ui->txtLog->setPalette( p );
+
+    connect(&mUpdater, &QTimer::timeout, this, &ProgressDlg::updateActivities);
+    mUpdater.start(250);
 }
 
 ProgressDlg::~ProgressDlg()
@@ -60,39 +61,54 @@ ProgressDlg::~ProgressDlg()
     delete ui;
 }
 
-void ProgressDlg::setAction( const QString& action,
-                             const QStringList& open,
-                             const QStringList& current,
-                             const QStringList& done )
+int ProgressDlg::updateInterval() const
 {
-    QString act = action;
-
-    foreach( QString s, done )
-    {
-        act += QStringLiteral( " (<font color=\"green\">" ) % s % QStringLiteral( "</font>)" );
-    }
-
-    foreach( QString s, current )
-    {
-        act += QStringLiteral( " (<font color=\"blue\">" ) % s % QStringLiteral( "</font>)" );
-    }
-
-    foreach( QString s, open )
-    {
-        act += QStringLiteral( " (<font color=\"red\">" ) % s % QStringLiteral( "</font>)" );
-    }
-
-    ui->lblAction->setText( act );
+    return mUpdater.interval();
 }
 
-void ProgressDlg::setCurrent(QObject* current)
+void ProgressDlg::setUpdateInterval(int msec)
 {
-    mCurrent = current;
+    mUpdater.setInterval(msec);
+}
 
-    connect( mCurrent, SIGNAL(remoteMessage(QString)),
-             this, SLOT(remoteMessage(QString)) );
-    connect( mCurrent, SIGNAL(transportProgress(quint32, quint32, quint32, quint64)),
-             this, SLOT(transportProgress(quint32, quint32, quint32, quint64)) );
+void ProgressDlg::addActivity(const QString& description, QObject* activity,
+                              const StepInfo::List& steps)
+{
+    Q_ASSERT(activity);
+
+    Private::ProgressWdgt* a( new Private::ProgressWdgt(description) );
+    mActivities[activity] = a;
+
+    QTreeWidgetItem* activityItem(new QTreeWidgetItem);
+    ui->treeProgress->addTopLevelItem(activityItem);
+    ui->treeProgress->setItemWidget(activityItem, 0, a);
+
+    foreach (const StepInfo& sir, steps) {
+        Private::ProgressWdgt* s = new Private::ProgressWdgt(sir.desc);
+        a->mSteps[sir.name] = s;
+
+        QTreeWidgetItem* stepItem(new QTreeWidgetItem);
+        activityItem->addChild(stepItem);
+        ui->treeProgress->setItemWidget(stepItem, 0, s);
+    }
+}
+
+void ProgressDlg::setStatusInfo(QObject* activity, const QString& step,
+                                const QString& text)
+{
+    Q_ASSERT(activity && !step.isEmpty());
+
+    Private::ProgressWdgt* s = findStep(activity, step);
+    s->txtStatusInfo->setText(text);
+}
+
+void ProgressDlg::setPercentage(QObject* activity, const QString& step,
+                                qreal percent)
+{
+    Q_ASSERT(activity && !step.isEmpty());
+
+    Private::ProgressWdgt* s = findStep(activity, step);
+    s->mPercentage = qMin( qMax(percent, 0.), 1. ) * 100.;
 }
 
 void ProgressDlg::closeEvent( QCloseEvent* ev )
@@ -106,35 +122,7 @@ void ProgressDlg::closeEvent( QCloseEvent* ev )
     QDialog::closeEvent( ev );
 }
 
-void ProgressDlg::transportProgress( quint32 totalObjects,
-                                     quint32 indexedObjects,
-                                     quint32 receivedObjects,
-                                     quint64 receivedBytes )
-{
-    QString recv;
-    if( receivedBytes > 1024 * 1024 * 950 ) /* 950 is so we get 0.9 gb */
-    {
-        recv = QString::number( receivedBytes / (1024*1024*1024.0), 'f', 2 ) % QStringLiteral( " Gb" );
-    }
-    else if( receivedBytes > 1024 * 950 )
-    {
-        recv = QString::number( receivedBytes / (1024*1024.0), 'f', 2 ) % QStringLiteral( " Mb" );
-    }
-    else if( receivedBytes > 950 )
-    {
-        recv = QString::number( receivedBytes / 1024.0, 'f', 2 ) % QStringLiteral( " Kb" );
-    }
-    else
-    {
-        recv = QString::number( receivedBytes );
-    }
-    ui->lblTransferSize->setText( recv );
-
-    ui->progressBar->setRange( 0, totalObjects * 2 );
-    ui->progressBar->setValue( indexedObjects + receivedObjects );
-}
-
-void ProgressDlg::remoteMessage( const QString& msg )
+void ProgressDlg::remoteMessage(const QString& msg)
 {
     mRawRemoteMessage += msg;
 
@@ -166,27 +154,53 @@ void ProgressDlg::remoteMessage( const QString& msg )
         output += QString( outputBuffer, outBufLen );
 
     QString log = mBaseLog % QStringLiteral( "<br/>" ) %
-            output.replace( QChar( L'\n' ), QLatin1String("<br/>") ).simplified();
+            output.replace( QChar( L'\n' ), QStringLiteral("<br/>") ).simplified();
 
     ui->txtLog->setHtml( log );
 }
 
-void ProgressDlg::beginStep( const QString& step )
+void ProgressDlg::finished(QObject* activity)
 {
-    mBaseLog += tr( "<font color=\"blue\">%1</font><br/>" ).arg( step );
-    ui->txtLog->setHtml( mBaseLog );
+    mActivities[activity]->mStatus = Private::ProgressWdgt::Stopped;
+
+    bool done = true;
+    foreach (Private::ProgressWdgt* a, mActivities) {
+        done &= (a->mStatus == Private::ProgressWdgt::Stopped);
+        if (!done) {
+            break;
+        }
+    }
+
+    if (done) {
+        mDone = true;
+        ui->buttonBox->button( QDialogButtonBox::Close )->setEnabled( true );
+    }
 }
 
-void ProgressDlg::finalizeStep()
+void ProgressDlg::finished(QObject* activity, const QString& step)
 {
-    mBaseLog = ui->txtLog->toHtml() % QStringLiteral( "<br/>" );
-    mRawRemoteMessage = QString();
+    Q_ASSERT(activity && !step.isEmpty());
 
-    ui->txtLog->setHtml( mBaseLog );
+    Private::ProgressWdgt* a = mActivities[activity];
+    a->mSteps[step]->mStatus = Private::ProgressWdgt::Stopped;
 }
 
-void ProgressDlg::setDone()
+void ProgressDlg::updateActivities()
 {
-    mDone = true;
-    ui->buttonBox->button( QDialogButtonBox::Close )->setEnabled( true );
+    foreach(Private::ProgressWdgt* a, mActivities) {
+        a->mPercentage = 0;
+        foreach (Private::ProgressWdgt* s, a->mSteps) {
+            s->progressBar->setValue(qRound(s->mPercentage));
+            qreal stepPercent = s->mPercentage / a->mSteps.size();
+            a->mPercentage += qMin( qMax(stepPercent, 0.), 100.);
+        }
+
+        a->progressBar->setValue(qRound(a->mPercentage));
+    }
+}
+
+Private::ProgressWdgt* ProgressDlg::findStep(QObject* activity, const QString& step) const
+{
+    Private::ProgressWdgt* a = mActivities[activity];
+    return step.isEmpty() || !a ? nullptr : a->mSteps[step];
 }

@@ -6,6 +6,7 @@
 
 #include <QMap>
 #include <QPointer>
+#include <QTimer>
 
 namespace Private
 {
@@ -22,6 +23,14 @@ class MGV_CORE_API ProgressDlg : public BlueSky::Dialog
     Q_OBJECT
 
 public:
+    struct StepInfo
+    {
+        typedef QVector<StepInfo> List;
+
+        QString name;
+        QString desc;
+    };
+
     typedef QMap< QPointer<QObject>, QPointer<Private::ProgressWdgt> > Activities;
 
 public:
@@ -29,22 +38,28 @@ public:
     ~ProgressDlg();
 
 public:
-    void setAction( const QString& action, const QStringList& open,
-                    const QStringList& current, const QStringList& done );
-    void setCurrent(QObject* current);
+    int updateInterval() const;
+    void setUpdateInterval(int msec);
+
+    void addActivity(const QString& description, QObject* activity,
+                     const StepInfo::List& steps);
+
+    void setStatusInfo(QObject* activity, const QString& step,
+                       const QString& text);
+    void setPercentage(QObject* activity, const QString& step, qreal percent);
+    void remoteMessage(const QString& msg);
+
+    void finished(QObject* activity);
+    void finished(QObject* activity, const QString& step);
 
 private slots:
-    void transportProgress( quint32 totalObjects, quint32 indexedObjects,
-                            quint32 receivedObjects, quint64 receivedBytes );
-    void remoteMessage( const QString& msg );
-
-public:
-    void setDone();
-    void beginStep( const QString& step );
-    void finalizeStep();
+    void updateActivities();
 
 protected:
     void closeEvent( QCloseEvent* ev );
+
+private:
+    Private::ProgressWdgt* findStep(QObject* activity, const QString& step) const;
 
 private:
     Ui::ProgressDlg*    ui;
@@ -52,6 +67,8 @@ private:
 private:
     bool            mDone;
     QString         mBaseLog;
-    QObject*        mCurrent;
     QString         mRawRemoteMessage;
+    Activities      mActivities;
+
+    QTimer          mUpdater;
 };

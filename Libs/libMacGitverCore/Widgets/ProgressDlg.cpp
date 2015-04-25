@@ -68,7 +68,13 @@ int ProgressDlg::updateInterval() const
 
 void ProgressDlg::setUpdateInterval(int msec)
 {
-    mUpdater.setInterval(msec);
+    if (mUpdater.isActive()) {
+        // restart timer with the new interval
+        mUpdater.start(msec);
+    }
+    else {
+        mUpdater.setInterval(msec);
+    }
 }
 
 void ProgressDlg::addActivity(const QString& description, QObject* activity,

@@ -24,10 +24,10 @@
 #include "libGitWrap/Operations/CloneOperation.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
+#include "libMacGitverCore/Widgets/ProgressDlg.hpp"
 
 #include <QFileDialog>
 #include <QMessageBox>
-#include "ProgressDlg.hpp"
 
 
 CloneOptionsWdgt::CloneOptionsWdgt()

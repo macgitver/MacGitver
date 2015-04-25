@@ -19,6 +19,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 
+#include "CloneRepositoryDlg.hpp"
 #include "RemoteCreateEditDlg.h"
 #include "RemotesModule.h"
 #include "RemotesView.h"
@@ -35,6 +36,7 @@ BlueSky::View* RemotesModule::createRemotesView()
 void RemotesModule::initialize()
 {
     setupActions( this );
+    acCloneAC->mergeInto( "CloneMP" );
     acRemotesAC->mergeInto( "RemotesMP" );
 
     MacGitver::self().registerView( "Remotes", tr( "Remotes" ),
@@ -44,6 +46,11 @@ void RemotesModule::initialize()
 void RemotesModule::deinitialize()
 {
     MacGitver::self().unregisterView( "Remotes" );
+}
+
+void RemotesModule::onClone()
+{
+    CloneDlg().exec();
 }
 
 void RemotesModule::onRemoteCreate()

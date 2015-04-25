@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ProgressWdgt</class>
+ <widget class="QWidget" name="ProgressWdgt">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>448</width>
+    <height>83</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Progress</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="txtHeader">
+     <property name="text">
+      <string>Progress:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="progressBar"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="txtStatusInfo">
+     <property name="text">
+      <string>Not started...</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

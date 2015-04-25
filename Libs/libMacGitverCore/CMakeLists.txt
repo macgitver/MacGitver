@@ -55,6 +55,7 @@ SET( SRC_FILES
     Widgets/FlatTreeComboBox.cpp
     Widgets/FlatTreeModel.cpp
     Widgets/FlatTreeDelegate.cpp
+    Widgets/ProgressDlg.cpp
     Widgets/SHA1Input.cpp
     Widgets/ShortCommitModel.cpp
     Widgets/RepoStateWidget.cpp
@@ -102,6 +103,7 @@ SET( PUB_HDR_FILES
     Widgets/FlatTreeComboBox.h
     Widgets/FlatTreeModel.h
     Widgets/FlatTreeDelegate.h
+    Widgets/ProgressDlg.hpp
     Widgets/SHA1Input.h
     Widgets/ShortCommitModel.h
     Widgets/TreeViewCtxMenu.hpp
@@ -149,6 +151,9 @@ SET( UI_FILES
     RepoMan/Config/RepoManConfigPage.ui
 
     Widgets/ExpandableDlg.ui
+    Widgets/ProgressDlg.ui
+
+    Widgets/ProgressWdgt.ui
 )
 
 SET( HID_FILES

@@ -130,43 +130,6 @@ void ProgressDlg::closeEvent( QCloseEvent* ev )
     QDialog::closeEvent( ev );
 }
 
-void ProgressDlg::remoteMessage(const QString& msg)
-{
-    mRawRemoteMessage += msg;
-
-    QString output;
-    QChar outputBuffer[ 256 ];
-    int outBufPos = 0, outBufLen = 0;
-
-    for( int i = 0; i < mRawRemoteMessage.length(); ++i )
-    {
-        if( mRawRemoteMessage[ i ] == QChar( L'\r' ) )
-        {
-            outBufPos = 0;
-        }
-        else if( mRawRemoteMessage[ i ] == QChar( L'\n' ) )
-        {
-            if( outBufLen )
-                output += QString( outputBuffer, outBufLen );
-            output += QChar( L'\n' );
-            outBufPos = outBufLen = 0;
-        }
-        else
-        {
-            outputBuffer[ outBufPos++] = mRawRemoteMessage[ i ];
-            outBufLen = qMax( outBufLen, outBufPos );
-        }
-    }
-
-    if( outBufLen )
-        output += QString( outputBuffer, outBufLen );
-
-    QString log = mBaseLog % QStringLiteral( "<br/>" ) %
-            output.replace( QChar( L'\n' ), QStringLiteral("<br/>") ).simplified();
-
-    ui->txtLog->setHtml( log );
-}
-
 void ProgressDlg::finished(QObject* activity)
 {
     Private::ProgressWdgt* a = mActivities[activity];

@@ -47,7 +47,6 @@ public:
     void setStatusInfo(QObject* activity, const QString& step,
                        const QString& text);
     void setPercentage(QObject* activity, const QString& step, qreal percent);
-    void remoteMessage(const QString& msg);
 
     void finished(QObject* activity);
     void finished(QObject* activity, const QString& step);

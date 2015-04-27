@@ -188,7 +188,20 @@ void ProgressDlg::updateActivities()
 
             ++it;
         }
+    }
+}
 
+void ProgressDlg::accept()
+{
+    if (isDone()) {
+        BlueSky::Dialog::accept();
+    }
+}
+
+void ProgressDlg::reject()
+{
+    if (isDone()) {
+        BlueSky::Dialog::reject();
     }
 }
 

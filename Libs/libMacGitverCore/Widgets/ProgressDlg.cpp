@@ -135,18 +135,6 @@ void ProgressDlg::finished(QObject* activity)
     a->mStatus = Private::ProgressWdgt::Stopped;
     a->txtStatusInfo->setText(tr("Finished!"));
 
-    bool done = true;
-    foreach (Private::ProgressWdgt* a, mActivities) {
-        done &= (a->mStatus == Private::ProgressWdgt::Stopped);
-        if (!done) {
-            break;
-        }
-    }
-
-    if (done) {
-        mDone = true;
-        ui->buttonBox->button( QDialogButtonBox::Close )->setEnabled( true );
-    }
 }
 
 void ProgressDlg::finished(QObject* activity, const QString& step)
@@ -189,6 +177,8 @@ void ProgressDlg::updateActivities()
             ++it;
         }
     }
+
+    setCanClose();
 }
 
 void ProgressDlg::accept()

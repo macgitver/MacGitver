@@ -178,7 +178,7 @@ void CloneDlg::accept()
                    this,  &CloneDlg::doneCheckout );
     }
 
-    mProgress->addActivity(tr("Cloning <b>%1</b> to <b>%2</b>")
+    mProgress->addActivity(tr("Clone <b>%1</b> to <b>%2</b>")
                            .arg(repoName).arg(targetDir), clone, steps);
 
     connect( clone, &Git::CloneOperation::finished,

@@ -101,18 +101,18 @@ void ProgressDlg::addActivity(const QString& description, QObject* activity,
 void ProgressDlg::setStatusInfo(QObject* activity, const QString& step,
                                 const QString& text)
 {
-    Q_ASSERT(activity && !step.isEmpty());
-
     Private::ProgressWdgt* s = findStep(activity, step);
+    Q_ASSERT(s);
+
     s->txtStatusInfo->setText(text);
 }
 
 void ProgressDlg::setPercentage(QObject* activity, const QString& step,
                                 qreal percent)
 {
-    Q_ASSERT(activity && !step.isEmpty());
-
     Private::ProgressWdgt* s = findStep(activity, step);
+    Q_ASSERT(s);
+
     s->mPercentage = qMin( qMax(percent, 0.), 1. ) * 100.;
 }
 
@@ -130,6 +130,8 @@ void ProgressDlg::closeEvent( QCloseEvent* ev )
 void ProgressDlg::finished(QObject* activity)
 {
     Private::ProgressWdgt* a = mActivities[activity];
+    Q_ASSERT(a);
+
     a->mStatus = Private::ProgressWdgt::Stopped;
     a->txtStatusInfo->setText(tr("Finished!"));
 

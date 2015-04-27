@@ -19,6 +19,8 @@ namespace Private
 
     public:
         ProgressWdgt(const QString& description)
+            : mStatus(Running)
+            , mPercentage(0.)
         {
             setupUi(this);
             progressBar->setMinimum(0);
@@ -28,9 +30,9 @@ namespace Private
 
     public:
         Steps   mSteps;
-        Status  mStatus     = Running;
+        Status  mStatus;
 
-        qreal   mPercentage = 0.;
+        qreal   mPercentage;
     };
 
 }

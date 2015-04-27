@@ -143,6 +143,7 @@ void ProgressDlg::finished(QObject* activity, const QString& step)
     Q_ASSERT(s);
 
     s->mStatus = Private::ProgressWdgt::Stopped;
+    s->mPercentage = 100.;
 }
 
 void ProgressDlg::setError(QObject* activity, const QString& message)

@@ -49,10 +49,6 @@ ProgressDlg::ProgressDlg()
     close->setEnabled( false );
     connect( close, &QPushButton::clicked, this, &ProgressDlg::close );
 
-    QPalette p;
-    p.setColor( QPalette::Base, p.color( QPalette::Window ) );
-    p.setColor( QPalette::Text, p.color( QPalette::WindowText ) );
-    ui->txtLog->setPalette( p );
 
     connect(&mUpdater, &QTimer::timeout, this, &ProgressDlg::updateActivities);
     mUpdater.start(250);

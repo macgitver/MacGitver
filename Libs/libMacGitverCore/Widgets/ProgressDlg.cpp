@@ -134,6 +134,7 @@ void ProgressDlg::finished(QObject* activity)
 
     a->mStatus = Private::ProgressWdgt::Stopped;
     a->txtStatusInfo->setText(tr("Finished!"));
+    a->setStyleSheet(QStringLiteral("QProgressBar::chunk{background-color: #55FF55;}"));
 
 }
 
@@ -144,6 +145,7 @@ void ProgressDlg::finished(QObject* activity, const QString& step)
 
     s->mStatus = Private::ProgressWdgt::Stopped;
     s->mPercentage = 100.;
+    s->setStyleSheet(QStringLiteral("QProgressBar::chunk{background-color: #55FF55;}"));
 }
 
 void ProgressDlg::setError(QObject* activity, const QString& message)
@@ -153,6 +155,7 @@ void ProgressDlg::setError(QObject* activity, const QString& message)
     a->setToolTip(tr("<b>Activity failed!</b><hr/>%1").arg(message));
     a->txtStatusInfo->setText(tr("Failed!"));
     a->mStatus = Private::ProgressWdgt::Stopped;
+    a->setStyleSheet(QStringLiteral("QProgressBar{background-color: #FF5555;} QProgressBar::chunk{background-color: red;}"));
 }
 
 void ProgressDlg::updateActivities()

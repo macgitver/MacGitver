@@ -3,9 +3,9 @@
 #include "ui_ProgressDlg.h"
 #include "ui_ProgressWdgt.h"
 
-#include <QStringBuilder>
 #include <QCloseEvent>
 #include <QPushButton>
+#include <QStringBuilder>
 
 namespace Private
 {
@@ -13,9 +13,9 @@ namespace Private
     class ProgressWdgt : public QWidget, public Ui::ProgressWdgt
     {
     public:
-        typedef QMap< QString, QPointer<ProgressWdgt> > Steps;
-
         enum Status { Running = 0, Stopped };
+
+        typedef QMap< QString, QPointer<ProgressWdgt> > Steps;
 
     public:
         ProgressWdgt(const QString& description)

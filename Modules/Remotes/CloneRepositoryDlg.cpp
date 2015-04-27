@@ -215,15 +215,13 @@ void CloneDlg::rootCloneFinished()
     Git::BaseOperation* operation = static_cast<Git::BaseOperation*>( sender() );
     Q_ASSERT( operation );
 
-    if ( operation->result() )
-    {
-        mProgress->finished(sender());
-        return;
+    if ( operation->result() ) {
+        mProgress->finished(operation);
+    }
+    else {
+        mProgress->setError(operation, operation->result().errorText());
     }
 
-    QMessageBox::critical(mProgress, tr("Errors while cloning repository."),
-                          tr("Cloning failed:\nGit Message: %1").arg(operation->result().errorText()));
-    mProgress->reject();
 }
 
 void CloneDlg::onCheckoutProgress(const QString& fileName, quint64 totalFiles,

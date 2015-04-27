@@ -140,7 +140,7 @@ void CloneDlg::accept()
 
     if ( mCloneWdgt->chkAppendRepoName->isChecked() )
     {
-        targetDir += QString::fromUtf8("/%1")
+        targetDir += QStringLiteral("/%1")
                     .arg( QUrl( repoName ).fileName() );
     }
 

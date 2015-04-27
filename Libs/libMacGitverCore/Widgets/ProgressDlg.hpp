@@ -53,6 +53,11 @@ public:
 
     void setError(QObject* activity, const QString& message);
 
+public:
+    // virtual slots
+    void accept();
+    void reject();
+
 private slots:
     void updateActivities();
 

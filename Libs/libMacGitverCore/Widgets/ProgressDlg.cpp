@@ -159,15 +159,27 @@ void ProgressDlg::finished(QObject* activity, const QString& step)
 
 void ProgressDlg::updateActivities()
 {
-    foreach(Private::ProgressWdgt* a, mActivities) {
-        a->mPercentage = 0;
-        foreach (Private::ProgressWdgt* s, a->mSteps) {
-            s->progressBar->setValue(qRound(s->mPercentage));
-            qreal stepPercent = s->mPercentage / a->mSteps.size();
-            a->mPercentage += qMin( qMax(stepPercent, 0.), 100.);
+    Activities::Iterator it = mActivities.begin();
+    while ( it != mActivities.end() ) {
+        if (!it.key()) {
+            // remove invalid activities
+            it = mActivities.erase(it);
+        }
+        else {
+            Private::ProgressWdgt* a = *it;
+            a->mPercentage = 0.;
+
+            foreach (Private::ProgressWdgt* s, a->mSteps) {
+                s->progressBar->setValue(qRound(s->mPercentage));
+                qreal stepPercent = s->mPercentage / a->mSteps.size();
+                a->mPercentage += qMin( qMax(stepPercent, 0.), 100.);
+            }
+
+            a->progressBar->setValue(qRound(a->mPercentage));
+
+            ++it;
         }
 
-        a->progressBar->setValue(qRound(a->mPercentage));
     }
 }
 

@@ -45,10 +45,9 @@ ProgressDlg::ProgressDlg()
 {
     ui->setupUi( this );
 
-    QPushButton* close = ui->buttonBox->button( QDialogButtonBox::Close );
+    QPushButton* close = ui->buttonBox->button(QDialogButtonBox::Close);
     close->setEnabled( false );
-    connect( close, &QPushButton::clicked, this, &ProgressDlg::close );
-
+    connect(close, &QPushButton::clicked, this, &ProgressDlg::close);
 
     connect(&mUpdater, &QTimer::timeout, this, &ProgressDlg::updateActivities);
     mUpdater.start(250);

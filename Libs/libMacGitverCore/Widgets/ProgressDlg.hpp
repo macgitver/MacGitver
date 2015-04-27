@@ -60,6 +60,9 @@ protected:
 private:
     Private::ProgressWdgt* findStep(QObject* activity, const QString& step) const;
 
+    bool isDone() const;
+    void setCanClose();
+
 private:
     Ui::ProgressDlg*    ui;
 
@@ -71,3 +74,8 @@ private:
 
     QTimer          mUpdater;
 };
+
+inline bool ProgressDlg::isDone() const
+{
+    return mActivities.isEmpty();
+}

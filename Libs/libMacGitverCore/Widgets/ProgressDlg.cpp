@@ -174,3 +174,13 @@ Private::ProgressWdgt* ProgressDlg::findStep(QObject* activity, const QString& s
     Private::ProgressWdgt* a = mActivities[activity];
     return step.isEmpty() || !a ? nullptr : a->mSteps[step];
 }
+
+void ProgressDlg::setCanClose()
+{
+    const bool wasDone = mDone;
+    mDone = isDone();
+
+    if (mDone != wasDone) {
+        ui->buttonBox->button( QDialogButtonBox::Close )->setEnabled( mDone );
+    }
+}

@@ -151,10 +151,19 @@ void ProgressDlg::finished(QObject* activity)
 
 void ProgressDlg::finished(QObject* activity, const QString& step)
 {
-    Q_ASSERT(activity && !step.isEmpty());
+    Private::ProgressWdgt* s = findStep(activity, step);
+    Q_ASSERT(s);
 
+    s->mStatus = Private::ProgressWdgt::Stopped;
+}
+
+void ProgressDlg::setError(QObject* activity, const QString& message)
+{
     Private::ProgressWdgt* a = mActivities[activity];
-    a->mSteps[step]->mStatus = Private::ProgressWdgt::Stopped;
+    Q_ASSERT(a);
+    a->setToolTip(tr("<b>Activity failed!</b><hr/>%1").arg(message));
+    a->txtStatusInfo->setText(tr("Failed!"));
+    a->mStatus = Private::ProgressWdgt::Stopped;
 }
 
 void ProgressDlg::updateActivities()

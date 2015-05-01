@@ -13,13 +13,12 @@ namespace Private
     class ProgressWdgt : public QWidget, public Ui::ProgressWdgt
     {
     public:
-        enum Status { Running = 0, Stopped };
 
         typedef QMap< QString, QPointer<ProgressWdgt> > Steps;
 
     public:
         ProgressWdgt(const QString& description)
-            : mStatus(Running)
+            : mActive(true)
             , mPercentage(0.)
         {
             setupUi(this);
@@ -31,8 +30,8 @@ namespace Private
 
     public:
         Steps   mSteps;
-        Status  mStatus;
 
+        bool    mActive;
         qreal   mPercentage;
     };
 
@@ -133,7 +132,7 @@ void ProgressDlg::finished(QObject* activity)
     Private::ProgressWdgt* a = mActivities[activity];
     Q_ASSERT(a);
 
-    a->mStatus = Private::ProgressWdgt::Stopped;
+    a->mActive = false;
     a->txtStatusInfo->setText(tr("Finished!"));
     a->setStyleSheet(QStringLiteral("QProgressBar::chunk{background-color: #55FF55;}"));
 
@@ -144,7 +143,7 @@ void ProgressDlg::finished(QObject* activity, const QString& step)
     Private::ProgressWdgt* s = findStep(activity, step);
     Q_ASSERT(s);
 
-    s->mStatus = Private::ProgressWdgt::Stopped;
+    s->mActive = false;
     s->mPercentage = 100.;
     s->setStyleSheet(QStringLiteral("QProgressBar::chunk{background-color: #55FF55;}"));
 }
@@ -153,9 +152,9 @@ void ProgressDlg::setError(QObject* activity, const QString& message)
 {
     Private::ProgressWdgt* a = mActivities[activity];
     Q_ASSERT(a);
+    a->mActive = false;
     a->setToolTip(tr("<b>Activity failed!</b><hr/>%1").arg(message));
     a->txtStatusInfo->setText(tr("Failed!"));
-    a->mStatus = Private::ProgressWdgt::Stopped;
     a->setStyleSheet(QStringLiteral("QProgressBar{background-color: #FF5555;} QProgressBar::chunk{background-color: red;}"));
 }
 

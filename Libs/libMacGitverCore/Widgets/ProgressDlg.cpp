@@ -23,6 +23,7 @@ namespace Private
             , mPercentage(0.)
         {
             setupUi(this);
+            setAttribute(Qt::WA_NoSystemBackground);
             progressBar->setMinimum(0);
             progressBar->setMaximum(100);
             txtHeader->setText( description );

@@ -13,6 +13,7 @@ namespace Private
     class ProgressWdgt : public QWidget, public Ui::ProgressWdgt
     {
     public:
+        enum Result { Undefined = 0, Ok, Error };
 
         typedef QMap< QString, QPointer<ProgressWdgt> > Steps;
 
@@ -23,16 +24,61 @@ namespace Private
         {
             setupUi(this);
             setAttribute(Qt::WA_NoSystemBackground);
+            resultChanged(Result::Undefined);
             progressBar->setMinimum(0);
             progressBar->setMaximum(100);
             txtHeader->setText( description );
         }
 
     public:
-        Steps   mSteps;
+        void resultChanged(Result result)
+        {
+            QColor barColor;
 
+            switch (result) {
+            case Result::Ok:
+                barColor = QColor(0x55, 0xFF, 0x55);
+                break;
+
+            case Result::Error:
+                barColor = QColor(0xFF, 0x55, 0x55);
+                break;
+
+            case Result::Undefined:
+            default:
+                barColor = QColor(0x99, 0x99, 0x99);
+                break;
+            }
+
+            progressBar->setStyleSheet(
+                        QStringLiteral(
+                            "QProgressBar{"
+                            "text-align: center;"
+                            "border: 2px solid silver;"
+                            "border-radius: 5px;"
+                            "background: QLinearGradient("
+                            "x1: 0, y1: 0, x2: 0, y2: 1,"
+                            "stop: 0 %1,"
+                            "stop: 1 %2);"
+                            "}")
+                        .arg(barColor.darker(150).name()).arg(barColor.name()) %
+
+                        QStringLiteral(
+                            "QProgressBar::chunk{"
+                            "background: QLinearGradient("
+                            "x1: 0, y1: 0, x2: 0, y2: 1,"
+                            "stop: 0 %1,"
+                            "stop: 1 %2);"
+                            "}")
+                        .arg(barColor.lighter(150).name()).arg(barColor.name())
+                        );
+        }
+
+    public:
         bool    mActive;
         qreal   mPercentage;
+
+        Steps   mSteps;
     };
 
 }
@@ -134,8 +180,7 @@ void ProgressDlg::finished(QObject* activity)
 
     a->mActive = false;
     a->txtStatusInfo->setText(tr("Finished!"));
-    a->setStyleSheet(QStringLiteral("QProgressBar::chunk{background-color: #55FF55;}"));
-
+    a->resultChanged(Private::ProgressWdgt::Result::Ok);
 }
 
 void ProgressDlg::finished(QObject* activity, const QString& step)
@@ -145,7 +190,7 @@ void ProgressDlg::finished(QObject* activity, const QString& step)
 
     s->mActive = false;
     s->mPercentage = 100.;
-    s->setStyleSheet(QStringLiteral("QProgressBar::chunk{background-color: #55FF55;}"));
+    s->resultChanged(Private::ProgressWdgt::Result::Ok);
 }
 
 void ProgressDlg::setError(QObject* activity, const QString& message)
@@ -153,9 +198,9 @@ void ProgressDlg::setError(QObject* activity, const QString& message)
     Private::ProgressWdgt* a = mActivities[activity];
     Q_ASSERT(a);
     a->mActive = false;
-    a->setToolTip(tr("<b>Activity failed!</b><hr/>%1").arg(message));
     a->txtStatusInfo->setText(tr("Failed!"));
-    a->setStyleSheet(QStringLiteral("QProgressBar{background-color: #FF5555;} QProgressBar::chunk{background-color: red;}"));
+    a->setToolTip(tr("<b>Activity failed!</b><hr/>%1").arg(message));
+    a->resultChanged(Private::ProgressWdgt::Result::Error);
 }
 
 void ProgressDlg::updateActivities()

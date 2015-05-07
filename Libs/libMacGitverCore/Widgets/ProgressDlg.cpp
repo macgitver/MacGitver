@@ -208,6 +208,8 @@ void ProgressDlg::updateActivities()
     Activities::Iterator it = mActivities.begin();
     while ( it != mActivities.end() ) {
         Private::ProgressWdgt* a = *it;
+        Q_ASSERT(a);
+
         a->mPercentage = 0.;
 
         foreach (Private::ProgressWdgt* s, a->mSteps) {

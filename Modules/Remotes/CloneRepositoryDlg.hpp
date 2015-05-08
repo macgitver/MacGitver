@@ -84,9 +84,6 @@ private slots:
     void checkValid();
 
     void beginDownloading();
-    void doneDownload();
-    void doneIndexing();
-    void doneCheckout();
     void rootCloneFinished();
 
     void onCheckoutProgress(const QString& fileName,

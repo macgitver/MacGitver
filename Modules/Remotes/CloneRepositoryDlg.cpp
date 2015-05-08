@@ -174,8 +174,6 @@ void CloneDlg::accept()
     if (!clone->bare()) {
           steps << ProgressDlg::StepInfo{ QStringLiteral("checkout"),
                    tr("Checkout the worktree.") };
-          connect( clone, &Git::CloneOperation::doneCheckout,
-                   this,  &CloneDlg::doneCheckout );
     }
 
     mProgress->addActivity(tr("Clone <b>%1</b> to <b>%2</b>")
@@ -187,27 +185,8 @@ void CloneDlg::accept()
              this,  &CloneDlg::onTransportProgress );
     connect( clone, &Git::CloneOperation::checkoutProgress,
              this,  &CloneDlg::onCheckoutProgress );
-    connect( clone, &Git::CloneOperation::doneDownloading,
-             this,  &CloneDlg::doneDownload );
-    connect( clone, &Git::CloneOperation::doneIndexing,
-             this,  &CloneDlg::doneIndexing );
 
     clone->execute();
-}
-
-void CloneDlg::doneDownload()
-{
-    mProgress->finished(sender(), QStringLiteral("transfer"));
-}
-
-void CloneDlg::doneIndexing()
-{
-    mProgress->finished(sender(), QStringLiteral("index"));
-}
-
-void CloneDlg::doneCheckout()
-{
-    mProgress->finished(sender(), QStringLiteral("checkout"));
 }
 
 void CloneDlg::rootCloneFinished()

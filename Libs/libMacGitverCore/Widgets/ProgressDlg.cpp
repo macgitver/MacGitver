@@ -13,7 +13,7 @@ namespace Private
     class ProgressWdgt : public QWidget, public Ui::ProgressWdgt
     {
     public:
-        enum Result { Undefined = 0, Ok, Error };
+        enum class Result { Undefined = 0, Ok, Error };
 
         typedef QMap< QString, QPointer<ProgressWdgt> > Steps;
 

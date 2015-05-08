@@ -140,8 +140,6 @@ void ProgressDlg::addActivity(const QString& description, QObject* activity,
         activityItem->addChild(stepItem);
         ui->treeProgress->setItemWidget(stepItem, 0, s);
     }
-
-    a->progressBar->setFormat(tr("Running..."));
 }
 
 void ProgressDlg::setStatusInfo(QObject* activity, const QString& step,
@@ -179,7 +177,6 @@ void ProgressDlg::finished(QObject* activity)
     Q_ASSERT(a);
 
     a->mActive = false;
-    a->progressBar->setFormat(tr("Finished!"));
     a->resultChanged(Private::ProgressWdgt::Result::Ok);
 }
 

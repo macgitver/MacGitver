@@ -158,6 +158,10 @@ void ProgressDlg::setPercentage(QObject* activity, const QString& step,
     Q_ASSERT(s);
 
     s->mPercentage = qMin( qMax(percent, 0.), 1. ) * 100.;
+
+    if (s->mPercentage >= 100.) {
+        s->resultChanged(Private::ProgressWdgt::Result::Ok);
+    }
 }
 
 void ProgressDlg::closeEvent( QCloseEvent* ev )
@@ -178,16 +182,6 @@ void ProgressDlg::finished(QObject* activity)
 
     a->mActive = false;
     a->resultChanged(Private::ProgressWdgt::Result::Ok);
-}
-
-void ProgressDlg::finished(QObject* activity, const QString& step)
-{
-    Private::ProgressWdgt* s = findStep(activity, step);
-    Q_ASSERT(s);
-
-    s->mActive = false;
-    s->mPercentage = 100.;
-    s->resultChanged(Private::ProgressWdgt::Result::Ok);
 }
 
 void ProgressDlg::setError(QObject* activity, const QString& message)

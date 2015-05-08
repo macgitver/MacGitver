@@ -141,7 +141,7 @@ void ProgressDlg::addActivity(const QString& description, QObject* activity,
         ui->treeProgress->setItemWidget(stepItem, 0, s);
     }
 
-    a->txtStatusInfo->setText(tr("Running..."));
+    a->progressBar->setFormat(tr("Running..."));
 }
 
 void ProgressDlg::setStatusInfo(QObject* activity, const QString& step,
@@ -150,7 +150,7 @@ void ProgressDlg::setStatusInfo(QObject* activity, const QString& step,
     Private::ProgressWdgt* s = findStep(activity, step);
     Q_ASSERT(s);
 
-    s->txtStatusInfo->setText(text);
+    s->progressBar->setFormat(text);
 }
 
 void ProgressDlg::setPercentage(QObject* activity, const QString& step,
@@ -179,7 +179,7 @@ void ProgressDlg::finished(QObject* activity)
     Q_ASSERT(a);
 
     a->mActive = false;
-    a->txtStatusInfo->setText(tr("Finished!"));
+    a->progressBar->setFormat(tr("Finished!"));
     a->resultChanged(Private::ProgressWdgt::Result::Ok);
 }
 
@@ -198,7 +198,7 @@ void ProgressDlg::setError(QObject* activity, const QString& message)
     Private::ProgressWdgt* a = mActivities[activity];
     Q_ASSERT(a);
     a->mActive = false;
-    a->txtStatusInfo->setText(tr("Failed!"));
+    a->progressBar->setFormat(tr("Failed!"));
     a->setToolTip(tr("<b>Activity failed!</b><hr/>%1").arg(message));
     a->resultChanged(Private::ProgressWdgt::Result::Error);
 }

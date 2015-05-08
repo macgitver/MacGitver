@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>448</width>
-    <height>83</height>
+    <height>62</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,12 +22,9 @@
     </widget>
    </item>
    <item>
-    <widget class="QProgressBar" name="progressBar"/>
-   </item>
-   <item>
-    <widget class="QLabel" name="txtStatusInfo">
-     <property name="text">
-      <string>Not started...</string>
+    <widget class="QProgressBar" name="progressBar">
+     <property name="format">
+      <string/>
      </property>
     </widget>
    </item>

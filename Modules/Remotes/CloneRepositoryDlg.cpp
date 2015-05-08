@@ -161,7 +161,7 @@ void CloneDlg::accept()
     // TODO: implement a ProgressDlg::minimumDuration
     mProgress->show();
 
-    if( repoName.endsWith( QLatin1String( ".git" ) ) )
+    if( repoName.endsWith( QStringLiteral( ".git" ) ) )
         repoName = repoName.left( repoName.length() - 4 );
 
     if( repoName.lastIndexOf( QChar( L'/' ) ) != -1 )

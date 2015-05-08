@@ -25,11 +25,6 @@ Ui RepositoryActions {
         ConnectTo           onRepositoryOpen();
     };
 
-    Action RepositoryClone {
-        Text        "&Clone...";
-        ConnectTo   onRepositoryClone();
-    };
-
     Action RepositoryCreate {
         Text        "&New...";
         Shortcut    "Ctrl+N";
@@ -45,11 +40,10 @@ Ui RepositoryActions {
 
     Container RepositoryMenuAC {
 
+        Action      RepositoryCreate;
         Action      RepositoryOpen;
         Menu        RepoOpenRecent;
         Separator;
-        Action      RepositoryCreate;
-        Action      RepositoryClone;
 
     };
 

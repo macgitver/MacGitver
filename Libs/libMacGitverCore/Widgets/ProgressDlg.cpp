@@ -195,8 +195,8 @@ void ProgressDlg::setError(QObject* activity, const QString& message)
     Private::ProgressWdgt* a = mActivities[activity];
     Q_ASSERT(a);
     a->mActive = false;
-    a->progressBar->setFormat(tr("Failed!"));
-    a->setToolTip(tr("<b>Activity failed!</b><hr/>%1").arg(message));
+    a->progressBar->setFormat(tr("Failed. See tool tip for details."));
+    a->setToolTip(tr("<b>Activity failed.</b><hr/>%1").arg(message));
     a->resultChanged(Private::ProgressWdgt::Result::Error);
 }
 

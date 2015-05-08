@@ -6,15 +6,25 @@ QT_PREPARE(Core)
 SET( SRC_FILES
 
     Manager.cpp
+    Activity.cpp
+    Step.cpp
+    Log.cpp
 )
 
 SET( PUB_HDR_FILES
 
     Api.hpp
     Manager.hpp
+    Activity.hpp
+    Step.hpp
+    Log.hpp
 )
 
 SET( PRI_HDR_FILES
+    ManagerPrivate.hpp
+    ActivityPrivate.hpp
+    StepPrivate.hpp
+    LogPrivate.hpp
 )
 
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )

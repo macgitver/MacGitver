@@ -19,19 +19,60 @@
 
 #pragma once
 
-#include "libActivities/Api.hpp"
+#include "libActivities/Activity.hpp"
+
+#include <QObject>
 
 namespace Activities
 {
 
-    class ACTIVITIES_API Manager
+    struct GlobalSnapShot
     {
-    public:
-        Manager();
-        ~Manager();
+        int         mNumActivities;
+        int         mRunningActivities;
+        int         mDoneActivities;
+        int         mFailedActivities;
 
+        int         mCurProgress;
+        int         mMaxProgress;
+
+        QString     mUpfrontName;       // The name of the first registered activity. This is really
+                                        // arbitrary as we obviously cannot display all of them in
+                                        // the global snap shot.
+    };
+
+    class ACTIVITIES_API Manager
+            : public QObject
+    {
+        Q_OBJECT
     private:
+        Manager();
+    public:
+        ~Manager() = default;
 
+        static Manager& instance();
+
+    public:
+        Activity createActivity(const QString& display);
+
+    public:
+        Activity::Vector activities() const;
+
+    signals:
+        void activityCreated(Activities::Activity);
+        void activityUpdated(Activities::Activity);
+        void activityRemoved(Activities::Activity);
+        void stepCreated(Activities::Activity, Activities::Step);
+        void stepUpdated(Activities::Activity, Activities::Step);
+        void stepRemoved(Activities::Activity, Activities::Step);
+        void logUpdated(Activities::Activity);
+
+    signals:
+        void updateGlobalActivity(Activities::GlobalSnapShot);
+        void showProgressDialog(bool modal);
+        void hideProgressDialog();
     };
 
 }
+
+Q_DECLARE_METATYPE(Activities::GlobalSnapShot)

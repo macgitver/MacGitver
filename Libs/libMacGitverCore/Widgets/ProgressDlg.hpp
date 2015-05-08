@@ -49,7 +49,6 @@ public:
     void setPercentage(QObject* activity, const QString& step, qreal percent);
 
     void finished(QObject* activity);
-    void finished(QObject* activity, const QString& step);
 
     void setError(QObject* activity, const QString& message);
 

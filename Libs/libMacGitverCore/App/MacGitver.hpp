@@ -40,7 +40,8 @@ typedef BlueSky::ViewDescriptor::CreatorFunc MgvViewCreator;
 
 class MacGitverPrivate;
 
-class MGV_CORE_API MacGitver : public QObject
+class MGV_CORE_API MacGitver
+        : public QObject
 {
     Q_OBJECT
 public:
@@ -65,9 +66,9 @@ public:
                                           MgvViewCreator creator);
     void unregisterView(const BlueSky::ViewIdentifier& identifier);
 
-    static void log( Log::Type type, const QString& logMessage );
-    static void log( Log::Type type, const char* logMessage );
-    static void log( Log::Type type, const Git::Result& r, const char* logMessage = NULL );
+    static void log(Log::Type type, const QString& logMessage);
+    static void log(Log::Type type, const char* logMessage);
+    static void log(Log::Type type, const Git::Result& r, const char* logMessage = nullptr);
 
 private:
     MacGitverPrivate* d;

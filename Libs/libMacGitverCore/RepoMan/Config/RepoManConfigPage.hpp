@@ -30,7 +30,9 @@ namespace RM
     class AutoRefresher;
 }
 
-class RepoManConfigPage : public ConfigPage, private Ui::RepoManConfigPage
+class RepoManConfigPage
+        : public ConfigPage
+        , private Ui::RepoManConfigPage
 {
     Q_OBJECT
     DECLARE_NESTED_PAGE_CREATOR();

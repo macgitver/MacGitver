@@ -64,13 +64,13 @@ void MacGitverPrivate::init()
     // These are used to accquire global settings and stuff...
     // Set them differently, so we can run unit tests without fiddeling about the global settings.
     if (isGui) {
-        QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
-        QApplication::setApplicationName( QLatin1String( "MacGitver" ) );
+        QApplication::setOrganizationName(QStringLiteral("MacGitver"));
+        QApplication::setApplicationName(QStringLiteral("MacGitver"));
 
-        Heaven::IconManager::self().defaultProvider()->addSearchPath(QLatin1String(":/Images"));
+        Heaven::IconManager::self().defaultProvider()->addSearchPath(QStringLiteral(":/Images"));
     } else {
-        QApplication::setOrganizationName( QLatin1String( "MacGitver" ) );
-        QApplication::setApplicationName( QLatin1String( "MacGitver_NonGui" ) );
+        QApplication::setOrganizationName(QStringLiteral("MacGitver"));
+        QApplication::setApplicationName(QStringLiteral("MacGitver_NonGui"));
     }
 
     sRepoMan    = new RM::RepoMan;
@@ -78,7 +78,7 @@ void MacGitverPrivate::init()
 
     if (isGui) {
         // Continue with the rest of the init-process after QApplication::exec() has started to run.
-        QMetaObject::invokeMethod( this, "bootGui", Qt::QueuedConnection );
+        QMetaObject::invokeMethod(this, "bootGui", Qt::QueuedConnection);
     }
 }
 
@@ -155,7 +155,7 @@ BlueSky::ViewDescriptor* MacGitver::registerView(const BlueSky::ViewIdentifier& 
                                                  const QString &displayName,
                                                  MgvViewCreator creator)
 {
-    return new BlueSky::ViewDescriptor( identifier, displayName, creator );
+    return new BlueSky::ViewDescriptor(identifier, displayName, creator);
 }
 
 void MacGitver::unregisterView(const BlueSky::ViewIdentifier& identifier)
@@ -166,17 +166,17 @@ void MacGitver::unregisterView(const BlueSky::ViewIdentifier& identifier)
     }
 }
 
-void MacGitver::log( Log::Type type, const QString& logMessage )
+void MacGitver::log(Log::Type type, const QString& logMessage)
 {
     Log::Manager().addMessage(logMessage, type);
 }
 
-void MacGitver::log( Log::Type type, const char* logMessage )
+void MacGitver::log(Log::Type type, const char* logMessage)
 {
     Log::Manager().addMessage(QString::fromUtf8(logMessage), type);
 }
 
-void MacGitver::log( Log::Type type, const Git::Result& r, const char* logMessage )
+void MacGitver::log(Log::Type type, const Git::Result& r, const char* logMessage)
 {
     if (logMessage) {
         Log::Manager().addMessage(tr("GitWrap-Error: %1\n(%2)")

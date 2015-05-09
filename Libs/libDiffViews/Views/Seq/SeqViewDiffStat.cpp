@@ -54,9 +54,9 @@ namespace DiffViews
     {
         if( mBinary )
         {
-            return QLatin1String( "Bin" );
+            return QStringLiteral( "Bin" );
         }
-        return QString( QLatin1String( "+%1 -%2" ) ).arg( mAdded ).arg( mRemoved );
+        return QString( QStringLiteral( "+%1 -%2" ) ).arg( mAdded ).arg( mRemoved );
     }
 
     void SeqViewDiffStat::postRendering()

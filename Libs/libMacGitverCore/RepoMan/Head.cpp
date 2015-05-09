@@ -59,7 +59,7 @@ namespace RM
 
         void HeadPrivate::dumpSelf(Internal::Dumper& dumper) const
         {
-            dumper.addLine(QString(QLatin1String("Head 0x%1 - %2"))
+            dumper.addLine(QString(QStringLiteral("Head 0x%1 - %2"))
                            .arg(quintptr(mPub),0,16)
                            .arg(symbolicName));
         }

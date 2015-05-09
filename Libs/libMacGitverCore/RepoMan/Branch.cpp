@@ -108,14 +108,14 @@ namespace RM
 
     void BranchPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Branch 0x%1 - %2"))
+        dumper.addLine(QString(QStringLiteral("Branch 0x%1 - %2"))
                        .arg(quintptr(mPub),0,16)
                        .arg(mName));
     }
 
     QString BranchPrivate::objectTypeName() const
     {
-        return QLatin1String("Branch");
+        return QStringLiteral("Branch");
     }
 
     void BranchPrivate::emitMoved()

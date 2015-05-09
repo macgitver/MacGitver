@@ -256,7 +256,7 @@ namespace RM
 
     void RepoManPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QLatin1String("Repository-Manager"));
+        dumper.addLine(QStringLiteral("Repository-Manager"));
     }
 
     void RepoManPrivate::preTerminate()
@@ -266,12 +266,12 @@ namespace RM
 
     QString RepoManPrivate::displayName() const
     {
-        return QLatin1String("RepoMan");
+        return QStringLiteral("RepoMan");
     }
 
     QString RepoManPrivate::objectTypeName() const
     {
-        return QLatin1String("RepoMan");
+        return QStringLiteral("RepoMan");
     }
 
     Heaven::Menu* RepoManPrivate::contextMenuFor(Base* object)

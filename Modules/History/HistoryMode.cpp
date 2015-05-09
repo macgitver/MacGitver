@@ -36,7 +36,7 @@ HistoryMode::HistoryMode(QObject *parent)
 }
 
 QString HistoryMode::createDefaultState() const {
-    QFile f(QLatin1String(":/Modes/HistoryMode.xml"));
+    QFile f(QStringLiteral(":/Modes/HistoryMode.xml"));
     if (!f.open(QFile::ReadOnly)) {
         return QString();
     }

@@ -96,7 +96,7 @@ void IndexWidget::updateWtFilterView(const WorkingTreeFilterModel * const wtFilt
 void IndexWidget::setupFilters()
 {
     WorkingTreeFilterModel *wtFilter = new WorkingTreeFilterModel;
-    QVariant v = Config::self().get( QLatin1String("Worktree/Filters"),
+    QVariant v = Config::self().get( QStringLiteral("Worktree/Filters"),
                                      int( ALL_FILE_STATUS_FILTERS ) );
     wtFilter->setSourceModel( mStatusModel );
     wtFilter->setFilter( Git::StatusFlags( v.toInt() ) );
@@ -162,7 +162,7 @@ void IndexWidget::setWtFilter(bool enabled, Git::Status flag)
     {
         Git::StatusFlags f = wtfModel->filter();
         wtfModel->setFilter( enabled ? f |= flag : f &= ~flag );
-        Config::self().set( QLatin1String( "Worktree/Filters" ),
+        Config::self().set( QStringLiteral( "Worktree/Filters" ),
                             int( wtfModel->filter() ) );
     }
 

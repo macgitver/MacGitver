@@ -86,12 +86,12 @@ QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
             return info->isActive();
 
         case Qt::ToolTipRole:
-            return QLatin1String("<html><head><style type=\"text/css\">"
+            return QStringLiteral("<html><head><style type=\"text/css\">"
                                  ".h1 { margin: 0px; font-size: large; color: gray; }"
                                  ".row { margin: 0px; }"
                                  "</style></head><body>" ) +
                     trUtf8( "<div class=\"h1\">%1</div>" ).arg( info->displayName() ) +
-                    QLatin1String("<hr/>") +
+                    QStringLiteral("<hr/>") +
                     trUtf8( "<div class=\"row\">Branch: %1</div>" ).arg( info->branchDisplay() ) +
                     trUtf8( "</body></html>" )
                     ;

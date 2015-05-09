@@ -77,7 +77,7 @@ namespace RM
 
     void RemotePrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Remote %2 0x%1"))
+        dumper.addLine(QString(QStringLiteral("Remote %2 0x%1"))
                        .arg(quintptr(mPub),0,16)
                        .arg(name));
     }
@@ -113,7 +113,7 @@ namespace RM
 
     QString RemotePrivate::objectTypeName() const
     {
-        return QLatin1String("Remote");
+        return QStringLiteral("Remote");
     }
 
     bool RemotePrivate::inherits(ObjTypes type) const

@@ -34,10 +34,10 @@ HistoryDetails::HistoryDetails( QWidget* parent )
 
 void HistoryDetails::readConfig()
 {
-    QVariant vList = Config::self().get( "History/Details/List", QLatin1String( "#" ) );
+    QVariant vList = Config::self().get( "History/Details/List", QStringLiteral( "#" ) );
     QString sList = vList.toString();
 
-    if( sList == QLatin1String( "#" ) )
+    if( sList == QStringLiteral( "#" ) )
     {
         mViewDetailRows << HHD_Subject << HHD_AuthorName << HHD_AuthorMail << HHD_AuthorDate
                            << HHD_SHA1 << HHD_ChildrenList << HHD_ParentsList;
@@ -52,7 +52,7 @@ void HistoryDetails::readConfig()
         }
     }
 
-    QFile fStyle( QLatin1String(":/Modules/History/commit-detail.css") );
+    QFile fStyle( QStringLiteral(":/Modules/History/commit-detail.css") );
     QString styleTempl = fStyle.open(QFile::ReadOnly) ? QString::fromUtf8( fStyle.readAll().constData() ) : QString();
 
     mStyle = updateStyle( styleTempl );
@@ -64,10 +64,10 @@ QString HistoryDetails::updateStyle(const QString &templ) const
 {
     // TODO: this hash shall be provided by the "Config" mechanism
     ShellExpand::Macros macros;
-    macros[QLatin1String("MGV_VARIABLE_FONT")] = Config::defaultFontCSS();
-    macros[QLatin1String("MGV_FIXED_FONT")] = Config::defaultFixedFontCSS();
-    macros[QLatin1String("MGV_BGCOLOR")] =
-            Config::self().get(QLatin1String("mgv-bg")).toString();
+    macros[QStringLiteral("MGV_VARIABLE_FONT")] = Config::defaultFontCSS();
+    macros[QStringLiteral("MGV_FIXED_FONT")] = Config::defaultFixedFontCSS();
+    macros[QStringLiteral("MGV_BGCOLOR")] =
+            Config::self().get(QStringLiteral("mgv-bg")).toString();
 
     // replace constants in css (sample $MY_CONST)
     return ShellExpand(macros).expandText(templ);
@@ -96,7 +96,7 @@ void HistoryDetails::setCommit( const Git::ObjectId& sha1 )
 
 static inline QString mkRow( const QString& lbl, const QString& content, bool fixed = false )
 {
-    QString s = QLatin1String(
+    QString s = QStringLiteral(
                 "<tr>"
                     "<td class=\"name\">%1:</td>"
                     "<td>%2</td>"

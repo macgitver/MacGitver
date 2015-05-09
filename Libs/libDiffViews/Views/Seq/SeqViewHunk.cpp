@@ -126,7 +126,7 @@ namespace DiffViews
     qreal SeqViewHunkContent::setWidth( qreal width )
     {
         QFontMetricsF fm( info()->mFixed );
-        QRectF r = fm.boundingRect( QLatin1String( "X" ) );
+        QRectF r = fm.boundingRect( QStringLiteral( "X" ) );
         qreal height = 1 + ( r.height() + 1 ) * mLines.count();
 
         mSpaceLeft = mSpaceRight = 20;
@@ -155,7 +155,7 @@ namespace DiffViews
 
         QFontMetricsF fm( ifo->mFixed );
         QRectF outline(10, 0, width() - 20, height());
-        QRectF r = fm.boundingRect( QLatin1String( "X" ) );
+        QRectF r = fm.boundingRect( QStringLiteral( "X" ) );
         qreal lh = r.height() + 1;
         qreal top = 0;
 

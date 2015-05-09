@@ -391,7 +391,7 @@ namespace RM
 
     QString BasePrivate::displayName() const
     {
-        return QLatin1String("<Unknown>");
+        return QStringLiteral("<Unknown>");
     }
 
     /**

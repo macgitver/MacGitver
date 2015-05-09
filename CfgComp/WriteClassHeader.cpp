@@ -31,8 +31,8 @@ WriteClassHeader::WriteClassHeader( const QString& outFile, const ConfigSection&
 
 void WriteClassHeader::generate()
 {
-    QString protector = QLatin1String( "CFGCOMP_" ) + mSection.className().toUpper() +
-            QLatin1String( "_HPP" );
+    QString protector = QStringLiteral( "CFGCOMP_" ) + mSection.className().toUpper() +
+            QStringLiteral( "_HPP" );
 
     mOutStream << "\n"
                   "#ifndef " << protector << "\n"

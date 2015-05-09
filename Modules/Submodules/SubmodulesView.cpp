@@ -82,7 +82,7 @@ void SubmodulesView::readSubmodules()
     }
 
     // TODO: use IconProvider
-    QIcon decoration; // ( IconProvider::self().icon(QLatin1String("subrepo")) );
+    QIcon decoration; // ( IconProvider::self().icon(QStringLiteral("subrepo")) );
 
     foreach( Git::Submodule module, submodules )
     {

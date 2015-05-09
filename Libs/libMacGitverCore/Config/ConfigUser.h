@@ -26,8 +26,10 @@
 class MGV_CORE_API ConfigUser
 {
 protected:
-    ConfigUser( const QString& configBasePath );
-    ConfigUser( const char* pszConfigBasePath );
+    ConfigUser(const QString& configBasePath);
+    ConfigUser(const char* pszConfigBasePath)
+        : ConfigUser(QString::fromUtf8(pszConfigBasePath)) {}
+
     virtual ~ConfigUser();
 
 public:
@@ -58,7 +60,7 @@ public:
 
     inline QString configGet( const char* pszSubPath, const char* pszValue ) const
     {
-        return configGet< QString >( pszSubPath, QLatin1String( pszValue ) );
+        return configGet< QString >( pszSubPath, QString::fromUtf8(pszValue) );
     }
 
 public:

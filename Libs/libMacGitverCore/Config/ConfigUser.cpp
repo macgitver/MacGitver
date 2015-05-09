@@ -29,12 +29,6 @@ ConfigUser::ConfigUser( const QString& configBasePath )
     Config::self().addConfigUser( this );
 }
 
-ConfigUser::ConfigUser( const char* pszConfigBasePath )
-    : mConfigBase( QLatin1String( pszConfigBasePath ) )
-{
-    Config::self().addConfigUser( this );
-}
-
 ConfigUser::~ConfigUser()
 {
     Config::self().delConfigUser( this );
@@ -47,7 +41,7 @@ QString ConfigUser::configSubPath( const QString& subPath ) const
 
 QString ConfigUser::configSubPath( const char* pszSubPath ) const
 {
-    return mConfigBase % QChar( L'/' ) % QLatin1String( pszSubPath );
+    return mConfigBase % QChar( L'/' ) % QString::fromUtf8(pszSubPath);
 }
 
 QVariant ConfigUser::configGetV( const QString& subPath,

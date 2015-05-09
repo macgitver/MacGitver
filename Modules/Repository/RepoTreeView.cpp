@@ -56,11 +56,11 @@ RepoTreeView::RepoTreeView()
     connect( mRepos,    SIGNAL(contextMenu(QModelIndex,QPoint)),
              this,      SLOT(contextMenu(QModelIndex,QPoint)) );
 
-    connect( &MacGitver::repoMan(), &RM::RepoMan::repositoryActivated,
-             this,                  &RepoTreeView::onRepoActivated);
+    connect(&RM::RepoMan::instance(),   &RM::RepoMan::repositoryActivated,
+            this,                       &RepoTreeView::onRepoActivated);
 
-    connect( &MacGitver::repoMan(), &RM::RepoMan::repositoryDeactivated,
-             this,                  &RepoTreeView::onRepoDeactivated);
+    connect(&RM::RepoMan::instance(),   &RM::RepoMan::repositoryDeactivated,
+            this,                       &RepoTreeView::onRepoDeactivated);
 }
 
 QModelIndex RepoTreeView::deeplyMapToSource( QModelIndex current ) const

@@ -36,7 +36,7 @@ RepoStateWidget::RepoStateWidget()
     repo = NULL;
     setupUi();
 
-    RM::RepoMan& rm = MacGitver::repoMan();
+    RM::RepoMan& rm = RM::RepoMan::instance();
 
     connect(&rm,    &RM::RepoMan::refMoved,
             this,   &RepoStateWidget::onUpdateHEAD);

@@ -71,7 +71,8 @@ void RepoManConfigPage::apply()
 
 void RepoManConfigPage::init()
 {
-    RM::RepoMan* rm = &MacGitver::repoMan();
+    RM::RepoMan* rm = &RM::RepoMan::instance();
+
     RM::Internal::RepoManPrivate* rmp = RM::Internal::BasePrivate::dataOf<RM::RepoMan>(rm);
     refresher = rmp->refresher;
 

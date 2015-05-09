@@ -50,6 +50,7 @@ public:
 
 public:
     static MacGitver&   self();
+    GW_DEPRECATED
     static RM::RepoMan& repoMan();
 
 public:

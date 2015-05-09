@@ -18,23 +18,52 @@ Ui RemotesModuleActions {
 
     Container RemotesAC {
 
-        Menu Remotes {
+        Action ManageRemotes {
+            Text    "Remotes ...";
+            _ConnectTo  onManageRemotes();
+        };
 
-            Text    "R&emotes";
+    };
 
-            Action RemotesCreate {
-                Text        "&Create...";
-                _ConnectTo  onRemoteCreate();
+    Container FetchAC {
+
+        Menu MnuFetch {
+            Text    "Fetch";
+
+            Action FetchAll {
+                Text        "Fetch All Remotes";
+                _ConnectTo  onFetchAllRemotes();
             };
 
-            Action RemotesFetch {
-                Text        "&Fetch";
+            Separator;
+
+            // TODO: Add DAM to fetch a single Remote
+        };
+
+    };
+
+    Container FetchThisAC {
+
+        Action FetchThis {
+            Text        "Fetch This";
+            _ConnectTo  onFetchThis();
+        };
+
+    };
+
+    Container PushAC {
+
+        Menu MnuPush {
+            Text    "Push";
+
+            Action PushToAll {
+                Text        "Push To All Remotes";
+                _ConnectTo  onPushToAllRemotes();
             };
 
-            Action RemotesPush {
-                Text        "P&ush...";
-            };
+            Separator;
 
+            // TODO: Add DAM to push to a single Remote
         };
 
     };

@@ -16,8 +16,6 @@
 
 Ui RepoTreeViewCtxMenu {
 
-
-
     Action Activate {
         Text            "&Activate";
         StatusToolTip   "Make this repository the active one.";
@@ -34,6 +32,11 @@ Ui RepoTreeViewCtxMenu {
 
         Action      Activate;
         Separator;
+
+        MergePlace  RemotesMP;
+        MergePlace  FetchMP;
+        Separator;
+
         Action      Close;
 
     };
@@ -41,7 +44,11 @@ Ui RepoTreeViewCtxMenu {
     Menu CtxMenuSMRepo {
 
         Action      Activate;
+        Separator;
 
+        MergePlace  RemotesMP;
+        MergePlace  FetchMP;
+        Separator;
     };
 
 };

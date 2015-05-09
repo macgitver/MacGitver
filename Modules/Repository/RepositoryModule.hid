@@ -43,14 +43,27 @@ Ui RepositoryActions {
 
     };
 
+    Menu MnuActiveRepo {
+        Text        "Active repository";
+
+        MergePlace  RemotesMP;
+        Separator;
+
+        MergePlace  FetchMP;
+        MergePlace  PushMP;
+    };
+
     Container RepositoryMenuAC {
 
         Action      RepositoryOpen;
         Menu        RepoOpenRecent;
         Separator;
+
         Action      RepositoryCreate;
         Action      RepositoryClone;
+        Separator;
 
+        Menu        MnuActiveRepo;
     };
 
 };

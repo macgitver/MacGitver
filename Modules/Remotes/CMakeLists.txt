@@ -11,22 +11,19 @@ INCLUDE_DIRECTORIES( BEFORE
 SET( SRC_FILES
 
     RemotesModule.cpp
-    RemotesView.cpp
-    RemotesViewContext.cpp
-    RemoteCreateEditDlg.cpp
+    RemotesDlg.cpp
 )
 
 SET( HDR_FILES
 
     RemotesModule.h
-    RemotesView.h
-    RemotesViewContext.h
-    RemoteCreateEditDlg.h
+    RemotesDlg.h
 )
 
 SET( UI_FILES
 
-    RemoteCreateEditDlg.ui
+    RemotesOptionsWdgt.ui
+    RemotesWdgt.ui
 )
 
 SET( HID_FILES

@@ -14,8 +14,7 @@
  *
  */
 
-#ifndef MGV_MODULE_REMOTES_H
-#define MGV_MODULE_REMOTES_H
+#pragma once
 
 #include "libMacGitverCore/MacGitver/Module.h"
 
@@ -34,11 +33,21 @@ public:
     void initialize();
     void deinitialize();
 
-private:
-    static BlueSky::View* createRemotesView();
+private slots:
+    // RemotesAC
+    void onManageRemotes();
 
 private slots:
-    void onRemoteCreate();
-};
+    // FetchAC
+    void onFetchAllRemotes();
 
-#endif
+    // FetchThisAC
+    void onFetchThis();
+
+private slots:
+    // PushAC
+    void onPushToAllRemotes();
+
+private slots:
+    void onOperationFinished();
+};

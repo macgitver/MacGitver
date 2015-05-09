@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_FLAT_TREE_MODEL_H
-#define MGV_FLAT_TREE_MODEL_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -60,5 +59,3 @@ public:
 private:
     FlatTreeModelPrivate* d;
 };
-
-#endif

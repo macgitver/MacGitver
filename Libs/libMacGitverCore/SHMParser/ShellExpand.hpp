@@ -18,9 +18,6 @@
  *
  */
 
-#ifndef SHELL_EXPAND_HPP
-#define SHELL_EXPAND_HPP
-
 #include "libMacGitverCore/MacGitverApi.hpp"
 
 #include <QString>
@@ -58,6 +55,3 @@ private:
     Macros  mMacros;
     bool    mOverwriteMacroDecls;
 };
-
-
-#endif

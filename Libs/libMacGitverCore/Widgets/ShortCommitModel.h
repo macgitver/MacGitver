@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_SHORT_COMMIT_MODEL_H
-#define MGV_SHORT_COMMIT_MODEL_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -49,5 +48,3 @@ public:
 private:
     Git::CommitList mCommitList;
 };
-
-#endif

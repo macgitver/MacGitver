@@ -17,15 +17,12 @@
  *
  */
 
-#ifndef MGV_MGV_CORE_API_H
-#define MGV_MGV_CORE_API_H
+#pragma once
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #ifdef MacGitverCore_EXPORTS
 #   define MGV_CORE_API Q_DECL_EXPORT
 #else
 #   define MGV_CORE_API Q_DECL_IMPORT
-#endif
-
 #endif

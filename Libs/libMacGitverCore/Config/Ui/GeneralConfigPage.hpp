@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_GENERAL_CONFIG_PAGE_H
-#define MGV_GENERAL_CONFIG_PAGE_H
+#pragma once
 
 #include <QWidget>
 
@@ -53,5 +52,3 @@ public:
 private slots:
     void onFontChanged();
 };
-
-#endif

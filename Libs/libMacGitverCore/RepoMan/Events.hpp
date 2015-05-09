@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_EVENTS_HPP
-#define MGV_CORE_REPOMAN_EVENTS_HPP
+#pragma once
 
 #include <QSet>
 
@@ -141,5 +140,3 @@ namespace RM
     };
 
 }
-
-#endif

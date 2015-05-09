@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_HEADER_VIEW_H
-#define MGV_HEADER_VIEW_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -43,6 +42,3 @@ public slots:
 private:
     QString mConfigName;
 };
-
-#endif
-

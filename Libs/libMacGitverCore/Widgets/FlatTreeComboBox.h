@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_FLAT_TREE_COMBOBOX_H
-#define MGV_FLAT_TREE_COMBOBOX_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -47,5 +46,3 @@ private:
     // prevent setting a random QAbstractItemModel
     using QComboBox::setModel;
 };
-
-#endif

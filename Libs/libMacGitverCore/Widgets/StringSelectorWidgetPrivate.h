@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_WIDGETS_STRING_SELECTOR_WIDGET_PRIVATE_H
-#define MGV_WIDGETS_STRING_SELECTOR_WIDGET_PRIVATE_H
+#pragma once
 
 #include <QIcon>
 #include <QVariant>
@@ -82,5 +81,3 @@ public:
 public:
     QSize sizeHint() const;
 };
-
-#endif

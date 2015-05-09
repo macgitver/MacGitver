@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_BRANCH_HPP
-#define MGV_CORE_REPOMAN_BRANCH_HPP
+#pragma once
 
 #include "Ref.hpp"
 
@@ -45,5 +44,3 @@ namespace RM
     };
 
 }
-
-#endif

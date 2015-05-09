@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_MODULES_H
-#define MGV_MODULES_H
+#pragma once
 
 #include <QSet>
 
@@ -47,5 +46,3 @@ private:
 private:
     QSet< Module* >     mModules;
 };
-
-#endif

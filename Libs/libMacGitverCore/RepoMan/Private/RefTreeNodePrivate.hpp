@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef REPOMAN_REF_TREE_NODE_PRIVATE_HPP
-#define REPOMAN_REF_TREE_NODE_PRIVATE_HPP
+#pragma once
 
 #include "RepoMan/Private/BasePrivate.hpp"
 
@@ -53,5 +52,3 @@ namespace RM
     }
 
 }
-
-#endif

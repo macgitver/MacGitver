@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_REF_TREE_NODE_HPP
-#define MGV_CORE_REPOMAN_REF_TREE_NODE_HPP
+#pragma once
 
 #include <QString>
 
@@ -48,5 +47,3 @@ namespace RM
     };
 
 }
-
-#endif

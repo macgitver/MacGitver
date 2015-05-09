@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_CONFIG_PAGE_PROVIDER_HPP
-#define MGV_CORE_CONFIG_PAGE_PROVIDER_HPP
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -86,6 +85,3 @@ public:
     { \
         delete PageCreator::sSelf; \
     }
-
-
-#endif

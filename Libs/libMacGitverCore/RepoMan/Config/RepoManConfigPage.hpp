@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_CFG_PAGE_HPP
-#define MGV_CORE_REPOMAN_CFG_PAGE_HPP
+#pragma once
 
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
 #include "libMacGitverCore/Config/Ui/ConfigPage.hpp"
@@ -56,5 +55,3 @@ public:
 private:
     RM::AutoRefresher* refresher;
 };
-
-#endif

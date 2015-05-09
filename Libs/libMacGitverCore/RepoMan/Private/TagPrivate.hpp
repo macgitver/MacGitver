@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef REPOMAN_TAG_PRIVATE_HPP
-#define REPOMAN_TAG_PRIVATE_HPP
+#pragma once
 
 #include "RepoMan/Private/RefPrivate.hpp"
 
@@ -47,5 +46,3 @@ namespace RM
     }
 
 }
-
-#endif

@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_PRIMARY_WINDOW_HPP
-#define MGV_PRIMARY_WINDOW_HPP
+#pragma once
 
 #include "libGitWrap/Repository.hpp"
 
@@ -64,5 +63,3 @@ protected:
 private:
     MgvPrimaryWindowPrivate* d;
 };
-
-#endif

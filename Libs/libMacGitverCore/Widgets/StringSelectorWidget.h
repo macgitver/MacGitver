@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_WIDGETS_STRING_SELECTOR_WIDGET_H
-#define MGV_WIDGETS_STRING_SELECTOR_WIDGET_H
+#pragma once
 
 #include <QWidget>
 #include <QVariant>
@@ -96,6 +95,4 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( StringSelectorWidget::Buttons )
-
-#endif
 

@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CONFIG_USER_H
-#define MGV_CONFIG_USER_H
+#pragma once
 
 #include <QVariant>
 
@@ -68,5 +67,3 @@ public:
 private:
     QString         mConfigBase;
 };
-
-#endif

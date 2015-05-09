@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_MODULE_H
-#define MGV_MODULE_H
+#pragma once
 
 #include <QObject>
 
@@ -125,5 +124,3 @@ protected:
 
 Q_DECLARE_INTERFACE( Module,
                      "org.macgitver.Module/0.1" )
-
-#endif

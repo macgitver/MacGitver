@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_REPO_MANAGER_HPP
-#define MGV_REPO_MANAGER_HPP
+#pragma once
 
 #include <QObject>
 
@@ -112,5 +111,3 @@ namespace RM
     };
 
 }
-
-#endif

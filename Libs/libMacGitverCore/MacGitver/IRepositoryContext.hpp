@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGVCORE_IREPOSITORY_CONTEXT_HPP
-#define MGVCORE_IREPOSITORY_CONTEXT_HPP
+#pragma once
 
 #include <QObject>
 
@@ -35,6 +34,3 @@ public:
 
 Q_DECLARE_INTERFACE( IRepositoryContext,
                      "org.macgitver.IRepositoryContext/0.1" )
-
-#endif
-

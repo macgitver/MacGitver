@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_REMOTE_HPP
-#define MGV_CORE_REPOMAN_REMOTE_HPP
+#pragma once
 
 #include "libGitWrap/Remote.hpp"
 
@@ -51,5 +50,3 @@ namespace RM
     };
 
 }
-
-#endif

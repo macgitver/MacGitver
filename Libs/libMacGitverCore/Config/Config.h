@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CONFIG_H
-#define MGV_CONFIG_H
+#pragma once
 
 #include <QList>
 #include <QSet>
@@ -80,5 +79,3 @@ private:
     QFont                               mDefaultDialogFont;
     QFont                               mDefaultFixedFont;
 };
-
-#endif

@@ -17,6 +17,8 @@
  *
  */
 
+#pragma once
+
 #include "RepoMan/Private/BasePrivate.hpp"
 
 #include "RepoMan/Repo.hpp"
@@ -81,4 +83,3 @@ namespace RM
     }
 
 }
-

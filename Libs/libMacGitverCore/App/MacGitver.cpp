@@ -73,7 +73,7 @@ void MacGitverPrivate::init()
         QApplication::setApplicationName(QStringLiteral("MacGitver_NonGui"));
     }
 
-    sRepoMan    = new RM::RepoMan;
+    RM::RepoMan::instance();
     sModules    = new Modules;
 
     if (isGui) {
@@ -86,7 +86,8 @@ MacGitverPrivate::~MacGitverPrivate()
 {
     unregisterGlobalConfigPages();
 
-    delete sRepoMan;    sRepoMan    = NULL;
+    RM::RepoMan::instance().terminate();
+
     delete sModules;    sModules    = NULL;
 
     Log::Manager::release();
@@ -104,7 +105,6 @@ void MacGitverPrivate::bootGui()
 }
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
-RM::RepoMan*    MacGitverPrivate::sRepoMan      = NULL;
 Modules*        MacGitverPrivate::sModules      = NULL;
 
 MacGitver& MacGitver::self()
@@ -117,9 +117,7 @@ MacGitver& MacGitver::self()
 
 RM::RepoMan& MacGitver::repoMan()
 {
-    Q_ASSERT(MacGitverPrivate::sRepoMan);
-
-    return *MacGitverPrivate::sRepoMan;
+    return RM::RepoMan::instance();
 }
 
 MacGitver::MacGitver(bool runGui)

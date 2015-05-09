@@ -64,5 +64,4 @@ public:
     MgvApp              bsApp;
     static MacGitver*   sSelf;
     static Modules*     sModules;
-    static RM::RepoMan* sRepoMan;
 };

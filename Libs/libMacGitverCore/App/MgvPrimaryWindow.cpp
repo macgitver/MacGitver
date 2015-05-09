@@ -64,10 +64,10 @@ MgvPrimaryWindow::MgvPrimaryWindow()
     w->show();
     #endif
 
-    connect(&MacGitver::repoMan(), &RM::RepoMan::firstRepositoryOpened,
+    connect(&RM::RepoMan::instance(), &RM::RepoMan::firstRepositoryOpened,
             this, &MgvPrimaryWindow::activateModeForRepo);
 
-    connect(&MacGitver::repoMan(), &RM::RepoMan::lastRepositoryClosed,
+    connect(&RM::RepoMan::instance(), &RM::RepoMan::lastRepositoryClosed,
             this, &MgvPrimaryWindow::activateModeForRepo);
 
     setupFonts();
@@ -157,7 +157,7 @@ void MgvPrimaryWindow::moveToCenter()
 
 void MgvPrimaryWindow::activateModeForRepo()
 {
-    if (MacGitver::repoMan().repositories().count() > 0) {
+    if (RM::RepoMan::instance().repositories().count() > 0) {
         activateMode(QStringLiteral("HistoryMode"));
     }
     else {

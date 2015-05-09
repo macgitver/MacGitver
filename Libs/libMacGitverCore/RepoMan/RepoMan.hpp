@@ -62,6 +62,10 @@ namespace RM
 
         void internalClosedRepo(Repo* repository);
 
+    public:
+        static RepoMan& instance();
+        void terminate();
+
     private:
         Repo* open(const Git::Repository& repo);
 

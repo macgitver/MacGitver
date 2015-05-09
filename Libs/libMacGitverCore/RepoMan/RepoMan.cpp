@@ -68,6 +68,20 @@ namespace RM
         Events::delReceiver(this);
     }
 
+    RepoMan& RepoMan::instance()
+    {
+        static QPointer<RepoMan> sSelf;
+        if (!sSelf) {
+            sSelf = new RepoMan;
+        }
+        return *sSelf;
+    }
+
+    void RepoMan::terminate()
+    {
+        delete this;
+    }
+
     /**
      * @brief       Open a repository (By it's path)
      *

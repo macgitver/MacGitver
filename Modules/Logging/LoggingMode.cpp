@@ -31,7 +31,7 @@ LoggingMode::LoggingMode(QObject *parent)
     setEnabled(false);
     setDisplayOrder(100);
 
-    connect(&MacGitver::self().repoMan(),
+    connect(&RM::RepoMan::instance(),
             &RM::RepoMan::hasActiveRepositoryChanged,
             this, &LoggingMode::setEnabled);
 }

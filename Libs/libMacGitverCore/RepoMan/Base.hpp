@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_BASE_HPP
-#define MGV_CORE_REPOMAN_BASE_HPP
+#pragma once
 
 #include <QVector>
 #include <QSet>
@@ -175,5 +174,3 @@ namespace RM
     }
 
 }
-
-#endif

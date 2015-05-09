@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_AUTO_REFRESHER_HPP
-#define MGV_CORE_REPOMAN_AUTO_REFRESHER_HPP
+#pragma once
 
 #include <QObject>
 
@@ -66,5 +65,3 @@ namespace RM
     };
 
 }
-
-#endif

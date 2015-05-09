@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_FONT_SELECT_WIDGET_H
-#define MGV_FONT_SELECT_WIDGET_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -65,5 +64,3 @@ private:
     QCheckBox*      mchkItalic;
     QComboBox*      mcboSize;
 };
-
-#endif

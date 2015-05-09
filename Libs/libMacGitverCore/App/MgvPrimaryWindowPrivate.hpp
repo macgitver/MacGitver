@@ -17,13 +17,10 @@
  *
  */
 
-#ifndef MGV_PRIMARY_WINDOW_PRIVATE_HPP
-#define MGV_PRIMARY_WINDOW_PRIVATE_HPP
+#pragma once
 
 class MgvPrimaryWindowPrivate
 {
 public:
     MgvPrimaryWindowPrivate();
 };
-
-#endif

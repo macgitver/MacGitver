@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_FLAT_TREE_DELEGATE_H
-#define MGV_FLAT_TREE_DELEGATE_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -33,5 +32,3 @@ public:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 };
-
-#endif

@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef REPOMAN_REPO_MAN_PRIVATE_HPP
-#define REPOMAN_REPO_MAN_PRIVATE_HPP
+#pragma once
 
 #include "libMacGitverCore/RepoMan/Private/BasePrivate.hpp"
 
@@ -57,5 +56,3 @@ namespace RM
     }
 
 }
-
-#endif

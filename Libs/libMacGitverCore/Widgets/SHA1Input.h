@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_SHA1_INPUT_H
-#define MGV_SHA1_INPUT_H
+#pragma once
 
 #include "libMacGitverCore/Widgets/LineEdit.h"
 
@@ -39,7 +38,3 @@ private:
     using QLineEdit::text;
     using QLineEdit::setText;
 };
-
-#endif
-
-

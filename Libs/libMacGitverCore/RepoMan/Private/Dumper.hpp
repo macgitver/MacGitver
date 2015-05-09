@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_DUMPER_HPP
-#define MGV_CORE_REPOMAN_DUMPER_HPP
+#pragma once
 
 #include <QStringList>
 #include <QVector>
@@ -52,5 +51,3 @@ namespace RM
     }
 
 }
-
-#endif

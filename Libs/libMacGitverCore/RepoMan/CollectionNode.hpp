@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_COLLECTION_NODE_HPP
-#define MGV_CORE_REPOMAN_COLLECTION_NODE_HPP
+#pragma once
 
 #include <QCoreApplication>
 
@@ -51,5 +50,3 @@ namespace RM
     };
 
 }
-
-#endif

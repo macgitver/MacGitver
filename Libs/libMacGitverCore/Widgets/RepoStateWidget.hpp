@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_REPO_STATE_WIDGET_HPP
-#define MGV_REPO_STATE_WIDGET_HPP
+#pragma once
 
 class QLabel;
 
@@ -53,7 +52,3 @@ private:
     QLabel*         txtState;
     QLabel*         txtBranch;
 };
-
-#endif
-
-

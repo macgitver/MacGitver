@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_I_CONFIG_PAGE_H
-#define MGV_I_CONFIG_PAGE_H
+#pragma once
 
 #include <QWidget>
 
@@ -49,5 +48,3 @@ protected slots:
 private:
     ConfigDialog*   mDialog;
 };
-
-#endif

@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_FLAT_TREE_MODEL_PRIVATE_H
-#define MGV_FLAT_TREE_MODEL_PRIVATE_H
+#pragma once
 
 #include <QIcon>
 #include <QVariant>
@@ -65,5 +64,3 @@ public:
     QList< FlatTreeModelEntry* >    mEntries;
     FlatTreeModelEntry              mRoot;
 };
-
-#endif

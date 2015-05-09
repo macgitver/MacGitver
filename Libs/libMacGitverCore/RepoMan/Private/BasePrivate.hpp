@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef REPOMAN_BASE_PRIVATE_HPP
-#define REPOMAN_BASE_PRIVATE_HPP
+#pragma once
 
 #include "RepoMan/Base.hpp"
 
@@ -120,5 +119,3 @@ namespace RM
     }
 
 }
-
-#endif

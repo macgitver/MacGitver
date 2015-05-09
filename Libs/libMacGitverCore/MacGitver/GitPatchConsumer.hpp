@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_DIFF_GIT_PATCH_CONSUMER_H
-#define MGV_DIFF_GIT_PATCH_CONSUMER_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -57,5 +56,3 @@ private:
     enum { None, Context, Add, Del, Change }
                         mCurType;
 };
-
-#endif

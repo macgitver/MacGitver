@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CONFIG_WIDGET_H
-#define MGV_CONFIG_WIDGET_H
+#pragma once
 
 #include <QHash>
 #include <QMap>
@@ -71,5 +70,3 @@ private:
     static QMap< int, QSet<ConfigPageProvider*> >
                                             sProviders;
 };
-
-#endif

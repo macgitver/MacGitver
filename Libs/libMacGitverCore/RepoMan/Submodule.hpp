@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_SUBMODULE_HPP
-#define MGV_CORE_REPOMAN_SUBMODULE_HPP
+#pragma once
 
 #include "Repo.hpp"
 
@@ -44,5 +43,3 @@ namespace RM
     };
 
 }
-
-#endif

@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_LINE_EDIT_H
-#define MGV_LINE_EDIT_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -48,5 +47,3 @@ private:
 private:
     bool    mMandatory;
 };
-
-#endif

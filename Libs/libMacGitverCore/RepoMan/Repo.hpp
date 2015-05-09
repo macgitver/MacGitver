@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_REPOSITORY_INFO_HPP
-#define MGV_REPOSITORY_INFO_HPP
+#pragma once
 
 #include <QObject>
 
@@ -109,5 +108,3 @@ namespace RM
     };
 
 }
-
-#endif

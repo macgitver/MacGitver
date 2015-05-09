@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_MACGITVER_H
-#define MGV_MACGITVER_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -73,6 +72,3 @@ public:
 private:
     MacGitverPrivate* d;
 };
-
-#endif
-

@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_TAG_HPP
-#define MGV_CORE_REPOMAN_TAG_HPP
+#pragma once
 
 #include "Ref.hpp"
 
@@ -46,5 +45,3 @@ namespace RM
     };
 
 }
-
-#endif

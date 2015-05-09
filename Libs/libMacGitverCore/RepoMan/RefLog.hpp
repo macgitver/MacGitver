@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_REFLOG_HPP
-#define MGV_CORE_REPOMAN_REFLOG_HPP
+#pragma once
 
 #include "Base.hpp"
 
@@ -41,5 +40,3 @@ namespace RM
     };
 
 }
-
-#endif

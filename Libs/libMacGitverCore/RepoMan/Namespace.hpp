@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_NAMESPACE_HPP
-#define MGV_CORE_REPOMAN_NAMESPACE_HPP
+#pragma once
 
 #include "Base.hpp"
 #include "CollectionNode.hpp"
@@ -53,5 +52,3 @@ namespace RM
     };
 
 }
-
-#endif

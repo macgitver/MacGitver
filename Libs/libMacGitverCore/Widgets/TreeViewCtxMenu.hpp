@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_TREE_VIEW_CTXMENU_HPP
-#define MGV_CORE_TREE_VIEW_CTXMENU_HPP
+#pragma once
 
 #include <QTreeView>
 
@@ -36,5 +35,3 @@ protected:
 signals:
     void contextMenu( const QModelIndex& index, const QPoint& globalPos );
 };
-
-#endif

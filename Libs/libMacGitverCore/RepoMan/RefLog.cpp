@@ -48,7 +48,7 @@ namespace RM
 
     void RefLogPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("RefLog 0x%1"))
+        dumper.addLine(QString(QStringLiteral("RefLog 0x%1"))
                        .arg(quintptr(mPub),0,16));
     }
 
@@ -70,7 +70,7 @@ namespace RM
 
     QString RefLogPrivate::objectTypeName() const
     {
-        return QLatin1String("RefLog");
+        return QStringLiteral("RefLog");
     }
 
     bool RefLogPrivate::inherits(ObjTypes type) const

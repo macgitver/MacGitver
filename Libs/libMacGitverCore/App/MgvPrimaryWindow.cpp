@@ -86,7 +86,7 @@ MgvPrimaryWindow::~MgvPrimaryWindow()
 
 void MgvPrimaryWindow::setupUi()
 {
-    QIcon icon( QLatin1String( ":/mgv_sak32.png" ) );
+    QIcon icon( QStringLiteral( ":/mgv_sak32.png" ) );
     setWindowIcon( icon );
 
     setupActions( this );
@@ -161,7 +161,7 @@ void MgvPrimaryWindow::moveToCenter()
 void MgvPrimaryWindow::activateModeForRepo()
 {
     if (MacGitver::repoMan().repositories().count() > 0) {
-        activateMode(QLatin1String("HistoryMode"));
+        activateMode(QStringLiteral("HistoryMode"));
     }
     else {
         activateMode(QString());

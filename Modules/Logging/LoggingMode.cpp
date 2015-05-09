@@ -37,7 +37,7 @@ LoggingMode::LoggingMode(QObject *parent)
 }
 
 QString LoggingMode::createDefaultState() const {
-    QFile f(QLatin1String(":/Modes/LoggingMode.xml"));
+    QFile f(QStringLiteral(":/Modes/LoggingMode.xml"));
     if (!f.open(QFile::ReadOnly)) {
         return QString();
     }

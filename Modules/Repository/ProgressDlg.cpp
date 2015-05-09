@@ -131,7 +131,7 @@ void ProgressDlg::remoteMessage( const QString& msg )
         output += QString( outputBuffer, outBufLen );
 
     QString log = mBaseLog % QStringLiteral( "<br/>" ) %
-            output.replace( QChar( L'\n' ), QLatin1String("<br/>") ).simplified();
+            output.replace( QChar( L'\n' ), QStringLiteral("<br/>") ).simplified();
 
     txtLog->setHtml( log );
 }

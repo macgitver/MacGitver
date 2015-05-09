@@ -45,7 +45,7 @@ Modules::~Modules()
 void Modules::search( const QDir& binDir )
 {
     QStringList modFiles;
-    modFiles << QLatin1String( "Mod*.mgv" );
+    modFiles << QStringLiteral( "Mod*.mgv" );
 
     // qDebug( "Searching for Modules in %s", qPrintable( binDir.absolutePath() ) );
 

@@ -39,7 +39,7 @@ WorkingTreeItemView::WorkingTreeItemView(QWidget *parent)
 #endif
 
     setHeader( mHeader );
-    mHeader->setConfigName( QLatin1String( "Worktree/Columns" ) );
+    mHeader->setConfigName( QStringLiteral( "Worktree/Columns" ) );
 
     WorkingTreeCtxMenu::setupActions( this );
 

@@ -24,7 +24,7 @@
 SHA1Input::SHA1Input( QWidget* parent )
     : LineEdit( parent )
 {
-    QRegExp re( QLatin1String( "[0-9a-fA-F]{5,40}" ) );
+    QRegExp re( QStringLiteral( "[0-9a-fA-F]{5,40}" ) );
     setValidator( new QRegExpValidator( re, this ) );
 }
 

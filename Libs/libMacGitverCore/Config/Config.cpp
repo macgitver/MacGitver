@@ -56,20 +56,20 @@ void Config::loadSettings()
 
 
     QString fontName = get( "General/Font", "#" ).toString();
-    if( fontName == QLatin1String( "#" ) )
+    if( fontName == QStringLiteral( "#" ) )
         mDefaultFont = QFont();
     else
         mDefaultFont.fromString( fontName );
 
     fontName = get( "General/DialogFont", "#" ).toString();
-    if( fontName == QLatin1String( "#" ) )
+    if( fontName == QStringLiteral( "#" ) )
         mDefaultDialogFont = mDefaultFont;
     else
         mDefaultDialogFont.fromString( fontName );
 
     fontName = get( "General/FixedFont", "#" ).toString();
-    if( fontName == QLatin1String( "#" ) )
-        mDefaultFixedFont = QFont( QLatin1String( "Courier New" ), 10 );
+    if( fontName == QStringLiteral( "#" ) )
+        mDefaultFixedFont = QFont( QStringLiteral( "Courier New" ), 10 );
     else
         mDefaultFixedFont.fromString( fontName );
 }

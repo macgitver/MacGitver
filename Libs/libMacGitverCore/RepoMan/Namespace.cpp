@@ -84,7 +84,7 @@ namespace RM
 
     void NamespacePrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Namespace 0x%1 - %2"))
+        dumper.addLine(QString(QStringLiteral("Namespace 0x%1 - %2"))
                        .arg(quintptr(mPub),0,16)
                        .arg(name));
     }
@@ -119,7 +119,7 @@ namespace RM
 
     QString NamespacePrivate::objectTypeName() const
     {
-        return QLatin1String("Namespace");
+        return QStringLiteral("Namespace");
     }
 
     bool NamespacePrivate::inherits(ObjTypes type) const

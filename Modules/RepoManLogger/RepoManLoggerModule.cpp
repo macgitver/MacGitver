@@ -81,7 +81,7 @@ void RepoManLoggerModule::setupTemplates()
 
 void RepoManLoggerModule::setupChannel()
 {
-    repoManChannel = Log::Channel::create(QLatin1String("RepoMan"));
+    repoManChannel = Log::Channel::create(QStringLiteral("RepoMan"));
     repoManChannel.setDisplayName(trUtf8("Repository Log"));
     repoManChannel.setDefaultTemplate(defTemplate);
     Log::Manager().addChannel(repoManChannel);

@@ -156,5 +156,5 @@ void LoggingView::calculatePrefix()
             .arg(Config::defaultFontCSS())
             .arg(Config::defaultFixedFontCSS());
 
-    htmlPostfix = QLatin1String("</body></html>");
+    htmlPostfix = QStringLiteral("</body></html>");
 }

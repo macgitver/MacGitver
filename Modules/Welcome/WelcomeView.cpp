@@ -30,7 +30,7 @@ WelcomeView::WelcomeView()
     mBrowser->page()->setLinkDelegationPolicy( QWebPage::DelegateExternalLinks );
     connect( mBrowser, SIGNAL(linkClicked(QUrl)), this, SLOT(onLinkClicked(const QUrl&)) );
 
-    mBrowser->load( QUrl( QLatin1String("qrc:/ModWelcome/Welcome.html") ) );
+    mBrowser->load( QUrl( QStringLiteral("qrc:/ModWelcome/Welcome.html") ) );
 
     setWidget( mBrowser );
 }

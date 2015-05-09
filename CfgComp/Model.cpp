@@ -28,14 +28,14 @@ ConfigSetting::ConfigSetting( QDomElement el, ConfigSubSection* parent )
 {
     mSubSection = parent;
 
-    mName = el.attribute( QLatin1String( "Name" ) );
-    mDefaultValue = el.attribute( QLatin1String( "Default" ), QString() );
-    mType = el.attribute( QLatin1String( "Type" ) );
-    mSubType = el.attribute( QLatin1String( "Subtype" ), QString() );
-    mValidatorRule = el.attribute( QLatin1String( "Validate" ), QString() );
+    mName = el.attribute( QStringLiteral( "Name" ) );
+    mDefaultValue = el.attribute( QStringLiteral( "Default" ), QString() );
+    mType = el.attribute( QStringLiteral( "Type" ) );
+    mSubType = el.attribute( QStringLiteral( "Subtype" ), QString() );
+    mValidatorRule = el.attribute( QStringLiteral( "Validate" ), QString() );
 
-    mEmitSignal = el.attribute( QLatin1String( "Notify" ), QLatin1String( "no" ) ).toLower() !=
-            QLatin1String( "no" );
+    mEmitSignal = el.attribute( QStringLiteral( "Notify" ), QStringLiteral( "no" ) ).toLower() !=
+            QStringLiteral( "no" );
 }
 
 bool ConfigSetting::isSubSectioned() const
@@ -102,11 +102,11 @@ QString ConfigSetting::defaultValue() const
 
 QString ConfigSetting::defaultInitializer() const
 {
-    if( mType == QLatin1String( "String" ) )
+    if( mType == QStringLiteral( "String" ) )
     {
-        return QLatin1String( "QString::fromUtf8( \"" )
+        return QStringLiteral( "QString::fromUtf8( \"" )
                 % utf8Encoded( mDefaultValue )
-                % QLatin1String( "\" )" );
+                % QStringLiteral( "\" )" );
     }
     else if( mDefaultValue.isEmpty() )
     {
@@ -121,18 +121,18 @@ QString ConfigSetting::defaultInitializer() const
 ConfigSubSection::ConfigSubSection( QDomElement el, ConfigSubSection* parent )
 {
     mParent = parent;
-    mName = el.attribute( QLatin1String( "Name" ), QString() );
+    mName = el.attribute( QStringLiteral( "Name" ), QString() );
 
     //qDebug() << "Subsection:" << mName;
 
     QDomElement elChild = el.firstChildElement();
     while( elChild.isElement() )
     {
-        if( elChild.tagName() == QLatin1String( "Setting" ) )
+        if( elChild.tagName() == QStringLiteral( "Setting" ) )
         {
             mSettings.append( new ConfigSetting( elChild, this ) );
         }
-        else if( elChild.tagName() == QLatin1String( "SubSection" ) )
+        else if( elChild.tagName() == QStringLiteral( "SubSection" ) )
         {
             mSections.append( new ConfigSubSection( elChild, this ) );
         }
@@ -195,17 +195,17 @@ void ConfigSubSection::addAllSettings( QList< ConfigSetting* >& settings) const
 
 ConfigSection::ConfigSection( QDomElement el )
 {
-    mClassName = el.attribute( QLatin1String( "Class" ) );
-    mConfigPath = el.attribute( QLatin1String( "ConfigPath" ) );
+    mClassName = el.attribute( QStringLiteral( "Class" ) );
+    mConfigPath = el.attribute( QStringLiteral( "ConfigPath" ) );
 
     QDomElement elChild = el.firstChildElement();
     while( elChild.isElement() )
     {
-        if( elChild.tagName() == QLatin1String( "Setting" ) )
+        if( elChild.tagName() == QStringLiteral( "Setting" ) )
         {
             mSettings.append( new ConfigSetting( elChild ) );
         }
-        else if( elChild.tagName() == QLatin1String( "SubSection" ) )
+        else if( elChild.tagName() == QStringLiteral( "SubSection" ) )
         {
             mSections.append( new ConfigSubSection( elChild ) );
         }

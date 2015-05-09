@@ -56,7 +56,7 @@ namespace RM
 
     void RefTreeNodePrivate::dumpSelf(Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("RefTreeNode 0x%1 [%2]"))
+        dumper.addLine(QString(QStringLiteral("RefTreeNode 0x%1 [%2]"))
                        .arg(quintptr(mPub),0,16)
                        .arg(name));
     }
@@ -97,7 +97,7 @@ namespace RM
 
     QString RefTreeNodePrivate::objectTypeName() const
     {
-        return QLatin1String("RefTreeNode");
+        return QStringLiteral("RefTreeNode");
     }
 
     bool RefTreeNodePrivate::inherits(ObjTypes type) const

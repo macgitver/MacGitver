@@ -60,7 +60,7 @@ namespace DiffViews
 
     QString Hunk::area() const
     {
-        return QString( QLatin1String( "@@ %1,%2 %3,%4 @@" ) )
+        return QString( QStringLiteral( "@@ %1,%2 %3,%4 @@" ) )
                 .arg( firstLine( 0 ) )
                 .arg( numLines( 0 ) )
                 .arg( firstLine( 1 ) )

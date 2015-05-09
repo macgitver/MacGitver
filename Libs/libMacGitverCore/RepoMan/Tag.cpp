@@ -67,14 +67,14 @@ namespace RM
 
     void TagPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Tag 0x%1 - %2"))
+        dumper.addLine(QString(QStringLiteral("Tag 0x%1 - %2"))
                        .arg(quintptr(mPub),0,16)
                        .arg(mName));
     }
 
     QString TagPrivate::objectTypeName() const
     {
-        return QLatin1String("Tag");
+        return QStringLiteral("Tag");
     }
 
     bool TagPrivate::inherits(ObjTypes type) const

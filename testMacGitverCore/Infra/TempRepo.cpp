@@ -33,7 +33,7 @@ TempRepo::TempRepo(Fixture* fixture, const char* name)
 
 TempRepo::~TempRepo()
 {
-    QDir(mTempRepoDir).rmpath(QLatin1String("."));
+    QDir(mTempRepoDir).rmpath(QStringLiteral("."));
 }
 
 TempRepoOpener::TempRepoOpener(Fixture* fixture, const char* name)

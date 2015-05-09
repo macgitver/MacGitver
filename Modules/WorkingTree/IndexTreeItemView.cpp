@@ -38,7 +38,7 @@ IndexTreeItemView::IndexTreeItemView(QWidget *parent)
 #endif
 
     setHeader( mHeader );
-    mHeader->setConfigName( QLatin1String( "Indextree/Columns" ) );
+    mHeader->setConfigName( QStringLiteral( "Indextree/Columns" ) );
 
     StageViewCtxMenu::setupActions( this );
 

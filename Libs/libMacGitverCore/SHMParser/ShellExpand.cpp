@@ -200,7 +200,7 @@ const ShellExpand::Macros& ShellExpand::macros() const
  */
 QString ShellExpand::expandText(const QString &input)
 {
-    static QString cmdChars = QLatin1String(":#/%+-=&");
+    static QString cmdChars = QStringLiteral(":#/%+-=&");
 
     State s(input);
 
@@ -325,22 +325,22 @@ QString ShellExpand::replacementLogic(const QString& parameter, const QString& c
 
     if (!command.isEmpty())
     {
-        bool replaced = replaceExpandedValue(value, (command == QLatin1String(":+")) && !value.isEmpty(), arg);
+        bool replaced = replaceExpandedValue(value, (command == QStringLiteral(":+")) && !value.isEmpty(), arg);
 
         if (!replaced)
-            replaced = replaceExpandedValue(value, (command == QLatin1String(":-")) && value.isEmpty(), arg);
+            replaced = replaceExpandedValue(value, (command == QStringLiteral(":-")) && value.isEmpty(), arg);
 
         if (!replaced)
         {
-            replaced = replaceExpandedValue(value, command == QLatin1String(":=") && value.isEmpty(), arg);
+            replaced = replaceExpandedValue(value, command == QStringLiteral(":=") && value.isEmpty(), arg);
             if (replaced)
                 mMacros[parameter] = value;
         }
 
-        if (!replaced && (command == QLatin1String(":")))
+        if (!replaced && (command == QStringLiteral(":")))
         {
             replaced = true;
-            QStringList sl = arg.split(QLatin1String(":"));
+            QStringList sl = arg.split(QStringLiteral(":"));
             if (sl.count() == 1)
             {
                 value = value.mid(sl[0].toInt());
@@ -351,7 +351,7 @@ QString ShellExpand::replacementLogic(const QString& parameter, const QString& c
             }
             else
             {
-                value = QLatin1String(">Error: Bar arg count<");
+                value = QStringLiteral(">Error: Bar arg count<");
             }
         }
 
@@ -369,11 +369,11 @@ bool ShellExpand::processExternal(QString &value, const QString &command, const 
 {
     bool result = true;
 
-    if (command == QLatin1String("&-"))
+    if (command == QStringLiteral("&-"))
     {
         expandFile( arg );
     }
-    else if (command == QLatin1String("&"))
+    else if (command == QStringLiteral("&"))
     {
         if (value.isEmpty())
             value = expandFile( arg );

@@ -546,10 +546,10 @@ namespace RM
 
     void RepoPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Repository 0x%1 - %02"))
+        dumper.addLine(QString(QStringLiteral("Repository 0x%1 - %02"))
                        .arg(quintptr(mPub),0,16)
                        .arg(mIsLoaded ? pub<Repo>()->gitLoadedRepo().name()
-                                      : QLatin1String("<not loaded>")));
+                                      : QStringLiteral("<not loaded>")));
     }
 
 
@@ -753,7 +753,7 @@ namespace RM
 
     QString RepoPrivate::objectTypeName() const
     {
-        return QLatin1String("Repo");
+        return QStringLiteral("Repo");
     }
 
     bool RepoPrivate::inherits(ObjTypes type) const

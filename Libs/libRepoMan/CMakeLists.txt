@@ -48,6 +48,7 @@ SET( SRC_FILES
     Backend/RepoMan.cpp
 
     Services/OpenRepository.cpp
+    Services/RefreshRepository.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -99,6 +100,7 @@ SET( PRI_HDR_FILES
     Backend/RepoLocker.hpp
 
     Services/OpenRepository.hpp
+    Services/RefreshRepository.hpp
 )
 
 SET( HID_FILES

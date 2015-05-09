@@ -42,6 +42,10 @@ SET( SRC_FILES
     Data/Head.cpp
 
     Private/Dumper.cpp
+
+    Backend/AbstractService.cpp
+    Backend/ServiceRunner.cpp
+    Backend/RepoMan.cpp
 )
 
 SET( PUB_HDR_FILES
@@ -86,6 +90,11 @@ SET( PRI_HDR_FILES
     Data/Head.hpp
 
     Frontend/BaseInternal.hpp
+
+    Backend/AbstractService.hpp
+    Backend/ServiceRunner.hpp
+    Backend/RepoMan.hpp
+    Backend/RepoLocker.hpp
 )
 
 SET( HID_FILES

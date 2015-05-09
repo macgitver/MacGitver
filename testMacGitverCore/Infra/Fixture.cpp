@@ -98,10 +98,10 @@ bool copyDir(const QString& src, const QString& dest)
 
 QString Fixture::prepareRepo(const char* name)
 {
-    QString sourceDir = dataDir() % QChar(L'/') % QLatin1String(name);
-    QString destDir = TempDirProvider::get() % QChar(L'/') % QLatin1String(name);
+    QString sourceDir = dataDir() % QChar(L'/') % QString::fromUtf8(name);
+    QString destDir = TempDirProvider::get() % QChar(L'/') % QString::fromUtf8(name);
 
-    QDir(TempDirProvider::get()).mkpath(QLatin1String(name));
+    QDir(TempDirProvider::get()).mkpath(QString::fromUtf8(name));
 
     copyDir(sourceDir, destDir);
 

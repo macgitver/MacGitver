@@ -84,12 +84,12 @@ void Config::saveSettings()
 
 QVariant Config::get( const char* szPath, const char* szDefaultValue ) const
 {
-    return get( szPath, QLatin1String( szDefaultValue ) );
+    return get(szPath, QString::fromUtf8(szDefaultValue));
 }
 
 QVariant Config::get( const char* szPath, const QVariant& defaultValue ) const
 {
-    return get( QLatin1String( szPath ), defaultValue );
+    return get(QString::fromUtf8(szPath), defaultValue);
 }
 
 QVariant Config::get( const QString& path, const QVariant& defaultValue ) const
@@ -111,7 +111,7 @@ QVariant Config::get( const QString& path, const QVariant& defaultValue ) const
 
 void Config::set( const char* pszPath, const QVariant& value )
 {
-    set( QLatin1String( pszPath ), value );
+    set(QString::fromUtf8(pszPath), value);
 }
 
 void Config::set( const QString& path, const QVariant& value )

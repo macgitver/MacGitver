@@ -22,6 +22,8 @@
 #include "libActivities/StepPrivate.hpp"
 #include "libActivities/ManagerPrivate.hpp"
 
+#include <cassert>
+
 namespace Activities
 {
 

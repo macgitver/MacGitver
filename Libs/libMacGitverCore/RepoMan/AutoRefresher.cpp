@@ -26,183 +26,178 @@
 
 #include "AutoRefresherCfg.hpp"
 
-namespace RM
+AutoRefresher::AutoRefresher(QObject* parent)
+    : QObject(parent)
+    , refreshGitTimer(NULL)
+    , refreshIndexTimer(NULL)
+    , refreshWorktreeTimer(NULL)
 {
+    new AutoRefresherCfg(this);
 
-    AutoRefresher::AutoRefresher(QObject* parent)
-        : QObject(parent)
-        , refreshGitTimer(NULL)
-        , refreshIndexTimer(NULL)
-        , refreshWorktreeTimer(NULL)
-    {
-        new AutoRefresherCfg(this);
+    forcedUpdate();
+}
 
-        forcedUpdate();
+AutoRefresher::~AutoRefresher()
+{
+}
+
+bool AutoRefresher::refreshEnabled() const
+{
+    return AutoRefresherCfg::refreshEnabled();
+}
+
+bool AutoRefresher::refreshGitEnabled() const
+{
+    return AutoRefresherCfg::gitInterval() != 0;
+}
+
+bool AutoRefresher::refreshIndexEnabled() const
+{
+    return AutoRefresherCfg::indexInterval() != 0;
+}
+
+bool AutoRefresher::refreshWorktreeEnabled() const
+{
+    return AutoRefresherCfg::worktreeInterval() != 0;
+}
+
+void AutoRefresher::setRefreshEnabled(bool enabled)
+{
+    AutoRefresherCfg::setRefreshEnabled(enabled);
+    forcedUpdate();
+}
+
+void AutoRefresher::forcedUpdate()
+{
+    setRefreshGitInterval(AutoRefresherCfg::gitInterval(), true);
+    setRefreshIndexInterval(AutoRefresherCfg::indexInterval(), true);
+    setRefreshWorktreeInterval(AutoRefresherCfg::worktreeInterval(), true);
+}
+
+void AutoRefresher::setRefreshGitInterval(int interval, bool force)
+{
+    if (interval < 15) {
+        interval = 0;
     }
 
-    AutoRefresher::~AutoRefresher()
-    {
-    }
-
-    bool AutoRefresher::refreshEnabled() const
-    {
-        return AutoRefresherCfg::refreshEnabled();
-    }
-
-    bool AutoRefresher::refreshGitEnabled() const
-    {
-        return AutoRefresherCfg::gitInterval() != 0;
-    }
-
-    bool AutoRefresher::refreshIndexEnabled() const
-    {
-        return AutoRefresherCfg::indexInterval() != 0;
-    }
-
-    bool AutoRefresher::refreshWorktreeEnabled() const
-    {
-        return AutoRefresherCfg::worktreeInterval() != 0;
-    }
-
-    void AutoRefresher::setRefreshEnabled(bool enabled)
-    {
-        AutoRefresherCfg::setRefreshEnabled(enabled);
-        forcedUpdate();
-    }
-
-    void AutoRefresher::forcedUpdate()
-    {
-        setRefreshGitInterval(AutoRefresherCfg::gitInterval(), true);
-        setRefreshIndexInterval(AutoRefresherCfg::indexInterval(), true);
-        setRefreshWorktreeInterval(AutoRefresherCfg::worktreeInterval(), true);
-    }
-
-    void AutoRefresher::setRefreshGitInterval(int interval, bool force)
-    {
-        if (interval < 15) {
-            interval = 0;
-        }
-
-        if (interval == AutoRefresherCfg::gitInterval() ) {
-            if (!force) {
-                return;
-            }
-        }
-        else {
-            AutoRefresherCfg::setGitInterval(interval);
-        }
-
-        if (interval) {
-            if (!refreshGitTimer) {
-                refreshGitTimer = new QTimer(this);
-                connect(refreshGitTimer, SIGNAL(timeout()),
-                        this, SLOT(onRefreshGit()));
-            }
-            refreshGitTimer->setInterval(interval * 1000);
-            refreshGitTimer->start();
-        }
-        else {
-            if (refreshGitTimer) {
-                refreshGitTimer->stop();
-                refreshGitTimer->deleteLater();
-                refreshGitTimer = NULL;
-            }
+    if (interval == AutoRefresherCfg::gitInterval() ) {
+        if (!force) {
+            return;
         }
     }
-
-    void AutoRefresher::setRefreshIndexInterval(int interval, bool force)
-    {
-        if (interval < 30) {
-            interval = 0;
-        }
-
-        if (interval == AutoRefresherCfg::indexInterval() ) {
-            if (!force) {
-                return;
-            }
-        }
-        else {
-            AutoRefresherCfg::setIndexInterval(interval);
-        }
-
-        if (interval) {
-            if (!refreshIndexTimer) {
-                refreshIndexTimer = new QTimer(this);
-                connect(refreshIndexTimer, SIGNAL(timeout()),
-                        this, SLOT(onRefreshIndex()));
-            }
-            refreshIndexTimer->setInterval(interval * 1000);
-            refreshIndexTimer->start();
-        }
-        else {
-            if (refreshIndexTimer) {
-                refreshIndexTimer->stop();
-                refreshIndexTimer->deleteLater();
-                refreshIndexTimer = NULL;
-            }
-        }
+    else {
+        AutoRefresherCfg::setGitInterval(interval);
     }
 
-    void AutoRefresher::setRefreshWorktreeInterval(int interval, bool force)
-    {
-        if (interval < 120) {
-            interval = 0;
+    if (interval) {
+        if (!refreshGitTimer) {
+            refreshGitTimer = new QTimer(this);
+            connect(refreshGitTimer, SIGNAL(timeout()),
+                    this, SLOT(onRefreshGit()));
         }
-
-        if (interval == AutoRefresherCfg::worktreeInterval() ) {
-            if (!force) {
-                return;
-            }
-        }
-        else {
-            AutoRefresherCfg::setWorktreeInterval(interval);
-        }
-
-        if (interval) {
-            if (!refreshWorktreeTimer) {
-                refreshWorktreeTimer = new QTimer(this);
-                connect(refreshWorktreeTimer, SIGNAL(timeout()),
-                        this, SLOT(onRefreshWorktree()));
-            }
-            refreshWorktreeTimer->setInterval(interval * 1000);
-            refreshWorktreeTimer->start();
-        }
-        else {
-            if (refreshWorktreeTimer) {
-                refreshWorktreeTimer->stop();
-                refreshWorktreeTimer->deleteLater();
-                refreshWorktreeTimer = NULL;
-            }
+        refreshGitTimer->setInterval(interval * 1000);
+        refreshGitTimer->start();
+    }
+    else {
+        if (refreshGitTimer) {
+            refreshGitTimer->stop();
+            refreshGitTimer->deleteLater();
+            refreshGitTimer = NULL;
         }
     }
+}
 
-    int AutoRefresher::gitRefreshInterval() const
-    {
-        return AutoRefresherCfg::gitInterval();
+void AutoRefresher::setRefreshIndexInterval(int interval, bool force)
+{
+    if (interval < 30) {
+        interval = 0;
     }
 
-    int AutoRefresher::indexRefreshInterval() const
-    {
-        return AutoRefresherCfg::indexInterval();
+    if (interval == AutoRefresherCfg::indexInterval() ) {
+        if (!force) {
+            return;
+        }
+    }
+    else {
+        AutoRefresherCfg::setIndexInterval(interval);
     }
 
-    int AutoRefresher::worktreeRefreshInterval() const
-    {
-        return AutoRefresherCfg::worktreeInterval();
+    if (interval) {
+        if (!refreshIndexTimer) {
+            refreshIndexTimer = new QTimer(this);
+            connect(refreshIndexTimer, SIGNAL(timeout()),
+                    this, SLOT(onRefreshIndex()));
+        }
+        refreshIndexTimer->setInterval(interval * 1000);
+        refreshIndexTimer->start();
+    }
+    else {
+        if (refreshIndexTimer) {
+            refreshIndexTimer->stop();
+            refreshIndexTimer->deleteLater();
+            refreshIndexTimer = NULL;
+        }
+    }
+}
+
+void AutoRefresher::setRefreshWorktreeInterval(int interval, bool force)
+{
+    if (interval < 120) {
+        interval = 0;
     }
 
-    void AutoRefresher::onRefreshGit()
-    {
-        Log::Manager().addMessage(trUtf8("Refreshing git repositories..."));
-        RM::RepoMan::instance().refresh();
+    if (interval == AutoRefresherCfg::worktreeInterval() ) {
+        if (!force) {
+            return;
+        }
+    }
+    else {
+        AutoRefresherCfg::setWorktreeInterval(interval);
     }
 
-    void AutoRefresher::onRefreshIndex()
-    {
+    if (interval) {
+        if (!refreshWorktreeTimer) {
+            refreshWorktreeTimer = new QTimer(this);
+            connect(refreshWorktreeTimer, SIGNAL(timeout()),
+                    this, SLOT(onRefreshWorktree()));
+        }
+        refreshWorktreeTimer->setInterval(interval * 1000);
+        refreshWorktreeTimer->start();
     }
-
-    void AutoRefresher::onRefreshWorktree()
-    {
+    else {
+        if (refreshWorktreeTimer) {
+            refreshWorktreeTimer->stop();
+            refreshWorktreeTimer->deleteLater();
+            refreshWorktreeTimer = NULL;
+        }
     }
+}
 
+int AutoRefresher::gitRefreshInterval() const
+{
+    return AutoRefresherCfg::gitInterval();
+}
+
+int AutoRefresher::indexRefreshInterval() const
+{
+    return AutoRefresherCfg::indexInterval();
+}
+
+int AutoRefresher::worktreeRefreshInterval() const
+{
+    return AutoRefresherCfg::worktreeInterval();
+}
+
+void AutoRefresher::onRefreshGit()
+{
+    Log::Manager().addMessage(trUtf8("Refreshing git repositories..."));
+    RM::RepoMan::instance().refresh();
+}
+
+void AutoRefresher::onRefreshIndex()
+{
+}
+
+void AutoRefresher::onRefreshWorktree()
+{
 }

@@ -29,6 +29,13 @@
 namespace RM
 {
 
+    enum class RefreshTypes
+    {
+        Repositories,
+        Indicies,
+        Worktrees
+    };
+
     namespace Frontend { class Branch; }
 
     class REPOMAN_API RepoMan
@@ -42,6 +49,7 @@ namespace RM
         ~RepoMan();
 
     public:
+        void refresh(RefreshTypes what);
         void open(const QString& path);
 
         void closeAll();

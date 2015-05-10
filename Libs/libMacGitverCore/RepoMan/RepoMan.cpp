@@ -29,6 +29,8 @@
 
 #include "libBlueSky/Application.hpp"
 
+#include <QDebug>
+
 namespace RM
 {
 
@@ -69,81 +71,17 @@ namespace RM
     }
 
     /**
-     * @brief       Open a repository (By it's path)
+     * @brief       Open a repository
      *
-     * Opens a Git::Repository at the @a path and if this is valid, call open() to setup a RepoMan
-     * repository for it.
+     * Opens the Repository at @a path
      *
      * @param[in]   path    The path where to look for the repository to open.
      *
-     * @return      A pointer to a Repo object that represents the repositorty. An existing one will
-     *              be returned if such a Repo object can be found.
-     *              `NULL` will be returned, if the repository cannot be opened.
-     *
      */
-    Repo* RepoMan::open(const QString& path)
+    void RepoMan::open(const QString& path)
     {
-        Git::Result result;
-        Git::Repository repo = Git::Repository::open( result, path );
-        if( !result || !repo.isValid() )
-        {
-            return NULL;
-        }
-
-        return open( repo );
-    }
-
-    /**
-     * @brief       Setup a Repo object for a Git::Repository
-     *
-     * If there is no Repo object for the git repository at that place in the file system, a new one
-     * will be created and registered with the repo-manager and the core.
-     *
-     * @param[in]   gitRepo The Git::Repository object
-     *
-     * @return      Returns either an existing Repo object or a newly created one.
-     *
-     */
-    Repo* RepoMan::open(const Git::Repository& gitRepo)
-    {
-        RM_D(RepoMan);
-
-        Repo* repo = repoByPath(gitRepo.workTreePath(), false);
-
-        if(!repo) {
-            repo = new Repo(gitRepo, this);
-            d->repos.append(repo);
-
-            Events::self()->repositoryOpened(repo);
-
-            if (d->repos.count() == 1) {
-                emit firstRepositoryOpened();
-            }
-        }
-
-        activate( repo );
-        return repo;
-    }
-
-    Repo* RepoMan::repoByPath( const QString& basePath, bool searchSubmodules )
-    {
-        RM_D(RepoMan);
-
-        foreach (Repo* repo, d->repos) {
-            if (repo->path() == basePath) {
-                return repo;
-            }
-
-            if (searchSubmodules) {
-                if (RepoPrivate* subPriv = Private::dataOf<Repo>(repo)) {
-                    if (Repo* subSubRepo = subPriv->repoByPath(basePath, true)) {
-                        return subSubRepo;
-                    }
-                }
-            }
-        }
-
-        return NULL;
+        // ### REPOMAN TODO
+        qDebug() << "RepoMan::Open is currently not implemented.";
     }
 
     /**

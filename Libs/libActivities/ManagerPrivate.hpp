@@ -112,6 +112,8 @@ namespace Activities
         template<typename ... T>
         void enqueue(T&& ... t)
         {
+            // Since we can't bind a brace-initialised object to an xvalue, this method can be used
+            // instead, like: enqueue(EventType::Foo, bar);
             EventInfo ei(std::forward<T>(t)...);
             enqueue(std::move(ei));
         }

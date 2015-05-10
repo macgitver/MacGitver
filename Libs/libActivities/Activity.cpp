@@ -182,16 +182,4 @@ namespace Activities
         return Log();
     }
 
-#if 0
-    void Activity::addStep(const Step::Ptr& step)
-    {
-        std::lock_guard<std::mutex> _(mMtx);
-        std::shared_ptr<StepImpl> _step = std::static_pointer_cast<StepImpl>(step);
-
-        _step->setActivity(getptr());
-        mSteps.push_back(step);
-    }
-
-#endif
-
 }

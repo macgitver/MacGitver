@@ -169,7 +169,7 @@ void CloneDlg::accept()
 
     ProgressDlg::StepInfo::List steps;
     steps << ProgressDlg::StepInfo{ QStringLiteral("transfer"), tr("Download Git objects.") }
-          << ProgressDlg::StepInfo{ QStringLiteral("index"), tr("Add objects to Git index.") };
+          << ProgressDlg::StepInfo{ QStringLiteral("index"), tr("Indexing Git objects.") };
 
     if (!clone->bare()) {
           steps << ProgressDlg::StepInfo{ QStringLiteral("checkout"),

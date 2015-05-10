@@ -32,9 +32,9 @@
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
+#include "libMacGitverCore/Config/Ui//RepoManConfigPage.hpp"
 #include "libMacGitverCore/MacGitver/Modules.h"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
 #include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
 
 /**

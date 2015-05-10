@@ -354,7 +354,7 @@ namespace RM
     {
         mRepo = repo;
         mHead = NULL;
-        mPath = mRepo.basePath();
+        mPath = mRepo.workTreePath();
         mIsLoaded = mRepo.isValid();
         mIsActive = false;
         mIsBare = mRepo.isValid() && mRepo.isBare();
@@ -465,7 +465,7 @@ namespace RM
             Q_ASSERT(subRepo.isValid());
 
             Repo* subInfo = NULL;
-            QString path = subRepo.basePath();
+            QString path = subRepo.workTreePath();
 
             if (path.endsWith(L'/')) {
                 path = path.left(path.length() - 1);

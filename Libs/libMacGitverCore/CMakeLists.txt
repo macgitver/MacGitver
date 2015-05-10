@@ -20,6 +20,7 @@ SET( SRC_FILES
     Config/Ui/ConfigPage.cpp
     Config/Ui/GeneralConfigPage.cpp
     Config/Ui/ConfigPageProvider.cpp
+    Config/Ui/RepoManConfigPage.cpp
 
     MacGitver/Module.cpp
     MacGitver/Modules.cpp
@@ -42,8 +43,6 @@ SET( SRC_FILES
     RepoMan/Head.cpp
 
     RepoMan/Private/Dumper.cpp
-
-    RepoMan/Config/RepoManConfigPage.cpp
 
     SHMParser/ShellExpand.cpp
 
@@ -116,6 +115,7 @@ SET( PRI_HDR_FILES
 
     Config/Ui/ConfigDialog.hpp
     Config/Ui/GeneralConfigPage.hpp
+    Config/Ui/RepoManConfigPage.hpp
 
     RepoMan/Private/BasePrivate.hpp
     RepoMan/Private/BranchPrivate.hpp
@@ -132,8 +132,6 @@ SET( PRI_HDR_FILES
     RepoMan/Private/Dumper.hpp
     RepoMan/Private/HeadPrivate.hpp
 
-    RepoMan/Config/RepoManConfigPage.hpp
-
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h
     Widgets/RepoStateWidget.hpp
@@ -145,8 +143,7 @@ SET( UI_FILES
 
     Config/Ui/ConfigDialog.ui
     Config/Ui/GeneralConfigPage.ui
-
-    RepoMan/Config/RepoManConfigPage.ui
+    Config/Ui/RepoManConfigPage.ui
 
     Widgets/ExpandableDlg.ui
 )

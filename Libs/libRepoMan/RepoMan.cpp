@@ -21,6 +21,10 @@
 
 #include "libRepoMan/Private/Dumper.hpp"
 
+#include "libRepoMan/Backend/ServiceRunner.hpp"
+
+#include "libRepoMan/Services/OpenRepository.hpp"
+
 #include "libRepoMan/Data/RepoMan.hpp"
 #include "libRepoMan/Data/Repo.hpp"
 
@@ -86,8 +90,7 @@ namespace RM
      */
     void RepoMan::open(const QString& path)
     {
-        // ### REPOMAN TODO
-        qDebug() << "RepoMan::Open is currently not implemented.";
+        Backend::perform(new Services::OpenRepository(path));
     }
 
     /**

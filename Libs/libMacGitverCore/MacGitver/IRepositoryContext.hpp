@@ -23,13 +23,16 @@
 
 namespace RM
 {
-    class Repo;
+    namespace Frontend
+    {
+        class Repo;
+    }
 }
 
 class IRepositoryContext
 {
 public:
-    virtual RM::Repo* repository() const = 0;
+    virtual RM::Frontend::Repo repository() const = 0;
 };
 
 Q_DECLARE_INTERFACE( IRepositoryContext,

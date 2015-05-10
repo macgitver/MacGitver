@@ -19,6 +19,15 @@ Ui RemotesModuleActions {
     Container RemotesAC {
 
         Menu Remotes {
+    Container CloneAC {
+
+        Action Clone {
+            Text        "&Clone...";
+            _ConnectTo  onClone();
+        };
+
+    };
+
 
             Text    "R&emotes";
 

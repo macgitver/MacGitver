@@ -16,7 +16,6 @@ SET( SRC_FILES
     RepoTreeView.cpp
     RepositoryContext.cpp
 
-    CloneRepositoryDlg.cpp
     CreateRepositoryDlg.cpp
 )
 
@@ -28,14 +27,11 @@ SET( HDR_FILES
     RepoTreeView.hpp
     RepositoryContext.hpp
 
-    CloneRepositoryDlg.hpp
     CreateRepositoryDlg.h
 )
 
 SET( UI_FILES
 
-    CloneOptionsWdgt.ui
-    CloneRepositoryDlg.ui
     CreateRepositoryDlg.ui
 )
 

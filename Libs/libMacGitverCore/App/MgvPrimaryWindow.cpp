@@ -17,6 +17,20 @@
  *
  */
 
+#include "libMacGitverCore/App/MacGitverPrivate.hpp"
+#include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
+#include "libMacGitverCore/App/MgvPrimaryWindowPrivate.hpp"
+#include "libMacGitverCore/MacGitver/Modules.h"
+
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+
+#include "libMacGitverCore/Config/Config.h"
+#include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
+#include "libMacGitverCore/Widgets/RepoStateWidget.hpp"
+
+#include "libBlueSky/Application.hpp"
+#include "libBlueSky/FooterWidget.hpp"
+
 #include <QDebug>
 #include <QComboBox>
 #include <QStatusBar>
@@ -27,23 +41,6 @@
 #include <QStringBuilder>
 #include <QDesktopWidget>
 #include <QApplication>
-
-
-#include "libGitWrap/ObjectId.hpp"
-#include "libGitWrap/Reference.hpp"
-
-#include "libBlueSky/Application.hpp"
-#include "libBlueSky/FooterWidget.hpp"
-
-#include "libMacGitverCore/App/MacGitverPrivate.hpp"
-#include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
-#include "libMacGitverCore/App/MgvPrimaryWindowPrivate.hpp"
-#include "libMacGitverCore/MacGitver/Modules.h"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Repo.hpp"
-#include "libMacGitverCore/Config/Config.h"
-#include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
-#include "libMacGitverCore/Widgets/RepoStateWidget.hpp"
 
 #if 0
 #include "libStairway/StairwayToHeavenTool.hpp"

@@ -55,11 +55,11 @@ Ui RepositoryActions {
 
     Container RepositoryMenuAC {
 
+        Action      RepositoryCreate;
         Action      RepositoryOpen;
         Menu        RepoOpenRecent;
         Separator;
 
-        Action      RepositoryCreate;
         Action      RepositoryClone;
         Separator;
 

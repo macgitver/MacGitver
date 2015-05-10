@@ -25,43 +25,39 @@ class QTimer;
 
 #include "libMacGitverCore/Config/ConfigUser.h"
 
-namespace RM
+class AutoRefresher
+        : public QObject
 {
+    Q_OBJECT
+public:
+    AutoRefresher(QObject* parent);
+    ~AutoRefresher();
 
-    class AutoRefresher : public QObject
-    {
-        Q_OBJECT
-    public:
-        AutoRefresher(QObject* parent);
-        ~AutoRefresher();
+public:
+    bool refreshEnabled() const;
+    bool refreshGitEnabled() const;
+    bool refreshIndexEnabled() const;
+    bool refreshWorktreeEnabled() const;
 
-    public:
-        bool refreshEnabled() const;
-        bool refreshGitEnabled() const;
-        bool refreshIndexEnabled() const;
-        bool refreshWorktreeEnabled() const;
+    int gitRefreshInterval() const;
+    int indexRefreshInterval() const;
+    int worktreeRefreshInterval() const;
 
-        int gitRefreshInterval() const;
-        int indexRefreshInterval() const;
-        int worktreeRefreshInterval() const;
+    void setRefreshEnabled(bool enabled);
+    void setRefreshGitInterval(int interval, bool force = false);
+    void setRefreshIndexInterval(int interval, bool force = false);
+    void setRefreshWorktreeInterval(int interval, bool force = false);
 
-        void setRefreshEnabled(bool enabled);
-        void setRefreshGitInterval(int interval, bool force = false);
-        void setRefreshIndexInterval(int interval, bool force = false);
-        void setRefreshWorktreeInterval(int interval, bool force = false);
+private slots:
+    void onRefreshGit();
+    void onRefreshIndex();
+    void onRefreshWorktree();
 
-    private slots:
-        void onRefreshGit();
-        void onRefreshIndex();
-        void onRefreshWorktree();
+private:
+    void forcedUpdate();
 
-    private:
-        void forcedUpdate();
-
-    private:
-        QTimer*     refreshGitTimer;
-        QTimer*     refreshIndexTimer;
-        QTimer*     refreshWorktreeTimer;
-    };
-
-}
+private:
+    QTimer*     refreshGitTimer;
+    QTimer*     refreshIndexTimer;
+    QTimer*     refreshWorktreeTimer;
+};

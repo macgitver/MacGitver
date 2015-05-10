@@ -25,10 +25,7 @@
 
 #include "ui_RepoManConfigPage.h"
 
-namespace RM
-{
-    class AutoRefresher;
-}
+class AutoRefresher;
 
 class RepoManConfigPage
         : public ConfigPage
@@ -55,5 +52,5 @@ public:
     QWidget* widget();
 
 private:
-    RM::AutoRefresher* refresher;
+    AutoRefresher* refresher;
 };

@@ -111,7 +111,7 @@ makeInstall libHeaven
 makeInstall MacGitver
 
 hr
-echo "DONE! Macgitver was successfully installed!"
-echo "Run from here: $INSTALL_DIR/bin/Macgitver"
+echo "DONE!"
+echo "Start MacGiver from here: $INSTALL_DIR/bin/MacGitver"
 
 exit 0

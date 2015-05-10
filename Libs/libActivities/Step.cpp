@@ -24,9 +24,13 @@
 namespace Activities
 {
 
-    StepData::StepData()
-        : mGeneration(ManagerData::nextGeneration())
+    StepData::StepData(const ActivityData::Ptr& activity, const QString& display)
+        : mActivity(activity)
+        , mGeneration(ManagerData::nextGeneration())
         , mState(State::Pending)
+        , mDisplayName(display)
+        , mCurProgress(0)
+        , mMaxProgress(0)
     {
     }
 
@@ -44,14 +48,9 @@ namespace Activities
         return mGeneration;
     }
 
-    StepData::Ptr StepData::create()
+    StepData::Ptr StepData::create(const ActivityData::Ptr& activity, const QString& display)
     {
-        return std::make_shared<StepData>();
-    }
-
-    void StepData::setActivity(ActivityData* activity)
-    {
-        mActivity = activity->getptr();
+        return std::make_shared<StepData>(activity, display);
     }
 
     void StepData::changeState(State newState, std::unique_lock<std::mutex>& lock)

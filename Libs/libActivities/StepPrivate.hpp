@@ -39,18 +39,15 @@ namespace Activities
         using Vector    = std::vector<Ptr>;
 
     public:
-        StepData();
+        StepData(const std::shared_ptr<ActivityData>& activity, const QString& display);
         ~StepData();
 
     public:
-        static Ptr create();
+        static Ptr create(const std::shared_ptr<ActivityData>& activity, const QString& display);
 
     public:
         quint32 generation() const;
         Ptr getptr();
-
-    public:
-        void setActivity(ActivityData* activity);
 
     public:
         QString displayName() const;

@@ -42,6 +42,7 @@ namespace Activities
 
     public:
         Step::Vector steps() const;
+        Step createStep(const QString& displayName);
 
     public:
         State state() const;

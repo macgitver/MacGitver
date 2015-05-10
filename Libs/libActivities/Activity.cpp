@@ -182,4 +182,20 @@ namespace Activities
         return Log();
     }
 
+    Step Activity::createStep(const QString& displayName)
+    {
+        if (d) {
+            std::lock_guard<std::mutex> _(d->mMtx);
+
+            StepData::Ptr sd = StepData::create(d->getptr(), displayName);
+            d->mSteps.push_back(sd);
+
+            ManagerData::instance()->enqueue(EventTypes::StepAdded, d->getptr(), sd);
+
+            return {sd};
+        }
+
+        return {};
+    }
+
 }

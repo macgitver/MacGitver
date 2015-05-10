@@ -21,8 +21,12 @@
 
 #include "libRepoMan/Private/Dumper.hpp"
 
+#include "libRepoMan/Services/RefreshRepository.hpp"
+
 #include "libRepoMan/Data/RepoMan.hpp"
 #include "libRepoMan/Data/Repo.hpp"
+
+#include "libLogger/Manager.hpp"
 
 #include "libBlueSky/Application.hpp"
 
@@ -187,6 +191,12 @@ namespace RM
         #else
         return Frontend::Repo::List();
         #endif
+    }
+
+    void RepoMan::refresh(RefreshTypes what)
+    {
+        Log::Manager().addMessage(trUtf8("Refreshing git repositories..."));
+        Backend::perform(new Services::RefreshRepository(activeRepository()));
     }
 
     #if 0 // ###DEAD

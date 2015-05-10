@@ -21,18 +21,6 @@ SET(SRC_FILES
     Infra/main.cpp
     Infra/Fixture.cpp
     Infra/TempDirProvider.cpp
-    Infra/TempRepo.cpp
-    Infra/EventCatcher.cpp
-
-    Test_RepoMan.cpp
-    Test_Repo.cpp
-    Test_Tag.cpp
-    Test_Submodule.cpp
-    Test_Branch.cpp
-    Test_Remote.cpp
-    Test_Namespace.cpp
-    Test_RefTreeNode.cpp
-    Test_RefLog.cpp
 
     Test_SHMParser.cpp
 )
@@ -41,18 +29,6 @@ SET(HDR_FILES
 
     Infra/Fixture.hpp
     Infra/TempDirProvider.hpp
-    Infra/TempRepo.hpp
-    Infra/EventCatcher.hpp
-
-    Test_RepoMan.hpp
-    Test_Repo.hpp
-    Test_Submodule.hpp
-    Test_Tag.hpp
-    Test_Branch.hpp
-    Test_Remote.hpp
-    Test_Namespace.hpp
-    Test_RefTreeNode.hpp
-    Test_RefLog.hpp
 
     Test_SHMParser.hpp
 )

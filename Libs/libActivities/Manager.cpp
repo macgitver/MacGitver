@@ -109,9 +109,12 @@ namespace Activities
 
     Activity ManagerData::newActivity(const QString& display)
     {
+        std::unique_lock<std::mutex> lock(ManagerData::getLock());
         ActivityData::Ptr ad { std::make_shared<ActivityData>(display) };
 
         mCurActivities.push_back(ad);
+
+        lock.unlock();
         enqueue(EventTypes::ActivityAdded, ad);
 
         return {ad};
@@ -318,7 +321,6 @@ namespace Activities
     Activity Manager::createActivity(const QString& display)
     {
         ManagerData* d = ManagerData::instance();
-        std::unique_lock<std::mutex> lock(ManagerData::getLock());
         return d->newActivity(display);
     }
 

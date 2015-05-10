@@ -49,7 +49,7 @@ namespace RM
         ~RepoMan();
 
     public:
-        Repo* open(const QString& path);
+        void open(const QString& path);
 
         void closeAll();
 
@@ -58,16 +58,11 @@ namespace RM
 
         Repo::List repositories() const;
 
-        Repo* repoByPath(const QString& basePath, bool searchSubmodules);
-
         void internalClosedRepo(Repo* repository);
 
     public:
         static RepoMan& instance();
         void terminate();
-
-    private:
-        Repo* open(const Git::Repository& repo);
 
     private slots:
         void reactivateWorkaround();

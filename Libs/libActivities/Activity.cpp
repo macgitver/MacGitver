@@ -182,6 +182,66 @@ namespace Activities
         return Log();
     }
 
+    State Activity::state() const
+    {
+        if (d) {
+            std::lock_guard<std::mutex> _(d->mMtx);
+            return d->mState;
+        }
+
+        return State::Unknown;
+    }
+
+    QString Activity::display() const
+    {
+        if (d) {
+            std::lock_guard<std::mutex> _(d->mMtx);
+            return d->mDisplay;
+        }
+
+        return {};
+    }
+
+    int Activity::curProgress() const
+    {
+        if (d) {
+            std::lock_guard<std::mutex> _(d->mMtx);
+            return d->mTotalCurProgress;
+        }
+
+        return 0;
+    }
+
+    int Activity::maxProgress() const
+    {
+        if (d) {
+            std::lock_guard<std::mutex> _(d->mMtx);
+            return d->mTotalMaxProgress;
+        }
+
+        return 0;
+    }
+
+    int Activity::curOwnProgress() const
+    {
+        if (d) {
+            std::lock_guard<std::mutex> _(d->mMtx);
+            return d->mCurProgress;
+        }
+
+        return 0;
+    }
+
+    int Activity::maxOwnProgress() const
+    {
+        if (d) {
+            std::lock_guard<std::mutex> _(d->mMtx);
+            return d->mMaxProgress;
+        }
+
+        return 0;
+    }
+
     Step Activity::createStep(const QString& displayName)
     {
         if (d) {

@@ -108,7 +108,7 @@ namespace RM
     {
         RM_D(RepoMan);
 
-        Repo* repo = repoByPath(gitRepo.basePath(), false);
+        Repo* repo = repoByPath(gitRepo.workTreePath(), false);
 
         if(!repo) {
             repo = new Repo(gitRepo, this);

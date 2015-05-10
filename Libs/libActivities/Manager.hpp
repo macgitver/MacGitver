@@ -56,6 +56,7 @@ namespace Activities
         Activity createActivity(const QString& display);
 
     public:
+        void requestProgressDialog();
         Activity::Vector activities() const;
 
     signals:

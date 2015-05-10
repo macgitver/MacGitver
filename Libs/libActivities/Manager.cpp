@@ -337,4 +337,20 @@ namespace Activities
         return result;
     }
 
+    void Manager::requestProgressDialog()
+    {
+        bool requireModal;
+
+        {
+            std::unique_lock<std::mutex> lock(ManagerData::getLock());
+            ManagerData* d = ManagerData::instance();
+
+            // this ought to be false, if this method is used correctly. But timing could interfere
+            // here.
+            requireModal = d->isModalityRequired();
+        }
+
+        emit showProgressDialog(requireModal);
+    }
+
 }

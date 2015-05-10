@@ -103,6 +103,7 @@ namespace Activities
         static quint32 nextGeneration();
 
     public:
+        bool isModalityRequired() const;
         Activity newActivity(const QString &display);
 
     public:
@@ -121,7 +122,6 @@ namespace Activities
     private:
         bool maybeStartEventSending();
         void updateGlobalState();
-        bool isModalityRequired() const;
 
     public:
         Manager*                mOwner;

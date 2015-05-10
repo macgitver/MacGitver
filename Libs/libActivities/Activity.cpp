@@ -179,7 +179,7 @@ namespace Activities
             std::lock_guard<std::mutex> _(d->mMtx);
             return {d->mLog};
         }
-        return Log();
+        return {};
     }
 
     State Activity::state() const

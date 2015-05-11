@@ -42,6 +42,8 @@ SET( SRC_FILES
     RepoMan/Frontend/Tag.cpp
     RepoMan/Frontend/Head.cpp
 
+    RepoMan/Data/Base.cpp
+
     RepoMan/Private/Dumper.cpp
 
     SHMParser/ShellExpand.cpp

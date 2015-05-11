@@ -43,7 +43,7 @@ namespace RM
 
     ObjTypes RefLogPrivate::objType() const
     {
-        return RefLogObject;
+        return ObjTypes::RefLog;
     }
 
     void RefLogPrivate::dumpSelf(Internal::Dumper& dumper) const
@@ -75,7 +75,7 @@ namespace RM
 
     bool RefLogPrivate::inherits(ObjTypes type) const
     {
-        return type == RefLogObject || BasePrivate::inherits(type);
+        return type == ObjTypes::RefLog || BasePrivate::inherits(type);
     }
 
 }

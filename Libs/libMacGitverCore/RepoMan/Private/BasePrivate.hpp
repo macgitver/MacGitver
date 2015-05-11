@@ -33,13 +33,22 @@
 #define RM_CP(CLASS)    const CLASS* p = \
                             static_cast<const CLASS*>(mPub)
 
+#ifdef _MSVC
+#define const_or_constexpr const
+#else
+#define const_or_constexpr constexpr
+#endif
+
 namespace RM
 {
 
     namespace Internal
     {
-
         class Dumper;
+    }
+
+    namespace Internal
+    {
 
         class BasePrivate
         {

@@ -19,43 +19,10 @@
 
 #pragma once
 
-#include <QVector>
-#include <QSet>
-#include <QStringList>
-
-#include "libMacGitverCore/MacGitverApi.hpp"
-
-namespace Heaven {
-
-    class Menu;
-    class IconRef;
-
-}
+#include "libMacGitverCore/RepoMan/Core.hpp"
 
 namespace RM
 {
-
-    enum ObjTypes
-    {
-        InvalidObject,
-
-        NamespaceObject,
-        RepoManagerObject,
-
-        // repositories
-        RepoObject,
-        RemoteObject,
-        SubmoduleObject,
-        HeadObject,
-
-        // references
-        BranchObject,
-        RefObject,
-        RefTreeNodeObject,
-        TagObject,
-
-        RefLogObject
-    };
 
     class Repo;
     class RefTreeNode;

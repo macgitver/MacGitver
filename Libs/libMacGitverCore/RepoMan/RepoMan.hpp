@@ -41,7 +41,7 @@ namespace RM
     {
         Q_OBJECT
     public:
-        enum { StaticObjectType = RepoManagerObject };
+        static const ObjTypes StaticObjectType = ObjTypes::RepoManager;
         typedef Internal::RepoManPrivate Private;
 
     public:

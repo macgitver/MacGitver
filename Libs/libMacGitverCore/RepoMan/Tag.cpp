@@ -44,7 +44,7 @@ namespace RM
 
     ObjTypes TagPrivate::objType() const
     {
-        return TagObject;
+        return ObjTypes::Tag;
     }
 
     void TagPrivate::postCreation()
@@ -79,7 +79,7 @@ namespace RM
 
     bool TagPrivate::inherits(ObjTypes type) const
     {
-        return type == TagObject || RefPrivate::inherits(type);
+        return type == ObjTypes::Tag || RefPrivate::inherits(type);
     }
 
 }

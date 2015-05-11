@@ -27,7 +27,7 @@ namespace RM
     class MGV_CORE_API Submodule : public Repo
     {
     public:
-        enum { StaticObjectType = SubmoduleObject };
+        static const ObjTypes StaticObjectType = ObjTypes::Submodule;
 
     public:
         Submodule(const Git::Repository& repo, Repo* parent);

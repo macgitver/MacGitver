@@ -54,7 +54,7 @@ namespace RM
 
         ObjTypes HeadPrivate::objType() const
         {
-            return HeadObject;
+            return ObjTypes::Head;
         }
 
         void HeadPrivate::dumpSelf(Internal::Dumper& dumper) const
@@ -93,7 +93,7 @@ namespace RM
 
         bool HeadPrivate::inherits(ObjTypes type) const
         {
-            return type == HeadObject || BasePrivate::inherits(type);
+            return type == ObjTypes::Head || BasePrivate::inherits(type);
         }
 
     }

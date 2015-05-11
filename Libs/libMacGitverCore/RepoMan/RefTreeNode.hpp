@@ -34,7 +34,7 @@ namespace RM
     class MGV_CORE_API RefTreeNode : public Base
     {
     public:
-        enum { StaticObjectType = RefTreeNodeObject };
+        static const ObjTypes StaticObjectType = ObjTypes::RefTreeNode;
         typedef Internal::RefTreeNodePrivate Private;
         typedef QList< RefTreeNode* > List;
 

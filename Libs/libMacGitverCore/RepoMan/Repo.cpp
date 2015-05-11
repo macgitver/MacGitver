@@ -136,7 +136,7 @@ namespace RM
             return NULL;
         }
 
-        if (p->inheritsRepoManType(RepoObject)) {
+        if (p->inheritsRepoManType(ObjTypes::Repo)) {
             return static_cast<Repo*>(p);
         }
 
@@ -457,12 +457,12 @@ namespace RM
     /**
      * @brief       Get this object's type
      *
-     * @return      always RepoObject.
+     * @return      always ObjTypes::Repo.
      *
      */
     ObjTypes RepoPrivate::objType() const
     {
-        return RepoObject;
+        return ObjTypes::Repo;
     }
 
     void RepoPrivate::dumpSelf(Internal::Dumper& dumper) const
@@ -575,7 +575,7 @@ namespace RM
 
     bool RepoPrivate::inherits(ObjTypes type) const
     {
-        return type == RepoObject || BasePrivate::inherits(type);
+        return type == ObjTypes::Repo || BasePrivate::inherits(type);
     }
 
     Repo* RepoPrivate::searchRepository()

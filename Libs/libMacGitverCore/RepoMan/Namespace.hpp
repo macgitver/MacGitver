@@ -32,7 +32,7 @@ namespace RM
     class MGV_CORE_API Namespace : public Base
     {
     public:
-        enum { StaticObjectType = NamespaceObject };
+        static const ObjTypes StaticObjectType = ObjTypes::Namespace;
         typedef Internal::NamespacePrivate Private;
         typedef QVector< Namespace* > List;
 

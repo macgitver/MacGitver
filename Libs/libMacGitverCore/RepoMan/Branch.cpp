@@ -85,7 +85,7 @@ namespace RM
 
     ObjTypes BranchPrivate::objType() const
     {
-        return BranchObject;
+        return ObjTypes::Branch;
     }
 
     void BranchPrivate::postCreation()
@@ -134,7 +134,7 @@ namespace RM
 
     bool BranchPrivate::inherits(ObjTypes type) const
     {
-        return type == BranchObject || RefPrivate::inherits(type);
+        return type == ObjTypes::Branch || RefPrivate::inherits(type);
     }
 
 }

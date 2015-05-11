@@ -196,7 +196,7 @@ namespace RM
 
     ObjTypes RepoManPrivate::objType() const
     {
-        return RepoManagerObject;
+        return ObjTypes::RepoManager;
     }
 
     void RepoManPrivate::dumpSelf(Internal::Dumper& dumper) const
@@ -223,16 +223,16 @@ namespace RM
     {
         switch (object->objType()) {
 
-        case BranchObject:      return menuCtxBranch;
-        case TagObject:         return menuCtxTag;
-        case RepoObject:        return menuCtxRepo;
-        case SubmoduleObject:   return menuCtxSubmodule;
-        case NamespaceObject:   return menuCtxNamespace;
-        case RefLogObject:      return menuCtxRefLog;
-        case RemoteObject:      return menuCtxRemote;
+        case ObjTypes::Branch:      return menuCtxBranch;
+        case ObjTypes::Tag:         return menuCtxTag;
+        case ObjTypes::Repo:        return menuCtxRepo;
+        case ObjTypes::Submodule:   return menuCtxSubmodule;
+        case ObjTypes::Namespace:   return menuCtxNamespace;
+        case ObjTypes::RefLog:      return menuCtxRefLog;
+        case ObjTypes::Remote:      return menuCtxRemote;
 
-        //case RefObject:                 return menuCtxRef;
-        //case RefTreeNodeObject:         return menuCtxRefTreeNode;
+        //case ObjTypes::Reference:                 return menuCtxRef;
+        //case ObjTypes::RefTreeNode:         return menuCtxRefTreeNode;
 
         default:
             break;

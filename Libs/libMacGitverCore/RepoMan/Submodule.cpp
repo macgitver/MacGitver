@@ -51,7 +51,7 @@ namespace RM
 
     ObjTypes SubmodulePrivate::objType() const
     {
-        return SubmoduleObject;
+        return ObjTypes::Submodule;
     }
 
     void SubmodulePrivate::dumpSelf(Dumper& dumper) const
@@ -85,7 +85,7 @@ namespace RM
 
     bool SubmodulePrivate::inherits(ObjTypes type) const
     {
-        return type == SubmoduleObject || RepoPrivate::inherits(type);
+        return type == ObjTypes::Submodule || RepoPrivate::inherits(type);
     }
 
 }

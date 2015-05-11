@@ -19,24 +19,38 @@
 
 #pragma once
 
-#include "Base.hpp"
+#include <QVector>
+#include <QSet>
+#include <QStringList>
+#include <QStringBuilder>
+
+#include "libMacGitverCore/MacGitverApi.hpp"
+
+namespace Heaven {
+
+    class Menu;
+    class IconRef;
+
+}
 
 namespace RM
 {
 
-    namespace Internal
+    enum class ObjTypes
     {
-        class RefLogPrivate;
-    }
+        Invalid,
 
-    class MGV_CORE_API RefLog : public Base
-    {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::RefLog;
-        typedef Internal::RefLogPrivate Private;
-
-    public:
-        RefLog(Base* _parent);
+        Namespace,
+        RepoManager,
+        Repo,
+        Remote,
+        Submodule,
+        Head,
+        Branch,
+        Reference,
+        RefTreeNode,
+        Tag,
+        RefLog
     };
 
 }

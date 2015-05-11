@@ -75,6 +75,7 @@ SET( PUB_HDR_FILES
     MacGitver/GitPatchConsumer.hpp
     MacGitver/IRepositoryContext.hpp
 
+    RepoMan/Core.hpp
     RepoMan/Base.hpp
     RepoMan/Events.hpp
     RepoMan/Ref.hpp

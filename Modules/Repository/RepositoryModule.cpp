@@ -54,8 +54,8 @@ void RepositoryModule::initialize()
 
     mMostRecentlyUsed = configGet( "MRU", QStringList() );
 
-    connect(&MacGitver::repoMan(),  SIGNAL(repositoryOpened(RM::Repo*)),
-            this,                   SLOT(onCoreRepoOpen(RM::Repo*)));
+    connect(&RM::RepoMan::instance(),   &RM::RepoMan::repositoryOpened,
+            this,                       &RepositoryModule::onCoreRepoOpen);
 
     updateMostRecentlyUsedMenu();
 
@@ -117,17 +117,8 @@ void RepositoryModule::onRepositoryOpenHelper()
         return;
     }
 
-    MacGitver::repoMan().open(repoDir);
-
-    // ###REPOMAN This should move to an eventlistener, which is invoked by RepoMan for every
-    //            opened repository. This will then also boost the priority in the LRU menu for
-    //            repositories opened through it.
-
-    // If we successfully loaded the repository at that directory,
-    // we store the repository's work dir as "lastUsedDir".
-    // If it is a bare repository, we store the repository's directory.
+    RM::RepoMan::instance().open(repoDir);
     Config::self().set("Repository/lastUsedDir", repoDir);
-                    // repo.isBare() ? repoDir : repo.basePath() );
 }
 
 void RepositoryModule::onRepositoryClone()
@@ -138,17 +129,17 @@ void RepositoryModule::onRepositoryClone()
 void RepositoryModule::onRecentRepositoryOpen( const QVariant& path )
 {
     QString repoPath = path.toString();
-    MacGitver::repoMan().open( repoPath );
+    RM::RepoMan::instance().open( repoPath );
 }
 
-void RepositoryModule::onCoreRepoOpen(RM::Repo* repo)
+void RepositoryModule::onCoreRepoOpen(const RM::Frontend::Repo& repo)
 {
-    if( repo->isSubModule() )
+    if( repo.isSubModule() )
     {
         return;
     }
 
-    QString path = repo->path();
+    QString path = repo.path();
     mMostRecentlyUsed.removeAll( path );
     mMostRecentlyUsed.prepend( path );
 

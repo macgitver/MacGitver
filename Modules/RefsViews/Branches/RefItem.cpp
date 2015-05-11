@@ -47,9 +47,9 @@ RefItem::~RefItem()
     qDeleteAll( children );
 }
 
-RM::Base* RefItem::object()
+RM::Frontend::Base RefItem::object()
 {
-    return NULL;
+    return nullptr;
 }
 
 int RefItem::itemPosition()
@@ -140,7 +140,7 @@ QVariant RefBranch::data(int role) const
 
     switch (role) {
     case Qt::FontRole:
-        if (object()->isHead()) {
+        if (object().isHead()) {
             QFont f;
             f.setBold( true );
             return f;
@@ -175,7 +175,7 @@ QVariant RefTag::data(int role) const
 
     switch (role) {
     case Qt::EditRole:
-        return object()->name();
+        return object().name();
     }
 
     return RefItemObject::data(role);

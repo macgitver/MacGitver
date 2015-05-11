@@ -19,20 +19,16 @@
 #ifndef MGV_BRANCHES_MODEL_HPP
 #define MGV_BRANCHES_MODEL_HPP
 
-#include <QAbstractItemModel>
+#include "Branches/BranchesViewData.hpp"
+#include "RefItem.hpp"
+
+#include "libMacGitverCore/RepoMan/Frontend/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
 
 #include "libGitWrap/Reference.hpp"
 #include "libGitWrap/Repository.hpp"
 
-#include "Branches/BranchesViewData.hpp"
-#include "RefItem.hpp"
-
-namespace RM
-{
-    class Ref;
-    class Repo;
-    class CollectionNode;
-}
+#include <QAbstractItemModel>
 
 class RefItem;
 class RefScope;
@@ -61,37 +57,37 @@ signals:
     void gitError( const Git::Result& error );
 
 private slots:
-    void onRefCreated(RM::Repo* repo, RM::Ref* ref);
-    void onRefDestroyed(RM::Repo* repo, RM::Ref* ref);
-    void onRefMoved(RM::Repo* repo, RM::Ref* ref);
-    void onRefTreeNodeAboutToBeDeleted(RM::Repo* repo, RM::RefTreeNode* obj);
+    void onRefCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
+    void onRefDestroyed(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
+    void onRefMoved(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
+    void onRefTreeNodeAboutToBeDeleted(const RM::Frontend::Repo& repo, const RM::Frontend::RefTreeNode& obj);
 
 private:
     QModelIndex itemToIndex(RefItem* item) const;
-    QModelIndex objectToIndex(RM::Base* obj) const;
+    QModelIndex objectToIndex(const RM::Frontend::Base& obj) const;
 
     RefItem* link(bool notify, RefItem* it);
-    void insertCollection(RM::CollectionNode* coll);
-    RefItem* insertObject(bool notify, RM::Base* obj);
-    RefItem* createBranchItem(bool notify, RefItem* parent, RM::Branch* obj);
-    RefItem* createTagItem(bool notify, RefItem* parent, RM::Tag* obj);
-    RefItem* createScopeItem(bool notify, RefItem* parent, RM::RefTreeNode* obj);
-    RefItem* createRemoteItem(bool notify, RefItem* parent, RM::Remote* obj);
+    //void insertCollection(RM::CollectionNode* coll);
+    RefItem* insertObject(bool notify, const RM::Frontend::Base& obj);
+    RefItem* createBranchItem(bool notify, RefItem* parent, const RM::Frontend::Branch& obj);
+    RefItem* createTagItem(bool notify, RefItem* parent, const RM::Frontend::Tag& obj);
+    RefItem* createScopeItem(bool notify, RefItem* parent, const RM::Frontend::RefTreeNode& obj);
+    RefItem* createRemoteItem(bool notify, RefItem* parent, const RM::Frontend::Remote& obj);
 
-    void updatedObject(RM::Base* obj);
-    void deletedObject(RM::Base* obj);
+    void updatedObject(const RM::Frontend::Base& obj);
+    void deletedObject(const RM::Frontend::Base& obj);
     void deleteItem(RefItem* it);
 
 private:
-    RM::Repo*           mRepo;
+    RM::Frontend::Repo  mRepo;
     RefRoot*            mRoot;
 
     RefHeadline*        mHeaderLocal;
     RefHeadline*        mHeaderRemote;
     RefHeadline*        mHeaderTags;
 
-    QHash<RM::Base*, RefItem*>  mObjToItems;
-    QHash<RefItem*, RM::Base*>  mItemToObjs;
+    QHash<RM::Frontend::Base, RefItem*>  mObjToItems;
+    QHash<RefItem*, RM::Frontend::Base>  mItemToObjs;
 };
 
 #endif

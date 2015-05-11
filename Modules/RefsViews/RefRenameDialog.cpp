@@ -24,10 +24,10 @@
 
 #include "libGitWrap/RefName.hpp"
 
-#include "libMacGitverCore/RepoMan/Branch.hpp"
-#include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Branch.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
 
-RefRenameDialog::RefRenameDialog(const Git::Reference &ref, RM::Repo* repo)
+RefRenameDialog::RefRenameDialog(const Git::Reference &ref, const RM::Frontend::Repo& repo)
     : BlueSky::Dialog()
     , mRef(ref)
     , mRepo(repo)
@@ -64,7 +64,9 @@ void RefRenameDialog::accept()
         mRef.rename(mGitResult, newRefName);
 
         if (mGitResult) {
-            mRepo->refresh();
+            // ###REPOMAN When making this a service, we need to refresh (but all services need to
+            //            do that).
+            //mRepo->refresh();
             QDialog::accept();
             return;
         }

@@ -22,6 +22,7 @@
 #include <QVector>
 #include <QSet>
 #include <QStringList>
+#include <QStringBuilder>
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 

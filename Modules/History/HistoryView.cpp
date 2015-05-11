@@ -31,7 +31,7 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
 
 #include "HistoryView.h"
 #include "HistoryEntry.h"
@@ -73,13 +73,14 @@ HistoryView::HistoryView()
              this,                  &HistoryView::repoActivated);
 }
 
-void HistoryView::repoActivated(RM::Repo* repo)
+void HistoryView::repoActivated(const RM::Frontend::Repo& repo)
 {
     if (mRepo != repo) {
 
         mRepo = repo;
 
-        Git::Repository repo = mRepo->gitRepo();
+        #if 0 // ###REPOMAN
+        Git::Repository repo = mRepo.gitRepo();
 
         if (mModel) {
             mList->setModel(NULL);
@@ -104,6 +105,7 @@ void HistoryView::repoActivated(RM::Repo* repo)
             mModel->buildHistory();
             mList->setModel(mModel);
         }
+        #endif
     }
 }
 

@@ -34,7 +34,7 @@ namespace RM
     class MGV_CORE_API Head : public Base
     {
     public:
-        enum { StaticObjectType = HeadObject };
+        static const ObjTypes StaticObjectType = ObjTypes::Head;
         typedef Internal::HeadPrivate Private;
         typedef QVector< Head* > List;
 

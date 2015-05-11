@@ -184,7 +184,7 @@ RefItem* BranchesModel::createBranchItem(bool notify, RefItem* parent, RM::Branc
         return NULL;
     }
 
-    if (!parent && obj->parentObject()->objType() != RM::CollectionNodeObject) {
+    if (!parent && obj->parentObject()->objType() != RM::ObjTypes::CollectionNode) {
         parent = insertObject(notify, obj->parentObject());
         return NULL;
     }
@@ -198,7 +198,7 @@ RefItem* BranchesModel::createBranchItem(bool notify, RefItem* parent, RM::Branc
 
 RefItem* BranchesModel::createTagItem(bool notify, RefItem* parent, RM::Tag* obj)
 {
-    if (!parent && obj->parentObject()->objType() != RM::CollectionNodeObject) {
+    if (!parent && obj->parentObject()->objType() != RM::ObjTypes::CollectionNode) {
         parent = insertObject(notify, obj->parentObject());
         return NULL;
     }
@@ -215,7 +215,7 @@ RefItem* BranchesModel::createScopeItem(bool notify, RefItem* parent, RM::RefTre
     if (!parent) {
         RM::Base* parObj = obj->parentObject();
 
-        if (parObj->objType() != RM::CollectionNodeObject) {
+        if (parObj->objType() != RM::ObjTypes::CollectionNode) {
             parent = insertObject(notify, parObj);
             return NULL;
         }
@@ -262,20 +262,20 @@ RefItem* BranchesModel::insertObject(bool notify, RM::Base* obj)
 
     if (!it) {
         switch (obj->objType()) {
-        case RM::BranchObject:
+        case RM::ObjTypes::Branch:
             it = createBranchItem(notify, parent, static_cast<RM::Branch*>(obj));
             break;
 
-        case RM::TagObject:
+        case RM::ObjTypes::Tag:
             it = createTagItem(notify, parent, static_cast<RM::Tag*>(obj));
             break;
 
-        case RM::RefTreeNodeObject:
+        case RM::ObjTypes::RefTreeNode:
             it = createScopeItem(notify, parent, static_cast<RM::RefTreeNode*>(obj));
             doChildren = true;
             break;
 
-        case RM::RemoteObject:
+        case RM::ObjTypes::Remote:
             it = createRemoteItem(notify, parent, static_cast<RM::Remote*>(obj));
             doChildren = true;
             break;

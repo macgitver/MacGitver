@@ -44,7 +44,7 @@ namespace RM
 
         Q_OBJECT
     public:
-        enum { StaticObjectType = RepoObject };
+        static const ObjTypes StaticObjectType = ObjTypes::Repo;
         typedef Internal::RepoPrivate Private;
         typedef QVector< Repo* > List;
 

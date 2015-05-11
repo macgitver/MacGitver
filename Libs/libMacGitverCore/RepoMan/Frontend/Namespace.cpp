@@ -80,7 +80,7 @@ namespace RM
 
     ObjTypes NamespacePrivate::objType() const
     {
-        return NamespaceObject;
+        return ObjTypes::Namespace;
     }
 
     void NamespacePrivate::dumpSelf(Internal::Dumper& dumper) const
@@ -125,7 +125,7 @@ namespace RM
 
     bool NamespacePrivate::inherits(ObjTypes type) const
     {
-        return type == NamespaceObject || BasePrivate::inherits(type);
+        return type == ObjTypes::Namespace || BasePrivate::inherits(type);
     }
 
 }

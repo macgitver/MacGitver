@@ -54,7 +54,7 @@ namespace RM
 
     ObjTypes RefTreeNodePrivate::objType() const
     {
-        return RefTreeNodeObject;
+        return ObjTypes::RefTreeNode;
     }
 
     void RefTreeNodePrivate::dumpSelf(Dumper& dumper) const
@@ -105,7 +105,7 @@ namespace RM
 
     bool RefTreeNodePrivate::inherits(ObjTypes type) const
     {
-        return type == RefTreeNodeObject || BasePrivate::inherits(type);
+        return type == ObjTypes::RefTreeNode || BasePrivate::inherits(type);
     }
 
 }

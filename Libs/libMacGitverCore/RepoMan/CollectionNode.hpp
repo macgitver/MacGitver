@@ -36,7 +36,7 @@ namespace RM
         Q_DECLARE_TR_FUNCTIONS(RM_CollectionNode)
 
     public:
-        enum { StaticObjectType = CollectionNodeObject };
+        static const ObjTypes StaticObjectType = ObjTypes::CollectionNode;
         typedef Internal::CollectionNodePrivate Private;
         typedef QVector< CollectionNode* > List;
 

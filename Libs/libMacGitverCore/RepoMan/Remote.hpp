@@ -34,7 +34,7 @@ namespace RM
     class MGV_CORE_API Remote : public Base
     {
     public:
-        enum { StaticObjectType = RemoteObject };
+        static const ObjTypes StaticObjectType = ObjTypes::Remote;
         typedef Internal::RemotePrivate Private;
         typedef QVector< Remote* > List;
 

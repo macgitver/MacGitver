@@ -74,7 +74,7 @@ namespace RM
 
     ObjTypes RemotePrivate::objType() const
     {
-        return RemoteObject;
+        return ObjTypes::Remote;
     }
 
     void RemotePrivate::dumpSelf(Internal::Dumper& dumper) const
@@ -120,7 +120,7 @@ namespace RM
 
     bool RemotePrivate::inherits(ObjTypes type) const
     {
-        return type == RemoteObject || BasePrivate::inherits(type);
+        return type == ObjTypes::Remote || BasePrivate::inherits(type);
     }
 
 }

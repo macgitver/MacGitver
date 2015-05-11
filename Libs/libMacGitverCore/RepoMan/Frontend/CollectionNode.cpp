@@ -68,7 +68,7 @@ namespace RM
 
     ObjTypes CollectionNodePrivate::objType() const
     {
-        return CollectionNodeObject;
+        return ObjTypes::CollectionNode;
     }
 
     QString CollectionNodePrivate::displayName() const
@@ -121,7 +121,7 @@ namespace RM
 
     bool CollectionNodePrivate::inherits(ObjTypes type) const
     {
-        return type == CollectionNodeObject || BasePrivate::inherits(type);
+        return type == ObjTypes::CollectionNode || BasePrivate::inherits(type);
     }
 
 }

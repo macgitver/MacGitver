@@ -40,7 +40,7 @@ namespace RM
     class MGV_CORE_API Ref : public Base
     {
     public:
-        enum { StaticObjectType = RefObject };
+        static const ObjTypes StaticObjectType = ObjTypes::Reference;
 
         typedef QList< Ref* > List;
 

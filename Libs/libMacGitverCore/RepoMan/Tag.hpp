@@ -27,7 +27,7 @@ namespace RM
     class MGV_CORE_API Tag : public Ref
     {
     public:
-        enum { StaticObjectType = TagObject };
+        static const ObjTypes StaticObjectType = ObjTypes::Tag;
         typedef QVector< Tag* > List;
 
     public:

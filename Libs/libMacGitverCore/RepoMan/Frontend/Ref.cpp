@@ -109,7 +109,7 @@ namespace RM
 
         ObjTypes RefPrivate::objType() const
         {
-            return RefObject;
+            return ObjTypes::Reference;
         }
 
         QString RefPrivate::displayName() const
@@ -124,7 +124,7 @@ namespace RM
 
         bool RefPrivate::inherits(ObjTypes type) const
         {
-            return type == RefObject || BasePrivate::inherits(type);
+            return type == ObjTypes::Reference || BasePrivate::inherits(type);
         }
 
         void RefPrivate::postCreation()

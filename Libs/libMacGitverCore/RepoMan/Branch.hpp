@@ -27,7 +27,7 @@ namespace RM
     class MGV_CORE_API Branch : public Ref
     {
     public:
-        enum { StaticObjectType = BranchObject };
+        static const ObjTypes StaticObjectType = ObjTypes::Branch;
         typedef QVector< Branch* > List;
 
     public:

@@ -28,60 +28,11 @@
 namespace RM
 {
 
-    using namespace Internal;
-
     Tag::Tag(Base* _parent, const Git::Reference& _ref)
-        : Ref(*new TagPrivate(this, _ref))
+        : Ref(*new Internal::TagPrivate(this, _ref))
     {
         RM_D(Tag);
         d->linkToParent(_parent);
-    }
-
-    //-- TagPrivate --------------------------------------------------------------------------------
-
-    TagPrivate::TagPrivate(Tag* _pub, const Git::Reference& _ref)
-        : RefPrivate(_pub, TagType, _ref)
-    {
-    }
-
-    ObjTypes TagPrivate::objType() const
-    {
-        return ObjTypes::Tag;
-    }
-
-    void TagPrivate::postCreation()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->tagCreated(repository(), pub<Tag>());
-        }
-
-        RefPrivate::postCreation();
-    }
-
-    void TagPrivate::preTerminate()
-    {
-        if (!repoEventsBlocked()) {
-            Events::self()->tagAboutToBeDeleted(repository(), pub<Tag>());
-        }
-
-        RefPrivate::preTerminate();
-    }
-
-    void TagPrivate::dumpSelf(Internal::Dumper& dumper) const
-    {
-        dumper.addLine(QString(QStringLiteral("Tag 0x%1 - %2"))
-                       .arg(quintptr(mPub),0,16)
-                       .arg(mName));
-    }
-
-    QString TagPrivate::objectTypeName() const
-    {
-        return QStringLiteral("Tag");
-    }
-
-    bool TagPrivate::inherits(ObjTypes type) const
-    {
-        return type == ObjTypes::Tag || RefPrivate::inherits(type);
     }
 
 }

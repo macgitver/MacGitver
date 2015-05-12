@@ -19,8 +19,6 @@
 
 #include "libGitWrap/Result.hpp"
 
-#include "libRepoMan/Events.hpp"
-
 #include "libRepoMan/Frontend/Repo.hpp"
 #include "libRepoMan/Frontend/Remote.hpp"
 

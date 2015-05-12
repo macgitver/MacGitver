@@ -17,14 +17,10 @@
  *
  */
 
-//#include "App/MacGitver.hpp"
-
 #include "libRepoMan/Frontend/BaseInternal.hpp"
 #include "libRepoMan/Frontend/Repo.hpp"
 #include "libRepoMan/RepoMan.hpp"
 #include "libRepoMan/Frontend/RefTreeNode.hpp"
-
-#include "libRepoMan/Events.hpp"
 
 #include "libRepoMan/Data/Base.hpp"
 

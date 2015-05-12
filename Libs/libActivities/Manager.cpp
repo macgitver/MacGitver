@@ -207,7 +207,7 @@ namespace Activities
                 return false;
             }
 
-            assert(a.activity && b.activity);
+            Q_ASSERT(a.activity && b.activity);
 
             if (a.activity->generation() < b.activity->generation()) {
                 return true;
@@ -220,7 +220,7 @@ namespace Activities
                     a.type == EventTypes::StepRemoved ||
                     a.type == EventTypes::StepUpdated) {
 
-                assert(a.step && b.step);
+                Q_ASSERT(a.step && b.step);
 
                 if (a.step->generation() < b.step->generation()) {
                     return true;
@@ -233,7 +233,7 @@ namespace Activities
             // If we're still here, then we're the same type and neither one of the activity nor
             // step generation number is either less or greater -> We're equal! But we want to be
             // unique, so equality is impossible...
-            assert(false);
+            Q_ASSERT(false);
             Q_UNREACHABLE();
         });
 

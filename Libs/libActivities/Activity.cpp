@@ -22,8 +22,6 @@
 #include "libActivities/StepPrivate.hpp"
 #include "libActivities/ManagerPrivate.hpp"
 
-#include <cassert>
-
 namespace Activities
 {
 
@@ -78,7 +76,7 @@ namespace Activities
                 return State::PartiallyFinishedWithErrors;
             }
 
-            assert(running + success > 0);
+            Q_ASSERT(running + success > 0);
             return State::InProgress;
         }
     }

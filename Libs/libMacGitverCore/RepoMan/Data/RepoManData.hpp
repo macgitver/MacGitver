@@ -43,7 +43,7 @@ namespace RM
             bool refreshSelf();
             void preTerminate();
             QString displayName() const;
-            void dumpSelf(Dumper& dumper) const;
+            void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
 
             Heaven::Menu* contextMenuFor(Base* object);

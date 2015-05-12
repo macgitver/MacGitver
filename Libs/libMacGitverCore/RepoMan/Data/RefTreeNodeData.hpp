@@ -41,7 +41,7 @@ namespace RM
             void preTerminate();
             bool refreshCheckDispensable();
             QString displayName() const;
-            void dumpSelf(Dumper& dumper) const;
+            void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 

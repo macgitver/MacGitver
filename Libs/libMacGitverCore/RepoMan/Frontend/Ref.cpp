@@ -32,8 +32,6 @@
 namespace RM
 {
 
-    //-- Ref --8>
-
     Ref::Ref(Internal::RefPrivate& data)
         : Base( data )
     {
@@ -86,108 +84,6 @@ namespace RM
         }
 
         return gitRef;
-    }
-
-    namespace Internal
-    {
-
-        RefPrivate::RefPrivate(Ref* pub, RefTypes type, const Git::Reference& ref)
-            : BasePrivate( pub )
-            , mType( type )
-            , mFullQualifiedName( ref.name() )
-            , mName( ref.nameAnalyzer().name() )
-            , mId( ref.objectId() )
-        {
-        }
-
-        void RefPrivate::dumpSelf(Internal::Dumper& dumper) const
-        {
-            dumper.addLine(QString(QStringLiteral("Ref 0x%1 [%2]"))
-                           .arg(quintptr(mPub),0,16)
-                           .arg(mName));
-        }
-
-        ObjTypes RefPrivate::objType() const
-        {
-            return ObjTypes::Reference;
-        }
-
-        QString RefPrivate::displayName() const
-        {
-            return mName;
-        }
-
-        QString RefPrivate::objectTypeName() const
-        {
-            return QStringLiteral("Ref");
-        }
-
-        bool RefPrivate::inherits(ObjTypes type) const
-        {
-            return type == ObjTypes::Reference || BasePrivate::inherits(type);
-        }
-
-        void RefPrivate::postCreation()
-        {
-            RM_P(Ref);
-
-            if (!repoEventsBlocked()) {
-                Events::self()->refCreated(repository(), p);
-            }
-
-            BasePrivate::postCreation();
-        }
-
-        void RefPrivate::preTerminate()
-        {
-            RM_P(Ref);
-
-            if ( !repoEventsBlocked() ) {
-                Events::self()->refAboutToBeDeleted(repository(), p);
-            }
-
-            BasePrivate::preTerminate();
-        }
-
-        void RefPrivate::emitMoved()
-        {
-            if (!repoEventsBlocked()) {
-                Events::self()->refMoved(repository(), pub<Ref>());
-            }
-        }
-
-        bool RefPrivate::refreshDetails(const Git::Reference& ref)
-        {
-            Git::ObjectId id = ref.objectId();
-
-            if (id != mId) {
-                mId = id;
-                if (!repoEventsBlocked()) {
-                    emitMoved();
-                }
-            }
-
-            return true;
-        }
-
-        bool RefPrivate::refreshSelf()
-        {
-            Git::Result     r;
-            Repo*           repo        = repository();          Q_ASSERT( repo );
-            Git::Repository gr          = repo->gitLoadedRepo();
-            Git::Reference  ref         = gr.reference(r, mFullQualifiedName);
-
-            if (!ref.isValid() || ref.wasDestroyed()) {
-                return false;
-            }
-
-            if (!refreshDetails(ref)) {
-                return false;
-            }
-
-            return true;
-        }
-
     }
 
 }

@@ -43,6 +43,7 @@ SET( SRC_FILES
     RepoMan/Frontend/Head.cpp
 
     RepoMan/Data/Base.cpp
+    RepoMan/Data/Reference.cpp
     RepoMan/Data/Tag.cpp
 
     RepoMan/Private/Dumper.cpp

@@ -44,11 +44,12 @@ namespace RM
             , mId( ref.objectId() )
         {
         }
+        #endif
 
         void Reference::dumpSelf(Internal::Dumper& dumper) const
         {
             dumper.addLine(QString(QStringLiteral("Ref 0x%1 [%2]"))
-                           .arg(quintptr(mPub),0,16)
+                           .arg(quintptr(this),0,16)
                            .arg(mName));
         }
 
@@ -64,14 +65,15 @@ namespace RM
 
         QString Reference::objectTypeName() const
         {
-            return QStringLiteral("Ref");
+            return QStringLiteral("Reference");
         }
 
         bool Reference::inherits(ObjTypes type) const
         {
-            return type == ObjTypes::Reference || BasePrivate::inherits(type);
+            return type == ObjTypes::Reference || Base::inherits(type);
         }
 
+        #if 0
         void Reference::postCreation()
         {
             RM_P(Ref);

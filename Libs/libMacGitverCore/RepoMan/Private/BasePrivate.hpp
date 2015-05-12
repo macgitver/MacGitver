@@ -108,7 +108,7 @@ namespace RM
             virtual bool refreshCheckDispensable();
             virtual bool inherits(ObjTypes type) const;
             virtual ObjTypes objType() const = 0;
-            virtual void dumpSelf(Dumper& dumper) const = 0;
+            virtual void dumpSelf(Internal::Dumper& dumper) const = 0;
         };
 
         inline Repo* BasePrivate::repository()

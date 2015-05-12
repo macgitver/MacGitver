@@ -40,7 +40,7 @@ namespace RM
             void postCreation();
             void preTerminate();
             QString displayName() const;
-            void dumpSelf(Dumper& dumper) const;
+            void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 

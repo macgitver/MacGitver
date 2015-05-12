@@ -42,7 +42,7 @@ namespace RM
             void preTerminate();
             virtual bool refreshDetails(const Git::Reference& ref);
             virtual void emitMoved();
-            void dumpSelf(Dumper& dumper) const;
+            void dumpSelf(Internal::Dumper& dumper) const;
             QString objectTypeName() const;
             bool inherits(ObjTypes type) const;
 

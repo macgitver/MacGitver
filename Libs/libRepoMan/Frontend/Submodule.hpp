@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "libRepoman/Frontend/Repo.hpp"
+#include "libRepoMan/Frontend/Repo.hpp"
 
 namespace RM
 {

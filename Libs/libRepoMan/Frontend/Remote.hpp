@@ -21,7 +21,7 @@
 
 #include "libGitWrap/Remote.hpp"
 
-#include "libRepoman/Frontend/Base.hpp"
+#include "libRepoMan/Frontend/Base.hpp"
 
 namespace RM
 {

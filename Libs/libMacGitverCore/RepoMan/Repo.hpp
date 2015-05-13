@@ -38,60 +38,67 @@ namespace RM
         class RepoPrivate;
     }
 
-    class MGV_CORE_API Repo : public QObject, public Base
+    namespace Frontend
     {
-        friend class RepoMan;
 
-        Q_OBJECT
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Repo;
-        typedef Internal::RepoPrivate Private;
-        typedef QVector< Repo* > List;
+        class MGV_CORE_API Repo
+                : public QObject
+                , public Base
+        {
+            friend class RepoMan;
 
-    protected:
-        Repo(Internal::RepoPrivate& _d);
+            Q_OBJECT
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Repo;
+            typedef Internal::RepoPrivate Private;
+            typedef QVector< Repo* > List;
 
-    public:
-        Repo(const Git::Repository& repo, Base* parent);
-        ~Repo();
+        protected:
+            Repo(Internal::RepoPrivate& _d);
 
-    public:
-        GW_DEPRECATED Git::Repository gitRepo();
-        GW_DEPRECATED Git::Repository gitLoadedRepo();
+        public:
+            Repo(const Git::Repository& repo, Base* parent);
+            ~Repo();
 
-        bool isSubModule() const;
-        bool isBare() const;
-        bool isLoaded() const;
-        bool isActive() const;
-        bool isInitializing() const;
+        public:
+            GW_DEPRECATED Git::Repository gitRepo();
+            GW_DEPRECATED Git::Repository gitLoadedRepo();
 
-        Repo* parentRepository();
-        List submodules() const;
+            bool isSubModule() const;
+            bool isBare() const;
+            bool isLoaded() const;
+            bool isActive() const;
+            bool isInitializing() const;
 
-        QString path() const;
+            Repo* parentRepository();
+            List submodules() const;
 
-        QString displayAlias() const;
-        void setDisplayAlias( const QString& alias );
+            QString path() const;
 
-        QString branchDisplay() const;
+            QString displayAlias() const;
+            void setDisplayAlias( const QString& alias );
 
-        void close();
+            QString branchDisplay() const;
 
-        Ref*        findReference(  const Git::Reference&   ref);
-        Ref*        findReference(  const QString&          fqrn);
-        Remote*     findRemote(     const Git::Remote&      remote);
-        Remote*     findRemote(     const QString&          remoteName);
-        Namespace*  findNamespace(  const QStringList&      namespaces);
-        Namespace*  findNamespace(  const QString&          nsFullName);
+            void close();
 
-        Head*           head() const;
+            Ref*        findReference(  const Git::Reference&   ref);
+            Ref*        findReference(  const QString&          fqrn);
+            Remote*     findRemote(     const Git::Remote&      remote);
+            Remote*     findRemote(     const QString&          remoteName);
+            Namespace*  findNamespace(  const QStringList&      namespaces);
+            Namespace*  findNamespace(  const QString&          nsFullName);
 
-    private:
-        void activated();
-        void deactivated();
+            Head*           head() const;
 
-    private slots:
-        void unloadTimer();
-    };
+        private:
+            void activated();
+            void deactivated();
+
+        private slots:
+            void unloadTimer();
+        };
+
+    }
 
 }

@@ -28,11 +28,16 @@
 namespace RM
 {
 
-    Tag::Tag(Base* _parent, const Git::Reference& _ref)
-        : Ref(*new Internal::TagPrivate(this, _ref))
+    namespace Frontend
     {
-        RM_D(Tag);
-        d->linkToParent(_parent);
+
+        Tag::Tag(Base* _parent, const Git::Reference& _ref)
+            : Ref(*new Internal::TagPrivate(this, _ref))
+        {
+            RM_D(Tag);
+            d->linkToParent(_parent);
+        }
+
     }
 
 }

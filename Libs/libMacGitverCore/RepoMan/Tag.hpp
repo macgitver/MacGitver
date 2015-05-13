@@ -24,23 +24,28 @@
 namespace RM
 {
 
-    class MGV_CORE_API Tag : public Ref
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Tag;
-        typedef QVector< Tag* > List;
 
-    public:
-        Tag(Base* _parent, const Git::Reference& _ref);
+        class MGV_CORE_API Tag : public Ref
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Tag;
+            typedef QVector< Tag* > List;
 
-    public:
+        public:
+            Tag(Base* _parent, const Git::Reference& _ref);
 
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
+        public:
 
-    private:
-    };
+        private:
+            ObjTypes objType() const;
+            void preTerminate();
+            void dumpSelf(Internal::Dumper& dumper) const;
+
+        private:
+        };
+
+    }
 
 }

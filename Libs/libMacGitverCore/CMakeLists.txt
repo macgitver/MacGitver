@@ -43,11 +43,16 @@ SET( SRC_FILES
     RepoMan/Frontend/Head.cpp
 
     RepoMan/Data/Base.cpp
-    RepoMan/Data/Reference.cpp
-    RepoMan/Data/Repo.cpp
     RepoMan/Data/Branch.cpp
-    RepoMan/Data/Head.cpp
+    RepoMan/Data/Reference.cpp
+    RepoMan/Data/Namespace.cpp
+    RepoMan/Data/RefLog.cpp
+    RepoMan/Data/RefTreeNode.cpp
+    RepoMan/Data/Remote.cpp
+    RepoMan/Data/Repo.cpp
+    RepoMan/Data/Submodule.cpp
     RepoMan/Data/Tag.cpp
+    RepoMan/Data/Head.cpp
 
     RepoMan/Private/Dumper.cpp
 

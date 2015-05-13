@@ -34,48 +34,4 @@ namespace RM
         d->linkToParent(_parent);
     }
 
-    //-- RefLogPrivate -----------------------------------------------------------------------------
-
-    RefLogPrivate::RefLogPrivate(RefLog* _pub)
-        : BasePrivate(_pub)
-    {
-    }
-
-    ObjTypes RefLogPrivate::objType() const
-    {
-        return ObjTypes::RefLog;
-    }
-
-    void RefLogPrivate::dumpSelf(Internal::Dumper& dumper) const
-    {
-        dumper.addLine(QString(QStringLiteral("RefLog 0x%1"))
-                       .arg(quintptr(mPub),0,16));
-    }
-
-    void RefLogPrivate::postCreation()
-    {
-        BasePrivate::postCreation();
-    }
-
-    void RefLogPrivate::preTerminate()
-    {
-        // What to do? We don't send Ref-Log-Deleted events
-        BasePrivate::preTerminate();
-    }
-
-    bool RefLogPrivate::refreshSelf()
-    {
-        return true;
-    }
-
-    QString RefLogPrivate::objectTypeName() const
-    {
-        return QStringLiteral("RefLog");
-    }
-
-    bool RefLogPrivate::inherits(ObjTypes type) const
-    {
-        return type == ObjTypes::RefLog || BasePrivate::inherits(type);
-    }
-
 }

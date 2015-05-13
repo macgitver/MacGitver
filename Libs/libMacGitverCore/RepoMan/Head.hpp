@@ -30,24 +30,31 @@ namespace RM
         class HeadPrivate;
     }
 
-    class MGV_CORE_API Head : public Base
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Head;
-        typedef Internal::HeadPrivate Private;
-        typedef QVector< Head* > List;
 
-    public:
-        Head(const Git::Repository& repo, Base* parent);
+        class MGV_CORE_API Head : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Head;
+            typedef Internal::HeadPrivate Private;
+            typedef QVector< Head* > List;
 
-    public:
-        bool isDetached() const;
-        bool isUnborn() const;
-        Git::ObjectId detachedId() const;
-        QString symbolicName() const;
+        public:
+            Head(const Git::Repository& repo, Base* parent);
 
-    public:
-        bool is(const Branch* ref) const;
-    };
+        public:
+            bool isDetached() const;
+            bool isUnborn() const;
+            Git::ObjectId detachedId() const;
+            QString symbolicName() const;
+
+        public:
+            bool is(const Branch* ref) const;
+        };
+
+    }
+
+    using Head = Frontend::Head;
 
 }

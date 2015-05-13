@@ -44,15 +44,15 @@ SET( SRC_FILES
 
     RepoMan/Data/Base.cpp
     RepoMan/Data/Branch.cpp
-    RepoMan/Data/Reference.cpp
+    RepoMan/Data/Head.cpp
     RepoMan/Data/Namespace.cpp
+    RepoMan/Data/Reference.cpp
     RepoMan/Data/RefLog.cpp
     RepoMan/Data/RefTreeNode.cpp
     RepoMan/Data/Remote.cpp
     RepoMan/Data/Repo.cpp
     RepoMan/Data/Submodule.cpp
     RepoMan/Data/Tag.cpp
-    RepoMan/Data/Head.cpp
 
     RepoMan/Private/Dumper.cpp
 
@@ -94,7 +94,7 @@ SET( PUB_HDR_FILES
 
     RepoMan/Frontend/Base.hpp
     RepoMan/Frontend/Branch.hpp
-    RepoMan/Head.hpp
+    RepoMan/Frontend/Head.hpp
     RepoMan/Frontend/Namespace.hpp
     RepoMan/Ref.hpp
     RepoMan/Repo.hpp

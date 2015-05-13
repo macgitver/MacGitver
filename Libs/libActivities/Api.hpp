@@ -19,40 +19,10 @@
 
 #pragma once
 
-#include "libGitWrap/Remote.hpp"
+#include <QtGlobal>
 
-#include "libRepoMan/Frontend/Base.hpp"
-
-namespace RM
-{
-
-    namespace Data
-    {
-        class Remote;
-    }
-
-    namespace Frontend
-    {
-
-        class REPOMAN_API Remote : public Base
-        {
-        public:
-            static const ObjTypes StaticObjectType = ObjTypes::Remote;
-            typedef Data::Remote Private;
-            typedef QVector<Remote> List;
-
-        public:
-            Remote(const Git::Remote& gitObj, Base* parent);
-
-        public:
-            GW_DEPRECATED
-            Git::Remote gitObject();
-            QString name() const;
-            #if 0 // ###DEAD
-            CollectionNode* branches();
-            #endif
-        };
-
-    }
-
-}
+#ifdef Activities_EXPORTS
+#   define ACTIVITIES_API Q_DECL_EXPORT
+#else
+#   define ACTIVITIES_API Q_DECL_IMPORT
+#endif

@@ -19,40 +19,37 @@
 
 #pragma once
 
-#include "libGitWrap/Remote.hpp"
+#include "libActivities/Step.hpp"
 
-#include "libRepoMan/Frontend/Base.hpp"
+#include <QStringList>
 
-namespace RM
+namespace Activities
 {
 
-    namespace Data
+    class LogData;
+
+    class ACTIVITIES_API Log
     {
-        class Remote;
-    }
+    public:
+        Log() = default;
+        ~Log() = default;
+        Log(const Log& o) : Log(o.d) {}
+        Log(Log&& o) : Log(std::move(o.d)) {}
+        Log(const std::shared_ptr<LogData>& o) : d(o) {}
+        Log(std::shared_ptr<LogData>&& o) : d(std::move(o)) {}
 
-    namespace Frontend
-    {
+    public:
+        void setRecoverable(const QString& text, bool flush = false);
+        void addLine(const QString& text, bool flush = true);
 
-        class REPOMAN_API Remote : public Base
-        {
-        public:
-            static const ObjTypes StaticObjectType = ObjTypes::Remote;
-            typedef Data::Remote Private;
-            typedef QVector<Remote> List;
+    public:
+        QStringList lines() const;
 
-        public:
-            Remote(const Git::Remote& gitObj, Base* parent);
+    public:
+        bool isDefunct() const;
 
-        public:
-            GW_DEPRECATED
-            Git::Remote gitObject();
-            QString name() const;
-            #if 0 // ###DEAD
-            CollectionNode* branches();
-            #endif
-        };
-
-    }
+    private:
+        std::shared_ptr<LogData> d;
+    };
 
 }

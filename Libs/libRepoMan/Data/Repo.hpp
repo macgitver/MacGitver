@@ -23,6 +23,8 @@
 
 #include "libRepoMan/Frontend/Repo.hpp"
 
+#include <QMutex>
+
 class QTimer;
 
 namespace RM

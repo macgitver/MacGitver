@@ -1,0 +1,58 @@
+
+PROJECT(ACTIVITIES)
+
+QT_PREPARE(Core)
+
+SET( SRC_FILES
+
+    Manager.cpp
+    Activity.cpp
+    Step.cpp
+    Log.cpp
+)
+
+SET( PUB_HDR_FILES
+
+    Api.hpp
+    Manager.hpp
+    Activity.hpp
+    Step.hpp
+    Log.hpp
+)
+
+SET( PRI_HDR_FILES
+    ManagerPrivate.hpp
+    ActivityPrivate.hpp
+    StepPrivate.hpp
+    LogPrivate.hpp
+)
+
+SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
+
+QT_MOC( MOC_FILES ${HDR_FILES} )
+
+ADD_QT_LIBRARY(
+    Activities SHARED
+
+    ${SRC_FILES}
+    ${HDR_FILES}
+    ${MOC_FILES}
+)
+
+TARGET_LINK_LIBRARIES(
+    Activities
+)
+
+IF(UNIX AND NOT APPLE)
+    SET_TARGET_PROPERTIES(
+        Activities
+        PROPERTIES  INSTALL_RPATH
+        "\$ORIGIN"
+    )
+ENDIF()
+
+RAD_DEFINE_VERSION(ACTIVITIES 0 0 1)
+RAD_SET_TARGET_VERSION(Activities ACTIVITIES)
+RAD_INSTALL_LIBRARY    (Activities Activities)
+RAD_INSTALL_HEADERS    (libActivities ${PUB_HDR_FILES})
+RAD_SPLIT_SOURCE_TREE  (libActivities)

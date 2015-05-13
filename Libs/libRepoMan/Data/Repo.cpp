@@ -19,8 +19,6 @@
 
 #include "libRepoMan/Data/Repo.hpp"
 
-#include <cassert>
-
 namespace RM
 {
 
@@ -40,7 +38,7 @@ namespace RM
         Git::Repository Repo::gitRepo(bool doLoad)
         {
             if (!mRepo && doLoad) {
-                assert(false); // ###REPOMAN - Not sure if we still want to support this...
+                Q_ASSERT(false); // ###REPOMAN - Not sure if we still want to support this...
             }
 
             return mRepo;

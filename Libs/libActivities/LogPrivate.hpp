@@ -19,40 +19,43 @@
 
 #pragma once
 
-#include "libGitWrap/Remote.hpp"
+#include "libActivities/Log.hpp"
 
-#include "libRepoMan/Frontend/Base.hpp"
+#include <QString>
 
-namespace RM
+#include <mutex>
+
+namespace Activities
 {
 
-    namespace Data
+    class ActivityData;
+
+    class LogData
+            : public std::enable_shared_from_this<LogData>
     {
-        class Remote;
-    }
+    public:
+        using Ptr       = std::shared_ptr<LogData>;
 
-    namespace Frontend
-    {
+    public:
+        LogData();
+        ~LogData();
 
-        class REPOMAN_API Remote : public Base
-        {
-        public:
-            static const ObjTypes StaticObjectType = ObjTypes::Remote;
-            typedef Data::Remote Private;
-            typedef QVector<Remote> List;
+    public:
+        static Ptr create();
 
-        public:
-            Remote(const Git::Remote& gitObj, Base* parent);
+    public:
+        Ptr getptr();
 
-        public:
-            GW_DEPRECATED
-            Git::Remote gitObject();
-            QString name() const;
-            #if 0 // ###DEAD
-            CollectionNode* branches();
-            #endif
-        };
+    public:
+        void setActivity(ActivityData* activity);
 
-    }
+    public:
+        void flush();
+
+    public:
+        std::weak_ptr<ActivityData> mActivity;
+        QString                     mRecoverableLine;
+        QStringList                 mLines;
+    };
 
 }

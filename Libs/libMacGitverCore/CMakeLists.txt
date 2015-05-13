@@ -30,7 +30,6 @@ SET( SRC_FILES
     RepoMan/Base.cpp
     RepoMan/Ref.cpp
     RepoMan/Branch.cpp
-    RepoMan/CollectionNode.cpp
     RepoMan/Events.cpp
     RepoMan/Repo.cpp
     RepoMan/RepoMan.cpp
@@ -78,7 +77,6 @@ SET( PUB_HDR_FILES
 
     RepoMan/Base.hpp
     RepoMan/Events.hpp
-    RepoMan/CollectionNode.hpp
     RepoMan/Ref.hpp
     RepoMan/Repo.hpp
     RepoMan/RepoMan.hpp
@@ -119,7 +117,6 @@ SET( PRI_HDR_FILES
 
     RepoMan/Private/BasePrivate.hpp
     RepoMan/Private/BranchPrivate.hpp
-    RepoMan/Private/CollectionNodePrivate.hpp
     RepoMan/Private/NamespacePrivate.hpp
     RepoMan/Private/RefPrivate.hpp
     RepoMan/Private/RefLogPrivate.hpp

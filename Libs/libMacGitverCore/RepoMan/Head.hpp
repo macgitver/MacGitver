@@ -20,7 +20,6 @@
 #pragma once
 
 #include "RepoMan/Base.hpp"
-#include "RepoMan/CollectionNode.hpp"
 #include "RepoMan/Branch.hpp"
 
 namespace RM

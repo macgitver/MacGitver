@@ -22,7 +22,6 @@
 #include "Repo.hpp"
 #include "Remote.hpp"
 #include "Events.hpp"
-#include "CollectionNode.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
 #include "RepoMan/Private/RemotePrivate.hpp"
@@ -51,15 +50,6 @@ namespace RM
         RM_D(Remote);
 
         return d->name;
-    }
-
-    CollectionNode* Remote::branches()
-    {
-        RM_D(Remote);
-
-
-        // ### We don't use this when filling up the branches, yet.
-        return d->getOrCreateCollection(ctBranches);
     }
 
     //-- RemotePrivate -----------------------------------------------------------------------------

@@ -84,8 +84,6 @@ namespace RM
             Base* findRefParent(const QStringList& scopes, bool create);
             RefTreeNode* findRefTreeNode(const QStringList& scopes, bool create);
 
-            CollectionNode* getOrCreateCollection(CollectionTypes ctype);
-
             template< class T > static typename T::Private* dataOf(Base* b)
             {
                 BasePrivate* p = b->mData;

@@ -41,7 +41,6 @@
 #include "RepoMan/Private/Dumper.hpp"
 #include "RepoMan/Private/RepoPrivate.hpp"
 #include "RepoMan/Private/RemotePrivate.hpp"
-#include "RepoMan/Private/CollectionNodePrivate.hpp"
 
 namespace RM
 {
@@ -283,64 +282,6 @@ namespace RM
         return d->mHead;
     }
 
-    /**
-     * @brief       Get this repository's collection of branches
-     *
-     * @return      A CollectionNode whose children are the branches included in this repository.
-     *
-     * Branches are references matching the regular expression `^refs/heads/.*$`. Branches may be
-     * scoped in which case they are subdivided into RefTreeNode objects.
-     *
-     */
-    CollectionNode* Repo::branches()
-    {
-        RM_D( Repo );
-        return d->getOrCreateCollection( ctBranches );
-    }
-
-    /**
-     * @brief       Get this repository's collection of tags
-     *
-     * @return      A CollectionNode whose children are the tags included in this repository.
-     *
-     * Tags are references matching the regular expression `^refs/tags/.*$`. Tags may be scoped in
-     * which case they are subdivided into RefTreeNode objects.
-     *
-     */
-    CollectionNode* Repo::tags()
-    {
-        RM_D( Repo );
-        return d->getOrCreateCollection( ctTags );
-    }
-
-    /**
-     * @brief       Get this repository's collection of namespaces
-     *
-     * @return      A CollectionNode whose children are the 1st level namespaces included in this
-     *              repository.
-     *
-     */
-    CollectionNode* Repo::namespaces()
-    {
-        RM_D(Repo);
-        return d->getOrCreateCollection(ctNamespaces);
-    }
-
-    /**
-     * @brief       Get this repository's collection of notes
-     *
-     * @return      A CollectionNode object whose children are the notes included in this repository.
-     *
-     * Notes are refs matching the regular expression `^refs/notes/.*$`. Notes may be scoped, in
-     * which case they are subdivided into RefTreeNode objects.
-     *
-     */
-    CollectionNode* Repo::notes()
-    {
-        RM_D(Repo);
-        return d->getOrCreateCollection(ctNotes);
-    }
-
     //-- RepoPrivate -------------------------------------------------------------------------------
 
     RepoPrivate::RepoPrivate(Repo* pub, const Git::Repository& repo)
@@ -547,85 +488,6 @@ namespace RM
 
     Ref* RepoPrivate::findReference(Git::RefName& rn, Git::Reference ref, bool create)
     {
-        Base* parent = NULL;
-        CollectionNode* cn = NULL;
-
-        if (rn.isRemote() && rn.isBranch()) {
-            Remote* rm = findRemote(rn.remote(), create);
-
-            if (!rm) {
-                return NULL;
-            }
-
-            RemotePrivate* rmp = dataOf<Remote>(rm);
-            if (!rmp) {
-                return NULL;
-            }
-
-            parent = rmp->findRefParent(rn.scopes(), create);
-        }
-        else if (rn.isNamespaced()) {
-            Namespace* ns = findNamespace(rn.namespaces(), create);
-
-            if (!ns) {
-                return NULL;
-            }
-
-            if (rn.isBranch()) {
-                cn = ns->branches();
-            }
-            else if (rn.isTag()) {
-                cn = ns->tags();
-            }
-            else {
-                return NULL;
-            }
-
-            CollectionNodePrivate* cnp = dataOf<CollectionNode>(cn);
-            if (!cnp) {
-                return NULL;
-            }
-
-            parent = cnp->findRefParent(rn.scopes(), create);
-        }
-        else {
-            if (rn.isBranch()) {
-                cn = getOrCreateCollection(ctBranches);
-            }
-            else if (rn.isTag()) {
-                cn = getOrCreateCollection(ctTags);
-            }
-            else {
-                return NULL;
-            }
-
-            CollectionNodePrivate* cnp = dataOf<CollectionNode>(cn);
-            if (!cnp) {
-                return NULL;
-            }
-
-            parent = cnp->findRefParent(rn.scopes(), create);
-        }
-
-        foreach (Ref* rmRef, parent->childObjects<Ref>()) {
-            if (rmRef->fullName() == rn.fullName()) {
-                return rmRef;
-            }
-        }
-
-        if (create) {
-            if ( rn.isBranch() ) {
-                return new Branch( parent, ref );
-            }
-            else if( rn.isTag() ) {
-                return new Tag( parent, ref );
-            }
-            else {
-                qDebug() << "Do not know how to deal with reference:" << rn.fullName();
-                return NULL;
-            }
-        }
-
         return NULL;
     }
 
@@ -675,34 +537,9 @@ namespace RM
         return NULL;
     }
 
-    Namespace* RepoPrivate::findNamespace(const QStringList& _namespaces, bool create) {
-
-        Base* par = getOrCreateCollection(ctNamespaces);
-        Namespace* child = NULL;
-
-        foreach (QString nsName, _namespaces) {
-            child = NULL;
-
-            foreach (Namespace* ns, par->childObjects<Namespace>()) {
-                if (ns->name() == nsName) {
-                    child = ns;
-                    break;
-                }
-            }
-
-            if (!child) {
-                if (create) {
-                    child = new Namespace(par, nsName);
-                }
-                else {
-                    return NULL;
-                }
-            }
-
-            par = child;
-        }
-
-        return child;
+    Namespace* RepoPrivate::findNamespace(const QStringList& _namespaces, bool create)
+    {
+        return NULL;
     }
 
     Namespace* RepoPrivate::findNamespace(const QString& nsFullName, bool create) {

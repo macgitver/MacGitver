@@ -45,7 +45,6 @@ namespace RM
         GW_DEPRECATED
         Git::Remote gitObject();
         QString name() const;
-        CollectionNode* branches();
     };
 
 }

@@ -28,7 +28,6 @@
 #include "Repo.hpp"
 #include "RepoMan.hpp"
 #include "RefTreeNode.hpp"
-#include "CollectionNode.hpp"
 #include "Events.hpp"
 
 #include "Private/RepoManPrivate.hpp"
@@ -621,20 +620,6 @@ namespace RM
         }
 
         return static_cast< RefTreeNode* >(current);
-    }
-
-
-    CollectionNode* BasePrivate::getOrCreateCollection(CollectionTypes ctype)
-    {
-        CollectionNode* cn;
-
-        foreach (cn, mPub->childObjects<CollectionNode>()) {
-            if (cn->collectionType() == ctype) {
-                return cn;
-            }
-        }
-
-        return new CollectionNode(ctype, mPub);
     }
 
     Repo* BasePrivate::searchRepository()

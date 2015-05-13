@@ -20,7 +20,6 @@
 #include "libMacGitverCore/App/MacGitver.hpp"
 
 #include "RepoMan/RepoMan.hpp"
-#include "RepoMan/CollectionNode.hpp"
 #include "RepoMan/Events.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
@@ -234,18 +233,6 @@ namespace RM
 
         //case RefObject:                 return menuCtxRef;
         //case RefTreeNodeObject:         return menuCtxRefTreeNode;
-
-        case CollectionNodeObject:
-            switch (static_cast<CollectionNode*>(object)->collectionType()) {
-
-            case ctBranches:    return menuCtxBranches;
-            case ctTags:        return menuCtxTags;
-            case ctNotes:       return menuCtxNotes;
-            case ctNamespaces:  return menuCtxNamespaces;
-
-            default:            break;
-            }
-            break;
 
         default:
             break;

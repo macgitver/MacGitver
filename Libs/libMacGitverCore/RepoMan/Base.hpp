@@ -39,7 +39,6 @@ namespace RM
     {
         InvalidObject,
 
-        CollectionNodeObject,
         NamespaceObject,
         RepoManagerObject,
 
@@ -58,17 +57,8 @@ namespace RM
         RefLogObject
     };
 
-    enum CollectionTypes
-    {
-        ctBranches,
-        ctNamespaces,
-        ctNotes,
-        ctTags
-    };
-
     class Repo;
     class RefTreeNode;
-    class CollectionNode;
     class Namespace;
     class Ref;
     class Remote;

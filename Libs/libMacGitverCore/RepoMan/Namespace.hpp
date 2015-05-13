@@ -20,7 +20,6 @@
 #pragma once
 
 #include "Base.hpp"
-#include "CollectionNode.hpp"
 
 namespace RM
 {
@@ -42,12 +41,6 @@ namespace RM
 
     public:
         QString name() const;
-
-    public:
-        CollectionNode* branches();
-        CollectionNode* namespaces();
-        CollectionNode* notes();
-        CollectionNode* tags();
     };
 
 }

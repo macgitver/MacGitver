@@ -31,27 +31,30 @@
 namespace RM
 {
 
-    using namespace Internal;
-
-    Remote::Remote(const Git::Remote& gitObj, Base* _parent)
-        : Base(*new RemotePrivate(this, gitObj))
+    namespace Frontend
     {
-        RM_D(Remote);
 
-        d->linkToParent(_parent);
-    }
+        Remote::Remote(const Git::Remote& gitObj, Base* _parent)
+            : Base(*new Internal::RemotePrivate(this, gitObj))
+        {
+            RM_D(Remote);
 
-    Git::Remote Remote::gitObject()
-    {
-        Git::Result r;
-        return repository()->gitRepo().remote(r, name());
-    }
+            d->linkToParent(_parent);
+        }
 
-    QString Remote::name() const
-    {
-        RM_D(Remote);
+        Git::Remote Remote::gitObject()
+        {
+            Git::Result r;
+            return repository()->gitRepo().remote(r, name());
+        }
 
-        return d->name;
+        QString Remote::name() const
+        {
+            RM_D(Remote);
+
+            return d->name;
+        }
+
     }
 
 }

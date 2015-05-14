@@ -31,20 +31,26 @@ namespace RM
         class RemotePrivate;
     }
 
-    class MGV_CORE_API Remote : public Base
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Remote;
-        typedef Internal::RemotePrivate Private;
-        typedef QVector< Remote* > List;
 
-    public:
-        Remote(const Git::Remote& gitObj, Base* parent);
+        class MGV_CORE_API Remote
+                : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Remote;
+            typedef Internal::RemotePrivate Private;
+            typedef QVector< Remote* > List;
 
-    public:
-        GW_DEPRECATED
-        Git::Remote gitObject();
-        QString name() const;
-    };
+        public:
+            Remote(const Git::Remote& gitObj, Base* parent);
+
+        public:
+            GW_DEPRECATED
+            Git::Remote gitObject();
+            QString name() const;
+        };
+
+    }
 
 }

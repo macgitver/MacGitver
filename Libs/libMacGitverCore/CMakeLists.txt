@@ -96,7 +96,7 @@ SET( PUB_HDR_FILES
     RepoMan/Frontend/Branch.hpp
     RepoMan/Frontend/Head.hpp
     RepoMan/Frontend/Namespace.hpp
-    RepoMan/Ref.hpp
+    RepoMan/Frontend/Ref.hpp
     RepoMan/Frontend/Repo.hpp
     RepoMan/Frontend/Remote.hpp
     RepoMan/Frontend/RefLog.hpp

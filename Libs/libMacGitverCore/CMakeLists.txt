@@ -33,7 +33,7 @@ SET( SRC_FILES
     RepoMan/Frontend/Base.cpp
     RepoMan/Frontend/Branch.cpp
     RepoMan/Frontend/Namespace.cpp
-    RepoMan/Frontend/Ref.cpp
+    RepoMan/Frontend/Reference.cpp
     RepoMan/Frontend/RefLog.cpp
     RepoMan/Frontend/RefTreeNode.cpp
     RepoMan/Frontend/Remote.cpp
@@ -96,7 +96,7 @@ SET( PUB_HDR_FILES
     RepoMan/Frontend/Branch.hpp
     RepoMan/Frontend/Head.hpp
     RepoMan/Frontend/Namespace.hpp
-    RepoMan/Frontend/Ref.hpp
+    RepoMan/Frontend/Reference.hpp
     RepoMan/Frontend/Repo.hpp
     RepoMan/Frontend/Remote.hpp
     RepoMan/Frontend/RefLog.hpp

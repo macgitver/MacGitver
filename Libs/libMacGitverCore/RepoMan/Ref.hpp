@@ -31,34 +31,40 @@ namespace RM
         class RefPrivate;
     }
 
-    enum RefTypes
+    namespace Frontend
     {
-        BranchType,
-        TagType
-    };
 
-    class MGV_CORE_API Ref : public Base
-    {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Reference;
+        enum RefTypes
+        {
+            BranchType,
+            TagType
+        };
 
-        typedef QList< Ref* > List;
+        class MGV_CORE_API Ref
+                : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Reference;
 
-    protected:
-        Ref(Internal::RefPrivate& data);
+            typedef QList< Ref* > List;
 
-    public:
-        Ref(Base* parent, RefTypes type, const Git::Reference& ref);
+        protected:
+            Ref(Internal::RefPrivate& data);
 
-        GW_DEPRECATED
-        Git::Reference load(Git::Result& r);
+        public:
+            Ref(Base* parent, RefTypes type, const Git::Reference& ref);
 
-    public:
-        RefTypes type() const;
-        QString name() const;
-        QString fullName() const;
-        Git::ObjectId id() const;
-        QString displaySha1() const;
-    };
+            GW_DEPRECATED
+            Git::Reference load(Git::Result& r);
+
+        public:
+            RefTypes type() const;
+            QString name() const;
+            QString fullName() const;
+            Git::ObjectId id() const;
+            QString displaySha1() const;
+        };
+
+    }
 
 }

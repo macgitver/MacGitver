@@ -32,58 +32,63 @@
 namespace RM
 {
 
-    Ref::Ref(Internal::RefPrivate& data)
-        : Base( data )
+    namespace Frontend
     {
-    }
 
-    Ref::Ref(Base* parent, RefTypes type, const Git::Reference& ref)
-        : Base( *new Internal::RefPrivate( this, type, ref ) )
-    {
-        RM_D( Ref );
-        d->linkToParent( parent );
-    }
-
-    RefTypes Ref::type() const
-    {
-        RM_CD(Ref);
-        return d->mType;
-    }
-
-    QString Ref::name() const
-    {
-        RM_CD(Ref);
-        return d->mName;
-    }
-
-    QString Ref::fullName() const
-    {
-        RM_CD(Ref);
-        return d->mFullQualifiedName;
-    }
-
-    Git::ObjectId Ref::id() const
-    {
-        RM_CD(Ref);
-        return d->mId;
-    }
-
-    QString Ref::displaySha1() const
-    {
-        return id().toString(8);
-    }
-
-    Git::Reference Ref::load(Git::Result& r)
-    {
-        RM_D(Ref);
-        Git::Reference gitRef;
-
-        if (r) {
-            Git::Repository repo = repository()->gitRepo();
-            gitRef = repo.reference(r, d->mFullQualifiedName);
+        Ref::Ref(Internal::RefPrivate& data)
+            : Base( data )
+        {
         }
 
-        return gitRef;
+        Ref::Ref(Base* parent, RefTypes type, const Git::Reference& ref)
+            : Base( *new Internal::RefPrivate( this, type, ref ) )
+        {
+            RM_D( Ref );
+            d->linkToParent( parent );
+        }
+
+        RefTypes Ref::type() const
+        {
+            RM_CD(Ref);
+            return d->mType;
+        }
+
+        QString Ref::name() const
+        {
+            RM_CD(Ref);
+            return d->mName;
+        }
+
+        QString Ref::fullName() const
+        {
+            RM_CD(Ref);
+            return d->mFullQualifiedName;
+        }
+
+        Git::ObjectId Ref::id() const
+        {
+            RM_CD(Ref);
+            return d->mId;
+        }
+
+        QString Ref::displaySha1() const
+        {
+            return id().toString(8);
+        }
+
+        Git::Reference Ref::load(Git::Result& r)
+        {
+            RM_D(Ref);
+            Git::Reference gitRef;
+
+            if (r) {
+                Git::Repository repo = repository()->gitRepo();
+                gitRef = repo.reference(r, d->mFullQualifiedName);
+            }
+
+            return gitRef;
+        }
+
     }
 
 }

@@ -119,19 +119,18 @@ SET( PRI_HDR_FILES
 
     RepoMan/Private/Dumper.hpp
 
-    RepoMan/Data/BaseData.hpp
-    RepoMan/Data/BranchData.hpp
-    RepoMan/Data/NamespaceData.hpp
-    RepoMan/Data/RefData.hpp
-    RepoMan/Data/RefLogData.hpp
-    RepoMan/Data/RefTreeNodeData.hpp
-    RepoMan/Data/RemoteData.hpp
-    RepoMan/Data/RepoData.hpp
+    RepoMan/Data/Base.hpp
+    RepoMan/Data/Branch.hpp
+    RepoMan/Data/Head.hpp
+    RepoMan/Data/Namespace.hpp
+    RepoMan/Data/Ref.hpp
+    RepoMan/Data/RefLog.hpp
+    RepoMan/Data/RefTreeNode.hpp
+    RepoMan/Data/Remote.hpp
+    RepoMan/Data/Repo.hpp
     RepoMan/Data/RepoManData.hpp
-    RepoMan/Data/SubmoduleData.hpp
-    RepoMan/Data/TagData.hpp
-    RepoMan/Data/HeadData.hpp
-
+    RepoMan/Data/Submodule.hpp
+    RepoMan/Data/Tag.hpp
 
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h

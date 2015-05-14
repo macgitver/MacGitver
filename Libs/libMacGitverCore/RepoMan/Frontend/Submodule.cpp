@@ -26,21 +26,25 @@
 
 namespace RM
 {
-    using namespace Internal;
 
-    Submodule::Submodule(const Git::Repository& repo, Repo* parent)
-        : Repo( *new SubmodulePrivate( this, repo ) )
+    namespace Frontend
     {
-        RM_D(Submodule);
 
-        d->mIsSubModule = true;
+        Submodule::Submodule(const Git::Repository& repo, Repo* parent)
+            : Repo( *new Internal::SubmodulePrivate( this, repo ) )
+        {
+            RM_D(Submodule);
 
-        setDisplayAlias( repo.name() );
+            d->mIsSubModule = true;
 
-        d->linkToParent( parent );
-        d->refresh();
+            setDisplayAlias( repo.name() );
 
-        d->mIsInitializing = false;
+            d->linkToParent( parent );
+            d->refresh();
+
+            d->mIsInitializing = false;
+        }
+
     }
 
 }

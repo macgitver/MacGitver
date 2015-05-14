@@ -24,22 +24,28 @@
 namespace RM
 {
 
-    class MGV_CORE_API Submodule : public Repo
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Submodule;
 
-    public:
-        Submodule(const Git::Repository& repo, Repo* parent);
+        class MGV_CORE_API Submodule
+                : public Repo
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Submodule;
 
-    public:
+        public:
+            Submodule(const Git::Repository& repo, Repo* parent);
 
-    private:
-        ObjTypes objType() const;
-        void preTerminate();
-        void dumpSelf(Internal::Dumper& dumper) const;
+        public:
 
-    private:
-    };
+        private:
+            ObjTypes objType() const;
+            void preTerminate();
+            void dumpSelf(Internal::Dumper& dumper) const;
+
+        private:
+        };
+
+    }
 
 }

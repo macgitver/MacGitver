@@ -40,7 +40,7 @@ namespace RM
             TagType
         };
 
-        class MGV_CORE_API Ref
+        class MGV_CORE_API Reference
                 : public Base
         {
         public:
@@ -49,10 +49,10 @@ namespace RM
             typedef QList< Ref* > List;
 
         protected:
-            Ref(Internal::RefPrivate& data);
+            Reference(Internal::RefPrivate& data);
 
         public:
-            Ref(Base* parent, RefTypes type, const Git::Reference& ref);
+            Reference(Base* parent, RefTypes type, const Git::Reference& ref);
 
             GW_DEPRECATED
             Git::Reference load(Git::Result& r);

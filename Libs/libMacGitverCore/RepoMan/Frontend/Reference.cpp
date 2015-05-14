@@ -23,7 +23,7 @@
 
 #include "RepoMan/Events.hpp"
 
-#include "RepoMan/Ref.hpp"
+#include "RepoMan/Frontend/Reference.hpp"
 #include "RepoMan/Repo.hpp"
 
 #include "RepoMan/Private/Dumper.hpp"
@@ -35,58 +35,58 @@ namespace RM
     namespace Frontend
     {
 
-        Ref::Ref(Internal::RefPrivate& data)
+        Reference::Reference(Internal::ReferencePrivate& data)
             : Base( data )
         {
         }
 
-        Ref::Ref(Base* parent, RefTypes type, const Git::Reference& ref)
-            : Base( *new Internal::RefPrivate( this, type, ref ) )
+        Reference::Reference(Base* parent, ReferenceTypes type, const Git::Reference& Reference)
+            : Base( *new Internal::ReferencePrivate( this, type, Reference ) )
         {
-            RM_D( Ref );
+            RM_D( Reference );
             d->linkToParent( parent );
         }
 
-        RefTypes Ref::type() const
+        ReferenceTypes Reference::type() const
         {
-            RM_CD(Ref);
+            RM_CD(Reference);
             return d->mType;
         }
 
-        QString Ref::name() const
+        QString Reference::name() const
         {
-            RM_CD(Ref);
+            RM_CD(Reference);
             return d->mName;
         }
 
-        QString Ref::fullName() const
+        QString Reference::fullName() const
         {
-            RM_CD(Ref);
+            RM_CD(Reference);
             return d->mFullQualifiedName;
         }
 
-        Git::ObjectId Ref::id() const
+        Git::ObjectId Reference::id() const
         {
-            RM_CD(Ref);
+            RM_CD(Reference);
             return d->mId;
         }
 
-        QString Ref::displaySha1() const
+        QString Reference::displaySha1() const
         {
             return id().toString(8);
         }
 
-        Git::Reference Ref::load(Git::Result& r)
+        Git::Reference Reference::load(Git::Result& r)
         {
-            RM_D(Ref);
-            Git::Reference gitRef;
+            RM_D(Reference);
+            Git::Reference gitReference;
 
             if (r) {
                 Git::Repository repo = repository()->gitRepo();
-                gitRef = repo.reference(r, d->mFullQualifiedName);
+                gitReference = repo.Reference(r, d->mFullQualifiedName);
             }
 
-            return gitRef;
+            return gitReference;
         }
 
     }

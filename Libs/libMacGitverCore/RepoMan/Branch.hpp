@@ -24,22 +24,28 @@
 namespace RM
 {
 
-    class MGV_CORE_API Branch : public Ref
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Branch;
-        typedef QVector< Branch* > List;
 
-    public:
-        Branch(Base* parent, const Git::Reference& ref);
+        class MGV_CORE_API Branch
+                : public Ref
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Branch;
+            typedef QVector< Branch* > List;
 
-    public:
-        bool hasUpstream() const;
-        QString upstreamRefName() const;
-        Ref* upstream();
-        int aheadCount() const;
-        int behindCount() const;
-        bool isHead() const;
-    };
+        public:
+            Branch(Base* parent, const Git::Reference& ref);
+
+        public:
+            bool hasUpstream() const;
+            QString upstreamRefName() const;
+            Ref* upstream();
+            int aheadCount() const;
+            int behindCount() const;
+            bool isHead() const;
+        };
+
+    }
 
 }

@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -26,12 +29,6 @@ ConfigUser::ConfigUser( const QString& configBasePath )
     Config::self().addConfigUser( this );
 }
 
-ConfigUser::ConfigUser( const char* pszConfigBasePath )
-    : mConfigBase( QLatin1String( pszConfigBasePath ) )
-{
-    Config::self().addConfigUser( this );
-}
-
 ConfigUser::~ConfigUser()
 {
     Config::self().delConfigUser( this );
@@ -44,7 +41,7 @@ QString ConfigUser::configSubPath( const QString& subPath ) const
 
 QString ConfigUser::configSubPath( const char* pszSubPath ) const
 {
-    return mConfigBase % QChar( L'/' ) % QLatin1String( pszSubPath );
+    return mConfigBase % QChar( L'/' ) % QString::fromUtf8(pszSubPath);
 }
 
 QVariant ConfigUser::configGetV( const QString& subPath,

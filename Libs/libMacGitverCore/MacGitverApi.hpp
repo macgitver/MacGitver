@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,15 +17,12 @@
  *
  */
 
-#ifndef MGV_MGV_CORE_API_H
-#define MGV_MGV_CORE_API_H
+#pragma once
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #ifdef MacGitverCore_EXPORTS
 #   define MGV_CORE_API Q_DECL_EXPORT
 #else
 #   define MGV_CORE_API Q_DECL_IMPORT
-#endif
-
 #endif

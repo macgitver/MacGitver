@@ -106,7 +106,7 @@ void WriteClassSource::generate()
 
     foreach( ConfigSetting* setting, mSection.allSettings() )
     {
-        mOutStream << "\n\tif( subPath == QLatin1String( \"" << setting->fullPath() << "\" ) )\n"
+        mOutStream << "\n\tif( subPath == QStringLiteral( \"" << setting->fullPath() << "\" ) )\n"
                       "\t{\n"
                       "\t\tmValue" << setting->fullName() << " = value.";
 

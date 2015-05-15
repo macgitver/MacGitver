@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CONFIG_USER_H
-#define MGV_CONFIG_USER_H
+#pragma once
 
 #include <QVariant>
 
@@ -24,8 +26,10 @@
 class MGV_CORE_API ConfigUser
 {
 protected:
-    ConfigUser( const QString& configBasePath );
-    ConfigUser( const char* pszConfigBasePath );
+    ConfigUser(const QString& configBasePath);
+    ConfigUser(const char* pszConfigBasePath)
+        : ConfigUser(QString::fromUtf8(pszConfigBasePath)) {}
+
     virtual ~ConfigUser();
 
 public:
@@ -56,7 +60,7 @@ public:
 
     inline QString configGet( const char* pszSubPath, const char* pszValue ) const
     {
-        return configGet< QString >( pszSubPath, QLatin1String( pszValue ) );
+        return configGet< QString >( pszSubPath, QString::fromUtf8(pszValue) );
     }
 
 public:
@@ -65,5 +69,3 @@ public:
 private:
     QString         mConfigBase;
 };
-
-#endif

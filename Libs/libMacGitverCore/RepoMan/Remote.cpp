@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -77,7 +77,7 @@ namespace RM
 
     void RemotePrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Remote %2 0x%1"))
+        dumper.addLine(QString(QStringLiteral("Remote %2 0x%1"))
                        .arg(quintptr(mPub),0,16)
                        .arg(name));
     }
@@ -113,7 +113,7 @@ namespace RM
 
     QString RemotePrivate::objectTypeName() const
     {
-        return QLatin1String("Remote");
+        return QStringLiteral("Remote");
     }
 
     bool RemotePrivate::inherits(ObjTypes type) const

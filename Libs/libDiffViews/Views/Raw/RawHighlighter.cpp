@@ -30,9 +30,9 @@ namespace DiffViews
     {
         QColor c = Qt::black;
 
-        if( text.startsWith( QLatin1String( "diff" ) ) ||
-            text.startsWith( QLatin1String( "---" ) ) ||
-            text.startsWith( QLatin1String( "+++" ) ) )
+        if( text.startsWith( QStringLiteral( "diff" ) ) ||
+            text.startsWith( QStringLiteral( "---" ) ) ||
+            text.startsWith( QStringLiteral( "+++" ) ) )
         {
             c = Qt::darkGreen;
         }
@@ -48,9 +48,9 @@ namespace DiffViews
         {
             c = Qt::gray;
         }
-        else if( text.startsWith( QLatin1String( "@@" ) ) )
+        else if( text.startsWith( QStringLiteral( "@@" ) ) )
         {
-            int i = text.indexOf( QLatin1String( "@@" ), 2 );
+            int i = text.indexOf( QStringLiteral( "@@" ), 2 );
             i += 2;
             setFormat( 0, i, Qt::darkYellow );
             setFormat( i, text.length() - i, Qt::blue );

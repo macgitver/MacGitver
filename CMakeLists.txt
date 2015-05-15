@@ -29,6 +29,7 @@ ENDIF()
 
 IF(UNIX)
     GCC_ADD_FLAG("-Wall")
+    GCC_ADD_FLAG("-W")
     GCC_ADD_FLAG("-fvisibility=hidden")
     GCC_ADD_FLAG("-fvisibility-inlines-hidden")
 ENDIF()

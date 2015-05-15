@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -56,7 +56,7 @@ namespace RM
 
     void SubmodulePrivate::dumpSelf(Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Submodule 0x%1"))
+        dumper.addLine(QString(QStringLiteral("Submodule 0x%1"))
                        .arg(quintptr(mPub),0,16));
     }
 
@@ -80,7 +80,7 @@ namespace RM
 
     QString SubmodulePrivate::objectTypeName() const
     {
-        return QLatin1String("Submodule");
+        return QStringLiteral("Submodule");
     }
 
     bool SubmodulePrivate::inherits(ObjTypes type) const

@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,6 +17,20 @@
  *
  */
 
+#include "libMacGitverCore/App/MacGitverPrivate.hpp"
+#include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
+#include "libMacGitverCore/App/MgvPrimaryWindowPrivate.hpp"
+#include "libMacGitverCore/MacGitver/Modules.h"
+
+#include "libMacGitverCore/RepoMan/RepoMan.hpp"
+
+#include "libMacGitverCore/Config/Config.h"
+#include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
+#include "libMacGitverCore/Widgets/RepoStateWidget.hpp"
+
+#include "libBlueSky/Application.hpp"
+#include "libBlueSky/FooterWidget.hpp"
+
 #include <QDebug>
 #include <QComboBox>
 #include <QStatusBar>
@@ -24,23 +41,6 @@
 #include <QStringBuilder>
 #include <QDesktopWidget>
 #include <QApplication>
-
-
-#include "libGitWrap/ObjectId.hpp"
-#include "libGitWrap/Reference.hpp"
-
-#include "libBlueSky/Application.hpp"
-#include "libBlueSky/FooterWidget.hpp"
-
-#include "libMacGitverCore/App/MacGitverPrivate.hpp"
-#include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
-#include "libMacGitverCore/App/MgvPrimaryWindowPrivate.hpp"
-#include "libMacGitverCore/MacGitver/Modules.h"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Repo.hpp"
-#include "libMacGitverCore/Config/Config.h"
-#include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
-#include "libMacGitverCore/Widgets/RepoStateWidget.hpp"
 
 #if 0
 #include "libStairway/StairwayToHeavenTool.hpp"
@@ -83,7 +83,7 @@ MgvPrimaryWindow::~MgvPrimaryWindow()
 
 void MgvPrimaryWindow::setupUi()
 {
-    QIcon icon( QLatin1String( ":/mgv_sak32.png" ) );
+    QIcon icon( QStringLiteral( ":/mgv_sak32.png" ) );
     setWindowIcon( icon );
 
     setupActions( this );
@@ -158,7 +158,7 @@ void MgvPrimaryWindow::moveToCenter()
 void MgvPrimaryWindow::activateModeForRepo()
 {
     if (MacGitver::repoMan().repositories().count() > 0) {
-        activateMode(QLatin1String("HistoryMode"));
+        activateMode(QStringLiteral("HistoryMode"));
     }
     else {
         activateMode(QString());

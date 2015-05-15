@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef MGV_CORE_REPOMAN_CFG_PAGE_HPP
-#define MGV_CORE_REPOMAN_CFG_PAGE_HPP
+#pragma once
 
 #include "libMacGitverCore/Config/Ui/ConfigDialog.hpp"
 #include "libMacGitverCore/Config/Ui/ConfigPage.hpp"
@@ -31,7 +30,9 @@ namespace RM
     class AutoRefresher;
 }
 
-class RepoManConfigPage : public ConfigPage, private Ui::RepoManConfigPage
+class RepoManConfigPage
+        : public ConfigPage
+        , private Ui::RepoManConfigPage
 {
     Q_OBJECT
     DECLARE_NESTED_PAGE_CREATOR();
@@ -56,5 +57,3 @@ public:
 private:
     RM::AutoRefresher* refresher;
 };
-
-#endif

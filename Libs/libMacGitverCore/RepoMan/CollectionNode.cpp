@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -78,7 +78,7 @@ namespace RM
 
     void CollectionNodePrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Collection '%2' 0x%1"))
+        dumper.addLine(QString(QStringLiteral("Collection '%2' 0x%1"))
                        .arg(quintptr(mPub),0,16)
                        .arg(displayName()));
     }
@@ -100,7 +100,7 @@ namespace RM
 
     QString CollectionNodePrivate::objectTypeName() const
     {
-        return QLatin1String("CollectionNode");
+        return QStringLiteral("CollectionNode");
     }
 
     Heaven::IconRef CollectionNodePrivate::icon(bool small) const
@@ -109,10 +109,10 @@ namespace RM
         QString s;
 
         switch (ctype) {
-        case ctBranches:    s = QLatin1String("Branches");      break;
-        case ctTags:        s = QLatin1String("Tags");          break;
-        case ctNotes:       s = QLatin1String("Notes");         break;
-        case ctNamespaces:  s = QLatin1String("Namespaces");    break;
+        case ctBranches:    s = QStringLiteral("Branches");      break;
+        case ctTags:        s = QStringLiteral("Tags");          break;
+        case ctNotes:       s = QStringLiteral("Notes");         break;
+        case ctNamespaces:  s = QStringLiteral("Namespaces");    break;
         default:            return Heaven::IconRef();
         }
 

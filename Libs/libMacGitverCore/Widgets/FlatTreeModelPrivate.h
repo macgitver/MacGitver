@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,8 +17,7 @@
  *
  */
 
-#ifndef MGV_FLAT_TREE_MODEL_PRIVATE_H
-#define MGV_FLAT_TREE_MODEL_PRIVATE_H
+#pragma once
 
 #include <QIcon>
 #include <QVariant>
@@ -62,5 +64,3 @@ public:
     QList< FlatTreeModelEntry* >    mEntries;
     FlatTreeModelEntry              mRoot;
 };
-
-#endif

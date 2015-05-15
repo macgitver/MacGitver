@@ -47,7 +47,7 @@ VariantType::VariantType( const QString& typeName,
 
 bool VariantType::isUserType() const
 {
-    return mType == QLatin1String( "User" );
+    return mType == QStringLiteral( "User" );
 }
 
 bool VariantType::requiresTemplateMagic() const
@@ -77,20 +77,20 @@ QVariant::Type VariantType::typeId() const
 
 QString VariantType::typeIdName() const
 {
-    return QLatin1String( QVariant::typeToName( mTypeId ) );
+    return QString::fromUtf8(QVariant::typeToName(mTypeId));
 }
 
 QString VariantType::defaultCTored() const
 {
     switch( mTypeId )
     {
-    case QVariant::Bool:        return QLatin1String( "false" );
+    case QVariant::Bool:        return QStringLiteral( "false" );
     case QVariant::Int:
-    case QVariant::UInt:        return QLatin1String( "0" );
+    case QVariant::UInt:        return QStringLiteral( "0" );
     case QVariant::LongLong:
-    case QVariant::ULongLong:   return QLatin1String( "0LL" );
-    case QVariant::Double:      return QLatin1String( "0.0" );
-    case QVariant::Char:        return QLatin1String( "'\\0'" );
+    case QVariant::ULongLong:   return QStringLiteral( "0LL" );
+    case QVariant::Double:      return QStringLiteral( "0.0" );
+    case QVariant::Char:        return QStringLiteral( "'\\0'" );
 
     case QVariant::Map:
     case QVariant::List:
@@ -112,28 +112,28 @@ QString VariantType::defaultCTored() const
     case QVariant::Point:
     case QVariant::PointF:
     case QVariant::RegExp:
-    case QVariant::Hash:        return mCppType + QLatin1String( "()" );
-    default:                    return QLatin1String( "/* UNSUPPORTED */" );
+    case QVariant::Hash:        return mCppType + QStringLiteral( "()" );
+    default:                    return QStringLiteral( "/* UNSUPPORTED */" );
     }
 }
 
 VariantTypes::VariantTypes()
 {
-    mTypes.append(VariantType(QLatin1String("String"),
+    mTypes.append(VariantType(QStringLiteral("String"),
                               QVariant::String,
-                              QLatin1String("QString")));
+                              QStringLiteral("QString")));
 
-    mTypes.append(VariantType(QLatin1String("Int"),
+    mTypes.append(VariantType(QStringLiteral("Int"),
                               QVariant::Int,
-                              QLatin1String("qint32")));
+                              QStringLiteral("qint32")));
 
-    mTypes.append(VariantType(QLatin1String("UInt"),
+    mTypes.append(VariantType(QStringLiteral("UInt"),
                               QVariant::UInt,
-                              QLatin1String("quint32")));
+                              QStringLiteral("quint32")));
 
-    mTypes.append(VariantType(QLatin1String("Bool"),
+    mTypes.append(VariantType(QStringLiteral("Bool"),
                               QVariant::Bool,
-                              QLatin1String("bool")));
+                              QStringLiteral("bool")));
 }
 
 VariantTypes* VariantTypes::sSelf = NULL;

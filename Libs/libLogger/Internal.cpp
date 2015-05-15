@@ -23,6 +23,8 @@
 #include <QCoreApplication>
 #include <QThread>
 
+Q_DECLARE_METATYPE(Log::Event)
+
 namespace Log
 {
 
@@ -38,6 +40,7 @@ namespace Log
             : mNextId(1)
             , mConsumer(nullptr)
         {
+            qRegisterMetaType<Log::Event>();
             createDefaultChannels();
         }
 

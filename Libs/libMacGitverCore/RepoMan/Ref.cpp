@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -101,7 +101,7 @@ namespace RM
 
         void RefPrivate::dumpSelf(Internal::Dumper& dumper) const
         {
-            dumper.addLine(QString(QLatin1String("Ref 0x%1 [%2]"))
+            dumper.addLine(QString(QStringLiteral("Ref 0x%1 [%2]"))
                            .arg(quintptr(mPub),0,16)
                            .arg(mName));
         }
@@ -118,7 +118,7 @@ namespace RM
 
         QString RefPrivate::objectTypeName() const
         {
-            return QLatin1String("Ref");
+            return QStringLiteral("Ref");
         }
 
         bool RefPrivate::inherits(ObjTypes type) const

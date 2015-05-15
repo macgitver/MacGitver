@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Nils Fenner <nilsfenner@web.de>
  * (C) Cunz RaD Ltd.
  *
@@ -17,9 +17,6 @@
  * not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef SHELL_EXPAND_HPP
-#define SHELL_EXPAND_HPP
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -58,6 +55,3 @@ private:
     Macros  mMacros;
     bool    mOverwriteMacroDecls;
 };
-
-
-#endif

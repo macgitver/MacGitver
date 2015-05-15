@@ -115,7 +115,7 @@ void HistoryView::currentCommitChanged(const Git::ObjectId& sha1)
 
 void HistoryView::configChanged( const QString& subPath, const QVariant& value )
 {
-    if( subPath == QLatin1String( "SplitLayout" ) )
+    if( subPath == QStringLiteral( "SplitLayout" ) )
     {
         initSplitters();
     }

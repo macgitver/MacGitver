@@ -1,8 +1,8 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
  * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -354,7 +354,7 @@ namespace RM
     {
         mRepo = repo;
         mHead = NULL;
-        mPath = mRepo.basePath();
+        mPath = mRepo.workTreePath();
         mIsLoaded = mRepo.isValid();
         mIsActive = false;
         mIsBare = mRepo.isValid() && mRepo.isBare();
@@ -465,7 +465,7 @@ namespace RM
             Q_ASSERT(subRepo.isValid());
 
             Repo* subInfo = NULL;
-            QString path = subRepo.basePath();
+            QString path = subRepo.workTreePath();
 
             if (path.endsWith(L'/')) {
                 path = path.left(path.length() - 1);
@@ -546,10 +546,10 @@ namespace RM
 
     void RepoPrivate::dumpSelf(Internal::Dumper& dumper) const
     {
-        dumper.addLine(QString(QLatin1String("Repository 0x%1 - %02"))
+        dumper.addLine(QString(QStringLiteral("Repository 0x%1 - %02"))
                        .arg(quintptr(mPub),0,16)
                        .arg(mIsLoaded ? pub<Repo>()->gitLoadedRepo().name()
-                                      : QLatin1String("<not loaded>")));
+                                      : QStringLiteral("<not loaded>")));
     }
 
 
@@ -753,7 +753,7 @@ namespace RM
 
     QString RepoPrivate::objectTypeName() const
     {
-        return QLatin1String("Repo");
+        return QStringLiteral("Repo");
     }
 
     bool RepoPrivate::inherits(ObjTypes type) const

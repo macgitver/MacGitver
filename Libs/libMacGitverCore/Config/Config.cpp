@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -53,20 +56,20 @@ void Config::loadSettings()
 
 
     QString fontName = get( "General/Font", "#" ).toString();
-    if( fontName == QLatin1String( "#" ) )
+    if( fontName == QStringLiteral( "#" ) )
         mDefaultFont = QFont();
     else
         mDefaultFont.fromString( fontName );
 
     fontName = get( "General/DialogFont", "#" ).toString();
-    if( fontName == QLatin1String( "#" ) )
+    if( fontName == QStringLiteral( "#" ) )
         mDefaultDialogFont = mDefaultFont;
     else
         mDefaultDialogFont.fromString( fontName );
 
     fontName = get( "General/FixedFont", "#" ).toString();
-    if( fontName == QLatin1String( "#" ) )
-        mDefaultFixedFont = QFont( QLatin1String( "Courier New" ), 10 );
+    if( fontName == QStringLiteral( "#" ) )
+        mDefaultFixedFont = QFont( QStringLiteral( "Courier New" ), 10 );
     else
         mDefaultFixedFont.fromString( fontName );
 }
@@ -81,12 +84,12 @@ void Config::saveSettings()
 
 QVariant Config::get( const char* szPath, const char* szDefaultValue ) const
 {
-    return get( szPath, QLatin1String( szDefaultValue ) );
+    return get(szPath, QString::fromUtf8(szDefaultValue));
 }
 
 QVariant Config::get( const char* szPath, const QVariant& defaultValue ) const
 {
-    return get( QLatin1String( szPath ), defaultValue );
+    return get(QString::fromUtf8(szPath), defaultValue);
 }
 
 QVariant Config::get( const QString& path, const QVariant& defaultValue ) const
@@ -108,7 +111,7 @@ QVariant Config::get( const QString& path, const QVariant& defaultValue ) const
 
 void Config::set( const char* pszPath, const QVariant& value )
 {
-    set( QLatin1String( pszPath ), value );
+    set(QString::fromUtf8(pszPath), value);
 }
 
 void Config::set( const QString& path, const QVariant& value )

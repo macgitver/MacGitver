@@ -1,8 +1,9 @@
 /*
- * libHeaven - A Qt-based ui framework for strongly modularized applications
- * Copyright (C) 2012-2013 The MacGitver-Developers <dev@macgitver.org>
+ * MacGitver
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
  *
- * (C) Sascha Cunz <sascha@macgitver.org>
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -16,8 +17,7 @@
  *
  */
 
-#ifndef MGVCORE_IREPOSITORY_CONTEXT_HPP
-#define MGVCORE_IREPOSITORY_CONTEXT_HPP
+#pragma once
 
 #include <QObject>
 
@@ -34,6 +34,3 @@ public:
 
 Q_DECLARE_INTERFACE( IRepositoryContext,
                      "org.macgitver.IRepositoryContext/0.1" )
-
-#endif
-

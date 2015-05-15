@@ -1,6 +1,9 @@
 /*
  * MacGitver
- * Copyright (C) 2012-2013 Sascha Cunz <sascha@babbelbox.org>
+ * Copyright (C) 2012-2015 The MacGitver-Developers <dev@macgitver.org>
+ *
+ * (C) Sascha Cunz <sascha@cunz-rad.com>
+ * (C) Cunz RaD Ltd.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License (Version 2) as published by the Free Software Foundation.
@@ -14,8 +17,7 @@
  *
  */
 
-#ifndef MGV_MACGITVER_H
-#define MGV_MACGITVER_H
+#pragma once
 
 #include "libMacGitverCore/MacGitverApi.hpp"
 
@@ -38,7 +40,8 @@ typedef BlueSky::ViewDescriptor::CreatorFunc MgvViewCreator;
 
 class MacGitverPrivate;
 
-class MGV_CORE_API MacGitver : public QObject
+class MGV_CORE_API MacGitver
+        : public QObject
 {
     Q_OBJECT
 public:
@@ -63,13 +66,10 @@ public:
                                           MgvViewCreator creator);
     void unregisterView(const BlueSky::ViewIdentifier& identifier);
 
-    static void log( Log::Type type, const QString& logMessage );
-    static void log( Log::Type type, const char* logMessage );
-    static void log( Log::Type type, const Git::Result& r, const char* logMessage = NULL );
+    static void log(Log::Type type, const QString& logMessage);
+    static void log(Log::Type type, const char* logMessage);
+    static void log(Log::Type type, const Git::Result& r, const char* logMessage = nullptr);
 
 private:
     MacGitverPrivate* d;
 };
-
-#endif
-

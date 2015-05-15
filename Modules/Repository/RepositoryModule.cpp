@@ -83,7 +83,7 @@ void RepositoryModule::onRepositoryOpen()
     #endif
 
     QString lastUsedDir = Config::self().get( "Repository/lastUsedDir", "#" ).toString();
-    if( lastUsedDir != QLatin1String( "#" ) )
+    if( lastUsedDir != QStringLiteral( "#" ) )
     {
         fd->setDirectory( lastUsedDir );
     }

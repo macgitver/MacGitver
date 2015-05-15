@@ -210,7 +210,7 @@ namespace Log
             s = event.param(QString());
         }
         else {
-            s.replace(QLatin1String("$$"), event.param(QString()));
+            s.replace(QStringLiteral("$$"), event.param(QString()));
         }
 
         foreach (QString pname, event.paramNames()) {
@@ -218,8 +218,8 @@ namespace Log
                 QString key = QChar(L'$') % pname % QChar(L'$');
                 QString value = event.param(pname);
 
-                value.replace(QChar(L'&'), QLatin1String("&amp;"));
-                value.replace(QChar(L'<'), QLatin1String("&lt;"));
+                value.replace(QChar(L'&'), QStringLiteral("&amp;"));
+                value.replace(QChar(L'<'), QStringLiteral("&lt;"));
 
                 s.replace(key, value);
             }

@@ -28,20 +28,23 @@
 namespace RM
 {
 
-    using namespace Internal;
-
-    RefTreeNode::RefTreeNode(Base* _parent, const QString& _name)
-        : Base(*new RefTreeNodePrivate(this, _name))
+    namespace Frontend
     {
-        RM_D(RefTreeNode);
-        d->linkToParent(_parent);
-    }
 
-    QString RefTreeNode::name() const
-    {
-        RM_D(RefTreeNode);
+        RefTreeNode::RefTreeNode(Base* _parent, const QString& _name)
+            : Base(*new Internal::RefTreeNodePrivate(this, _name))
+        {
+            RM_D(RefTreeNode);
+            d->linkToParent(_parent);
+        }
 
-        return d->name;
+        QString RefTreeNode::name() const
+        {
+            RM_D(RefTreeNode);
+
+            return d->name;
+        }
+
     }
 
 }

@@ -31,18 +31,24 @@ namespace RM
         class RefTreeNodePrivate;
     }
 
-    class MGV_CORE_API RefTreeNode : public Base
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::RefTreeNode;
-        typedef Internal::RefTreeNodePrivate Private;
-        typedef QList< RefTreeNode* > List;
 
-    public:
-        RefTreeNode(Base* _parent, const QString& _name);
+        class MGV_CORE_API RefTreeNode
+                : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::RefTreeNode;
+            typedef Internal::RefTreeNodePrivate Private;
+            typedef QList< RefTreeNode* > List;
 
-    public:
-        QString name() const;
-    };
+        public:
+            RefTreeNode(Base* _parent, const QString& _name);
+
+        public:
+            QString name() const;
+        };
+
+    }
 
 }

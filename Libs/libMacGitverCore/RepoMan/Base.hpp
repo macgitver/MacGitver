@@ -39,83 +39,88 @@ namespace RM
         class BasePrivate;
     }
 
-    class MGV_CORE_API Base
+    namespace Frontend
     {
-        friend class Repo;
-        friend class Internal::BasePrivate;
 
-    public:
-        typedef QVector< Base* > List;
+        class MGV_CORE_API Base
+        {
+            friend class Repo;
+            friend class Internal::BasePrivate;
 
-    protected:
-        Base(Internal::BasePrivate& _d);
-        virtual ~Base();
+        public:
+            typedef QVector< Base* > List;
 
-    public:
-        ObjTypes objType() const;
+        protected:
+            Base(Internal::BasePrivate& _d);
+            virtual ~Base();
 
-    public:
-        void refresh();
+        public:
+            ObjTypes objType() const;
 
-        const Repo* repository() const;
-        Repo* repository();
+        public:
+            void refresh();
 
-        Base* parentObject() const;
+            const Repo* repository() const;
+            Repo* repository();
 
-        List childObjects() const;
-        List childObjects(ObjTypes type) const;
+            Base* parentObject() const;
+
+            List childObjects() const;
+            List childObjects(ObjTypes type) const;
+
+            template< class T >
+            typename T::List childObjects() const;
+
+            template< class T >
+            bool isA() const;
+
+            template< class T >
+            bool inheritsRepoManType() const;
+
+            bool inheritsRepoManType(ObjTypes type) const;
+
+            Heaven::IconRef icon(bool small = false) const;
+
+            QString typeName() const;
+            QString displayName() const;
+            QString dump() const;
+
+            Heaven::Menu* contextMenu();
+
+        protected:
+            Internal::BasePrivate* mData;
+
+        private:
+            Base(const Base& other);
+            Base& operator=(const Base& other);
+        };
 
         template< class T >
-        typename T::List childObjects() const;
-
-        template< class T >
-        bool isA() const;
-
-        template< class T >
-        bool inheritsRepoManType() const;
-
-        bool inheritsRepoManType(ObjTypes type) const;
-
-        Heaven::IconRef icon(bool small = false) const;
-
-        QString typeName() const;
-        QString displayName() const;
-        QString dump() const;
-
-        Heaven::Menu* contextMenu();
-
-    protected:
-        Internal::BasePrivate* mData;
-
-    private:
-        Base(const Base& other);
-        Base& operator=(const Base& other);
-    };
-
-    template< class T >
-    inline bool Base::isA() const
-    {
-        return objType() == ObjTypes(T::StaticObjectType);
-    }
-
-    template< class T >
-    inline bool Base::inheritsRepoManType() const
-    {
-        return inheritsRepoManType(ObjTypes(T::StaticObjectType));
-    }
-
-    template< class T >
-    inline typename T::List Base::childObjects() const
-    {
-        typename T::List children;
-
-        foreach(Base* child, childObjects()) {
-            if (child->inheritsRepoManType<T>()) {
-                children.append(static_cast<T*>(child));
-            }
+        inline bool Base::isA() const
+        {
+            return objType() == ObjTypes(T::StaticObjectType);
         }
 
-        return children;
+        template< class T >
+        inline bool Base::inheritsRepoManType() const
+        {
+            return inheritsRepoManType(ObjTypes(T::StaticObjectType));
+        }
+
+        template< class T >
+        inline typename T::List Base::childObjects() const
+        {
+            typename T::List children;
+
+            foreach(Base* child, childObjects()) {
+                if (child->inheritsRepoManType<T>()) {
+                    children.append(static_cast<T*>(child));
+                }
+            }
+
+            return children;
+        }
+
     }
 
 }

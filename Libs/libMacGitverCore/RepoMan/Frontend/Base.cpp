@@ -54,236 +54,239 @@
 namespace RM
 {
 
-    using namespace Internal;
-
-    /**
-     * @fn          bool Base::refreshSelf()
-     * @brief       Refresh this object's data and sent events
-     *
-     * This method is called during the refreshing mechanism. It is the first step and can determine
-     * that the object itself does no longer exist. However, if this happens, the child refreshing
-     * logic of the parent is most probably broken.
-     *
-     * Implementations should _only_ refresh the object itself and not the children. See refresh()
-     * for details on how exactly the refreshing process works.
-     */
-
-    /**
-     * @fn          bool Base::isA<T>()
-     * @brief       Check this object's type
-     *
-     * @tparam      T   Type to check against
-     *
-     * @return      `true`, if this is an object of type @a T. `false` otherwise.
-     */
-
-    /*-* // Keep this comment away from doxygen: https://bugzilla.gnome.org/show_bug.cgi?id=709052
-     * @fn          T::Set Base::childObjects() const
-     * @brief       Find (existing) children filtered by a given type
-     *
-     * @tparam      T   Type to check the children against
-     *
-     * @return      A set of children of type @a T.
-     */
-
-    /**
-     * @brief       Constructor
-     *
-     * Creates a new RepoMan object and links it into the parent. Because at this point the new
-     * child is not yet fully constructed, no further action is taken.
-     *
-     * @param[in]   parent      The parent to whom we shall link this new child to.
-     *
-     */
-    Base::Base(BasePrivate& _d)
-        : mData(&_d)
+    namespace Frontend
     {
-    }
 
-    /**
-     * @brief       Destructor
-     *
-     * At the point where the destructor is called, all children should have been unlinked from the
-     * tree and this object has to be unlinked too.
-     *
-     */
-    Base::~Base()
-    {
-        delete mData;
-    }
+        /**
+         * @fn          bool Base::refreshSelf()
+         * @brief       Refresh this object's data and sent events
+         *
+         * This method is called during the refreshing mechanism. It is the first step and can determine
+         * that the object itself does no longer exist. However, if this happens, the child refreshing
+         * logic of the parent is most probably broken.
+         *
+         * Implementations should _only_ refresh the object itself and not the children. See refresh()
+         * for details on how exactly the refreshing process works.
+         */
 
-    /**
-     * @brief       Find (existing) children
-     *
-     * @return      A set of all children of this object (unfiltered).
-     */
-    Base::List Base::childObjects() const
-    {
-        RM_CD(Base);
+        /**
+         * @fn          bool Base::isA<T>()
+         * @brief       Check this object's type
+         *
+         * @tparam      T   Type to check against
+         *
+         * @return      `true`, if this is an object of type @a T. `false` otherwise.
+         */
 
-        return d->mChildren;
-    }
+        /*-* // Keep this comment away from doxygen: https://bugzilla.gnome.org/show_bug.cgi?id=709052
+         * @fn          T::Set Base::childObjects() const
+         * @brief       Find (existing) children filtered by a given type
+         *
+         * @tparam      T   Type to check the children against
+         *
+         * @return      A set of children of type @a T.
+         */
 
-    /**
-     * @brief       Find (existing) children of a specific type
-     *
-     * @param[in]   type    The object type of the children to find.
-     *
-     * @return      A set of children of this object filtered by object type.
-     *
-     */
-    Base::List Base::childObjects(ObjTypes type) const
-    {
-        RM_CD(Base);
-
-        List children;
-
-        foreach(Base* child, d->mChildren) {
-            if (child->objType() == type) {
-                children.append(child);
-            }
+        /**
+         * @brief       Constructor
+         *
+         * Creates a new RepoMan object and links it into the parent. Because at this point the new
+         * child is not yet fully constructed, no further action is taken.
+         *
+         * @param[in]   parent      The parent to whom we shall link this new child to.
+         *
+         */
+        Base::Base(BasePrivate& _d)
+            : mData(&_d)
+        {
         }
 
-        return children;
-    }
+        /**
+         * @brief       Destructor
+         *
+         * At the point where the destructor is called, all children should have been unlinked from the
+         * tree and this object has to be unlinked too.
+         *
+         */
+        Base::~Base()
+        {
+            delete mData;
+        }
 
-    /**
-     * @brief       Get the direct parent object
-     *
-     * The direct parent object is specified during construction and can never be changed.
-     *
-     * @return      The direct parent object.
-     *
-     */
-    Base* Base::parentObject() const
-    {
-        RM_CD(Base);
+        /**
+         * @brief       Find (existing) children
+         *
+         * @return      A set of all children of this object (unfiltered).
+         */
+        Base::List Base::childObjects() const
+        {
+            RM_CD(Base);
 
-        return d->mParentObj->mPub;
-    }
+            return d->mChildren;
+        }
 
-    /**
-     * @brief       Refresh this object
-     *
-     * Refreshs this object and all its children.
-     *
-     */
-    void Base::refresh()
-    {
-        RM_D(Base);
-        d->refresh();
-    }
+        /**
+         * @brief       Find (existing) children of a specific type
+         *
+         * @param[in]   type    The object type of the children to find.
+         *
+         * @return      A set of children of this object filtered by object type.
+         *
+         */
+        Base::List Base::childObjects(ObjTypes type) const
+        {
+            RM_CD(Base);
 
-    /**
-     * @brief       Find the repository for this object
-     *
-     * @return      The first repository in hierarchy (Repo or Submodule)
-     *
-     */
-    const Repo* Base::repository() const
-    {
-        RM_CD(Base);
-        return d->mRepo;
-    }
+            List children;
 
-    /**
-     * @brief       find the repository for this object
-     *
-     * Walks up the hierarchy of objects to find the repository. Since objects can never be
-     * reparented, the result of this method never changes.
-     *
-     * @return      The first repository in hierarchy that is found
-     *
-     */
-    Repo* Base::repository()
-    {
-        RM_D(Base);
-        return d->mRepo;
-    }
+            foreach(Base* child, d->mChildren) {
+                if (child->objType() == type) {
+                    children.append(child);
+                }
+            }
 
-    /**
-     * @brief       Get a string that can be used to display this object
-     *
-     * @return      Always `<Unknown>`. Reimplementations should return something more meaningful.
-     *
-     */
-    QString Base::displayName() const
-    {
-        RM_CD(Base);
-        return d->displayName();
-    }
+            return children;
+        }
 
-    /**
-     * @brief       Get the type of this object
-     *
-     * This method must be implemented by all derivats of Base. They must simply return the correct
-     * value from the ObjTypes enum.
-     *
-     * @return      Type of this object
-     *
-     */
-    ObjTypes Base::objType() const
-    {
-        RM_CD(Base);
-        return d->objType();
-    }
+        /**
+         * @brief       Get the direct parent object
+         *
+         * The direct parent object is specified during construction and can never be changed.
+         *
+         * @return      The direct parent object.
+         *
+         */
+        Base* Base::parentObject() const
+        {
+            RM_CD(Base);
 
-    /**
-     * @brief       Creates a textual dump of this object and its children
-     *
-     * @return      Textual dump.
-     *
-     */
-    QString Base::dump() const
-    {
-        RM_CD(Base);
+            return d->mParentObj->mPub;
+        }
 
-        Dumper dumper;
-        d->dumpRecursive(dumper);
-        return dumper.output();
-    }
+        /**
+         * @brief       Refresh this object
+         *
+         * Refreshs this object and all its children.
+         *
+         */
+        void Base::refresh()
+        {
+            RM_D(Base);
+            d->refresh();
+        }
 
-    /**
-     * @brief       Get the name of this object type
-     *
-     * @return      The name
-     *
-     */
-    QString Base::typeName() const
-    {
-        RM_CD(Base);
-        return d->objectTypeName();
-    }
+        /**
+         * @brief       Find the repository for this object
+         *
+         * @return      The first repository in hierarchy (Repo or Submodule)
+         *
+         */
+        const Repo* Base::repository() const
+        {
+            RM_CD(Base);
+            return d->mRepo;
+        }
 
-    /**
-     * @brief       Get a context menu for this object
-     *
-     * @return      A Heaven::Menu that can be used as context menu for this object.
-     *
-     */
-    Heaven::Menu* Base::contextMenu()
-    {
-        RepoMan* rm = &MacGitver::repoMan();
-        RepoMan::Private* rmp = BasePrivate::dataOf<RepoMan>(rm);
-        return rmp->contextMenuFor(this);
-    }
+        /**
+         * @brief       find the repository for this object
+         *
+         * Walks up the hierarchy of objects to find the repository. Since objects can never be
+         * reparented, the result of this method never changes.
+         *
+         * @return      The first repository in hierarchy that is found
+         *
+         */
+        Repo* Base::repository()
+        {
+            RM_D(Base);
+            return d->mRepo;
+        }
 
-    /**
-     * @brief       Get an icon for this object
-     *
-     * @return      A iconRef for this object
-     *
-     */
-    Heaven::IconRef Base::icon(bool small) const
-    {
-        RM_D(Base);
-        return d->icon(small);
-    }
+        /**
+         * @brief       Get a string that can be used to display this object
+         *
+         * @return      Always `<Unknown>`. Reimplementations should return something more meaningful.
+         *
+         */
+        QString Base::displayName() const
+        {
+            RM_CD(Base);
+            return d->displayName();
+        }
 
-    bool Base::inheritsRepoManType(ObjTypes type) const
-    {
-        RM_CD(Base);
-        return d->inherits(type);
+        /**
+         * @brief       Get the type of this object
+         *
+         * This method must be implemented by all derivats of Base. They must simply return the correct
+         * value from the ObjTypes enum.
+         *
+         * @return      Type of this object
+         *
+         */
+        ObjTypes Base::objType() const
+        {
+            RM_CD(Base);
+            return d->objType();
+        }
+
+        /**
+         * @brief       Creates a textual dump of this object and its children
+         *
+         * @return      Textual dump.
+         *
+         */
+        QString Base::dump() const
+        {
+            RM_CD(Base);
+
+            Dumper dumper;
+            d->dumpRecursive(dumper);
+            return dumper.output();
+        }
+
+        /**
+         * @brief       Get the name of this object type
+         *
+         * @return      The name
+         *
+         */
+        QString Base::typeName() const
+        {
+            RM_CD(Base);
+            return d->objectTypeName();
+        }
+
+        /**
+         * @brief       Get a context menu for this object
+         *
+         * @return      A Heaven::Menu that can be used as context menu for this object.
+         *
+         */
+        Heaven::Menu* Base::contextMenu()
+        {
+            RepoMan* rm = &MacGitver::repoMan();
+            RepoMan::Private* rmp = BasePrivate::dataOf<RepoMan>(rm);
+            return rmp->contextMenuFor(this);
+        }
+
+        /**
+         * @brief       Get an icon for this object
+         *
+         * @return      A iconRef for this object
+         *
+         */
+        Heaven::IconRef Base::icon(bool small) const
+        {
+            RM_D(Base);
+            return d->icon(small);
+        }
+
+        bool Base::inheritsRepoManType(ObjTypes type) const
+        {
+            RM_CD(Base);
+            return d->inherits(type);
+        }
+
     }
 
 }

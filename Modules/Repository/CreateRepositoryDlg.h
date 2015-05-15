@@ -14,8 +14,7 @@
  *
  */
 
-#ifndef CREATE_REPOSITORY_DLG_H
-#define CREATE_REPOSITORY_DLG_H
+#pragma once
 
 #include "ui_CreateRepositoryDlg.h"
 
@@ -33,5 +32,3 @@ private slots:
     void onBrowseHelper( const QString& directory );
     void checkValid();
 };
-
-#endif

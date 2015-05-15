@@ -89,8 +89,8 @@ SET( PUB_HDR_FILES
     MacGitver/IRepositoryContext.hpp
 
     RepoMan/Core.hpp
-    RepoMan/Base.hpp
     RepoMan/Events.hpp
+    RepoMan/Frontend/Base.hpp
     RepoMan/Ref.hpp
     RepoMan/Repo.hpp
     RepoMan/RepoMan.hpp

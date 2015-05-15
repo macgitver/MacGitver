@@ -100,7 +100,7 @@ SET( PUB_HDR_FILES
     RepoMan/Repo.hpp
     RepoMan/Remote.hpp
     RepoMan/Frontend/RefLog.hpp
-    RepoMan/RefTreeNode.hpp
+    RepoMan/Frontend/RefTreeNode.hpp
     RepoMan/Submodule.hpp
     RepoMan/Tag.hpp
 

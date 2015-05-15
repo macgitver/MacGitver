@@ -90,18 +90,19 @@ SET( PUB_HDR_FILES
 
     RepoMan/Core.hpp
     RepoMan/Events.hpp
+    RepoMan/RepoMan.hpp
+
     RepoMan/Frontend/Base.hpp
+    RepoMan/Frontend/Branch.hpp
+    RepoMan/Head.hpp
+    RepoMan/Namespace.hpp
     RepoMan/Ref.hpp
     RepoMan/Repo.hpp
-    RepoMan/RepoMan.hpp
     RepoMan/Remote.hpp
-    RepoMan/Tag.hpp
-    RepoMan/Branch.hpp
     RepoMan/RefLog.hpp
-    RepoMan/Submodule.hpp
     RepoMan/RefTreeNode.hpp
-    RepoMan/Namespace.hpp
-    RepoMan/Head.hpp
+    RepoMan/Submodule.hpp
+    RepoMan/Tag.hpp
 
     SHMParser/ShellExpand.hpp
 

@@ -29,14 +29,20 @@ namespace RM
         class RefLogPrivate;
     }
 
-    class MGV_CORE_API RefLog : public Base
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::RefLog;
-        typedef Internal::RefLogPrivate Private;
 
-    public:
-        RefLog(Base* _parent);
-    };
+        class MGV_CORE_API RefLog
+                : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::RefLog;
+            typedef Internal::RefLogPrivate Private;
+
+        public:
+            RefLog(Base* _parent);
+        };
+
+    }
 
 }

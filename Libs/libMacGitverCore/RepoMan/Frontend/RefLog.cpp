@@ -25,13 +25,16 @@
 namespace RM
 {
 
-    using namespace Internal;
-
-    RefLog::RefLog(Base* _parent)
-        : Base(*new RefLogPrivate(this))
+    namespace Frontend
     {
-        RM_D(RefLog);
-        d->linkToParent(_parent);
+
+        RefLog::RefLog(Base* _parent)
+            : Base(*new Internal::RefLogPrivate(this))
+        {
+            RM_D(RefLog);
+            d->linkToParent(_parent);
+        }
+
     }
 
 }

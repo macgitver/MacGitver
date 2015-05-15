@@ -29,18 +29,24 @@ namespace RM
         class NamespacePrivate;
     }
 
-    class MGV_CORE_API Namespace : public Base
+    namespace Frontend
     {
-    public:
-        static const ObjTypes StaticObjectType = ObjTypes::Namespace;
-        typedef Internal::NamespacePrivate Private;
-        typedef QVector< Namespace* > List;
 
-    public:
-        Namespace(Base* parent, const QString& _name);
+        class MGV_CORE_API Namespace
+                : public Base
+        {
+        public:
+            static const ObjTypes StaticObjectType = ObjTypes::Namespace;
+            typedef Internal::NamespacePrivate Private;
+            typedef QVector< Namespace* > List;
 
-    public:
-        QString name() const;
-    };
+        public:
+            Namespace(Base* parent, const QString& _name);
+
+        public:
+            QString name() const;
+        };
+
+    }
 
 }

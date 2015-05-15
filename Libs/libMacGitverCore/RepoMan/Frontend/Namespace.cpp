@@ -27,20 +27,23 @@
 namespace RM
 {
 
-    using namespace Internal;
-
-    Namespace::Namespace(Base* _parent, const QString& _name)
-        : Base(*new NamespacePrivate(this, _name))
+    namespace Frontend
     {
-        RM_D(Namespace);
-        d->linkToParent(_parent);
-    }
 
-    QString Namespace::name() const
-    {
-        RM_D(Namespace);
+        Namespace::Namespace(Base* _parent, const QString& _name)
+            : Base(*new Internal::NamespacePrivate(this, _name))
+        {
+            RM_D(Namespace);
+            d->linkToParent(_parent);
+        }
 
-        return d->name;
+        QString Namespace::name() const
+        {
+            RM_D(Namespace);
+
+            return d->name;
+        }
+
     }
 
 }

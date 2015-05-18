@@ -1,6 +1,6 @@
 # How to install MacGitver
 
-In present state, you need to compile MacGitver from source. We provide a compilable version from our default branch `development`. If you like to help with creating binary packages, please create a [pull request](https://github.com/macgitver/MacGitver/pulls) or contact me via [mail](nils@macgitver.org).
+In present state, you need to compile MacGitver from source. We provide a compilable version from our default branch `development`. If you like to help with creating binary packages, please create a [pull request](https://github.com/macgitver/MacGitver/pulls) or contact me via [mail](mailto:nils@macgitver.org).
 
 ## Prerequisites
 
@@ -18,14 +18,20 @@ If you have questions on how to install those packages, feel free to open an iss
 
 Depending on your hardware, the compile will take about 5-15 minutes.
 
-After you installed the above mentioned packages, open a terminal and cd to your favourite directory (for example `cd ~/Projects/3rd-party`)..
-
 ## Linux / OSX
+
+After you installed the above mentioned packages, open a terminal and cd to your favourite directory. Example:
+
+```bash
+cd ~/Projects/3rd-party
+```
+
+From here, clone the MacGitver repository and run the install script:
 
 ```bash
 git clone git://github.com/macgitver/MacGitver
 cd MacGitver/scripts
-./mgv-dev.-install.sh
+./mgv-dev-install.sh
 ```
 
 The script leads you through the installation process. MacGitver is installed completely into a single directory.

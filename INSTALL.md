@@ -6,11 +6,14 @@ In present state, you need to compile MacGitver from source. We provide a compil
 
 To be able to build and install, the following packages are required:
 
-* Qt >=5.4
+* Qt >=5.4 (via the [Qt installer](http://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run))
 * CMake >=3.1
-* C++11 (libc++)
+    * For Ubuntu/Debian you'll have to add [this PPA](https://launchpad.net/~george-edison55/+archive/ubuntu/cmake-3.x) or download and install manually from the [CMake homepage](http://cmake.org).
 * A recent C++ compiler GCC (>=4.9) or Clang (>=3.6)
-* Git (must support submodules)
+* C++11
+    * Clang with `libc++`
+    * GCC with `libstdc++`
+* Git
 
 If you have questions on how to install those packages, feel free to open an issue or write e-mail.
 

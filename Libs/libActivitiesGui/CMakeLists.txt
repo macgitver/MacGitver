@@ -9,10 +9,12 @@ INCLUDE_DIRECTORIES(
 
 SET( SRC_FILES
     ProgressDlg.cpp
+    ProgressItems.cpp
 )
 
 SET( PUB_HDR_FILES
     ProgressDlg.hpp
+    ProgressItems.hpp
 )
 
 SET( PRI_HDR_FILES

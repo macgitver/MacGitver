@@ -23,6 +23,9 @@ public:
     virtual int type() const;
 
     virtual QVariant data(int role) const;
+
+private:
+    ProgressItem*       mParent;
 };
 
 template<class T>

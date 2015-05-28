@@ -2,6 +2,7 @@
 
 
 ProgressItem::ProgressItem(ProgressItem* parent)
+    : mParent(parent)
 {
 }
 

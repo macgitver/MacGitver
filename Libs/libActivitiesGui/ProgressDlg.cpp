@@ -3,12 +3,43 @@
 #include "ui_ProgressDlg.h"
 #include "ui_ProgressWdgt.h"
 
+#include "ProgressItems.hpp"
+
 #include <QCloseEvent>
+#include <QPainter>
 #include <QPushButton>
 #include <QStringBuilder>
+#include <QStyledItemDelegate>
 
 namespace Private
 {
+    class ProgressDelegate : public QStyledItemDelegate
+    {
+    public:
+        ProgressDelegate(QObject* parent = 0)
+            : QStyledItemDelegate(parent)
+        {
+        }
+
+        void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const
+        {
+            // draw header text
+            QTextOption txtOpts;
+            txtOpts.setAlignment(Qt::AlignLeading);
+            painter->drawText(option.rect, index.data().toString(), txtOpts);
+
+            // draw progress bar
+            QRect progressRect = option.rect.adjusted(10, 10, -10, -10);
+            painter->drawRoundedRect(progressRect, 5., 5.);
+
+            // draw description text
+            QTextOption descOpts;
+            descOpts.setAlignment(Qt::AlignCenter);
+            painter->drawText(progressRect,
+                              index.data(static_cast<int>(ProgressItem::DisplayRole::ProgressInfo)).toString());
+        }
+    };
 
     class ProgressWdgt : public QWidget, public Ui::ProgressWdgt
     {
@@ -90,6 +121,8 @@ ProgressDlg::ProgressDlg()
     , mDone( false )
 {
     ui->setupUi( this );
+
+    ui->treeProgress->setItemDelegate(new Private::ProgressDelegate);
 
     QPushButton* close = ui->buttonBox->button(QDialogButtonBox::Close);
     close->setEnabled( false );

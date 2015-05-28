@@ -11,6 +11,7 @@ class ProgressItem
 {
 public:
     enum class Type { Base = 0, Service, Activity, Step };
+    enum class DisplayRole { Progress = Qt::UserRole, ProgressInfo };
 
 public:
     static const Type StaticType = Type::Base;
@@ -47,20 +48,48 @@ public:
 //        if (mObject) {
 //            switch (role) {
 //            case Qt::DisplayRole:
-//                return mObject->description();
+//                return mObject->display();
 
 //            case Qt::DecorationRole:
 //                Heaven::IconRef iref = mObject->icon(true);
 //                Heaven::Icon icon = iref.icon();
 //                return icon.pixmap();
 //            }
-//        }
+
+//            case ProgressItem::Progress:
+//                return percent();
+
+//            case ProgressItem::ProgressInfo:
+//                return percent();
+
+//            case Qt::ToolTipRole:
+//                return mObject->isDefunct() ? mObject->errorText()
+//                                            : mObject->description();
+//      }
 
         return ProgressItem::data(role);
     }
 
 protected:
     T* mObject;
+
+private:
+    quint8 percent() const
+    {
+        int max = mObject->maxProgress();
+        int cur = mObject->curProgress();
+
+        if (mObject->minProgress() < 0) {
+            // substract a negative minimum
+            max += mObject->minProgress();
+            cur += mObject->minProgress();
+        }
+
+        int percent = max ? (cur / max) * 100 : 0;
+        Q_ASSERT(percent >= 0);
+
+        return static_cast<quint8>(percent);
+    }
 };
 
 //class ProgressItemService

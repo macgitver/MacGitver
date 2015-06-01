@@ -20,8 +20,7 @@
 #include <QFile>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
+#include "libRepoMan/RepoMan.hpp"
 #include "LoggingMode.hpp"
 
 LoggingMode::LoggingMode(QObject *parent)
@@ -31,7 +30,7 @@ LoggingMode::LoggingMode(QObject *parent)
     setEnabled(false);
     setDisplayOrder(100);
 
-    connect(&MacGitver::self().repoMan(),
+    connect(&RM::RepoMan::instance(),
             &RM::RepoMan::hasActiveRepositoryChanged,
             this, &LoggingMode::setEnabled);
 }

@@ -32,9 +32,11 @@
 #include "libMacGitverCore/App/MgvPrimaryWindow.hpp"
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/Config/Ui/GeneralConfigPage.hpp"
+#include "libMacGitverCore/Config/Ui/RepoManConfigPage.hpp"
 #include "libMacGitverCore/MacGitver/Modules.h"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Config/RepoManConfigPage.hpp"
+#include "libMacGitverCore/MacGitver/AutoRefresher.hpp"
+
+#include "libRepoMan/RepoMan.hpp"
 
 /**
  * @class   MacGitver
@@ -55,6 +57,7 @@
 
 MacGitverPrivate::MacGitverPrivate(MacGitver* owner, bool runGui)
     : isGui(runGui)
+    , refresher(nullptr)
 {
     sSelf = owner;
 }
@@ -67,13 +70,16 @@ void MacGitverPrivate::init()
         QApplication::setOrganizationName(QStringLiteral("MacGitver"));
         QApplication::setApplicationName(QStringLiteral("MacGitver"));
 
+        // only start the auto refresher if we're running a GUI
+        refresher = new AutoRefresher;
+
         Heaven::IconManager::self().defaultProvider()->addSearchPath(QStringLiteral(":/Images"));
     } else {
         QApplication::setOrganizationName(QStringLiteral("MacGitver"));
         QApplication::setApplicationName(QStringLiteral("MacGitver_NonGui"));
     }
 
-    sRepoMan    = new RM::RepoMan;
+    RM::RepoMan::instance();
     sModules    = new Modules;
 
     if (isGui) {
@@ -86,7 +92,8 @@ MacGitverPrivate::~MacGitverPrivate()
 {
     unregisterGlobalConfigPages();
 
-    delete sRepoMan;    sRepoMan    = NULL;
+    RM::RepoMan::instance().terminate();
+
     delete sModules;    sModules    = NULL;
 
     Log::Manager::release();
@@ -104,7 +111,6 @@ void MacGitverPrivate::bootGui()
 }
 
 MacGitver*      MacGitverPrivate::sSelf         = NULL;
-RM::RepoMan*    MacGitverPrivate::sRepoMan      = NULL;
 Modules*        MacGitverPrivate::sModules      = NULL;
 
 MacGitver& MacGitver::self()
@@ -117,9 +123,7 @@ MacGitver& MacGitver::self()
 
 RM::RepoMan& MacGitver::repoMan()
 {
-    Q_ASSERT(MacGitverPrivate::sRepoMan);
-
-    return *MacGitverPrivate::sRepoMan;
+    return RM::RepoMan::instance();
 }
 
 MacGitver::MacGitver(bool runGui)
@@ -208,4 +212,9 @@ int MacGitver::exec()
 bool MacGitver::isRunningGui() const
 {
     return d->isGui;
+}
+
+AutoRefresher* MacGitver::refresher() const
+{
+    return d->refresher;
 }

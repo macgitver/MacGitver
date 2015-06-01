@@ -25,7 +25,7 @@
 #include "TemplateNames.hpp"
 
 RepoManLoggerModule::RepoManLoggerModule()
-    : listener(NULL)
+    : listener(nullptr)
 {
 }
 
@@ -49,7 +49,7 @@ void RepoManLoggerModule::deinitialize()
     // Channel should also be kept registered
     // But listener has to be destroyed...
     delete listener;
-    listener = NULL;
+    listener = nullptr;
 }
 
 void RepoManLoggerModule::setupTemplates()

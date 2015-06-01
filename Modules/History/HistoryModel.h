@@ -30,8 +30,11 @@
 
 namespace RM
 {
-    class Ref;
-    class Repo;
+    namespace Frontend
+    {
+        class Reference;
+        class Repo;
+    }
 }
 
 class HistoryModel : public QAbstractTableModel
@@ -114,9 +117,9 @@ private slots:
     void beforeAppend();
     void afterAppend();
 
-    void onRefCreated(RM::Repo* repo, RM::Ref* ref);
-    void onRefDestroyed(RM::Repo* repo, RM::Ref* ref);
-    void onRefMoved(RM::Repo*repo, RM::Ref*ref);
+    void onRefCreated  (const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
+    void onRefDestroyed(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
+    void onRefMoved    (const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref);
 
 private:
     InlineRefDisplays           mDisplays;

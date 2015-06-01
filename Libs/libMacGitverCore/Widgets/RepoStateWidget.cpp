@@ -25,18 +25,18 @@
 #include "libHeavenIcons/IconRef.hpp"
 #include "libHeavenIcons/Icon.hpp"
 
-#include "RepoMan/Ref.hpp"
-#include "RepoMan/RepoMan.hpp"
-#include "RepoMan/Repo.hpp"
+#include "libRepoMan/Frontend/Reference.hpp"
+#include "libRepoMan/Frontend/Repo.hpp"
+
+#include "libRepoMan/RepoMan.hpp"
 
 #include "RepoStateWidget.hpp"
 
 RepoStateWidget::RepoStateWidget()
 {
-    repo = NULL;
     setupUi();
 
-    RM::RepoMan& rm = MacGitver::repoMan();
+    RM::RepoMan& rm = RM::RepoMan::instance();
 
     connect(&rm,    &RM::RepoMan::refMoved,
             this,   &RepoStateWidget::onUpdateHEAD);
@@ -48,20 +48,18 @@ RepoStateWidget::RepoStateWidget()
             this,   &RepoStateWidget::repositoryDeactivated);
 }
 
-void RepoStateWidget::repositoryActivated(RM::Repo* info)
+void RepoStateWidget::repositoryActivated(const RM::Frontend::Repo& repo)
 {
-    if( repo != info )
-    {
-        repo = info;
+    if (mRepo != repo) {
+        mRepo = repo;
         setRepoState();
     }
 }
 
-void RepoStateWidget::repositoryDeactivated(RM::Repo* info)
+void RepoStateWidget::repositoryDeactivated(const RM::Frontend::Repo& repo)
 {
-    if( repo == info )
-    {
-        repo = NULL;
+    if (mRepo == repo) {
+        mRepo = RM::Frontend::Repo();
         setRepoState();
     }
 }
@@ -70,22 +68,25 @@ void RepoStateWidget::setRepoState()
 {
     txtState->hide();
 
-    txtRepo->setText( repo ? repo->displayAlias() : QString() );
-    onUpdateHEAD( repo, NULL );
+    txtRepo->setText(mRepo ? mRepo.displayAlias() : QString());
+    onUpdateHEAD(RM::Frontend::Reference());
 }
 
-void RepoStateWidget::onUpdateHEAD(RM::Repo* ownerRepo, RM::Ref* ref)
+void RepoStateWidget::onUpdateHEAD(
+        const RM::Frontend::Reference& ref)
 {
-    if ( ownerRepo != repo ) {
+    RM::Frontend::Repo repo = ref.repository();
+
+    if (repo != mRepo) {
         return;
     }
 
-    if ( ref && ref->name() != QStringLiteral("HEAD") ) {
+    if (ref && ref.name() != QStringLiteral("HEAD")) {
         return;
     }
 
     // TODO: implement a HTML formatter to highlight HEAD
-    txtBranch->setText( repo ? repo->branchDisplay() : QString() );
+    txtBranch->setText(repo ? repo.branchDisplay() : QString());
 }
 
 static inline QLabel* pixmapLabel(const char* name)

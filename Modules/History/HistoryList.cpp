@@ -16,7 +16,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
 #include "libMacGitverCore/Widgets/HeaderView.h"
 
 #include "CreateBranchDialog.h"
@@ -128,6 +128,7 @@ QModelIndex HistoryList::deeplyMapToSource( QModelIndex current ) const
 
 void HistoryList::onCheckout()
 {
+    #if 0 // ### REPOMAN
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action )
         return;
@@ -162,10 +163,12 @@ void HistoryList::onCheckout()
                                   trUtf8("Checkout of commit failed. Git message:\n%1").arg(r.errorText()));
         return;
     }
+    #endif
 }
 
 void HistoryList::checkout(Git::Result& result, const Git::Reference& ref)
 {
+    #if 0 // ### REPOMAN
     GW_CHECK_RESULT(result, void());
 
     Git::CheckoutReferenceOperation* op = new Git::CheckoutReferenceOperation( ref );
@@ -181,10 +184,12 @@ void HistoryList::checkout(Git::Result& result, const Git::Reference& ref)
                                   .arg( ref.shorthand() )
                                   .arg( result.errorText() ) );
     }
+    #endif
 }
 
 void HistoryList::onCreateBranch()
 {
+    #if 0 // ### REPOMAN
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action )
         return;
@@ -220,10 +225,12 @@ void HistoryList::onCreateBranch()
     {
         checkout( r, branch );
     }
+    #endif
 }
 
 void HistoryList::onCreateTag()
 {
+    #if 0 // ### REPOMAN
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if ( !action )
         return;
@@ -253,10 +260,12 @@ void HistoryList::onCreateTag()
                                   trUtf8("Failed to create tag. Git message:\n%1").arg(r.errorText()) );
         return;
     }
+    #endif
 }
 
 void HistoryList::onShowHEAD()
 {
+    #if 0 // ### REPOMAN
     Git::Result r;
 
     Git::Repository repo = MacGitver::repoMan().activeRepository()->gitRepo();
@@ -280,5 +289,6 @@ void HistoryList::onShowHEAD()
                                      "Important Note: This is a feature preview!\n\n"
                                      "Please make sure the HEAD commit is at least once visible!" ) );
     }
+    #endif
 }
 

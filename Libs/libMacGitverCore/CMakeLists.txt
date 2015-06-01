@@ -20,30 +20,12 @@ SET( SRC_FILES
     Config/Ui/ConfigPage.cpp
     Config/Ui/GeneralConfigPage.cpp
     Config/Ui/ConfigPageProvider.cpp
+    Config/Ui/RepoManConfigPage.cpp
 
     MacGitver/Module.cpp
     MacGitver/Modules.cpp
     MacGitver/GitPatchConsumer.cpp
-
-    RepoMan/AutoRefresher.cpp
-    RepoMan/Base.cpp
-    RepoMan/Ref.cpp
-    RepoMan/Branch.cpp
-    RepoMan/CollectionNode.cpp
-    RepoMan/Events.cpp
-    RepoMan/Repo.cpp
-    RepoMan/RepoMan.cpp
-    RepoMan/Remote.cpp
-    RepoMan/Tag.cpp
-    RepoMan/RefLog.cpp
-    RepoMan/Submodule.cpp
-    RepoMan/RefTreeNode.cpp
-    RepoMan/Namespace.cpp
-    RepoMan/Head.cpp
-
-    RepoMan/Private/Dumper.cpp
-
-    RepoMan/Config/RepoManConfigPage.cpp
+    MacGitver/AutoRefresher.cpp
 
     SHMParser/ShellExpand.cpp
 
@@ -55,6 +37,7 @@ SET( SRC_FILES
     Widgets/FlatTreeComboBox.cpp
     Widgets/FlatTreeModel.cpp
     Widgets/FlatTreeDelegate.cpp
+    Widgets/ProgressDlg.cpp
     Widgets/SHA1Input.cpp
     Widgets/ShortCommitModel.cpp
     Widgets/RepoStateWidget.cpp
@@ -77,21 +60,6 @@ SET( PUB_HDR_FILES
     MacGitver/GitPatchConsumer.hpp
     MacGitver/IRepositoryContext.hpp
 
-    RepoMan/Base.hpp
-    RepoMan/Events.hpp
-    RepoMan/CollectionNode.hpp
-    RepoMan/Ref.hpp
-    RepoMan/Repo.hpp
-    RepoMan/RepoMan.hpp
-    RepoMan/Remote.hpp
-    RepoMan/Tag.hpp
-    RepoMan/Branch.hpp
-    RepoMan/RefLog.hpp
-    RepoMan/Submodule.hpp
-    RepoMan/RefTreeNode.hpp
-    RepoMan/Namespace.hpp
-    RepoMan/Head.hpp
-
     SHMParser/ShellExpand.hpp
 
     Widgets/ExpandableDlg.hpp
@@ -102,6 +70,7 @@ SET( PUB_HDR_FILES
     Widgets/FlatTreeComboBox.h
     Widgets/FlatTreeModel.h
     Widgets/FlatTreeDelegate.h
+    Widgets/ProgressDlg.hpp
     Widgets/SHA1Input.h
     Widgets/ShortCommitModel.h
     Widgets/TreeViewCtxMenu.hpp
@@ -112,31 +81,17 @@ SET( PRI_HDR_FILES
     App/MacGitverPrivate.hpp
     App/MgvPrimaryWindowPrivate.hpp
 
+    MacGitver/AutoRefresher.hpp
+
     Config/Ui/ConfigDialog.hpp
     Config/Ui/GeneralConfigPage.hpp
-
-    RepoMan/AutoRefresher.hpp
-
-    RepoMan/Private/BasePrivate.hpp
-    RepoMan/Private/BranchPrivate.hpp
-    RepoMan/Private/CollectionNodePrivate.hpp
-    RepoMan/Private/NamespacePrivate.hpp
-    RepoMan/Private/RefPrivate.hpp
-    RepoMan/Private/RefLogPrivate.hpp
-    RepoMan/Private/RefTreeNodePrivate.hpp
-    RepoMan/Private/RemotePrivate.hpp
-    RepoMan/Private/RepoPrivate.hpp
-    RepoMan/Private/RepoManPrivate.hpp
-    RepoMan/Private/SubmodulePrivate.hpp
-    RepoMan/Private/TagPrivate.hpp
-    RepoMan/Private/Dumper.hpp
-    RepoMan/Private/HeadPrivate.hpp
-
-    RepoMan/Config/RepoManConfigPage.hpp
+    Config/Ui/RepoManConfigPage.hpp
 
     Widgets/StringSelectorWidgetPrivate.h
     Widgets/FlatTreeModelPrivate.h
     Widgets/RepoStateWidget.hpp
+
+    MacGitver/AutoRefresher.hpp
 )
 
 SET( UI_FILES
@@ -145,16 +100,17 @@ SET( UI_FILES
 
     Config/Ui/ConfigDialog.ui
     Config/Ui/GeneralConfigPage.ui
-
-    RepoMan/Config/RepoManConfigPage.ui
+    Config/Ui/RepoManConfigPage.ui
 
     Widgets/ExpandableDlg.ui
+    Widgets/ProgressDlg.ui
+
+    Widgets/ProgressWdgt.ui
 )
 
 SET( HID_FILES
 
     App/MgvPrimaryWindowActions.hid
-    RepoMan/Private/RepoManActions.hid
 
 )
 
@@ -165,7 +121,7 @@ SET(RCC_FILES
 SET( HDR_FILES ${PRI_HDR_FILES} ${PUB_HDR_FILES} )
 
 SET(CCFG_FILES
-    RepoMan/AutoRefresherCfg.ccfg
+    MacGitver/AutoRefresherCfg.ccfg
 )
 
 CFGCOMP(CFG_FILES ${CCFG_FILES})
@@ -195,6 +151,7 @@ TARGET_LINK_LIBRARIES(
         HeavenIcons
         BlueSky
         Logger
+        RepoMan
 
     LINK_PRIVATE
         GitWrap

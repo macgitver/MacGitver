@@ -14,8 +14,7 @@
  *
  */
 
-#ifndef MGV_REPO_TREE_VIEW_HPP
-#define MGV_REPO_TREE_VIEW_HPP
+#pragma once
 
 #include "libBlueSky/Contexts.hpp"
 
@@ -23,13 +22,10 @@
 
 class QModelIndex;
 
-namespace RM
-{
-    class Repo;
-}
-
 class RepoInfoModel;
 class TreeViewCtxMenu;
+
+#include "libRepoMan/RepoMan.hpp"
 
 class RepoTreeView
         : public BlueSky::ContextView
@@ -50,8 +46,8 @@ private slots:  // from mRepos
     void contextMenu( const QModelIndex& index, const QPoint& globalPos );
 
 private slots:  // for MacGitver::repoMan()
-    void onRepoActivated(RM::Repo* repo);
-    void onRepoDeactivated(RM::Repo* repo);
+    void onRepoActivated(const RM::Frontend::Repo& repo);
+    void onRepoDeactivated(const RM::Frontend::Repo& repo);
 
 private:
     QModelIndex deeplyMapToSource( QModelIndex current ) const;
@@ -61,5 +57,3 @@ private:
     RepoInfoModel*          mModel;
     TreeViewCtxMenu*        mRepos;
 };
-
-#endif

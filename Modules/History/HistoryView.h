@@ -33,10 +33,7 @@ class QToolBar;
 
 #include "HistoryModel.h"
 
-namespace RM
-{
-    class Repo;
-}
+#include "libMacGitverCore/RepoMan/Frontend/Repo.hpp"
 
 class HistoryDetails;
 class HistoryList;
@@ -53,7 +50,7 @@ public:
     HistoryView();
 
 private slots:
-    void repoActivated(RM::Repo* repo);
+    void repoActivated(const RM::Frontend::Repo& repo);
     void currentCommitChanged(const Git::ObjectId& sha1);
 
     void onChangeShowLocalBranches(bool checked);
@@ -78,7 +75,7 @@ private:
     HistoryList*            mList;
     HistoryDetails*         mDetails;
     HistoryDiff*            mDiff;
-    RM::Repo*               mRepo;
+    RM::Frontend::Repo      mRepo;
 };
 
 #endif

@@ -18,8 +18,7 @@
 #include <QFileDialog>
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libRepoMan/RepoMan.hpp"
 
 #include "GitConfigModule.h"
 #include "GitConfigDialog.h"
@@ -40,10 +39,13 @@ void GitConfigModule::deinitialize()
 
 void GitConfigModule::onToolsGitConfig()
 {
+    RM::Frontend::Repo repo(RM::RepoMan::instance().activeRepository());
+
+    #if 0 // ###REPOMAN
     Git::Repository gitRepo;
-    RM::Repo* repo = MacGitver::repoMan().activeRepository();
     if (repo) {
         gitRepo = repo->gitRepo();
     }
     GitConfigDialog( gitRepo ).exec();
+    #endif
 }

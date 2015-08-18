@@ -20,8 +20,7 @@
 #include "libMacGitverCore/Widgets/TreeViewCtxMenu.hpp"
 
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Repo.hpp"
+#include "libRepoMan/RepoMan.hpp"
 
 #include "RepoTreeView.hpp"
 #include "RepoInfoModel.hpp"
@@ -56,11 +55,11 @@ RepoTreeView::RepoTreeView()
     connect( mRepos,    SIGNAL(contextMenu(QModelIndex,QPoint)),
              this,      SLOT(contextMenu(QModelIndex,QPoint)) );
 
-    connect( &MacGitver::repoMan(), &RM::RepoMan::repositoryActivated,
-             this,                  &RepoTreeView::onRepoActivated);
+    connect(&RM::RepoMan::instance(),   &RM::RepoMan::repositoryActivated,
+            this,                       &RepoTreeView::onRepoActivated);
 
-    connect( &MacGitver::repoMan(), &RM::RepoMan::repositoryDeactivated,
-             this,                  &RepoTreeView::onRepoDeactivated);
+    connect(&RM::RepoMan::instance(),   &RM::RepoMan::repositoryDeactivated,
+            this,                       &RepoTreeView::onRepoDeactivated);
 }
 
 QModelIndex RepoTreeView::deeplyMapToSource( QModelIndex current ) const
@@ -79,7 +78,8 @@ QModelIndex RepoTreeView::deeplyMapToSource( QModelIndex current ) const
 
 void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPos )
 {
-    RM::Repo* info = mModel->index2Info(deeplyMapToSource(index));
+#if 0
+    RM::Repo* info = mModel->index2Repo(deeplyMapToSource(index));
 
     if (info) {
         Heaven::Menu* menu = info->isSubModule() ? menuCtxMenuSMRepo : menuCtxMenuRepo;
@@ -88,23 +88,26 @@ void RepoTreeView::contextMenu( const QModelIndex& index, const QPoint& globalPo
 
         menu->showPopup( globalPos );
     }
+#endif
 }
 
 void RepoTreeView::onCtxActivate()
 {
+#if 0
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
-    if( action )
-    {
+    if (action) {
         RM::Repo* info = qobject_cast< RM::Repo* >( action->activatedBy() );
         if( info )
         {
             MacGitver::repoMan().activate( info );
         }
     }
+#endif
 }
 
 void RepoTreeView::onCtxClose()
 {
+#if 0
     Heaven::Action* action = qobject_cast< Heaven::Action* >( sender() );
     if( action )
     {
@@ -114,10 +117,12 @@ void RepoTreeView::onCtxClose()
             info->close();
         }
     }
+#endif
 }
 
-void RepoTreeView::onRepoActivated(RM::Repo* repo)
+void RepoTreeView::onRepoActivated(const RM::Frontend::Repo& repo)
 {
+#if 0
     BlueSky::ContextKeys keys = mkKeys();
     keys.set("RepoName", repo->path());
 
@@ -132,15 +137,18 @@ void RepoTreeView::onRepoActivated(RM::Repo* repo)
     }
 
     setCurrentContext(ctx);
+#endif
 }
 
-void RepoTreeView::onRepoDeactivated(RM::Repo* repo)
+void RepoTreeView::onRepoDeactivated(const RM::Frontend::Repo& repo)
 {
+#if 0
     RepositoryContext* ctx = qobject_cast< RepositoryContext* >(currentContext());
 
     if (ctx && ctx->repository() == repo) {
         setCurrentContext( NULL );
     }
+#endif
 }
 
 BlueSky::ViewContext* RepoTreeView::createContextObject() const

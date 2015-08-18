@@ -20,8 +20,7 @@
 
 #include "libMacGitverCore/Config/Config.h"
 #include "libMacGitverCore/App/MacGitver.hpp"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
+#include "libRepoMan/RepoMan.hpp"
 #include "CreateRepositoryDlg.h"
 
 CreateRepositoryDlg::CreateRepositoryDlg()
@@ -106,7 +105,7 @@ void CreateRepositoryDlg::accept()
 
     MacGitver::log(Log::Normal, trUtf8("Created a new repository at %1").arg(fn));
 
-    MacGitver::repoMan().open(fn);
+    RM::RepoMan::instance().open(fn);
 
     QDialog::accept();
 }

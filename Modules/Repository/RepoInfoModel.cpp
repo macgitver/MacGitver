@@ -14,61 +14,80 @@
  *
  */
 
+#include "RepoInfoModel.hpp"
+
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/Config/Config.h"
-#include "libMacGitverCore/RepoMan/RepoMan.hpp"
-
+#include "libRepoMan/RepoMan.hpp"
 #include "libHeavenIcons/IconRef.hpp"
 #include "libHeavenIcons/Icon.hpp"
 
-#include "RepoInfoModel.hpp"
+struct RepoInfoModel::RepoInfo
+{
+    RepoInfo(RM::Frontend::Repo&& r)
+        : mRepo(std::move(r))
+    {}
+
+    ~RepoInfo()
+    {
+        qDeleteAll(mChildren);
+    }
+
+    RM::Frontend::Repo          mRepo;
+    RepoInfoModel::RepoInfos    mChildren;
+};
 
 RepoInfoModel::RepoInfoModel()
 {
-    mRepoMan = &MacGitver::repoMan();
+    RM::RepoMan& rm = RM::RepoMan::instance();
 
-    connect( mRepoMan, &RM::RepoMan::repositoryDeactivated,
-             this,     &RepoInfoModel::invalidateRepository);
+    connect( &rm,   &RM::RepoMan::repositoryDeactivated,
+             this,  &RepoInfoModel::invalidateRepository);
 
-    connect( mRepoMan, &RM::RepoMan::repositoryActivated,
-             this,     &RepoInfoModel::invalidateRepository);
+    connect( &rm,   &RM::RepoMan::repositoryActivated,
+             this,  &RepoInfoModel::invalidateRepository);
 
-    connect( mRepoMan, &RM::RepoMan::repositoryOpened,
-             this,     &RepoInfoModel::invalidateRepository);
+    connect( &rm,   &RM::RepoMan::repositoryOpened,
+             this,  &RepoInfoModel::invalidateRepository);
+}
+
+RepoInfoModel::~RepoInfoModel()
+{
+    qDeleteAll(mRoots);
 }
 
 int RepoInfoModel::rowCount( const QModelIndex& parent ) const
 {
-    if( parent.isValid() )
-    {
-        RM::Repo* info = index2Info( parent );
-        return info ? info->submodules().count() : 0;
+    if (parent.isValid()) {
+        RM::Frontend::Repo info = index2Repo( parent );
+        return info ? info.submodules().count() : 0;
     }
-    else
-    {
-        return mRepoMan->repositories().count();
+    else {
+        return RM::RepoMan::instance().repositories().count();
     }
 }
 
-int RepoInfoModel::columnCount( const QModelIndex& parent ) const
+int RepoInfoModel::columnCount(const QModelIndex& parent) const
 {
     return 1;
 }
 
-QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
+QVariant RepoInfoModel::data(const QModelIndex& index, int role) const
 {
-    if( !index.isValid() ) return QVariant();
+    if (!index.isValid()) {
+        return QVariant();
+    }
 
-    RM::Repo* info = index2Info( index );
-    if( info )
-    {
-        switch(role) {
+    RM::Frontend::Repo info = index2Repo(index);
+    if (info) {
+
+        switch (role) {
         case Qt::DisplayRole:
-            return info->displayAlias();
+            return info.displayAlias();
 
         case Qt::DecorationRole:
             {
-                Heaven::IconRef icon = info->icon().clone();
+                Heaven::IconRef icon = info.icon().clone();
                 QFont f;
                 int size = (f.pixelSize() <= 0) ? f.pointSize() : f.pixelSize();
                 icon.setSize( qMax(size + 2, 16) );
@@ -79,11 +98,11 @@ QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
             {
                 QFont f1, f2;
                 f2.setBold( true );
-                return info->isActive() ? f2 : f1;
+                return info.isActive() ? f2 : f1;
             }
 
         case IsActive:
-            return info->isActive();
+            return info.isActive();
 
         case Qt::ToolTipRole:
             return trUtf8(
@@ -100,81 +119,74 @@ QVariant RepoInfoModel::data( const QModelIndex& index, int role ) const
                     "<div class=\"row\">Branch: %2</div>"
                   "</body>"
                 "</html>")
-                .arg(info->displayName())
-                .arg(info->branchDisplay());
+                .arg(info.displayName())
+                .arg(info.branchDisplay());
         }
     }
 
     return QVariant();
 }
 
-QModelIndex RepoInfoModel::index( int row, int column, const QModelIndex& parent ) const
+QModelIndex RepoInfoModel::index(int row, int column, const QModelIndex& parent) const
 {
     Q_UNUSED(column);
-    RM::Repo::List list;
+    RM::Frontend::Repo::List list;
 
-    if( parent.isValid() )
-    {
-        RM::Repo* infoParent = index2Info( parent );
-        if( !infoParent )
-        {
+    if (parent.isValid()) {
+
+        RM::Frontend::Repo repoParent = index2Repo(parent);
+
+        if (!repoParent) {
             return QModelIndex();
         }
 
-        foreach (RM::Repo* r, infoParent->submodules()) {
-            list.append(r);
-        }
+        list = repoParent.submodules();
     }
-    else
-    {
-        list = mRepoMan->repositories();
+    else {
+        list = RM::RepoMan::instance().repositories();
     }
 
-    if( row >= list.count() || row < 0 )
-    {
+    if (row >= list.count() || row < 0) {
         return QModelIndex();
     }
 
-    return info2Index( list.at( row ) );
+    return repo2Index(list.at(row));
 }
 
-QModelIndex RepoInfoModel::parent( const QModelIndex& child ) const
+QModelIndex RepoInfoModel::parent(const QModelIndex& child) const
 {
-    if( !child.isValid() )
-    {
+    if (!child.isValid()) {
         return QModelIndex();
     }
 
-    RM::Repo* info = index2Info( child );
-    if( !info || !info->parentRepository() )
-    {
+    RM::Frontend::Repo info = index2Repo(child);
+
+    if (!info || !info.parentRepository()) {
         return QModelIndex();
     }
 
-    return info2Index( info->parentRepository() );
+    return repo2Index(info.parentRepository());
 }
 
-RM::Repo* RepoInfoModel::index2Info( const QModelIndex& index ) const
+RM::Frontend::Repo RepoInfoModel::index2Repo(const QModelIndex& index) const
 {
-    return static_cast< RM::Repo* >( index.internalPointer() );
+    RepoInfo* ri = index2info(index);
+    return ri ? ri->mRepo : RM::Frontend::Repo();
 }
 
-QModelIndex RepoInfoModel::info2Index(RM::Repo* info) const
+QModelIndex RepoInfoModel::repo2Index(const RM::Frontend::Repo& repo) const
 {
     int row = 0;
 
-    if( !info )
-    {
+    if (!repo) {
         return QModelIndex();
     }
 
-    if( info->parentRepository() )
+#if 0
+    if (info->parentRepository())
     {
-        RM::Repo::Set sms = info->parentRepository()->submodules();
-        RM::Repo::List list;
-        foreach (RM::Repo* r, sms) {
-            list.append(r);
-        }
+        RM::Repo::List list = info->parentRepository()->submodules();
+        // ###REPOMAN Shouldn't this be sorted?
         row = list.indexOf(info);
     }
     else
@@ -188,27 +200,38 @@ QModelIndex RepoInfoModel::info2Index(RM::Repo* info) const
     }
 
     return createIndex( row, 0, info );
+#endif
 }
 
-void RepoInfoModel::invalidateRepository(RM::Repo *info)
+void RepoInfoModel::invalidateRepository(const RM::Frontend::Repo& info)
 {
-    if ( !info ) return;
+    if (!info) {
+        return;
+    }
 
-    QModelIndex index = info2Index( info );
-    emit dataChanged( index, index );
+    QModelIndex index = repo2Index(info);
+    emit dataChanged(index, index);
 }
 
-void RepoInfoModel::repositoryOpened(RM::Repo *info)
+RepoInfoModel::RepoInfo* RepoInfoModel::index2info(const QModelIndex& index) const
 {
+    return nullptr;
+}
+
+void RepoInfoModel::repositoryOpened(const RM::Frontend::Repo& info)
+{
+#if 0
     if (!info || info->parentRepository()) {
         return;
     }
 
+    // ###REPOMAN Instead of this, listen to SubmoduleCreated events
+
     // This connection is wrong. There could be any children added below the repository (i.e.
     // HEAD, SubModule, CollectionNode). But the slot will unconditionally reserve a new space
     // for a submodule...
-    connect(info, &RM::Repo::childAdded,
-            this, &RepoInfoModel::repositoryChildAdded);
+    //connect(info, &RM::Repo::childAdded,
+    //        this, &RepoInfoModel::repositoryChildAdded);
 
     // we add a row just at the end of the root. This is stupid. But that's the way it works when
     // a model actually isn't a model...
@@ -216,11 +239,13 @@ void RepoInfoModel::repositoryOpened(RM::Repo *info)
     int row = mRepoMan->repositories().count() - 1;
     emit beginInsertRows(QModelIndex(), row, row);
     emit endInsertRows();
+#endif
 }
 
-void RepoInfoModel::repositoryChildAdded(RM::Repo* parent, RM::Repo* child)
+void RepoInfoModel::repositoryChildAdded(const RM::Frontend::Repo& parent, const RM::Frontend::Repo& child)
 {
-    QModelIndex parentIndex = info2Index(parent);
+#if 0
+    QModelIndex parentIndex = repo2Index(parent);
 
     // we add a row just at the end of the root. This is stupid. But that's the way it works when
     // a model actually isn't a model...
@@ -228,4 +253,5 @@ void RepoInfoModel::repositoryChildAdded(RM::Repo* parent, RM::Repo* child)
     int row = parent->submodules().count() - 1;
     emit beginInsertRows(parentIndex, row, row);
     emit endInsertRows();
+#endif
 }

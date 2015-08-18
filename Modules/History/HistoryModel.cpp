@@ -22,7 +22,7 @@
 
 #include "libMacGitverCore/App/MacGitver.hpp"
 #include "libMacGitverCore/RepoMan/RepoMan.hpp"
-#include "libMacGitverCore/RepoMan/Ref.hpp"
+#include "libMacGitverCore/RepoMan/Frontend/Reference.hpp"
 
 #include "libGitWrap/Reference.hpp"
 
@@ -40,7 +40,7 @@ HistoryModel::HistoryModel( const Git::Repository& repo, QObject* parent )
 
     mDisplays = 0;
 
-    RM::RepoMan &rm = MacGitver::repoMan();
+    RM::RepoMan &rm = RM::RepoMan::instance();
     connect(&rm, &RM::RepoMan::refCreated,          this, &HistoryModel::onRefCreated);
     connect(&rm, &RM::RepoMan::refAboutToBeDeleted, this, &HistoryModel::onRefDestroyed);
     connect(&rm, &RM::RepoMan::refMoved,            this, &HistoryModel::onRefMoved);
@@ -229,35 +229,41 @@ void HistoryModel::afterAppend()
     endInsertRows();
 }
 
-void HistoryModel::onRefCreated(RM::Repo* repo, RM::Ref* ref)
+void HistoryModel::onRefCreated(const RM::Frontend::Repo& repo, const RM::Frontend::Reference& ref)
 {
     Q_UNUSED( ref )
 
+    #if 0 // ###REPOMAN
     if ( !repo || (repo->gitLoadedRepo() != mRepo) ) {
         return;
     }
+    #endif
 
     scanInlineReferences();
 }
 
-void HistoryModel::onRefDestroyed(RM::Repo* repo, RM::Ref* ref)
+void HistoryModel::onRefDestroyed(const RM::Frontend::Repo&  repo, const RM::Frontend::Reference& ref)
 {
     Q_UNUSED( ref )
 
+    #if 0 // ###REPOMAN
     if ( !repo || (repo->gitLoadedRepo() != mRepo) ) {
         return;
     }
+    #endif
 
     scanInlineReferences();
 }
 
-void HistoryModel::onRefMoved(RM::Repo* repo, RM::Ref* ref)
+void HistoryModel::onRefMoved(const RM::Frontend::Repo&  repo, const RM::Frontend::Reference&  ref)
 {
     Q_UNUSED( ref );
 
+    #if 0 // ###REPOMAN
     if ( !repo || (repo->gitLoadedRepo() != mRepo) ) {
         return;
     }
+    #endif
 
     scanInlineReferences();
 }

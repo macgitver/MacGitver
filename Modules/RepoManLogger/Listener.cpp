@@ -17,10 +17,10 @@
  *
  */
 
-#include "libMacGitverCore/RepoMan/Repo.hpp"
-#include "libMacGitverCore/RepoMan/Tag.hpp"
-#include "libMacGitverCore/RepoMan/Branch.hpp"
-#include "libMacGitverCore/RepoMan/Submodule.hpp"
+#include "libRepoMan/RepoMan.hpp"
+#include "libRepoMan/Frontend/Tag.hpp"
+#include "libRepoMan/Frontend/Branch.hpp"
+#include "libRepoMan/Frontend/Submodule.hpp"
 
 #include "Listener.hpp"
 #include "TemplateNames.hpp"
@@ -28,188 +28,188 @@
 Listener::Listener(Log::Channel channel)
     : repoManChannel(channel)
 {
-    RM::Events::addReceiver(this);
+    RM::CompatEvents::addReceiver(this);
 }
 
 Listener::~Listener()
 {
-    RM::Events::delReceiver(this);
+    RM::CompatEvents::delReceiver(this);
 }
 
-void Listener::repositoryOpened(RM::Repo* repo)
+void Listener::repositoryOpened(const RM::Frontend::Repo& repo)
 {
     Log::Event e = Log::Event::create(TMPL_REPO_ACTIVITY);
     Q_ASSERT(e);
 
     e.setParam(QStringLiteral("Action"),     tr("opened"));
-    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("RepoName"),   repo.displayAlias());
 
     repoManChannel.addEvent(e);
 }
 
-void Listener::repositoryAboutToClose(RM::Repo* repo)
+void Listener::repositoryAboutToClose(const RM::Frontend::Repo& repo)
 {
     Log::Event e = Log::Event::create(TMPL_REPO_ACTIVITY);
     Q_ASSERT(e);
 
     e.setParam(QStringLiteral("Action"),     tr("closed"));
-    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("RepoName"),   repo.displayAlias());
 
     repoManChannel.addEvent(e);
 }
 
-void Listener::repositoryActivated(RM::Repo* repo)
+void Listener::repositoryActivated(const RM::Frontend::Repo& repo)
 {
     Log::Event e = Log::Event::create(TMPL_REPO_ACTIVITY);
     Q_ASSERT(e);
 
     e.setParam(QStringLiteral("Action"),     tr("activated"));
-    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("RepoName"),   repo.displayAlias());
 
     repoManChannel.addEvent(e);
 }
 
-void Listener::repositoryDeactivated(RM::Repo* repo)
+void Listener::repositoryDeactivated(const RM::Frontend::Repo& repo)
 {
     // We don't want to report deactivation
 }
 
-void Listener::objectCreated(RM::Repo* repo, RM::Base* object)
+void Listener::objectCreated(const RM::Frontend::Base& object)
 {
 }
 
-void Listener::objectAboutToBeDeleted(RM::Repo* repo, RM::Base* object)
+void Listener::objectAboutToBeDeleted(const RM::Frontend::Base& object)
 {
 }
 
-void Listener::refTreeNodeCreated(RM::Repo* repo, RM::RefTreeNode* node)
+void Listener::refTreeNodeCreated(const RM::Frontend::RefTreeNode& node)
 {
 }
 
-void Listener::refTreeNodeAboutToBeDeleted(RM::Repo* repo, RM::RefTreeNode* node)
+void Listener::refTreeNodeAboutToBeDeleted(const RM::Frontend::RefTreeNode& node)
 {
 }
 
-void Listener::refCreated(RM::Repo* repo, RM::Ref* ref)
+void Listener::refCreated(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::refAboutToBeDeleted(RM::Repo* repo, RM::Ref* ref)
+void Listener::refAboutToBeDeleted(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::refMoved(RM::Repo* repo, RM::Ref* ref)
+void Listener::refMoved(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::refHeadDetached(RM::Repo* repo, RM::Ref* ref)
+void Listener::refHeadDetached(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::tagCreated(RM::Repo* repo, RM::Tag* tag)
+void Listener::tagCreated(const RM::Frontend::Tag& tag)
 {
     Log::Event e = Log::Event::create(TMPL_FOUND_NEW_REF);
     Q_ASSERT(e);
 
     e.setParam(QStringLiteral("Type"),       tr("tag"));
-    e.setParam(QStringLiteral("ObjName"),    tag->displayName());
-    e.setParam(QStringLiteral("SHA"),        tag->displaySha1());
-    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("ObjName"),    tag.displayName());
+    e.setParam(QStringLiteral("SHA"),        tag.displaySha1());
+    e.setParam(QStringLiteral("RepoName"),   tag.repository().displayAlias());
 
     repoManChannel.addEvent(e);
 }
 
-void Listener::tagAboutToBeDeleted(RM::Repo* repo, RM::Tag* tag)
+void Listener::tagAboutToBeDeleted(const RM::Frontend::Tag& tag)
 {
 }
 
-void Listener::branchCreated(RM::Repo* repo, RM::Branch* branch)
+void Listener::branchCreated(const RM::Frontend::Branch& branch)
 {
 }
 
-void Listener::branchAboutToBeDeleted(RM::Repo* repo, RM::Branch* branch)
+void Listener::branchAboutToBeDeleted(const RM::Frontend::Branch& branch)
 {
 }
 
-void Listener::branchMoved(RM::Repo* repo, RM::Branch* branch)
+void Listener::branchMoved(const RM::Frontend::Branch& branch)
 {
     Log::Event e = Log::Event::create(TMPL_BRANCH_MOVED);
     Q_ASSERT(e);
 
-    e.setParam(QStringLiteral("ObjName"),    branch->displayName());
-    e.setParam(QStringLiteral("SHA"),        branch->displaySha1());
-    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("ObjName"),    branch.displayName());
+    e.setParam(QStringLiteral("SHA"),        branch.displaySha1());
+    e.setParam(QStringLiteral("RepoName"),   branch.repository().displayAlias());
 
     repoManChannel.addEvent(e);
 }
 
-void Listener::branchUpstreamChanged(RM::Repo* repo, RM::Branch* branch)
+void Listener::branchUpstreamChanged(const RM::Frontend::Branch& branch)
 {
 }
 
-void Listener::namespaceCreated(RM::Repo* repo, RM::Namespace* nameSpace)
+void Listener::namespaceCreated(const RM::Frontend::Namespace& nameSpace)
 {
 }
 
-void Listener::namespaceAboutToBeDeleted(RM::Repo* repo, RM::Namespace* nameSpace)
+void Listener::namespaceAboutToBeDeleted(const RM::Frontend::Namespace& nameSpace)
 {
 }
 
-void Listener::refLogChanged(RM::Repo* repo, RM::RefLog* reflog)
+void Listener::refLogChanged(const RM::Frontend::RefLog& reflog)
 {
 }
 
-void Listener::refLogNewEntry(RM::Repo* repo, RM::RefLog* reflog)
+void Listener::refLogNewEntry(const RM::Frontend::RefLog& reflog)
 {
 }
 
-void Listener::stageCreated(RM::Repo* repo, RM::Ref* ref)
+void Listener::stageCreated(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::stageAboutToBeDeleted(RM::Repo* repo, RM::Ref* ref)
+void Listener::stageAboutToBeDeleted(const RM::Frontend::Reference& ref)
 {
 }
 
-void Listener::remoteCreated(RM::Repo* repo, RM::Remote* remote)
+void Listener::remoteCreated(const RM::Frontend::Remote& remote)
 {
 }
 
-void Listener::remoteAboutToBeDeleted(RM::Repo* repo, RM::Remote* remote)
+void Listener::remoteAboutToBeDeleted(const RM::Frontend::Remote& remote)
 {
 }
 
-void Listener::remoteModified(RM::Repo* repo, RM::Remote* remote)
+void Listener::remoteModified(const RM::Frontend::Remote& remote)
 {
 }
 
-void Listener::submoduleCreated(RM::Repo* repo, RM::Submodule* submodule)
+void Listener::submoduleCreated(const RM::Frontend::Submodule& submodule)
 {
     Log::Event e = Log::Event::create(TMPL_FOUND_NEW_SM);
     Q_ASSERT(e);
 
-    e.setParam(QStringLiteral("ObjName"),    submodule->displayName());
-    e.setParam(QStringLiteral("RepoName"),   repo->displayAlias());
+    e.setParam(QStringLiteral("ObjName"),    submodule.displayName());
+    e.setParam(QStringLiteral("RepoName"),   submodule.repository().displayAlias());
 
     repoManChannel.addEvent(e);
 }
 
-void Listener::submoduleAboutToBeDeleted(RM::Repo* repo, RM::Submodule* submodule)
+void Listener::submoduleAboutToBeDeleted(const RM::Frontend::Submodule& submodule)
 {
 }
 
-void Listener::submoduleMoved(RM::Repo* repo, RM::Submodule* submodule)
+void Listener::submoduleMoved(const RM::Frontend::Submodule& submodule)
 {
 }
 
-void Listener::repositoryStateChanged(RM::Repo* repo)
+void Listener::repositoryStateChanged(const RM::Frontend::Repo& repo)
 {
 }
 
-void Listener::indexUpdated(RM::Repo* repo)
+void Listener::indexUpdated()
 {
 }
 
-void Listener::workTreeUpdated(RM::Repo* repo)
+void Listener::workTreeUpdated()
 {
 }

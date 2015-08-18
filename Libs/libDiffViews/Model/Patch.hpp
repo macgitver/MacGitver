@@ -19,6 +19,8 @@
 
 #include "libDiffViews/Model/TextFilePatch.hpp"
 
+class QIODevice;
+
 namespace DiffViews
 {
 

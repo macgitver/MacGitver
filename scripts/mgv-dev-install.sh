@@ -75,7 +75,7 @@ makeInstall() {
 
 enterQtDir() {
     echo "Please enter the path to Qt and press <Enter>." &&
-    echo "    Example: $HOME/Qt/5.4/gcc_64"
+    echo "    Example: $HOME/Qt/5.5/gcc_64"
 
     while true; do
         read -p "Enter Path: " input

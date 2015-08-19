@@ -1,9 +1,21 @@
 #! /bin/sh
 
+SCRIPT_DIR=$(dirname `readlink -f -- $0`)
+
+# includes
+. $SCRIPT_DIR/includes/sh-utils.sh
+
+
 # global variables
 
 MAIN_DIR=$HOME/Projects/MacGitver-Release
 INSTALL_DIR=$MAIN_DIR/installation
+
+NINJA_FOUND=0
+if programExists ninja; then
+    NINJA_FOUND=1
+    echo "Using Ninja build generator!"
+fi
 
 
 # function definitions
@@ -69,8 +81,18 @@ makeInstall() {
     fi
 
     cd $BUILD_DIR
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR -- $SRC_DIR &&
-    make -s && make install
+
+    GENERATOR=''
+    if [ "$NINJA_FOUND" -eq 1 ] ; then
+        GENERATOR='-GNinja'
+    fi
+    cmake $GENERATOR -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR -- $SRC_DIR &&
+
+    if [ "$NINJA_FOUND" -eq 1 ] ; then
+        ninja && ninja install
+    else
+        make -s && make install
+    fi
 }
 
 enterQtDir() {
@@ -87,6 +109,9 @@ enterQtDir() {
         fi
     done
 }
+
+
+# main script
 
 echo "All Project related files will be located in $MAIN_DIR"
 askContinue

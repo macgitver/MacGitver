@@ -34,14 +34,63 @@ Ui BranchesViewActions {
         ConnectTo       onRenameRef();
     };
 
-    ToolBar BranchesTB {
-        // placeholder for the real toolbar
+    ToolBar RefsViewTB {
+        Action ShowLocalBranches {
+            Text        "Branches";
+            ConnectTo   onShowBranches();
+            Checkable   true;
+            Checked     true;
+        };
+        Action ShowRemotes {
+            Text        "Remotes";
+            ConnectTo   onShowRemotes();
+            Checkable   true;
+            Checked     true;
+        };
+        Action ShowTags {
+            Text        "Tags";
+            ConnectTo   onShowTags();
+            Checkable   true;
+            Checked     true;
+        };
     };
 
-    Menu CtxMenuRefsView {
+    Menu MnuBranch {
         Action      CheckoutRef;
         Action      RenameRef;
         Separator;
+
+        MergePlace  FetchMP;
+        MergePlace  PushMP;
+        Separator;
+
+        Action      RemoveRef;
+    };
+
+    Menu MnuRemote {
+        Action      RenameRef;
+        Separator;
+
+        MergePlace  FetchThisMP;
+        Separator;
+
+        Action      RemoveRef;
+    };
+
+    Menu MnuRemoteBranch {
+        Action      CheckoutRef;
+        Separator;
+
+        MergePlace  FetchThisMP;
+        Separator;
+
+        Action      RemoveRef;
+    };
+
+    Menu MnuTag {
+        Action      CheckoutRef;
+        Separator;
+
         Action      RemoveRef;
     };
 

@@ -51,7 +51,7 @@ BranchesView::BranchesView()
     setupActions( this );
 
     setViewName( tr( "References" ) );
-    setToolBar( tbBranchesTB );
+    setToolBar( tbRefsViewTB );
     setWidget( mTree );
 
     setFlags( ConsumesContexts | DataPerContext );
@@ -87,14 +87,28 @@ void BranchesView::showContextMenu(const QModelIndex& index, const QPoint& globa
         return;
     }
 
-    Heaven::Menu* menu = 0;
-    if (item->type() == RefItem::Branch) {
-        menu = menuCtxMenuRefsView;
-        //menu->setActivationContext( item );
+    Heaven::Menu* menu = nullptr;
+    switch (item->type()) {
+    case RefItem::Branch:
+        menu = menuMnuBranch;
+        break;
+
+    case RefItem::Remote:
+        menu = menuMnuRemote;
+        break;
+
+    case RefItem::Tag:
+        menu = menuMnuTag;
+        break;
+
+    default:
+        break;
     }
 
-    if ( menu )
+    if ( menu ) {
+        //menu->setActivationContext( item );
         menu->showPopup( globalPos );
+    }
 }
 
 void BranchesView::onCheckoutRef()
